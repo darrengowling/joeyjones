@@ -173,6 +173,148 @@ const Home = () => {
         </div>
       )}
 
+      {/* Create League Dialog */}
+      {showCreateLeagueDialog && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-2xl font-bold text-gray-900">Create New League</h2>
+              <button
+                onClick={() => setShowCreateLeagueDialog(false)}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                ✕
+              </button>
+            </div>
+            <form onSubmit={handleCreateLeague}>
+              <div className="mb-4">
+                <label className="block text-gray-700 mb-2 font-semibold">League Name</label>
+                <input
+                  type="text"
+                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={leagueForm.name}
+                  onChange={(e) => setLeagueForm({ ...leagueForm, name: e.target.value })}
+                  required
+                  data-testid="league-name-input"
+                />
+              </div>
+
+              <div className="mb-4">
+                <label className="block text-gray-700 mb-2 font-semibold">
+                  Budget per Manager ($)
+                </label>
+                <input
+                  type="number"
+                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={leagueForm.budget}
+                  onChange={(e) => setLeagueForm({ ...leagueForm, budget: Number(e.target.value) })}
+                  min="100"
+                  required
+                  data-testid="league-budget-input"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4 mb-4">
+                <div>
+                  <label className="block text-gray-700 mb-2 font-semibold">Min Managers</label>
+                  <input
+                    type="number"
+                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    value={leagueForm.minManagers}
+                    onChange={(e) => setLeagueForm({ ...leagueForm, minManagers: Number(e.target.value) })}
+                    min="2"
+                    max="8"
+                    required
+                    data-testid="league-min-managers-input"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-gray-700 mb-2 font-semibold">Max Managers</label>
+                  <input
+                    type="number"
+                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    value={leagueForm.maxManagers}
+                    onChange={(e) => setLeagueForm({ ...leagueForm, maxManagers: Number(e.target.value) })}
+                    min="2"
+                    max="8"
+                    required
+                    data-testid="league-max-managers-input"
+                  />
+                </div>
+              </div>
+
+              <div className="mb-4">
+                <label className="block text-gray-700 mb-2 font-semibold">
+                  Club Slots per Manager (1-10)
+                </label>
+                <input
+                  type="number"
+                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={leagueForm.clubSlots}
+                  onChange={(e) => setLeagueForm({ ...leagueForm, clubSlots: Number(e.target.value) })}
+                  min="1"
+                  max="10"
+                  required
+                  data-testid="league-club-slots-input"
+                />
+              </div>
+
+              <button
+                type="submit"
+                className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 font-semibold text-lg"
+                data-testid="create-league-submit"
+              >
+                Create League
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Join League Dialog */}
+      {showJoinLeagueDialog && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-2xl font-bold text-gray-900">Join League</h2>
+              <button
+                onClick={() => setShowJoinLeagueDialog(false)}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                ✕
+              </button>
+            </div>
+            <form onSubmit={handleJoinLeague}>
+              <div className="mb-4">
+                <label className="block text-gray-700 mb-2 font-semibold">Invite Token</label>
+                <input
+                  type="text"
+                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Enter 8-character invite token"
+                  value={inviteToken}
+                  onChange={(e) => setInviteToken(e.target.value)}
+                  maxLength={8}
+                  required
+                  data-testid="invite-token-input"
+                />
+                <p className="text-sm text-gray-500 mt-2">
+                  Get the invite token from your league commissioner
+                </p>
+              </div>
+
+              <button
+                type="submit"
+                className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 font-semibold"
+                data-testid="join-league-submit"
+              >
+                Join League
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+
       {/* Header */}
       <div className="bg-white shadow-md">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
