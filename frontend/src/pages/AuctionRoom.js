@@ -92,6 +92,7 @@ export default function AuctionRoom() {
     socket.on("timer_update", (data) => {
       // Filter timer updates to only apply to current auction
       if (data.auctionId === auctionId) {
+        console.log(`Timer update: ${data.timeRemaining}s`);
         setTimeRemaining(data.timeRemaining);
       }
     });
@@ -99,10 +100,9 @@ export default function AuctionRoom() {
     socket.on("lot_started", (data) => {
       console.log("Lot started:", data);
       setCurrentClub(data.club);
-      const endTime = new Date(data.timerEndsAt);
-      const remaining = Math.max(0, Math.floor((endTime - new Date()) / 1000));
-      setTimeRemaining(remaining);
-      console.log("Lot started - time remaining:", remaining);
+      // DON'T calculate time remaining here - let timer_update handle it
+      console.log("New lot started, waiting for timer_update events");
+    });
       loadAuction();
     });
 
