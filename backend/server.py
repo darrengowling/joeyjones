@@ -321,7 +321,7 @@ async def start_auction(league_id: str):
         
         # Emit lot start via Socket.IO
         await sio.emit('lot_started', {
-            'club': Club(**all_clubs[0]).dict(),
+            'club': Club(**all_clubs[0]).model_dump(),
             'lotNumber': 1,
             'timerEndsAt': timer_end.isoformat()
         }, room=f"auction:{auction_obj.id}")
