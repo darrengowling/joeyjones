@@ -104,4 +104,4 @@ class LeaguePoints(BaseModel):
     goalsScored: int = 0
     goalsConceded: int = 0
     totalPoints: int = 0  # Calculated: (wins * 3) + (draws * 1) + (goalsScored * 1)
-    lastUpdated: datetime = Field(default_factory=datetime.utcnow)
+    lastUpdated: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
