@@ -70,6 +70,9 @@ class Auction(BaseModel):
     bidTimer: int = 60  # seconds
     antiSnipeSeconds: int = 30
     timerEndsAt: Optional[datetime] = None
+    clubQueue: List[str] = []  # Queue of club IDs to auction
+    unsoldClubs: List[str] = []  # Clubs that went unsold, will be re-offered
+    minimumBudget: float = 1000000.0  # £1m minimum budget per user
     createdAt: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 class AuctionCreate(BaseModel):
