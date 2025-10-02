@@ -447,6 +447,96 @@ async def get_league_auction(league_id: str):
         raise HTTPException(status_code=404, detail="No auction found for this league")
     return {"auctionId": auction["id"], "status": auction["status"]}
 
+@api_router.get("/auction/{auction_id}/clubs")
+async def get_auction_clubs(auction_id: str):
+    """Get all clubs in the auction with their status (upcoming/current/sold/unsold)"""
+    auction = await db.auctions.find_one({"id": auction_id})
+    if not auction:
+        raise HTTPException(status_code=404, detail="Auction not found")
+    
+    # Get all clubs
+    all_clubs = await db.clubs.find().to_list(100)
+    
+    # Get all bids to determine sold clubs
+    all_bids = await db.bids.find({"auctionId": auction_id}).to_list(1000)
+    
+    # Group bids by club to find winners
+    bids_by_club = {}
+    for bid in all_bids:
+        club_id = bid["clubId"]
+        if club_id not in bids_by_club or bid["amount"] > bids_by_club[club_id]["amount"]:
+            bids_by_club[club_id] = bid
+    
+    # Build club status information
+    club_queue = auction.get("clubQueue", [])
+    unsold_clubs = auction.get("unsoldClubs", [])
+    current_club_id = auction.get("currentClubId")
+    current_lot = auction.get("currentLot", 0)
+    
+    clubs_with_status = []
+    
+    for club in all_clubs:
+        club.pop('_id', None)  # Remove MongoDB ID
+        
+        # Determine club status
+        club_id = club["id"]
+        status = "upcoming"  # Default status
+        winner = None
+        winning_bid = None
+        lot_number = None
+        
+        # Find lot number if club is in queue
+        try:
+            lot_index = club_queue.index(club_id)
+            lot_number = lot_index + 1
+        except ValueError:
+            lot_number = None
+        
+        if club_id == current_club_id:
+            status = "current"
+        elif club_id in bids_by_club:
+            # Club has bids - check if it's been completed
+            if current_lot > lot_number if lot_number else False:
+                winning_bid_data = bids_by_club[club_id]
+                winner = winning_bid_data.get("userName", "Unknown")
+                winning_bid = winning_bid_data.get("amount", 0)
+                status = "sold"
+        elif club_id in unsold_clubs:
+            status = "unsold"
+        elif lot_number and current_lot > lot_number:
+            # Lot has passed but no bids
+            status = "unsold"
+        
+        # Add club with status
+        clubs_with_status.append({
+            **Club(**club).model_dump(),
+            "status": status,
+            "lotNumber": lot_number,
+            "winner": winner,
+            "winningBid": winning_bid
+        })
+    
+    # Sort by lot number (current first, then by lot order, then unsold)
+    def sort_key(club):
+        if club["status"] == "current":
+            return (0, club.get("lotNumber", 999))
+        elif club["status"] == "upcoming":
+            return (1, club.get("lotNumber", 999))
+        elif club["status"] == "sold":
+            return (2, club.get("lotNumber", 999))
+        else:  # unsold
+            return (3, club.get("lotNumber", 999))
+    
+    clubs_with_status.sort(key=sort_key)
+    
+    return {
+        "clubs": clubs_with_status,
+        "totalClubs": len(all_clubs),
+        "soldClubs": len([c for c in clubs_with_status if c["status"] == "sold"]),
+        "unsoldClubs": len([c for c in clubs_with_status if c["status"] == "unsold"]),
+        "remainingClubs": len([c for c in clubs_with_status if c["status"] in ["upcoming", "current"]])
+    }
+
 @api_router.get("/auction/{auction_id}")
 async def get_auction(auction_id: str):
     auction = await db.auctions.find_one({"id": auction_id})
