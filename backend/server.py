@@ -9,7 +9,7 @@ from typing import List
 import socketio
 import asyncio
 import uuid
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 from models import (
     User, UserCreate,
