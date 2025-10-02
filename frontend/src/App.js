@@ -64,6 +64,68 @@ const Home = () => {
     }
   };
 
+  const handleCreateLeague = async (e) => {
+    e.preventDefault();
+    if (!user) {
+      alert("Please sign in first");
+      return;
+    }
+
+    try {
+      const response = await axios.post(`${API}/leagues`, {
+        ...leagueForm,
+        commissionerId: user.id,
+      });
+      
+      // Auto-join as commissioner
+      await axios.post(`${API}/leagues/${response.data.id}/join`, {
+        userId: user.id,
+        inviteToken: response.data.inviteToken,
+      });
+      
+      alert(`League created! Invite Token: ${response.data.inviteToken}`);
+      setShowCreateLeagueDialog(false);
+      loadLeagues();
+      navigate(`/league/${response.data.id}`);
+    } catch (e) {
+      console.error("Error creating league:", e);
+      alert("Error creating league");
+    }
+  };
+
+  const handleJoinLeague = async (e) => {
+    e.preventDefault();
+    if (!user) {
+      alert("Please sign in first");
+      return;
+    }
+
+    try {
+      // Find league by invite token
+      const leaguesResponse = await axios.get(`${API}/leagues`);
+      const league = leaguesResponse.data.find((l) => l.inviteToken === inviteToken);
+      
+      if (!league) {
+        alert("Invalid invite token");
+        return;
+      }
+
+      await axios.post(`${API}/leagues/${league.id}/join`, {
+        userId: user.id,
+        inviteToken: inviteToken,
+      });
+
+      alert("Joined league successfully!");
+      setShowJoinLeagueDialog(false);
+      setInviteToken("");
+      loadLeagues();
+      navigate(`/league/${league.id}`);
+    } catch (e) {
+      console.error("Error joining league:", e);
+      alert(e.response?.data?.detail || "Error joining league");
+    }
+  };
+
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
     if (savedUser) {
