@@ -224,9 +224,9 @@ async def join_league(league_id: str, participant_input: LeagueParticipantCreate
     if not league:
         raise HTTPException(status_code=404, detail="League not found")
     
-    # Verify invite token (trim whitespace to handle copy-paste issues)
-    input_token = participant_input.inviteToken.strip()
-    league_token = league["inviteToken"].strip()
+    # Verify invite token (trim whitespace and normalize case to handle copy-paste issues)
+    input_token = participant_input.inviteToken.strip().lower()
+    league_token = league["inviteToken"].strip().lower()
     
     if league_token != input_token:
         # Provide more helpful error message
