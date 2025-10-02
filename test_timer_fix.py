@@ -95,6 +95,13 @@ async def test_timer_fix():
             print(f"🧪 Test room message: {data}")
             events_received.append("test_room_message")
         
+        @sio.event
+        async def timer_update_broadcast(data):
+            time_remaining = data.get('timeRemaining', 0)
+            auction_id = data.get('auctionId', 'unknown')
+            print(f"📡 Broadcast timer update: {time_remaining}s for auction {auction_id}")
+            events_received.append(f"timer_broadcast:{time_remaining}")
+        
         try:
             # Connect to socket
             await sio.connect(SOCKET_URL, socketio_path=SOCKET_PATH)
