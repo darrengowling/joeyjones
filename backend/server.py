@@ -488,6 +488,10 @@ async def complete_lot(auction_id: str):
         # Get updated participants for broadcast
         participants = await db.league_participants.find({"leagueId": auction["leagueId"]}).to_list(100)
         
+        # Remove MongoDB _id field from participants
+        for p in participants:
+            p.pop('_id', None)
+        
         # Emit lot complete
         await sio.emit('lot_complete', {
             'clubId': auction["currentClubId"],
