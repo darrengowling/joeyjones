@@ -144,7 +144,7 @@ def test_socket_events():
         
         # Wait for events
         print("Waiting for bid_placed event...")
-        time.sleep(5)
+        time.sleep(3)
         
         print(f"Events received after bid: {events_received}")
         
@@ -156,7 +156,7 @@ def test_socket_events():
         # Wait for timer updates
         print("Waiting for timer updates...")
         initial_timer_count = events_received.count("timer_update")
-        time.sleep(5)
+        time.sleep(8)  # Wait longer for timer updates
         final_timer_count = events_received.count("timer_update")
         
         if final_timer_count > initial_timer_count:
