@@ -91,3 +91,17 @@ class BidCreate(BaseModel):
     userId: str
     clubId: str
     amount: float
+
+# League Points Models (for scoring)
+class LeaguePoints(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    leagueId: str
+    clubId: str
+    clubName: str
+    wins: int = 0
+    draws: int = 0
+    losses: int = 0
+    goalsScored: int = 0
+    goalsConceded: int = 0
+    totalPoints: int = 0  # Calculated: (wins * 3) + (draws * 1) + (goalsScored * 1)
+    lastUpdated: datetime = Field(default_factory=datetime.utcnow)
