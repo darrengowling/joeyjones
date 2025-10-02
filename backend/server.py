@@ -223,6 +223,26 @@ async def place_bid(auction_id: str, bid_input: BidCreate):
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     
+    # Get league
+    league = await db.leagues.find_one({"id": auction["leagueId"]})
+    if not league:
+        raise HTTPException(status_code=404, detail="League not found")
+    
+    # Get participant to check budget
+    participant = await db.league_participants.find_one({
+        "leagueId": auction["leagueId"],
+        "userId": bid_input.userId
+    })
+    if not participant:
+        raise HTTPException(status_code=403, detail="User is not a participant in this league")
+    
+    # Check if user has enough budget
+    if bid_input.amount > participant["budgetRemaining"]:
+        raise HTTPException(
+            status_code=400, 
+            detail=f"Insufficient budget. You have ${participant['budgetRemaining']} remaining"
+        )
+    
     # Create bid
     bid_obj = Bid(
         **bid_input.dict(),
