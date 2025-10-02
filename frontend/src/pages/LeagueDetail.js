@@ -10,8 +10,10 @@ export default function LeagueDetail() {
   const navigate = useNavigate();
   const [league, setLeague] = useState(null);
   const [participants, setParticipants] = useState([]);
+  const [standings, setStandings] = useState([]);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [loadingScores, setLoadingScores] = useState(false);
 
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
