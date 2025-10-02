@@ -382,15 +382,9 @@ export default function AuctionRoom() {
                     </div>
                   </div>
 
-                  {isCommissioner && (
-                    <button
-                      onClick={completeLot}
-                      className="w-full mt-6 bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 font-semibold"
-                      data-testid="complete-lot-button"
-                    >
-                      Complete Lot
-                    </button>
-                  )}
+                  <div className="mt-6 p-3 bg-yellow-50 border border-yellow-200 rounded-lg text-sm text-gray-700">
+                    ⏱️ Lot will auto-complete when timer expires. Next club will load automatically.
+                  </div>
                 </div>
               ) : (
                 <div className="text-center py-12">
