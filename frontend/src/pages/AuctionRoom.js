@@ -642,38 +642,6 @@ export default function AuctionRoom() {
                 <p>Order is randomized - use for strategy only</p>
               </div>
             </div>
-                          ? "bg-blue-50 border-blue-500"
-                          : "bg-gray-50 border-gray-200"
-                      }`}
-                      data-testid={`club-item-${club.id}`}
-                    >
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <div className="font-semibold text-gray-900">{club.name}</div>
-                          <div className="text-xs text-gray-600">{club.country}</div>
-                        </div>
-                        {isCurrentClub && (
-                          <span className="text-xs bg-blue-600 text-white px-2 py-1 rounded">
-                            LIVE
-                          </span>
-                        )}
-                        {isSold && !isCurrentClub && (
-                          <div className="text-right">
-                            <div className="text-xs text-green-600 font-semibold">✓ Sold</div>
-                            {winner && (
-                              <>
-                                <div className="text-xs text-gray-600">{winner.userName}</div>
-                                <div className="text-xs font-bold text-gray-900">${winner.amount}</div>
-                              </>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
           </div>
         </div>
       </div>
