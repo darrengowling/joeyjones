@@ -238,10 +238,11 @@ export default function AuctionRoom() {
 
   const loadClubs = async () => {
     try {
-      const response = await axios.get(`${API}/clubs`);
-      setClubs(response.data);
-    } catch (e) {
-      console.error("Error loading clubs:", e);
+      const response = await axios.get(`${API}/auction/${auctionId}/clubs`);
+      setClubs(response.data.clubs);
+      console.log("Loaded clubs:", response.data);
+    } catch (error) {
+      console.error("Error loading clubs:", error);
     }
   };
 
