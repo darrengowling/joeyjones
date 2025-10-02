@@ -375,28 +375,38 @@ async def start_auction(league_id: str):
     # Auto-start first club
     if all_clubs:
         first_club_id = all_clubs[0]["id"]
+        lot_id = f"{auction_obj.id}-lot-1"  # Create lot ID
         timer_end = datetime.now(timezone.utc) + timedelta(seconds=auction_obj.bidTimer)
+        
         await db.auctions.update_one(
             {"id": auction_obj.id},
             {"$set": {
                 "status": "active",
                 "currentClubId": first_club_id,
                 "currentLot": 1,
-                "timerEndsAt": timer_end
+                "timerEndsAt": timer_end,
+                "currentLotId": lot_id  # Store lot ID
             }}
         )
         
-        # Emit lot start via Socket.IO
+        # Create timer event for lot start
+        if timer_end.tzinfo is None:
+            timer_end = timer_end.replace(tzinfo=timezone.utc)
+        ends_at_ms = int(timer_end.timestamp() * 1000)
+        timer_data = create_timer_event(lot_id, ends_at_ms)
+        
+        # Emit lot start with standardized timer data
         await sio.emit('lot_started', {
             'club': Club(**all_clubs[0]).model_dump(),
             'lotNumber': 1,
-            'timerEndsAt': timer_end.isoformat()
-        }, room=f"auction:{auction_obj.id}")
+            'timer': timer_data  # Include standardized timer data
+        })
         
         # Start timer countdown
-        asyncio.create_task(countdown_timer(auction_obj.id, timer_end))
+        asyncio.create_task(countdown_timer(auction_obj.id, timer_end, lot_id))
         
-        logger.info(f"Started auction {auction_obj.id} with first club: {all_clubs[0]['name']}")
+        logger.info(f"Started auction {auction_obj.id} lot {lot_id} with club: {all_clubs[0]['name']}")
+        logger.info(f"Timer data - seq: {timer_data['seq']}, endsAt: {timer_data['endsAt']}")
     else:
         logger.error(f"Failed to start auction {auction_obj.id} - no clubs available")
         raise HTTPException(status_code=500, detail="No clubs available to auction")
