@@ -443,6 +443,10 @@ async def complete_lot(auction_id: str):
         
         winning_bid = bids[0] if bids else None
         
+        # Remove MongoDB _id from winning bid
+        if winning_bid:
+            winning_bid.pop('_id', None)
+        
         # If there's a winner, update their budget and clubs won
         if winning_bid:
             participant = await db.league_participants.find_one({
