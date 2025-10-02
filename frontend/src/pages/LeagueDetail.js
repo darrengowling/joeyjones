@@ -136,6 +136,33 @@ export default function LeagueDetail() {
             )}
           </div>
 
+          {/* Participants */}
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">League Participants</h3>
+            {participants.length === 0 ? (
+              <p className="text-gray-600">No participants yet. Share the invite token to get started!</p>
+            ) : (
+              <div className="space-y-2">
+                {participants.map((p) => (
+                  <div
+                    key={p.id}
+                    className="flex justify-between items-center bg-white p-3 rounded"
+                  >
+                    <div>
+                      <span className="font-semibold text-gray-900">{p.userName}</span>
+                      {p.userId === league.commissionerId && (
+                        <span className="ml-2 text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">
+                          Commissioner
+                        </span>
+                      )}
+                    </div>
+                    <span className="text-sm text-gray-600">{p.userEmail}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
           {/* League Details */}
           <div className="grid md:grid-cols-2 gap-6 mb-8">
             <div className="bg-gray-50 p-6 rounded-lg">
