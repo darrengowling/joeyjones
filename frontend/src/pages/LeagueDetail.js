@@ -22,6 +22,7 @@ export default function LeagueDetail() {
     }
     loadLeague();
     loadParticipants();
+    loadStandings();
   }, [leagueId]);
 
   const loadLeague = async () => {
