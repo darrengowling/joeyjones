@@ -73,6 +73,8 @@ class Auction(BaseModel):
     clubQueue: List[str] = []  # Queue of club IDs to auction
     unsoldClubs: List[str] = []  # Clubs that went unsold, will be re-offered
     minimumBudget: float = 1000000.0  # £1m minimum budget per user
+    pausedRemainingTime: Optional[float] = None  # Stored time when paused
+    pausedAt: Optional[datetime] = None  # When auction was paused
     createdAt: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 class AuctionCreate(BaseModel):
