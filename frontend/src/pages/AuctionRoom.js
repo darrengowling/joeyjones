@@ -202,6 +202,8 @@ export default function AuctionRoom() {
       socket.off("sold", handleSold);
       socket.off("anti_snipe", handleAntiSnipe);
       socket.off("auction_complete", handleAuctionComplete);
+      socket.off("auction_paused", handleAuctionPaused);
+      socket.off("auction_resumed", handleAuctionResumed);
       socket.off("disconnect", handleDisconnect);
     };
   };
