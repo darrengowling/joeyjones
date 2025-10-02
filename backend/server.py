@@ -17,9 +17,11 @@ from models import (
     League, LeagueCreate,
     LeagueParticipant, LeagueParticipantCreate,
     Auction, AuctionCreate,
-    Bid, BidCreate
+    Bid, BidCreate,
+    LeaguePoints
 )
 from uefa_clubs import UEFA_CL_CLUBS
+from scoring_service import recompute_league_scores, get_league_standings
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
