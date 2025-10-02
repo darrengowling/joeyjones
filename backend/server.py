@@ -374,7 +374,9 @@ async def start_auction(league_id: str):
     
     # Auto-start first club
     if all_clubs:
-        first_club_id = all_clubs[0]["id"]
+        # Initialize club queue (randomized order)
+        club_queue = [club["id"] for club in all_clubs]
+        first_club_id = club_queue[0]
         lot_id = f"{auction_obj.id}-lot-1"  # Create lot ID
         timer_end = datetime.now(timezone.utc) + timedelta(seconds=auction_obj.bidTimer)
         
@@ -385,7 +387,10 @@ async def start_auction(league_id: str):
                 "currentClubId": first_club_id,
                 "currentLot": 1,
                 "timerEndsAt": timer_end,
-                "currentLotId": lot_id  # Store lot ID
+                "currentLotId": lot_id,  # Store lot ID
+                "clubQueue": club_queue,  # Initialize club queue
+                "unsoldClubs": [],  # Initialize empty unsold list
+                "minimumBudget": 1000000.0  # £1m minimum budget
             }}
         )
         
