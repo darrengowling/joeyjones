@@ -508,10 +508,18 @@ async def place_bid(auction_id: str, bid_input: BidCreate):
                 {"$set": {"timerEndsAt": new_end_time}}
             )
             
-            await sio.emit('anti_snipe_triggered', {
-                'newEndTime': new_end_time.isoformat(),
-                'extensionSeconds': auction["antiSnipeSeconds"]
-            }, room=f"auction:{auction_id}")
+            # Get lot ID and create anti-snipe timer data
+            lot_id = auction.get("currentLotId")
+            if not lot_id and auction.get("currentLot"):
+                lot_id = f"{auction_id}-lot-{auction['currentLot']}"
+            
+            if lot_id:
+                ends_at_ms = int(new_end_time.timestamp() * 1000)
+                timer_data = create_timer_event(lot_id, ends_at_ms)
+                
+                await sio.emit('anti_snipe', timer_data)
+                
+                logger.info(f"Anti-snipe triggered for lot {lot_id}: seq={timer_data['seq']}, new end={timer_data['endsAt']}")
     
     return {"message": "Bid placed successfully", "bid": bid_obj}
 
