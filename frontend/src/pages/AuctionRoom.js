@@ -75,9 +75,7 @@ export default function AuctionRoom() {
       if (data.currentBids) {
         setBids(data.currentBids);
       }
-      if (data.timeRemaining !== undefined) {
-        setTimeRemaining(data.timeRemaining);
-      }
+      // DON'T set timer from sync_state - let timer_update handle it
       if (data.participants) {
         setParticipants(data.participants);
       }
