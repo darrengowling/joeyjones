@@ -587,11 +587,19 @@ async def place_bid(auction_id: str, bid_input: BidCreate):
     if not participant:
         raise HTTPException(status_code=403, detail="User is not a participant in this league")
     
+    # Check minimum bid amount
+    minimum_budget = auction.get("minimumBudget", 1000000.0)  # Default £1m
+    if bid_input.amount < minimum_budget:
+        raise HTTPException(
+            status_code=400, 
+            detail=f"Bid must be at least £{minimum_budget:,.0f}"
+        )
+    
     # Check if user has enough budget
     if bid_input.amount > participant["budgetRemaining"]:
         raise HTTPException(
             status_code=400, 
-            detail=f"Insufficient budget. You have ${participant['budgetRemaining']} remaining"
+            detail=f"Insufficient budget. You have £{participant['budgetRemaining']:,.0f} remaining"
         )
     
     # Create bid
