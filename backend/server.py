@@ -605,22 +605,23 @@ async def leave_league(sid, data):
 async def root():
     return {"message": "Friends of Pifa API"}
 
-# Include the router in the main app
-app.include_router(api_router)
-
-# Mount Socket.IO
-socket_app = socketio.ASGIApp(
-    sio,
-    other_asgi_app=app,
-    socketio_path='/socket.io'
-)
-
+# Add CORS middleware to main app
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
     allow_origins=os.environ.get('CORS_ORIGINS', '*').split(','),
     allow_methods=["*"],
     allow_headers=["*"],
+)
+
+# Include the router in the main app
+app.include_router(api_router)
+
+# Mount Socket.IO - this wraps the FastAPI app
+socket_app = socketio.ASGIApp(
+    sio,
+    other_asgi_app=app,
+    socketio_path='socket.io'
 )
 
 @app.on_event("shutdown")
