@@ -446,7 +446,7 @@ const Home = () => {
                         <div className="flex-1">
                           <h4 className="text-xl font-semibold text-gray-900 mb-2">{league.name}</h4>
                           <p className="text-gray-600 text-sm mb-1">
-                            Budget: ${league.budget} | Slots: {league.clubSlots}
+                            Budget: £{league.budget.toLocaleString()} | Slots: {league.clubSlots}
                           </p>
                           <p className="text-gray-600 text-sm">
                             Managers: {league.participantCount || 0}/{league.maxManagers} 
