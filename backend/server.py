@@ -210,13 +210,9 @@ async def join_league(league_id: str, participant_input: LeagueParticipantCreate
     input_token = participant_input.inviteToken.strip()
     league_token = league["inviteToken"].strip()
     
-    logger.info(f"Token comparison: league_token='{league_token}' vs input_token='{input_token}'")
-    logger.info(f"Are equal after trim: {league_token == input_token}")
-    
     if league_token != input_token:
         # Provide more helpful error message
         error_msg = f"Invalid invite token. The correct token for league '{league['name']}' is '{league_token}'"
-        logger.error(f"Token mismatch for user {participant_input.userId}: expected '{league_token}', got '{input_token}'")
         raise HTTPException(status_code=403, detail=error_msg)
     
     # Check if already joined
