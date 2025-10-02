@@ -356,9 +356,9 @@ const Home = () => {
       {/* Main Content */}
       <div className="container mx-auto px-4 py-8">
         <div className="bg-white rounded-lg shadow-lg p-8">
-          <h2 className="text-3xl font-bold mb-6 text-gray-900">Welcome to UEFA Club Auction</h2>
+          <h2 className="text-3xl font-bold mb-6 text-gray-900">Welcome to Friends of Pifa</h2>
           <p className="text-gray-600 mb-8">
-            Bid on UEFA Champions League clubs and build your dream team!
+            Bid for exclusive ownership of UCL teams and compete with friends!
           </p>
 
           <div className="grid md:grid-cols-3 gap-6 mb-8">
