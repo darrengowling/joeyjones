@@ -361,6 +361,7 @@ async def place_bid(auction_id: str, bid_input: BidCreate):
     
     # Create bid
     bid_obj = Bid(
+        auctionId=auction_id,
         **bid_input.dict(),
         userName=user["name"],
         userEmail=user["email"]
