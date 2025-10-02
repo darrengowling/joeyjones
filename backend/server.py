@@ -300,7 +300,36 @@ async def start_auction(league_id: str):
         {"$set": {"status": "active"}}
     )
     
-    return {"message": "Auction created", "auctionId": auction_obj.id}
+    # Get all clubs and randomize order
+    import random
+    all_clubs = await db.clubs.find().to_list(100)
+    random.shuffle(all_clubs)
+    
+    # Auto-start first club
+    if all_clubs:
+        first_club_id = all_clubs[0]["id"]
+        timer_end = datetime.utcnow() + timedelta(seconds=auction_obj.bidTimer)
+        await db.auctions.update_one(
+            {"id": auction_obj.id},
+            {"$set": {
+                "status": "active",
+                "currentClubId": first_club_id,
+                "currentLot": 1,
+                "timerEndsAt": timer_end
+            }}
+        )
+        
+        # Emit lot start via Socket.IO
+        await sio.emit('lot_started', {
+            'club': Club(**all_clubs[0]).dict(),
+            'lotNumber': 1,
+            'timerEndsAt': timer_end.isoformat()
+        }, room=f"auction:{auction_obj.id}")
+        
+        # Start timer countdown
+        asyncio.create_task(countdown_timer(auction_obj.id, timer_end))
+    
+    return {"message": "Auction created and started", "auctionId": auction_obj.id}
 
 @api_router.get("/auction/{auction_id}")
 async def get_auction(auction_id: str):
