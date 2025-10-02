@@ -49,8 +49,26 @@ app = FastAPI()
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
 
-# Store active timers
+# Store active timers and sequence numbers
 active_timers = {}
+lot_sequences = {}  # Track sequence numbers per lot
+
+def get_next_seq(lot_id: str) -> int:
+    """Get next sequence number for a lot"""
+    if lot_id not in lot_sequences:
+        lot_sequences[lot_id] = 0
+    lot_sequences[lot_id] += 1
+    return lot_sequences[lot_id]
+
+def create_timer_event(lot_id: str, ends_at_ms: int) -> dict:
+    """Create standardized timer event data"""
+    import time
+    return {
+        "lotId": lot_id,
+        "seq": get_next_seq(lot_id),
+        "endsAt": ends_at_ms,
+        "serverNow": int(time.time() * 1000)
+    }
 
 # Configure logging
 logging.basicConfig(
