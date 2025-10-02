@@ -112,6 +112,11 @@ export default function AuctionRoom() {
       alert(`🔥 Anti-snipe! Timer extended by ${data.extensionSeconds} seconds`);
     });
 
+    socket.on("auction_complete", (data) => {
+      console.log("Auction complete:", data);
+      alert(data.message || "Auction complete! All clubs have been auctioned.");
+    });
+
     socket.on("disconnect", () => {
       console.log("Socket disconnected");
     });
