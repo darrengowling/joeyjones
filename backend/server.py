@@ -682,8 +682,17 @@ async def disconnect(sid):
 async def join_auction(sid, data):
     auction_id = data.get('auctionId')
     if auction_id:
-        sio.enter_room(sid, f"auction:{auction_id}")
-        logger.info(f"Client {sid} joined auction room: auction:{auction_id}")
+        room_name = f"auction:{auction_id}"
+        sio.enter_room(sid, room_name)
+        logger.info(f"Client {sid} joined auction room: {room_name}")
+        
+        # Test immediate emission to verify room membership
+        await sio.emit('test_room_message', {
+            'message': f'You have joined room {room_name}',
+            'timestamp': datetime.now(timezone.utc).isoformat()
+        }, room=sid)  # Send to specific client first
+        
+        logger.info(f"Sent test message to client {sid}")
         
         # Send current auction state for reconnection
         auction = await db.auctions.find_one({"id": auction_id})
