@@ -665,8 +665,8 @@ async def complete_lot(auction_id: str):
     return {"message": "No active lot"}
 
 # ===== TIMER COUNTDOWN =====
-async def countdown_timer(auction_id: str, end_time: datetime):
-    """Countdown timer with proper cleanup and debugging"""
+async def countdown_timer(auction_id: str, end_time: datetime, lot_id: str):
+    """Countdown timer with standardized events"""
     
     # Store this timer to prevent duplicates
     if auction_id in active_timers:
@@ -678,10 +678,15 @@ async def countdown_timer(auction_id: str, end_time: datetime):
     active_timers[auction_id] = current_task
     
     try:
-        logger.info(f"Starting countdown timer for auction {auction_id}")
+        logger.info(f"Starting countdown timer for auction {auction_id}, lot {lot_id}")
+        
+        # Convert end_time to epoch milliseconds
+        if end_time.tzinfo is None:
+            end_time = end_time.replace(tzinfo=timezone.utc)
+        ends_at_ms = int(end_time.timestamp() * 1000)
         
         while True:
-            await asyncio.sleep(1)
+            await asyncio.sleep(0.5)  # 500ms tick interval
             
             # Check if we should stop (cancelled or auction ended)
             if auction_id not in active_timers or active_timers[auction_id] != current_task:
@@ -700,23 +705,29 @@ async def countdown_timer(auction_id: str, end_time: datetime):
                 logger.info(f"No timer end time for auction {auction_id}, stopping timer")
                 break
             
-            # Ensure timezone awareness
+            # Update ends_at_ms if it changed (anti-snipe)
             if current_end_time.tzinfo is None:
                 current_end_time = current_end_time.replace(tzinfo=timezone.utc)
+            new_ends_at_ms = int(current_end_time.timestamp() * 1000)
             
-            time_remaining = (current_end_time - datetime.now(timezone.utc)).total_seconds()
+            if new_ends_at_ms != ends_at_ms:
+                # Anti-snipe occurred, update end time
+                ends_at_ms = new_ends_at_ms
+                logger.info(f"Anti-snipe detected for auction {auction_id}, new end time: {ends_at_ms}")
             
-            if time_remaining <= 0:
+            # Check if timer expired
+            now_ms = int(datetime.now(timezone.utc).timestamp() * 1000)
+            if now_ms >= ends_at_ms:
                 # Timer expired, complete the lot
                 logger.info(f"Timer expired for auction {auction_id}, completing lot")
                 await complete_lot(auction_id)
                 break
             
-            # Use working broadcast method instead of broken room targeting
-            await sio.emit('timer_update', {
-                'timeRemaining': max(0, int(time_remaining)),
-                'auctionId': auction_id  # Include auction ID for client filtering
-            })  # Broadcast to all clients
+            # Emit timer tick
+            timer_data = create_timer_event(lot_id, ends_at_ms)
+            logger.debug(f"Emitting tick for lot {lot_id}: seq={timer_data['seq']}")
+            
+            await sio.emit('tick', timer_data)  # Broadcast to all clients
     
     except asyncio.CancelledError:
         logger.info(f"Timer for auction {auction_id} was cancelled")
