@@ -201,19 +201,7 @@ export default function LeagueDetail() {
               
               {league.status === "active" && (
                 <button
-                  onClick={() => {
-                    // Find auction for this league
-                    axios.get(`${API}/leagues`).then(resp => {
-                      // We need to find the auction ID
-                      // For now, navigate to a discover page or fetch auction
-                      fetch(`${API}/leagues`)
-                        .then(r => r.json())
-                        .then(data => {
-                          // This is a workaround - we should have an endpoint to get auction by league
-                          // For now, let's add this functionality
-                        });
-                    });
-                  }}
+                  onClick={goToAuction}
                   className="px-6 py-3 rounded-lg font-semibold bg-blue-600 text-white hover:bg-blue-700"
                   data-testid="go-to-auction-button"
                 >
