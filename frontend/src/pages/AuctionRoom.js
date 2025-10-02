@@ -57,20 +57,21 @@ export default function AuctionRoom() {
       reconnectionAttempts: 5,
     });
     
-    socket.on("connect_error", (error) => {
+    // Define handlers as named functions for proper cleanup
+    const handleConnectError = (error) => {
       console.error("Socket.IO connection error:", error);
-    });
+    };
 
-    socket.on("connect", () => {
+    const handleConnect = () => {
       console.log("Socket connected");
       socket.emit("join_auction", { auctionId });
-    });
+    };
 
-    socket.on("joined", (data) => {
+    const handleJoined = (data) => {
       console.log("Joined auction:", data);
-    });
+    };
 
-    socket.on("sync_state", (data) => {
+    const handleSyncState = (data) => {
       console.log("Received sync state:", data);
       // Update state with current auction data (timer handled by useAuctionClock)
       if (data.currentClub) {
@@ -86,23 +87,23 @@ export default function AuctionRoom() {
       if (data.auction && data.auction.currentLotId) {
         setCurrentLotId(data.auction.currentLotId);
       }
-    });
+    };
 
-    socket.on("bid_placed", (data) => {
+    const handleBidPlaced = (data) => {
       console.log("Bid placed:", data);
       setBids((prev) => [data.bid, ...prev]);
       loadAuction();
-    });
+    };
 
-    socket.on("lot_started", (data) => {
+    const handleLotStarted = (data) => {
       console.log("Lot started:", data);
       setCurrentClub(data.club);
       if (data.timer && data.timer.lotId) {
         setCurrentLotId(data.timer.lotId);
       }
-    });
+    };
 
-    socket.on("sold", (data) => {
+    const handleSold = (data) => {
       console.log("Lot sold:", data);
       alert(`Lot complete! Winner: ${data.winningBid ? data.winningBid.userName : "No bids"}`);
       setCurrentClub(null);
@@ -111,21 +112,59 @@ export default function AuctionRoom() {
         setParticipants(data.participants);
       }
       loadAuction();
-    });
+    };
 
-    socket.on("anti_snipe", (data) => {
+    const handleAntiSnipe = (data) => {
       console.log("Anti-snipe triggered:", data);
       alert(`🔥 Anti-snipe! Timer extended!`);
-    });
+    };
 
-    socket.on("auction_complete", (data) => {
+    const handleAuctionComplete = (data) => {
       console.log("Auction complete:", data);
       alert(data.message || "Auction complete! All clubs have been auctioned.");
-    });
+    };
 
-    socket.on("disconnect", () => {
+    const handleDisconnect = () => {
       console.log("Socket disconnected");
-    });
+    };
+
+    // Remove existing listeners before adding new ones (prevent duplicates)
+    socket.off("connect_error", handleConnectError);
+    socket.off("connect", handleConnect);
+    socket.off("joined", handleJoined);
+    socket.off("sync_state", handleSyncState);
+    socket.off("bid_placed", handleBidPlaced);
+    socket.off("lot_started", handleLotStarted);
+    socket.off("sold", handleSold);
+    socket.off("anti_snipe", handleAntiSnipe);
+    socket.off("auction_complete", handleAuctionComplete);
+    socket.off("disconnect", handleDisconnect);
+
+    // Add listeners
+    socket.on("connect_error", handleConnectError);
+    socket.on("connect", handleConnect);
+    socket.on("joined", handleJoined);
+    socket.on("sync_state", handleSyncState);
+    socket.on("bid_placed", handleBidPlaced);
+    socket.on("lot_started", handleLotStarted);
+    socket.on("sold", handleSold);
+    socket.on("anti_snipe", handleAntiSnipe);
+    socket.on("auction_complete", handleAuctionComplete);
+    socket.on("disconnect", handleDisconnect);
+
+    // Store cleanup function
+    return () => {
+      socket.off("connect_error", handleConnectError);
+      socket.off("connect", handleConnect);
+      socket.off("joined", handleJoined);
+      socket.off("sync_state", handleSyncState);
+      socket.off("bid_placed", handleBidPlaced);
+      socket.off("lot_started", handleLotStarted);
+      socket.off("sold", handleSold);
+      socket.off("anti_snipe", handleAntiSnipe);
+      socket.off("auction_complete", handleAuctionComplete);
+      socket.off("disconnect", handleDisconnect);
+    };
   };
 
   const loadAuction = async () => {
