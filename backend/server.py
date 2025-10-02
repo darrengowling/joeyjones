@@ -704,10 +704,11 @@ app.add_middleware(
 app.include_router(api_router)
 
 # Mount Socket.IO - this wraps the FastAPI app
+# Note: Using 'api/socket.io' to match Kubernetes ingress routing rules
 socket_app = socketio.ASGIApp(
     sio,
     other_asgi_app=app,
-    socketio_path='socket.io'
+    socketio_path='api/socket.io'
 )
 
 @app.on_event("shutdown")
