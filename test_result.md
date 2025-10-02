@@ -255,15 +255,13 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Fix JSON serialization issues"
-    - "API endpoints functionality"
-    - "Socket.IO client connection"
     - "UI state synchronization"
+    - "Real-time auction flow"
   stuck_tasks:
     - "UI state synchronization"
     - "Real-time auction flow"
   test_all: false
-  test_priority: "high_first"
+  test_priority: "stuck_first"
 
 agent_communication:
   - agent: "main"
