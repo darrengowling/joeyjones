@@ -455,7 +455,7 @@ async def start_lot(auction_id: str, club_id: str):
     
     # Emit lot start
     await sio.emit('lot_started', {
-        'club': Club(**club).dict(),
+        'club': Club(**club).model_dump(),
         'lotNumber': auction["currentLot"] + 1,
         'timerEndsAt': timer_end.isoformat()
     }, room=f"auction:{auction_id}")
