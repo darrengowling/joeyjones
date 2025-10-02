@@ -126,6 +126,35 @@ const Home = () => {
     }
   };
 
+  const handleDeleteLeague = async (league, e) => {
+    e.stopPropagation(); // Prevent navigation to league detail
+    
+    if (!user) {
+      alert("Please sign in first");
+      return;
+    }
+
+    if (league.commissionerId !== user.id) {
+      alert("Only the commissioner can delete this league");
+      return;
+    }
+
+    const confirmed = window.confirm(
+      `Are you sure you want to delete "${league.name}"? This action cannot be undone.`
+    );
+
+    if (!confirmed) return;
+
+    try {
+      await axios.delete(`${API}/leagues/${league.id}?user_id=${user.id}`);
+      alert("League deleted successfully");
+      loadLeagues();
+    } catch (e) {
+      console.error("Error deleting league:", e);
+      alert(e.response?.data?.detail || "Error deleting league");
+    }
+  };
+
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
     if (savedUser) {
