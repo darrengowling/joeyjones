@@ -101,27 +101,38 @@ const Home = () => {
     }
 
     try {
-      // Find league by invite token
+      // Trim whitespace and normalize token (handle copy-paste issues)
+      const normalizedToken = inviteToken.trim().toLowerCase();
+      
+      if (!normalizedToken) {
+        alert("Please enter an invite token");
+        return;
+      }
+
+      // Find league by invite token (case-insensitive)
       const leaguesResponse = await axios.get(`${API}/leagues`);
-      const league = leaguesResponse.data.find((l) => l.inviteToken === inviteToken);
+      const league = leaguesResponse.data.find((l) => 
+        l.inviteToken.trim().toLowerCase() === normalizedToken
+      );
       
       if (!league) {
-        alert("Invalid invite token");
+        alert(`Invalid invite token "${inviteToken.trim()}". Please check with your league commissioner for the correct token.`);
         return;
       }
 
       await axios.post(`${API}/leagues/${league.id}/join`, {
         userId: user.id,
-        inviteToken: inviteToken,
+        inviteToken: inviteToken.trim(), // Send trimmed token to backend
       });
 
-      alert("Joined league successfully!");
+      alert(`Successfully joined "${league.name}"!`);
       setShowJoinLeagueDialog(false);
       setInviteToken("");
       loadLeagues();
       navigate(`/league/${league.id}`);
     } catch (e) {
       console.error("Error joining league:", e);
+      // Show the backend error message which includes helpful details
       alert(e.response?.data?.detail || "Error joining league");
     }
   };
