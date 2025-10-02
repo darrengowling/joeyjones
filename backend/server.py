@@ -527,7 +527,7 @@ async def complete_lot(auction_id: str):
         # Emit lot complete
         await sio.emit('lot_complete', {
             'clubId': auction["currentClubId"],
-            'winningBid': Bid(**winning_bid).dict() if winning_bid else None,
+            'winningBid': Bid(**winning_bid).model_dump(mode='json') if winning_bid else None,
             'participants': [LeagueParticipant(**p).model_dump(mode='json') for p in participants]
         }, room=f"auction:{auction_id}")
         
