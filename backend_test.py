@@ -143,7 +143,7 @@ class BackendTester:
         league_data = {
             "name": "Test Champions League",
             "commissionerId": self.test_data["user_id"],
-            "budget": 100.0,
+            "budget": 50000000.0,  # £50m budget to allow for minimum £1m bids
             "minManagers": 2,
             "maxManagers": 4,
             "clubSlots": 3
