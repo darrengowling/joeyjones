@@ -71,6 +71,60 @@ async def get_user(user_id: str):
         raise HTTPException(status_code=404, detail="User not found")
     return User(**user)
 
+@api_router.post("/auth/magic-link")
+async def send_magic_link(email_input: dict):
+    """
+    Placeholder for magic-link authentication
+    In production: Generate token, send email with link
+    For pilot: Just return the token
+    """
+    email = email_input.get("email")
+    if not email:
+        raise HTTPException(status_code=400, detail="Email required")
+    
+    # Check if user exists, create if not
+    user = await db.users.find_one({"email": email})
+    if not user:
+        # For pilot, create user with email as name
+        user_create = UserCreate(name=email.split("@")[0], email=email)
+        user_obj = User(**user_create.dict())
+        await db.users.insert_one(user_obj.dict())
+        user = user_obj.dict()
+    
+    # Generate magic token (in production, store and send via email)
+    magic_token = str(uuid.uuid4())[:12]
+    
+    # For pilot: Return token directly
+    return {
+        "message": "Magic link generated (pilot mode)",
+        "email": email,
+        "token": magic_token,
+        "user": User(**user),
+        "note": "In production, this would be sent via email"
+    }
+
+@api_router.post("/auth/verify-magic-link")
+async def verify_magic_link(token_input: dict):
+    """
+    Placeholder for magic-link verification
+    For pilot: Just validate email and return user
+    """
+    email = token_input.get("email")
+    token = token_input.get("token")
+    
+    if not email or not token:
+        raise HTTPException(status_code=400, detail="Email and token required")
+    
+    # For pilot: Just find user by email
+    user = await db.users.find_one({"email": email})
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    return {
+        "message": "Magic link verified (pilot mode)",
+        "user": User(**user)
+    }
+
 # ===== CLUB ENDPOINTS =====
 @api_router.get("/clubs", response_model=List[Club])
 async def get_clubs():
