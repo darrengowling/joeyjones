@@ -575,6 +575,161 @@ async def start_lot(auction_id: str, club_id: str):
     
     return {"message": "Lot started", "club": Club(**club)}
 
+@api_router.post("/auction/{auction_id}/pause")
+async def pause_auction(auction_id: str, commissioner_id: str = None):
+    """Pause an active auction - only commissioner can do this"""
+    auction = await db.auctions.find_one({"id": auction_id})
+    if not auction:
+        raise HTTPException(status_code=404, detail="Auction not found")
+    
+    # Get league to verify commissioner
+    league = await db.leagues.find_one({"id": auction["leagueId"]})
+    if not league:
+        raise HTTPException(status_code=404, detail="League not found")
+    
+    # Verify commissioner permissions (for now, skip verification - would need user auth)
+    
+    if auction["status"] != "active":
+        raise HTTPException(status_code=400, detail="Can only pause active auctions")
+    
+    # Cancel active timer
+    if auction_id in active_timers:
+        active_timers[auction_id].cancel()
+        del active_timers[auction_id]
+    
+    # Store remaining time when paused
+    remaining_time = 0
+    if auction.get("timerEndsAt"):
+        timer_end = auction["timerEndsAt"]
+        if timer_end.tzinfo is None:
+            timer_end = timer_end.replace(tzinfo=timezone.utc)
+        remaining_time = max(0, (timer_end - datetime.now(timezone.utc)).total_seconds())
+    
+    # Update auction status
+    await db.auctions.update_one(
+        {"id": auction_id},
+        {"$set": {
+            "status": "paused",
+            "pausedRemainingTime": remaining_time,  # Store remaining time
+            "pausedAt": datetime.now(timezone.utc)
+        }}
+    )
+    
+    # Notify all participants
+    await sio.emit('auction_paused', {
+        'message': 'Auction has been paused by the commissioner',
+        'remainingTime': remaining_time
+    })
+    
+    logger.info(f"Auction {auction_id} paused with {remaining_time}s remaining")
+    
+    return {"message": "Auction paused successfully", "remainingTime": remaining_time}
+
+
+@api_router.post("/auction/{auction_id}/resume")
+async def resume_auction(auction_id: str, commissioner_id: str = None):
+    """Resume a paused auction - only commissioner can do this"""
+    auction = await db.auctions.find_one({"id": auction_id})
+    if not auction:
+        raise HTTPException(status_code=404, detail="Auction not found")
+    
+    # Get league to verify commissioner
+    league = await db.leagues.find_one({"id": auction["leagueId"]})
+    if not league:
+        raise HTTPException(status_code=404, detail="League not found")
+    
+    # Verify commissioner permissions (for now, skip verification)
+    
+    if auction["status"] != "paused":
+        raise HTTPException(status_code=400, detail="Can only resume paused auctions")
+    
+    # Calculate new end time based on stored remaining time
+    remaining_time = auction.get("pausedRemainingTime", auction.get("bidTimer", 60))
+    new_end_time = datetime.now(timezone.utc) + timedelta(seconds=remaining_time)
+    
+    # Update auction status
+    await db.auctions.update_one(
+        {"id": auction_id},
+        {"$set": {
+            "status": "active",
+            "timerEndsAt": new_end_time
+        },
+        "$unset": {
+            "pausedRemainingTime": "",
+            "pausedAt": ""
+        }}
+    )
+    
+    # Restart timer
+    current_lot_id = auction.get("currentLotId")
+    if not current_lot_id:
+        current_lot_id = f"{auction_id}-lot-{auction.get('currentLot', 1)}"
+    
+    asyncio.create_task(countdown_timer(auction_id, new_end_time, current_lot_id))
+    
+    # Notify all participants
+    await sio.emit('auction_resumed', {
+        'message': 'Auction has been resumed by the commissioner',
+        'newEndTime': new_end_time.isoformat(),
+        'remainingTime': remaining_time
+    })
+    
+    logger.info(f"Auction {auction_id} resumed with {remaining_time}s remaining")
+    
+    return {"message": "Auction resumed successfully", "remainingTime": remaining_time}
+
+
+@api_router.delete("/leagues/{league_id}")
+async def delete_league(league_id: str, commissioner_id: str = None):
+    """Delete a league and all associated data - only commissioner can do this"""
+    league = await db.leagues.find_one({"id": league_id})
+    if not league:
+        raise HTTPException(status_code=404, detail="League not found")
+    
+    # Verify commissioner permissions (for now, skip verification)
+    # In production, you'd verify that commissioner_id matches league["commissionerId"]
+    
+    # Check if auction is active
+    existing_auction = await db.auctions.find_one({"leagueId": league_id})
+    if existing_auction and existing_auction["status"] == "active":
+        raise HTTPException(status_code=400, detail="Cannot delete league with active auction. Pause or complete the auction first.")
+    
+    # Cascade delete all related data
+    delete_results = {}
+    
+    # Delete bids
+    bid_result = await db.bids.delete_many({"auctionId": {"$in": [existing_auction["id"]] if existing_auction else []}})
+    delete_results["bids"] = bid_result.deleted_count
+    
+    # Delete auction
+    if existing_auction:
+        auction_result = await db.auctions.delete_one({"leagueId": league_id})
+        delete_results["auction"] = auction_result.deleted_count
+        
+        # Cancel any active timers
+        if existing_auction["id"] in active_timers:
+            active_timers[existing_auction["id"]].cancel()
+            del active_timers[existing_auction["id"]]
+    
+    # Delete league participants
+    participant_result = await db.league_participants.delete_many({"leagueId": league_id})
+    delete_results["participants"] = participant_result.deleted_count
+    
+    # Delete league points
+    points_result = await db.league_points.delete_many({"leagueId": league_id})
+    delete_results["points"] = points_result.deleted_count
+    
+    # Delete the league itself
+    league_result = await db.leagues.delete_one({"id": league_id})
+    delete_results["league"] = league_result.deleted_count
+    
+    logger.info(f"Deleted league {league_id}: {delete_results}")
+    
+    return {
+        "message": "League deleted successfully",
+        "deletedData": delete_results
+    }
+
 @api_router.post("/auction/{auction_id}/complete-lot")
 async def complete_lot(auction_id: str):
     auction = await db.auctions.find_one({"id": auction_id})
