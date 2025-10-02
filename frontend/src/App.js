@@ -110,6 +110,16 @@ const Home = () => {
               >
                 Change
               </button>
+              <button
+                onClick={() => {
+                  localStorage.removeItem("user");
+                  setUser(null);
+                }}
+                className="text-sm text-red-600 hover:underline"
+                data-testid="logout-button"
+              >
+                Logout
+              </button>
             </div>
           ) : (
             <button
