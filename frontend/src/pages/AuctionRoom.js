@@ -47,7 +47,14 @@ export default function AuctionRoom() {
   const initializeSocket = () => {
     socket = io(BACKEND_URL, {
       path: "/socket.io",
-      transports: ["websocket", "polling"],
+      transports: ["polling", "websocket"], // Try polling first
+      reconnection: true,
+      reconnectionDelay: 1000,
+      reconnectionAttempts: 5,
+    });
+    
+    socket.on("connect_error", (error) => {
+      console.error("Socket.IO connection error:", error);
     });
 
     socket.on("connect", () => {
