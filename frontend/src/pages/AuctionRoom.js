@@ -113,6 +113,10 @@ export default function AuctionRoom() {
       // Load league
       const leagueResponse = await axios.get(`${API}/leagues/${response.data.auction.leagueId}`);
       setLeague(leagueResponse.data);
+
+      // Load participants
+      const participantsResponse = await axios.get(`${API}/leagues/${response.data.auction.leagueId}/participants`);
+      setParticipants(participantsResponse.data);
     } catch (e) {
       console.error("Error loading auction:", e);
     } finally {
