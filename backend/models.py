@@ -38,7 +38,7 @@ class League(BaseModel):
 class LeagueCreate(BaseModel):
     name: str
     commissionerId: str
-    budget: float
+    budget: float = 500000000.0  # Default £500m budget
     minManagers: int = 2
     maxManagers: int = 8
     clubSlots: int = 3
