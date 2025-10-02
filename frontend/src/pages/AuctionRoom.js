@@ -155,6 +155,13 @@ export default function AuctionRoom() {
       return;
     }
 
+    // Check user's budget
+    const userParticipant = participants.find((p) => p.userId === user.id);
+    if (userParticipant && amount > userParticipant.budgetRemaining) {
+      alert(`Insufficient budget. You have $${userParticipant.budgetRemaining} remaining`);
+      return;
+    }
+
     // Check if higher than current highest bid
     const currentBids = bids.filter((b) => b.clubId === currentClub.id);
     if (currentBids.length > 0) {
@@ -174,7 +181,7 @@ export default function AuctionRoom() {
       setBidAmount("");
     } catch (e) {
       console.error("Error placing bid:", e);
-      alert("Error placing bid");
+      alert(e.response?.data?.detail || "Error placing bid");
     }
   };
 
