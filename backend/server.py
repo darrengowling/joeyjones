@@ -787,14 +787,22 @@ async def join_auction(sid, data):
                 }).to_list(100)
                 current_bids = [Bid(**b).model_dump(mode='json') for b in bids]
             
-            # Calculate time remaining
-            time_remaining = 0
-            if auction.get("timerEndsAt"):
+            # Create timer data if timer is active
+            timer_data = None
+            if auction.get("timerEndsAt") and auction.get("status") == "active":
                 timer_end = auction["timerEndsAt"]
                 if timer_end.tzinfo is None:
                     timer_end = timer_end.replace(tzinfo=timezone.utc)
-                time_remaining = max(0, int((timer_end - datetime.now(timezone.utc)).total_seconds()))
-                logger.info(f"Calculated time remaining for {auction_id}: {time_remaining}s")
+                ends_at_ms = int(timer_end.timestamp() * 1000)
+                
+                # Get or create lot ID
+                lot_id = auction.get("currentLotId")
+                if not lot_id and auction.get("currentLot"):
+                    lot_id = f"{auction_id}-lot-{auction['currentLot']}"
+                
+                if lot_id:
+                    timer_data = create_timer_event(lot_id, ends_at_ms)
+                    logger.info(f"Sync state timer data - seq: {timer_data['seq']}, endsAt: {timer_data['endsAt']}")
             
             # Get participants
             participants = await db.league_participants.find({"leagueId": auction["leagueId"]}).to_list(100)
@@ -803,14 +811,19 @@ async def join_auction(sid, data):
             for p in participants:
                 p.pop('_id', None)
             
-            # Send sync state
-            await sio.emit('sync_state', {
+            # Send sync state with standardized timer data
+            sync_data = {
                 'auction': Auction(**auction).model_dump(mode='json'),
                 'currentClub': current_club,
                 'currentBids': current_bids,
-                'timeRemaining': time_remaining,
                 'participants': [LeagueParticipant(**p).model_dump(mode='json') for p in participants]
-            }, room=sid)
+            }
+            
+            # Add timer data if available
+            if timer_data:
+                sync_data['timer'] = timer_data
+            
+            await sio.emit('sync_state', sync_data, room=sid)
         
         await sio.emit('joined', {'auctionId': auction_id}, room=sid)
 
