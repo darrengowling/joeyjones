@@ -561,58 +561,87 @@ export default function AuctionRoom() {
               )}
             </div>
 
-            {/* Auction Progress */}
+            {/* Clubs Overview */}
             <div className="bg-white rounded-lg shadow-lg p-6">
-              <h3 className="text-xl font-bold mb-4 text-gray-900">Auction Progress</h3>
+              <h3 className="text-xl font-bold mb-4 text-gray-900">All Clubs in Auction</h3>
               
-              <div className="mb-4 p-4 bg-blue-50 rounded-lg">
-                <div className="text-sm text-gray-600 mb-2">Status</div>
-                <div className="text-lg font-bold text-blue-600">
-                  {currentClub ? "Live Auction" : "Between Lots"}
+              {/* Summary Stats */}
+              <div className="grid grid-cols-2 gap-2 mb-4 text-sm">
+                <div className="bg-blue-50 p-2 rounded">
+                  <div className="font-semibold text-blue-800">Total</div>
+                  <div className="text-blue-600">{clubs.length}</div>
                 </div>
-                <div className="text-sm text-gray-600 mt-2">
-                  Clubs load automatically in random order
+                <div className="bg-green-50 p-2 rounded">
+                  <div className="font-semibold text-green-800">Sold</div>
+                  <div className="text-green-600">{clubs.filter(c => c.status === 'sold').length}</div>
                 </div>
-              </div>
-
-              <div className="mb-4">
-                <div className="text-sm text-gray-600 mb-2">Clubs Auctioned</div>
-                <div className="flex items-center gap-2">
-                  <div className="flex-1 bg-gray-200 rounded-full h-2">
-                    <div 
-                      className="bg-green-600 h-2 rounded-full transition-all"
-                      style={{
-                        width: `${clubs.length > 0 ? (bids.filter((b, i, arr) => arr.findIndex(a => a.clubId === b.clubId) === i).length / clubs.length) * 100 : 0}%`
-                      }}
-                    ></div>
-                  </div>
-                  <div className="text-sm font-semibold text-gray-900">
-                    {bids.filter((b, i, arr) => arr.findIndex(a => a.clubId === b.clubId) === i).length}/{clubs.length}
-                  </div>
+                <div className="bg-yellow-50 p-2 rounded">
+                  <div className="font-semibold text-yellow-800">Current</div>
+                  <div className="text-yellow-600">{clubs.filter(c => c.status === 'current').length}</div>
+                </div>
+                <div className="bg-gray-50 p-2 rounded">
+                  <div className="font-semibold text-gray-800">Remaining</div>
+                  <div className="text-gray-600">{clubs.filter(c => c.status === 'upcoming').length}</div>
                 </div>
               </div>
 
-              <div className="text-xs text-gray-500 space-y-1 mb-4">
-                <p>🔄 Clubs auto-load in random order</p>
-                <p>⏱️ 60 seconds per club</p>
-                <p>🔥 Timer extends if bid in last 30s</p>
-              </div>
-
-              <h4 className="font-semibold text-gray-900 mb-2 text-sm">Recent Results</h4>
-              <div className="max-h-[400px] overflow-y-auto space-y-2">
+              {/* Club List */}
+              <div className="max-h-[500px] overflow-y-auto space-y-1">
                 {clubs.map((club) => {
-                  const clubBids = bids.filter((b) => b.clubId === club.id);
-                  const isCurrentClub = currentClub?.id === club.id;
-                  const isSold = clubBids.length > 0;
-                  const winner = isSold ? clubBids.sort((a, b) => b.amount - a.amount)[0] : null;
+                  const statusColors = {
+                    current: "bg-yellow-100 border-yellow-300 text-yellow-800",
+                    upcoming: "bg-blue-50 border-blue-200 text-blue-800",
+                    sold: "bg-green-50 border-green-200 text-green-800",
+                    unsold: "bg-red-50 border-red-200 text-red-800"
+                  };
                   
-                  if (!isCurrentClub && !isSold) return null;
+                  const statusIcons = {
+                    current: "🔥",
+                    upcoming: "⏳",
+                    sold: "✅",
+                    unsold: "❌"
+                  };
                   
                   return (
                     <div
                       key={club.id}
-                      className={`p-3 rounded-lg border ${
-                        isCurrentClub
+                      className={`p-2 rounded-lg border text-xs ${statusColors[club.status] || 'bg-gray-50 border-gray-200'}`}
+                    >
+                      <div className="flex justify-between items-start">
+                        <div className="flex-1 min-w-0">
+                          <div className="font-semibold truncate">{club.name}</div>
+                          <div className="text-xs opacity-75">{club.country}</div>
+                        </div>
+                        <div className="ml-2 flex flex-col items-end">
+                          <div className="flex items-center gap-1">
+                            <span>{statusIcons[club.status]}</span>
+                            {club.lotNumber && (
+                              <span className="text-xs opacity-75">#{club.lotNumber}</span>
+                            )}
+                          </div>
+                          {club.status === 'sold' && club.winningBid && (
+                            <div className="text-xs font-semibold">
+                              £{club.winningBid.toLocaleString()}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      
+                      {club.status === 'sold' && club.winner && (
+                        <div className="text-xs mt-1 opacity-75">
+                          Won by {club.winner}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div className="mt-4 text-xs text-gray-500 space-y-1 border-t pt-3">
+                <p>🔥 Current lot • ⏳ Upcoming • ✅ Sold • ❌ Unsold</p>
+                <p>Order is randomized - use for strategy only</p>
+              </div>
+            </div>
                           ? "bg-blue-50 border-blue-500"
                           : "bg-gray-50 border-gray-200"
                       }`}
