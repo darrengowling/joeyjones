@@ -640,9 +640,7 @@ export default function AuctionRoom() {
                         <div className="ml-2 flex flex-col items-end">
                           <div className="flex items-center gap-1">
                             <span>{statusIcons[club.status]}</span>
-                            {club.lotNumber && (
-                              <span className="text-xs opacity-75">#{club.lotNumber}</span>
-                            )}
+                            {/* Hide lot number to keep draw order secret */}
                           </div>
                           {club.status === 'sold' && club.winningBid && (
                             <div className="text-xs font-semibold">
