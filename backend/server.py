@@ -581,150 +581,229 @@ async def complete_lot(auction_id: str):
     if not auction:
         raise HTTPException(status_code=404, detail="Auction not found")
     
-    # Get winning bid for current club
-    if auction.get("currentClubId"):
-        bids = await db.bids.find({
-            "auctionId": auction_id,
-            "clubId": auction["currentClubId"]
-        }).sort("amount", -1).to_list(1)
-        
-        winning_bid = bids[0] if bids else None
-        
-        # Remove MongoDB _id from winning bid
-        if winning_bid:
-            winning_bid.pop('_id', None)
-        
-        # If there's a winner, update their budget and clubs won
-        if winning_bid:
-            participant = await db.league_participants.find_one({
-                "leagueId": auction["leagueId"],
-                "userId": winning_bid["userId"]
-            })
-            
-            if participant:
-                # Get all previous winning bids for this user to calculate total spent
-                user_winning_clubs = participant.get("clubsWon", [])
-                user_total_spent = participant.get("totalSpent", 0.0)
-                
-                # Add this club and amount
-                user_winning_clubs.append(auction["currentClubId"])
-                user_total_spent += winning_bid["amount"]
-                
-                # Get league to calculate remaining budget
-                league = await db.leagues.find_one({"id": auction["leagueId"]})
-                budget_remaining = league["budget"] - user_total_spent
-                
-                # Update participant
-                await db.league_participants.update_one(
-                    {
-                        "leagueId": auction["leagueId"],
-                        "userId": winning_bid["userId"]
-                    },
-                    {"$set": {
-                        "clubsWon": user_winning_clubs,
-                        "totalSpent": user_total_spent,
-                        "budgetRemaining": budget_remaining
-                    }}
-                )
-        
-        # Get updated participants for broadcast
-        participants = await db.league_participants.find({"leagueId": auction["leagueId"]}).to_list(100)
-        
-        # Remove MongoDB _id field from participants
-        for p in participants:
-            p.pop('_id', None)
-        
-        # Get current lot ID for sold event
-        current_lot_id = auction.get("currentLotId")
-        if not current_lot_id and auction.get("currentLot"):
-            current_lot_id = f"{auction_id}-lot-{auction['currentLot']}"
-        
-        # Create sold event with timer data
-        sold_data = {}
-        if current_lot_id:
-            # Use current timestamp as "sold" time
-            sold_timer_data = create_timer_event(current_lot_id, int(datetime.now(timezone.utc).timestamp() * 1000))
-            sold_data['timer'] = sold_timer_data
-        
-        # Emit lot complete (now called 'sold')
-        await sio.emit('sold', {
-            'clubId': auction["currentClubId"],
-            'winningBid': Bid(**winning_bid).model_dump(mode='json') if winning_bid else None,
-            'participants': [LeagueParticipant(**p).model_dump(mode='json') for p in participants],
-            **sold_data  # Include timer data if available
+    current_club_id = auction.get("currentClubId")
+    if not current_club_id:
+        raise HTTPException(status_code=400, detail="No current club to complete")
+    
+    # Get bids for current club
+    bids = await db.bids.find({
+        "auctionId": auction_id,
+        "clubId": current_club_id
+    }).sort("amount", -1).to_list(1)
+    
+    winning_bid = bids[0] if bids else None
+    
+    # Remove MongoDB _id from winning bid
+    if winning_bid:
+        winning_bid.pop('_id', None)
+    
+    # Handle sold vs unsold scenarios
+    if winning_bid:
+        # CLUB SOLD - Update winner's budget and clubs
+        participant = await db.league_participants.find_one({
+            "leagueId": auction["leagueId"],
+            "userId": winning_bid["userId"]
         })
         
-        logger.info(f"Lot sold - clubId: {auction['currentClubId']}, winner: {winning_bid['userId'] if winning_bid else 'none'}")
-        
-        # Auto-start next club
-        # Get all clubs
-        all_clubs = await db.clubs.find().to_list(100)
-        
-        # Get clubs already auctioned (have bids)
-        all_bids = await db.bids.find({"auctionId": auction_id}).to_list(1000)
-        auctioned_club_ids = set(bid["clubId"] for bid in all_bids)
-        
-        # Find next club that hasn't been auctioned
-        next_club = None
-        for club in all_clubs:
-            if club["id"] not in auctioned_club_ids:
-                next_club = club
-                break
-        
-        if next_club:
-            # Start next lot
-            next_lot_number = auction["currentLot"] + 1
-            next_lot_id = f"{auction_id}-lot-{next_lot_number}"
-            timer_end = datetime.now(timezone.utc) + timedelta(seconds=auction["bidTimer"])
+        if participant:
+            user_winning_clubs = participant.get("clubsWon", [])
+            user_total_spent = participant.get("totalSpent", 0.0)
             
-            await db.auctions.update_one(
-                {"id": auction_id},
+            # Add this club and amount
+            user_winning_clubs.append(current_club_id)
+            user_total_spent += winning_bid["amount"]
+            
+            # Calculate remaining budget
+            league = await db.leagues.find_one({"id": auction["leagueId"]})
+            budget_remaining = league["budget"] - user_total_spent
+            
+            # Update participant
+            await db.league_participants.update_one(
+                {"leagueId": auction["leagueId"], "userId": winning_bid["userId"]},
                 {"$set": {
-                    "currentClubId": next_club["id"],
-                    "currentLot": next_lot_number,
-                    "currentLotId": next_lot_id,
-                    "timerEndsAt": timer_end
+                    "clubsWon": user_winning_clubs,
+                    "totalSpent": user_total_spent,
+                    "budgetRemaining": budget_remaining
                 }}
             )
             
-            # Remove _id for serialization
-            next_club.pop('_id', None)
-            
-            # Create timer data for new lot
-            if timer_end.tzinfo is None:
-                timer_end = timer_end.replace(tzinfo=timezone.utc)
-            ends_at_ms = int(timer_end.timestamp() * 1000)
-            timer_data = create_timer_event(next_lot_id, ends_at_ms)
-            
-            # Emit lot start with timer data
-            await sio.emit('lot_started', {
-                'club': Club(**next_club).model_dump(),
-                'lotNumber': next_lot_number,
-                'timer': timer_data
-            })
-            
-            logger.info(f"Started next lot {next_lot_id}: {next_club['name']}, seq={timer_data['seq']}")
-            
-            # Start timer countdown
-            asyncio.create_task(countdown_timer(auction_id, timer_end, next_lot_id))
-        else:
-            # No more clubs, auction complete
-            await db.auctions.update_one(
-                {"id": auction_id},
-                {"$set": {
-                    "status": "completed",
-                    "currentClubId": None,
-                    "timerEndsAt": None
-                }}
-            )
-            
-            await sio.emit('auction_complete', {
-                'message': 'All clubs have been auctioned!'
-            }, room=f"auction:{auction_id}")
-        
-        return {"message": "Lot completed", "winningBid": winning_bid}
+        logger.info(f"Club sold - {current_club_id} to {winning_bid['userId']} for £{winning_bid['amount']:,}")
     
-    return {"message": "No active lot"}
+    else:
+        # CLUB UNSOLD - Add to unsold queue for re-offering later
+        current_unsold = auction.get("unsoldClubs", [])
+        if current_club_id not in current_unsold:
+            current_unsold.append(current_club_id)
+            await db.auctions.update_one(
+                {"id": auction_id},
+                {"$set": {"unsoldClubs": current_unsold}}
+            )
+        
+        logger.info(f"Club unsold - {current_club_id} moved to end of queue")
+    
+    # Get updated participants
+    participants = await db.league_participants.find({"leagueId": auction["leagueId"]}).to_list(100)
+    for p in participants:
+        p.pop('_id', None)
+    
+    # Emit sold/unsold event
+    current_lot_id = auction.get("currentLotId")
+    if not current_lot_id and auction.get("currentLot"):
+        current_lot_id = f"{auction_id}-lot-{auction['currentLot']}"
+    
+    sold_data = {}
+    if current_lot_id:
+        sold_timer_data = create_timer_event(current_lot_id, int(datetime.now(timezone.utc).timestamp() * 1000))
+        sold_data['timer'] = sold_timer_data
+    
+    await sio.emit('sold', {
+        'clubId': current_club_id,
+        'winningBid': Bid(**winning_bid).model_dump(mode='json') if winning_bid else None,
+        'unsold': not bool(winning_bid),  # Flag if club went unsold
+        'participants': [LeagueParticipant(**p).model_dump(mode='json') for p in participants],
+        **sold_data
+    })
+    
+    # Determine next club to offer
+    next_club_id = await get_next_club_to_auction(auction_id)
+    
+    if next_club_id:
+        await start_next_lot(auction_id, next_club_id)
+    else:
+        # Check if auction is complete
+        await check_auction_completion(auction_id)
+
+
+async def get_next_club_to_auction(auction_id: str) -> Optional[str]:
+    """Get the next club to auction, considering queue and unsold clubs"""
+    auction = await db.auctions.find_one({"id": auction_id})
+    if not auction:
+        return None
+    
+    club_queue = auction.get("clubQueue", [])
+    unsold_clubs = auction.get("unsoldClubs", [])
+    current_lot = auction.get("currentLot", 0)
+    
+    # Check if we're still in the initial round
+    if current_lot < len(club_queue):
+        # Return next club in initial queue
+        return club_queue[current_lot]  # currentLot is 1-indexed, but we want next club
+    
+    # Initial round complete - check for unsold clubs
+    if unsold_clubs:
+        # Check if any participants can still afford minimum budget
+        participants = await db.league_participants.find({"leagueId": auction["leagueId"]}).to_list(100)
+        minimum_budget = auction.get("minimumBudget", 1000000.0)
+        
+        can_still_bid = any(p.get("budgetRemaining", 0) >= minimum_budget for p in participants)
+        
+        if can_still_bid:
+            # Return first unsold club and remove it from unsold list
+            next_unsold = unsold_clubs[0]
+            remaining_unsold = unsold_clubs[1:]
+            
+            await db.auctions.update_one(
+                {"id": auction_id},
+                {"$set": {"unsoldClubs": remaining_unsold}}
+            )
+            
+            logger.info(f"Re-offering unsold club: {next_unsold}")
+            return next_unsold
+    
+    # No more clubs to offer
+    return None
+
+
+async def start_next_lot(auction_id: str, next_club_id: str):
+    """Start the next lot with the given club"""
+    auction = await db.auctions.find_one({"id": auction_id})
+    if not auction:
+        return
+    
+    # Get club details
+    next_club = await db.clubs.find_one({"id": next_club_id})
+    if not next_club:
+        logger.error(f"Club not found: {next_club_id}")
+        return
+    
+    next_lot_number = auction["currentLot"] + 1
+    next_lot_id = f"{auction_id}-lot-{next_lot_number}"
+    timer_end = datetime.now(timezone.utc) + timedelta(seconds=auction["bidTimer"])
+    
+    await db.auctions.update_one(
+        {"id": auction_id},
+        {"$set": {
+            "currentClubId": next_club_id,
+            "currentLot": next_lot_number,
+            "currentLotId": next_lot_id,
+            "timerEndsAt": timer_end
+        }}
+    )
+    
+    # Remove _id for serialization
+    next_club.pop('_id', None)
+    
+    # Create timer data
+    if timer_end.tzinfo is None:
+        timer_end = timer_end.replace(tzinfo=timezone.utc)
+    ends_at_ms = int(timer_end.timestamp() * 1000)
+    timer_data = create_timer_event(next_lot_id, ends_at_ms)
+    
+    # Emit lot start
+    await sio.emit('lot_started', {
+        'club': Club(**next_club).model_dump(),
+        'lotNumber': next_lot_number,
+        'timer': timer_data,
+        'isUnsoldRetry': next_club_id in auction.get("unsoldClubs", [])  # Flag for UI
+    })
+    
+    logger.info(f"Started lot {next_lot_number}: {next_club['name']}")
+    
+    # Start timer countdown
+    asyncio.create_task(countdown_timer(auction_id, timer_end, next_lot_id))
+
+
+async def check_auction_completion(auction_id: str):
+    """Check if auction is complete and handle completion"""
+    auction = await db.auctions.find_one({"id": auction_id})
+    if not auction:
+        return
+    
+    unsold_clubs = auction.get("unsoldClubs", [])
+    participants = await db.league_participants.find({"leagueId": auction["leagueId"]}).to_list(100)
+    minimum_budget = auction.get("minimumBudget", 1000000.0)
+    
+    # Check if any participants can still afford minimum budget
+    can_still_bid = any(p.get("budgetRemaining", 0) >= minimum_budget for p in participants)
+    
+    if not unsold_clubs or not can_still_bid:
+        # Mark auction as complete
+        await db.auctions.update_one(
+            {"id": auction_id},
+            {"$set": {"status": "completed"}}
+        )
+        
+        # Update league status
+        await db.leagues.update_one(
+            {"id": auction["leagueId"]},
+            {"$set": {"status": "completed"}}
+        )
+        
+        # Calculate final statistics
+        total_clubs_sold = 0
+        total_unsold = len(unsold_clubs)
+        
+        for p in participants:
+            total_clubs_sold += len(p.get("clubsWon", []))
+        
+        await sio.emit('auction_complete', {
+            'message': f'Auction completed! {total_clubs_sold} clubs sold, {total_unsold} unsold.',
+            'clubsSold': total_clubs_sold,
+            'clubsUnsold': total_unsold,
+            'participants': [LeagueParticipant(**p).model_dump(mode='json') for p in participants]
+        })
+        
+        logger.info(f"Auction {auction_id} completed - {total_clubs_sold} sold, {total_unsold} unsold")
 
 # ===== TIMER COUNTDOWN =====
 async def countdown_timer(auction_id: str, end_time: datetime, lot_id: str):
