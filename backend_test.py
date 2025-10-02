@@ -538,7 +538,9 @@ class BackendTester:
                             # Check that sold club has winner and winning bid info
                             sold_club = next((c for c in updated_clubs if c.get("status") == "sold"), None)
                             if sold_club:
-                                if sold_club.get("winner") and sold_club.get("winningBid"):
+                                winner = sold_club.get("winner")
+                                winning_bid = sold_club.get("winningBid")
+                                if winner and winning_bid:
                                     self.log("✅ Sold club includes winner and winning bid information")
                                 else:
                                     self.log("Sold club missing winner or winning bid information", "ERROR")
