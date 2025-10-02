@@ -219,6 +219,8 @@ export default function AuctionRoom() {
   const loadAuction = async () => {
     try {
       const response = await axios.get(`${API}/auction/${auctionId}`);
+      console.log("Auction data loaded:", response.data);
+      console.log("Bids from API:", response.data.bids);
       setAuction(response.data.auction);
       setBids(response.data.bids);
       if (response.data.currentClub) {
