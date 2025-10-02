@@ -91,6 +91,16 @@ export default function LeagueDetail() {
     }
   };
 
+  const goToAuction = async () => {
+    try {
+      const response = await axios.get(`${API}/leagues/${leagueId}/auction`);
+      navigate(`/auction/${response.data.auctionId}`);
+    } catch (e) {
+      console.error("Error getting auction:", e);
+      alert("No auction found for this league");
+    }
+  };
+
   const deleteLeague = async () => {
     if (!user) {
       alert("Please sign in first");
