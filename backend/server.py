@@ -215,6 +215,33 @@ async def get_league_participants(league_id: str):
     participants = await db.league_participants.find({"leagueId": league_id}).to_list(100)
     return [LeagueParticipant(**p) for p in participants]
 
+@api_router.delete("/leagues/{league_id}")
+async def delete_league(league_id: str, user_id: str):
+    # Verify league exists
+    league = await db.leagues.find_one({"id": league_id})
+    if not league:
+        raise HTTPException(status_code=404, detail="League not found")
+    
+    # Verify user is commissioner
+    if league["commissionerId"] != user_id:
+        raise HTTPException(status_code=403, detail="Only the commissioner can delete this league")
+    
+    # Delete league
+    await db.leagues.delete_one({"id": league_id})
+    
+    # Delete all participants
+    await db.league_participants.delete_many({"leagueId": league_id})
+    
+    # Find and delete associated auction
+    auction = await db.auctions.find_one({"leagueId": league_id})
+    if auction:
+        # Delete all bids for this auction
+        await db.bids.delete_many({"auctionId": auction["id"]})
+        # Delete auction
+        await db.auctions.delete_one({"id": auction["id"]})
+    
+    return {"message": "League deleted successfully"}
+
 # ===== AUCTION ENDPOINTS =====
 @api_router.post("/leagues/{league_id}/auction/start")
 async def start_auction(league_id: str):
