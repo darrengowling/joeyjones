@@ -308,7 +308,7 @@ async def start_auction(league_id: str):
     # Auto-start first club
     if all_clubs:
         first_club_id = all_clubs[0]["id"]
-        timer_end = datetime.utcnow() + timedelta(seconds=auction_obj.bidTimer)
+        timer_end = datetime.now(timezone.utc) + timedelta(seconds=auction_obj.bidTimer)
         await db.auctions.update_one(
             {"id": auction_obj.id},
             {"$set": {
