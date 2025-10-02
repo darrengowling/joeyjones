@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import List
 import socketio
 import asyncio
+import uuid
 from datetime import datetime, timedelta
 
 from models import (
