@@ -477,7 +477,7 @@ class BackendTester:
                 
                 # Complete the lot to create a sold club
                 complete_result = self.test_api_endpoint("POST", f"/auction/{auction_id}/complete-lot")
-                if "error" not in complete_result:
+                if complete_result and "error" not in complete_result:
                     self.log("Completed lot to create sold club")
                     
                     # Wait a moment for the lot to process
