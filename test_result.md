@@ -255,8 +255,8 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Clubs list UI feature"
-    - "Minimum budget enforcement"
+    - "UI state synchronization"
+    - "Real-time auction flow"
   stuck_tasks:
     - "UI state synchronization"
     - "Real-time auction flow"
