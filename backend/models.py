@@ -8,7 +8,7 @@ class User(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     name: str
     email: str
-    createdAt: datetime = Field(default_factory=datetime.utcnow)
+    createdAt: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 class UserCreate(BaseModel):
     name: str
@@ -33,7 +33,7 @@ class League(BaseModel):
     clubSlots: int
     status: str = "pending"  # pending, active, completed
     inviteToken: str = Field(default_factory=lambda: str(uuid.uuid4())[:8])  # Short token
-    createdAt: datetime = Field(default_factory=datetime.utcnow)
+    createdAt: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 class LeagueCreate(BaseModel):
     name: str
@@ -69,7 +69,7 @@ class Auction(BaseModel):
     bidTimer: int = 60  # seconds
     antiSnipeSeconds: int = 30
     timerEndsAt: Optional[datetime] = None
-    createdAt: datetime = Field(default_factory=datetime.utcnow)
+    createdAt: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 class AuctionCreate(BaseModel):
     leagueId: str
