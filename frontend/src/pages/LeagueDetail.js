@@ -47,6 +47,29 @@ export default function LeagueDetail() {
     }
   };
 
+  const loadStandings = async () => {
+    try {
+      const response = await axios.get(`${API}/leagues/${leagueId}/standings`);
+      setStandings(response.data);
+    } catch (e) {
+      console.error("Error loading standings:", e);
+    }
+  };
+
+  const recomputeScores = async () => {
+    setLoadingScores(true);
+    try {
+      await axios.post(`${API}/leagues/${leagueId}/score/recompute`);
+      await loadStandings();
+      alert("Scores recomputed successfully!");
+    } catch (e) {
+      console.error("Error recomputing scores:", e);
+      alert(e.response?.data?.detail || "Error recomputing scores");
+    } finally {
+      setLoadingScores(false);
+    }
+  };
+
   const startAuction = async () => {
     if (!user) {
       alert("Please sign in first");
