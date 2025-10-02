@@ -39,11 +39,21 @@ export default function AuctionRoom() {
 
     loadAuction();
     loadClubs();
-    initializeSocket();
+    const cleanupSocket = initializeSocket();
 
     return () => {
       if (socket) {
+        // Leave the auction room
+        socket.emit("leave_auction", { auctionId });
+        
+        // Clean up all listeners
+        if (cleanupSocket) {
+          cleanupSocket();
+        }
+        
+        // Disconnect socket
         socket.disconnect();
+        socket = null;
       }
     };
   }, [auctionId]);
