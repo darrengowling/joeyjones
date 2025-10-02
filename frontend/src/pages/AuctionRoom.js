@@ -103,8 +103,6 @@ export default function AuctionRoom() {
       // DON'T calculate time remaining here - let timer_update handle it
       console.log("New lot started, waiting for timer_update events");
     });
-      loadAuction();
-    });
 
     socket.on("lot_complete", (data) => {
       console.log("Lot complete:", data);
