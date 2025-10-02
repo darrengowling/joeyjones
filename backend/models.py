@@ -32,6 +32,7 @@ class League(BaseModel):
     maxManagers: int
     clubSlots: int
     status: str = "pending"  # pending, active, completed
+    inviteToken: str = Field(default_factory=lambda: str(uuid.uuid4())[:8])  # Short token
     createdAt: datetime = Field(default_factory=datetime.utcnow)
 
 class LeagueCreate(BaseModel):
@@ -39,8 +40,24 @@ class LeagueCreate(BaseModel):
     commissionerId: str
     budget: float
     minManagers: int = 2
-    maxManagers: int = 12
+    maxManagers: int = 8
     clubSlots: int = 3
+
+# League Participant Models
+class LeagueParticipant(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    leagueId: str
+    userId: str
+    userName: str
+    userEmail: str
+    budgetRemaining: float
+    clubsWon: List[str] = []
+    totalSpent: float = 0.0
+    joinedAt: datetime = Field(default_factory=datetime.utcnow)
+
+class LeagueParticipantCreate(BaseModel):
+    userId: str
+    inviteToken: str
 
 # Auction Models
 class Auction(BaseModel):
