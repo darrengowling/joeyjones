@@ -617,12 +617,27 @@ async def complete_lot(auction_id: str):
         for p in participants:
             p.pop('_id', None)
         
-        # Emit lot complete
-        await sio.emit('lot_complete', {
+        # Get current lot ID for sold event
+        current_lot_id = auction.get("currentLotId")
+        if not current_lot_id and auction.get("currentLot"):
+            current_lot_id = f"{auction_id}-lot-{auction['currentLot']}"
+        
+        # Create sold event with timer data
+        sold_data = {}
+        if current_lot_id:
+            # Use current timestamp as "sold" time
+            sold_timer_data = create_timer_event(current_lot_id, int(datetime.now(timezone.utc).timestamp() * 1000))
+            sold_data['timer'] = sold_timer_data
+        
+        # Emit lot complete (now called 'sold')
+        await sio.emit('sold', {
             'clubId': auction["currentClubId"],
             'winningBid': Bid(**winning_bid).model_dump(mode='json') if winning_bid else None,
-            'participants': [LeagueParticipant(**p).model_dump(mode='json') for p in participants]
-        }, room=f"auction:{auction_id}")
+            'participants': [LeagueParticipant(**p).model_dump(mode='json') for p in participants],
+            **sold_data  # Include timer data if available
+        })
+        
+        logger.info(f"Lot sold - clubId: {auction['currentClubId']}, winner: {winning_bid['userId'] if winning_bid else 'none'}")
         
         # Auto-start next club
         # Get all clubs
@@ -641,12 +656,16 @@ async def complete_lot(auction_id: str):
         
         if next_club:
             # Start next lot
+            next_lot_number = auction["currentLot"] + 1
+            next_lot_id = f"{auction_id}-lot-{next_lot_number}"
             timer_end = datetime.now(timezone.utc) + timedelta(seconds=auction["bidTimer"])
+            
             await db.auctions.update_one(
                 {"id": auction_id},
                 {"$set": {
                     "currentClubId": next_club["id"],
-                    "currentLot": auction["currentLot"] + 1,
+                    "currentLot": next_lot_number,
+                    "currentLotId": next_lot_id,
                     "timerEndsAt": timer_end
                 }}
             )
@@ -654,15 +673,23 @@ async def complete_lot(auction_id: str):
             # Remove _id for serialization
             next_club.pop('_id', None)
             
-            # Emit lot start
+            # Create timer data for new lot
+            if timer_end.tzinfo is None:
+                timer_end = timer_end.replace(tzinfo=timezone.utc)
+            ends_at_ms = int(timer_end.timestamp() * 1000)
+            timer_data = create_timer_event(next_lot_id, ends_at_ms)
+            
+            # Emit lot start with timer data
             await sio.emit('lot_started', {
                 'club': Club(**next_club).model_dump(),
-                'lotNumber': auction["currentLot"] + 1,
-                'timerEndsAt': timer_end.isoformat()
-            }, room=f"auction:{auction_id}")
+                'lotNumber': next_lot_number,
+                'timer': timer_data
+            })
+            
+            logger.info(f"Started next lot {next_lot_id}: {next_club['name']}, seq={timer_data['seq']}")
             
             # Start timer countdown
-            asyncio.create_task(countdown_timer(auction_id, timer_end))
+            asyncio.create_task(countdown_timer(auction_id, timer_end, next_lot_id))
         else:
             # No more clubs, auction complete
             await db.auctions.update_one(
