@@ -311,8 +311,8 @@ class BackendTester:
         }
         
         result = self.test_api_endpoint("POST", f"/auction/{auction_id}/bid", low_bid_data, expected_status=400)
-        # For 400 status, the result should contain an error
-        if result.get("error") != "Status 400":
+        # For 400 status, we should get the error detail directly
+        if "detail" not in result:
             self.log(f"Low bid should have been rejected but was accepted. Result: {result}", "ERROR")
             return False
         
