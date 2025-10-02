@@ -339,6 +339,28 @@ export default function AuctionRoom() {
     }
   };
 
+  const deleteAuction = async () => {
+    if (!window.confirm(
+      `Are you sure you want to delete this auction? This will:\n` +
+      `• Remove all auction data and bids\n` +
+      `• Reset all participant budgets\n` +
+      `• Return the league to ready state\n\n` +
+      `This action cannot be undone.`
+    )) {
+      return;
+    }
+
+    try {
+      const result = await axios.delete(`${API}/auction/${auctionId}`);
+      console.log("Auction deleted:", result.data);
+      alert("Auction deleted successfully!");
+      navigate("/"); // Go back to homepage
+    } catch (e) {
+      console.error("Error deleting auction:", e);
+      alert("Error deleting auction: " + (e.response?.data?.detail || e.message));
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 flex items-center justify-center">
