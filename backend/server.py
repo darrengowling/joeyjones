@@ -166,6 +166,32 @@ async def get_leagues():
     leagues = await db.leagues.find().to_list(100)
     return [League(**league) for league in leagues]
 
+@api_router.get("/leagues/search")
+async def search_leagues(name: str = None):
+    """Search leagues by name"""
+    if not name:
+        return []
+    
+    # Case-insensitive search
+    leagues = await db.leagues.find({
+        "name": {"$regex": f"^{name}$", "$options": "i"}
+    }).to_list(100)
+    
+    # Return league info without sensitive data
+    results = []
+    for league in leagues:
+        results.append({
+            "id": league["id"],
+            "name": league["name"],
+            "inviteToken": league["inviteToken"],
+            "budget": league["budget"],
+            "minManagers": league["minManagers"],
+            "maxManagers": league["maxManagers"],
+            "status": league["status"]
+        })
+    
+    return results
+
 @api_router.get("/leagues/{league_id}", response_model=League)
 async def get_league(league_id: str):
     league = await db.leagues.find_one({"id": league_id})
