@@ -442,7 +442,7 @@ async def start_lot(auction_id: str, club_id: str):
         raise HTTPException(status_code=404, detail="Club not found")
     
     # Update auction with current lot
-    timer_end = datetime.utcnow() + timedelta(seconds=auction["bidTimer"])
+    timer_end = datetime.now(timezone.utc) + timedelta(seconds=auction["bidTimer"])
     await db.auctions.update_one(
         {"id": auction_id},
         {"$set": {
@@ -548,7 +548,7 @@ async def complete_lot(auction_id: str):
         
         if next_club:
             # Start next lot
-            timer_end = datetime.utcnow() + timedelta(seconds=auction["bidTimer"])
+            timer_end = datetime.now(timezone.utc) + timedelta(seconds=auction["bidTimer"])
             await db.auctions.update_one(
                 {"id": auction_id},
                 {"$set": {
@@ -604,7 +604,7 @@ async def countdown_timer(auction_id: str, end_time: datetime):
         if not current_end_time:
             break
         
-        time_remaining = (current_end_time - datetime.utcnow()).total_seconds()
+        time_remaining = (current_end_time - datetime.now(timezone.utc)).total_seconds()
         
         if time_remaining <= 0:
             # Timer expired, complete the lot
@@ -654,7 +654,7 @@ async def join_auction(sid, data):
             # Calculate time remaining
             time_remaining = 0
             if auction.get("timerEndsAt"):
-                time_remaining = max(0, int((auction["timerEndsAt"] - datetime.utcnow()).total_seconds()))
+                time_remaining = max(0, int((auction["timerEndsAt"] - datetime.now(timezone.utc)).total_seconds()))
             
             # Get participants
             participants = await db.league_participants.find({"leagueId": auction["leagueId"]}).to_list(100)
