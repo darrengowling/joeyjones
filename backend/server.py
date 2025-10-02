@@ -263,6 +263,13 @@ async def join_league(league_id: str, participant_input: LeagueParticipantCreate
     )
     await db.league_participants.insert_one(participant.model_dump())
     
+    # Emit real-time update to league participants
+    await sio.emit('participant_joined', {
+        'leagueId': league_id,
+        'participant': participant.model_dump(mode='json'),
+        'message': f"{participant.userName} joined the league"
+    }, room=f"league:{league_id}")
+    
     return {"message": "Joined league successfully", "participant": participant}
 
 @api_router.get("/leagues/{league_id}/participants")
