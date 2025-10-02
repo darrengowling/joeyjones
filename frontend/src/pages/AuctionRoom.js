@@ -106,7 +106,6 @@ export default function AuctionRoom() {
       console.log("Lot sold:", data);
       alert(`Lot complete! Winner: ${data.winningBid ? data.winningBid.userName : "No bids"}`);
       setCurrentClub(null);
-      setTimeRemaining(0);
       setBidAmount("");
       if (data.participants) {
         setParticipants(data.participants);
