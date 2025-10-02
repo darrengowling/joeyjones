@@ -115,7 +115,15 @@ export default function AuctionRoom() {
 
     const handleSold = (data) => {
       console.log("Lot sold:", data);
-      alert(`Lot complete! Winner: ${data.winningBid ? data.winningBid.userName : "No bids"}`);
+      
+      if (data.unsold) {
+        alert(`❌ Club went unsold! "${data.clubId}" will be offered again later.`);
+      } else {
+        const winnerName = data.winningBid ? data.winningBid.userName : "Unknown";
+        const amount = data.winningBid ? `£${data.winningBid.amount.toLocaleString()}` : "";
+        alert(`✅ Club sold to ${winnerName} for ${amount}!`);
+      }
+      
       setCurrentClub(null);
       setBidAmount("");
       if (data.participants) {
