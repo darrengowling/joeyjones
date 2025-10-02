@@ -90,6 +90,11 @@ async def test_timer_fix():
             print(f"🕒 Timer update received: {time_remaining}s")
             events_received.append(f"timer_update:{time_remaining}")
         
+        @sio.event
+        async def test_room_message(data):
+            print(f"🧪 Test room message: {data}")
+            events_received.append("test_room_message")
+        
         try:
             # Connect to socket
             await sio.connect(SOCKET_URL, socketio_path=SOCKET_PATH)
