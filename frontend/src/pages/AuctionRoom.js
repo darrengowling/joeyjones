@@ -147,6 +147,18 @@ export default function AuctionRoom() {
       alert(data.message || "Auction complete! All clubs have been auctioned.");
     };
 
+    const handleAuctionPaused = (data) => {
+      console.log("Auction paused:", data);
+      alert(`⏸️ ${data.message}`);
+      loadAuction(); // Reload to show paused state
+    };
+
+    const handleAuctionResumed = (data) => {
+      console.log("Auction resumed:", data);
+      alert(`▶️ ${data.message}`);
+      loadAuction(); // Reload to show resumed state
+    };
+
     const handleDisconnect = () => {
       console.log("Socket disconnected");
     };
