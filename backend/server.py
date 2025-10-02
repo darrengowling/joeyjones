@@ -607,6 +607,10 @@ async def countdown_timer(auction_id: str, end_time: datetime):
         if not current_end_time:
             break
         
+        # Ensure timezone awareness
+        if current_end_time.tzinfo is None:
+            current_end_time = current_end_time.replace(tzinfo=timezone.utc)
+        
         time_remaining = (current_end_time - datetime.now(timezone.utc)).total_seconds()
         
         if time_remaining <= 0:
