@@ -670,11 +670,13 @@ async def join_auction(sid, data):
     auction_id = data.get('auctionId')
     if auction_id:
         sio.enter_room(sid, f"auction:{auction_id}")
-        logger.info(f"Client {sid} joined auction:{auction_id}")
+        logger.info(f"Client {sid} joined auction room: auction:{auction_id}")
         
         # Send current auction state for reconnection
         auction = await db.auctions.find_one({"id": auction_id})
         if auction:
+            logger.info(f"Sending sync_state to client {sid} for auction {auction_id}")
+            
             # Get current club if exists
             current_club = None
             if auction.get("currentClubId"):
@@ -698,6 +700,7 @@ async def join_auction(sid, data):
                 if timer_end.tzinfo is None:
                     timer_end = timer_end.replace(tzinfo=timezone.utc)
                 time_remaining = max(0, int((timer_end - datetime.now(timezone.utc)).total_seconds()))
+                logger.info(f"Calculated time remaining for {auction_id}: {time_remaining}s")
             
             # Get participants
             participants = await db.league_participants.find({"leagueId": auction["leagueId"]}).to_list(100)
