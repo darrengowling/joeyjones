@@ -297,13 +297,123 @@ export default function LeagueDetail() {
             </ul>
           </div>
 
+          {/* Standings */}
+          {league.status === "active" && (
+            <div className="bg-white border border-gray-200 rounded-lg p-6 mt-8">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-lg font-semibold text-gray-900">League Standings</h3>
+                {isCommissioner && (
+                  <button
+                    onClick={recomputeScores}
+                    disabled={loadingScores}
+                    className={`px-4 py-2 rounded-lg font-semibold text-sm ${
+                      loadingScores
+                        ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                        : "bg-blue-600 text-white hover:bg-blue-700"
+                    }`}
+                    data-testid="recompute-scores-button"
+                  >
+                    {loadingScores ? "Computing..." : "🔄 Recompute Scores"}
+                  </button>
+                )}
+              </div>
+
+              {standings.length === 0 ? (
+                <p className="text-gray-500 text-center py-8">
+                  No scores yet. Clubs need to be won in the auction first, then scores can be computed based on Champions League results.
+                </p>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-gray-50">
+                      <tr>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Rank
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Club
+                        </th>
+                        <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          W
+                        </th>
+                        <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          D
+                        </th>
+                        <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          L
+                        </th>
+                        <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          GF
+                        </th>
+                        <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          GA
+                        </th>
+                        <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          GD
+                        </th>
+                        <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider font-bold">
+                          Points
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
+                      {standings.map((club, index) => {
+                        const goalDiff = club.goalsScored - club.goalsConceded;
+                        return (
+                          <tr key={club.id} className={index < 3 ? "bg-green-50" : ""}>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                              {index + 1}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">
+                              {club.clubName}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-600">
+                              {club.wins}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-600">
+                              {club.draws}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-600">
+                              {club.losses}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-600">
+                              {club.goalsScored}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-600">
+                              {club.goalsConceded}
+                            </td>
+                            <td className={`px-6 py-4 whitespace-nowrap text-sm text-center font-semibold ${
+                              goalDiff > 0 ? "text-green-600" : goalDiff < 0 ? "text-red-600" : "text-gray-600"
+                            }`}>
+                              {goalDiff > 0 ? "+" : ""}{goalDiff}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-center font-bold text-blue-600">
+                              {club.totalPoints}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                  <div className="mt-4 text-xs text-gray-500 space-y-1">
+                    <p>📊 <strong>Scoring:</strong> Win = 3 pts | Draw = 1 pt | Goal Scored = 1 pt</p>
+                    <p>🏆 <strong>Legend:</strong> W=Wins | D=Draws | L=Losses | GF=Goals For | GA=Goals Against | GD=Goal Difference</p>
+                    <p className="text-green-600">Green rows = Top 3 positions</p>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
           {isCommissioner && (
             <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
               <p className="text-blue-900 font-semibold">
                 🎯 You are the commissioner of this league
               </p>
               <p className="text-blue-700 text-sm mt-1">
-                You can start the auction when ready
+                {league.status === "pending" 
+                  ? "You can start the auction when ready"
+                  : "You can recompute scores to update standings based on latest Champions League results"}
               </p>
             </div>
           )}
