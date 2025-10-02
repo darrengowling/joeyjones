@@ -274,7 +274,7 @@ export default function AuctionRoom() {
     // Check user's budget
     const userParticipant = participants.find((p) => p.userId === user.id);
     if (userParticipant && amount > userParticipant.budgetRemaining) {
-      alert(`Insufficient budget. You have $${userParticipant.budgetRemaining} remaining`);
+      alert(`Insufficient budget. You have £${userParticipant.budgetRemaining.toLocaleString()} remaining`);
       return;
     }
 
