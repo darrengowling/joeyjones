@@ -63,8 +63,8 @@ async def create_user(input: UserCreate):
     if existing:
         return User(**existing)
     
-    user_obj = User(**input.dict())
-    await db.users.insert_one(user_obj.dict())
+    user_obj = User(**input.model_dump())
+    await db.users.insert_one(user_obj.model_dump())
     return user_obj
 
 @api_router.get("/users/{user_id}", response_model=User)
