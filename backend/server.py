@@ -153,8 +153,8 @@ async def seed_clubs():
 # ===== LEAGUE ENDPOINTS =====
 @api_router.post("/leagues", response_model=League)
 async def create_league(input: LeagueCreate):
-    league_obj = League(**input.dict())
-    await db.leagues.insert_one(league_obj.dict())
+    league_obj = League(**input.model_dump())
+    await db.leagues.insert_one(league_obj.model_dump())
     return league_obj
 
 @api_router.get("/leagues", response_model=List[League])
