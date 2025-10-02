@@ -594,34 +594,67 @@ async def complete_lot(auction_id: str):
 
 # ===== TIMER COUNTDOWN =====
 async def countdown_timer(auction_id: str, end_time: datetime):
-    while True:
-        await asyncio.sleep(1)
+    """Countdown timer with proper cleanup and debugging"""
+    
+    # Store this timer to prevent duplicates
+    if auction_id in active_timers:
+        # Cancel existing timer
+        active_timers[auction_id].cancel()
+    
+    # Create current task handle
+    current_task = asyncio.current_task()
+    active_timers[auction_id] = current_task
+    
+    try:
+        logger.info(f"Starting countdown timer for auction {auction_id}")
         
-        # Check if auction still exists and is active
-        auction = await db.auctions.find_one({"id": auction_id})
-        if not auction or auction["status"] != "active":
-            break
-        
-        # Get updated end time (in case of anti-snipe)
-        current_end_time = auction.get("timerEndsAt")
-        if not current_end_time:
-            break
-        
-        # Ensure timezone awareness
-        if current_end_time.tzinfo is None:
-            current_end_time = current_end_time.replace(tzinfo=timezone.utc)
-        
-        time_remaining = (current_end_time - datetime.now(timezone.utc)).total_seconds()
-        
-        if time_remaining <= 0:
-            # Timer expired, complete the lot
-            await complete_lot(auction_id)
-            break
-        
-        # Emit timer update
-        await sio.emit('timer_update', {
-            'timeRemaining': max(0, int(time_remaining))
-        }, room=f"auction:{auction_id}")
+        while True:
+            await asyncio.sleep(1)
+            
+            # Check if we should stop (cancelled or auction ended)
+            if auction_id not in active_timers or active_timers[auction_id] != current_task:
+                logger.info(f"Timer for auction {auction_id} was cancelled")
+                break
+            
+            # Check if auction still exists and is active
+            auction = await db.auctions.find_one({"id": auction_id})
+            if not auction or auction["status"] != "active":
+                logger.info(f"Auction {auction_id} no longer active, stopping timer")
+                break
+            
+            # Get updated end time (in case of anti-snipe)
+            current_end_time = auction.get("timerEndsAt")
+            if not current_end_time:
+                logger.info(f"No timer end time for auction {auction_id}, stopping timer")
+                break
+            
+            # Ensure timezone awareness
+            if current_end_time.tzinfo is None:
+                current_end_time = current_end_time.replace(tzinfo=timezone.utc)
+            
+            time_remaining = (current_end_time - datetime.now(timezone.utc)).total_seconds()
+            
+            if time_remaining <= 0:
+                # Timer expired, complete the lot
+                logger.info(f"Timer expired for auction {auction_id}, completing lot")
+                await complete_lot(auction_id)
+                break
+            
+            # Emit timer update
+            logger.debug(f"Emitting timer_update for auction {auction_id}: {int(time_remaining)}s remaining")
+            await sio.emit('timer_update', {
+                'timeRemaining': max(0, int(time_remaining))
+            }, room=f"auction:{auction_id}")
+    
+    except asyncio.CancelledError:
+        logger.info(f"Timer for auction {auction_id} was cancelled")
+    except Exception as e:
+        logger.error(f"Timer error for auction {auction_id}: {str(e)}")
+    finally:
+        # Clean up timer reference
+        if auction_id in active_timers and active_timers[auction_id] == current_task:
+            del active_timers[auction_id]
+        logger.info(f"Timer cleanup completed for auction {auction_id}")
 
 # ===== SOCKET.IO EVENTS =====
 @sio.event
