@@ -20,7 +20,7 @@ const Home = () => {
   const [leagues, setLeagues] = useState([]);
   const [leagueForm, setLeagueForm] = useState({
     name: "",
-    budget: 1000,
+    budget: 500000000, // £500m default budget
     minManagers: 2,
     maxManagers: 8,
     clubSlots: 3,
