@@ -331,6 +331,14 @@ async def start_auction(league_id: str):
     
     return {"message": "Auction created and started", "auctionId": auction_obj.id}
 
+@api_router.get("/leagues/{league_id}/auction")
+async def get_league_auction(league_id: str):
+    """Get the auction for a specific league"""
+    auction = await db.auctions.find_one({"leagueId": league_id})
+    if not auction:
+        raise HTTPException(status_code=404, detail="No auction found for this league")
+    return {"auctionId": auction["id"], "status": auction["status"]}
+
 @api_router.get("/auction/{auction_id}")
 async def get_auction(auction_id: str):
     auction = await db.auctions.find_one({"id": auction_id})
