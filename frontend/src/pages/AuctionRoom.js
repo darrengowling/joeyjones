@@ -103,6 +103,7 @@ export default function AuctionRoom() {
       console.log("Bid placed:", data);
       setBids((prev) => [data.bid, ...prev]);
       loadAuction();
+      loadClubs(); // Reload clubs to update status
     };
 
     const handleLotStarted = (data) => {
