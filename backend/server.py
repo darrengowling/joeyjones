@@ -504,7 +504,7 @@ async def leave_league(sid, data):
 # ===== ROOT ENDPOINT =====
 @api_router.get("/")
 async def root():
-    return {"message": "UEFA Club Auction API"}
+    return {"message": "Friends of Pifa API"}
 
 # Include the router in the main app
 app.include_router(api_router)
