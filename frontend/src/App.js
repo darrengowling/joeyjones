@@ -230,7 +230,7 @@ const Home = () => {
 
               <div className="mb-4">
                 <label className="block text-gray-700 mb-2 font-semibold">
-                  Budget per Manager ($)
+                  Budget per Manager (£)
                 </label>
                 <input
                   type="number"
