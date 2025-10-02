@@ -114,9 +114,9 @@ export default function AuctionRoom() {
       loadAuction();
     });
 
-    socket.on("anti_snipe_triggered", (data) => {
+    socket.on("anti_snipe", (data) => {
       console.log("Anti-snipe triggered:", data);
-      alert(`🔥 Anti-snipe! Timer extended by ${data.extensionSeconds} seconds`);
+      alert(`🔥 Anti-snipe! Timer extended!`);
     });
 
     socket.on("auction_complete", (data) => {
