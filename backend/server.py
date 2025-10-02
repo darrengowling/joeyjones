@@ -319,6 +319,20 @@ async def start_auction(league_id: str):
     if not league:
         raise HTTPException(status_code=404, detail="League not found")
     
+    # Check if clubs are seeded
+    club_count = await db.clubs.count_documents({})
+    if club_count == 0:
+        # Auto-seed clubs if none exist
+        from uefa_clubs import UEFA_CL_CLUBS
+        clubs_to_insert = []
+        for club_data in UEFA_CL_CLUBS:
+            club = Club(**club_data)
+            clubs_to_insert.append(club.model_dump())
+        
+        if clubs_to_insert:
+            await db.clubs.insert_many(clubs_to_insert)
+            logger.info(f"Auto-seeded {len(clubs_to_insert)} clubs for auction")
+    
     # Check if auction already exists
     existing_auction = await db.auctions.find_one({"leagueId": league_id})
     if existing_auction:
@@ -363,6 +377,11 @@ async def start_auction(league_id: str):
         
         # Start timer countdown
         asyncio.create_task(countdown_timer(auction_obj.id, timer_end))
+        
+        logger.info(f"Started auction {auction_obj.id} with first club: {all_clubs[0]['name']}")
+    else:
+        logger.error(f"Failed to start auction {auction_obj.id} - no clubs available")
+        raise HTTPException(status_code=500, detail="No clubs available to auction")
     
     return {"message": "Auction created and started", "auctionId": auction_obj.id}
 
