@@ -126,6 +126,17 @@ export default function AuctionRoom() {
     }
   };
 
+  const loadParticipants = async () => {
+    try {
+      if (!auction) return;
+      const leagueId = auction.leagueId;
+      const response = await axios.get(`${API}/leagues/${leagueId}/participants`);
+      setParticipants(response.data);
+    } catch (e) {
+      console.error("Error loading participants:", e);
+    }
+  };
+
   const placeBid = async () => {
     if (!user || !currentClub || !bidAmount) {
       alert("Please enter a bid amount");
