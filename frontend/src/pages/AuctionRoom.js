@@ -508,7 +508,7 @@ export default function AuctionRoom() {
                   {highestBid > 0 && (
                     <div className="bg-green-50 border border-green-200 p-4 rounded-lg mb-6">
                       <div className="text-sm text-gray-600">Current Highest Bid</div>
-                      <div className="text-3xl font-bold text-green-600">${highestBid}</div>
+                      <div className="text-3xl font-bold text-green-600">£{highestBid.toLocaleString()}</div>
                       {currentClubBids[0] && (
                         <div className="text-sm text-gray-600 mt-1">
                           by {currentClubBids[0].userName}
