@@ -232,6 +232,39 @@ export default function AuctionRoom() {
             </div>
           </div>
 
+          {/* Participant Budgets */}
+          <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <h2 className="text-xl font-bold mb-4 text-gray-900">Manager Budgets</h2>
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {participants.map((p) => {
+                const isCurrentUser = user && p.userId === user.id;
+                return (
+                  <div
+                    key={p.id}
+                    className={`p-4 rounded-lg border-2 ${
+                      isCurrentUser
+                        ? "bg-blue-50 border-blue-500"
+                        : "bg-gray-50 border-gray-200"
+                    }`}
+                  >
+                    <div className="font-semibold text-gray-900 text-sm mb-1">
+                      {p.userName} {isCurrentUser && "(You)"}
+                    </div>
+                    <div className="text-2xl font-bold text-green-600">
+                      ${p.budgetRemaining.toFixed(0)}
+                    </div>
+                    <div className="text-xs text-gray-500 mt-1">
+                      Spent: ${p.totalSpent.toFixed(0)}
+                    </div>
+                    <div className="text-xs text-gray-500">
+                      Clubs: {p.clubsWon.length}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
           <div className="grid lg:grid-cols-3 gap-6">
             {/* Current Lot */}
             <div className="lg:col-span-2 bg-white rounded-lg shadow-lg p-6">
