@@ -207,9 +207,14 @@ async def join_league(league_id: str, participant_input: LeagueParticipantCreate
         raise HTTPException(status_code=404, detail="League not found")
     
     # Verify invite token
+    logger.info(f"Token comparison: league_token='{league['inviteToken']}' vs input_token='{participant_input.inviteToken}'")
+    logger.info(f"Token types: league={type(league['inviteToken'])} input={type(participant_input.inviteToken)}")
+    logger.info(f"Are equal: {league['inviteToken'] == participant_input.inviteToken}")
+    
     if league["inviteToken"] != participant_input.inviteToken:
         # Provide more helpful error message
         error_msg = f"Invalid invite token. The correct token for league '{league['name']}' is '{league['inviteToken']}'"
+        logger.error(f"Token mismatch for user {participant_input.userId}: expected '{league['inviteToken']}', got '{participant_input.inviteToken}'")
         raise HTTPException(status_code=403, detail=error_msg)
     
     # Check if already joined
