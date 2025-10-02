@@ -59,6 +59,23 @@ export default function AuctionRoom() {
       console.log("Joined auction:", data);
     });
 
+    socket.on("sync_state", (data) => {
+      console.log("Received sync state:", data);
+      // Update state with current auction data
+      if (data.currentClub) {
+        setCurrentClub(data.currentClub);
+      }
+      if (data.currentBids) {
+        setBids(data.currentBids);
+      }
+      if (data.timeRemaining) {
+        setTimeRemaining(data.timeRemaining);
+      }
+      if (data.participants) {
+        setParticipants(data.participants);
+      }
+    });
+
     socket.on("bid_placed", (data) => {
       console.log("Bid placed:", data);
       setBids((prev) => [data.bid, ...prev]);
