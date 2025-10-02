@@ -66,6 +66,7 @@ class Auction(BaseModel):
     status: str = "pending"  # pending, active, paused, completed
     currentLot: int = 0
     currentClubId: Optional[str] = None
+    currentLotId: Optional[str] = None  # Track lot ID for timer events
     bidTimer: int = 60  # seconds
     antiSnipeSeconds: int = 30
     timerEndsAt: Optional[datetime] = None
