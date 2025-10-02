@@ -326,6 +326,39 @@ async def complete_lot(auction_id: str):
         
         winning_bid = bids[0] if bids else None
         
+        # If there's a winner, update their budget and clubs won
+        if winning_bid:
+            participant = await db.league_participants.find_one({
+                "leagueId": auction["leagueId"],
+                "userId": winning_bid["userId"]
+            })
+            
+            if participant:
+                # Get all previous winning bids for this user to calculate total spent
+                user_winning_clubs = participant.get("clubsWon", [])
+                user_total_spent = participant.get("totalSpent", 0.0)
+                
+                # Add this club and amount
+                user_winning_clubs.append(auction["currentClubId"])
+                user_total_spent += winning_bid["amount"]
+                
+                # Get league to calculate remaining budget
+                league = await db.leagues.find_one({"id": auction["leagueId"]})
+                budget_remaining = league["budget"] - user_total_spent
+                
+                # Update participant
+                await db.league_participants.update_one(
+                    {
+                        "leagueId": auction["leagueId"],
+                        "userId": winning_bid["userId"]
+                    },
+                    {"$set": {
+                        "clubsWon": user_winning_clubs,
+                        "totalSpent": user_total_spent,
+                        "budgetRemaining": budget_remaining
+                    }}
+                )
+        
         # Update auction
         await db.auctions.update_one(
             {"id": auction_id},
@@ -335,10 +368,14 @@ async def complete_lot(auction_id: str):
             }}
         )
         
+        # Get updated participants for broadcast
+        participants = await db.league_participants.find({"leagueId": auction["leagueId"]}).to_list(100)
+        
         # Emit lot complete
         await sio.emit('lot_complete', {
             'clubId': auction["currentClubId"],
-            'winningBid': Bid(**winning_bid).dict() if winning_bid else None
+            'winningBid': Bid(**winning_bid).dict() if winning_bid else None,
+            'participants': [LeagueParticipant(**p).dict(mode='json') for p in participants]
         }, room=f"auction:{auction_id}")
         
         return {"message": "Lot completed", "winningBid": winning_bid}
