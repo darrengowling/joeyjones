@@ -540,6 +540,43 @@ async def join_auction(sid, data):
     if auction_id:
         sio.enter_room(sid, f"auction:{auction_id}")
         logger.info(f"Client {sid} joined auction:{auction_id}")
+        
+        # Send current auction state for reconnection
+        auction = await db.auctions.find_one({"id": auction_id})
+        if auction:
+            # Get current club if exists
+            current_club = None
+            if auction.get("currentClubId"):
+                club = await db.clubs.find_one({"id": auction["currentClubId"]})
+                if club:
+                    current_club = Club(**club).dict()
+            
+            # Get all bids for current club
+            current_bids = []
+            if auction.get("currentClubId"):
+                bids = await db.bids.find({
+                    "auctionId": auction_id,
+                    "clubId": auction["currentClubId"]
+                }).to_list(100)
+                current_bids = [Bid(**b).dict(mode='json') for b in bids]
+            
+            # Calculate time remaining
+            time_remaining = 0
+            if auction.get("timerEndsAt"):
+                time_remaining = max(0, int((auction["timerEndsAt"] - datetime.utcnow()).total_seconds()))
+            
+            # Get participants
+            participants = await db.league_participants.find({"leagueId": auction["leagueId"]}).to_list(100)
+            
+            # Send sync state
+            await sio.emit('sync_state', {
+                'auction': Auction(**auction).dict(mode='json'),
+                'currentClub': current_club,
+                'currentBids': current_bids,
+                'timeRemaining': time_remaining,
+                'participants': [LeagueParticipant(**p).dict(mode='json') for p in participants]
+            }, room=sid)
+        
         await sio.emit('joined', {'auctionId': auction_id}, room=sid)
 
 @sio.event
