@@ -403,9 +403,9 @@ class BackendTester:
             return False
         
         # Check error message mentions insufficient budget
-        error_text = result.get("text", "")
-        if "Insufficient budget" not in error_text:
-            self.log(f"Error message doesn't mention insufficient budget: {error_text}", "ERROR")
+        error_detail = result.get("detail", "")
+        if "Insufficient budget" not in error_detail:
+            self.log(f"Error message doesn't mention insufficient budget: {error_detail}", "ERROR")
             return False
         
         self.log("✅ Budget remaining validation still working")
