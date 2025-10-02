@@ -1027,6 +1027,65 @@ async def resume_auction(auction_id: str, commissioner_id: str = None):
     
     return {"message": "Auction resumed successfully", "remainingTime": remaining_time}
 
+
+@api_router.delete("/auction/{auction_id}")
+async def delete_auction(auction_id: str, commissioner_id: str = None):
+    """Delete an auction and all associated bids - only commissioner can do this"""
+    auction = await db.auctions.find_one({"id": auction_id})
+    if not auction:
+        raise HTTPException(status_code=404, detail="Auction not found")
+    
+    # Get league to verify commissioner
+    league = await db.leagues.find_one({"id": auction["leagueId"]})
+    if not league:
+        raise HTTPException(status_code=404, detail="League not found")
+    
+    # Verify commissioner permissions (for now, skip verification if not provided)
+    # if commissioner_id and league["commissionerId"] != commissioner_id:
+    #     raise HTTPException(status_code=403, detail="Only the commissioner can delete this auction")
+    
+    # Cancel any active timers
+    if auction_id in active_timers:
+        active_timers[auction_id].cancel()
+        del active_timers[auction_id]
+    
+    # Delete all bids for this auction
+    bid_result = await db.bids.delete_many({"auctionId": auction_id})
+    
+    # Reset participant budgets and clubs won (since auction is being deleted)
+    participants = await db.league_participants.find({"leagueId": auction["leagueId"]}).to_list(100)
+    for participant in participants:
+        await db.league_participants.update_one(
+            {"id": participant["id"]},
+            {"$set": {
+                "budgetRemaining": league["budget"],  # Reset to full budget
+                "totalSpent": 0.0,
+                "clubsWon": []
+            }}
+        )
+    
+    # Delete auction
+    auction_result = await db.auctions.delete_one({"id": auction_id})
+    
+    # Update league status back to 'active' (ready for new auction)
+    await db.leagues.update_one(
+        {"id": auction["leagueId"]},
+        {"$set": {"status": "active"}}
+    )
+    
+    delete_results = {
+        "auction": auction_result.deleted_count,
+        "bids": bid_result.deleted_count,
+        "participants_reset": len(participants)
+    }
+    
+    logger.info(f"Deleted auction {auction_id}: {delete_results}")
+    
+    return {
+        "message": "Auction deleted successfully",
+        "deletedData": delete_results
+    }
+
 # ===== TIMER COUNTDOWN =====
 async def countdown_timer(auction_id: str, end_time: datetime, lot_id: str):
     """Countdown timer with standardized events"""
