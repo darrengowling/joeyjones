@@ -90,9 +90,9 @@ async def send_magic_link(email_input: dict):
     if not user:
         # For pilot, create user with email as name
         user_create = UserCreate(name=email.split("@")[0], email=email)
-        user_obj = User(**user_create.dict())
-        await db.users.insert_one(user_obj.dict())
-        user = user_obj.dict()
+        user_obj = User(**user_create.model_dump())
+        await db.users.insert_one(user_obj.model_dump())
+        user = user_obj.model_dump()
     
     # Generate magic token (in production, store and send via email)
     magic_token = str(uuid.uuid4())[:12]
