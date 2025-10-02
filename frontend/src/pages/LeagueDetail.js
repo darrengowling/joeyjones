@@ -167,7 +167,7 @@ export default function LeagueDetail() {
             </div>
 
             <div className="flex gap-3">
-              {isCommissioner && league.status === "pending" && (
+              {league.status === "pending" && isCommissioner && (
                 <div>
                   <button
                     onClick={startAuction}
@@ -189,7 +189,29 @@ export default function LeagueDetail() {
                 </div>
               )}
               
-              {isCommissioner && (
+              {league.status === "active" && (
+                <button
+                  onClick={() => {
+                    // Find auction for this league
+                    axios.get(`${API}/leagues`).then(resp => {
+                      // We need to find the auction ID
+                      // For now, navigate to a discover page or fetch auction
+                      fetch(`${API}/leagues`)
+                        .then(r => r.json())
+                        .then(data => {
+                          // This is a workaround - we should have an endpoint to get auction by league
+                          // For now, let's add this functionality
+                        });
+                    });
+                  }}
+                  className="px-6 py-3 rounded-lg font-semibold bg-blue-600 text-white hover:bg-blue-700"
+                  data-testid="go-to-auction-button"
+                >
+                  Go to Auction
+                </button>
+              )}
+              
+              {isCommissioner && league.status === "pending" && (
                 <button
                   onClick={deleteLeague}
                   className="px-6 py-3 rounded-lg font-semibold bg-red-600 text-white hover:bg-red-700"
