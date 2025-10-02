@@ -311,22 +311,29 @@ export default function AuctionRoom() {
                   )}
 
                   {/* Bid Input */}
-                  <div className="flex gap-4">
-                    <input
-                      type="number"
-                      placeholder="Enter bid amount"
-                      className="flex-1 px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg"
-                      value={bidAmount}
-                      onChange={(e) => setBidAmount(e.target.value)}
-                      data-testid="bid-amount-input"
-                    />
-                    <button
-                      onClick={placeBid}
-                      className="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 font-semibold text-lg"
-                      data-testid="place-bid-button"
-                    >
-                      Place Bid
-                    </button>
+                  <div>
+                    <div className="flex gap-4 mb-2">
+                      <input
+                        type="number"
+                        placeholder="Enter bid amount"
+                        className="flex-1 px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg"
+                        value={bidAmount}
+                        onChange={(e) => setBidAmount(e.target.value)}
+                        data-testid="bid-amount-input"
+                      />
+                      <button
+                        onClick={placeBid}
+                        className="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 font-semibold text-lg"
+                        data-testid="place-bid-button"
+                      >
+                        Place Bid
+                      </button>
+                    </div>
+                    {participants.find((p) => p.userId === user?.id) && (
+                      <p className="text-sm text-gray-600">
+                        Your remaining budget: ${participants.find((p) => p.userId === user.id).budgetRemaining.toFixed(0)}
+                      </p>
+                    )}
                   </div>
 
                   {/* Bid History for Current Club */}
