@@ -195,6 +195,10 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/create-league" element={<CreateLeague />} />
+        <Route path="/clubs" element={<ClubsList />} />
+        <Route path="/league/:leagueId" element={<LeagueDetail />} />
+        <Route path="/auction/:auctionId" element={<AuctionRoom />} />
       </Routes>
     </BrowserRouter>
   );
