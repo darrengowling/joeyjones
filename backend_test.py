@@ -281,7 +281,7 @@ class BackendTester:
         self.log(f"Placed bid: ${bid.get('amount')} for {current_club.get('name')}")
         
         # Place another bid (higher)
-        bid_data["amount"] = 25.0
+        bid_data["amount"] = 1500000.0  # £1.5m
         result = self.test_api_endpoint("POST", f"/auction/{auction_id}/bid", bid_data)
         if "error" in result:
             self.log("Second bid placement failed", "ERROR")
