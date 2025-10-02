@@ -404,32 +404,85 @@ export default function AuctionRoom() {
               )}
             </div>
 
-            {/* Available Clubs */}
+            {/* Auction Progress */}
             <div className="bg-white rounded-lg shadow-lg p-6">
-              <h3 className="text-xl font-bold mb-4 text-gray-900">Available Clubs</h3>
-              <div className="max-h-[600px] overflow-y-auto space-y-2">
+              <h3 className="text-xl font-bold mb-4 text-gray-900">Auction Progress</h3>
+              
+              <div className="mb-4 p-4 bg-blue-50 rounded-lg">
+                <div className="text-sm text-gray-600 mb-2">Status</div>
+                <div className="text-lg font-bold text-blue-600">
+                  {currentClub ? "Live Auction" : "Between Lots"}
+                </div>
+                <div className="text-sm text-gray-600 mt-2">
+                  Clubs load automatically in random order
+                </div>
+              </div>
+
+              <div className="mb-4">
+                <div className="text-sm text-gray-600 mb-2">Clubs Auctioned</div>
+                <div className="flex items-center gap-2">
+                  <div className="flex-1 bg-gray-200 rounded-full h-2">
+                    <div 
+                      className="bg-green-600 h-2 rounded-full transition-all"
+                      style={{
+                        width: `${clubs.length > 0 ? (bids.filter((b, i, arr) => arr.findIndex(a => a.clubId === b.clubId) === i).length / clubs.length) * 100 : 0}%`
+                      }}
+                    ></div>
+                  </div>
+                  <div className="text-sm font-semibold text-gray-900">
+                    {bids.filter((b, i, arr) => arr.findIndex(a => a.clubId === b.clubId) === i).length}/{clubs.length}
+                  </div>
+                </div>
+              </div>
+
+              <div className="text-xs text-gray-500 space-y-1 mb-4">
+                <p>🔄 Clubs auto-load in random order</p>
+                <p>⏱️ 60 seconds per club</p>
+                <p>🔥 Timer extends if bid in last 30s</p>
+              </div>
+
+              <h4 className="font-semibold text-gray-900 mb-2 text-sm">Recent Results</h4>
+              <div className="max-h-[400px] overflow-y-auto space-y-2">
                 {clubs.map((club) => {
                   const clubBids = bids.filter((b) => b.clubId === club.id);
-                  const isAuctioned = clubBids.length > 0 && !currentClub;
+                  const isCurrentClub = currentClub?.id === club.id;
+                  const isSold = clubBids.length > 0;
+                  const winner = isSold ? clubBids.sort((a, b) => b.amount - a.amount)[0] : null;
+                  
+                  if (!isCurrentClub && !isSold) return null;
                   
                   return (
                     <div
                       key={club.id}
-                      className={`p-3 rounded-lg border cursor-pointer hover:shadow-md transition-shadow ${
-                        currentClub?.id === club.id
+                      className={`p-3 rounded-lg border ${
+                        isCurrentClub
                           ? "bg-blue-50 border-blue-500"
-                          : isAuctioned
-                          ? "bg-gray-100 border-gray-300"
-                          : "bg-white border-gray-200"
+                          : "bg-gray-50 border-gray-200"
                       }`}
-                      onClick={() => isCommissioner && !currentClub && !isAuctioned && startLot(club.id)}
                       data-testid={`club-item-${club.id}`}
                     >
-                      <div className="font-semibold text-gray-900">{club.name}</div>
-                      <div className="text-sm text-gray-600">{club.country}</div>
-                      {isAuctioned && (
-                        <div className="text-xs text-green-600 mt-1">✓ Sold</div>
-                      )}
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <div className="font-semibold text-gray-900">{club.name}</div>
+                          <div className="text-xs text-gray-600">{club.country}</div>
+                        </div>
+                        {isCurrentClub && (
+                          <span className="text-xs bg-blue-600 text-white px-2 py-1 rounded">
+                            LIVE
+                          </span>
+                        )}
+                        {isSold && !isCurrentClub && (
+                          <div className="text-right">
+                            <div className="text-xs text-green-600 font-semibold">✓ Sold</div>
+                            {winner && (
+                              <>
+                                <div className="text-xs text-gray-600">{winner.userName}</div>
+                                <div className="text-xs font-bold text-gray-900">${winner.amount}</div>
+                              </>
+                            )}
+                          </div>
+                        )}
+                      </div>
                     </div>
                   );
                 })}
