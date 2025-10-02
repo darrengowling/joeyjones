@@ -85,6 +85,9 @@ export default function AuctionRoom() {
       setCurrentClub(null);
       setTimeRemaining(0);
       setBidAmount("");
+      if (data.participants) {
+        setParticipants(data.participants);
+      }
       loadAuction();
     });
 
