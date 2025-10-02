@@ -83,7 +83,7 @@ class Bid(BaseModel):
     userId: str
     clubId: str
     amount: float
-    timestamp: datetime = Field(default_factory=datetime.utcnow)
+    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     userName: Optional[str] = None
     userEmail: Optional[str] = None
 
