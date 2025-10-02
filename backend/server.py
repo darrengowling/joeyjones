@@ -645,10 +645,19 @@ async def countdown_timer(auction_id: str, end_time: datetime):
                 break
             
             # Emit timer update
-            logger.debug(f"Emitting timer_update for auction {auction_id}: {int(time_remaining)}s remaining")
+            room_name = f"auction:{auction_id}"
+            logger.debug(f"Emitting timer_update to room '{room_name}': {int(time_remaining)}s remaining")
+            
+            # Get clients in room for debugging
+            try:
+                room_clients = sio.manager.get_participants(sio.namespace, room_name)
+                logger.info(f"Room '{room_name}' has {len(room_clients)} clients: {list(room_clients)}")
+            except:
+                logger.info(f"Could not get room client count for '{room_name}'")
+            
             await sio.emit('timer_update', {
                 'timeRemaining': max(0, int(time_remaining))
-            }, room=f"auction:{auction_id}")
+            }, room=room_name)
     
     except asyncio.CancelledError:
         logger.info(f"Timer for auction {auction_id} was cancelled")
