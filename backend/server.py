@@ -492,7 +492,7 @@ async def complete_lot(auction_id: str):
         await sio.emit('lot_complete', {
             'clubId': auction["currentClubId"],
             'winningBid': Bid(**winning_bid).dict() if winning_bid else None,
-            'participants': [LeagueParticipant(**p).dict(mode='json') for p in participants]
+            'participants': [LeagueParticipant(**p).model_dump(mode='json') for p in participants]
         }, room=f"auction:{auction_id}")
         
         return {"message": "Lot completed", "winningBid": winning_bid}
@@ -559,7 +559,7 @@ async def join_auction(sid, data):
                     "auctionId": auction_id,
                     "clubId": auction["currentClubId"]
                 }).to_list(100)
-                current_bids = [Bid(**b).dict(mode='json') for b in bids]
+                current_bids = [Bid(**b).model_dump(mode='json') for b in bids]
             
             # Calculate time remaining
             time_remaining = 0
@@ -571,11 +571,11 @@ async def join_auction(sid, data):
             
             # Send sync state
             await sio.emit('sync_state', {
-                'auction': Auction(**auction).dict(mode='json'),
+                'auction': Auction(**auction).model_dump(mode='json'),
                 'currentClub': current_club,
                 'currentBids': current_bids,
                 'timeRemaining': time_remaining,
-                'participants': [LeagueParticipant(**p).dict(mode='json') for p in participants]
+                'participants': [LeagueParticipant(**p).model_dump(mode='json') for p in participants]
             }, room=sid)
         
         await sio.emit('joined', {'auctionId': auction_id}, room=sid)
