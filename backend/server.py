@@ -414,7 +414,7 @@ async def place_bid(auction_id: str, bid_input: BidCreate):
     
     # Check for anti-snipe
     if auction.get("timerEndsAt"):
-        time_remaining = (auction["timerEndsAt"] - datetime.utcnow()).total_seconds()
+        time_remaining = (auction["timerEndsAt"] - datetime.now(timezone.utc)).total_seconds()
         if time_remaining <= auction["antiSnipeSeconds"] and time_remaining > 0:
             # Extend timer
             new_end_time = datetime.utcnow() + timedelta(seconds=auction["antiSnipeSeconds"])
