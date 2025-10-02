@@ -35,6 +35,7 @@ export default function AuctionRoom() {
 
     loadAuction();
     loadClubs();
+    loadParticipants();
     initializeSocket();
 
     return () => {
