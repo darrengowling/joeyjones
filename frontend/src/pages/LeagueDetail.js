@@ -78,6 +78,7 @@ export default function LeagueDetail() {
   }
 
   const isCommissioner = user && league.commissionerId === user.id;
+  const canStartAuction = participants.length >= league.minManagers;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 py-8">
@@ -93,25 +94,45 @@ export default function LeagueDetail() {
           <div className="flex justify-between items-start mb-6">
             <div>
               <h1 className="text-3xl font-bold text-gray-900 mb-2">{league.name}</h1>
-              <span
-                className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                  league.status === "active"
-                    ? "bg-green-100 text-green-800"
-                    : "bg-gray-100 text-gray-800"
-                }`}
-              >
-                {league.status}
-              </span>
+              <div className="flex gap-2 items-center">
+                <span
+                  className={`px-3 py-1 rounded-full text-sm font-semibold ${
+                    league.status === "active"
+                      ? "bg-green-100 text-green-800"
+                      : "bg-gray-100 text-gray-800"
+                  }`}
+                >
+                  {league.status}
+                </span>
+                <span className="text-sm text-gray-600">
+                  {participants.length}/{league.maxManagers} managers
+                </span>
+              </div>
+              <div className="mt-2 text-sm text-gray-600">
+                Invite Token: <code className="bg-gray-100 px-2 py-1 rounded font-mono">{league.inviteToken}</code>
+              </div>
             </div>
 
             {isCommissioner && league.status === "pending" && (
-              <button
-                onClick={startAuction}
-                className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 font-semibold"
-                data-testid="start-auction-button"
-              >
-                Start Auction
-              </button>
+              <div>
+                <button
+                  onClick={startAuction}
+                  disabled={!canStartAuction}
+                  className={`px-6 py-3 rounded-lg font-semibold ${
+                    canStartAuction
+                      ? "bg-green-600 text-white hover:bg-green-700"
+                      : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  }`}
+                  data-testid="start-auction-button"
+                >
+                  Start Auction
+                </button>
+                {!canStartAuction && (
+                  <p className="text-sm text-red-600 mt-2">
+                    Need {league.minManagers - participants.length} more manager(s) to start
+                  </p>
+                )}
+              </div>
             )}
           </div>
 
