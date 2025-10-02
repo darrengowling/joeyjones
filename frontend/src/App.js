@@ -1,54 +1,201 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import "@/App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import axios from "axios";
+import io from "socket.io-client";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
+// Initialize Socket.IO
+let socket = null;
+
 const Home = () => {
-  const helloWorldApi = async () => {
+  const navigate = useNavigate();
+  const [user, setUser] = useState(null);
+  const [showUserDialog, setShowUserDialog] = useState(false);
+  const [userForm, setUserForm] = useState({ name: "", email: "" });
+  const [leagues, setLeagues] = useState([]);
+
+  useEffect(() => {
+    loadLeagues();
+  }, []);
+
+  const loadLeagues = async () => {
     try {
-      const response = await axios.get(`${API}/`);
-      console.log(response.data.message);
+      const response = await axios.get(`${API}/leagues`);
+      setLeagues(response.data);
     } catch (e) {
-      console.error(e, `errored out requesting / api`);
+      console.error("Error loading leagues:", e);
+    }
+  };
+
+  const handleUserSubmit = async (e) => {
+    e.preventDefault();
+    if (!userForm.name || !userForm.email) {
+      alert("Please enter both name and email");
+      return;
+    }
+
+    try {
+      const response = await axios.post(`${API}/users`, userForm);
+      setUser(response.data);
+      localStorage.setItem("user", JSON.stringify(response.data));
+      setShowUserDialog(false);
+    } catch (e) {
+      console.error("Error creating user:", e);
+      alert("Error creating user");
     }
   };
 
   useEffect(() => {
-    helloWorldApi();
+    const savedUser = localStorage.getItem("user");
+    if (savedUser) {
+      setUser(JSON.parse(savedUser));
+    }
   }, []);
 
   return (
-    <div>
-      <header className="App-header">
-        <a
-          className="App-link"
-          href="https://emergent.sh"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <img src="https://avatars.githubusercontent.com/in/1201222?s=120&u=2686cf91179bbafbc7a71bfbc43004cf9ae1acea&v=4" />
-        </a>
-        <p className="mt-5">Building something incredible ~!</p>
-      </header>
+    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900">
+      {/* User Dialog */}
+      {showUserDialog && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4">
+            <h2 className="text-2xl font-bold mb-4 text-gray-900">Enter Your Details</h2>
+            <form onSubmit={handleUserSubmit}>
+              <div className="mb-4">
+                <label className="block text-gray-700 mb-2">Name</label>
+                <input
+                  type="text"
+                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={userForm.name}
+                  onChange={(e) => setUserForm({ ...userForm, name: e.target.value })}
+                  data-testid="user-name-input"
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-gray-700 mb-2">Email</label>
+                <input
+                  type="email"
+                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={userForm.email}
+                  onChange={(e) => setUserForm({ ...userForm, email: e.target.value })}
+                  data-testid="user-email-input"
+                />
+              </div>
+              <button
+                type="submit"
+                className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700"
+                data-testid="user-submit-button"
+              >
+                Continue
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Header */}
+      <div className="bg-white shadow-md">
+        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+          <h1 className="text-2xl font-bold text-blue-900">UEFA Club Auction</h1>
+          {user ? (
+            <div className="flex items-center gap-4">
+              <span className="text-gray-700">
+                <strong>{user.name}</strong> ({user.email})
+              </span>
+              <button
+                onClick={() => setShowUserDialog(true)}
+                className="text-sm text-blue-600 hover:underline"
+              >
+                Change
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={() => setShowUserDialog(true)}
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+              data-testid="login-button"
+            >
+              Sign In
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="container mx-auto px-4 py-8">
+        <div className="bg-white rounded-lg shadow-lg p-8">
+          <h2 className="text-3xl font-bold mb-6 text-gray-900">Welcome to UEFA Club Auction</h2>
+          <p className="text-gray-600 mb-8">
+            Bid on UEFA Champions League clubs and build your dream team!
+          </p>
+
+          <div className="grid md:grid-cols-2 gap-6 mb-8">
+            <button
+              onClick={() => navigate("/create-league")}
+              className="bg-green-600 text-white px-6 py-4 rounded-lg hover:bg-green-700 text-lg font-semibold"
+              data-testid="create-league-button"
+            >
+              Create New League
+            </button>
+            <button
+              onClick={() => navigate("/clubs")}
+              className="bg-purple-600 text-white px-6 py-4 rounded-lg hover:bg-purple-700 text-lg font-semibold"
+              data-testid="view-clubs-button"
+            >
+              View All Clubs
+            </button>
+          </div>
+
+          {/* Active Leagues */}
+          <div>
+            <h3 className="text-2xl font-bold mb-4 text-gray-900">Active Leagues</h3>
+            {leagues.length === 0 ? (
+              <p className="text-gray-500">No leagues yet. Create one to get started!</p>
+            ) : (
+              <div className="grid gap-4">
+                {leagues.map((league) => (
+                  <div
+                    key={league.id}
+                    className="border rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer"
+                    onClick={() => navigate(`/league/${league.id}`)}
+                    data-testid={`league-card-${league.id}`}
+                  >
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <h4 className="text-xl font-semibold text-gray-900">{league.name}</h4>
+                        <p className="text-gray-600">
+                          Budget: ${league.budget} | Slots: {league.clubSlots} | Status: {league.status}
+                        </p>
+                      </div>
+                      <span
+                        className={`px-3 py-1 rounded-full text-sm font-semibold ${
+                          league.status === "active"
+                            ? "bg-green-100 text-green-800"
+                            : "bg-gray-100 text-gray-800"
+                        }`}
+                      >
+                        {league.status}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
 
-function App() {
+export default function App() {
   return (
-    <div className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />}>
-            <Route index element={<Home />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
-
-export default App;
