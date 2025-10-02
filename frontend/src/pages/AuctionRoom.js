@@ -346,8 +346,47 @@ export default function AuctionRoom() {
                 <h1 className="text-3xl font-bold text-gray-900">
                   {league ? league.name : "Auction Room"}
                 </h1>
-                <p className="text-gray-600">Lot #{auction?.currentLot || 0}</p>
+                <p className="text-gray-600">
+                  Lot #{auction?.currentLot || 0} • Status: {auction?.status || "Unknown"}
+                  {auction?.status === "paused" && (
+                    <span className="ml-2 px-2 py-1 bg-yellow-100 text-yellow-800 text-sm rounded">PAUSED</span>
+                  )}
+                </p>
               </div>
+              
+              {/* Commissioner Controls */}
+              {isCommissioner && (
+                <div className="flex gap-2">
+                  {auction?.status === "active" && (
+                    <button
+                      onClick={pauseAuction}
+                      className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600"
+                      title="Pause Auction"
+                    >
+                      ⏸️ Pause
+                    </button>
+                  )}
+                  
+                  {auction?.status === "paused" && (
+                    <button
+                      onClick={resumeAuction}
+                      className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+                      title="Resume Auction"
+                    >
+                      ▶️ Resume
+                    </button>
+                  )}
+                  
+                  <button
+                    onClick={completeLot}
+                    className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                    title="Complete Current Lot"
+                  >
+                    Complete Lot
+                  </button>
+                </div>
+              )}
+            </div>
               <div className="text-right">
                 <div className="text-sm text-gray-600">Bidding as</div>
                 <div className="font-semibold text-gray-900">{user?.name}</div>
