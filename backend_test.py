@@ -485,7 +485,7 @@ class BackendTester:
                     
                     # Check clubs list again
                     updated_result = self.test_api_endpoint("GET", f"/auction/{auction_id}/clubs")
-                    if "error" not in updated_result:
+                    if updated_result and "error" not in updated_result:
                         updated_clubs = updated_result.get("clubs", [])
                         sold_count = len([c for c in updated_clubs if c.get("status") == "sold"])
                         
