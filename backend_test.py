@@ -783,6 +783,8 @@ class BackendTester:
             ("league_endpoints", self.test_league_endpoints),
             ("auction_endpoints", self.test_auction_endpoints),
             ("bidding_endpoints", self.test_bidding_endpoints),
+            ("minimum_budget_enforcement", self.test_minimum_budget_enforcement),
+            ("clubs_list_endpoint", self.test_clubs_list_endpoint),
             ("socket_connection", self.test_socket_connection),
             ("real_time_auction_flow", self.test_real_time_auction_flow),
             ("lot_management", self.test_lot_management),
