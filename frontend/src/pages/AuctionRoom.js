@@ -100,8 +100,14 @@ export default function AuctionRoom() {
     };
 
     const handleBidPlaced = (data) => {
-      console.log("Bid placed:", data);
-      setBids((prev) => [data.bid, ...prev]);
+      console.log("Bid placed event received:", data);
+      console.log("Current bids before update:", bids);
+      console.log("Current club:", currentClub);
+      setBids((prev) => {
+        const newBids = [data.bid, ...prev];
+        console.log("New bids after update:", newBids);
+        return newBids;
+      });
       loadAuction();
       loadClubs(); // Reload clubs to update status
     };
