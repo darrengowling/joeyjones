@@ -31,6 +31,13 @@ export function useAuctionClock(socket, lotId) {
     };
 
     if (socket) {
+      // Remove existing listeners before adding new ones (prevent duplicates)
+      socket.off("sync_state", onSync);
+      socket.off("tick", onTick);
+      socket.off("anti_snipe", onAnti);
+      socket.off("sold", onSold);
+
+      // Add listeners
       socket.on("sync_state", onSync);
       socket.on("tick", onTick);
       socket.on("anti_snipe", onAnti);
