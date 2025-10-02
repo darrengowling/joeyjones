@@ -516,16 +516,16 @@ async def get_auction_clubs(auction_id: str):
             "winningBid": winning_bid
         })
     
-    # Sort by lot number (current first, then by lot order, then unsold)
+    # Sort by status first, then alphabetically (hide draw order for strategy)
     def sort_key(club):
         if club["status"] == "current":
-            return (0, club.get("lotNumber", 999))
-        elif club["status"] == "upcoming":
-            return (1, club.get("lotNumber", 999))
+            return (0, club["name"])  # Current lot first
         elif club["status"] == "sold":
-            return (2, club.get("lotNumber", 999))
-        else:  # unsold
-            return (3, club.get("lotNumber", 999))
+            return (1, club.get("lotNumber", 999))  # Sold by lot order for history
+        elif club["status"] == "unsold":
+            return (2, club["name"])  # Unsold alphabetically
+        else:  # upcoming
+            return (3, club["name"])  # Upcoming alphabetically (hide draw order)
     
     clubs_with_status.sort(key=sort_key)
     
