@@ -118,8 +118,8 @@ backend:
         comment: "Successfully cleared all test data: 13 users, 36 clubs deleted. Database now clean."
         
   - task: "Fix JSON serialization issues"
-    implemented: false
-    working: false
+    implemented: true
+    working: "NA"
     file: "server.py"
     stuck_count: 0
     priority: "high"
@@ -128,6 +128,9 @@ backend:
       - working: false
         agent: "main"
         comment: "Found multiple .dict() calls that should be .model_dump() and datetime serialization issues"
+      - working: "NA"
+        agent: "main"
+        comment: "Fixed all .dict() to .model_dump() calls and datetime.utcnow() to datetime.now(timezone.utc) - backend linting passed"
 
   - task: "Socket.IO path configuration"
     implemented: true
