@@ -173,6 +173,8 @@ export default function AuctionRoom() {
     socket.off("sold", handleSold);
     socket.off("anti_snipe", handleAntiSnipe);
     socket.off("auction_complete", handleAuctionComplete);
+    socket.off("auction_paused", handleAuctionPaused);
+    socket.off("auction_resumed", handleAuctionResumed);
     socket.off("disconnect", handleDisconnect);
 
     // Add listeners
@@ -185,6 +187,8 @@ export default function AuctionRoom() {
     socket.on("sold", handleSold);
     socket.on("anti_snipe", handleAntiSnipe);
     socket.on("auction_complete", handleAuctionComplete);
+    socket.on("auction_paused", handleAuctionPaused);
+    socket.on("auction_resumed", handleAuctionResumed);
     socket.on("disconnect", handleDisconnect);
 
     // Store cleanup function
