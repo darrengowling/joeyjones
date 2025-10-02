@@ -168,39 +168,48 @@ backend:
 frontend:
   - task: "Socket.IO client connection"
     implemented: true
-    working: "NA"
+    working: true
     file: "AuctionRoom.js"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Socket.IO client correctly configured with /api/socket.io path"
+      - working: true
+        agent: "testing"
+        comment: "Socket.IO connection working correctly. Client connects successfully, joins auction rooms, and receives initial sync_state events. Connection established at /api/socket.io path."
 
   - task: "UI state synchronization"
     implemented: true
-    working: "NA"
+    working: false
     file: "AuctionRoom.js"
-    stuck_count: 1
+    stuck_count: 2
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: false
         agent: "user"
         comment: "User reports stuck timers and need for manual refreshes"
+      - working: false
+        agent: "testing"
+        comment: "CRITICAL ISSUE CONFIRMED: Timer stuck at initial value and does not update. Backend sends timer_update events every second (confirmed in logs), but frontend does not receive these events. Manual refresh updates timer to current value but immediately gets stuck again. Socket connection works for initial sync but timer_update events are not being delivered to client."
 
   - task: "Real-time auction flow"
     implemented: true
-    working: "NA"
+    working: false
     file: "AuctionRoom.js"
-    stuck_count: 1
+    stuck_count: 2
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: false
         agent: "user"
         comment: "User reports auction flow not working properly"
+      - working: false
+        agent: "testing"
+        comment: "Auction flow partially working: Auction starts correctly, displays current club (Real Madrid, Dinamo Zagreb tested), shows participant budgets, bidding interface present. However, critical timer synchronization issue prevents proper auction flow. Bidding functionality appears to work (bid_placed events detected in backend logs). Main issue: timer_update events not reaching frontend despite backend emitting them every second."
 
 metadata:
   created_by: "main_agent"
