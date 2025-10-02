@@ -509,15 +509,6 @@ async def complete_lot(auction_id: str):
                     }}
                 )
         
-        # Update auction
-        await db.auctions.update_one(
-            {"id": auction_id},
-            {"$set": {
-                "currentClubId": None,
-                "timerEndsAt": None
-            }}
-        )
-        
         # Get updated participants for broadcast
         participants = await db.league_participants.find({"leagueId": auction["leagueId"]}).to_list(100)
         
@@ -531,6 +522,60 @@ async def complete_lot(auction_id: str):
             'winningBid': Bid(**winning_bid).dict() if winning_bid else None,
             'participants': [LeagueParticipant(**p).model_dump(mode='json') for p in participants]
         }, room=f"auction:{auction_id}")
+        
+        # Auto-start next club
+        # Get all clubs
+        all_clubs = await db.clubs.find().to_list(100)
+        
+        # Get clubs already auctioned (have bids)
+        all_bids = await db.bids.find({"auctionId": auction_id}).to_list(1000)
+        auctioned_club_ids = set(bid["clubId"] for bid in all_bids)
+        
+        # Find next club that hasn't been auctioned
+        next_club = None
+        for club in all_clubs:
+            if club["id"] not in auctioned_club_ids:
+                next_club = club
+                break
+        
+        if next_club:
+            # Start next lot
+            timer_end = datetime.utcnow() + timedelta(seconds=auction["bidTimer"])
+            await db.auctions.update_one(
+                {"id": auction_id},
+                {"$set": {
+                    "currentClubId": next_club["id"],
+                    "currentLot": auction["currentLot"] + 1,
+                    "timerEndsAt": timer_end
+                }}
+            )
+            
+            # Remove _id for serialization
+            next_club.pop('_id', None)
+            
+            # Emit lot start
+            await sio.emit('lot_started', {
+                'club': Club(**next_club).dict(),
+                'lotNumber': auction["currentLot"] + 1,
+                'timerEndsAt': timer_end.isoformat()
+            }, room=f"auction:{auction_id}")
+            
+            # Start timer countdown
+            asyncio.create_task(countdown_timer(auction_id, timer_end))
+        else:
+            # No more clubs, auction complete
+            await db.auctions.update_one(
+                {"id": auction_id},
+                {"$set": {
+                    "status": "completed",
+                    "currentClubId": None,
+                    "timerEndsAt": None
+                }}
+            )
+            
+            await sio.emit('auction_complete', {
+                'message': 'All clubs have been auctioned!'
+            }, room=f"auction:{auction_id}")
         
         return {"message": "Lot completed", "winningBid": winning_bid}
     
