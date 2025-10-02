@@ -107,6 +107,11 @@ export default function AuctionRoom() {
 
     const handleLotStarted = (data) => {
       console.log("Lot started:", data);
+      
+      if (data.isUnsoldRetry) {
+        alert(`🔄 Re-offering unsold club: ${data.club.name}!`);
+      }
+      
       setCurrentClub(data.club);
       if (data.timer && data.timer.lotId) {
         setCurrentLotId(data.timer.lotId);
