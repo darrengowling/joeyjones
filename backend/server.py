@@ -648,12 +648,11 @@ async def countdown_timer(auction_id: str, end_time: datetime):
             room_name = f"auction:{auction_id}"
             logger.debug(f"Emitting timer_update to room '{room_name}': {int(time_remaining)}s remaining")
             
-            # Get clients in room for debugging
-            try:
-                room_clients = sio.manager.get_participants(sio.namespace, room_name)
-                logger.info(f"Room '{room_name}' has {len(room_clients)} clients: {list(room_clients)}")
-            except:
-                logger.info(f"Could not get room client count for '{room_name}'")
+            # TEST: Emit to all clients as well to see if room targeting is the issue
+            await sio.emit('timer_update_broadcast', {
+                'timeRemaining': max(0, int(time_remaining)),
+                'auctionId': auction_id
+            })  # No room specified = broadcast to all
             
             await sio.emit('timer_update', {
                 'timeRemaining': max(0, int(time_remaining))
