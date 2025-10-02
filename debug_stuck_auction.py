@@ -44,8 +44,8 @@ async def debug_stuck_auction():
                         if response.status == 200:
                             auction = await response.json()
                             print(f"\nAUCTION STATE:")
-                            print(f"  Status: {auction['status']}")
-                            print(f"  Current Lot: {auction['currentLot']}")
+                            print(f"  Status: {auction.get('status', 'Unknown')}")
+                            print(f"  Current Lot: {auction.get('currentLot', 'Unknown')}")
                             print(f"  Current Club ID: {auction.get('currentClubId', 'None')}")
                             print(f"  Timer Ends At: {auction.get('timerEndsAt', 'None')}")
                             
@@ -55,8 +55,8 @@ async def debug_stuck_auction():
                             else:
                                 print(f"  Current Club: None - THIS IS THE PROBLEM!")
                             
-                            print(f"  Bid Timer: {auction['bidTimer']}s")
-                            print(f"  Anti-Snipe: {auction['antiSnipeSeconds']}s")
+                            print(f"  Bid Timer: {auction.get('bidTimer', 'Unknown')}s")
+                            print(f"  Anti-Snipe: {auction.get('antiSnipeSeconds', 'Unknown')}s")
                         else:
                             print(f"❌ Could not get auction details: {response.status}")
                 else:
