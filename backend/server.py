@@ -535,26 +535,38 @@ async def start_lot(auction_id: str, club_id: str):
         raise HTTPException(status_code=404, detail="Club not found")
     
     # Update auction with current lot
+    new_lot_number = auction["currentLot"] + 1
+    lot_id = f"{auction_id}-lot-{new_lot_number}"
     timer_end = datetime.now(timezone.utc) + timedelta(seconds=auction["bidTimer"])
+    
     await db.auctions.update_one(
         {"id": auction_id},
         {"$set": {
             "status": "active",
             "currentClubId": club_id,
-            "currentLot": auction["currentLot"] + 1,
+            "currentLot": new_lot_number,
+            "currentLotId": lot_id,
             "timerEndsAt": timer_end
         }}
     )
     
+    # Create timer data
+    if timer_end.tzinfo is None:
+        timer_end = timer_end.replace(tzinfo=timezone.utc)
+    ends_at_ms = int(timer_end.timestamp() * 1000)
+    timer_data = create_timer_event(lot_id, ends_at_ms)
+    
     # Emit lot start
     await sio.emit('lot_started', {
         'club': Club(**club).model_dump(),
-        'lotNumber': auction["currentLot"] + 1,
-        'timerEndsAt': timer_end.isoformat()
-    }, room=f"auction:{auction_id}")
+        'lotNumber': new_lot_number,
+        'timer': timer_data
+    })
+    
+    logger.info(f"Manual start lot {lot_id}: {club['name']}, seq={timer_data['seq']}")
     
     # Start timer countdown
-    asyncio.create_task(countdown_timer(auction_id, timer_end))
+    asyncio.create_task(countdown_timer(auction_id, timer_end, lot_id))
     
     return {"message": "Lot started", "club": Club(**club)}
 
