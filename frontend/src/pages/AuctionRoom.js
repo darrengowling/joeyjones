@@ -137,15 +137,6 @@ export default function AuctionRoom() {
         setCurrentClub(response.data.currentClub);
       }
 
-      // Calculate initial time remaining
-      if (response.data.auction.timerEndsAt) {
-        const endTime = new Date(response.data.auction.timerEndsAt);
-        const now = new Date();
-        const remaining = Math.max(0, Math.floor((endTime - now) / 1000));
-        setTimeRemaining(remaining);
-        console.log("Initial time remaining:", remaining);
-      }
-
       // Load league
       const leagueResponse = await axios.get(`${API}/leagues/${response.data.auction.leagueId}`);
       setLeague(leagueResponse.data);
