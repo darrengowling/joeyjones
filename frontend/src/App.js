@@ -219,13 +219,32 @@ const Home = () => {
             Bid on UEFA Champions League clubs and build your dream team!
           </p>
 
-          <div className="grid md:grid-cols-2 gap-6 mb-8">
+          <div className="grid md:grid-cols-3 gap-6 mb-8">
             <button
-              onClick={() => navigate("/create-league")}
+              onClick={() => {
+                if (!user) {
+                  setShowUserDialog(true);
+                } else {
+                  setShowCreateLeagueDialog(true);
+                }
+              }}
               className="bg-green-600 text-white px-6 py-4 rounded-lg hover:bg-green-700 text-lg font-semibold"
               data-testid="create-league-button"
             >
               Create New League
+            </button>
+            <button
+              onClick={() => {
+                if (!user) {
+                  setShowUserDialog(true);
+                } else {
+                  setShowJoinLeagueDialog(true);
+                }
+              }}
+              className="bg-blue-600 text-white px-6 py-4 rounded-lg hover:bg-blue-700 text-lg font-semibold"
+              data-testid="join-league-button"
+            >
+              Join League
             </button>
             <button
               onClick={() => navigate("/clubs")}
