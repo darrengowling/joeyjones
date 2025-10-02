@@ -312,7 +312,7 @@ class BackendTester:
         
         result = self.test_api_endpoint("POST", f"/auction/{auction_id}/bid", low_bid_data, expected_status=400)
         if "error" not in result or result.get("error") != "Status 400":
-            self.log("Low bid should have been rejected but was accepted", "ERROR")
+            self.log(f"Low bid should have been rejected but was accepted. Result: {result}", "ERROR")
             return False
         
         # Check error message contains proper currency formatting
