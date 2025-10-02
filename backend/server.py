@@ -291,8 +291,8 @@ async def start_auction(league_id: str):
     
     # Create auction
     auction_create = AuctionCreate(leagueId=league_id)
-    auction_obj = Auction(**auction_create.dict())
-    await db.auctions.insert_one(auction_obj.dict())
+    auction_obj = Auction(**auction_create.model_dump())
+    await db.auctions.insert_one(auction_obj.model_dump())
     
     # Update league status
     await db.leagues.update_one(
