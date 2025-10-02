@@ -644,19 +644,25 @@ async def countdown_timer(auction_id: str, end_time: datetime):
                 await complete_lot(auction_id)
                 break
             
-            # Emit timer update
+            # TEST: Try different room targeting approaches
             room_name = f"auction:{auction_id}"
-            logger.debug(f"Emitting timer_update to room '{room_name}': {int(time_remaining)}s remaining")
+            logger.info(f"Testing different emission methods for room '{room_name}': {int(time_remaining)}s")
             
-            # TEST: Emit to all clients as well to see if room targeting is the issue
-            await sio.emit('timer_update_broadcast', {
-                'timeRemaining': max(0, int(time_remaining)),
-                'auctionId': auction_id
-            })  # No room specified = broadcast to all
-            
+            # Method 1: Direct room emission (current broken method)
             await sio.emit('timer_update', {
                 'timeRemaining': max(0, int(time_remaining))
             }, room=room_name)
+            
+            # Method 2: Broadcast with auction filter (working method)
+            await sio.emit('timer_update_broadcast', {
+                'timeRemaining': max(0, int(time_remaining)),
+                'auctionId': auction_id
+            })
+            
+            # Method 3: Try emitting to room using namespace parameter
+            await sio.emit('timer_update_namespace', {
+                'timeRemaining': max(0, int(time_remaining))
+            }, room=room_name, namespace='/')
     
     except asyncio.CancelledError:
         logger.info(f"Timer for auction {auction_id} was cancelled")
