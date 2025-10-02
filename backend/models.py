@@ -53,7 +53,7 @@ class LeagueParticipant(BaseModel):
     budgetRemaining: float
     clubsWon: List[str] = []
     totalSpent: float = 0.0
-    joinedAt: datetime = Field(default_factory=datetime.utcnow)
+    joinedAt: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 class LeagueParticipantCreate(BaseModel):
     userId: str
