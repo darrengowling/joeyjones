@@ -234,6 +234,9 @@ async def delete_league(league_id: str, user_id: str):
     # Delete all participants
     await db.league_participants.delete_many({"leagueId": league_id})
     
+    # Delete league points
+    await db.league_points.delete_many({"leagueId": league_id})
+    
     # Find and delete associated auction
     auction = await db.auctions.find_one({"leagueId": league_id})
     if auction:
@@ -243,6 +246,35 @@ async def delete_league(league_id: str, user_id: str):
         await db.auctions.delete_one({"id": auction["id"]})
     
     return {"message": "League deleted successfully"}
+
+# ===== SCORING ENDPOINTS =====
+@api_router.post("/leagues/{league_id}/score/recompute")
+async def recompute_scores(league_id: str):
+    """
+    Recompute scores for all clubs in a league based on Champions League results
+    Fetches data from OpenFootball and applies scoring rules:
+    - Win: 3 points
+    - Draw: 1 point
+    - Goal scored: 1 point
+    """
+    try:
+        result = await recompute_league_scores(db, league_id)
+        return result
+    except Exception as e:
+        logger.error(f"Error recomputing scores: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.get("/leagues/{league_id}/standings")
+async def get_standings(league_id: str):
+    """
+    Get current standings for a league, sorted by total points
+    """
+    try:
+        standings = await get_league_standings(db, league_id)
+        return [LeaguePoints(**s) for s in standings]
+    except Exception as e:
+        logger.error(f"Error getting standings: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 # ===== AUCTION ENDPOINTS =====
 @api_router.post("/leagues/{league_id}/auction/start")
