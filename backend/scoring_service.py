@@ -280,7 +280,7 @@ async def recompute_league_scores(db, league_id: str):
         else:
             from models import LeaguePoints
             league_points_obj = LeaguePoints(**league_points_data)
-            await db.league_points.insert_one(league_points_obj.dict())
+            await db.league_points.insert_one(league_points_obj.model_dump())
         
         updated_count += 1
         logger.info(f"Updated points for {club_name}: {stats['total_points']} points")
