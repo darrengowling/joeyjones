@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Socket.IO Connection Test</title>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <style>
+        body { font-family: Arial; padding: 20px; max-width: 800px; margin: 0 auto; }
+        .log { background: #f5f5f5; padding: 10px; margin: 10px 0; border-radius: 4px; font-family: monospace; font-size: 12px; }
+        .success { color: green; }
+        .error { color: red; }
+        .info { color: blue; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Socket.IO Connection Test</h1>
+    
+    <div>
+        <button onclick="testConnection()">Test Connection</button>
+        <button onclick="clearLogs()">Clear Logs</button>
+    </div>
+    
+    <h2>Connection Log:</h2>
+    <div id="logs"></div>
+
+    <script>
+        let socket = null;
+        const BACKEND_URL = 'https://club-auctions.preview.emergentagent.com';
+        
+        function log(message, type = 'info') {
+            const logsDiv = document.getElementById('logs');
+            const logEntry = document.createElement('div');
+            logEntry.className = `log ${type}`;
+            logEntry.textContent = `[${new Date().toISOString()}] ${message}`;
+            logsDiv.insertBefore(logEntry, logsDiv.firstChild);
+        }
+        
+        function clearLogs() {
+            document.getElementById('logs').innerHTML = '';
+        }
+        
+        function testConnection() {
+            log('Attempting to connect to: ' + BACKEND_URL);
+            log('Path: /socket.io');
+            log('Transports: polling, websocket');
+            
+            if (socket) {
+                socket.disconnect();
+            }
+            
+            socket = io(BACKEND_URL, {
+                path: '/socket.io',
+                transports: ['polling', 'websocket'],
+                reconnection: false
+            });
+            
+            socket.on('connect', () => {
+                log('✓ Connected! Socket ID: ' + socket.id, 'success');
+                log('Transport: ' + socket.io.engine.transport.name, 'success');
+            });
+            
+            socket.on('connect_error', (error) => {
+                log('✗ Connection Error: ' + error.message, 'error');
+                log('Error Details: ' + JSON.stringify(error), 'error');
+            });
+            
+            socket.on('disconnect', (reason) => {
+                log('Disconnected. Reason: ' + reason, 'info');
+            });
+            
+            socket.on('error', (error) => {
+                log('Socket Error: ' + error, 'error');
+            });
+            
+            // Test joining auction
+            setTimeout(() => {
+                if (socket.connected) {
+                    log('Attempting to join test auction...', 'info');
+                    socket.emit('join_auction', { auctionId: '853b64ef-65fb-466b-8d51-8a5222294b98' });
+                }
+            }, 2000);
+            
+            socket.on('joined', (data) => {
+                log('✓ Joined auction: ' + JSON.stringify(data), 'success');
+            });
+            
+            socket.on('sync_state', (data) => {
+                log('✓ Received sync_state', 'success');
+                log('Current club: ' + (data.currentClub ? data.currentClub.name : 'None'), 'info');
+                log('Time remaining: ' + data.timeRemaining + 's', 'info');
+            });
+            
+            socket.on('timer_update', (data) => {
+                log('Timer update: ' + data.timeRemaining + 's', 'info');
+            });
+        }
+        
+        // Auto-test on load
+        window.onload = () => {
+            log('Page loaded. Click "Test Connection" to start.', 'info');
+        };
+    </script>
+</body>
+</html>
