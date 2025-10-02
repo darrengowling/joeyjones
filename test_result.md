@@ -269,11 +269,14 @@ test_plan:
     file: "AuctionRoom.js"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Clubs list feature already implemented in the UI with sidebar showing all clubs and their status (current/upcoming/sold/unsold) with proper icons and formatting. Backend endpoint GET /api/auction/{auction_id}/clubs already exists and functional. Fixed corrupted JSX code at end of file."
+      - working: true
+        agent: "testing"
+        comment: "Backend endpoint GET /api/auction/{auction_id}/clubs tested successfully. Returns all 36 clubs with correct status information (current/upcoming/sold/unsold), lot numbers, winner information, and winning bid amounts. Proper sorting by status and lot number confirmed. Summary statistics (totalClubs, soldClubs, unsoldClubs, remainingClubs) working correctly. Tested with sold clubs after completing lots - winner and winning bid information properly included."
         
   - task: "Minimum budget enforcement"
     implemented: true
@@ -281,11 +284,14 @@ test_plan:
     file: "server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Added minimum budget validation to bid endpoint. Bids must be at least £1m (minimumBudget from auction). Enhanced error messages to show proper currency formatting."
+      - working: true
+        agent: "testing"
+        comment: "Minimum budget enforcement tested successfully. Bids below £1,000,000 correctly rejected with proper error message 'Bid must be at least £1,000,000'. Bids exactly at £1m and above correctly accepted. Budget remaining validation still works alongside minimum budget enforcement. All edge cases tested and working correctly."
 
 agent_communication:
   - agent: "main"
