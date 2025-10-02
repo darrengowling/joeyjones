@@ -90,6 +90,7 @@ export default function AuctionRoom() {
     });
 
     socket.on("timer_update", (data) => {
+      console.log("🕒 Timer update received:", data.timeRemaining);
       setTimeRemaining(data.timeRemaining);
     });
 
