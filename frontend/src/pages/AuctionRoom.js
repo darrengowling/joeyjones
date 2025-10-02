@@ -90,8 +90,9 @@ export default function AuctionRoom() {
       console.log("Lot started:", data);
       setCurrentClub(data.club);
       const endTime = new Date(data.timerEndsAt);
-      const remaining = Math.floor((endTime - new Date()) / 1000);
+      const remaining = Math.max(0, Math.floor((endTime - new Date()) / 1000));
       setTimeRemaining(remaining);
+      console.log("Lot started - time remaining:", remaining);
       loadAuction();
     });
 
