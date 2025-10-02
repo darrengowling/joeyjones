@@ -61,6 +61,11 @@ export function useAuctionClock(socket, lotId) {
         socket.off("sold", onSold);
         if (rafRef.current) cancelAnimationFrame(rafRef.current);
       };
+    } else {
+      // Clean up RAF even if no socket
+      return () => {
+        if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      };
     }
   }, [socket, lotId, endsAt]);
 
