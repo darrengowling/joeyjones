@@ -14,8 +14,18 @@ const Home = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [showUserDialog, setShowUserDialog] = useState(false);
+  const [showCreateLeagueDialog, setShowCreateLeagueDialog] = useState(false);
+  const [showJoinLeagueDialog, setShowJoinLeagueDialog] = useState(false);
   const [userForm, setUserForm] = useState({ name: "", email: "" });
   const [leagues, setLeagues] = useState([]);
+  const [leagueForm, setLeagueForm] = useState({
+    name: "",
+    budget: 1000,
+    minManagers: 2,
+    maxManagers: 8,
+    clubSlots: 3,
+  });
+  const [inviteToken, setInviteToken] = useState("");
 
   useEffect(() => {
     loadLeagues();
@@ -24,7 +34,13 @@ const Home = () => {
   const loadLeagues = async () => {
     try {
       const response = await axios.get(`${API}/leagues`);
-      setLeagues(response.data);
+      const leaguesWithParticipants = await Promise.all(
+        response.data.map(async (league) => {
+          const participantsResponse = await axios.get(`${API}/leagues/${league.id}/participants`);
+          return { ...league, participantCount: participantsResponse.data.length };
+        })
+      );
+      setLeagues(leaguesWithParticipants);
     } catch (e) {
       console.error("Error loading leagues:", e);
     }
