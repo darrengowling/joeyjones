@@ -255,13 +255,13 @@ metadata:
 
 test_plan:
   current_focus:
-    - "UI state synchronization"
-    - "Real-time auction flow"
+    - "Clubs list UI feature"
+    - "Minimum budget enforcement"
   stuck_tasks:
     - "UI state synchronization"
     - "Real-time auction flow"
   test_all: false
-  test_priority: "stuck_first"
+  test_priority: "high_first"
 
   - task: "Clubs list UI feature"
     implemented: true
