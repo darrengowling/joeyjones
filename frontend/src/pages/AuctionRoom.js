@@ -68,7 +68,7 @@ export default function AuctionRoom() {
       if (data.currentBids) {
         setBids(data.currentBids);
       }
-      if (data.timeRemaining) {
+      if (data.timeRemaining !== undefined) {
         setTimeRemaining(data.timeRemaining);
       }
       if (data.participants) {
