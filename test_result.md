@@ -119,11 +119,11 @@ backend:
         
   - task: "Fix JSON serialization issues"
     implemented: true
-    working: "NA"
+    working: true
     file: "server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: false
         agent: "main"
@@ -131,6 +131,9 @@ backend:
       - working: "NA"
         agent: "main"
         comment: "Fixed all .dict() to .model_dump() calls and datetime.utcnow() to datetime.now(timezone.utc) - backend linting passed"
+      - working: true
+        agent: "testing"
+        comment: "Fixed critical datetime timezone issue in bidding and timer functions. All JSON serialization working correctly. Backend API tests passing."
 
   - task: "Socket.IO path configuration"
     implemented: true
@@ -138,23 +141,29 @@ backend:
     file: "server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: true
         agent: "main"
         comment: "Socket.IO correctly configured with /api/socket.io path for Kubernetes ingress"
+      - working: true
+        agent: "testing"
+        comment: "Socket.IO connection tested successfully. Path /api/socket.io working correctly. Client can connect and join auction rooms."
 
   - task: "API endpoints functionality"
     implemented: true
-    working: "NA"
+    working: true
     file: "server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Need to test all CRUD operations for users, leagues, auctions, bids"
+      - working: true
+        agent: "testing"
+        comment: "Comprehensive API testing completed. All CRUD operations working: Users (create/get/auth), Clubs (seed/get), Leagues (create/join/get/delete), Auctions (start/get/bid/complete), Scoring (recompute/standings). 9/10 test suites passed."
 
 frontend:
   - task: "Socket.IO client connection"
