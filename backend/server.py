@@ -661,7 +661,10 @@ async def join_auction(sid, data):
             # Calculate time remaining
             time_remaining = 0
             if auction.get("timerEndsAt"):
-                time_remaining = max(0, int((auction["timerEndsAt"] - datetime.now(timezone.utc)).total_seconds()))
+                timer_end = auction["timerEndsAt"]
+                if timer_end.tzinfo is None:
+                    timer_end = timer_end.replace(tzinfo=timezone.utc)
+                time_remaining = max(0, int((timer_end - datetime.now(timezone.utc)).total_seconds()))
             
             # Get participants
             participants = await db.league_participants.find({"leagueId": auction["leagueId"]}).to_list(100)
