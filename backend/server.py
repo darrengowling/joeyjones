@@ -143,7 +143,7 @@ async def seed_clubs():
     clubs = []
     for club_data in UEFA_CL_CLUBS:
         club = Club(**club_data)
-        clubs.append(club.dict())
+        clubs.append(club.model_dump())
     
     if clubs:
         await db.clubs.insert_many(clubs)
