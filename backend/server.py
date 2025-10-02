@@ -208,7 +208,7 @@ async def join_league(league_id: str, participant_input: LeagueParticipantCreate
         totalSpent=0.0,
         clubsWon=[]
     )
-    await db.league_participants.insert_one(participant.dict())
+    await db.league_participants.insert_one(participant.model_dump())
     
     return {"message": "Joined league successfully", "participant": participant}
 
