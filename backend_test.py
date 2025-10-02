@@ -650,7 +650,7 @@ class BackendTester:
                 bid_data = {
                     "userId": user_id,
                     "clubId": self.test_data["current_club"]["id"],
-                    "amount": 35.0
+                    "amount": 1300000.0  # £1.3m
                 }
                 
                 result = self.test_api_endpoint("POST", f"/auction/{auction_id}/bid", bid_data)
