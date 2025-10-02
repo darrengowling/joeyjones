@@ -417,7 +417,7 @@ async def place_bid(auction_id: str, bid_input: BidCreate):
         time_remaining = (auction["timerEndsAt"] - datetime.now(timezone.utc)).total_seconds()
         if time_remaining <= auction["antiSnipeSeconds"] and time_remaining > 0:
             # Extend timer
-            new_end_time = datetime.utcnow() + timedelta(seconds=auction["antiSnipeSeconds"])
+            new_end_time = datetime.now(timezone.utc) + timedelta(seconds=auction["antiSnipeSeconds"])
             await db.auctions.update_one(
                 {"id": auction_id},
                 {"$set": {"timerEndsAt": new_end_time}}
