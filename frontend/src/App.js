@@ -433,41 +433,55 @@ const Home = () => {
               <p className="text-gray-500">No leagues yet. Create one to get started!</p>
             ) : (
               <div className="grid gap-4">
-                {leagues.map((league) => (
-                  <div
-                    key={league.id}
-                    className="border rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer"
-                    onClick={() => navigate(`/league/${league.id}`)}
-                    data-testid={`league-card-${league.id}`}
-                  >
-                    <div className="flex justify-between items-start">
-                      <div className="flex-1">
-                        <h4 className="text-xl font-semibold text-gray-900 mb-2">{league.name}</h4>
-                        <p className="text-gray-600 text-sm mb-1">
-                          Budget: ${league.budget} | Slots: {league.clubSlots}
-                        </p>
-                        <p className="text-gray-600 text-sm">
-                          Managers: {league.participantCount || 0}/{league.maxManagers} 
-                          {league.participantCount >= league.minManagers && (
-                            <span className="text-green-600 ml-2">✓ Ready to start</span>
+                {leagues.map((league) => {
+                  const isCommissioner = user && league.commissionerId === user.id;
+                  return (
+                    <div
+                      key={league.id}
+                      className="border rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer"
+                      onClick={() => navigate(`/league/${league.id}`)}
+                      data-testid={`league-card-${league.id}`}
+                    >
+                      <div className="flex justify-between items-start">
+                        <div className="flex-1">
+                          <h4 className="text-xl font-semibold text-gray-900 mb-2">{league.name}</h4>
+                          <p className="text-gray-600 text-sm mb-1">
+                            Budget: ${league.budget} | Slots: {league.clubSlots}
+                          </p>
+                          <p className="text-gray-600 text-sm">
+                            Managers: {league.participantCount || 0}/{league.maxManagers} 
+                            {league.participantCount >= league.minManagers && (
+                              <span className="text-green-600 ml-2">✓ Ready to start</span>
+                            )}
+                          </p>
+                          <p className="text-xs text-gray-500 mt-2">
+                            Invite Token: <code className="bg-gray-100 px-2 py-1 rounded">{league.inviteToken}</code>
+                          </p>
+                        </div>
+                        <div className="flex flex-col items-end gap-2">
+                          <span
+                            className={`px-3 py-1 rounded-full text-sm font-semibold ${
+                              league.status === "active"
+                                ? "bg-green-100 text-green-800"
+                                : "bg-gray-100 text-gray-800"
+                            }`}
+                          >
+                            {league.status}
+                          </span>
+                          {isCommissioner && (
+                            <button
+                              onClick={(e) => handleDeleteLeague(league, e)}
+                              className="text-red-600 hover:text-red-800 text-sm font-semibold"
+                              data-testid={`delete-league-${league.id}`}
+                            >
+                              🗑️ Delete
+                            </button>
                           )}
-                        </p>
-                        <p className="text-xs text-gray-500 mt-2">
-                          Invite Token: <code className="bg-gray-100 px-2 py-1 rounded">{league.inviteToken}</code>
-                        </p>
+                        </div>
                       </div>
-                      <span
-                        className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                          league.status === "active"
-                            ? "bg-green-100 text-green-800"
-                            : "bg-gray-100 text-gray-800"
-                        }`}
-                      >
-                        {league.status}
-                      </span>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             )}
           </div>
