@@ -682,7 +682,7 @@ async def leave_auction(sid, data):
         logger.info(f"Client {sid} left auction:{auction_id}")
 
 @sio.event
-async def join_league(sid, data):
+async def join_league_room(sid, data):
     league_id = data.get('leagueId')
     if league_id:
         sio.enter_room(sid, f"league:{league_id}")
