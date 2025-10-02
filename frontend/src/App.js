@@ -411,11 +411,20 @@ const Home = () => {
                     onClick={() => navigate(`/league/${league.id}`)}
                     data-testid={`league-card-${league.id}`}
                   >
-                    <div className="flex justify-between items-center">
-                      <div>
-                        <h4 className="text-xl font-semibold text-gray-900">{league.name}</h4>
-                        <p className="text-gray-600">
-                          Budget: ${league.budget} | Slots: {league.clubSlots} | Status: {league.status}
+                    <div className="flex justify-between items-start">
+                      <div className="flex-1">
+                        <h4 className="text-xl font-semibold text-gray-900 mb-2">{league.name}</h4>
+                        <p className="text-gray-600 text-sm mb-1">
+                          Budget: ${league.budget} | Slots: {league.clubSlots}
+                        </p>
+                        <p className="text-gray-600 text-sm">
+                          Managers: {league.participantCount || 0}/{league.maxManagers} 
+                          {league.participantCount >= league.minManagers && (
+                            <span className="text-green-600 ml-2">✓ Ready to start</span>
+                          )}
+                        </p>
+                        <p className="text-xs text-gray-500 mt-2">
+                          Invite Token: <code className="bg-gray-100 px-2 py-1 rounded">{league.inviteToken}</code>
                         </p>
                       </div>
                       <span
