@@ -14,6 +14,7 @@ from models import (
     User, UserCreate,
     Club,
     League, LeagueCreate,
+    LeagueParticipant, LeagueParticipantCreate,
     Auction, AuctionCreate,
     Bid, BidCreate
 )
