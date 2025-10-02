@@ -136,6 +136,7 @@ export default function AuctionRoom() {
         setParticipants(data.participants);
       }
       loadAuction();
+      loadClubs(); // Reload clubs to update status
     };
 
     const handleAntiSnipe = (data) => {
