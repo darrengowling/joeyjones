@@ -403,7 +403,7 @@ async def place_bid(auction_id: str, bid_input: BidCreate):
         userName=user["name"],
         userEmail=user["email"]
     )
-    await db.bids.insert_one(bid_obj.dict())
+    await db.bids.insert_one(bid_obj.model_dump())
     
     # Emit bid via Socket.IO
     await sio.emit('bid_placed', {
