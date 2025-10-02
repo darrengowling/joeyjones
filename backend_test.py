@@ -290,6 +290,266 @@ class BackendTester:
         self.log("✅ Bidding endpoints working")
         return True
     
+    def test_minimum_budget_enforcement(self) -> bool:
+        """Test minimum budget enforcement (£1m minimum bid)"""
+        self.log("=== Testing Minimum Budget Enforcement ===")
+        
+        if "auction_id" not in self.test_data or "current_club" not in self.test_data:
+            self.log("No auction or current club available for minimum budget testing", "ERROR")
+            return False
+            
+        auction_id = self.test_data["auction_id"]
+        current_club = self.test_data["current_club"]
+        user_id = self.test_data["user_id"]
+        
+        # Test 1: Bid below £1m should be rejected
+        self.log("Testing bid below £1m minimum...")
+        low_bid_data = {
+            "userId": user_id,
+            "clubId": current_club["id"],
+            "amount": 500000.0  # £500k - below minimum
+        }
+        
+        result = self.test_api_endpoint("POST", f"/auction/{auction_id}/bid", low_bid_data, expected_status=400)
+        if "error" not in result:
+            self.log("Low bid should have been rejected but was accepted", "ERROR")
+            return False
+        
+        # Check error message contains proper currency formatting
+        error_text = result.get("text", "")
+        if "£1,000,000" not in error_text:
+            self.log(f"Error message doesn't contain proper currency formatting: {error_text}", "ERROR")
+            return False
+        
+        self.log("✅ Bid below £1m correctly rejected with proper error message")
+        
+        # Test 2: Bid exactly at £1m should be accepted
+        self.log("Testing bid exactly at £1m minimum...")
+        min_bid_data = {
+            "userId": user_id,
+            "clubId": current_club["id"],
+            "amount": 1000000.0  # £1m - exactly at minimum
+        }
+        
+        result = self.test_api_endpoint("POST", f"/auction/{auction_id}/bid", min_bid_data, expected_status=200)
+        if "error" in result:
+            self.log(f"Minimum bid should have been accepted but was rejected: {result.get('text')}", "ERROR")
+            return False
+        
+        bid = result.get("bid")
+        if not bid or bid.get("amount") != 1000000.0:
+            self.log("Minimum bid not properly recorded", "ERROR")
+            return False
+        
+        self.log("✅ Bid exactly at £1m correctly accepted")
+        
+        # Test 3: Bid above £1m should be accepted
+        self.log("Testing bid above £1m minimum...")
+        high_bid_data = {
+            "userId": user_id,
+            "clubId": current_club["id"],
+            "amount": 1500000.0  # £1.5m - above minimum
+        }
+        
+        result = self.test_api_endpoint("POST", f"/auction/{auction_id}/bid", high_bid_data, expected_status=200)
+        if "error" in result:
+            self.log(f"High bid should have been accepted but was rejected: {result.get('text')}", "ERROR")
+            return False
+        
+        bid = result.get("bid")
+        if not bid or bid.get("amount") != 1500000.0:
+            self.log("High bid not properly recorded", "ERROR")
+            return False
+        
+        self.log("✅ Bid above £1m correctly accepted")
+        
+        # Test 4: Check that budget remaining is still validated
+        self.log("Testing budget remaining validation...")
+        # Create a second user with limited budget to test budget validation
+        user2_data = {
+            "name": "Budget Test User",
+            "email": "budget.test@test.com"
+        }
+        
+        user2_result = self.test_api_endpoint("POST", "/users", user2_data)
+        if "error" in user2_result:
+            self.log("Could not create second user for budget test", "ERROR")
+            return False
+        
+        user2_id = user2_result.get("id")
+        
+        # Join the user to the league
+        join_data = {
+            "userId": user2_id,
+            "inviteToken": self.test_data["invite_token"]
+        }
+        
+        join_result = self.test_api_endpoint("POST", f"/leagues/{self.test_data['league_id']}/join", join_data)
+        if "error" in join_result:
+            self.log("Second user could not join league for budget test", "ERROR")
+            return False
+        
+        # Try to bid more than the user's budget (league budget is 100.0)
+        over_budget_data = {
+            "userId": user2_id,
+            "clubId": current_club["id"],
+            "amount": 1000000.0  # £1m but user only has £100 budget
+        }
+        
+        result = self.test_api_endpoint("POST", f"/auction/{auction_id}/bid", over_budget_data, expected_status=400)
+        if "error" not in result:
+            self.log("Over-budget bid should have been rejected but was accepted", "ERROR")
+            return False
+        
+        # Check error message mentions insufficient budget
+        error_text = result.get("text", "")
+        if "Insufficient budget" not in error_text:
+            self.log(f"Error message doesn't mention insufficient budget: {error_text}", "ERROR")
+            return False
+        
+        self.log("✅ Budget remaining validation still working")
+        
+        self.log("✅ Minimum budget enforcement working correctly")
+        return True
+    
+    def test_clubs_list_endpoint(self) -> bool:
+        """Test clubs list endpoint with status information"""
+        self.log("=== Testing Clubs List Endpoint ===")
+        
+        if "auction_id" not in self.test_data:
+            self.log("No auction available for clubs list testing", "ERROR")
+            return False
+            
+        auction_id = self.test_data["auction_id"]
+        
+        # Test clubs list endpoint
+        result = self.test_api_endpoint("GET", f"/auction/{auction_id}/clubs")
+        if "error" in result:
+            self.log("Clubs list endpoint failed", "ERROR")
+            return False
+        
+        clubs_data = result.get("clubs")
+        if not clubs_data or not isinstance(clubs_data, list):
+            self.log("No clubs data returned or invalid format", "ERROR")
+            return False
+        
+        self.log(f"Retrieved {len(clubs_data)} clubs with status information")
+        
+        # Verify required fields are present
+        required_fields = ["id", "name", "status", "lotNumber"]
+        for club in clubs_data[:3]:  # Check first 3 clubs
+            for field in required_fields:
+                if field not in club:
+                    self.log(f"Missing required field '{field}' in club data", "ERROR")
+                    return False
+        
+        # Check status values are valid
+        valid_statuses = ["current", "upcoming", "sold", "unsold"]
+        status_counts = {"current": 0, "upcoming": 0, "sold": 0, "unsold": 0}
+        
+        for club in clubs_data:
+            status = club.get("status")
+            if status not in valid_statuses:
+                self.log(f"Invalid status '{status}' found in club data", "ERROR")
+                return False
+            status_counts[status] += 1
+        
+        self.log(f"Status distribution: {status_counts}")
+        
+        # Should have exactly one current club
+        if status_counts["current"] != 1:
+            self.log(f"Expected exactly 1 current club, found {status_counts['current']}", "ERROR")
+            return False
+        
+        # Should have upcoming clubs
+        if status_counts["upcoming"] == 0:
+            self.log("Expected some upcoming clubs, found none", "ERROR")
+            return False
+        
+        # Check sorting - current should be first
+        first_club = clubs_data[0]
+        if first_club.get("status") != "current":
+            self.log(f"First club should be current, but is {first_club.get('status')}", "ERROR")
+            return False
+        
+        # Check lot numbers are present and valid
+        current_club = first_club
+        if not current_club.get("lotNumber") or current_club.get("lotNumber") < 1:
+            self.log("Current club should have valid lot number", "ERROR")
+            return False
+        
+        # Check summary statistics
+        total_clubs = result.get("totalClubs", 0)
+        sold_clubs = result.get("soldClubs", 0)
+        unsold_clubs = result.get("unsoldClubs", 0)
+        remaining_clubs = result.get("remainingClubs", 0)
+        
+        if total_clubs != len(clubs_data):
+            self.log(f"Total clubs mismatch: summary says {total_clubs}, actual {len(clubs_data)}", "ERROR")
+            return False
+        
+        if sold_clubs != status_counts["sold"]:
+            self.log(f"Sold clubs mismatch: summary says {sold_clubs}, actual {status_counts['sold']}", "ERROR")
+            return False
+        
+        if unsold_clubs != status_counts["unsold"]:
+            self.log(f"Unsold clubs mismatch: summary says {unsold_clubs}, actual {status_counts['unsold']}", "ERROR")
+            return False
+        
+        expected_remaining = status_counts["current"] + status_counts["upcoming"]
+        if remaining_clubs != expected_remaining:
+            self.log(f"Remaining clubs mismatch: summary says {remaining_clubs}, expected {expected_remaining}", "ERROR")
+            return False
+        
+        self.log("✅ Clubs list endpoint working correctly")
+        
+        # Test with sold clubs (place some bids and complete lots to create sold clubs)
+        self.log("Testing clubs list with sold clubs...")
+        
+        # Place a winning bid on current club
+        if "user_id" in self.test_data and "current_club" in self.test_data:
+            winning_bid_data = {
+                "userId": self.test_data["user_id"],
+                "clubId": self.test_data["current_club"]["id"],
+                "amount": 2000000.0  # £2m
+            }
+            
+            bid_result = self.test_api_endpoint("POST", f"/auction/{auction_id}/bid", winning_bid_data)
+            if "error" not in bid_result:
+                self.log("Placed winning bid for clubs list testing")
+                
+                # Complete the lot to create a sold club
+                complete_result = self.test_api_endpoint("POST", f"/auction/{auction_id}/complete-lot")
+                if "error" not in complete_result:
+                    self.log("Completed lot to create sold club")
+                    
+                    # Wait a moment for the lot to process
+                    time.sleep(2)
+                    
+                    # Check clubs list again
+                    updated_result = self.test_api_endpoint("GET", f"/auction/{auction_id}/clubs")
+                    if "error" not in updated_result:
+                        updated_clubs = updated_result.get("clubs", [])
+                        sold_count = len([c for c in updated_clubs if c.get("status") == "sold"])
+                        
+                        if sold_count > 0:
+                            self.log("✅ Clubs list correctly shows sold clubs")
+                            
+                            # Check that sold club has winner and winning bid info
+                            sold_club = next((c for c in updated_clubs if c.get("status") == "sold"), None)
+                            if sold_club:
+                                if sold_club.get("winner") and sold_club.get("winningBid"):
+                                    self.log("✅ Sold club includes winner and winning bid information")
+                                else:
+                                    self.log("Sold club missing winner or winning bid information", "ERROR")
+                                    return False
+                        else:
+                            self.log("No sold clubs found after completing lot", "ERROR")
+                            return False
+        
+        self.log("✅ Clubs list endpoint fully working")
+        return True
+    
     def test_socket_connection(self) -> bool:
         """Test Socket.IO connection and events"""
         self.log("=== Testing Socket.IO Connection ===")
