@@ -323,7 +323,11 @@ export default function AuctionRoom() {
                   {/* Timer */}
                   <div className="bg-gradient-to-r from-red-500 to-orange-500 text-white p-6 rounded-lg mb-6 text-center">
                     <div className="text-5xl font-bold" data-testid="auction-timer">
-                      {Math.floor(timeRemaining / 60)}:{String(timeRemaining % 60).padStart(2, "0")}
+                      {remainingMs !== null ? (
+                        `${Math.floor((remainingMs / 1000) / 60)}:${String(Math.floor((remainingMs / 1000) % 60)).padStart(2, "0")}`
+                      ) : (
+                        "--:--"
+                      )}
                     </div>
                     <div className="text-sm mt-2">Time Remaining</div>
                   </div>
