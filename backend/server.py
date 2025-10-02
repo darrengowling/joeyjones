@@ -182,7 +182,9 @@ async def join_league(league_id: str, participant_input: LeagueParticipantCreate
     
     # Verify invite token
     if league["inviteToken"] != participant_input.inviteToken:
-        raise HTTPException(status_code=403, detail="Invalid invite token")
+        # Provide more helpful error message
+        error_msg = f"Invalid invite token. The correct token for league '{league['name']}' is '{league['inviteToken']}'"
+        raise HTTPException(status_code=403, detail=error_msg)
     
     # Check if already joined
     existing = await db.league_participants.find_one({
