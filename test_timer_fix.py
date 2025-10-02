@@ -87,8 +87,12 @@ async def test_timer_fix():
         @sio.event
         async def timer_update(data):
             time_remaining = data.get('timeRemaining', 0)
-            print(f"🕒 Timer update received: {time_remaining}s")
-            events_received.append(f"timer_update:{time_remaining}")
+            auction_id_in_event = data.get('auctionId', 'none')
+            print(f"🕒 Timer update received: {time_remaining}s for auction {auction_id_in_event}")
+            if auction_id_in_event == auction_id:
+                events_received.append(f"timer_update:{time_remaining}")
+            else:
+                events_received.append(f"timer_update_other:{time_remaining}")
         
         @sio.event
         async def test_room_message(data):
