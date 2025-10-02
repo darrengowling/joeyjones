@@ -677,14 +677,6 @@ async def join_auction(sid, data):
         sio.enter_room(sid, room_name)
         logger.info(f"Client {sid} joined auction room: {room_name}")
         
-        # Test immediate emission to verify room membership
-        await sio.emit('test_room_message', {
-            'message': f'You have joined room {room_name}',
-            'timestamp': datetime.now(timezone.utc).isoformat()
-        }, room=sid)  # Send to specific client first
-        
-        logger.info(f"Sent test message to client {sid}")
-        
         # Send current auction state for reconnection
         auction = await db.auctions.find_one({"id": auction_id})
         if auction:
