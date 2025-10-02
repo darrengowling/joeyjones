@@ -370,7 +370,7 @@ async def place_bid(auction_id: str, bid_input: BidCreate):
     
     # Emit bid via Socket.IO
     await sio.emit('bid_placed', {
-        'bid': bid_obj.dict(mode='json'),
+        'bid': bid_obj.model_dump(mode='json'),
         'auctionId': auction_id,
         'clubId': bid_input.clubId
     }, room=f"auction:{auction_id}")
