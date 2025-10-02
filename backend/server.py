@@ -640,7 +640,7 @@ async def join_auction(sid, data):
             if auction.get("currentClubId"):
                 club = await db.clubs.find_one({"id": auction["currentClubId"]})
                 if club:
-                    current_club = Club(**club).dict()
+                    current_club = Club(**club).model_dump()
             
             # Get all bids for current club
             current_bids = []
