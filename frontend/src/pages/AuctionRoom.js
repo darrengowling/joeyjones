@@ -316,6 +316,26 @@ export default function AuctionRoom() {
     }
   };
 
+  const pauseAuction = async () => {
+    try {
+      const result = await axios.post(`${API}/auction/${auctionId}/pause`);
+      console.log("Auction paused:", result.data);
+    } catch (e) {
+      console.error("Error pausing auction:", e);
+      alert("Error pausing auction: " + (e.response?.data?.detail || e.message));
+    }
+  };
+
+  const resumeAuction = async () => {
+    try {
+      const result = await axios.post(`${API}/auction/${auctionId}/resume`);
+      console.log("Auction resumed:", result.data);
+    } catch (e) {
+      console.error("Error resuming auction:", e);
+      alert("Error resuming auction: " + (e.response?.data?.detail || e.message));
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 flex items-center justify-center">
