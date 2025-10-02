@@ -65,6 +65,33 @@ export default function LeagueDetail() {
     }
   };
 
+  const deleteLeague = async () => {
+    if (!user) {
+      alert("Please sign in first");
+      return;
+    }
+
+    if (league.commissionerId !== user.id) {
+      alert("Only the league commissioner can delete this league");
+      return;
+    }
+
+    const confirmed = window.confirm(
+      `Are you sure you want to delete "${league.name}"? This will remove all participants, auction data, and bids. This action cannot be undone.`
+    );
+
+    if (!confirmed) return;
+
+    try {
+      await axios.delete(`${API}/leagues/${leagueId}?user_id=${user.id}`);
+      alert("League deleted successfully");
+      navigate("/");
+    } catch (e) {
+      console.error("Error deleting league:", e);
+      alert(e.response?.data?.detail || "Error deleting league");
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 flex items-center justify-center">
