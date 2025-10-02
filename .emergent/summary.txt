@@ -1,80 +1,87 @@
 <analysis>
-The trajectory details the iterative development of a real-time UEFA club auction application, starting from forking an existing repository. The initial phase focused on setting up the core architecture: a FastAPI backend with MongoDB and a React frontend, interconnected via REST APIs and Socket.IO for real-time bidding.
+The trajectory chronicles the intensive debugging and refactoring of a real-time UEFA club auction application. The initial state was highly unstable, with the user expressing significant frustration over a non-functional UI, stuck timers, and confusing test data.
 
-Key features were added incrementally based on user requests: league creation with manager limits and budgets, user authentication (simplified to name/email), invite tokens, a scoring system pulling data from an external API (OpenFootball), rebranding, and league deletion.
+The first phase focused on stabilization. This involved a complete database cleanup, followed by systematic backend fixes for Pydantic serialization ( to ) and timezone-aware datetimes. However, the core problem persisted: a broken real-time auction timer.
 
-Significant time was spent on debugging. A major challenge was establishing a stable Socket.IO connection, which was ultimately resolved by correctly prefixing the websocket path with  to align with Kubernetes ingress rules. Another recurring issue was  exceptions from attempting to serialize non-JSON-compatible objects from MongoDB (like  and ) when emitting Socket.IO events; these were fixed by proper data conversion before transmission.
+The second, most challenging phase involved a deep dive into the timer synchronization. Initial debugging pointed to a Socket.IO room-targeting issue, leading to a temporary workaround using broadcast events. This revealed the true root cause: a critical race condition and state management flaw in the React frontend, where stale data from a  event would overwrite real-time timer ticks.
 
-The project is currently in a fragile state. The user's final message expresses significant frustration with the application's usability, citing stuck timers, the need for manual refreshes, and an unusable UI cluttered with old test data. The immediate priority is to stabilize the application and clean the environment.
+This failure prompted a complete, user-specified architectural pivot. The timer system was re-engineered to be server-authoritative, using absolute timestamps (, ) and a monotonic sequence number () to guarantee consistency and reject stale events. A custom React hook, , was created to encapsulate this complex client-side logic, providing a stable and accurate timer. This fix was validated with a new Playwright E2E test suite.
+
+With the core functionality finally robust, development shifted to new features: handling unsold clubs, adding commissioner controls (pause/resume), restoring league deletion, and finally, adding a club visibility sidebar to the auction room.
 </analysis>
 
 <product_requirements>
-The goal is to build a Friends of Pifa web application where users can participate in real-time auctions for UEFA Champions League (UCL) clubs.
+The objective is to build the Friends of Pifa application, a real-time web platform for auctioning UEFA Champions League clubs.
 
 **Core Functionality:**
-- **Leagues:** Users can create leagues with specific rules (budget, manager count, club slots). The league creator is the commissioner.
-- **Clubs:** The system must be seeded with UCL clubs, initially from a static list and later from the OpenFootball API.
-- **Auctions:** The commissioner can start an auction for a league once the minimum number of managers have joined. Clubs are nominated automatically in a random order.
-- **Bidding:** Users can bid on the active club. Bids must not exceed their remaining budget. An anti-snipe feature extends the auction timer if a bid is placed in the final seconds.
-- **Real-Time Updates:** All auction events (new lot, new bid, timer updates) must be broadcast to all participants in real-time using Socket.IO.
-- **User Management:** A simple authentication system (name/email) is required. Users can join leagues using short, unique invite tokens. A logout feature is necessary.
+*   **Auction System:** A commissioner starts an auction for a league. Clubs are nominated randomly. The auction must be fully automated, advancing from one lot to the next without manual intervention.
+*   **Real-Time Bidding:** Users bid on clubs in real-time. All state changes (new bids, timer updates) must be instantly reflected for all participants via a robust Socket.IO connection.
+*   **Timer Synchronization:** The auction timer must be perfectly synchronized across all clients, resilient to network latency and stale data. It should support an anti-snipe feature that extends the timer on last-second bids.
+*   **Unsold Clubs:** Clubs that receive no bids must be moved to a separate queue and re-offered at the end of the auction.
+*   **Commissioner Controls:** The league commissioner must have the ability to pause, resume, and delete leagues.
 
-**Additional Features:**
-- **Scoring System:** A service to fetch real-world UCL match results from OpenFootball and award points to clubs (and thus their owners) based on wins, draws, and goals.
-- **League Deletion:** Commissioners must be able to delete leagues they created, which should cascade-delete all associated auctions and bids.
-- **UI/UX:** Rebrand the application to Friends of Pifa. The UI should clearly display the active club, highest bid, time remaining, and all participants' budgets. For active leagues, a Go to Auction button should be shown instead of Start Auction.
+**User Experience:**
+*   **Club Visibility:** During an auction, users must be able to see a list of all available clubs (upcoming, sold, current) to inform their bidding strategy.
+*   **User Management:** Simple user creation (name/email) and the ability to join leagues via unique invite tokens. The system must gracefully handle user errors, such as entering tokens with extra whitespace.
 </product_requirements>
 
 <key_technical_concepts>
-- **Backend:** FastAPI (Python web framework), Pydantic (data validation), Motor (async MongoDB driver).
-- **Frontend:** React (JavaScript library), .
-- **Database:** MongoDB (NoSQL database).
-- **Real-Time Communication:** Socket.IO for WebSocket-based, bidirectional event communication between the server and clients.
-- **API:** RESTful principles for creating, reading, and deleting resources like leagues and users.
-- **Deployment Context:** Kubernetes environment where backend routes must be prefixed with  to be routed correctly by the ingress controller.
+- **Backend:** FastAPI, Pydantic, Motor (async MongoDB driver).
+- **Frontend:** React, with a key custom hook () for state management.
+- **Real-Time:** Socket.IO for event-driven communication.
+- **Synchronization Strategy:** Server-authoritative state using absolute timestamps (, ) and a monotonic sequence number () to prevent race conditions and ensure data consistency.
+- **Testing:** Playwright for end-to-end browser automation testing to validate complex real-time UI interactions.
 </key_technical_concepts>
 
 <code_architecture>
-The application follows a standard monorepo structure with a separate frontend and backend.
+The application is a monorepo with distinct  and  directories.
 
 
 
 - ****
-  - **Importance:** This is the core of the application. It initializes the FastAPI app, connects to MongoDB, sets up the Socket.IO server, and defines all REST API endpoints and Socket.IO event handlers.
-  - **Changes:** This file was heavily modified throughout the trajectory. Key changes include: adding endpoints for leagues, users, bids, and scoring; implementing all Socket.IO logic for joining rooms, placing bids, and broadcasting state; and critical bug fixes related to JSON serialization ( instead of , converting ) and moving the Socket.IO path to .
+    - **Importance:** The application's core. It manages the FastAPI server, Socket.IO events, database interactions, and all business logic for auctions, leagues, and bidding.
+    - **Summary of Changes:** This file underwent massive refactoring. Key changes include:
+        - Implementing a new server-authoritative timer event system. All timer-related events (, , , ) were standardized to emit a payload of .
+        - Rewriting the  function to handle unsold clubs by moving them to an  queue.
+        - Adding new API endpoints for commissioner controls (, , ) and for displaying all auction clubs ().
 
 - ****
-  - **Importance:** Defines the data structures for the entire application using Pydantic models. This ensures data consistency between the API, the database, and the application logic.
-  - **Changes:** Models for , , , , , , and  were created and updated to include new fields like , , and budget tracking.
+    - **Importance:** The main user interface for participating in an auction. It handles real-time data display and user interactions like bidding.
+    - **Summary of Changes:** This component was completely overhauled to fix timer instability.
+        - All direct timer state management ( for ) was removed.
+        - It now consumes the  hook, making it the single source of truth for the timer display.
+        - Event listeners were added for new commissioner actions (, ).
+        - UI elements were added to display a sidebar of all available clubs, fetched from the new backend endpoint.
 
 - ****
-  - **Importance:** This is the primary user-facing component for the auction itself. It handles connecting to the Socket.IO server, listening for real-time events, displaying the current lot, timer, bids, and participant budgets, and allows the user to place bids.
-  - **Changes:** It was significantly refactored to handle real-time state synchronization ( event), calculate time remaining from , and remove manual auction controls in favor of auto-progression. The Socket.IO connection logic was updated to use the correct  path.
+    - **Importance:** This new hook is the cornerstone of the application's stability. It encapsulates all the logic for client-side timer synchronization.
+    - **Summary of Changes:** Created from scratch to solve the timer issues. It subscribes to the standardized timer events, calculates clock skew between server and client, ignores stale events using the  number, and provides a smooth countdown using . It also includes proper event listener cleanup to prevent memory leaks.
 
 - ****
-  - **Importance:** The main entry point for the React application, responsible for routing and global state management (like the current user).
-  - **Changes:** Routes were added for the new pages (, ). Logic was added to manage user state (sign-in, logout) and to convert the Create League page into a modal dialog.
+    - **Importance:** Defines all Pydantic data models, ensuring type safety and data consistency across the application.
+    - **Summary of Changes:** The  model was updated to support new features, adding fields like  (e.g., 'paused'), , , and . The  model's default budget was increased.
 
 - ****
-  - **Importance:** This page acts as a lobby for a specific league. It displays league details and participants, and it's where the commissioner starts the auction.
-  - **Changes:** Logic was added to gate the Start Auction button until the minimum number of managers join. A Go to Auction button was later added for leagues with an already active auction. A standings table was also added to display results from the scoring service.
+    - **Importance:** An automated end-to-end test that proves the core timer logic is robust and reliable.
+    - **Summary of Changes:** Created to validate the new timer architecture. It launches a browser, starts an auction, and asserts that the UI timer behaves correctly, specifically that it does not jump back when receiving stale events and that anti-snipe extends the clock as expected.
 </code_architecture>
 
 <pending_tasks>
-- Clean up all existing test data (leagues, auctions, users) to provide a clean and usable environment for testers.
-- Address UI instability that requires manual browser refreshes to see updated state.
-- Implement a Restart Auction button for stuck or failed auctions.
-- Ensure the bid history is reliably displayed on the auction page.
+- Verify that the minimum budget rule (£1m) is enforced during the bidding process. The models were updated, but the bidding logic enforcement was not explicitly tested.
+- Complete and thoroughly test the new Clubs List UI in the auction room to ensure it updates correctly as clubs are sold or become current.
 </pending_tasks>
 
 <current_work>
-The AI engineer has just completed a difficult debugging session to fix a series of critical, cascading bugs. The primary issue was that the Socket.IO connection was failing because its path () was not prefixed with , which is required by the Kubernetes ingress controller for routing to the backend. This root cause was fixed by moving the Socket.IO endpoint to  on both the server and client.
+The most recent task was to implement a feature allowing users to see all available clubs during an auction for strategic planning. This involved a two-part implementation:
 
-Immediately following this fix, another bug caused an auction timer to freeze. This was traced to a  in the backend, where a  object was not being properly serialized to JSON before being emitted in a Socket.IO event. The AI fixed this serialization issue as well.
+1.  **Backend:** A new FastAPI endpoint, , was created in . This endpoint retrieves all clubs associated with the specified auction and returns them along with their current status (e.g., 'available', 'sold', 'current'). This endpoint was successfully added and the backend was restarted.
 
-However, the user is extremely frustrated with the application's overall state, describing it as a shamble due to the accumulation of confusing test data and persistent UI/UX issues like stuck auctions and the need for manual refreshes. The AI's last action was to acknowledge the user's frustration and agree to clean up the application and fix the outstanding problems. The immediate task is to restore the user's confidence by stabilizing the application.
+2.  **Frontend:** The  component was modified to support this feature.
+    *   A new function, , was added to fetch data from the new  endpoint and store it in the component's  state.
+    *   This function is called when the component loads and after key auction events (like a lot completing) to keep the list fresh.
+    *   Work was underway to modify the JSX layout to add a sidebar that iterates over the  state and displays each club with its name, logo, and status, providing users with the requested visual reference. The backend has been prepared, and the frontend is in the final stages of UI integration.
 </current_work>
 
 <optional_next_step>
-I will start by creating a script to clear all existing test auctions, leagues, and related data from the MongoDB database to provide a clean slate, directly addressing the user's complaint about the confusing and unusable state.
+Test the new Clubs List feature in the auction room UI to ensure it correctly fetches, displays, and updates the status of all clubs in real-time.
 </optional_next_step>
