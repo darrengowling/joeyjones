@@ -379,6 +379,13 @@ export default function AuctionRoom() {
 
   const isCommissioner = league && user && league.commissionerId === user.id;
   const currentClubBids = currentClub ? bids.filter((b) => b.clubId === currentClub.id) : [];
+  
+  // Debug logging for bid display
+  if (currentClub) {
+    console.log("Current club ID:", currentClub.id);
+    console.log("All bids:", bids);
+    console.log("Current club bids:", currentClubBids);
+  }
   const highestBid = currentClubBids.length > 0 ? Math.max(...currentClubBids.map((b) => b.amount)) : 0;
 
   return (
