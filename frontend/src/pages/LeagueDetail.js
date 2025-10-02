@@ -140,27 +140,39 @@ export default function LeagueDetail() {
               </div>
             </div>
 
-            {isCommissioner && league.status === "pending" && (
-              <div>
+            <div className="flex gap-3">
+              {isCommissioner && league.status === "pending" && (
+                <div>
+                  <button
+                    onClick={startAuction}
+                    disabled={!canStartAuction}
+                    className={`px-6 py-3 rounded-lg font-semibold ${
+                      canStartAuction
+                        ? "bg-green-600 text-white hover:bg-green-700"
+                        : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                    }`}
+                    data-testid="start-auction-button"
+                  >
+                    Start Auction
+                  </button>
+                  {!canStartAuction && (
+                    <p className="text-sm text-red-600 mt-2">
+                      Need {league.minManagers - participants.length} more manager(s) to start
+                    </p>
+                  )}
+                </div>
+              )}
+              
+              {isCommissioner && (
                 <button
-                  onClick={startAuction}
-                  disabled={!canStartAuction}
-                  className={`px-6 py-3 rounded-lg font-semibold ${
-                    canStartAuction
-                      ? "bg-green-600 text-white hover:bg-green-700"
-                      : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                  }`}
-                  data-testid="start-auction-button"
+                  onClick={deleteLeague}
+                  className="px-6 py-3 rounded-lg font-semibold bg-red-600 text-white hover:bg-red-700"
+                  data-testid="delete-league-button"
                 >
-                  Start Auction
+                  Delete League
                 </button>
-                {!canStartAuction && (
-                  <p className="text-sm text-red-600 mt-2">
-                    Need {league.minManagers - participants.length} more manager(s) to start
-                  </p>
-                )}
-              </div>
-            )}
+              )}
+            </div>
           </div>
 
           {/* Participants */}
