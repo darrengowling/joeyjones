@@ -573,6 +573,10 @@ async def join_auction(sid, data):
             # Get participants
             participants = await db.league_participants.find({"leagueId": auction["leagueId"]}).to_list(100)
             
+            # Remove MongoDB _id field
+            for p in participants:
+                p.pop('_id', None)
+            
             # Send sync state
             await sio.emit('sync_state', {
                 'auction': Auction(**auction).model_dump(mode='json'),
