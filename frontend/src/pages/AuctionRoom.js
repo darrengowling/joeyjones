@@ -72,16 +72,19 @@ export default function AuctionRoom() {
 
     socket.on("sync_state", (data) => {
       console.log("Received sync state:", data);
-      // Update state with current auction data
+      // Update state with current auction data (timer handled by useAuctionClock)
       if (data.currentClub) {
         setCurrentClub(data.currentClub);
       }
       if (data.currentBids) {
         setBids(data.currentBids);
       }
-      // DON'T set timer from sync_state - let timer_update handle it
       if (data.participants) {
         setParticipants(data.participants);
+      }
+      // Extract lot ID from auction data for the clock hook
+      if (data.auction && data.auction.currentLotId) {
+        setCurrentLotId(data.auction.currentLotId);
       }
     });
 
@@ -91,23 +94,16 @@ export default function AuctionRoom() {
       loadAuction();
     });
 
-    socket.on("timer_update", (data) => {
-      // Filter timer updates to only apply to current auction
-      if (data.auctionId === auctionId) {
-        console.log(`Timer update: ${data.timeRemaining}s`);
-        setTimeRemaining(data.timeRemaining);
-      }
-    });
-
     socket.on("lot_started", (data) => {
       console.log("Lot started:", data);
       setCurrentClub(data.club);
-      // DON'T calculate time remaining here - let timer_update handle it
-      console.log("New lot started, waiting for timer_update events");
+      if (data.timer && data.timer.lotId) {
+        setCurrentLotId(data.timer.lotId);
+      }
     });
 
-    socket.on("lot_complete", (data) => {
-      console.log("Lot complete:", data);
+    socket.on("sold", (data) => {
+      console.log("Lot sold:", data);
       alert(`Lot complete! Winner: ${data.winningBid ? data.winningBid.userName : "No bids"}`);
       setCurrentClub(null);
       setTimeRemaining(0);
