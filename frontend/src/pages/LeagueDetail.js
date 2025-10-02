@@ -433,7 +433,20 @@ export default function LeagueDetail() {
               <p className="text-blue-700 text-sm mt-1">
                 {league.status === "pending" 
                   ? "You can start the auction when ready"
+                  : league.status === "active"
+                  ? "Auction is currently running. Click 'Go to Auction' to participate."
                   : "You can recompute scores to update standings based on latest Champions League results"}
+              </p>
+            </div>
+          )}
+          
+          {!isCommissioner && league.status === "active" && (
+            <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+              <p className="text-green-900 font-semibold">
+                🎮 Auction is Live!
+              </p>
+              <p className="text-green-700 text-sm mt-1">
+                Click "Go to Auction" to join the bidding and compete for clubs.
               </p>
             </div>
           )}
