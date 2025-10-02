@@ -62,7 +62,7 @@ export default function ClubsList() {
           </button>
 
           <h1 className="text-3xl font-bold mb-6 text-gray-900">
-            UEFA Champions League Clubs 2025/26
+            UCL Clubs 2025/26
           </h1>
 
           {/* Filters */}
