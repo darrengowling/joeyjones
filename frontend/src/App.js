@@ -2,13 +2,13 @@ import { useState, useEffect } from "react";
 import "@/App.css";
 import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import axios from "axios";
-import io from "socket.io-client";
+import CreateLeague from "./pages/CreateLeague";
+import ClubsList from "./pages/ClubsList";
+import LeagueDetail from "./pages/LeagueDetail";
+import AuctionRoom from "./pages/AuctionRoom";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
-
-// Initialize Socket.IO
-let socket = null;
 
 const Home = () => {
   const navigate = useNavigate();
