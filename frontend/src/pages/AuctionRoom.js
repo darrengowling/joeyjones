@@ -136,6 +136,11 @@ export default function AuctionRoom() {
       if (response.data.currentClub) {
         setCurrentClub(response.data.currentClub);
       }
+      
+      // Set lot ID for timer hook
+      if (response.data.auction.currentLotId) {
+        setCurrentLotId(response.data.auction.currentLotId);
+      }
 
       // Load league
       const leagueResponse = await axios.get(`${API}/leagues/${response.data.auction.leagueId}`);
