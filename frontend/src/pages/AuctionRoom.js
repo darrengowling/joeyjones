@@ -429,6 +429,14 @@ export default function AuctionRoom() {
                   >
                     Complete Lot
                   </button>
+                  
+                  <button
+                    onClick={deleteAuction}
+                    className="px-4 py-2 bg-red-700 text-white rounded hover:bg-red-800"
+                    title="Delete Entire Auction"
+                  >
+                    🗑️ Delete Auction
+                  </button>
                 </div>
               )}
             </div>
