@@ -10,7 +10,7 @@ export default function CreateLeague() {
   const [user, setUser] = useState(null);
   const [form, setForm] = useState({
     name: "",
-    budget: 1000,
+    budget: 500000000, // £500m default budget
     minManagers: 2,
     maxManagers: 12,
     clubSlots: 3,
