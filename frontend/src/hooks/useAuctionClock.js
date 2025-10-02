@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 
 export function useAuctionClock(socket, lotId) {
   const [remainingMs, setRemainingMs] = useState(null);
@@ -7,29 +7,30 @@ export function useAuctionClock(socket, lotId) {
   const skewRef = useRef(0); // serverNow - clientNow
   const rafRef = useRef(null);
 
-  useEffect(() => {
-    function apply(t) {
-      if (!t || (lotId && t.lotId !== lotId)) return;
-      if (t.seq < seqRef.current) return; // ignore stale
-      seqRef.current = t.seq;
-      const clientNow = Date.now();
-      skewRef.current = t.serverNow - clientNow;
-      setEndsAt(t.endsAt);
+  const apply = useCallback((t) => {
+    if (!t || (lotId && t.lotId !== lotId)) return;
+    if (t.seq < seqRef.current) return; // ignore stale
+    seqRef.current = t.seq;
+    const clientNow = Date.now();
+    skewRef.current = t.serverNow - clientNow;
+    setEndsAt(t.endsAt);
+  }, [lotId]);
+
+  const onSync = useCallback((data) => {
+    if (data.timer) {
+      apply(data.timer);
     }
+  }, [apply]);
 
-    const onSync = (data) => {
-      if (data.timer) {
-        apply(data.timer);
-      }
-    };
-    const onTick = (t) => apply(t);
-    const onAnti = (t) => apply(t);
-    const onSold = () => { 
-      seqRef.current = 0; 
-      setEndsAt(null); 
-      setRemainingMs(0); 
-    };
+  const onTick = useCallback((t) => apply(t), [apply]);
+  const onAnti = useCallback((t) => apply(t), [apply]);
+  const onSold = useCallback(() => { 
+    seqRef.current = 0; 
+    setEndsAt(null); 
+    setRemainingMs(0); 
+  }, []);
 
+  useEffect(() => {
     if (socket) {
       // Remove existing listeners before adding new ones (prevent duplicates)
       socket.off("sync_state", onSync);
@@ -67,7 +68,7 @@ export function useAuctionClock(socket, lotId) {
         if (rafRef.current) cancelAnimationFrame(rafRef.current);
       };
     }
-  }, [socket, lotId, endsAt]);
+  }, [socket, lotId, endsAt, onSync, onTick, onAnti, onSold]);
 
   return { remainingMs };
 }
