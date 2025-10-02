@@ -9,6 +9,7 @@ export default function LeagueDetail() {
   const { leagueId } = useParams();
   const navigate = useNavigate();
   const [league, setLeague] = useState(null);
+  const [participants, setParticipants] = useState([]);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -18,6 +19,7 @@ export default function LeagueDetail() {
       setUser(JSON.parse(savedUser));
     }
     loadLeague();
+    loadParticipants();
   }, [leagueId]);
 
   const loadLeague = async () => {
@@ -30,6 +32,15 @@ export default function LeagueDetail() {
       navigate("/");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadParticipants = async () => {
+    try {
+      const response = await axios.get(`${API}/leagues/${leagueId}/participants`);
+      setParticipants(response.data);
+    } catch (e) {
+      console.error("Error loading participants:", e);
     }
   };
 
