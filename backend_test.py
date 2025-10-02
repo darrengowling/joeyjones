@@ -472,7 +472,7 @@ class BackendTester:
             }
             
             bid_result = self.test_api_endpoint("POST", f"/auction/{auction_id}/bid", winning_bid_data)
-            if "error" not in bid_result:
+            if bid_result and "error" not in bid_result:
                 self.log("Placed winning bid for clubs list testing")
                 
                 # Complete the lot to create a sold club
