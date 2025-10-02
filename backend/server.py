@@ -112,6 +112,54 @@ async def get_league(league_id: str):
         raise HTTPException(status_code=404, detail="League not found")
     return League(**league)
 
+@api_router.post("/leagues/{league_id}/join")
+async def join_league(league_id: str, participant_input: LeagueParticipantCreate):
+    # Verify league exists
+    league = await db.leagues.find_one({"id": league_id})
+    if not league:
+        raise HTTPException(status_code=404, detail="League not found")
+    
+    # Verify invite token
+    if league["inviteToken"] != participant_input.inviteToken:
+        raise HTTPException(status_code=403, detail="Invalid invite token")
+    
+    # Check if already joined
+    existing = await db.league_participants.find_one({
+        "leagueId": league_id,
+        "userId": participant_input.userId
+    })
+    if existing:
+        return {"message": "Already joined", "participant": LeagueParticipant(**existing)}
+    
+    # Check max managers limit
+    participant_count = await db.league_participants.count_documents({"leagueId": league_id})
+    if participant_count >= league["maxManagers"]:
+        raise HTTPException(status_code=400, detail="League is full")
+    
+    # Get user details
+    user = await db.users.find_one({"id": participant_input.userId})
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    # Create participant
+    participant = LeagueParticipant(
+        leagueId=league_id,
+        userId=participant_input.userId,
+        userName=user["name"],
+        userEmail=user["email"],
+        budgetRemaining=league["budget"],
+        totalSpent=0.0,
+        clubsWon=[]
+    )
+    await db.league_participants.insert_one(participant.dict())
+    
+    return {"message": "Joined league successfully", "participant": participant}
+
+@api_router.get("/leagues/{league_id}/participants")
+async def get_league_participants(league_id: str):
+    participants = await db.league_participants.find({"leagueId": league_id}).to_list(100)
+    return [LeagueParticipant(**p) for p in participants]
+
 # ===== AUCTION ENDPOINTS =====
 @api_router.post("/leagues/{league_id}/auction/start")
 async def start_auction(league_id: str):
