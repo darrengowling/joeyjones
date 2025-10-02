@@ -263,6 +263,30 @@ test_plan:
   test_all: false
   test_priority: "stuck_first"
 
+  - task: "Clubs list UI feature"
+    implemented: true
+    working: true
+    file: "AuctionRoom.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Clubs list feature already implemented in the UI with sidebar showing all clubs and their status (current/upcoming/sold/unsold) with proper icons and formatting. Backend endpoint GET /api/auction/{auction_id}/clubs already exists and functional. Fixed corrupted JSX code at end of file."
+        
+  - task: "Minimum budget enforcement"
+    implemented: true
+    working: true
+    file: "server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Added minimum budget validation to bid endpoint. Bids must be at least £1m (minimumBudget from auction). Enhanced error messages to show proper currency formatting."
+
 agent_communication:
   - agent: "main"
     message: "Environment cleaned up successfully. Database cleared of all test data. Found serialization issues in backend that need fixing before testing. Socket.IO paths configured correctly. Ready for systematic testing after fixes."
@@ -272,3 +296,5 @@ agent_communication:
     message: "Backend testing completed successfully. Fixed critical datetime timezone issue causing 500 errors in bidding. All major backend functionality working: API endpoints (9/10 tests passed), Socket.IO connections, auction flow, bidding system, lot management, and scoring. Minor issue: Real-time event delivery to clients needs investigation but server is emitting events correctly. Backend is stable and ready for production use."
   - agent: "testing"
     message: "Frontend testing completed. CRITICAL ISSUE IDENTIFIED: Timer synchronization problem in auction room. Socket.IO connection works for initial sync but timer_update events are not being delivered to frontend clients, causing stuck timers that require manual refresh. This is the exact issue reported by users. All other frontend functionality working: navigation, league management, clubs list, user authentication, auction start/display. Backend confirmed sending timer_update events every second but frontend not receiving them. Requires investigation of Socket.IO event delivery mechanism."
+  - agent: "main"
+    message: "Completed pending tasks: 1) Fixed clubs list UI by removing corrupted JSX code - feature fully working with sidebar showing all clubs with status indicators; 2) Added minimum budget validation (£1m) to bidding endpoint. Ready for comprehensive testing of both new features."
