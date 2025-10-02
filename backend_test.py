@@ -261,11 +261,11 @@ class BackendTester:
         current_club = self.test_data["current_club"]
         user_id = self.test_data["user_id"]
         
-        # Place a bid
+        # Place a bid (must be at least £1m)
         bid_data = {
             "userId": user_id,
             "clubId": current_club["id"],
-            "amount": 15.0
+            "amount": 1200000.0  # £1.2m
         }
         
         result = self.test_api_endpoint("POST", f"/auction/{auction_id}/bid", bid_data)
