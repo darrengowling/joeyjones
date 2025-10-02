@@ -317,9 +317,9 @@ class BackendTester:
             return False
         
         # Check error message contains proper currency formatting
-        error_text = result.get("text", "")
-        if "£1,000,000" not in error_text:
-            self.log(f"Error message doesn't contain proper currency formatting: {error_text}", "ERROR")
+        error_detail = result.get("detail", "")
+        if "£1,000,000" not in error_detail:
+            self.log(f"Error message doesn't contain proper currency formatting: {error_detail}", "ERROR")
             return False
         
         self.log("✅ Bid below £1m correctly rejected with proper error message")
