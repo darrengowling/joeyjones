@@ -388,11 +388,14 @@ export default function AuctionRoom() {
                 </div>
               ) : (
                 <div className="text-center py-12">
-                  <h2 className="text-2xl font-bold text-gray-900 mb-4">No Active Lot</h2>
+                  <div className="text-6xl mb-4">⏳</div>
+                  <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                    {auction?.status === "completed" ? "Auction Complete!" : "Loading Next Club..."}
+                  </h2>
                   <p className="text-gray-600">
-                    {isCommissioner
-                      ? "Select a club from the list to start a new lot"
-                      : "Waiting for commissioner to start the next lot"}
+                    {auction?.status === "completed" 
+                      ? "All clubs have been auctioned. Check the standings!" 
+                      : "Clubs auto-load in random order. Next club starting soon..."}
                   </p>
                 </div>
               )}
