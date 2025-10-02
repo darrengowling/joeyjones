@@ -538,7 +538,7 @@ export default function AuctionRoom() {
                     </div>
                     {participants.find((p) => p.userId === user?.id) && (
                       <p className="text-sm text-gray-600">
-                        Your remaining budget: ${participants.find((p) => p.userId === user.id).budgetRemaining.toFixed(0)}
+                        Your remaining budget: £{participants.find((p) => p.userId === user.id).budgetRemaining.toLocaleString()}
                       </p>
                     )}
                   </div>
