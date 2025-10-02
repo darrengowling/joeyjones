@@ -283,7 +283,7 @@ test_plan:
         
   - task: "Minimum budget enforcement"
     implemented: true
-    working: true
+    working: "NA"
     file: "server.py"
     stuck_count: 0
     priority: "high"
@@ -295,6 +295,9 @@ test_plan:
       - working: true
         agent: "testing"
         comment: "Minimum budget enforcement tested successfully. Bids below £1,000,000 correctly rejected with proper error message 'Bid must be at least £1,000,000'. Bids exactly at £1m and above correctly accepted. Budget remaining validation still works alongside minimum budget enforcement. All edge cases tested and working correctly."
+      - working: "NA"
+        agent: "testing"
+        comment: "FRONTEND TESTING INCOMPLETE: Cannot test minimum budget validation in frontend due to no active bidding interface. Auction is in 'Loading Next Club' state with no current lot available for bidding. Backend validation confirmed working in previous tests. Frontend bidding interface elements (bid input, place bid button) not present when no active lot. Feature implementation confirmed working at backend level."
 
 agent_communication:
   - agent: "main"
