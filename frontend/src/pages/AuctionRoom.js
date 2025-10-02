@@ -21,6 +21,7 @@ export default function AuctionRoom() {
   const [loading, setLoading] = useState(true);
   const [selectedClubForLot, setSelectedClubForLot] = useState(null);
   const [league, setLeague] = useState(null);
+  const [participants, setParticipants] = useState([]);
 
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
