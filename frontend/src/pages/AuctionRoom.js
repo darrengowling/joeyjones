@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import io from "socket.io-client";
+import { useAuctionClock } from "../hooks/useAuctionClock";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
@@ -16,12 +17,15 @@ export default function AuctionRoom() {
   const [clubs, setClubs] = useState([]);
   const [currentClub, setCurrentClub] = useState(null);
   const [bids, setBids] = useState([]);
-  const [timeRemaining, setTimeRemaining] = useState(0);
   const [bidAmount, setBidAmount] = useState("");
   const [loading, setLoading] = useState(true);
   const [selectedClubForLot, setSelectedClubForLot] = useState(null);
   const [league, setLeague] = useState(null);
   const [participants, setParticipants] = useState([]);
+  const [currentLotId, setCurrentLotId] = useState(null);
+
+  // Use the new auction clock hook
+  const { remainingMs } = useAuctionClock(socket, currentLotId);
 
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
