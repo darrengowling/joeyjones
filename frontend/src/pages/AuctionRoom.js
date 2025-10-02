@@ -410,11 +410,6 @@ export default function AuctionRoom() {
                 </div>
               )}
             </div>
-              <div className="text-right">
-                <div className="text-sm text-gray-600">Bidding as</div>
-                <div className="font-semibold text-gray-900">{user?.name}</div>
-              </div>
-            </div>
           </div>
 
           {/* Participant Budgets */}
