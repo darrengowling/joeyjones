@@ -72,7 +72,7 @@ export default function ClubsList() {
               <label className="block text-gray-700 mb-2 font-semibold">Search</label>
               <input
                 type="text"
-                placeholder="Search clubs..."
+                placeholder="Search teams available for ownership..."
                 className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
