@@ -417,7 +417,7 @@ const Home = () => {
                   setShowJoinLeagueDialog(true);
                 }
               }}
-              className="bg-primary text-primary-foreground px-6 py-4 rounded-lg hover:bg-primary/90 text-lg font-semibold transition-colors"
+              className="bg-blue-600 text-white px-6 py-4 rounded-lg hover:bg-blue-700 text-lg font-semibold"
               data-testid="join-league-button"
             >
               Join League
