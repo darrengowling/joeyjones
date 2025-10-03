@@ -488,7 +488,7 @@ const Home = () => {
                         </div>
                         <div className="flex flex-col items-end gap-2">
                           <span
-                            className={`px-3 py-1 rounded-full text-sm font-semibold ${
+                            className={`chip px-3 py-1 rounded-full text-sm font-semibold ${
                               league.status === "active"
                                 ? "bg-green-100 text-green-800"
                                 : "bg-gray-100 text-gray-800"
