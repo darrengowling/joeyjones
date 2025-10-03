@@ -52,7 +52,7 @@ export default function CreateLeague() {
         <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-lg p-8 app-card">
           <button
             onClick={() => navigate("/")}
-            className="text-blue-600 hover:underline mb-4"
+            className="btn btn-secondary text-blue-600 hover:underline mb-4"
           >
             ← Back to Home
           </button>
