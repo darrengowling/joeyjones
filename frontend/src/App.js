@@ -449,7 +449,7 @@ const Home = () => {
                   return (
                     <div
                       key={league.id}
-                      className="border rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer"
+                      className="border rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer app-card"
                       onClick={() => navigate(`/league/${league.id}`)}
                       data-testid={`league-card-${league.id}`}
                     >
