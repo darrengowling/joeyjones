@@ -389,9 +389,9 @@ const Home = () => {
 
       {/* Main Content */}
       <div className="container mx-auto px-4 py-8">
-        <div className="bg-card border border-border rounded-lg shadow-lg p-8">
-          <h2 className="text-3xl font-bold mb-6 text-foreground">Welcome to Friends of PIFA</h2>
-          <p className="text-muted-foreground mb-8">
+        <div className="bg-white rounded-lg shadow-lg p-8">
+          <h2 className="text-3xl font-bold mb-6 text-gray-900">Welcome to Friends of PIFA</h2>
+          <p className="text-gray-600 mb-8">
             Bid for exclusive ownership of UCL teams and compete with friends!
           </p>
 
