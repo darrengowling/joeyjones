@@ -499,15 +499,24 @@ const Home = () => {
 };
 
 export default function App() {
+  // Detect test mode
+  const isTestMode = process.env.NODE_ENV === 'test' || 
+                     process.env.REACT_APP_TEST_MODE === 'true' ||
+                     window.location.search.includes('test=true');
+  
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/create-league" element={<CreateLeague />} />
-        <Route path="/clubs" element={<ClubsList />} />
-        <Route path="/league/:leagueId" element={<LeagueDetail />} />
-        <Route path="/auction/:auctionId" element={<AuctionRoom />} />
-      </Routes>
-    </BrowserRouter>
+    <ThemeProvider>
+      <div className={isTestMode ? 'test-mode' : ''}>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/create-league" element={<CreateLeague />} />
+            <Route path="/clubs" element={<ClubsList />} />
+            <Route path="/league/:leagueId" element={<LeagueDetail />} />
+            <Route path="/auction/:auctionId" element={<AuctionRoom />} />
+          </Routes>
+        </BrowserRouter>
+      </div>
+    </ThemeProvider>
   );
 }
