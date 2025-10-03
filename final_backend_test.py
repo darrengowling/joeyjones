@@ -174,7 +174,7 @@ def run_comprehensive_test():
         log("✅ Minimum £1M budget validation working")
         test_results["minimum_budget_enforcement"] = True
     else:
-        log("❌ Minimum budget validation failed", "ERROR")
+        log(f"❌ Minimum budget validation failed. Result: {result}", "ERROR")
     
     # Test 5: Bidding System
     log("=== TEST 5: Bidding System ===")
