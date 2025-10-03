@@ -75,7 +75,7 @@ export default function CreateLeague() {
 
             <div>
               <label className="block text-gray-700 mb-2 font-semibold">
-                Budget per Manager (£)
+                Strategic Budget per Manager (£)
               </label>
               <input
                 type="number"
