@@ -457,7 +457,7 @@ const Home = () => {
           <div>
             <h3 className="h2 text-2xl font-bold mb-4 text-gray-900">Active Leagues</h3>
             {leagues.length === 0 ? (
-              <p className="text-gray-500">No leagues yet. Create one to get started!</p>
+              <p className="text-gray-500">No competitions yet. Create your strategic arena to get started!</p>
             ) : (
               <div className="grid gap-4">
                 {leagues.map((league) => {
