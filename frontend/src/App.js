@@ -358,7 +358,7 @@ const Home = () => {
       {/* Header */}
       <div className="bg-white shadow-md app-header">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-blue-900">Friends of Pifa</h1>
+          <span data-testid="nav-brand" className="h2">Friends of PIFA</span>
           {user ? (
             <div className="flex items-center gap-4">
               <span className="text-gray-700">
