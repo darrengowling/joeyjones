@@ -61,8 +61,8 @@ export default function ClubsList() {
             ← Back to Home
           </button>
 
-          <h1 className="text-3xl font-bold mb-6 text-gray-900">
-            UCL Clubs 2025/26
+          <h1 className="h1 text-3xl font-bold mb-6 text-gray-900">
+            🏆 UCL Clubs 2025/26
           </h1>
 
           {/* Filters */}
