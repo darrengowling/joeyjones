@@ -365,26 +365,25 @@ const Home = () => {
           <h1 className="text-2xl font-bold text-blue-900">Friends of PIFA</h1>
           <div className="flex items-center gap-4">
             {user ? (
-              <>
-                <span className="text-muted-foreground">
+              <div className="flex items-center gap-4">
+                <span className="text-gray-700">
                   <strong>{user.name}</strong> ({user.email})
                 </span>
                 <button
                   onClick={() => setShowUserDialog(true)}
-                  className="text-sm text-primary hover:underline"
+                  className="text-sm text-blue-600 hover:underline"
                 >
                   Sign Out
                 </button>
-              </>
+              </div>
             ) : (
               <button
                 onClick={() => setShowUserDialog(true)}
-                className="bg-primary text-primary-foreground px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors"
+                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
               >
                 Sign In
               </button>
             )}
-          </div>
         </div>
       </div>
 
