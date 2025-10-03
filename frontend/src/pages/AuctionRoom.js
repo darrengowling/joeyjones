@@ -418,7 +418,7 @@ export default function AuctionRoom() {
               
               {/* Commissioner Controls */}
               {isCommissioner && (
-                <div className="flex gap-2">
+                <div className="row-gap-md flex">
                   {auction?.status === "active" && (
                     <button
                       onClick={pauseAuction}
