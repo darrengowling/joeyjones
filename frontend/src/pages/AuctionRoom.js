@@ -497,7 +497,7 @@ export default function AuctionRoom() {
             <div className="lg:col-span-2 bg-white rounded-lg shadow-lg p-6 app-card">
               {currentClub ? (
                 <div>
-                  <h2 className="text-2xl font-bold mb-4 text-gray-900">Current Lot</h2>
+                  <h2 className="h2 text-2xl font-bold mb-4 text-gray-900">🔥 Current Lot</h2>
                   
                   {/* Timer */}
                   <div className="bg-gradient-to-r from-red-500 to-orange-500 text-white p-6 rounded-lg mb-6 text-center">
