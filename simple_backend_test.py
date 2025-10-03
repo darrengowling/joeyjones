@@ -71,7 +71,7 @@ def main():
     }
     
     result = test_api_endpoint("POST", "/leagues", league_data)
-    if "error" in result:
+    if not result or "error" in result:
         log("❌ League creation failed", "ERROR")
         return False
     
