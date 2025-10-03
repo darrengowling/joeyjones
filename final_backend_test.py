@@ -241,7 +241,7 @@ def run_comprehensive_test():
         else:
             log("❌ Get participants failed", "ERROR")
     else:
-        log("❌ Complete lot failed", "ERROR")
+        log(f"❌ Complete lot failed. Result: {result}", "ERROR")
     
     # Test 7: Commissioner Controls
     log("=== TEST 7: Commissioner Controls ===")
