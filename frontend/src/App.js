@@ -496,7 +496,7 @@ const Home = () => {
       </div>
     </div>
   );
-};
+}
 
 export default function App() {
   return (
