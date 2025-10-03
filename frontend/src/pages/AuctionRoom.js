@@ -269,7 +269,7 @@ export default function AuctionRoom() {
 
   const placeBid = async () => {
     if (!user || !currentClub || !bidAmount) {
-      alert("Please enter a bid amount");
+      alert("Please enter your strategic bid amount to claim ownership");
       return;
     }
 
