@@ -471,15 +471,17 @@ const Home = () => {
                       <div className="flex justify-between items-start">
                         <div className="flex-1">
                           <h4 className="text-xl font-semibold text-gray-900 mb-2">{league.name}</h4>
-                          <p className="text-gray-600 text-sm mb-1">
-                            Budget: £{league.budget.toLocaleString()} | Slots: {league.clubSlots}
-                          </p>
-                          <p className="text-gray-600 text-sm">
-                            Managers: {league.participantCount || 0}/{league.maxManagers} 
-                            {league.participantCount >= league.minManagers && (
-                              <span className="text-green-600 ml-2">✓ Ready to start</span>
-                            )}
-                          </p>
+                          <div className="stack-md">
+                            <p className="subtle text-gray-600 text-sm">
+                              Budget: £{league.budget.toLocaleString()} | Slots: {league.clubSlots}
+                            </p>
+                            <p className="subtle text-gray-600 text-sm">
+                              Managers: {league.participantCount || 0}/{league.maxManagers} 
+                              {league.participantCount >= league.minManagers && (
+                                <span className="chip text-green-600 ml-2">✓ Ready to start</span>
+                              )}
+                            </p>
+                          </div>
                           <p className="text-xs text-gray-500 mt-2">
                             Invite Token: <code className="bg-gray-100 px-2 py-1 rounded">{league.inviteToken}</code>
                           </p>
