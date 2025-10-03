@@ -202,7 +202,7 @@ export default function LeagueDetail() {
               {league.status === "active" && (
                 <button
                   onClick={goToAuction}
-                  className="px-6 py-3 rounded-lg font-semibold bg-blue-600 text-white hover:bg-blue-700"
+                  className="btn btn-primary px-6 py-3 rounded-lg font-semibold bg-blue-600 text-white hover:bg-blue-700"
                   data-testid="go-to-auction-button"
                 >
                   Go to Auction
