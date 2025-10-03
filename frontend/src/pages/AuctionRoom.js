@@ -477,14 +477,16 @@ export default function AuctionRoom() {
                     <div className="font-semibold text-gray-900 text-sm mb-1">
                       {p.userName} {isCurrentUser && "(You)"}
                     </div>
-                    <div className="text-2xl font-bold text-green-600">
-                      £{p.budgetRemaining.toLocaleString()}
-                    </div>
-                    <div className="text-xs text-gray-500 mt-1">
-                      Spent: £{p.totalSpent.toLocaleString()}
-                    </div>
-                    <div className="text-xs text-gray-500">
-                      Clubs: {p.clubsWon.length}
+                    <div className="stack-md">
+                      <div className="chip text-2xl font-bold text-green-600">
+                        £{p.budgetRemaining.toLocaleString()}
+                      </div>
+                      <div className="subtle text-xs text-gray-500">
+                        Spent: £{p.totalSpent.toLocaleString()}
+                      </div>
+                      <div className="subtle text-xs text-gray-500">
+                        🏆 Clubs: {p.clubsWon.length}
+                      </div>
                     </div>
                   </div>
                 );
