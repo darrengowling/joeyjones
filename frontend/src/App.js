@@ -365,11 +365,11 @@ const Home = () => {
           <div className="flex items-center gap-4">
             <ThemeToggle />
             <div className="flex items-center gap-4">
-          {user ? (
-            <div className="flex items-center gap-4">
-              <span className="text-gray-700">
-                <strong>{user.name}</strong> ({user.email})
-              </span>
+            {user ? (
+              <>
+                <span className="text-muted-foreground">
+                  <strong>{user.name}</strong> ({user.email})
+                </span>
               <button
                 onClick={() => setShowUserDialog(true)}
                 className="text-sm text-blue-600 hover:underline"
