@@ -518,10 +518,12 @@ export default function AuctionRoom() {
                   </div>
 
                   {/* Club Info */}
-                  <div className="bg-gray-50 p-6 rounded-lg mb-6">
-                    <h3 className="text-3xl font-bold text-gray-900 mb-2">{currentClub.name}</h3>
-                    <p className="text-xl text-gray-600">{currentClub.country}</p>
-                    <p className="text-sm text-gray-500 mt-2">UEFA ID: {currentClub.uefaId}</p>
+                  <div className="app-card bg-gray-50 p-6 rounded-lg mb-6">
+                    <div className="stack-md">
+                      <h3 className="h1 text-3xl font-bold text-gray-900">{currentClub.name}</h3>
+                      <p className="h2 text-xl text-gray-600">{currentClub.country}</p>
+                      <p className="subtle text-sm text-gray-500">UEFA ID: {currentClub.uefaId}</p>
+                    </div>
                   </div>
 
                   {/* Current Highest Bid */}
