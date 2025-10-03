@@ -156,23 +156,25 @@ export default function LeagueDetail() {
 
           <div className="flex justify-between items-start mb-6">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">{league.name}</h1>
-              <div className="flex gap-2 items-center">
-                <span
-                  className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                    league.status === "active"
-                      ? "bg-green-100 text-green-800"
-                      : "bg-gray-100 text-gray-800"
-                  }`}
-                >
-                  {league.status}
-                </span>
-                <span className="text-sm text-gray-600">
-                  {participants.length}/{league.maxManagers} managers
-                </span>
-              </div>
-              <div className="mt-2 text-sm text-gray-600">
-                Invite Token: <code className="bg-gray-100 px-2 py-1 rounded font-mono">{league.inviteToken}</code>
+              <h1 className="h1 text-3xl font-bold text-gray-900 mb-2">{league.name}</h1>
+              <div className="stack-md">
+                <div className="row-gap-md flex items-center">
+                  <span
+                    className={`chip px-3 py-1 rounded-full text-sm font-semibold ${
+                      league.status === "active"
+                        ? "bg-green-100 text-green-800"
+                        : "bg-gray-100 text-gray-800"
+                    }`}
+                  >
+                    {league.status}
+                  </span>
+                  <span className="subtle text-sm text-gray-600">
+                    {participants.length}/{league.maxManagers} managers
+                  </span>
+                </div>
+                <div className="subtle text-sm text-gray-600">
+                  Invite Token: <code className="chip bg-gray-100 px-2 py-1 rounded font-mono">{league.inviteToken}</code>
+                </div>
               </div>
             </div>
 
