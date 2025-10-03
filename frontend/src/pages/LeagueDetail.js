@@ -182,7 +182,7 @@ export default function LeagueDetail() {
                   <button
                     onClick={startAuction}
                     disabled={!canStartAuction}
-                    className={`px-6 py-3 rounded-lg font-semibold ${
+                    className={`btn btn-primary px-6 py-3 rounded-lg font-semibold ${
                       canStartAuction
                         ? "bg-green-600 text-white hover:bg-green-700"
                         : "bg-gray-300 text-gray-500 cursor-not-allowed"
