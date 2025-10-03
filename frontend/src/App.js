@@ -363,7 +363,7 @@ const Home = () => {
                 className="btn btn-primary w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 font-semibold"
                 data-testid="join-league-submit"
               >
-                Join League
+                Join the Competition
               </button>
             </form>
           </div>
@@ -442,7 +442,7 @@ const Home = () => {
               className="btn btn-primary bg-blue-600 text-white px-6 py-4 rounded-lg hover:bg-blue-700 text-lg font-semibold"
               data-testid="join-league-button"
             >
-              Join League
+              Join the Competition
             </button>
             <button
               onClick={() => navigate("/clubs")}
