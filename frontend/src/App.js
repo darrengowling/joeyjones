@@ -370,32 +370,22 @@ const Home = () => {
                 <span className="text-muted-foreground">
                   <strong>{user.name}</strong> ({user.email})
                 </span>
+                <button
+                  onClick={() => setShowUserDialog(true)}
+                  className="text-sm text-primary hover:underline"
+                >
+                  Sign Out
+                </button>
+              </>
+            ) : (
               <button
                 onClick={() => setShowUserDialog(true)}
-                className="text-sm text-blue-600 hover:underline"
+                className="bg-primary text-primary-foreground px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors"
               >
-                Change
+                Sign In
               </button>
-              <button
-                onClick={() => {
-                  localStorage.removeItem("user");
-                  setUser(null);
-                }}
-                className="text-sm text-red-600 hover:underline"
-                data-testid="logout-button"
-              >
-                Logout
-              </button>
-            </div>
-          ) : (
-            <button
-              onClick={() => setShowUserDialog(true)}
-              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
-              data-testid="login-button"
-            >
-              Sign In
-            </button>
-          )}
+            )}
+          </div>
         </div>
       </div>
 
