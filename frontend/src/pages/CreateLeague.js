@@ -57,7 +57,8 @@ export default function CreateLeague() {
             ← Back to Home
           </button>
 
-          <h1 className="h1 text-3xl font-bold mb-6 text-gray-900">⚽ Create New League</h1>
+          <h1 className="h1 text-3xl font-bold mb-6 text-gray-900">⚽ Create Your Competition</h1>
+          <p className="subtle text-gray-600 mb-6">Build your peer-to-peer strategic arena where skill and tactics determine victory</p>
 
           <form onSubmit={handleSubmit} className="stack-lg space-y-6">
             <div>
