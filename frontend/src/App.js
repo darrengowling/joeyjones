@@ -359,9 +359,12 @@ const Home = () => {
       )}
 
       {/* Header */}
-      <div className="bg-white shadow-md">
+      <div className="bg-card border-b border-border shadow-sm">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-blue-900">Friends of Pifa</h1>
+          <h1 className="text-2xl font-bold text-foreground">{brandTokens.name}</h1>
+          <div className="flex items-center gap-4">
+            <ThemeToggle />
+            <div className="flex items-center gap-4">
           {user ? (
             <div className="flex items-center gap-4">
               <span className="text-gray-700">
