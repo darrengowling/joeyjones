@@ -612,7 +612,7 @@ export default function AuctionRoom() {
 
             {/* Clubs Overview */}
             <div className="app-card bg-white rounded-lg shadow-lg p-6">
-              <h3 className="h2 text-xl font-bold mb-4 text-gray-900">🏆 All Clubs in Auction</h3>
+              <h3 className="h2 text-xl font-bold mb-4 text-gray-900">🏆 Teams Available for Ownership</h3>
               
               {/* Summary Stats */}
               <div className="stack-md">
