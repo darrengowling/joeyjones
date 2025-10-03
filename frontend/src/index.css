@@ -1,86 +1,139 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-body {
-    margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
-        "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
-        "Helvetica Neue", sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-}
-
-code {
-    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-        monospace;
-}
-
-
-
 @layer base {
   :root {
-        --background: 0 0% 100%;
-        --foreground: 0 0% 3.9%;
-        --card: 0 0% 100%;
-        --card-foreground: 0 0% 3.9%;
-        --popover: 0 0% 100%;
-        --popover-foreground: 0 0% 3.9%;
-        --primary: 0 0% 9%;
-        --primary-foreground: 0 0% 98%;
-        --secondary: 0 0% 96.1%;
-        --secondary-foreground: 0 0% 9%;
-        --muted: 0 0% 96.1%;
-        --muted-foreground: 0 0% 45.1%;
-        --accent: 0 0% 96.1%;
-        --accent-foreground: 0 0% 9%;
-        --destructive: 0 84.2% 60.2%;
-        --destructive-foreground: 0 0% 98%;
-        --border: 0 0% 89.8%;
-        --input: 0 0% 89.8%;
-        --ring: 0 0% 3.9%;
-        --chart-1: 12 76% 61%;
-        --chart-2: 173 58% 39%;
-        --chart-3: 197 37% 24%;
-        --chart-4: 43 74% 66%;
-        --chart-5: 27 87% 67%;
-        --radius: 0.5rem;
-    }
+    /* Friends of PIFA Brand Colors */
+    --brand-primary-50: #eff6ff;
+    --brand-primary-100: #dbeafe;
+    --brand-primary-200: #bfdbfe;
+    --brand-primary-300: #93c5fd;
+    --brand-primary-400: #60a5fa;
+    --brand-primary-500: #3b82f6;
+    --brand-primary-600: #2563eb;
+    --brand-primary-700: #1d4ed8;
+    --brand-primary-800: #1e40af;
+    --brand-primary-900: #1e3a8a;
+    --brand-primary-950: #172554;
+    
+    --brand-secondary-50: #f0fdf4;
+    --brand-secondary-100: #dcfce7;
+    --brand-secondary-200: #bbf7d0;
+    --brand-secondary-300: #86efac;
+    --brand-secondary-400: #4ade80;
+    --brand-secondary-500: #22c55e;
+    --brand-secondary-600: #16a34a;
+    --brand-secondary-700: #15803d;
+    --brand-secondary-800: #166534;
+    --brand-secondary-900: #14532d;
+    --brand-secondary-950: #052e16;
+    
+    --brand-accent-50: #fefce8;
+    --brand-accent-100: #fef9c3;
+    --brand-accent-200: #fef08a;
+    --brand-accent-300: #fde047;
+    --brand-accent-400: #facc15;
+    --brand-accent-500: #eab308;
+    --brand-accent-600: #ca8a04;
+    --brand-accent-700: #a16207;
+    --brand-accent-800: #854d0e;
+    --brand-accent-900: #713f12;
+    --brand-accent-950: #422006;
+    
+    --brand-neutral-50: #f8fafc;
+    --brand-neutral-100: #f1f5f9;
+    --brand-neutral-200: #e2e8f0;
+    --brand-neutral-300: #cbd5e1;
+    --brand-neutral-400: #94a3b8;
+    --brand-neutral-500: #64748b;
+    --brand-neutral-600: #475569;
+    --brand-neutral-700: #334155;
+    --brand-neutral-800: #1e293b;
+    --brand-neutral-900: #0f172a;
+    --brand-neutral-950: #020617;
+    
+    /* Status Colors */
+    --brand-success: #22c55e;
+    --brand-warning: #eab308;
+    --brand-error: #ef4444;
+    --brand-info: #3b82f6;
+    
+    /* Semantic Color Mapping - Light Mode */
+    --background: var(--brand-neutral-50);
+    --foreground: var(--brand-neutral-900);
+    --card: #ffffff;
+    --card-foreground: var(--brand-neutral-800);
+    --surface: #ffffff;
+    --surface-foreground: var(--brand-neutral-800);
+    --primary: var(--brand-primary-600);
+    --primary-foreground: #ffffff;
+    --secondary: var(--brand-secondary-500);
+    --secondary-foreground: #ffffff;
+    --accent: var(--brand-accent-500);
+    --accent-foreground: var(--brand-neutral-900);
+    --muted: var(--brand-neutral-100);
+    --muted-foreground: var(--brand-neutral-600);
+    --border: var(--brand-neutral-200);
+    --input: var(--brand-neutral-200);
+    --ring: var(--brand-primary-500);
+    
+    /* Border Radius */
+    --radius-sm: 0.25rem;
+    --radius-base: 0.375rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+    --radius-xl: 1rem;
+  }
+  
   .dark {
-        --background: 0 0% 3.9%;
-        --foreground: 0 0% 98%;
-        --card: 0 0% 3.9%;
-        --card-foreground: 0 0% 98%;
-        --popover: 0 0% 3.9%;
-        --popover-foreground: 0 0% 98%;
-        --primary: 0 0% 98%;
-        --primary-foreground: 0 0% 9%;
-        --secondary: 0 0% 14.9%;
-        --secondary-foreground: 0 0% 98%;
-        --muted: 0 0% 14.9%;
-        --muted-foreground: 0 0% 63.9%;
-        --accent: 0 0% 14.9%;
-        --accent-foreground: 0 0% 98%;
-        --destructive: 0 62.8% 30.6%;
-        --destructive-foreground: 0 0% 98%;
-        --border: 0 0% 14.9%;
-        --input: 0 0% 14.9%;
-        --ring: 0 0% 83.1%;
-        --chart-1: 220 70% 50%;
-        --chart-2: 160 60% 45%;
-        --chart-3: 30 80% 55%;
-        --chart-4: 280 65% 60%;
-        --chart-5: 340 75% 55%;
-    }
+    /* Semantic Color Mapping - Dark Mode */
+    --background: var(--brand-neutral-950);
+    --foreground: var(--brand-neutral-100);
+    --card: var(--brand-neutral-900);
+    --card-foreground: var(--brand-neutral-100);
+    --surface: var(--brand-neutral-900);
+    --surface-foreground: var(--brand-neutral-100);
+    --primary: var(--brand-primary-500);
+    --primary-foreground: var(--brand-neutral-50);
+    --secondary: var(--brand-secondary-400);
+    --secondary-foreground: var(--brand-neutral-900);
+    --accent: var(--brand-accent-400);
+    --accent-foreground: var(--brand-neutral-900);
+    --muted: var(--brand-neutral-800);
+    --muted-foreground: var(--brand-neutral-400);
+    --border: var(--brand-neutral-700);
+    --input: var(--brand-neutral-800);
+    --ring: var(--brand-primary-400);
+  }
 }
-
-
 
 @layer base {
   * {
     @apply border-border;
-    }
+  }
+  
   body {
+    margin: 0;
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     @apply bg-background text-foreground;
-    }
+  }
+  
+  code {
+    font-family: 'SF Mono', Monaco, Inconsolata, 'Roboto Mono', monospace;
+  }
+}
+
+@layer utilities {
+  /* Disable animations in test mode */
+  .test-mode * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
