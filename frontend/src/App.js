@@ -499,12 +499,7 @@ const Home = () => {
 };
 
 export default function App() {
-  // Detect test mode
-  const isTestMode = (
-    process.env.NODE_ENV === 'test' || 
-    process.env.REACT_APP_TEST_MODE === 'true' ||
-    window.location.search.includes('test=true')
-  );
+  const isTestMode = false; // Simplify for now
   
   return (
     <ThemeProvider>
