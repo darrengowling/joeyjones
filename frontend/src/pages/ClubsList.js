@@ -52,7 +52,7 @@ export default function ClubsList() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 py-8">
-      <div className="container mx-auto px-4">
+      <div className="container-narrow mx-auto px-4">
         <div className="bg-white rounded-lg shadow-lg p-8">
           <button
             onClick={() => navigate("/")}
