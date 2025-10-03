@@ -98,7 +98,7 @@ const Home = () => {
         inviteToken: response.data.inviteToken,
       });
       
-      alert(`League created! Invite Token: ${response.data.inviteToken}`);
+      alert(`Strategic competition created! Share this invite token with your competitors: ${response.data.inviteToken}`);
       setShowCreateLeagueDialog(false);
       loadLeagues();
       navigate(`/league/${response.data.id}`);
