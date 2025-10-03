@@ -140,7 +140,7 @@ const Home = () => {
         inviteToken: inviteToken.trim(), // Send trimmed token to backend
       });
 
-      alert(`Successfully joined "${league.name}"!`);
+      alert(`Successfully joined the strategic competition "${league.name}"! Ready to bid for team ownership.`);
       setShowJoinLeagueDialog(false);
       setInviteToken("");
       loadLeagues();
