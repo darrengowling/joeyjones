@@ -305,6 +305,78 @@ test_plan:
         agent: "testing"
         comment: "PRODUCTION TESTING CONFIRMED: Minimum budget enforcement working correctly. Bids below £1M properly rejected with error message 'Bid must be at least £1,000,000'. Valid bids (£1M, £1.5M, £2M) accepted successfully. Backend validation fully functional and ready for production use."
 
+  - task: "League Creation & Joining Flow with £500M budget"
+    implemented: true
+    working: true
+    file: "server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "PRODUCTION TESTING PASSED: Successfully created league with £500M budget, joined league with invite token, verified participant budget set correctly to £500M. Socket.IO participant_joined events confirmed being emitted by backend logs. League creation and joining flow fully functional."
+
+  - task: "Auction Management with club queue randomization"
+    implemented: true
+    working: true
+    file: "server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "PRODUCTION TESTING PASSED: Auction starts successfully with randomized club queue (36 clubs), timer functionality active, auto-advance working. Club queue properly randomized on each auction start. First club selection varies between tests confirming randomization working correctly."
+
+  - task: "Real-time bidding system with Socket.IO events"
+    implemented: true
+    working: true
+    file: "server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "PRODUCTION TESTING PASSED: Multiple bids placed successfully (£1M, £1.5M, £2M), bid data stored and retrieved correctly. Backend logs confirm bid_placed Socket.IO events being emitted for each bid. Minimum £1M budget validation working. Real-time bidding system fully functional."
+
+  - task: "Club status transitions and budget management"
+    implemented: true
+    working: true
+    file: "server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "PRODUCTION TESTING PASSED: Club status transitions working (upcoming → current → sold). Budget deductions after winning bids working correctly. Participant budget tracking accurate. Clubs won count properly incremented. Budget management system fully functional."
+
+  - task: "Commissioner controls (pause/resume/delete)"
+    implemented: true
+    working: true
+    file: "server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "PRODUCTION TESTING PASSED: All commissioner controls working correctly. ✅ Pause auction - working with remaining time tracking. ✅ Resume auction - working with proper timer restoration. ✅ Delete auction - working with proper cleanup. Socket.IO events (auction_paused, auction_resumed) confirmed in backend logs."
+
+  - task: "Clubs list endpoint alphabetical sorting"
+    implemented: true
+    working: true
+    file: "server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "PRODUCTION TESTING PASSED: Clubs list endpoint returns all 36 clubs with correct status information. Upcoming clubs sorted alphabetically (not revealing draw order for strategy). Current club appears first, sold clubs by lot order for history, upcoming clubs alphabetically. Sorting strategy working as designed to hide auction draw order."
+
 agent_communication:
   - agent: "main"
     message: "Environment cleaned up successfully. Database cleared of all test data. Found serialization issues in backend that need fixing before testing. Socket.IO paths configured correctly. Ready for systematic testing after fixes."
