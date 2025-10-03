@@ -384,7 +384,7 @@ const Home = () => {
           ) : (
             <button
               onClick={() => setShowUserDialog(true)}
-              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+              className="btn btn-primary bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
               data-testid="login-button"
             >
               Sign In
