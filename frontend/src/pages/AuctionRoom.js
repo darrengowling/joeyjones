@@ -403,15 +403,17 @@ export default function AuctionRoom() {
           <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
             <div className="flex justify-between items-center">
               <div>
-                <h1 className="text-3xl font-bold text-gray-900">
-                  {league ? league.name : "Auction Room"}
-                </h1>
-                <p className="text-gray-600">
-                  Lot #{auction?.currentLot || 0} • Status: {auction?.status || "Unknown"}
-                  {auction?.status === "paused" && (
-                    <span className="ml-2 px-2 py-1 bg-yellow-100 text-yellow-800 text-sm rounded">PAUSED</span>
-                  )}
-                </p>
+                <div className="stack-md">
+                  <h1 className="h1 text-3xl font-bold text-gray-900">
+                    {league ? league.name : "Auction Room"}
+                  </h1>
+                  <p className="subtle text-gray-600">
+                    Lot #{auction?.currentLot || 0} • Status: {auction?.status || "Unknown"}
+                    {auction?.status === "paused" && (
+                      <span className="chip ml-2 px-2 py-1 bg-yellow-100 text-yellow-800 text-sm rounded">⏸️ PAUSED</span>
+                    )}
+                  </p>
+                </div>
               </div>
               
               {/* Commissioner Controls */}
