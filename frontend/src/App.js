@@ -429,7 +429,7 @@ const Home = () => {
               className="btn btn-primary bg-green-600 text-white px-6 py-4 rounded-lg hover:bg-green-700 text-lg font-semibold"
               data-testid="create-league-button"
             >
-              Create New League
+              Create Your Competition
             </button>
             <button
               onClick={() => {
