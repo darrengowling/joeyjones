@@ -257,7 +257,7 @@ export default function LeagueDetail() {
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-gray-600">Budget per Manager:</span>
-                  <span className="font-semibold">£{league.budget.toLocaleString()}</span>
+                  <span className="chip font-semibold">£{league.budget.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Min Managers:</span>
