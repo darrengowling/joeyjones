@@ -62,8 +62,9 @@ export default function ClubsList() {
           </button>
 
           <h1 className="h1 text-3xl font-bold mb-6 text-gray-900">
-            🏆 UCL Clubs 2025/26
+            🏆 UCL Teams 2025/26 - Available for Ownership
           </h1>
+          <p className="subtle text-gray-600 mb-6">Explore the teams you can bid for exclusive ownership. Each team you own scores points for your strategic success.</p>
 
           {/* Filters */}
           <div className="grid md:grid-cols-2 gap-4 mb-6">
