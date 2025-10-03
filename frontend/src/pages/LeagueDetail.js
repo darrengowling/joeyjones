@@ -195,7 +195,7 @@ export default function LeagueDetail() {
                   </button>
                   {!canStartAuction && (
                     <p className="text-sm text-red-600 mt-2">
-                      Need {league.minManagers - participants.length} more manager(s) to start
+                      Need {league.minManagers - participants.length} more strategic competitors to begin
                     </p>
                   )}
                 </div>
