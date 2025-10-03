@@ -500,14 +500,17 @@ export default function AuctionRoom() {
                   {/* Timer */}
                   <div className="bg-gradient-to-r from-red-500 to-orange-500 text-white p-6 rounded-lg mb-6 text-center">
                     <div className="text-5xl font-bold">
-                      <span data-testid="auction-timer">
-                        {(() => {
-                          const s = Math.ceil((remainingMs ?? 0) / 1000);
-                          const mm = String(Math.floor(s / 60)).padStart(2, "0");
-                          const ss = String(s % 60).padStart(2, "0");
-                          return `${mm}:${ss}`;
-                        })()}
-                      </span>
+                      {(() => {
+                        const s = Math.ceil((remainingMs ?? 0) / 1000);
+                        const mm = String(Math.floor(s / 60)).padStart(2, "0");
+                        const ss = String(s % 60).padStart(2, "0");
+                        const warn = (remainingMs ?? 0) < 10000;
+                        return (
+                          <span data-testid="auction-timer" className={`chip ${warn ? 'warn' : ''}`}>
+                            {mm}:{ss}
+                          </span>
+                        );
+                      })()}
                     </div>
                     <div className="text-sm mt-2">Time Remaining</div>
                   </div>
