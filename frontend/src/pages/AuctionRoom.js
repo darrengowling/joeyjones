@@ -291,7 +291,7 @@ export default function AuctionRoom() {
     if (currentBids.length > 0) {
       const highestBid = Math.max(...currentBids.map((b) => b.amount));
       if (amount <= highestBid) {
-        alert(`Bid must be higher than current highest bid: £${highestBid.toLocaleString()}`);
+        alert(`Strategic bid must exceed current leading bid: £${highestBid.toLocaleString()}`);
         return;
       }
     }
