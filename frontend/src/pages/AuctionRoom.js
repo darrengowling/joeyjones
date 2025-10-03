@@ -592,7 +592,7 @@ export default function AuctionRoom() {
                   </div>
 
                   <div className="mt-6 p-3 bg-yellow-50 border border-yellow-200 rounded-lg text-sm text-gray-700">
-                    ⏱️ Lot will auto-complete when timer expires. Next club will load automatically.
+                    ⏱️ Ownership opportunity will auto-complete when timer expires. Next team will load automatically for strategic bidding.
                   </div>
                 </div>
               ) : (
