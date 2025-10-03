@@ -482,7 +482,7 @@ const Home = () => {
                           {isCommissioner && (
                             <button
                               onClick={(e) => handleDeleteLeague(league, e)}
-                              className="text-red-600 hover:text-red-800 text-sm font-semibold"
+                              className="btn btn-danger text-red-600 hover:text-red-800 text-sm font-semibold"
                               data-testid={`delete-league-${league.id}`}
                             >
                               🗑️ Delete
