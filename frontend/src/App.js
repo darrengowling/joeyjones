@@ -320,7 +320,7 @@ const Home = () => {
               <h2 className="text-2xl font-bold text-gray-900">Join League</h2>
               <button
                 onClick={() => setShowJoinLeagueDialog(false)}
-                className="text-gray-500 hover:text-gray-700"
+                className="btn btn-secondary text-gray-500 hover:text-gray-700"
               >
                 ✕
               </button>
