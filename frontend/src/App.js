@@ -366,7 +366,7 @@ const Home = () => {
               </span>
               <button
                 onClick={() => setShowUserDialog(true)}
-                className="text-sm text-blue-600 hover:underline"
+                className="btn btn-secondary text-sm text-blue-600 hover:underline"
               >
                 Change
               </button>
