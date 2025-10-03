@@ -54,7 +54,7 @@ def main():
     
     user_data = {"name": "Test Manager", "email": "test@example.com"}
     result = test_api_endpoint("POST", "/users", user_data)
-    if "error" in result:
+    if not result or "error" in result:
         log("❌ User creation failed", "ERROR")
         return False
     
