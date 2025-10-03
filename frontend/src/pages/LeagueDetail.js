@@ -207,7 +207,7 @@ export default function LeagueDetail() {
                   className="btn btn-primary px-6 py-3 rounded-lg font-semibold bg-blue-600 text-white hover:bg-blue-700"
                   data-testid="go-to-auction-button"
                 >
-                  Go to Auction
+                  Enter Auction Room
                 </button>
               )}
               
