@@ -454,7 +454,7 @@ const Home = () => {
 
           {/* Active Leagues */}
           <div>
-            <h3 className="text-2xl font-bold mb-4 text-gray-900">Active Leagues</h3>
+            <h3 className="h2 text-2xl font-bold mb-4 text-gray-900">Active Leagues</h3>
             {leagues.length === 0 ? (
               <p className="text-gray-500">No leagues yet. Create one to get started!</p>
             ) : (
