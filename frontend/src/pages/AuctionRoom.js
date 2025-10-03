@@ -394,7 +394,7 @@ export default function AuctionRoom() {
         <div className="max-w-6xl mx-auto">
           <button
             onClick={() => navigate("/")}
-            className="text-white hover:underline mb-4"
+            className="btn btn-secondary text-white hover:underline mb-4"
           >
             ← Back to Home
           </button>
