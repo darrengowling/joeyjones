@@ -405,7 +405,7 @@ export default function AuctionRoom() {
               <div>
                 <div className="stack-md">
                   <h1 className="h1 text-3xl font-bold text-gray-900">
-                    {league ? league.name : "Auction Room"}
+                    {league ? league.name : "Strategic Competition Arena"}
                   </h1>
                   <p className="subtle text-gray-600">
                     Lot #{auction?.currentLot || 0} • Status: {auction?.status || "Unknown"}
