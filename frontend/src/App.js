@@ -423,7 +423,7 @@ const Home = () => {
                   setShowJoinLeagueDialog(true);
                 }
               }}
-              className="bg-blue-600 text-white px-6 py-4 rounded-lg hover:bg-blue-700 text-lg font-semibold"
+              className="btn btn-primary bg-blue-600 text-white px-6 py-4 rounded-lg hover:bg-blue-700 text-lg font-semibold"
               data-testid="join-league-button"
             >
               Join League
