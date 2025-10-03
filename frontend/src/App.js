@@ -354,7 +354,7 @@ const Home = () => {
                   data-testid="invite-token-input"
                 />
                 <p className="text-sm text-gray-500 mt-2">
-                  Get the invite token from your league commissioner
+                  Get the invite token from your competition commissioner to join the strategic arena
                 </p>
               </div>
 
