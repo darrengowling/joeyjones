@@ -430,7 +430,7 @@ const Home = () => {
             </button>
             <button
               onClick={() => navigate("/clubs")}
-              className="bg-purple-600 text-white px-6 py-4 rounded-lg hover:bg-purple-700 text-lg font-semibold"
+              className="btn btn-secondary bg-purple-600 text-white px-6 py-4 rounded-lg hover:bg-purple-700 text-lg font-semibold"
               data-testid="view-clubs-button"
             >
               View All Clubs
