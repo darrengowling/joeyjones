@@ -112,7 +112,7 @@ def main():
     
     # Get auction details
     result = test_api_endpoint("GET", f"/auction/{auction_id}")
-    if "error" in result:
+    if not result or "error" in result:
         log("❌ Get auction failed", "ERROR")
         return False
     
