@@ -326,7 +326,7 @@ export default function LeagueDetail() {
                   <button
                     onClick={recomputeScores}
                     disabled={loadingScores}
-                    className={`px-4 py-2 rounded-lg font-semibold text-sm ${
+                    className={`btn btn-secondary px-4 py-2 rounded-lg font-semibold text-sm ${
                       loadingScores
                         ? "bg-gray-300 text-gray-500 cursor-not-allowed"
                         : "bg-blue-600 text-white hover:bg-blue-700"
