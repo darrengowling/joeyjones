@@ -372,7 +372,7 @@ const Home = () => {
 
       {/* Header */}
       <div className="bg-white shadow-md app-header">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+        <div className="container-narrow mx-auto px-4 py-4 flex justify-between items-center">
           <span data-testid="nav-brand" className="h2">Friends of PIFA</span>
           {user ? (
             <div className="flex items-center gap-4">
