@@ -545,7 +545,7 @@ export default function AuctionRoom() {
                       />
                       <button
                         onClick={placeBid}
-                        className="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 font-semibold text-lg"
+                        className="btn btn-primary bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 font-semibold text-lg"
                         data-testid="place-bid-button"
                       >
                         Place Bid
