@@ -275,7 +275,7 @@ export default function AuctionRoom() {
 
     const amount = parseFloat(bidAmount);
     if (isNaN(amount) || amount <= 0) {
-      alert("Please enter a valid bid amount");
+      alert("Please enter a valid strategic bid amount for team ownership");
       return;
     }
 
