@@ -557,7 +557,7 @@ export default function AuctionRoom() {
                         className="btn btn-primary bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 font-semibold text-lg"
                         data-testid="place-bid-button"
                       >
-                        Place Bid
+                        Claim Ownership
                       </button>
                     </div>
                     {participants.find((p) => p.userId === user?.id) && (
