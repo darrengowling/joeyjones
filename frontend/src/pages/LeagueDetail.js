@@ -191,7 +191,7 @@ export default function LeagueDetail() {
                     }`}
                     data-testid="start-auction-button"
                   >
-                    Start Auction
+                    Begin Strategic Competition
                   </button>
                   {!canStartAuction && (
                     <p className="text-sm text-red-600 mt-2">
