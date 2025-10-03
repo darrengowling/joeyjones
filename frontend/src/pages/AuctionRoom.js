@@ -611,26 +611,28 @@ export default function AuctionRoom() {
             </div>
 
             {/* Clubs Overview */}
-            <div className="bg-white rounded-lg shadow-lg p-6">
-              <h3 className="text-xl font-bold mb-4 text-gray-900">All Clubs in Auction</h3>
+            <div className="app-card bg-white rounded-lg shadow-lg p-6">
+              <h3 className="h2 text-xl font-bold mb-4 text-gray-900">🏆 All Clubs in Auction</h3>
               
               {/* Summary Stats */}
-              <div className="grid grid-cols-2 gap-2 mb-4 text-sm">
-                <div className="bg-blue-50 p-2 rounded">
-                  <div className="font-semibold text-blue-800">Total</div>
-                  <div className="text-blue-600">{clubs.length}</div>
-                </div>
-                <div className="bg-green-50 p-2 rounded">
-                  <div className="font-semibold text-green-800">Sold</div>
-                  <div className="text-green-600">{clubs.filter(c => c.status === 'sold').length}</div>
-                </div>
-                <div className="bg-yellow-50 p-2 rounded">
-                  <div className="font-semibold text-yellow-800">Current</div>
-                  <div className="text-yellow-600">{clubs.filter(c => c.status === 'current').length}</div>
-                </div>
-                <div className="bg-gray-50 p-2 rounded">
-                  <div className="font-semibold text-gray-800">Remaining</div>
-                  <div className="text-gray-600">{clubs.filter(c => c.status === 'upcoming').length}</div>
+              <div className="stack-md">
+                <div className="grid grid-cols-2 gap-2 text-sm">
+                  <div className="chip bg-blue-50 p-2 rounded">
+                    <div className="font-semibold text-blue-800">Total</div>
+                    <div className="text-blue-600">{clubs.length}</div>
+                  </div>
+                  <div className="chip bg-green-50 p-2 rounded">
+                    <div className="font-semibold text-green-800">✅ Sold</div>
+                    <div className="text-green-600">{clubs.filter(c => c.status === 'sold').length}</div>
+                  </div>
+                  <div className="chip bg-yellow-50 p-2 rounded">
+                    <div className="font-semibold text-yellow-800">🔥 Current</div>
+                    <div className="text-yellow-600">{clubs.filter(c => c.status === 'current').length}</div>
+                  </div>
+                  <div className="chip bg-gray-50 p-2 rounded">
+                    <div className="font-semibold text-gray-800">⏳ Remaining</div>
+                    <div className="text-gray-600">{clubs.filter(c => c.status === 'upcoming').length}</div>
+                  </div>
                 </div>
               </div>
 
