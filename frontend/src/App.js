@@ -479,7 +479,7 @@ const Home = () => {
                             <p className="subtle text-gray-600 text-sm">
                               Managers: {league.participantCount || 0}/{league.maxManagers} 
                               {league.participantCount >= league.minManagers && (
-                                <span className="chip text-green-600 ml-2">✓ Ready to start</span>
+                                <span className="chip text-green-600 ml-2">✓ Ready for strategic competition</span>
                               )}
                             </p>
                           </div>
