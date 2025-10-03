@@ -49,7 +49,7 @@ export default function CreateLeague() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 py-8">
       <div className="container mx-auto px-4">
-        <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-lg p-8">
+        <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-lg p-8 app-card">
           <button
             onClick={() => navigate("/")}
             className="text-blue-600 hover:underline mb-4"
