@@ -404,7 +404,7 @@ const Home = () => {
                   setShowCreateLeagueDialog(true);
                 }
               }}
-              className="bg-secondary text-secondary-foreground px-6 py-4 rounded-lg hover:bg-secondary/90 text-lg font-semibold transition-colors"
+              className="bg-green-600 text-white px-6 py-4 rounded-lg hover:bg-green-700 text-lg font-semibold"
               data-testid="create-league-button"
             >
               Create New League
