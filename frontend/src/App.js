@@ -8,7 +8,7 @@ import LeagueDetail from "./pages/LeagueDetail";
 import AuctionRoom from "./pages/AuctionRoom";
 import { ThemeProvider } from "./hooks/useTheme";
 import { ThemeToggle } from "./components/ThemeToggle";
-import { brandTokens } from "./brand/brand.ts";
+// import { brandTokens } from "./brand/brand.ts";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
