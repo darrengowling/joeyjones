@@ -57,9 +57,9 @@ export default function CreateLeague() {
             ← Back to Home
           </button>
 
-          <h1 className="text-3xl font-bold mb-6 text-gray-900">Create New League</h1>
+          <h1 className="h1 text-3xl font-bold mb-6 text-gray-900">⚽ Create New League</h1>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="stack-lg space-y-6">
             <div>
               <label className="block text-gray-700 mb-2 font-semibold">League Name</label>
               <input
