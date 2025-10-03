@@ -212,7 +212,7 @@ export default function LeagueDetail() {
               {isCommissioner && (league.status === "pending" || league.status === "completed") && (
                 <button
                   onClick={deleteLeague}
-                  className="px-6 py-3 rounded-lg font-semibold bg-red-600 text-white hover:bg-red-700"
+                  className="btn btn-danger px-6 py-3 rounded-lg font-semibold bg-red-600 text-white hover:bg-red-700"
                   data-testid="delete-league-button"
                 >
                   Delete League
