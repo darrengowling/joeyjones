@@ -13,6 +13,21 @@ const API = `${BACKEND_URL}/api`;
 const Home = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
+
+  // Set test mode attribute on HTML element to disable animations
+  useEffect(() => {
+    const isTestMode = 
+      process.env.REACT_APP_TEST_MODE === 'true' ||
+      process.env.NODE_ENV === 'test' ||
+      window.location.search.includes('test-mode=true') ||
+      localStorage.getItem('test-mode') === 'true';
+    
+    if (isTestMode) {
+      document.documentElement.setAttribute('data-test-mode', 'true');
+    } else {
+      document.documentElement.removeAttribute('data-test-mode');
+    }
+  }, []);
   const [showUserDialog, setShowUserDialog] = useState(false);
   const [showCreateLeagueDialog, setShowCreateLeagueDialog] = useState(false);
   const [showJoinLeagueDialog, setShowJoinLeagueDialog] = useState(false);
