@@ -101,21 +101,39 @@ export default function ClubsList() {
           </button>
 
           <h1 className="h1 text-3xl font-bold mb-6 text-gray-900">
-            🏆 UCL Teams 2025/26 - Available for Ownership
+            {currentSport ? `${currentSport.name} ${currentSport.uiHints.assetPlural}` : 'Sports Assets'} - Available for Ownership
           </h1>
-          <p className="subtle text-gray-600 mb-6">Explore the teams you can bid for exclusive ownership. Each team you own scores points for your strategic success.</p>
+          <p className="subtle text-gray-600 mb-6">
+            Explore the {currentSport?.uiHints.assetPlural.toLowerCase() || 'assets'} you can bid for exclusive ownership. 
+            Each {currentSport?.uiHints.assetLabel.toLowerCase() || 'asset'} you own scores points for your strategic success.
+          </p>
 
-          {/* Filters */}
-          <div className="grid md:grid-cols-2 gap-4 mb-6">
+          {/* Sport Selection & Search */}
+          <div className="grid md:grid-cols-3 gap-4 mb-6">
             <div>
+              <label className="block text-gray-700 mb-2 font-semibold">Sport</label>
+              <select
+                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                value={selectedSport}
+                onChange={(e) => setSelectedSport(e.target.value)}
+                data-testid="sport-filter-select"
+              >
+                {sports.map((sport) => (
+                  <option key={sport.key} value={sport.key}>
+                    {sport.name} ({sport.uiHints.assetPlural})
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="md:col-span-2">
               <label className="block text-gray-700 mb-2 font-semibold">Search</label>
               <input
                 type="text"
-                placeholder="Search teams available for ownership..."
+                placeholder={`Search ${currentSport?.uiHints.assetPlural.toLowerCase() || 'assets'} available for ownership...`}
                 className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                data-testid="club-search-input"
+                data-testid="asset-search-input"
               />
             </div>
 
