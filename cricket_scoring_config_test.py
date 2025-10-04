@@ -460,6 +460,10 @@ match1,player3,100,2,0,0,1"""
         self.log("✅ Disabled century milestone working correctly")
         
         self.log("✅ Custom scoring application working correctly")
+        
+        # Clean up the test league
+        self.test_api_endpoint("DELETE", f"/leagues/{league_id}")
+        
         return True
     
     def test_schema_precedence(self) -> bool:
