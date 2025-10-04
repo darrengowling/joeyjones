@@ -496,7 +496,7 @@ async def start_auction(league_id: str):
         
         # Emit lot start with standardized timer data
         await sio.emit('lot_started', {
-            'club': Club(**all_clubs[0]).model_dump(),
+            'club': Club(**all_assets[0]).model_dump(),
             'lotNumber': 1,
             'timer': timer_data  # Include standardized timer data
         })
@@ -504,7 +504,7 @@ async def start_auction(league_id: str):
         # Start timer countdown
         asyncio.create_task(countdown_timer(auction_obj.id, timer_end, lot_id))
         
-        logger.info(f"Started auction {auction_obj.id} lot {lot_id} with club: {all_clubs[0]['name']}")
+        logger.info(f"Started auction {auction_obj.id} lot {lot_id} with club: {all_assets[0]['name']}")
         logger.info(f"Timer data - seq: {timer_data['seq']}, endsAt: {timer_data['endsAt']}")
     else:
         logger.error(f"Failed to start auction {auction_obj.id} - no clubs available")
