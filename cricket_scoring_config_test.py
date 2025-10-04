@@ -654,9 +654,9 @@ match4,player6,75,0,0,0,0"""
                     "runOut": 20
                 },
                 "milestones": {
-                    "halfCentury": {"enabled": True, "points": 10},
-                    "century": {"enabled": True, "points": 20},
-                    "fiveWicketHaul": {"enabled": True, "points": 30}
+                    "halfCentury": {"enabled": True, "threshold": 50, "points": 10},
+                    "century": {"enabled": True, "threshold": 100, "points": 20},
+                    "fiveWicketHaul": {"enabled": True, "threshold": 5, "points": 30}
                 }
             }
         }
