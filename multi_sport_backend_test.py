@@ -234,8 +234,8 @@ class MultiSportTester:
             return False
         
         football_leagues_count = len(result)
-        if existing_leagues_count > 0 and football_leagues_count != existing_leagues_count:
-            self.log(f"Football filter returned {football_leagues_count} leagues, expected {existing_leagues_count}", "ERROR")
+        if existing_leagues_count > 0 and football_leagues_count != football_leagues_existing:
+            self.log(f"Football filter returned {football_leagues_count} leagues, expected {football_leagues_existing}", "ERROR")
             return False
         
         self.log(f"✅ GET /api/leagues?sportKey=football returned {football_leagues_count} football leagues")
