@@ -1,7 +1,9 @@
 import { test, expect } from '@playwright/test';
 
 // Guard: Skip cricket tests if SPORTS_CRICKET_ENABLED is not 'true'
-test.describe.configure({ mode: process.env.SPORTS_CRICKET_ENABLED === 'true' ? 'default' : 'skip' });
+if (process.env.SPORTS_CRICKET_ENABLED !== 'true') {
+  test.skip();
+}
 
 test.describe('Cricket Smoke Test', () => {
   test('Cricket API and Scoring Workflow', async ({ page, request }) => {
