@@ -200,8 +200,13 @@ async def create_league(input: LeagueCreate):
     return league_obj
 
 @api_router.get("/leagues", response_model=List[League])
-async def get_leagues():
-    leagues = await db.leagues.find().to_list(100)
+async def get_leagues(sportKey: Optional[str] = None):
+    """Get leagues, optionally filtered by sport"""
+    query = {}
+    if sportKey:
+        query["sportKey"] = sportKey
+    
+    leagues = await db.leagues.find(query).to_list(100)
     return [League(**league) for league in leagues]
 
 @api_router.get("/leagues/search")
