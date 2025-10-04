@@ -264,7 +264,7 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Multi-sport functionality implementation"
+    - "Service layer and assets endpoint functionality"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
