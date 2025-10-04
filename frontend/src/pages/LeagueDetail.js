@@ -76,6 +76,19 @@ export default function LeagueDetail() {
     }
   };
 
+  const loadAssets = async () => {
+    setLoadingAssets(true);
+    try {
+      const response = await axios.get(`${API}/leagues/${leagueId}/assets`);
+      setAssets(response.data.assets || []);
+    } catch (e) {
+      console.error("Error loading assets:", e);
+      setAssets([]);
+    } finally {
+      setLoadingAssets(false);
+    }
+  };
+
   const recomputeScores = async () => {
     setLoadingScores(true);
     try {
