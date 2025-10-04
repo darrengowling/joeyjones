@@ -631,6 +631,12 @@ class CricketScoringTester:
             self.log(f"Expected detailed error for missing file, got: {result}", "ERROR")
             return False
         
+        # Check that the error is about the missing file field
+        error_detail = result["detail"][0]
+        if error_detail.get("loc") != ["body", "file"] or error_detail.get("type") != "missing":
+            self.log(f"Expected missing file field error, got: {error_detail}", "ERROR")
+            return False
+        
         self.log("✅ Missing file correctly handled")
         
         # Test 2: Non-existent league
