@@ -1180,7 +1180,7 @@ match4,player2,15,4,2,0,1"""
         try:
             # Test 404 errors
             result = self.test_endpoint("GET", "/users/nonexistent-id", expected_status=404)
-            if "error" not in result:
+            if "error" not in result or result.get("status_code") != 404:
                 self.log("❌ 404 error not properly handled", "ERROR")
                 return False
                 
