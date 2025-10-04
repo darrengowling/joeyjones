@@ -30,6 +30,31 @@ Football functionality is always available and includes:
 - Comprehensive scoring system
 - League management and standings
 
+## ✅ Setup & Verification Checklist
+
+### Enable Cricket (Optional)
+```bash
+# Enable cricket (optional)
+SPORTS_CRICKET_ENABLED=true
+
+# Seed players
+python scripts/seed_cricket_players.py
+
+# API sanity
+curl /api/sports
+curl "/api/assets?sportKey=cricket&page=1&pageSize=20"
+
+# Manual smoke
+# 1) Create Football league → run quick auction (unchanged)
+# 2) Create Cricket league → auction lists players  
+# 3) Upload sample CSV → leaderboard = 74, 97, 136
+```
+
+**Expected Results:**
+- Both sports work correctly
+- Football unchanged by default
+- Cricket available when enabled
+
 ## 🚨 Emergency Procedures
 
 **Instantly Disable Cricket:**
