@@ -61,8 +61,9 @@ curl "/api/assets?sportKey=cricket&page=1&pageSize=20"
 
 **Expected Results:**
 - Both sports work correctly
-- Football unchanged by default
-- Cricket available when enabled
+- Football unchanged by default (36 clubs, "Club" labels)  
+- Cricket available when enabled (20 players, "Player" labels)
+- /api/sports returns both Football (CLUB) and Cricket (PLAYER) when enabled
 
 ## 🚨 Emergency Procedures
 
