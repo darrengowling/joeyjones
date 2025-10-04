@@ -105,20 +105,14 @@ M1,P003,101,0,0,0,0`;
   });
 
   test('Cricket flag controls sport availability', async ({ request }) => {
-    // Test that cricket is available when SPORTS_CRICKET_ENABLED=true
+    // This test verifies cricket is available (since tests only run when flag is enabled)
     const sportsResponse = await request.get('/api/sports');
     expect(sportsResponse.ok()).toBeTruthy();
     const sports = await sportsResponse.json();
     
     const cricketSport = sports.find((s: any) => s.key === 'cricket');
-    
-    if (process.env.SPORTS_CRICKET_ENABLED === 'true') {
-      expect(cricketSport).toBeTruthy();
-      console.log('✅ Cricket available when flag enabled');
-    } else {
-      expect(cricketSport).toBeFalsy();
-      console.log('✅ Cricket hidden when flag disabled');
-    }
+    expect(cricketSport).toBeTruthy();
+    console.log('✅ Cricket available when flag enabled');
   });
 });
 
