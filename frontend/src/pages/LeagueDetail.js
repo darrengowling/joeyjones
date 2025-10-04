@@ -16,6 +16,9 @@ export default function LeagueDetail() {
   const [loadingScores, setLoadingScores] = useState(false);
   const [sport, setSport] = useState(null);
   const [uiHints, setUiHints] = useState({ assetLabel: "Club", assetPlural: "Clubs" }); // Default to football
+  const [scoringOverrides, setScoringOverrides] = useState(null);
+  const [editingScoring, setEditingScoring] = useState(false);
+  const [savingScoring, setSavingScoring] = useState(false);
 
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
