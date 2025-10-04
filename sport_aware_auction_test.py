@@ -421,7 +421,7 @@ class SportAwareAuctionTester:
         # Test football labels
         if football_sport:
             ui_hints = football_sport.get("uiHints", {})
-            if ui_hints.get("singular") == "Club" and ui_hints.get("plural") == "Clubs":
+            if ui_hints.get("assetLabel") == "Club" and ui_hints.get("assetPlural") == "Clubs":
                 self.log("✅ Football sport has correct labels: Club/Clubs")
             else:
                 self.log(f"Football labels incorrect: {ui_hints}", "ERROR")
@@ -433,7 +433,7 @@ class SportAwareAuctionTester:
         # Test cricket labels
         if cricket_sport:
             ui_hints = cricket_sport.get("uiHints", {})
-            if ui_hints.get("singular") == "Player" and ui_hints.get("plural") == "Players":
+            if ui_hints.get("assetLabel") == "Player" and ui_hints.get("assetPlural") == "Players":
                 self.log("✅ Cricket sport has correct labels: Player/Players")
             else:
                 self.log(f"Cricket labels incorrect: {ui_hints}", "ERROR")
