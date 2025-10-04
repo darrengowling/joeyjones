@@ -331,7 +331,7 @@ const Home = () => {
 
               <div className="mb-4">
                 <label className="block text-gray-700 mb-2 font-semibold">
-                  Club Slots per Manager (1-10)
+                  {sports.find(s => s.key === leagueForm.sportKey)?.uiHints.assetPlural || "Assets"} per Manager (1-10)
                 </label>
                 <input
                   type="number"
