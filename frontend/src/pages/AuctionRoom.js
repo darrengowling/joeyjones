@@ -23,6 +23,8 @@ export default function AuctionRoom() {
   const [league, setLeague] = useState(null);
   const [participants, setParticipants] = useState([]);
   const [currentLotId, setCurrentLotId] = useState(null);
+  const [sport, setSport] = useState(null);
+  const [uiHints, setUiHints] = useState({ assetLabel: "Club", assetPlural: "Clubs" }); // Default to football
 
   // Use the new auction clock hook
   const { remainingMs } = useAuctionClock(socket, currentLotId);
