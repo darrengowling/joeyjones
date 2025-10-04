@@ -49,11 +49,14 @@ curl "/api/assets?sportKey=cricket&page=1&pageSize=20"
 # 2) Create Cricket league → auction lists players  
 # 3) Upload sample CSV → leaderboard = 74, 97, 136
 
-# Sample CSV for step 3:
+# Sample CSV for step 3 (creates fresh match data):
 # matchId,playerExternalId,runs,wickets,catches,stumpings,runOuts
 # M1,P001,54,0,1,0,0
 # M1,P002,12,3,0,0,1  
 # M1,P003,101,0,0,0,0
+#
+# Expected individual match points: P001=74, P002=97, P003=136
+# (Note: Total leaderboard may show higher if previous matches exist)
 ```
 
 **Expected Results:**
