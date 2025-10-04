@@ -105,13 +105,28 @@ class AssetService:
         # Get players for current page, sorted by name
         players_data = await self.db.assets.find(query).sort("name", 1).skip(skip).limit(page_size).to_list(page_size)
         
+        # Convert ObjectIds to strings and clean up data for JSON serialization
+        cleaned_players = []
+        for player in players_data:
+            # Remove MongoDB ObjectId field and ensure proper serialization
+            if "_id" in player:
+                del player["_id"]
+            
+            # Convert datetime objects to ISO strings if present
+            if "createdAt" in player and hasattr(player["createdAt"], "isoformat"):
+                player["createdAt"] = player["createdAt"].isoformat()
+            if "updatedAt" in player and hasattr(player["updatedAt"], "isoformat"):
+                player["updatedAt"] = player["updatedAt"].isoformat()
+            
+            cleaned_players.append(player)
+        
         # Calculate pagination info
         total_pages = math.ceil(total / page_size) if total > 0 else 0
         has_next = page < total_pages
         has_prev = page > 1
         
         return {
-            "assets": players_data,  # Return raw documents since they're not Pydantic models
+            "assets": cleaned_players,
             "pagination": {
                 "page": page,
                 "pageSize": page_size,
