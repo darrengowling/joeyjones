@@ -264,11 +264,8 @@ metadata:
 
 test_plan:
   current_focus:
-    - "UI state synchronization"
-    - "Real-time auction flow"
-  stuck_tasks:
-    - "UI state synchronization"
-    - "Real-time auction flow"
+    - "SPORTS_CRICKET_ENABLED environment variable setup"
+  stuck_tasks: []
   test_all: false
   test_priority: "high_first"
 
