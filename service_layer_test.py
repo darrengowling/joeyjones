@@ -98,7 +98,7 @@ class ServiceLayerTester:
                     self.log(f"Football should have assetType='CLUB', got '{result.get('assetType')}'", "ERROR")
                     return False
                 ui_hints = result.get("uiHints", {})
-                if ui_hints.get("singular") != "Club" or ui_hints.get("plural") != "Clubs":
+                if ui_hints.get("assetLabel") != "Club" or ui_hints.get("assetPlural") != "Clubs":
                     self.log(f"Football UI hints incorrect: {ui_hints}", "ERROR")
                     return False
             
@@ -107,7 +107,7 @@ class ServiceLayerTester:
                     self.log(f"Cricket should have assetType='PLAYER', got '{result.get('assetType')}'", "ERROR")
                     return False
                 ui_hints = result.get("uiHints", {})
-                if ui_hints.get("singular") != "Player" or ui_hints.get("plural") != "Players":
+                if ui_hints.get("assetLabel") != "Player" or ui_hints.get("assetPlural") != "Players":
                     self.log(f"Cricket UI hints incorrect: {ui_hints}", "ERROR")
                     return False
             
