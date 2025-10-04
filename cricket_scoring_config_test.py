@@ -400,17 +400,17 @@ class CricketScoringConfigTester:
         league_check = self.test_api_endpoint("GET", f"/leagues/{league_id}")
         saved_overrides = league_check.get("scoringOverrides")
         if not saved_overrides:
-            self.log("Scoring overrides were not saved properly", "ERROR")
+            self.log(f"Scoring overrides were not saved properly for league {league_id}", "ERROR")
             return False
         
         # Check that milestones have threshold fields
         milestones = saved_overrides.get("milestones", {})
         for milestone_name, milestone_data in milestones.items():
             if "threshold" not in milestone_data:
-                self.log(f"Milestone {milestone_name} missing threshold field", "ERROR")
+                self.log(f"Milestone {milestone_name} missing threshold field. Data: {milestone_data}", "ERROR")
                 return False
         
-        self.log("Scoring overrides verified successfully")
+        self.log(f"Scoring overrides verified successfully for league {league_id}")
         
         # Create test CSV data with custom scoring scenario
         csv_data = """matchId,playerExternalId,runs,wickets,catches,stumpings,runOuts
