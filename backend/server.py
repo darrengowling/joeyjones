@@ -628,17 +628,31 @@ async def get_auction(auction_id: str):
     # Get all bids for this auction
     bids = await db.bids.find({"auctionId": auction_id}).to_list(1000)
     
-    # Get current club if exists
-    current_club = None
+    # Get current asset if exists
+    current_asset = None
     if auction.get("currentClubId"):
-        club = await db.clubs.find_one({"id": auction["currentClubId"]})
-        if club:
-            current_club = Club(**club)
+        # First get the league to determine sport
+        league = await db.leagues.find_one({"id": auction["leagueId"]})
+        sport_key = league.get("sportKey", "football") if league else "football"
+        
+        if sport_key == "football":
+            # Get from clubs collection for football
+            asset = await db.clubs.find_one({"id": auction["currentClubId"]})
+            if asset:
+                current_asset = Club(**asset)
+        else:
+            # Get from assets collection for other sports
+            asset = await db.assets.find_one({"id": auction["currentClubId"]})
+            if asset:
+                # Clean up MongoDB fields for JSON serialization
+                if "_id" in asset:
+                    del asset["_id"]
+                current_asset = asset
     
     return {
         "auction": Auction(**auction),
         "bids": [Bid(**bid) for bid in bids],
-        "currentClub": current_club
+        "currentClub": current_asset  # Keep field name for backward compatibility
     }
 
 @api_router.post("/auction/{auction_id}/bid")
