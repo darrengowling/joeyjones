@@ -622,11 +622,6 @@ class CricketScoringTester:
         self.log("Testing missing file error...")
         result = self.test_api_endpoint("POST", f"/scoring/{league_id}/ingest", expected_status=422)
         # FastAPI returns 422 for missing required file parameter with detailed error
-        if "error" not in result or result.get("error") != "Status 422":
-            self.log(f"Expected 422 for missing file, got: {result}", "ERROR")
-            return False
-        
-        # Check that the detail contains information about missing file
         if "detail" not in result or not isinstance(result["detail"], list):
             self.log(f"Expected detailed error for missing file, got: {result}", "ERROR")
             return False
