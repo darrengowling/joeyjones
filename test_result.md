@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "Add environment variable SPORTS_CRICKET_ENABLED to prepare the application for multisport cricket functionality. This flag should be readable in server configuration to safely toggle cricket features without disrupting existing football auction features."
+user_problem_statement: "Implement complete multi-sport functionality: add environment variable SPORTS_CRICKET_ENABLED, make leagues sport-aware with sportKey field, create sports collection with Football and Cricket configurations, enable sport selection in frontend, and run migration to backfill existing leagues with sportKey:'football'. Enable cricket functionality for user testing."
 
 backend:
   - task: "Database cleanup and reset"
