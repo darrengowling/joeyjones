@@ -75,7 +75,7 @@ class CricketFeatureTester:
                 return False
                 
             # Wait for service to start
-            time.sleep(5)
+            time.sleep(8)
             
             # Check if service is running
             status_result = subprocess.run(['sudo', 'supervisorctl', 'status', 'backend'], 
