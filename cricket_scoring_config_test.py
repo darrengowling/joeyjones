@@ -325,11 +325,38 @@ class CricketScoringConfigTester:
         """Test that custom scoring rules are applied correctly in scoring ingest"""
         self.log("=== Testing Custom Scoring Application ===")
         
-        if "league_id" not in self.test_data:
-            self.log("No league available for testing", "ERROR")
+        if "user_id" not in self.test_data:
+            self.log("No user available for testing", "ERROR")
             return False
         
-        league_id = self.test_data["league_id"]
+        # Create a fresh league for this test to avoid interference
+        league_data = {
+            "name": "Custom Scoring Test League",
+            "commissionerId": self.test_data["user_id"],
+            "budget": 50000000.0,
+            "minManagers": 2,
+            "maxManagers": 4,
+            "clubSlots": 3,
+            "sportKey": "cricket"
+        }
+        
+        result = self.test_api_endpoint("POST", "/leagues", league_data)
+        if "error" in result:
+            self.log("Failed to create custom scoring test league", "ERROR")
+            return False
+        
+        league_id = result.get("id")
+        
+        # Join the league
+        join_data = {
+            "userId": self.test_data["user_id"],
+            "inviteToken": result.get("inviteToken")
+        }
+        
+        join_result = self.test_api_endpoint("POST", f"/leagues/{league_id}/join", join_data)
+        if "error" in join_result:
+            self.log("Failed to join custom scoring test league", "ERROR")
+            return False
         
         # Set custom scoring overrides
         custom_overrides = {
