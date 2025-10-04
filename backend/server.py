@@ -183,6 +183,17 @@ async def get_assets(sportKey: str, search: Optional[str] = None, page: int = 1,
     
     return await asset_service.list_assets(sportKey, search, page, pageSize)
 
+@api_router.get("/leagues/{league_id}/assets")
+async def get_league_assets(league_id: str, search: Optional[str] = None, page: int = 1, pageSize: int = 50):
+    """Get assets for a specific league based on its sportKey"""
+    # Get league to determine sportKey
+    league = await db.leagues.find_one({"id": league_id})
+    if not league:
+        raise HTTPException(status_code=404, detail="League not found")
+    
+    sport_key = league.get("sportKey", "football")  # Default to football for backward compatibility
+    return await asset_service.list_assets(sport_key, search, page, pageSize)
+
 # ===== CLUB ENDPOINTS =====
 @api_router.get("/clubs", response_model=List[Club])
 async def get_clubs():
