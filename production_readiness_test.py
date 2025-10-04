@@ -1186,9 +1186,9 @@ match4,player2,15,4,2,0,1"""
                 
             # Test 400 errors (bad request)
             invalid_user_data = {"email": "invalid-email"}  # Missing name
-            result = self.test_endpoint("POST", "/users", invalid_user_data, expected_status=400)
+            result = self.test_endpoint("POST", "/users", invalid_user_data, expected_status=422)
             # Note: This might return 422 for validation errors, which is also acceptable
-            if "error" not in result and result.get("status_code") not in [400, 422]:
+            if "error" not in result or result.get("status_code") not in [400, 422]:
                 self.log("❌ Bad request error not properly handled", "ERROR")
                 return False
                 
