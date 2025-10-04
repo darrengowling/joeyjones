@@ -34,18 +34,8 @@ class AssetService:
             # For football, return clubs
             return await self._list_clubs(search, page, page_size, skip)
         elif sport_key == 'cricket':
-            # For cricket, return empty until players are seeded
-            return {
-                "assets": [],
-                "pagination": {
-                    "page": page,
-                    "pageSize": page_size,
-                    "total": 0,
-                    "totalPages": 0,
-                    "hasNext": False,
-                    "hasPrev": False
-                }
-            }
+            # For cricket, return players from assets collection
+            return await self._list_cricket_players(search, page, page_size, skip)
         else:
             logger.warning(f"Unknown sport key: {sport_key}")
             return {
