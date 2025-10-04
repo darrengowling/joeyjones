@@ -479,7 +479,7 @@ const Home = () => {
               className="btn btn-primary bg-purple-600 text-white px-6 py-4 rounded-lg hover:bg-purple-700 text-lg font-semibold"
               data-testid="view-clubs-button"
             >
-              Explore Available Assets
+              Explore Available Teams
             </button>
           </div>
 
