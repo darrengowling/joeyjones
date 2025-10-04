@@ -451,6 +451,21 @@ test_plan:
         agent: "testing"
         comment: "CRICKET PLAYER SEEDING TESTING COMPLETED: All functionality working perfectly. ✅ Cricket Player Seeding Verification - 20 cricket players successfully seeded with correct structure (sportKey:'cricket', externalId, name, meta:{franchise, role}). ✅ Cricket Assets Endpoint - GET /api/assets?sportKey=cricket returns all 20 players with proper pagination. ✅ Pagination Functionality - Page and pageSize parameters working correctly. ✅ Search Functionality - Search by name, franchise, and role all working (tested with 'Dhoni' and 'Mumbai'). ✅ Data Integrity - All players have required fields and proper meta structure. ✅ Upsert Functionality - No duplicates created on re-running seeding script. ✅ Football Regression Testing - Football assets endpoint still works correctly, no impact. All 6/6 test areas passed - cricket functionality is production-ready."
 
+  - task: "Cricket scoring ingest system with CSV upload and leaderboard maintenance"
+    implemented: true
+    working: true
+    file: "server.py, services/scoring/cricket.py, scripts/create_league_stats_index.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Implemented complete cricket scoring ingest system: POST /api/scoring/{leagueId}/ingest (commissioner only), CSV parsing with columns (matchId, playerExternalId, runs, wickets, catches, stumpings, runOuts), schema determination (league.scoringOverrides || sports[league.sportKey].scoringSchema), points calculation via get_cricket_points with milestone bonuses, upsert into league_stats with unique index {leagueId, matchId, playerExternalId}, leaderboard projection maintenance, GET /api/scoring/{leagueId}/leaderboard endpoint."
+      - working: true
+        agent: "testing"
+        comment: "CRICKET SCORING INGEST TESTING COMPLETED: All 15/15 test areas passed successfully. ✅ CSV Upload Functionality - POST endpoint working with proper column validation and error handling. ✅ Points Calculation - get_cricket_points function working correctly with milestone bonuses (half-century, century, five-wicket haul). ✅ Database Operations - Upsert functionality working with no double counting on re-upload, unique index prevents duplicates. ✅ Leaderboard Maintenance - cricket_leaderboard collection properly updated with point accumulation across matches. ✅ Schema Precedence - league.scoringOverrides || sports[league.sportKey].scoringSchema logic verified. ✅ Acceptance Criteria - Upload updates leaderboard ✓, re-upload gives identical totals (no double counting) ✓, milestone bonuses working ✓, multi-match accumulation working ✓. Fixed HTTPException handling bug for proper error responses. System is production-ready for cricket scoring operations."
+
   - task: "Multi-sport functionality implementation"
     implemented: true
     working: true
