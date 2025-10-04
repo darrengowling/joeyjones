@@ -44,6 +44,7 @@ class League(BaseModel):
     status: str = "pending"  # pending, active, completed
     inviteToken: str = Field(default_factory=lambda: str(uuid.uuid4())[:8])  # Short token
     createdAt: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    scoringOverrides: Optional[Dict[str, Any]] = None  # Custom scoring rules for cricket leagues
 
 class LeagueCreate(BaseModel):
     name: str
