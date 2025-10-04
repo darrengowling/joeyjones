@@ -21,6 +21,8 @@ from models import (
     Bid, BidCreate,
     LeaguePoints
 )
+from services.sport_service import SportService
+from services.asset_service import AssetService
 from uefa_clubs import UEFA_CL_CLUBS
 from scoring_service import recompute_league_scores, get_league_standings
 
