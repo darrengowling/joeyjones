@@ -413,6 +413,7 @@ match1,player3,100,2,0,0,1"""
             return False
         
         self.log("Scoring data ingested successfully")
+        self.log(f"Ingest details: processedRows={result.get('processedRows')}, updatedRows={result.get('updatedRows')}, leaderboardUpdates={result.get('leaderboardUpdates')}")
         
         # Get leaderboard to verify custom scoring
         leaderboard_result = self.test_api_endpoint("GET", f"/scoring/{league_id}/leaderboard")
