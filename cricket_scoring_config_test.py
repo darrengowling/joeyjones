@@ -147,14 +147,17 @@ class CricketScoringConfigTester:
                 "milestones": {
                     "halfCentury": {
                         "enabled": True,
+                        "threshold": 50,
                         "points": 15
                     },
                     "century": {
                         "enabled": False,
+                        "threshold": 100,
                         "points": 50
                     },
                     "fiveWicketHaul": {
                         "enabled": True,
+                        "threshold": 5,
                         "points": 40
                     }
                 }
