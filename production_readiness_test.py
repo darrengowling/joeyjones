@@ -1317,8 +1317,9 @@ match4,player2,15,4,2,0,1"""
             result2 = self.test_endpoint("POST", f"/leagues/{cricket_league['id']}/join", 
                                        join_cricket, expected_status=403)
             
-            # Both should fail with proper error handling
-            if "error" not in result1 or "error" not in result2:
+            # Both should fail with proper error handling (403 status)
+            if ("error" not in result1 or result1.get("status_code") != 403) or \
+               ("error" not in result2 or result2.get("status_code") != 403):
                 self.log("❌ Multi-tenant error isolation not working", "ERROR")
                 return False
                 
