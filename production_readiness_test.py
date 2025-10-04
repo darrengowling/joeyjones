@@ -915,7 +915,12 @@ match4,player2,15,4,2,0,1"""
                 return False
                 
             # Test existing football auction still works
-            auction_id = self.test_data["auction"]["id"]
+            auction_data = self.test_data.get("auction", {})
+            auction_id = auction_data.get("id")
+            if not auction_id:
+                self.log("❌ No auction available for regression test", "ERROR")
+                return False
+                
             result = self.test_endpoint("GET", f"/auction/{auction_id}")
             if "error" in result:
                 self.log(f"❌ Existing football auction broken: {result['error']}", "ERROR")
@@ -923,7 +928,7 @@ match4,player2,15,4,2,0,1"""
                 
             # Test football bidding still works
             user_id = self.test_data["user"]["id"]
-            current_club = self.test_data["auction"]["current_club"]
+            current_club = auction_data.get("current_club")
             
             bid_data = {
                 "userId": user_id,
