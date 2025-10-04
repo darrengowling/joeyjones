@@ -395,6 +395,18 @@ test_plan:
         agent: "testing"
         comment: "PRODUCTION TESTING PASSED: Clubs list endpoint returns all 36 clubs with correct status information. Upcoming clubs sorted alphabetically (not revealing draw order for strategy). Current club appears first, sold clubs by lot order for history, upcoming clubs alphabetically. Sorting strategy working as designed to hide auction draw order."
 
+  - task: "SPORTS_CRICKET_ENABLED environment variable setup"
+    implemented: true
+    working: "NA"
+    file: "server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Added SPORTS_CRICKET_ENABLED environment variable reading to server.py with default value of false. Created .env.example file with cricket flag. Added logging to confirm feature flag status on server startup."
+
 agent_communication:
   - agent: "main"
     message: "Environment cleaned up successfully. Database cleared of all test data. Found serialization issues in backend that need fixing before testing. Socket.IO paths configured correctly. Ready for systematic testing after fixes."
