@@ -550,6 +550,9 @@ async def ingest_cricket_scoring(league_id: str, file: UploadFile = File(...)):
         
     except UnicodeDecodeError:
         raise HTTPException(status_code=400, detail="Invalid CSV file format. Please ensure the file is UTF-8 encoded.")
+    except HTTPException:
+        # Re-raise HTTPExceptions (like missing columns) without modification
+        raise
     except Exception as e:
         logger.error(f"Error processing CSV: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Error processing CSV file: {str(e)}")
