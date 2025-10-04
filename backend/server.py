@@ -495,8 +495,17 @@ async def start_auction(league_id: str):
         timer_data = create_timer_event(lot_id, ends_at_ms)
         
         # Emit lot start with standardized timer data
+        # For football, use Club model, for others use generic asset data
+        if sport_key == "football":
+            asset_data = Club(**all_assets[0]).model_dump()
+        else:
+            asset_data = all_assets[0].copy()
+            # Remove MongoDB ObjectId if present
+            if "_id" in asset_data:
+                del asset_data["_id"]
+        
         await sio.emit('lot_started', {
-            'club': Club(**all_assets[0]).model_dump(),
+            'club': asset_data,  # Keep 'club' for backward compatibility 
             'lotNumber': 1,
             'timer': timer_data  # Include standardized timer data
         })
@@ -504,11 +513,11 @@ async def start_auction(league_id: str):
         # Start timer countdown
         asyncio.create_task(countdown_timer(auction_obj.id, timer_end, lot_id))
         
-        logger.info(f"Started auction {auction_obj.id} lot {lot_id} with club: {all_assets[0]['name']}")
+        logger.info(f"Started auction {auction_obj.id} lot {lot_id} with asset: {all_assets[0]['name']}")
         logger.info(f"Timer data - seq: {timer_data['seq']}, endsAt: {timer_data['endsAt']}")
     else:
-        logger.error(f"Failed to start auction {auction_obj.id} - no clubs available")
-        raise HTTPException(status_code=500, detail="No clubs available to auction")
+        logger.error(f"Failed to start auction {auction_obj.id} - no assets available")
+        raise HTTPException(status_code=500, detail="No assets available to auction")
     
     return {"message": "Auction created and started", "auctionId": auction_obj.id}
 
