@@ -391,7 +391,9 @@ match1,player3,100,2,0,0,1"""
         
         leaderboard = leaderboard_result.get("leaderboard", [])
         if not leaderboard:
+            # Try to get the ingest response to see what happened
             self.log(f"No leaderboard data returned. Full response: {leaderboard_result}", "ERROR")
+            self.log(f"Ingest result was: {result}", "ERROR")
             return False
         
         # Verify custom scoring calculations
