@@ -35,6 +35,10 @@ mongo_url = os.environ['MONGO_URL']
 client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
 
+# Sports feature flags
+SPORTS_CRICKET_ENABLED = os.environ.get('SPORTS_CRICKET_ENABLED', 'false').lower() == 'true'
+logger.info(f"Cricket feature enabled: {SPORTS_CRICKET_ENABLED}")
+
 # Create Socket.IO server
 sio = socketio.AsyncServer(
     async_mode='asgi',
