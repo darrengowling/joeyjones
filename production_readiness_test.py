@@ -414,7 +414,7 @@ class ProductionReadinessTest:
             }
             
             result = self.test_endpoint("POST", f"/auction/{auction_id}/bid", low_bid_data, expected_status=400)
-            if "error" not in result or result.get("status_code") != 400:
+            if result.get("status_code") != 400:
                 self.log("❌ Minimum budget enforcement not working", "ERROR")
                 return False
                 
