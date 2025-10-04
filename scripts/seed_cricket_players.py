@@ -103,7 +103,7 @@ async def seed_cricket_players():
     cricket_count = await db.assets.count_documents({"sportKey": "cricket"})
     print(f"   Database now contains {cricket_count} cricket players")
     
-    await client.close()
+    client.close()
     return True
 
 if __name__ == "__main__":
