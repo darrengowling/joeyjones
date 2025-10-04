@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "Application has accumulated confusing test data and UI instability. Users experience stuck timers, need manual refreshes, and unusable interface. Goal: Clean up and stabilize to successfully run an auction."
+user_problem_statement: "Add environment variable SPORTS_CRICKET_ENABLED to prepare the application for multisport cricket functionality. This flag should be readable in server configuration to safely toggle cricket features without disrupting existing football auction features."
 
 backend:
   - task: "Database cleanup and reset"
