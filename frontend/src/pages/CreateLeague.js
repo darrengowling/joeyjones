@@ -28,6 +28,20 @@ export default function CreateLeague() {
     }
   }, [navigate]);
 
+  useEffect(() => {
+    // Fetch available sports
+    const fetchSports = async () => {
+      try {
+        const response = await axios.get(`${API}/sports`);
+        setSports(response.data);
+      } catch (error) {
+        console.error("Error fetching sports:", error);
+      }
+    };
+    
+    fetchSports();
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!user) {
