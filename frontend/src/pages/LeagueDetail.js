@@ -11,9 +11,11 @@ export default function LeagueDetail() {
   const [league, setLeague] = useState(null);
   const [participants, setParticipants] = useState([]);
   const [standings, setStandings] = useState([]);
+  const [assets, setAssets] = useState([]);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [loadingScores, setLoadingScores] = useState(false);
+  const [loadingAssets, setLoadingAssets] = useState(false);
   const [sport, setSport] = useState(null);
   const [uiHints, setUiHints] = useState({ assetLabel: "Club", assetPlural: "Clubs" }); // Default to football
   const [scoringOverrides, setScoringOverrides] = useState(null);
