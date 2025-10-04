@@ -452,16 +452,25 @@ async def start_auction(league_id: str):
         {"$set": {"status": "active"}}
     )
     
-    # Get all clubs and randomize order
+    # Get all assets for this sport and randomize order
     import random
-    all_clubs = await db.clubs.find().to_list(100)
-    random.shuffle(all_clubs)
+    all_assets = []
     
-    # Auto-start first club
-    if all_clubs:
-        # Initialize club queue (randomized order)
-        club_queue = [club["id"] for club in all_clubs]
-        first_club_id = club_queue[0]
+    if sport_key == "football":
+        # Get clubs for football
+        all_assets = await db.clubs.find().to_list(100)
+    else:
+        # Get assets from assets collection for other sports
+        assets_data = await db.assets.find({"sportKey": sport_key}).to_list(100)
+        all_assets = assets_data
+    
+    random.shuffle(all_assets)
+    
+    # Auto-start first asset
+    if all_assets:
+        # Initialize asset queue (randomized order)
+        asset_queue = [asset["id"] for asset in all_assets]
+        first_asset_id = asset_queue[0]
         lot_id = f"{auction_obj.id}-lot-1"  # Create lot ID
         timer_end = datetime.now(timezone.utc) + timedelta(seconds=auction_obj.bidTimer)
         
