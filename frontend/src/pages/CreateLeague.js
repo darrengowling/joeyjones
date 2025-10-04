@@ -154,7 +154,7 @@ export default function CreateLeague() {
 
             <div>
               <label className="block text-gray-700 mb-2 font-semibold">
-                Club Slots per Manager
+                {sports.find(s => s.key === form.sportKey)?.uiHints.assetPlural || "Assets"} per Manager
               </label>
               <input
                 type="number"
