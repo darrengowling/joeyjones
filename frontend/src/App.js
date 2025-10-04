@@ -33,8 +33,10 @@ const Home = () => {
   const [showJoinLeagueDialog, setShowJoinLeagueDialog] = useState(false);
   const [userForm, setUserForm] = useState({ name: "", email: "" });
   const [leagues, setLeagues] = useState([]);
+  const [sports, setSports] = useState([]);
   const [leagueForm, setLeagueForm] = useState({
     name: "",
+    sportKey: "football", // Default to football
     budget: 500000000, // £500m default budget
     minManagers: 2,
     maxManagers: 8,
