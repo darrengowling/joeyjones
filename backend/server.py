@@ -42,6 +42,10 @@ db = client[os.environ['DB_NAME']]
 SPORTS_CRICKET_ENABLED = os.environ.get('SPORTS_CRICKET_ENABLED', 'false').lower() == 'true'
 logger.info(f"Cricket feature enabled: {SPORTS_CRICKET_ENABLED}")
 
+# Initialize services
+sport_service = SportService(db)
+asset_service = AssetService(db)
+
 # Create Socket.IO server
 sio = socketio.AsyncServer(
     async_mode='asgi',
