@@ -952,10 +952,17 @@ async def place_bid(auction_id: str, bid_input: BidCreate):
             detail=f"Insufficient budget. You have £{participant['budgetRemaining']:,.0f} remaining"
         )
     
+    # Get current club from auction
+    current_club_id = auction.get("currentClubId")
+    if not current_club_id:
+        raise HTTPException(status_code=400, detail="No club currently being auctioned")
+    
     # Create bid
     bid_obj = Bid(
         auctionId=auction_id,
-        **bid_input.model_dump(),
+        clubId=current_club_id,
+        userId=bid_input.userId,
+        amount=bid_input.amount,
         userName=user["name"],
         userEmail=user["email"]
     )
@@ -965,7 +972,7 @@ async def place_bid(auction_id: str, bid_input: BidCreate):
     await sio.emit('bid_placed', {
         'bid': bid_obj.model_dump(mode='json'),
         'auctionId': auction_id,
-        'clubId': bid_input.clubId
+        'clubId': current_club_id
     }, room=f"auction:{auction_id}")
     
     # Check for anti-snipe
