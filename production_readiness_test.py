@@ -1207,7 +1207,7 @@ match4,player2,15,4,2,0,1"""
             files = {"file": ("invalid.csv", invalid_csv, "text/csv")}
             result = self.test_endpoint("POST", f"/scoring/{cricket_league_id}/ingest", 
                                       files=files, expected_status=400)
-            if "error" not in result:
+            if "error" not in result or result.get("status_code") != 400:
                 self.log("❌ CSV validation error not properly handled", "ERROR")
                 return False
                 
