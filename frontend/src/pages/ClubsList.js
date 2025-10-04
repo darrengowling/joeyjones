@@ -61,12 +61,24 @@ export default function ClubsList() {
     }
   };
 
-  const countries = [...new Set(clubs.map((club) => club.country))].sort();
-
-  const filteredClubs = clubs.filter((club) => {
-    const matchesSearch = club.name.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCountry = selectedCountry === "all" || club.country === selectedCountry;
-    return matchesSearch && matchesCountry;
+  const currentSport = sports.find(s => s.key === selectedSport);
+  const currentAssets = assets[selectedSport] || [];
+  
+  // Dynamic filtering based on sport
+  const filteredAssets = currentAssets.filter((asset) => {
+    const matchesSearch = asset.name.toLowerCase().includes(searchTerm.toLowerCase());
+    
+    if (selectedSport === 'football') {
+      // For football, we can still filter by country if needed
+      return matchesSearch;
+    } else if (selectedSport === 'cricket') {
+      // For cricket, filter by franchise or role
+      const matchesFranchise = asset.meta?.franchise?.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesRole = asset.meta?.role?.toLowerCase().includes(searchTerm.toLowerCase());
+      return matchesSearch || matchesFranchise || matchesRole;
+    }
+    
+    return matchesSearch;
   });
 
   if (loading) {
