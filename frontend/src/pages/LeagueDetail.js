@@ -356,7 +356,7 @@ export default function LeagueDetail() {
 
               {standings.length === 0 ? (
                 <p className="text-gray-500 text-center py-8">
-                  No scores yet. Clubs need to be won in the auction first, then scores can be computed based on Champions League results.
+                  No scores yet. {uiHints.assetPlural} need to be won in the auction first, then scores can be computed based on competition results.
                 </p>
               ) : (
                 <div className="overflow-x-auto">
