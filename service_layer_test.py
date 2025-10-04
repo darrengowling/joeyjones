@@ -242,11 +242,12 @@ class ServiceLayerTester:
         # Test 5: Test missing sportKey parameter
         self.log("Testing missing sportKey parameter...")
         result = self.test_api_endpoint("GET", "/assets", expected_status=422)
-        if "error" not in result:
-            self.log("Missing sportKey should return 422 error", "ERROR")
+        # For 422 status, we get a "detail" field with validation errors
+        if "detail" not in result:
+            self.log("Missing sportKey should return 422 validation error", "ERROR")
             return False
         
-        self.log("✅ Missing sportKey correctly returns 422 error")
+        self.log("✅ Missing sportKey correctly returns 422 validation error")
         
         return True
     
