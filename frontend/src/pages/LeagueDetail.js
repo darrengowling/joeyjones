@@ -312,11 +312,11 @@ export default function LeagueDetail() {
             <ul className="space-y-2 text-gray-700">
               <li className="flex items-start">
                 <span className="text-blue-600 mr-2">•</span>
-                The commissioner starts the auction and selects clubs to bid on
+                The commissioner starts the auction and selects {uiHints.assetPlural.toLowerCase()} to bid on
               </li>
               <li className="flex items-start">
                 <span className="text-blue-600 mr-2">•</span>
-                Each club is auctioned for 60 seconds
+                Each {uiHints.assetLabel.toLowerCase()} is auctioned for 60 seconds
               </li>
               <li className="flex items-start">
                 <span className="text-blue-600 mr-2">•</span>
