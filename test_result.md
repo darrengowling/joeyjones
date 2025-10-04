@@ -264,7 +264,7 @@ metadata:
 
 test_plan:
   current_focus:
-    - "SPORTS_CRICKET_ENABLED environment variable setup"
+    - "Multi-sport functionality implementation"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
