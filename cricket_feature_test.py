@@ -113,13 +113,18 @@ class CricketFeatureTester:
             
     def check_server_startup_logs(self, expected_value):
         """Check if server logs contain cricket feature status"""
-        logs = self.get_backend_logs(100)  # Get more logs for startup
+        # Wait a bit more for logs to be written
+        time.sleep(2)
         
-        # Look for the cricket feature log message
+        logs = self.get_backend_logs(200)  # Get more logs for startup
+        
+        # Look for the cricket feature log message (get the most recent one)
         cricket_log_found = False
         logged_value = None
         
-        for line in logs.split('\n'):
+        # Process lines in reverse order to get the most recent log entry
+        lines = logs.split('\n')
+        for line in reversed(lines):
             if "Cricket feature enabled:" in line:
                 cricket_log_found = True
                 # Extract the boolean value from log
@@ -131,6 +136,9 @@ class CricketFeatureTester:
                 
         if not cricket_log_found:
             self.log("Cricket feature log message not found in startup logs", "ERROR")
+            # Debug: show recent logs
+            recent_lines = [line for line in lines[-20:] if line.strip()]
+            self.log(f"Recent log lines: {recent_lines}")
             return False
             
         if logged_value != expected_value:
