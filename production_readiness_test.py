@@ -477,7 +477,12 @@ class ProductionReadinessTest:
             time.sleep(1)  # Allow connection to establish
             
             # Join auction room
-            auction_id = self.test_data["auction"]["id"]
+            auction_id = self.test_data.get("auction", {}).get("id")
+            if not auction_id:
+                self.log("❌ No auction ID available for Socket.IO test", "ERROR")
+                sio.disconnect()
+                return False
+                
             sio.emit("join_auction", {"auctionId": auction_id})
             time.sleep(2)  # Wait for events
             
