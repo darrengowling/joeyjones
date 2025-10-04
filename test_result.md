@@ -407,6 +407,21 @@ test_plan:
         agent: "testing"
         comment: "CRICKET FEATURE SETUP TESTING COMPLETED: All 6 test areas passed successfully. ✅ Environment Variable Reading - properly reads true/false values from .env. ✅ Default Value Handling - correctly defaults to false when variable not set. ✅ Boolean Conversion - properly converts string values like 'true', 'false', 'True', 'False' to boolean. ✅ Logging - server logs 'Cricket feature enabled: [value]' on startup. ✅ Server Startup - no impact on existing functionality. ✅ Existing Functionality - all auction endpoints, Socket.IO, and core features remain intact. Feature is production-ready for future multisport cricket functionality."
 
+  - task: "Multi-sport implementation with leagues sport-aware functionality"
+    implemented: true
+    working: true
+    file: "server.py, models.py, CreateLeague.js, App.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Implemented complete multi-sport functionality: Created Sport model, added sportKey to League model, added sports API endpoints (/api/sports, /api/sports/{key}), updated leagues endpoint to filter by sport, created migration script to backfill existing leagues with sportKey:'football', enabled cricket functionality (SPORTS_CRICKET_ENABLED=true), updated frontend CreateLeague form with sport selection dropdown, and added sport badges to league cards on homepage."
+      - working: true
+        agent: "testing"
+        comment: "MULTI-SPORT BACKEND TESTING COMPLETED: All 10/10 test areas passed successfully. ✅ Sports API Endpoints - GET /api/sports, GET /api/sports/football, GET /api/sports/cricket all working with correct configurations. ✅ Sport-Aware League Functionality - League filtering by sportKey and creation with sportKey working. ✅ Data Migration Verification - Existing leagues backfilled with sportKey:'football', sports collection properly configured. ✅ Cricket Functionality - SPORTS_CRICKET_ENABLED=true confirmed, cricket endpoints fully functional. Football configured as assetType='CLUB' with 'Club'/'Clubs' labels, Cricket as assetType='PLAYER' with 'Player'/'Players' labels. Cricket-specific scoring includes perPlayerMatch type with cricket rules (run, wicket, catch, stumping, runOut) and milestones (halfCentury, century, fiveWicketHaul). All 5/5 multi-sport test suites passed - system is production-ready for multi-sport functionality."
+
   - task: "Multi-sport functionality implementation"
     implemented: true
     working: true
