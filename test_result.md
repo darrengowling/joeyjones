@@ -478,6 +478,21 @@ test_plan:
         agent: "testing"
         comment: "MULTI-SPORT BACKEND TESTING COMPLETED: Comprehensive testing of newly implemented multi-sport functionality performed. RESULTS: ✅ Sports API Endpoints - GET /api/sports returns both Football and Cricket sports with complete configurations. GET /api/sports/football and GET /api/sports/cricket working correctly with proper assetType (CLUB vs PLAYER) and uiHints (Club/Clubs vs Player/Players). ✅ Sport-Aware League Functionality - GET /api/leagues shows existing leagues with sportKey migration backfill working (9 football, 2 cricket leagues found). GET /api/leagues?sportKey=football and GET /api/leagues?sportKey=cricket filtering working correctly. POST /api/leagues with sportKey field creates new leagues with specified sport successfully. ✅ Data Verification - All existing leagues have been backfilled with sportKey field. Sports collection contains both Football and Cricket with proper schema including auctionTemplate and scoringSchema. ✅ Cricket Functionality Enabled - SPORTS_CRICKET_ENABLED=true confirmed working, cricket sport endpoints accessible, cricket leagues can be created and filtered. Cricket-specific scoring schema with perPlayerMatch type and cricket rules (run, wicket, catch, stumping, runOut) and milestones (halfCentury, century, fiveWicketHaul) properly configured. ALL 5/5 multi-sport test suites passed. Multi-sport migration successful and production-ready."
 
+  - task: "Frontend multi-sport integration and main flow sport selection"
+    implemented: true
+    working: true
+    file: "App.js, CreateLeague.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: false
+        agent: "testing"
+        comment: "CRITICAL ISSUE IDENTIFIED: Create League Sport Dropdown MISSING from main user flow. The sport selection dropdown with data-testid='create-sport-select' was not present in the homepage create league dialog. Two separate implementations found: 1) Inline dialog in App.js (missing sport selection), 2) Separate CreateLeague.js page (has sport selection). Main user flow was using the inline dialog without sport selection. Sports API working correctly, separate CreateLeague page functional, but main flow blocked."
+      - working: true
+        agent: "testing"
+        comment: "CRITICAL ISSUE RESOLVED: Fixed main flow sport selection by updating App.js inline create league dialog. Added sport dropdown with data-testid='create-sport-select', sports API integration, and sport-aware UI labels. TESTING RESULTS: ✅ Sport dropdown now present in main flow dialog with Football/Cricket options. ✅ Cricket selection working with UI label changes ('Players per Manager' vs 'Clubs per Manager'). ✅ Cricket league creation via main flow successful - redirected to league detail page. ✅ Cricket leagues display correctly on homepage with sport badges. ✅ Sports API called and working correctly. ✅ Sport-aware functionality fully operational in main user flow. Multi-sport frontend integration complete and production-ready."
+
   - task: "Service layer and assets endpoint functionality"
     implemented: true
     working: true
