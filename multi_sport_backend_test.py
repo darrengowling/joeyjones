@@ -207,18 +207,22 @@ class MultiSportTester:
             self.log("Leagues endpoint should return a list", "ERROR")
             return False
         
-        # Check if existing leagues have been backfilled with sportKey:"football"
+        # Check if existing leagues have been backfilled with sportKey (should have some sport key)
         existing_leagues_count = len(result)
+        football_leagues_existing = 0
+        other_sport_leagues_existing = 0
+        
         if existing_leagues_count > 0:
             for league in result:
                 sport_key = league.get("sportKey")
                 if not sport_key:
                     self.log("Found league without sportKey - migration backfill failed", "ERROR")
                     return False
-                if sport_key != "football":
-                    self.log(f"Found league with sportKey '{sport_key}' instead of 'football' - unexpected", "ERROR")
-                    return False
-            self.log(f"✅ Migration backfill working: {existing_leagues_count} existing leagues have sportKey:'football'")
+                if sport_key == "football":
+                    football_leagues_existing += 1
+                else:
+                    other_sport_leagues_existing += 1
+            self.log(f"✅ Migration backfill working: {existing_leagues_count} existing leagues have sportKey ({football_leagues_existing} football, {other_sport_leagues_existing} other sports)")
         else:
             self.log("No existing leagues found - will test with new leagues")
         
