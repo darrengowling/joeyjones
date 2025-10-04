@@ -1056,7 +1056,7 @@ match4,player2,15,4,2,0,1"""
                 
             # Test error handling with invalid endpoints
             result = self.test_endpoint("GET", "/nonexistent", expected_status=404)
-            if "error" not in result:
+            if "error" not in result or result.get("status_code") != 404:
                 self.log("❌ Error handling not working for invalid endpoints", "ERROR")
                 return False
                 
