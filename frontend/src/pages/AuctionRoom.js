@@ -237,6 +237,18 @@ export default function AuctionRoom() {
       // Load league
       const leagueResponse = await axios.get(`${API}/leagues/${response.data.auction.leagueId}`);
       setLeague(leagueResponse.data);
+      
+      // Load sport information based on league's sportKey
+      if (leagueResponse.data.sportKey) {
+        try {
+          const sportResponse = await axios.get(`${API}/sports/${leagueResponse.data.sportKey}`);
+          setSport(sportResponse.data);
+          setUiHints(sportResponse.data.uiHints);
+        } catch (e) {
+          console.error("Error loading sport info:", e);
+          // Keep default uiHints for clubs
+        }
+      }
 
       // Load participants
       const participantsResponse = await axios.get(`${API}/leagues/${response.data.auction.leagueId}/participants`);
