@@ -309,6 +309,183 @@ export default function LeagueDetail() {
             </div>
           </div>
 
+          {/* Cricket Scoring Configuration */}
+          {league && league.sportKey === "cricket" && (
+            <div className="bg-green-50 border border-green-200 rounded-lg p-6 mb-8">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-lg font-semibold text-gray-900">Advanced: Scoring (Cricket)</h3>
+                {!editingScoring ? (
+                  <button
+                    onClick={() => {
+                      setEditingScoring(true);
+                      // Initialize form with current overrides or sport defaults
+                      const currentOverrides = league.scoringOverrides || (sport ? sport.scoringSchema : null);
+                      setScoringOverrides(currentOverrides ? JSON.parse(JSON.stringify(currentOverrides)) : getDefaultCricketScoring());
+                    }}
+                    className="btn-secondary px-4 py-2 text-sm"
+                    data-testid="edit-scoring-button"
+                  >
+                    Edit Scoring Rules
+                  </button>
+                ) : (
+                  <div className="flex space-x-2">
+                    <button
+                      onClick={handleSaveScoring}
+                      disabled={savingScoring}
+                      className="btn-primary px-4 py-2 text-sm"
+                      data-testid="save-scoring-button"
+                    >
+                      {savingScoring ? "Saving..." : "Save Changes"}
+                    </button>
+                    <button
+                      onClick={() => {
+                        setEditingScoring(false);
+                        setScoringOverrides(null);
+                      }}
+                      className="btn-secondary px-4 py-2 text-sm"
+                      data-testid="cancel-scoring-button"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {!editingScoring ? (
+                <div>
+                  <p className="text-gray-600 text-sm mb-4">
+                    {league.scoringOverrides ? 
+                      "Using custom scoring rules for this league." : 
+                      "Using default cricket scoring rules."}
+                  </p>
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
+                    {getCurrentScoringDisplay().map((item, index) => (
+                      <div key={index} className="flex justify-between">
+                        <span className="text-gray-600">{item.label}:</span>
+                        <span className="font-semibold">{item.value}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-6">
+                  <div>
+                    <h4 className="font-medium text-gray-900 mb-3">Base Points</h4>
+                    <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+                      <div>
+                        <label className="block text-sm text-gray-600 mb-1">Run</label>
+                        <input
+                          type="number"
+                          min="0"
+                          step="0.1"
+                          value={scoringOverrides?.rules?.run || 0}
+                          onChange={(e) => updateScoringRule("run", parseFloat(e.target.value) || 0)}
+                          className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          data-testid="scoring-run-input"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm text-gray-600 mb-1">Wicket</label>
+                        <input
+                          type="number"
+                          min="0"
+                          step="0.1"
+                          value={scoringOverrides?.rules?.wicket || 0}
+                          onChange={(e) => updateScoringRule("wicket", parseFloat(e.target.value) || 0)}
+                          className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          data-testid="scoring-wicket-input"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm text-gray-600 mb-1">Catch</label>
+                        <input
+                          type="number"
+                          min="0"
+                          step="0.1"
+                          value={scoringOverrides?.rules?.catch || 0}
+                          onChange={(e) => updateScoringRule("catch", parseFloat(e.target.value) || 0)}
+                          className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          data-testid="scoring-catch-input"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm text-gray-600 mb-1">Stumping</label>
+                        <input
+                          type="number"
+                          min="0"
+                          step="0.1"
+                          value={scoringOverrides?.rules?.stumping || 0}
+                          onChange={(e) => updateScoringRule("stumping", parseFloat(e.target.value) || 0)}
+                          className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          data-testid="scoring-stumping-input"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm text-gray-600 mb-1">Run Out</label>
+                        <input
+                          type="number"
+                          min="0"
+                          step="0.1"
+                          value={scoringOverrides?.rules?.runOut || 0}
+                          onChange={(e) => updateScoringRule("runOut", parseFloat(e.target.value) || 0)}
+                          className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          data-testid="scoring-runout-input"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h4 className="font-medium text-gray-900 mb-3">Milestone Bonuses</h4>
+                    <div className="space-y-4">
+                      {["halfCentury", "century", "fiveWicketHaul"].map((milestone) => {
+                        const milestoneData = scoringOverrides?.milestones?.[milestone];
+                        const label = milestone === "halfCentury" ? "Half Century (50+ runs)" : 
+                                    milestone === "century" ? "Century (100+ runs)" : 
+                                    "Five Wicket Haul (5+ wickets)";
+                        
+                        return (
+                          <div key={milestone} className="flex items-center space-x-4">
+                            <label className="flex items-center cursor-pointer">
+                              <input
+                                type="checkbox"
+                                checked={milestoneData?.enabled || false}
+                                onChange={(e) => updateMilestone(milestone, "enabled", e.target.checked)}
+                                className="mr-2"
+                                data-testid={`milestone-${milestone}-enabled`}
+                              />
+                              <span className="text-sm text-gray-700">{label}</span>
+                            </label>
+                            {milestoneData?.enabled && (
+                              <div className="flex items-center space-x-2">
+                                <span className="text-sm text-gray-600">Points:</span>
+                                <input
+                                  type="number"
+                                  min="0"
+                                  step="1"
+                                  value={milestoneData?.points || 0}
+                                  onChange={(e) => updateMilestone(milestone, "points", parseInt(e.target.value) || 0)}
+                                  className="w-20 px-2 py-1 border rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                  data-testid={`milestone-${milestone}-points`}
+                                />
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  <div className="bg-blue-50 p-4 rounded-lg">
+                    <p className="text-sm text-blue-800">
+                      <strong>Note:</strong> Changes will apply to future score ingests. Leave fields blank to use default cricket scoring rules.
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Instructions */}
           <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-3">How It Works</h3>
