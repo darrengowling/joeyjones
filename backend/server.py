@@ -25,6 +25,7 @@ from models import (
 )
 from services.sport_service import SportService
 from services.asset_service import AssetService
+from services.scoring.cricket import get_cricket_points
 from uefa_clubs import UEFA_CL_CLUBS
 from scoring_service import recompute_league_scores, get_league_standings
 
