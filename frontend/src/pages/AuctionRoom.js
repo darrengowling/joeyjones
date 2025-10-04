@@ -617,8 +617,8 @@ export default function AuctionRoom() {
                   </h2>
                   <p className="text-gray-600">
                     {auction?.status === "completed" 
-                      ? "All clubs have been auctioned. Check the standings!" 
-                      : "Clubs auto-load in random order. Next club starting soon..."}
+                      ? `All ${uiHints.assetPlural.toLowerCase()} have been auctioned. Check the standings!` 
+                      : `${uiHints.assetPlural} auto-load in random order. Next ${uiHints.assetLabel.toLowerCase()} starting soon...`}
                   </p>
                 </div>
               )}
