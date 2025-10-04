@@ -14,6 +14,7 @@ from datetime import datetime, timedelta, timezone
 from models import (
     User, UserCreate,
     Club,
+    Sport,
     League, LeagueCreate,
     LeagueParticipant, LeagueParticipantCreate,
     Auction, AuctionCreate,
