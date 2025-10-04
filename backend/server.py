@@ -409,6 +409,178 @@ async def get_standings(league_id: str):
         logger.error(f"Error getting standings: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
+@api_router.post("/scoring/{league_id}/ingest")
+async def ingest_cricket_scoring(league_id: str, file: UploadFile = File(...)):
+    """
+    Ingest cricket scoring data from CSV file (commissioner only)
+    
+    CSV columns: matchId, playerExternalId, runs, wickets, catches, stumpings, runOuts
+    """
+    # Verify league exists and get league data
+    league = await db.leagues.find_one({"id": league_id})
+    if not league:
+        raise HTTPException(status_code=404, detail="League not found")
+    
+    # TODO: Add commissioner authorization check here when auth is implemented
+    # For now, we'll proceed without auth check
+    
+    # Verify this is a cricket league
+    if league.get("sportKey", "football") != "cricket":
+        raise HTTPException(status_code=400, detail="Scoring ingest is only supported for cricket leagues")
+    
+    # Determine scoring schema - use league overrides or sport default
+    scoring_schema = league.get("scoringOverrides")
+    if not scoring_schema:
+        # Get default schema from sport
+        sport = await db.sports.find_one({"key": "cricket"})
+        if not sport:
+            raise HTTPException(status_code=500, detail="Cricket sport configuration not found")
+        scoring_schema = sport.get("scoringSchema")
+    
+    if not scoring_schema:
+        raise HTTPException(status_code=500, detail="No scoring schema available")
+    
+    # Parse CSV file
+    try:
+        content = await file.read()
+        csv_content = content.decode('utf-8')
+        csv_reader = csv.DictReader(io.StringIO(csv_content))
+        
+        # Validate CSV headers
+        expected_columns = {"matchId", "playerExternalId", "runs", "wickets", "catches", "stumpings", "runOuts"}
+        actual_columns = set(csv_reader.fieldnames or [])
+        missing_columns = expected_columns - actual_columns
+        
+        if missing_columns:
+            raise HTTPException(status_code=400, detail=f"Missing required CSV columns: {missing_columns}")
+        
+        # Process each row
+        processed_rows = 0
+        updated_rows = 0
+        leaderboard_updates = {}  # Track points by playerExternalId for leaderboard
+        
+        for row in csv_reader:
+            try:
+                match_id = row["matchId"].strip()
+                player_external_id = row["playerExternalId"].strip()
+                
+                if not match_id or not player_external_id:
+                    logger.warning(f"Skipping row with empty matchId or playerExternalId: {row}")
+                    continue
+                
+                # Prepare performance data for points calculation
+                performance_data = {
+                    "runs": int(row.get("runs", 0)),
+                    "wickets": int(row.get("wickets", 0)),
+                    "catches": int(row.get("catches", 0)),
+                    "stumpings": int(row.get("stumpings", 0)),
+                    "runOuts": int(row.get("runOuts", 0))
+                }
+                
+                # Calculate points using the cricket scoring function
+                points = get_cricket_points(performance_data, scoring_schema)
+                
+                # Prepare document for upsert
+                stat_document = {
+                    "leagueId": league_id,
+                    "matchId": match_id,
+                    "playerExternalId": player_external_id,
+                    "points": points,
+                    "performance": performance_data,
+                    "updatedAt": datetime.now(timezone.utc)
+                }
+                
+                # Upsert into league_stats
+                result = await db.league_stats.update_one(
+                    {
+                        "leagueId": league_id,
+                        "matchId": match_id,
+                        "playerExternalId": player_external_id
+                    },
+                    {"$set": stat_document},
+                    upsert=True
+                )
+                
+                processed_rows += 1
+                if result.upserted_id or result.modified_count > 0:
+                    updated_rows += 1
+                
+                # Track for leaderboard update
+                if player_external_id not in leaderboard_updates:
+                    leaderboard_updates[player_external_id] = 0
+                
+            except (ValueError, KeyError) as e:
+                logger.warning(f"Error processing CSV row {processed_rows + 1}: {str(e)}")
+                continue
+        
+        # Update leaderboard projection - recalculate total points per player
+        leaderboard_results = []
+        for player_external_id in leaderboard_updates:
+            # Calculate total points for this player across all matches
+            pipeline = [
+                {"$match": {"leagueId": league_id, "playerExternalId": player_external_id}},
+                {"$group": {"_id": None, "totalPoints": {"$sum": "$points"}}}
+            ]
+            
+            result = await db.league_stats.aggregate(pipeline).to_list(1)
+            total_points = result[0]["totalPoints"] if result else 0
+            
+            # Update or create leaderboard entry
+            await db.cricket_leaderboard.update_one(
+                {"leagueId": league_id, "playerExternalId": player_external_id},
+                {
+                    "$set": {
+                        "leagueId": league_id,
+                        "playerExternalId": player_external_id,
+                        "totalPoints": total_points,
+                        "updatedAt": datetime.now(timezone.utc)
+                    }
+                },
+                upsert=True
+            )
+            leaderboard_results.append({"playerExternalId": player_external_id, "totalPoints": total_points})
+        
+        return {
+            "message": "Cricket scoring data ingested successfully",
+            "processedRows": processed_rows,
+            "updatedRows": updated_rows,
+            "leaderboardUpdates": len(leaderboard_updates),
+            "leaderboard": sorted(leaderboard_results, key=lambda x: x["totalPoints"], reverse=True)
+        }
+        
+    except UnicodeDecodeError:
+        raise HTTPException(status_code=400, detail="Invalid CSV file format. Please ensure the file is UTF-8 encoded.")
+    except Exception as e:
+        logger.error(f"Error processing CSV: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error processing CSV file: {str(e)}")
+
+@api_router.get("/scoring/{league_id}/leaderboard")
+async def get_cricket_leaderboard(league_id: str):
+    """
+    Get cricket leaderboard for a league
+    """
+    # Verify league exists
+    league = await db.leagues.find_one({"id": league_id})
+    if not league:
+        raise HTTPException(status_code=404, detail="League not found")
+    
+    # Get leaderboard data
+    leaderboard = await db.cricket_leaderboard.find(
+        {"leagueId": league_id}
+    ).sort("totalPoints", -1).to_list(100)
+    
+    return {
+        "leagueId": league_id,
+        "leaderboard": [
+            {
+                "playerExternalId": entry["playerExternalId"],
+                "totalPoints": entry["totalPoints"],
+                "updatedAt": entry["updatedAt"]
+            }
+            for entry in leaderboard
+        ]
+    }
+
 # ===== AUCTION ENDPOINTS =====
 @api_router.post("/leagues/{league_id}/auction/start")
 async def start_auction(league_id: str):
