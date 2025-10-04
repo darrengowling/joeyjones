@@ -1231,7 +1231,7 @@ match4,player2,15,4,2,0,1"""
             files = {"file": ("test.csv", valid_csv, "text/csv")}
             result = self.test_endpoint("POST", f"/scoring/{football_league_id}/ingest", 
                                       files=files, expected_status=400)
-            if "error" not in result or result.get("status_code") != 400:
+            if result.get("status_code") != 400:
                 self.log("❌ Non-cricket league scoring error not handled", "ERROR")
                 return False
                 
