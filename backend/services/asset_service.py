@@ -86,3 +86,38 @@ class AssetService:
                 "hasPrev": has_prev
             }
         }
+    
+    async def _list_cricket_players(self, search: Optional[str], page: int, page_size: int, skip: int) -> Dict[str, Any]:
+        """List cricket players with pagination and search"""
+        # Build query for cricket assets
+        query = {"sportKey": "cricket"}
+        if search:
+            # Case-insensitive search in name, franchise, and role
+            query["$or"] = [
+                {"name": {"$regex": search, "$options": "i"}},
+                {"meta.franchise": {"$regex": search, "$options": "i"}},
+                {"meta.role": {"$regex": search, "$options": "i"}}
+            ]
+        
+        # Get total count for pagination
+        total = await self.db.assets.count_documents(query)
+        
+        # Get players for current page, sorted by name
+        players_data = await self.db.assets.find(query).sort("name", 1).skip(skip).limit(page_size).to_list(page_size)
+        
+        # Calculate pagination info
+        total_pages = math.ceil(total / page_size) if total > 0 else 0
+        has_next = page < total_pages
+        has_prev = page > 1
+        
+        return {
+            "assets": players_data,  # Return raw documents since they're not Pydantic models
+            "pagination": {
+                "page": page,
+                "pageSize": page_size,
+                "total": total,
+                "totalPages": total_pages,
+                "hasNext": has_next,
+                "hasPrev": has_prev
+            }
+        }
