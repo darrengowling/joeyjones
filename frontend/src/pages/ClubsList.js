@@ -14,22 +14,48 @@ export default function ClubsList() {
   const [selectedSport, setSelectedSport] = useState("football");
 
   useEffect(() => {
-    loadClubs();
+    loadSportsAndAssets();
   }, []);
 
-  const loadClubs = async () => {
+  const loadSportsAndAssets = async () => {
     try {
-      const response = await axios.get(`${API}/clubs`);
-      if (response.data.length === 0) {
-        // Seed clubs if empty
-        await axios.post(`${API}/clubs/seed`);
-        const newResponse = await axios.get(`${API}/clubs`);
-        setClubs(newResponse.data);
-      } else {
-        setClubs(response.data);
-      }
+      // Load available sports
+      const sportsResponse = await axios.get(`${API}/sports`);
+      setSports(sportsResponse.data);
+      
+      // Load assets for each sport
+      const assetPromises = sportsResponse.data.map(async (sport) => {
+        try {
+          if (sport.key === 'football') {
+            // Load clubs for football
+            let response = await axios.get(`${API}/clubs`);
+            if (response.data.length === 0) {
+              // Seed clubs if empty
+              await axios.post(`${API}/clubs/seed`);
+              response = await axios.get(`${API}/clubs`);
+            }
+            return { sport: sport.key, assets: response.data };
+          } else {
+            // Load assets for other sports
+            const response = await axios.get(`${API}/assets?sportKey=${sport.key}&pageSize=50`);
+            return { sport: sport.key, assets: response.data.assets || [] };
+          }
+        } catch (e) {
+          console.error(`Error loading ${sport.key} assets:`, e);
+          return { sport: sport.key, assets: [] };
+        }
+      });
+      
+      const assetsData = await Promise.all(assetPromises);
+      const assetsBySport = {};
+      assetsData.forEach(({ sport, assets }) => {
+        assetsBySport[sport] = assets;
+      });
+      
+      setAssets(assetsBySport);
     } catch (e) {
-      console.error("Error loading clubs:", e);
+      console.error("Error loading sports and assets:", e);
+      alert("Error loading sports data");
     } finally {
       setLoading(false);
     }
