@@ -155,33 +155,51 @@ export default function ClubsList() {
             </div>
           </div>
 
-          {/* Clubs Grid */}
+          {/* Assets Grid */}
           <div className="text-gray-600 mb-4">
-            Showing {filteredClubs.length} of {clubs.length} clubs
+            Showing {filteredAssets.length} of {currentAssets.length} {currentSport?.uiHints.assetPlural.toLowerCase() || 'assets'}
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredClubs.map((club) => (
+            {filteredAssets.map((asset) => (
               <div
-                key={club.id}
+                key={asset.id}
                 className="border rounded-lg p-6 hover:shadow-lg transition-shadow bg-white"
-                data-testid={`club-card-${club.id}`}
+                data-testid={`asset-card-${asset.id}`}
               >
-                <h3 className="text-xl font-bold text-gray-900 mb-2">{club.name}</h3>
-                <div className="flex items-center gap-2 text-gray-600">
-                  <span className="text-2xl">{getCountryFlag(club.country)}</span>
-                  <span>{club.country}</span>
-                </div>
-                <div className="mt-2 text-sm text-gray-500">
-                  UEFA ID: {club.uefaId}
-                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">{asset.name}</h3>
+                
+                {selectedSport === 'football' && (
+                  <div>
+                    <div className="flex items-center gap-2 text-gray-600 mb-2">
+                      <span className="text-2xl">{getCountryFlag(asset.country)}</span>
+                      <span>{asset.country}</span>
+                    </div>
+                    <div className="text-sm text-gray-500">
+                      UEFA ID: {asset.uefaId}
+                    </div>
+                  </div>
+                )}
+                
+                {selectedSport === 'cricket' && asset.meta && (
+                  <div>
+                    <div className="text-gray-600 mb-2">
+                      <span className="inline-block bg-blue-100 text-blue-800 px-2 py-1 rounded text-sm mr-2">
+                        {asset.meta.role}
+                      </span>
+                    </div>
+                    <div className="text-sm text-gray-500">
+                      {asset.meta.franchise}
+                    </div>
+                  </div>
+                )}
               </div>
             ))}
           </div>
 
-          {filteredClubs.length === 0 && (
+          {filteredAssets.length === 0 && (
             <div className="text-center text-gray-500 py-8">
-              No clubs found matching your criteria
+              No {currentSport?.uiHints.assetPlural.toLowerCase() || 'assets'} found matching your criteria
             </div>
           )}
         </div>
