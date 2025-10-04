@@ -1,11 +1,7 @@
 import { test, expect } from '@playwright/test';
-import { promises as fs } from 'fs';
-import path from 'path';
 
-// Guard: Only run cricket tests when cricket is enabled
-if (!process.env.SPORTS_CRICKET_ENABLED) {
-  test.skip('Cricket functionality is disabled');
-}
+// Guard: Skip cricket tests if SPORTS_CRICKET_ENABLED is not 'true'
+test.describe.configure({ mode: process.env.SPORTS_CRICKET_ENABLED === 'true' ? 'default' : 'skip' });
 
 test.describe('Cricket Smoke Test', () => {
   let leagueId: string;
