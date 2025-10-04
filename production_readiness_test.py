@@ -80,10 +80,12 @@ class ProductionReadinessTest:
                     error_detail = response.json().get("detail", response.text)
                 except:
                     error_detail = response.text
-                return {"error": f"Status {response.status_code}", "detail": error_detail}
+                return {"error": f"Status {response.status_code}", "detail": error_detail, "status_code": response.status_code}
                 
             try:
-                return response.json()
+                result = response.json()
+                result["status_code"] = response.status_code
+                return result
             except:
                 return {"success": True, "status_code": response.status_code}
                 
