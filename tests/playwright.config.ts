@@ -8,7 +8,7 @@ export default defineConfig({
   workers: 1, // Single worker for auction tests to avoid conflicts
   reporter: 'html',
   use: {
-    baseURL: 'https://real-time-bidding.preview.emergentagent.com',
+    baseURL: 'https://uefa-auction-hub.preview.emergentagent.com',
     trace: 'on-first-retry',
     video: 'retain-on-failure',
     screenshot: 'only-on-failure',
