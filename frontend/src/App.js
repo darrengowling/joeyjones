@@ -474,6 +474,9 @@ const Home = () => {
                           <h4 className="text-xl font-semibold text-gray-900 mb-2">{league.name}</h4>
                           <div className="stack-md">
                             <p className="subtle text-gray-600 text-sm">
+                              <span className="chip bg-blue-100 text-blue-800 px-2 py-1 rounded mr-2">
+                                {league.sportKey === 'football' ? '⚽ Football' : league.sportKey === 'cricket' ? '🏏 Cricket' : league.sportKey}
+                              </span>
                               Budget: £{league.budget.toLocaleString()} | Slots: {league.clubSlots}
                             </p>
                             <p className="subtle text-gray-600 text-sm">
