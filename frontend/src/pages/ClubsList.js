@@ -7,10 +7,11 @@ const API = `${BACKEND_URL}/api`;
 
 export default function ClubsList() {
   const navigate = useNavigate();
-  const [clubs, setClubs] = useState([]);
+  const [assets, setAssets] = useState({ football: [], cricket: [] });
+  const [sports, setSports] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCountry, setSelectedCountry] = useState("all");
+  const [selectedSport, setSelectedSport] = useState("football");
 
   useEffect(() => {
     loadClubs();
