@@ -8,8 +8,10 @@ const API = `${BACKEND_URL}/api`;
 export default function CreateLeague() {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
+  const [sports, setSports] = useState([]);
   const [form, setForm] = useState({
     name: "",
+    sportKey: "football", // Default to football
     budget: 500000000, // £500m default budget
     minManagers: 2,
     maxManagers: 12,
