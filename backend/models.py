@@ -52,6 +52,7 @@ class LeagueCreate(BaseModel):
     minManagers: int = 2
     maxManagers: int = 8
     clubSlots: int = 3
+    sportKey: str = "football"  # Default to football
 
 # League Participant Models
 class LeagueParticipant(BaseModel):
