@@ -175,6 +175,14 @@ async def get_sport(sport_key: str):
         raise HTTPException(status_code=404, detail="Sport not found")
     return sport
 
+@api_router.get("/assets")
+async def get_assets(sportKey: str, search: Optional[str] = None, page: int = 1, pageSize: int = 50):
+    """Get assets for a specific sport with pagination and optional search"""
+    if not sportKey:
+        raise HTTPException(status_code=400, detail="sportKey parameter is required")
+    
+    return await asset_service.list_assets(sportKey, search, page, pageSize)
+
 # ===== CLUB ENDPOINTS =====
 @api_router.get("/clubs", response_model=List[Club])
 async def get_clubs():
