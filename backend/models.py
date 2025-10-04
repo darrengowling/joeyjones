@@ -14,6 +14,15 @@ class UserCreate(BaseModel):
     name: str
     email: str
 
+# Sport Models
+class Sport(BaseModel):
+    key: str
+    name: str
+    assetType: str
+    uiHints: Dict[str, Any]
+    auctionTemplate: Dict[str, Any]
+    scoringSchema: Dict[str, Any]
+
 # Club Models
 class Club(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
