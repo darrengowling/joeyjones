@@ -107,7 +107,6 @@ class Bid(BaseModel):
 
 class BidCreate(BaseModel):
     userId: str
-    clubId: str
     amount: float
 
 # League Points Models (for scoring)
