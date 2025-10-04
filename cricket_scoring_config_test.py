@@ -235,8 +235,9 @@ class CricketScoringConfigTester:
         }
         
         result = self.test_api_endpoint("PUT", f"/leagues/{league_id}/scoring-overrides", invalid_values, expected_status=400)
-        if "error" not in result or "Invalid or missing rule" not in result.get("detail", ""):
-            self.log("Invalid rule values validation failed", "ERROR")
+        detail = result.get("detail", "")
+        if not detail or "Invalid or missing rule" not in detail:
+            self.log(f"Invalid rule values validation failed. Expected error with 'Invalid or missing rule', got: {detail}", "ERROR")
             return False
         
         self.log("✅ Invalid rule values correctly rejected")
