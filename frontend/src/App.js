@@ -267,6 +267,24 @@ const Home = () => {
               </div>
 
               <div className="mb-4">
+                <label className="block text-gray-700 mb-2 font-semibold">Sport</label>
+                <select
+                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={leagueForm.sportKey}
+                  onChange={(e) => setLeagueForm({ ...leagueForm, sportKey: e.target.value })}
+                  data-testid="create-sport-select"
+                >
+                  <option value="football">Football</option>
+                  {sports.find(s => s.key === 'cricket') && (
+                    <option value="cricket">Cricket</option>
+                  )}
+                </select>
+                <p className="text-sm text-gray-500 mt-1">
+                  Choose the sport for your competition
+                </p>
+              </div>
+
+              <div className="mb-4">
                 <label className="block text-gray-700 mb-2 font-semibold">
                   Budget per Manager (£)
                 </label>
