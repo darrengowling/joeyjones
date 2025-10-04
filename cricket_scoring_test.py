@@ -256,8 +256,8 @@ class CricketScoringTester:
         
         # Test 2: Invalid CSV format (missing columns)
         self.log("Testing invalid CSV format...")
-        invalid_data = [{"matchId": "MATCH002", "playerExternalId": "PLAYER004", "runs": "50"}]  # Missing required columns
-        invalid_csv = self.create_test_csv(invalid_data)
+        # Create CSV with truly missing columns (not using create_test_csv)
+        invalid_csv = "matchId,playerExternalId,runs\nMATCH002,PLAYER004,50"
         files = {"file": ("invalid_cricket_scores.csv", invalid_csv, "text/csv")}
         
         result = self.test_api_endpoint("POST", f"/scoring/{league_id}/ingest", files=files, expected_status=400)
