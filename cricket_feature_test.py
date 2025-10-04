@@ -98,9 +98,15 @@ class CricketFeatureTester:
     def get_backend_logs(self, lines=50):
         """Get recent backend logs"""
         try:
-            result = subprocess.run(['tail', '-n', str(lines), '/var/log/supervisor/backend.out.log'], 
-                                  capture_output=True, text=True, timeout=10)
-            return result.stdout
+            # Check both out and err logs for cricket feature messages
+            out_result = subprocess.run(['tail', '-n', str(lines), '/var/log/supervisor/backend.out.log'], 
+                                      capture_output=True, text=True, timeout=10)
+            err_result = subprocess.run(['tail', '-n', str(lines), '/var/log/supervisor/backend.err.log'], 
+                                      capture_output=True, text=True, timeout=10)
+            
+            # Combine both logs
+            combined_logs = out_result.stdout + "\n" + err_result.stdout
+            return combined_logs
         except Exception as e:
             self.log(f"Error getting backend logs: {str(e)}", "ERROR")
             return ""
