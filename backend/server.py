@@ -380,6 +380,67 @@ async def delete_league(league_id: str, commissioner_id: str = None):
         "deletedData": delete_results
     }
 
+@api_router.put("/leagues/{league_id}/scoring-overrides")
+async def update_league_scoring_overrides(league_id: str, request: dict):
+    """Update scoring overrides for a cricket league (commissioner only)"""
+    
+    # Verify league exists
+    league = await db.leagues.find_one({"id": league_id})
+    if not league:
+        raise HTTPException(status_code=404, detail="League not found")
+    
+    # Verify this is a cricket league
+    if league.get("sportKey", "football") != "cricket":
+        raise HTTPException(status_code=400, detail="Scoring overrides are only supported for cricket leagues")
+    
+    # TODO: Add commissioner authorization check when auth is implemented
+    
+    # Get scoring overrides from request
+    scoring_overrides = request.get("scoringOverrides")
+    
+    # Validate scoring overrides structure if provided
+    if scoring_overrides:
+        # Basic validation
+        if "rules" not in scoring_overrides:
+            raise HTTPException(status_code=400, detail="Scoring overrides must include 'rules' section")
+        
+        rules = scoring_overrides["rules"]
+        required_rules = ["run", "wicket", "catch", "stumping", "runOut"]
+        
+        for rule in required_rules:
+            if rule not in rules or not isinstance(rules[rule], (int, float)):
+                raise HTTPException(status_code=400, detail=f"Invalid or missing rule: {rule}")
+        
+        # Validate milestones if provided
+        if "milestones" in scoring_overrides:
+            milestones = scoring_overrides["milestones"]
+            for milestone_name, milestone_data in milestones.items():
+                if not isinstance(milestone_data, dict):
+                    continue
+                if "enabled" in milestone_data and "points" in milestone_data:
+                    if not isinstance(milestone_data["enabled"], bool):
+                        raise HTTPException(status_code=400, detail=f"Milestone {milestone_name} 'enabled' must be boolean")
+                    if not isinstance(milestone_data["points"], (int, float)):
+                        raise HTTPException(status_code=400, detail=f"Milestone {milestone_name} 'points' must be numeric")
+    
+    # Update the league
+    update_data = {
+        "scoringOverrides": scoring_overrides,
+        "updatedAt": datetime.now(timezone.utc)
+    }
+    
+    result = await db.leagues.update_one(
+        {"id": league_id},
+        {"$set": update_data}
+    )
+    
+    if result.modified_count == 0:
+        raise HTTPException(status_code=500, detail="Failed to update scoring overrides")
+    
+    # Return updated league
+    updated_league = await db.leagues.find_one({"id": league_id})
+    return League(**updated_league)
+
 # ===== SCORING ENDPOINTS =====
 @api_router.post("/leagues/{league_id}/score/recompute")
 async def recompute_scores(league_id: str):
