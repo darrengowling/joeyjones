@@ -40,6 +40,7 @@ class League(BaseModel):
     minManagers: int
     maxManagers: int
     clubSlots: int
+    sportKey: str = "football"  # Default to football for backward compatibility
     status: str = "pending"  # pending, active, completed
     inviteToken: str = Field(default_factory=lambda: str(uuid.uuid4())[:8])  # Short token
     createdAt: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
