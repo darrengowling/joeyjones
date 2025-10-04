@@ -155,6 +155,21 @@ async def verify_magic_link(token_input: dict):
         "user": User(**user)
     }
 
+# ===== SPORT ENDPOINTS =====
+@api_router.get("/sports", response_model=List[Sport])
+async def get_sports():
+    """Get all available sports"""
+    sports = await db.sports.find().to_list(100)
+    return [Sport(**sport) for sport in sports]
+
+@api_router.get("/sports/{sport_key}", response_model=Sport)
+async def get_sport(sport_key: str):
+    """Get specific sport by key"""
+    sport = await db.sports.find_one({"key": sport_key})
+    if not sport:
+        raise HTTPException(status_code=404, detail="Sport not found")
+    return Sport(**sport)
+
 # ===== CLUB ENDPOINTS =====
 @api_router.get("/clubs", response_model=List[Club])
 async def get_clubs():
