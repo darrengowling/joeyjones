@@ -581,14 +581,17 @@ match3,player5,50,1,1,0,0"""
                 "milestones": {
                     "halfCentury": {
                         "enabled": False,  # Disabled
+                        "threshold": 50,
                         "points": 50
                     },
                     "century": {
                         "enabled": False,  # Also disabled
+                        "threshold": 100,
                         "points": 100
                     },
                     "fiveWicketHaul": {
                         "enabled": True,
+                        "threshold": 5,
                         "points": 40
                     }
                 }
