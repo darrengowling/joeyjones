@@ -324,11 +324,11 @@ export default function LeagueDetail() {
               </li>
               <li className="flex items-start">
                 <span className="text-blue-600 mr-2">•</span>
-                The highest bidder wins the club when the timer expires
+                The highest bidder wins the {uiHints.assetLabel.toLowerCase()} when the timer expires
               </li>
               <li className="flex items-start">
                 <span className="text-blue-600 mr-2">•</span>
-                Each manager can bid up to their budget across multiple clubs
+                Each manager can bid up to their budget across multiple {uiHints.assetPlural.toLowerCase()}
               </li>
             </ul>
           </div>
