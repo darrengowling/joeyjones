@@ -282,7 +282,7 @@ export default function LeagueDetail() {
                   <span className="font-semibold">{league.maxManagers}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Club Slots:</span>
+                  <span className="text-gray-600">{uiHints.assetLabel} Slots:</span>
                   <span className="font-semibold">{league.clubSlots}</span>
                 </div>
               </div>
