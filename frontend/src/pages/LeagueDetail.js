@@ -160,6 +160,101 @@ export default function LeagueDetail() {
   const isCommissioner = user && league.commissionerId === user.id;
   const canStartAuction = participants.length >= league.minManagers;
 
+  // Helper functions for cricket scoring configuration
+  const getDefaultCricketScoring = () => ({
+    type: "perPlayerMatch",
+    rules: {
+      run: 1,
+      wicket: 25,
+      catch: 10,
+      stumping: 15,
+      runOut: 10
+    },
+    milestones: {
+      halfCentury: {
+        enabled: true,
+        threshold: 50,
+        points: 10
+      },
+      century: {
+        enabled: true,
+        threshold: 100,
+        points: 25
+      },
+      fiveWicketHaul: {
+        enabled: true,
+        threshold: 5,
+        points: 25
+      }
+    }
+  });
+
+  const getCurrentScoringDisplay = () => {
+    const currentScoring = league.scoringOverrides || (sport ? sport.scoringSchema : getDefaultCricketScoring());
+    const rules = currentScoring.rules || {};
+    const milestones = currentScoring.milestones || {};
+    
+    return [
+      { label: "Run", value: `${rules.run || 0} pts` },
+      { label: "Wicket", value: `${rules.wicket || 0} pts` },
+      { label: "Catch", value: `${rules.catch || 0} pts` },
+      { label: "Stumping", value: `${rules.stumping || 0} pts` },
+      { label: "Run Out", value: `${rules.runOut || 0} pts` },
+      { label: "Half Century", value: milestones.halfCentury?.enabled ? `+${milestones.halfCentury.points} pts` : "Disabled" },
+      { label: "Century", value: milestones.century?.enabled ? `+${milestones.century.points} pts` : "Disabled" },
+      { label: "Five Wicket Haul", value: milestones.fiveWicketHaul?.enabled ? `+${milestones.fiveWicketHaul.points} pts` : "Disabled" }
+    ];
+  };
+
+  const updateScoringRule = (rule, value) => {
+    setScoringOverrides(prev => ({
+      ...prev,
+      rules: {
+        ...prev?.rules,
+        [rule]: value
+      }
+    }));
+  };
+
+  const updateMilestone = (milestone, field, value) => {
+    setScoringOverrides(prev => ({
+      ...prev,
+      milestones: {
+        ...prev?.milestones,
+        [milestone]: {
+          ...prev?.milestones?.[milestone],
+          threshold: milestone === "halfCentury" ? 50 : milestone === "century" ? 100 : 5,
+          [field]: value
+        }
+      }
+    }));
+  };
+
+  const handleSaveScoring = async () => {
+    if (!isCommissioner) {
+      alert("Only commissioners can modify scoring rules");
+      return;
+    }
+
+    setSavingScoring(true);
+    try {
+      const response = await axios.put(`${API}/leagues/${leagueId}/scoring-overrides`, {
+        scoringOverrides: scoringOverrides
+      });
+
+      if (response.data) {
+        setLeague(prev => ({ ...prev, scoringOverrides: scoringOverrides }));
+        setEditingScoring(false);
+        alert("Scoring rules updated successfully!");
+      }
+    } catch (error) {
+      console.error("Error saving scoring overrides:", error);
+      alert("Failed to save scoring rules. Please try again.");
+    } finally {
+      setSavingScoring(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 py-8">
       <div className="container-narrow mx-auto px-4">
