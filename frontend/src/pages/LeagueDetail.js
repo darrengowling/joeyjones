@@ -378,6 +378,45 @@ export default function LeagueDetail() {
             )}
           </div>
 
+          {/* Available Assets/Players */}
+          <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 mb-8">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              Available {uiHints.assetPlural} in Competition
+            </h3>
+            {loadingAssets ? (
+              <p className="text-gray-600">Loading {uiHints.assetPlural.toLowerCase()}...</p>
+            ) : assets.length === 0 ? (
+              <p className="text-gray-600">No {uiHints.assetPlural.toLowerCase()} available.</p>
+            ) : (
+              <>
+                <p className="text-gray-600 mb-4">
+                  {assets.length} {uiHints.assetPlural.toLowerCase()} available for auction in this competition.
+                </p>
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 max-h-96 overflow-y-auto">
+                  {assets.map((asset) => (
+                    <div key={asset.id} className="bg-white border rounded-lg p-4">
+                      <h4 className="font-semibold text-gray-900">{asset.name}</h4>
+                      {asset.country && (
+                        <p className="text-sm text-gray-600">{asset.country}</p>
+                      )}
+                      {asset.meta && asset.meta.franchise && (
+                        <p className="text-sm text-blue-600">{asset.meta.franchise}</p>
+                      )}
+                      {asset.meta && asset.meta.role && (
+                        <span className="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded mt-2">
+                          {asset.meta.role}
+                        </span>
+                      )}
+                      {asset.uefaId && (
+                        <p className="text-xs text-gray-500 mt-1">UEFA ID: {asset.uefaId}</p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
+
           {/* League Details */}
           <div className="grid md:grid-cols-2 gap-6 mb-8">
             <div className="bg-gray-50 p-6 rounded-lg">
