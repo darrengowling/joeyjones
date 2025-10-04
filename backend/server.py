@@ -478,11 +478,11 @@ async def start_auction(league_id: str):
             {"id": auction_obj.id},
             {"$set": {
                 "status": "active",
-                "currentClubId": first_club_id,
+                "currentClubId": first_asset_id,
                 "currentLot": 1,
                 "timerEndsAt": timer_end,
                 "currentLotId": lot_id,  # Store lot ID
-                "clubQueue": club_queue,  # Initialize club queue
+                "clubQueue": asset_queue,  # Initialize asset queue
                 "unsoldClubs": [],  # Initialize empty unsold list
                 "minimumBudget": 1000000.0  # £1m minimum budget
             }}
