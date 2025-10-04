@@ -46,7 +46,17 @@ const Home = () => {
 
   useEffect(() => {
     loadLeagues();
+    loadSports();
   }, []);
+
+  const loadSports = async () => {
+    try {
+      const response = await axios.get(`${API}/sports`);
+      setSports(response.data);
+    } catch (e) {
+      console.error("Error loading sports:", e);
+    }
+  };
 
   const loadLeagues = async () => {
     try {
