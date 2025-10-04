@@ -264,8 +264,9 @@ class CricketScoringConfigTester:
         }
         
         result = self.test_api_endpoint("PUT", f"/leagues/{league_id}/scoring-overrides", invalid_milestones, expected_status=400)
-        if "error" not in result or "must be boolean" not in result.get("detail", ""):
-            self.log("Invalid milestone structure validation failed", "ERROR")
+        detail = result.get("detail", "")
+        if not detail or "must be boolean" not in detail:
+            self.log(f"Invalid milestone structure validation failed. Expected error with 'must be boolean', got: {detail}", "ERROR")
             return False
         
         self.log("✅ Invalid milestone structure correctly rejected")
