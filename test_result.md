@@ -422,6 +422,21 @@ test_plan:
         agent: "testing"
         comment: "MULTI-SPORT BACKEND TESTING COMPLETED: All 10/10 test areas passed successfully. ✅ Sports API Endpoints - GET /api/sports, GET /api/sports/football, GET /api/sports/cricket all working with correct configurations. ✅ Sport-Aware League Functionality - League filtering by sportKey and creation with sportKey working. ✅ Data Migration Verification - Existing leagues backfilled with sportKey:'football', sports collection properly configured. ✅ Cricket Functionality - SPORTS_CRICKET_ENABLED=true confirmed, cricket endpoints fully functional. Football configured as assetType='CLUB' with 'Club'/'Clubs' labels, Cricket as assetType='PLAYER' with 'Player'/'Players' labels. Cricket-specific scoring includes perPlayerMatch type with cricket rules (run, wicket, catch, stumping, runOut) and milestones (halfCentury, century, fiveWicketHaul). All 5/5 multi-sport test suites passed - system is production-ready for multi-sport functionality."
 
+  - task: "Service layer and assets endpoint implementation"
+    implemented: true
+    working: true
+    file: "services/sport_service.py, services/asset_service.py, server.py, CreateLeague.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Implemented thin service layer: Created SportService with list_sports(enabled_only=True), get_sport(key), ui_hints(key) methods. Created AssetService with list_assets(sportKey, search, page, pageSize) method. Updated GET /api/sports to filter cricket by SPORTS_CRICKET_ENABLED flag. Added GET /api/assets endpoint with pagination. Updated frontend CreateLeague form with sport dropdown (data-testid='create-sport-select'), defaults to Football, shows Cricket only if available via /api/sports. Server defaults to football if sportKey omitted. No breaking changes made."
+      - working: true
+        agent: "testing"
+        comment: "SERVICE LAYER TESTING COMPLETED: All backend functionality working correctly. ✅ SportService.list_sports() correctly filters cricket based on SPORTS_CRICKET_ENABLED flag (returns Football + Cricket since flag=true). ✅ SportService.get_sport() retrieves individual sports correctly. ✅ AssetService.list_assets() works with pagination for both football (36 clubs) and cricket (empty until seeding). ✅ Updated endpoints working: GET /api/sports returns Football + Cricket, GET /api/assets?sportKey=football returns paginated clubs, GET /api/assets?sportKey=cricket returns empty array. ✅ Backward compatibility maintained: existing leagues API preserved, league creation defaults to football when sportKey omitted, no breaking changes detected. ✅ All 5/5 test suites passed - service layer is production-ready."
+
   - task: "Multi-sport functionality implementation"
     implemented: true
     working: true
