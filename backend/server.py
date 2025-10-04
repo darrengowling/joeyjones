@@ -417,11 +417,26 @@ async def update_league_scoring_overrides(league_id: str, request: dict):
             for milestone_name, milestone_data in milestones.items():
                 if not isinstance(milestone_data, dict):
                     continue
-                if "enabled" in milestone_data and "points" in milestone_data:
+                if "enabled" in milestone_data:
                     if not isinstance(milestone_data["enabled"], bool):
                         raise HTTPException(status_code=400, detail=f"Milestone {milestone_name} 'enabled' must be boolean")
+                if "points" in milestone_data:
                     if not isinstance(milestone_data["points"], (int, float)):
                         raise HTTPException(status_code=400, detail=f"Milestone {milestone_name} 'points' must be numeric")
+                if "threshold" in milestone_data:
+                    if not isinstance(milestone_data["threshold"], (int, float)):
+                        raise HTTPException(status_code=400, detail=f"Milestone {milestone_name} 'threshold' must be numeric")
+                
+                # Ensure all milestones have required threshold values
+                if milestone_data.get("enabled"):
+                    if "threshold" not in milestone_data:
+                        # Set default thresholds if not provided
+                        default_thresholds = {
+                            "halfCentury": 50,
+                            "century": 100,
+                            "fiveWicketHaul": 5
+                        }
+                        milestone_data["threshold"] = default_thresholds.get(milestone_name, 1)
     
     # Update the league
     update_data = {
