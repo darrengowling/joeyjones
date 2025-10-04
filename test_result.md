@@ -437,6 +437,21 @@ test_plan:
         agent: "testing"
         comment: "SERVICE LAYER TESTING COMPLETED: All backend functionality working correctly. ✅ SportService.list_sports() correctly filters cricket based on SPORTS_CRICKET_ENABLED flag (returns Football + Cricket since flag=true). ✅ SportService.get_sport() retrieves individual sports correctly. ✅ AssetService.list_assets() works with pagination for both football (36 clubs) and cricket (empty until seeding). ✅ Updated endpoints working: GET /api/sports returns Football + Cricket, GET /api/assets?sportKey=football returns paginated clubs, GET /api/assets?sportKey=cricket returns empty array. ✅ Backward compatibility maintained: existing leagues API preserved, league creation defaults to football when sportKey omitted, no breaking changes detected. ✅ All 5/5 test suites passed - service layer is production-ready."
 
+  - task: "Cricket player seeding and assets integration"
+    implemented: true
+    working: true
+    file: "scripts/seed_cricket_players.csv, scripts/seed_cricket_players.py, services/asset_service.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Created cricket player seeding functionality: CSV file with 20 cricket players (externalId, name, franchise, role headers), Python seeding script that reads CSV and inserts into assets collection with sportKey:'cricket', upsert on (sportKey, externalId). Updated AssetService to properly return cricket players instead of empty array. Fixed MongoDB ObjectId serialization for JSON API responses."
+      - working: true
+        agent: "testing"
+        comment: "CRICKET PLAYER SEEDING TESTING COMPLETED: All functionality working perfectly. ✅ Cricket Player Seeding Verification - 20 cricket players successfully seeded with correct structure (sportKey:'cricket', externalId, name, meta:{franchise, role}). ✅ Cricket Assets Endpoint - GET /api/assets?sportKey=cricket returns all 20 players with proper pagination. ✅ Pagination Functionality - Page and pageSize parameters working correctly. ✅ Search Functionality - Search by name, franchise, and role all working (tested with 'Dhoni' and 'Mumbai'). ✅ Data Integrity - All players have required fields and proper meta structure. ✅ Upsert Functionality - No duplicates created on re-running seeding script. ✅ Football Regression Testing - Football assets endpoint still works correctly, no impact. All 6/6 test areas passed - cricket functionality is production-ready."
+
   - task: "Multi-sport functionality implementation"
     implemented: true
     working: true
