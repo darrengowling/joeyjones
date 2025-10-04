@@ -254,6 +254,7 @@ class CricketScoringConfigTester:
                 "milestones": {
                     "halfCentury": {
                         "enabled": "invalid",  # Should be boolean
+                        "threshold": 50,
                         "points": 15
                     }
                 }
