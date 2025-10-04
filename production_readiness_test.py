@@ -1197,7 +1197,7 @@ match4,player2,15,4,2,0,1"""
             football_league_id = self.test_data["leagues"]["football"]["id"]
             result = self.test_endpoint("POST", f"/leagues/{football_league_id}/join", 
                                       invalid_join_data, expected_status=403)
-            if "error" not in result:
+            if "error" not in result or result.get("status_code") != 403:
                 self.log("❌ 403 error not properly handled", "ERROR")
                 return False
                 
