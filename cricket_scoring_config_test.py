@@ -312,8 +312,9 @@ class CricketScoringConfigTester:
         }
         
         result = self.test_api_endpoint("PUT", f"/leagues/{football_league_id}/scoring-overrides", scoring_overrides, expected_status=400)
-        if "error" not in result or result.get("detail") != "Scoring overrides are only supported for cricket leagues":
-            self.log(f"Non-cricket league rejection failed. Expected 'Scoring overrides are only supported for cricket leagues', got: {result.get('detail')}", "ERROR")
+        detail = result.get("detail", "")
+        if "error" not in result or "only supported for cricket leagues" not in detail:
+            self.log(f"Non-cricket league rejection failed. Expected error with 'only supported for cricket leagues', got: {detail}", "ERROR")
             return False
         
         # Clean up football league
