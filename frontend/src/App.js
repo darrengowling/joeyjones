@@ -483,67 +483,100 @@ const Home = () => {
             </button>
           </div>
 
-          {/* Active Leagues */}
+          {/* Active Leagues - Compact Horizontal Layout */}
           <div>
-            <h3 className="h2 text-2xl font-bold mb-4 text-gray-900">Active Leagues</h3>
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="h2 text-2xl font-bold text-gray-900">Active Leagues</h3>
+              {leagues.length > 0 && (
+                <p className="text-sm text-gray-500">{leagues.length} competitions</p>
+              )}
+            </div>
             {leagues.length === 0 ? (
-              <p className="text-gray-500">No competitions yet. Create your strategic arena to get started!</p>
+              <div className="text-center py-8 bg-gray-50 rounded-lg">
+                <p className="text-gray-500 text-lg">🏆 No competitions yet</p>
+                <p className="text-gray-400 text-sm mt-2">Create your strategic arena to get started!</p>
+              </div>
             ) : (
-              <div className="grid gap-4">
-                {leagues.map((league) => {
-                  const isCommissioner = user && league.commissionerId === user.id;
-                  return (
-                    <div
-                      key={league.id}
-                      className="border rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer app-card"
-                      onClick={() => navigate(`/league/${league.id}`)}
-                      data-testid={`league-card-${league.id}`}
-                    >
-                      <div className="flex justify-between items-start">
-                        <div className="flex-1">
-                          <h4 className="text-xl font-semibold text-gray-900 mb-2">{league.name}</h4>
-                          <div className="stack-md">
-                            <p className="subtle text-gray-600 text-sm">
-                              <span className="chip bg-blue-100 text-blue-800 px-2 py-1 rounded mr-2">
-                                {league.sportKey === 'football' ? '⚽ Football' : league.sportKey === 'cricket' ? '🏏 Cricket' : league.sportKey}
-                              </span>
-                              Budget: £{league.budget.toLocaleString()} | Slots: {league.clubSlots}
-                            </p>
-                            <p className="subtle text-gray-600 text-sm">
-                              Managers: {league.participantCount || 0}/{league.maxManagers} 
-                              {league.participantCount >= league.minManagers && (
-                                <span className="chip text-green-600 ml-2">✓ Ready for strategic competition</span>
-                              )}
-                            </p>
+              <div className="overflow-x-auto pb-4">
+                <div className="flex space-x-4 min-w-max">
+                  {leagues.map((league) => {
+                    const isCommissioner = user && league.commissionerId === user.id;
+                    const sportIcon = league.sportKey === 'football' ? '⚽' : league.sportKey === 'cricket' ? '🏏' : '🏆';
+                    const sportName = league.sportKey === 'football' ? 'Football' : league.sportKey === 'cricket' ? 'Cricket' : league.sportKey;
+                    
+                    return (
+                      <div
+                        key={league.id}
+                        className="flex-shrink-0 w-72 border rounded-lg p-4 hover:shadow-md transition-all duration-200 cursor-pointer app-card bg-white hover:bg-gray-50"
+                        onClick={() => navigate(`/league/${league.id}`)}
+                        data-testid={`league-card-${league.id}`}
+                      >
+                        <div className="flex items-start justify-between mb-3">
+                          <div className="flex items-center space-x-2">
+                            <span className="text-lg">{sportIcon}</span>
+                            <span className="chip bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs font-medium">
+                              {sportName}
+                            </span>
                           </div>
-                          <p className="text-xs text-gray-500 mt-2">
-                            Invite Token: <code className="bg-gray-100 px-2 py-1 rounded">{league.inviteToken}</code>
-                          </p>
-                        </div>
-                        <div className="flex flex-col items-end gap-2">
-                          <span
-                            className={`chip px-3 py-1 rounded-full text-sm font-semibold ${
-                              league.status === "active"
-                                ? "bg-green-100 text-green-800"
-                                : "bg-gray-100 text-gray-800"
-                            }`}
-                          >
-                            {league.status}
-                          </span>
                           {isCommissioner && (
-                            <button
-                              onClick={(e) => handleDeleteLeague(league, e)}
-                              className="btn btn-danger text-red-600 hover:text-red-800 text-sm font-semibold"
-                              data-testid={`delete-league-${league.id}`}
-                            >
-                              🗑️ Delete
-                            </button>
+                            <span className="chip bg-purple-100 text-purple-800 px-2 py-1 rounded text-xs font-medium">
+                              Commissioner
+                            </span>
                           )}
                         </div>
+                        
+                        <h4 className="text-lg font-semibold text-gray-900 mb-2 truncate" title={league.name}>
+                          {league.name}
+                        </h4>
+                        
+                        <div className="space-y-2 text-sm text-gray-600">
+                          <div className="flex justify-between">
+                            <span>Budget:</span>
+                            <span className="font-medium">£{(league.budget / 1000000).toFixed(0)}M</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Managers:</span>
+                            <span className={`font-medium ${league.participantCount >= league.minManagers ? 'text-green-600' : ''}`}>
+                              {league.participantCount || 0}/{league.maxManagers}
+                            </span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Slots:</span>
+                            <span className="font-medium">{league.clubSlots}</span>
+                          </div>
+                        </div>
+                        
+                        {league.participantCount >= league.minManagers && (
+                          <div className="mt-3 pt-3 border-t border-gray-200">
+                            <span className="text-xs text-green-600 font-medium">✓ Ready for Competition</span>
+                          </div>
+                        )}
+                        
+                        <div className="mt-3 pt-3 border-t border-gray-200">
+                          <p className="text-xs text-gray-500">
+                            Token: <code className="bg-gray-100 px-1 py-0.5 rounded text-xs">{league.inviteToken}</code>
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+                  
+                  {/* Add League Card */}
+                  <div
+                    className="flex-shrink-0 w-72 border-2 border-dashed border-gray-300 rounded-lg p-4 hover:border-blue-400 hover:bg-blue-50 transition-all duration-200 cursor-pointer flex flex-col items-center justify-center text-center"
+                    onClick={() => {
+                      if (!user) {
+                        setShowUserDialog(true);
+                      } else {
+                        setShowCreateLeagueDialog(true);
+                      }
+                    }}
+                  >
+                    <div className="text-4xl mb-3 text-gray-400">+</div>
+                    <h4 className="text-lg font-semibold text-gray-700 mb-2">Create New Competition</h4>
+                    <p className="text-sm text-gray-500">Start your own strategic arena</p>
+                  </div>
+                </div>
               </div>
             )}
           </div>
