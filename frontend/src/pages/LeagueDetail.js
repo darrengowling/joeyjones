@@ -31,6 +31,18 @@ export default function LeagueDetail() {
     try {
       const response = await axios.get(`${API}/leagues/${leagueId}`);
       setLeague(response.data);
+      
+      // Load sport information based on league's sportKey
+      if (response.data.sportKey) {
+        try {
+          const sportResponse = await axios.get(`${API}/sports/${response.data.sportKey}`);
+          setSport(sportResponse.data);
+          setUiHints(sportResponse.data.uiHints);
+        } catch (e) {
+          console.error("Error loading sport info:", e);
+          // Keep default uiHints for clubs
+        }
+      }
     } catch (e) {
       console.error("Error loading league:", e);
       alert("League not found");
