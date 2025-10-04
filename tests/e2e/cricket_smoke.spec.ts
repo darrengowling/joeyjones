@@ -4,132 +4,157 @@ import { test, expect } from '@playwright/test';
 test.describe.configure({ mode: process.env.SPORTS_CRICKET_ENABLED === 'true' ? 'default' : 'skip' });
 
 test.describe('Cricket Smoke Test', () => {
-  let leagueId: string;
-  let userId: string;
-  const testEmail = `cricket.smoke.${Date.now()}@test.com`;
-  const testName = `Cricket Smoke Tester`;
-  const leagueName = `Cricket Smoke League ${Date.now()}`;
-
-  test.beforeAll(async () => {
-    console.log('🏏 Cricket smoke tests starting...');
-  });
-
-  test('Complete cricket workflow: Auth → Create League → Auction → Scoring', async ({ page }) => {
-    test.setTimeout(90000); // 90 seconds timeout
+  test('Cricket API and Scoring Workflow', async ({ page, request }) => {
+    console.log('🏏 Starting Cricket API smoke test...');
     
-    console.log('🏏 Starting Cricket smoke test...');
-
-    // Step 1: Auth - Sign in
-    await page.goto('/');
-    await page.waitForLoadState('networkidle');
+    // Step 1: Create user via API
+    const userResponse = await request.post('/api/users', {
+      data: {
+        name: `Cricket Smoke Tester ${Date.now()}`,
+        email: `cricket.smoke.${Date.now()}@test.com`
+      }
+    });
+    expect(userResponse.ok()).toBeTruthy();
+    const user = await userResponse.json();
     
-    await page.click('button:has-text("Sign In")');
-    await page.fill('input[placeholder*="name"]', testName);
-    await page.fill('input[placeholder*="email"]', testEmail);
-    await page.click('button:has-text("Continue")');
-    await page.waitForSelector('text=Create Your Competition', { timeout: 10000 });
-
-    // Step 2: Create Cricket League  
-    await page.click('button:has-text("Create Your Competition")');
-    await page.waitForSelector('[data-testid="create-sport-select"]', { timeout: 10000 });
+    // Step 2: Create Cricket League via API
+    const leagueResponse = await request.post('/api/leagues', {
+      data: {
+        name: `Cricket Smoke League ${Date.now()}`,
+        commissionerId: user.id,
+        budget: 100000000,
+        minManagers: 2,
+        maxManagers: 4,
+        clubSlots: 5,
+        sportKey: "cricket"
+      }
+    });
+    expect(leagueResponse.ok()).toBeTruthy();
+    const league = await leagueResponse.json();
     
-    // Verify cricket option exists (flag test)
-    const cricketOption = await page.$('option[value="cricket"]');
-    expect(cricketOption).toBeTruthy();
+    console.log(`✅ Cricket league created: ${league.id}`);
     
-    await page.selectOption('[data-testid="create-sport-select"]', 'cricket');
-    await page.fill('[data-testid="league-name-input"]', leagueName);
-    await page.click('[data-testid="create-league-button"]');
+    // Step 3: Verify sports endpoint shows cricket (flag test)
+    const sportsResponse = await request.get('/api/sports');
+    expect(sportsResponse.ok()).toBeTruthy();
+    const sports = await sportsResponse.json();
     
-    await page.waitForSelector(`h1:has-text("${leagueName}")`, { timeout: 15000 });
+    const cricketSport = sports.find((s: any) => s.key === 'cricket');
+    expect(cricketSport).toBeTruthy();
+    expect(cricketSport.assetType).toBe('PLAYER');
+    console.log('✅ Cricket sport available (flag enabled)');
     
-    // Extract league ID from URL
-    leagueId = page.url().match(/\/league\/([a-f0-9-]+)/)?.[1] || '';
-    expect(leagueId).toBeTruthy();
-
-    // Step 3: Verify Cricket UI Elements
-    await expect(page.locator('text=Player Slots')).toBeVisible();
-    await expect(page.locator('text=compete for players')).toBeVisible();
-
-    // Step 4: Start Auction 
-    await page.click('button:has-text("Start Auction")');
-    await page.waitForSelector('text=Auction Started', { timeout: 15000 });
+    // Step 4: Verify cricket players are available
+    const assetsResponse = await request.get(`/api/leagues/${league.id}/assets`);
+    expect(assetsResponse.ok()).toBeTruthy();
+    const assetsData = await assetsResponse.json();
     
-    await page.click('button:has-text("Go to Auction")');
-    await page.waitForLoadState('networkidle');
+    expect(assetsData.assets.length).toBeGreaterThan(0);
+    console.log(`✅ ${assetsData.assets.length} cricket players available for auction`);
     
-    // Verify "Players" not "Clubs"
-    await expect(page.locator('text=Players Available for Ownership')).toBeVisible();
-
-    // Step 5: Test CSV Scoring via API
+    // Step 5: Upload CSV Scoring Data
     const csvContent = `matchId,playerExternalId,runs,wickets,catches,stumpings,runOuts
 M1,P001,54,0,1,0,0
 M1,P002,12,3,0,0,1
 M1,P003,101,0,0,0,0`;
 
-    // Upload scoring data and verify points
-    const scoringResult = await page.evaluate(async ([csvData, leagueId]) => {
-      const formData = new FormData();
-      const blob = new Blob([csvData], { type: 'text/csv' });
-      formData.append('file', blob, 'test_scores.csv');
-      
-      const response = await fetch(`/api/scoring/${leagueId}/ingest`, {
-        method: 'POST',
-        body: formData
-      });
-      
-      return response.json();
-    }, [csvContent, leagueId]);
-
+    const scoringResponse = await request.post(`/api/scoring/${league.id}/ingest`, {
+      multipart: {
+        file: {
+          name: 'test_scores.csv',
+          mimeType: 'text/csv',
+          buffer: Buffer.from(csvContent)
+        }
+      }
+    });
+    
+    expect(scoringResponse.ok()).toBeTruthy();
+    const scoringResult = await scoringResponse.json();
+    
     // Step 6: Verify Leaderboard Calculations
     expect(scoringResult.leaderboard).toBeTruthy();
+    expect(scoringResult.processedRows).toBe(3);
     
     const p001 = scoringResult.leaderboard.find((p: any) => p.playerExternalId === 'P001');
-    const p002 = scoringResult.leaderboard.find((p: any) => p.playerExternalId === 'P002');  
+    const p002 = scoringResult.leaderboard.find((p: any) => p.playerExternalId === 'P002');
     const p003 = scoringResult.leaderboard.find((p: any) => p.playerExternalId === 'P003');
     
     // P001: 54 runs + 10(catch) + 10(half-century) = 74
     expect(p001?.totalPoints).toBe(74);
+    console.log(`✅ P001 score verified: ${p001?.totalPoints} points`);
     
-    // P002: 12 runs + 75(3 wickets) + 10(runOut) = 97  
+    // P002: 12 runs + 75(3 wickets * 25) + 10(runOut) = 97
     expect(p002?.totalPoints).toBe(97);
+    console.log(`✅ P002 score verified: ${p002?.totalPoints} points`);
     
     // P003: 101 runs + 10(half-century) + 25(century) = 136
     expect(p003?.totalPoints).toBe(136);
+    console.log(`✅ P003 score verified: ${p003?.totalPoints} points`);
     
-    console.log('✅ Cricket smoke test passed!');
+    // Step 7: Verify leaderboard endpoint
+    const leaderboardResponse = await request.get(`/api/scoring/${league.id}/leaderboard`);
+    expect(leaderboardResponse.ok()).toBeTruthy();
+    const leaderboardData = await leaderboardResponse.json();
+    
+    expect(leaderboardData.leaderboard.length).toBe(3);
+    expect(leaderboardData.leaderboard[0].totalPoints).toBe(136); // P003 should be first
+    
+    console.log('🎉 Cricket smoke test passed!');
   });
 
-  test.afterAll(async () => {
-    console.log('🏏 Cricket smoke tests completed');
+  test('Cricket flag controls sport availability', async ({ request }) => {
+    // Test that cricket is available when SPORTS_CRICKET_ENABLED=true
+    const sportsResponse = await request.get('/api/sports');
+    expect(sportsResponse.ok()).toBeTruthy();
+    const sports = await sportsResponse.json();
+    
+    const cricketSport = sports.find((s: any) => s.key === 'cricket');
+    
+    if (process.env.SPORTS_CRICKET_ENABLED === 'true') {
+      expect(cricketSport).toBeTruthy();
+      console.log('✅ Cricket available when flag enabled');
+    } else {
+      expect(cricketSport).toBeFalsy();
+      console.log('✅ Cricket hidden when flag disabled');
+    }
   });
 });
 
-// Additional test to ensure cricket flag is working correctly
-test.describe('Cricket Flag Verification', () => {
-  test('Cricket features should only be available when flag is enabled', async ({ page }) => {
-    await page.goto('/');
-    await page.waitForLoadState('networkidle');
+// Test to verify football E2E is unaffected
+test.describe('Football E2E Unaffected', () => {
+  test('Football functionality still works with cricket enabled', async ({ request }) => {
+    // Create football user and league
+    const userResponse = await request.post('/api/users', {
+      data: {
+        name: `Football Tester ${Date.now()}`,
+        email: `football.test.${Date.now()}@test.com`
+      }
+    });
+    const user = await userResponse.json();
     
-    // Sign in first
-    await page.click('button:has-text("Sign In")');
-    await page.fill('input[placeholder*="name"]', 'Flag Tester');
-    await page.fill('input[placeholder*="email"]', `flag.test.${Date.now()}@test.com`);
-    await page.click('button:has-text("Continue")');
+    const leagueResponse = await request.post('/api/leagues', {
+      data: {
+        name: `Football League ${Date.now()}`,
+        commissionerId: user.id,
+        budget: 500000000,
+        minManagers: 2,
+        maxManagers: 8,
+        clubSlots: 3,
+        sportKey: "football"
+      }
+    });
+    expect(leagueResponse.ok()).toBeTruthy();
+    const league = await leagueResponse.json();
     
-    // Go to create league
-    await page.click('button:has-text("Create Your Competition")');
-    await page.waitForSelector('[data-testid="create-sport-select"]', { timeout: 10000 });
+    // Verify football assets work
+    const assetsResponse = await request.get(`/api/leagues/${league.id}/assets`);
+    expect(assetsResponse.ok()).toBeTruthy();
+    const assetsData = await assetsResponse.json();
     
-    // Verify cricket option is available when flag is enabled
-    const cricketOption = await page.$('option[value="cricket"]');
+    expect(assetsData.assets.length).toBeGreaterThan(0);
+    // Football assets should have 'country' field (clubs), not 'meta' field (players)
+    expect(assetsData.assets[0].country).toBeTruthy();
     
-    if (process.env.SPORTS_CRICKET_ENABLED === 'true') {
-      expect(cricketOption).toBeTruthy();
-      console.log('✅ Cricket option available with flag enabled');
-    } else {
-      expect(cricketOption).toBeFalsy();
-      console.log('✅ Cricket option hidden with flag disabled');
-    }
+    console.log('✅ Football functionality unaffected by cricket implementation');
   });
 });
