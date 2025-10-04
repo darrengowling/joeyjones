@@ -444,7 +444,7 @@ const Home = () => {
           <h2 className="h1 text-3xl font-bold mb-6 text-gray-900">Welcome to Friends of PIFA</h2>
           <p className="h2 text-lg font-semibold text-blue-900 mb-2">Sports Gaming with Friends. No Gambling. All Strategy.</p>
           <p className="subtle text-gray-600 mb-8">
-            Bid for exclusive ownership of teams who score your points. Experience the thrill of sports through strategic competition and community.
+            Bid for exclusive ownership of players and teams who score your points. Experience the thrill of sports through strategic competition and community.
           </p>
 
           <div className="grid md:grid-cols-3 gap-6 mb-8">
