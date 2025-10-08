@@ -34,6 +34,65 @@ export default function LeagueDetail() {
     loadParticipants();
     loadStandings();
     loadAssets();
+    
+    // Prompt A: Initialize Socket.IO for real-time member updates
+    const initializeSocket = () => {
+      if (socket) {
+        socket.disconnect();
+      }
+      
+      socket = io(BACKEND_URL, {
+        path: '/api/socket.io',
+        transports: ['websocket', 'polling']
+      });
+      
+      // Join league room
+      socket.emit('join_league_room', { leagueId });
+      
+      // Handle member updates
+      socket.on('member_joined', (data) => {
+        console.log('Member joined:', data);
+        setParticipants(prev => {
+          // Check if member already exists to avoid duplicates
+          const exists = prev.some(p => p.userId === data.userId);
+          if (exists) return prev;
+          
+          // Add new member (convert to participant format)
+          const newParticipant = {
+            userId: data.userId,
+            userName: data.displayName,
+            joinedAt: data.joinedAt
+          };
+          return [...prev, newParticipant];
+        });
+      });
+      
+      // Handle sync_members for reconciliation
+      socket.on('sync_members', (data) => {
+        console.log('Sync members:', data);
+        if (data.members) {
+          // Convert members to participant format and update
+          const updatedParticipants = data.members.map(member => ({
+            userId: member.userId,
+            userName: member.displayName,
+            joinedAt: member.joinedAt
+          }));
+          setParticipants(updatedParticipants);
+        }
+      });
+      
+      return () => {
+        if (socket) {
+          socket.emit('leave_league', { leagueId });
+          socket.disconnect();
+          socket = null;
+        }
+      };
+    };
+    
+    const cleanupSocket = initializeSocket();
+    
+    return cleanupSocket;
   }, [leagueId]);
 
   const loadLeague = async () => {
