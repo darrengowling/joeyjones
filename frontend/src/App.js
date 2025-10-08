@@ -79,19 +79,49 @@ const Home = () => {
 
   const handleUserSubmit = async (e) => {
     e.preventDefault();
-    if (!userForm.name || !userForm.email) {
-      alert("Please enter both name and email");
+    setAuthError("");
+    setAuthLoading(true);
+
+    // Enhanced validation
+    if (!userForm.name?.trim()) {
+      setAuthError("Name is required");
+      setAuthLoading(false);
+      return;
+    }
+
+    if (!userForm.email?.trim()) {
+      setAuthError("Email is required");
+      setAuthLoading(false);
+      return;
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(userForm.email)) {
+      setAuthError("Please enter a valid email address");
+      setAuthLoading(false);
       return;
     }
 
     try {
-      const response = await axios.post(`${API}/users`, userForm);
-      setUser(response.data);
-      localStorage.setItem("user", JSON.stringify(response.data));
+      // Simulate brief loading for better UX
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      const userData = {
+        id: Date.now().toString(),
+        name: userForm.name.trim(),
+        email: userForm.email.trim().toLowerCase(),
+      };
+
+      setUser(userData);
+      localStorage.setItem("user", JSON.stringify(userData));
       setShowUserDialog(false);
-    } catch (e) {
-      console.error("Error creating user:", e);
-      alert("Error creating user");
+      setUserForm({ name: "", email: "" });
+      setAuthError("");
+    } catch (error) {
+      setAuthError("Something went wrong. Please try again.");
+    } finally {
+      setAuthLoading(false);
     }
   };
 
