@@ -285,10 +285,14 @@ async def seed_clubs():
     return {"message": f"Seeded {len(clubs)} UEFA Champions League clubs"}
 
 # ===== LEAGUE ENDPOINTS =====
-@api_router.post("/leagues", response_model=League)
+@api_router.post("/leagues", response_model=League, dependencies=[RateLimiter(times=5, seconds=300)])
 async def create_league(input: LeagueCreate):
     league_obj = League(**input.model_dump())
     await db.leagues.insert_one(league_obj.model_dump())
+    
+    # Metrics: Track league creation
+    metrics.increment_league_created(input.sportKey)
+    
     return league_obj
 
 @api_router.get("/leagues", response_model=List[League])
