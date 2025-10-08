@@ -352,6 +352,64 @@ async def get_league_members(league_id: str):
     
     return members
 
+@api_router.put("/leagues/{league_id}/assets")
+async def update_league_assets(league_id: str, asset_ids: List[str]):
+    """Prompt E: Update selected assets for league (commissioner only)"""
+    # Verify league exists
+    league = await db.leagues.find_one({"id": league_id})
+    if not league:
+        raise HTTPException(status_code=404, detail="League not found")
+    
+    # Check if auction has started (block edits after start)
+    existing_auction = await db.auctions.find_one({"leagueId": league_id})
+    if existing_auction:
+        raise HTTPException(status_code=400, detail="Cannot edit teams after auction has started")
+    
+    # Validate that all asset IDs exist for this sport
+    sport_key = league.get("sportKey", "football")
+    if sport_key == "football":
+        # Validate club IDs
+        valid_assets = await db.clubs.find({"id": {"$in": asset_ids}}).to_list(len(asset_ids))
+    else:
+        # Validate other sport assets
+        valid_assets = await db.assets.find({
+            "id": {"$in": asset_ids},
+            "sportKey": sport_key
+        }).to_list(len(asset_ids))
+    
+    if len(valid_assets) != len(asset_ids):
+        raise HTTPException(status_code=400, detail="Some asset IDs are invalid")
+    
+    if len(asset_ids) == 0:
+        raise HTTPException(status_code=400, detail="Must select at least one team for the auction")
+    
+    # Update league with selected assets
+    await db.leagues.update_one(
+        {"id": league_id},
+        {"$set": {"assetsSelected": asset_ids}}
+    )
+    
+    return {"message": f"Updated league with {len(asset_ids)} selected teams", "count": len(asset_ids)}
+
+@api_router.get("/leagues/{league_id}/available-assets")
+async def get_available_assets_for_league(league_id: str):
+    """Prompt E: Get all available assets that can be selected for a league"""
+    # Get league to determine sport
+    league = await db.leagues.find_one({"id": league_id})
+    if not league:
+        raise HTTPException(status_code=404, detail="League not found")
+    
+    sport_key = league.get("sportKey", "football")
+    
+    if sport_key == "football":
+        # Get all clubs
+        assets = await db.clubs.find().to_list(100)
+        return [{"id": asset["id"], "name": asset["name"], "country": asset.get("country")} for asset in assets]
+    else:
+        # Get assets for other sports
+        assets = await db.assets.find({"sportKey": sport_key}).to_list(100)
+        return [{"id": asset["id"], "name": asset["name"], "meta": asset.get("meta")} for asset in assets]
+
 @api_router.delete("/leagues/{league_id}")
 async def delete_league(league_id: str, commissioner_id: str = None):
     """Delete a league and all associated data - only commissioner can do this"""
