@@ -601,10 +601,19 @@ export default function AuctionRoom() {
                       />
                       <button
                         onClick={placeBid}
-                        className="btn btn-primary bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 font-semibold text-lg"
+                        disabled={participants.find((p) => p.userId === user?.id)?.clubsWon?.length >= (league?.clubSlots || 3)}
+                        className={`btn btn-primary px-8 py-3 rounded-lg font-semibold text-lg ${
+                          participants.find((p) => p.userId === user?.id)?.clubsWon?.length >= (league?.clubSlots || 3) 
+                            ? 'bg-gray-400 cursor-not-allowed' 
+                            : 'bg-blue-600 text-white hover:bg-blue-700'
+                        }`}
                         data-testid="place-bid-button"
+                        title={participants.find((p) => p.userId === user?.id)?.clubsWon?.length >= (league?.clubSlots || 3) ? "Roster full" : ""}
                       >
-                        Claim Ownership
+                        {participants.find((p) => p.userId === user?.id)?.clubsWon?.length >= (league?.clubSlots || 3) 
+                          ? "Roster Full" 
+                          : "Claim Ownership"
+                        }
                       </button>
                     </div>
                     {participants.find((p) => p.userId === user?.id) && (
