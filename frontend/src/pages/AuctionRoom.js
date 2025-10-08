@@ -440,6 +440,40 @@ export default function AuctionRoom() {
             ← Back to Home
           </button>
 
+          {/* Prompt G: Top strip with league info and progress */}
+          {league && auction && (
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+              <div className="flex justify-between items-center">
+                <div className="flex items-center space-x-6">
+                  <div>
+                    <span className="text-sm font-medium text-blue-800">League:</span>
+                    <span className="text-sm text-blue-600 ml-1">{league.name}</span>
+                  </div>
+                  <div>
+                    <span className="text-sm font-medium text-blue-800">Progress:</span>
+                    <span className="text-sm text-blue-600 ml-1">
+                      Lot {auction.currentLot || 0} / {auction.clubQueue?.length || 0}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-sm font-medium text-blue-800">Managers with slots left:</span>
+                    <span className="text-sm text-blue-600 ml-1">
+                      {participants.filter(p => (p.clubsWon?.length || 0) < (league.clubSlots || 3)).map(p => {
+                        const slotsLeft = (league.clubSlots || 3) - (p.clubsWon?.length || 0);
+                        return `${p.userName}=${slotsLeft}`;
+                      }).join(', ') || 'None'}
+                    </span>
+                  </div>
+                </div>
+                {auction.status === "completed" && (
+                  <div className="bg-green-100 text-green-800 px-3 py-1 rounded text-sm font-medium">
+                    ✅ Auction Complete
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
           {/* Auction Header */}
           <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
             <div className="flex justify-between items-center">
