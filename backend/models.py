@@ -45,6 +45,9 @@ class League(BaseModel):
     inviteToken: str = Field(default_factory=lambda: str(uuid.uuid4())[:8])  # Short token
     createdAt: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     scoringOverrides: Optional[Dict[str, Any]] = None  # Custom scoring rules for cricket leagues
+    # Prompt D: Timer configuration
+    timerSeconds: int = 30  # Default 30s (reduced from 60s)
+    antiSnipeSeconds: int = 10  # Default 10s (reduced from 30s)
 
 class LeagueCreate(BaseModel):
     name: str
