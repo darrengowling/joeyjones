@@ -574,6 +574,105 @@ export default function LeagueDetail() {
             </div>
           </div>
 
+          {/* Prompt E: Team Management for Commissioner */}
+          {league && user && league.commissionerId === user.id && (
+            <div className="bg-purple-50 border border-purple-200 rounded-lg p-6 mb-8">
+              <div className="flex justify-between items-center mb-4">
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900">Manage {uiHints.assetPlural}</h3>
+                  <p className="text-sm text-gray-600 mt-1">
+                    Choose which {uiHints.assetPlural.toLowerCase()} will be available in your auction
+                  </p>
+                </div>
+                {!editingAssets ? (
+                  <button
+                    onClick={() => {
+                      setEditingAssets(true);
+                      loadAvailableAssets();
+                    }}
+                    className="btn-secondary px-4 py-2 text-sm"
+                    data-testid="manage-teams-button"
+                  >
+                    Select {uiHints.assetPlural}
+                  </button>
+                ) : (
+                  <div className="flex space-x-2">
+                    <button
+                      onClick={saveAssetSelection}
+                      disabled={loadingAssetSelection}
+                      className="btn-primary px-4 py-2 text-sm"
+                      data-testid="save-teams-button"
+                    >
+                      {loadingAssetSelection ? "Saving..." : "Save Selection"}
+                    </button>
+                    <button
+                      onClick={() => setEditingAssets(false)}
+                      className="btn-secondary px-4 py-2 text-sm"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {editingAssets ? (
+                <div>
+                  <div className="mb-4 p-3 bg-blue-50 rounded">
+                    <div className="text-sm font-medium text-blue-800">
+                      Selected: {selectedAssetIds.length} / {availableAssets.length}
+                    </div>
+                    <div className="text-xs text-blue-600 mt-1">
+                      ⚠️ Changes are locked after auction starts
+                    </div>
+                  </div>
+                  
+                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3 max-h-96 overflow-y-auto">
+                    {availableAssets.map((asset) => (
+                      <label
+                        key={asset.id}
+                        className={`flex items-center p-3 border rounded-lg cursor-pointer transition-colors ${
+                          selectedAssetIds.includes(asset.id)
+                            ? 'bg-purple-100 border-purple-300'
+                            : 'bg-white border-gray-200 hover:bg-gray-50'
+                        }`}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={selectedAssetIds.includes(asset.id)}
+                          onChange={() => handleAssetToggle(asset.id)}
+                          className="mr-3"
+                        />
+                        <div>
+                          <div className="font-medium text-gray-900">{asset.name}</div>
+                          {asset.country && (
+                            <div className="text-sm text-gray-600">{asset.country}</div>
+                          )}
+                          {asset.meta && asset.meta.franchise && (
+                            <div className="text-sm text-purple-600">{asset.meta.franchise}</div>
+                          )}
+                        </div>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <div>
+                  {league.assetsSelected ? (
+                    <div className="text-sm text-gray-600">
+                      <span className="font-medium text-gray-900">
+                        {league.assetsSelected.length}
+                      </span> {uiHints.assetPlural.toLowerCase()} selected for auction
+                    </div>
+                  ) : (
+                    <div className="text-sm text-gray-600">
+                      All available {uiHints.assetPlural.toLowerCase()} will be included in the auction
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Cricket Scoring Configuration */}
           {league && league.sportKey === "cricket" && (
             <div className="bg-green-50 border border-green-200 rounded-lg p-6 mb-8">
