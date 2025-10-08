@@ -100,8 +100,8 @@ class Auction(BaseModel):
 
 class AuctionCreate(BaseModel):
     leagueId: str
-    bidTimer: int = 60
-    antiSnipeSeconds: int = 30
+    bidTimer: int = 30  # Default 30s (Prompt D)
+    antiSnipeSeconds: int = 10  # Default 10s (Prompt D)
 
 # Bid Models
 class Bid(BaseModel):
