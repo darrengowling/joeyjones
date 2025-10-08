@@ -977,7 +977,32 @@ async def place_bid(auction_id: str, bid_input: BidCreate):
     )
     await db.bids.insert_one(bid_obj.model_dump())
     
-    # Emit bid via Socket.IO
+    # Update auction with current bid info and increment sequence (Prompt B)
+    new_bid_sequence = auction.get("bidSequence", 0) + 1
+    current_bidder = {
+        "userId": bid_input.userId,
+        "displayName": user["name"]
+    }
+    
+    await db.auctions.update_one(
+        {"id": auction_id},
+        {"$set": {
+            "currentBid": bid_input.amount,
+            "currentBidder": current_bidder,
+            "bidSequence": new_bid_sequence
+        }}
+    )
+    
+    # Emit bid update to all users (Prompt B: Everyone sees current bid)
+    await sio.emit('bid_update', {
+        'lotId': auction.get("currentLotId"),
+        'amount': bid_input.amount,
+        'bidder': current_bidder,
+        'seq': new_bid_sequence,
+        'serverTime': datetime.now(timezone.utc).isoformat()
+    }, room=f"auction:{auction_id}")
+    
+    # Also emit legacy bid_placed for backward compatibility
     await sio.emit('bid_placed', {
         'bid': bid_obj.model_dump(mode='json'),
         'auctionId': auction_id,
