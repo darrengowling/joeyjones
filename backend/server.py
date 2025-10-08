@@ -59,13 +59,7 @@ logger.info(f"Cricket feature enabled: {SPORTS_CRICKET_ENABLED}")
 sport_service = SportService(db)
 asset_service = AssetService(db)
 
-# Create Socket.IO server
-sio = socketio.AsyncServer(
-    async_mode='asgi',
-    cors_allowed_origins='*',
-    logger=True,
-    engineio_logger=True
-)
+# Socket.IO server imported from socketio_init.py (with Redis scaling support)
 
 # Create the main app without a prefix
 app = FastAPI()
