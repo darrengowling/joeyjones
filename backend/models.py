@@ -48,6 +48,8 @@ class League(BaseModel):
     # Prompt D: Timer configuration
     timerSeconds: int = 30  # Default 30s (reduced from 60s)
     antiSnipeSeconds: int = 10  # Default 10s (reduced from 30s)
+    # Prompt E: Team management
+    assetsSelected: Optional[List[str]] = None  # If null, use sport default; else restrict to selected IDs
 
 class LeagueCreate(BaseModel):
     name: str
