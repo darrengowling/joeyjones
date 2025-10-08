@@ -670,13 +670,7 @@ const Home = () => {
                   {/* Add League Card */}
                   <div
                     className="flex-shrink-0 w-72 border-2 border-dashed border-gray-300 rounded-lg p-4 hover:border-blue-400 hover:bg-blue-50 transition-all duration-200 cursor-pointer flex flex-col items-center justify-center text-center"
-                    onClick={() => {
-                      if (!user) {
-                        setShowUserDialog(true);
-                      } else {
-                        setShowCreateLeagueDialog(true);
-                      }
-                    }}
+                    onClick={handleCreateCompetition}
                   >
                     <div className="text-4xl mb-3 text-gray-400">+</div>
                     <h4 className="text-lg font-semibold text-gray-700 mb-2">Create New Competition</h4>
