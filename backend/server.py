@@ -315,7 +315,14 @@ async def join_league(league_id: str, participant_input: LeagueParticipantCreate
     )
     await db.league_participants.insert_one(participant.model_dump())
     
-    # Emit real-time update to league participants
+    # Prompt A: Emit member_joined event to league room  
+    await sio.emit('member_joined', {
+        'userId': participant.userId,
+        'displayName': participant.userName,
+        'joinedAt': participant.joinedAt.isoformat()
+    }, room=f"league:{league_id}")
+    
+    # Also emit legacy participant_joined for backward compatibility
     await sio.emit('participant_joined', {
         'leagueId': league_id,
         'participant': participant.model_dump(mode='json'),
