@@ -90,8 +90,8 @@ app = FastAPI(lifespan=lifespan)
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
 
-# Add metrics endpoint
-@app.get("/metrics")
+# Add metrics endpoint to API router
+@api_router.get("/metrics")
 def get_metrics():
     """Prometheus metrics endpoint"""
     if not metrics.ENABLE_METRICS:
