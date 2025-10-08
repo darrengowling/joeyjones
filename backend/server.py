@@ -1070,7 +1070,7 @@ async def get_auction(auction_id: str):
         "currentClub": current_asset  # Keep field name for backward compatibility
     }
 
-@api_router.post("/auction/{auction_id}/bid")
+@api_router.post("/auction/{auction_id}/bid", dependencies=[RateLimiter(times=20, seconds=60)])
 async def place_bid(auction_id: str, bid_input: BidCreate):
     # Verify auction exists and is active
     auction = await db.auctions.find_one({"id": auction_id})
