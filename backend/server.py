@@ -1201,13 +1201,21 @@ async def get_next_club_to_auction(auction_id: str) -> Optional[str]:
     
     # Initial round complete - check for unsold clubs
     if unsold_clubs:
-        # Check if any participants can still afford minimum budget
+        # Check if any participants can still bid (budget + roster slots) - Prompt C
         participants = await db.league_participants.find({"leagueId": auction["leagueId"]}).to_list(100)
+        league = await db.leagues.find_one({"id": auction["leagueId"]})
         minimum_budget = auction.get("minimumBudget", 1000000.0)
+        max_slots = league.get("clubSlots", 3) if league else 3
         
-        can_still_bid = any(p.get("budgetRemaining", 0) >= minimum_budget for p in participants)
+        # Check for eligible bidders (has budget AND roster space)
+        eligible_bidders = []
+        for p in participants:
+            has_budget = p.get("budgetRemaining", 0) >= minimum_budget
+            has_slots = len(p.get("clubsWon", [])) < max_slots
+            if has_budget and has_slots:
+                eligible_bidders.append(p)
         
-        if can_still_bid:
+        if eligible_bidders:
             # Return first unsold club and remove it from unsold list
             next_unsold = unsold_clubs[0]
             remaining_unsold = unsold_clubs[1:]
