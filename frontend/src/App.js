@@ -347,6 +347,38 @@ const Home = () => {
                 />
               </div>
 
+              {/* Prompt D: Timer Configuration */}
+              <div className="grid md:grid-cols-2 gap-4 mb-4">
+                <div>
+                  <label className="block text-gray-700 mb-2 font-semibold">Bidding Timer (seconds)</label>
+                  <input
+                    type="number"
+                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    value={leagueForm.timerSeconds}
+                    onChange={(e) => setLeagueForm({ ...leagueForm, timerSeconds: Number(e.target.value) })}
+                    min="15"
+                    max="120"
+                    required
+                    data-testid="league-timer-seconds-input"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">15-120 seconds</p>
+                </div>
+                <div>
+                  <label className="block text-gray-700 mb-2 font-semibold">Anti-Snipe (seconds)</label>
+                  <input
+                    type="number"
+                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    value={leagueForm.antiSnipeSeconds}
+                    onChange={(e) => setLeagueForm({ ...leagueForm, antiSnipeSeconds: Number(e.target.value) })}
+                    min="0"
+                    max="30"
+                    required
+                    data-testid="league-anti-snipe-input"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">0-30 seconds, must be less than timer</p>
+                </div>
+              </div>
+
               <button
                 type="submit"
                 className="btn btn-primary w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 font-semibold text-lg"
