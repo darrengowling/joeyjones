@@ -569,16 +569,22 @@ export default function AuctionRoom() {
                     </div>
                   </div>
 
-                  {/* Current Highest Bid */}
-                  {highestBid > 0 && (
+                  {/* Current Bid Panel (Prompt B: Visible to all users) */}
+                  {currentBid > 0 && currentBidder && (
                     <div className="app-card bg-green-50 border border-green-200 p-4 rounded-lg mb-6">
-                      <div className="subtle text-sm text-gray-600">💰 Leading Strategic Bid</div>
-                      <div className="text-3xl font-bold text-green-600">£{highestBid.toLocaleString()}</div>
-                      {currentClubBids[0] && (
-                        <div className="text-sm text-gray-600 mt-1">
-                          by {currentClubBids[0].userName}
-                        </div>
-                      )}
+                      <div className="subtle text-sm text-gray-600">💰 Current Bid</div>
+                      <div className="text-3xl font-bold text-green-600">£{currentBid.toLocaleString()}</div>
+                      <div className="text-sm text-gray-600 mt-1">
+                        by {currentBidder.displayName}
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* Fallback: Show no bids message */}
+                  {!currentBid && (
+                    <div className="app-card bg-blue-50 border border-blue-200 p-4 rounded-lg mb-6">
+                      <div className="subtle text-sm text-gray-600">💰 No bids yet</div>
+                      <div className="text-lg text-gray-600">Be the first to claim ownership!</div>
                     </div>
                   )}
 
