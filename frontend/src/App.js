@@ -267,22 +267,28 @@ const Home = () => {
                 <label className="block text-gray-700 mb-2">Name</label>
                 <input
                   type="text"
-                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Enter your full name"
+                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
                   value={userForm.name}
                   onChange={(e) => setUserForm({ ...userForm, name: e.target.value })}
                   data-testid="user-name-input"
                   disabled={authLoading}
+                  required
+                  maxLength="50"
                 />
               </div>
               <div className="mb-4">
-                <label className="block text-gray-700 mb-2">Email</label>
+                <label className="block text-gray-700 mb-2">Email Address</label>
                 <input
                   type="email"
-                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="your.email@example.com"
+                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
                   value={userForm.email}
                   onChange={(e) => setUserForm({ ...userForm, email: e.target.value })}
                   data-testid="user-email-input"
                   disabled={authLoading}
+                  required
+                  maxLength="100"
                 />
               </div>
               <button
