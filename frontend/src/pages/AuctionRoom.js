@@ -127,6 +127,18 @@ export default function AuctionRoom() {
       loadClubs(); // Reload clubs to update status
     };
 
+    // Prompt B: Handle bid updates for all users
+    const handleBidUpdate = (data) => {
+      console.log("Bid update received:", data);
+      
+      // Only update if this is a newer sequence to prevent stale overwrites
+      if (data.seq >= bidSequence) {
+        setCurrentBid(data.amount);
+        setCurrentBidder(data.bidder);
+        setBidSequence(data.seq);
+      }
+    };
+
     const handleLotStarted = (data) => {
       console.log("Lot started:", data);
       
