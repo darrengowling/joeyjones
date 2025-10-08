@@ -1122,6 +1122,7 @@ async def place_bid(auction_id: str, bid_input: BidCreate):
     clubs_won_count = len(participant.get("clubsWon", []))
     max_slots = league.get("clubSlots", 3)  # Default to 3 if not set
     if clubs_won_count >= max_slots:
+        metrics.increment_bid_rejected("roster_full")
         raise HTTPException(
             status_code=400,
             detail=f"Roster full. You already own {clubs_won_count}/{max_slots} teams"
