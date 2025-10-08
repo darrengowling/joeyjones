@@ -665,9 +665,23 @@ export default function AuctionRoom() {
                       </button>
                     </div>
                     {participants.find((p) => p.userId === user?.id) && (
-                      <p className="text-sm text-gray-600">
-                        Your strategic budget remaining: £{participants.find((p) => p.userId === user.id).budgetRemaining.toLocaleString()}
-                      </p>
+                      <div className="text-sm text-gray-600 space-y-1">
+                        <p>
+                          Your strategic budget remaining: £{participants.find((p) => p.userId === user.id).budgetRemaining.toLocaleString()}
+                        </p>
+                        <p className="flex items-center">
+                          <span>Roster:</span>
+                          <span className="ml-1 font-medium">
+                            {participants.find((p) => p.userId === user.id).clubsWon?.length || 0} / {league?.clubSlots || 3}
+                          </span>
+                          <span className="ml-2">
+                            {participants.find((p) => p.userId === user.id).clubsWon?.length >= (league?.clubSlots || 3) 
+                              ? '🔒 Full' 
+                              : '📍 Active'
+                            }
+                          </span>
+                        </p>
+                      </div>
                     )}
                   </div>
 
