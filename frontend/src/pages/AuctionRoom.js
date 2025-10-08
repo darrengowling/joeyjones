@@ -577,7 +577,7 @@ export default function AuctionRoom() {
                   <h2 className="h2 text-2xl font-bold mb-4 text-gray-900">🔥 Current Team Ownership</h2>
                   
                   {/* Timer */}
-                  <div className="bg-gradient-to-r from-red-500 to-orange-500 text-white p-6 rounded-lg mb-6 text-center">
+                  <div className="bg-gradient-to-r from-red-700 to-orange-600 text-white p-6 rounded-lg mb-6 text-center shadow-lg">
                     <div className="text-5xl font-bold">
                       {(() => {
                         const s = Math.ceil((remainingMs ?? 0) / 1000);
