@@ -1144,6 +1144,10 @@ async def place_bid(auction_id: str, bid_input: BidCreate):
     )
     await db.bids.insert_one(bid_obj.model_dump())
     
+    # Metrics: Track successful bid
+    metrics.increment_bid_accepted(auction_id)
+    metrics.observe_bid_latency(time.time() - start_time)
+    
     # Update auction with current bid info and increment sequence (Prompt B)
     new_bid_sequence = auction.get("bidSequence", 0) + 1
     current_bidder = {
