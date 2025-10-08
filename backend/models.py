@@ -57,6 +57,9 @@ class LeagueCreate(BaseModel):
     maxManagers: int = 8
     clubSlots: int = 3
     sportKey: str = "football"  # Default to football
+    # Prompt D: Timer configuration in league creation
+    timerSeconds: int = 30  # Default 30s
+    antiSnipeSeconds: int = 10  # Default 10s
 
 # League Participant Models
 class LeagueParticipant(BaseModel):
