@@ -1710,6 +1710,21 @@ async def join_league_room(sid, data):
     if league_id:
         sio.enter_room(sid, f"league:{league_id}")
         logger.info(f"Client {sid} joined league:{league_id}")
+        
+        # Prompt A: Send current member list for sync
+        participants = await db.league_participants.find({"leagueId": league_id}).sort("joinedAt", 1).to_list(100)
+        members = []
+        for p in participants:
+            members.append({
+                'userId': p['userId'],
+                'displayName': p['userName'],
+                'joinedAt': p['joinedAt'].isoformat() if isinstance(p['joinedAt'], datetime) else p['joinedAt']
+            })
+        
+        await sio.emit('sync_members', {
+            'leagueId': league_id,
+            'members': members
+        }, room=sid)
 
 @sio.event
 async def leave_league(sid, data):
