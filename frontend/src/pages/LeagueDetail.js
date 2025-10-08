@@ -24,6 +24,11 @@ export default function LeagueDetail() {
   const [scoringOverrides, setScoringOverrides] = useState(null);
   const [editingScoring, setEditingScoring] = useState(false);
   const [savingScoring, setSavingScoring] = useState(false);
+  // Prompt E: Team management state
+  const [availableAssets, setAvailableAssets] = useState([]);
+  const [selectedAssetIds, setSelectedAssetIds] = useState([]);
+  const [editingAssets, setEditingAssets] = useState(false);
+  const [loadingAssetSelection, setLoadingAssetSelection] = useState(false);
 
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
