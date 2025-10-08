@@ -196,6 +196,7 @@ export default function AuctionRoom() {
     socket.on("joined", handleJoined);
     socket.on("sync_state", handleSyncState);
     socket.on("bid_placed", handleBidPlaced);
+    socket.on("bid_update", handleBidUpdate);
     socket.on("lot_started", handleLotStarted);
     socket.on("sold", handleSold);
     socket.on("anti_snipe", handleAntiSnipe);
