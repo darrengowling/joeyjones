@@ -90,6 +90,44 @@ app = FastAPI(lifespan=lifespan)
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
 
+# Add metrics endpoint
+@app.get("/metrics")
+def get_metrics():
+    """Prometheus metrics endpoint"""
+    if not metrics.ENABLE_METRICS:
+        return Response(status_code=404, content="Metrics disabled")
+    return Response(generate_latest(), media_type=CONTENT_TYPE_LATEST)
+
+# Middleware for API request metrics
+@app.middleware("http")
+async def metrics_middleware(request: Request, call_next):
+    """Track API request metrics"""
+    start_time = time.time()
+    
+    response = await call_next(request)
+    
+    # Record metrics
+    duration = time.time() - start_time
+    endpoint = request.url.path
+    method = request.method
+    status = response.status_code
+    
+    metrics.record_api_request(method, endpoint, status, duration)
+    
+    return response
+
+# Rate limiting exception handler
+@app.exception_handler(429)
+async def rate_limit_handler(request: Request, exc):
+    """Handle rate limiting responses"""
+    endpoint = request.url.path
+    metrics.increment_rate_limited(endpoint)
+    return Response(
+        status_code=429,
+        content='{"error": "rate_limited", "hint": "Please retry later"}',
+        headers={"Content-Type": "application/json"}
+    )
+
 # Store active timers and sequence numbers
 active_timers = {}
 lot_sequences = {}  # Track sequence numbers per lot
