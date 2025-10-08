@@ -87,6 +87,9 @@ class Auction(BaseModel):
     minimumBudget: float = 1000000.0  # £1m minimum budget per user
     pausedRemainingTime: Optional[float] = None  # Stored time when paused
     pausedAt: Optional[datetime] = None  # When auction was paused
+    currentBid: Optional[float] = None  # Current highest bid amount
+    currentBidder: Optional[Dict[str, Any]] = None  # Current bidder info {userId, displayName}
+    bidSequence: int = 0  # Monotonic sequence number for bid updates
     createdAt: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 class AuctionCreate(BaseModel):
