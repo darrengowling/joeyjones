@@ -1755,6 +1755,9 @@ async def countdown_timer(auction_id: str, end_time: datetime, lot_id: str):
             timer_data = create_timer_event(lot_id, ends_at_ms)
             logger.debug(f"Emitting tick for lot {lot_id}: seq={timer_data['seq']}")
             
+            # Metrics: Track timer ticks
+            metrics.increment_timer_tick(auction_id)
+            
             await sio.emit('tick', timer_data)  # Broadcast to all clients
     
     except asyncio.CancelledError:
