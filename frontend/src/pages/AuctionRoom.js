@@ -98,6 +98,16 @@ export default function AuctionRoom() {
       if (data.participants) {
         setParticipants(data.participants);
       }
+      // Update current bid info (Prompt B: Bid visibility for all)
+      if (data.currentBid !== undefined) {
+        setCurrentBid(data.currentBid);
+      }
+      if (data.currentBidder) {
+        setCurrentBidder(data.currentBidder);
+      }
+      if (data.seq !== undefined) {
+        setBidSequence(data.seq);
+      }
       // Extract lot ID from auction data for the clock hook
       if (data.auction && data.auction.currentLotId) {
         setCurrentLotId(data.auction.currentLotId);
