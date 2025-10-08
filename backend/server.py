@@ -791,17 +791,28 @@ async def start_auction(league_id: str):
         {"$set": {"status": "active"}}
     )
     
-    # Get all assets for this sport and randomize order
+    # Prompt E: Get assets based on league selection or all available assets
     import random
-    all_assets = []
+    assets_selected = league.get("assetsSelected")
     
-    if sport_key == "football":
-        # Get clubs for football
-        all_assets = await db.clubs.find().to_list(100)
+    if assets_selected:
+        # Use commissioner's selected assets
+        if sport_key == "football":
+            all_assets = await db.clubs.find({"id": {"$in": assets_selected}}).to_list(100)
+        else:
+            all_assets = await db.assets.find({
+                "id": {"$in": assets_selected}, 
+                "sportKey": sport_key
+            }).to_list(100)
+        
+        if len(all_assets) == 0:
+            raise HTTPException(status_code=400, detail="No valid selected teams found. Please select teams in league settings before starting auction.")
     else:
-        # Get assets from assets collection for other sports
-        assets_data = await db.assets.find({"sportKey": sport_key}).to_list(100)
-        all_assets = assets_data
+        # Use all available assets for this sport (default behavior)
+        if sport_key == "football":
+            all_assets = await db.clubs.find().to_list(100)
+        else:
+            all_assets = await db.assets.find({"sportKey": sport_key}).to_list(100)
     
     random.shuffle(all_assets)
     
