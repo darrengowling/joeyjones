@@ -125,6 +125,22 @@ const Home = () => {
     }
   };
 
+  const handleCreateCompetition = () => {
+    if (!user) {
+      setAuthError(""); // Clear any previous auth errors
+      setShowUserDialog(true);
+    } else {
+      setShowCreateLeagueDialog(true);
+    }
+  };
+
+  const handleCloseUserDialog = () => {
+    setShowUserDialog(false);
+    setUserForm({ name: "", email: "" });
+    setAuthError("");
+    setAuthLoading(false);
+  };
+
   const handleCreateLeague = async (e) => {
     e.preventDefault();
     if (!user) {
