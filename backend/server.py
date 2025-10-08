@@ -1771,10 +1771,12 @@ async def countdown_timer(auction_id: str, end_time: datetime, lot_id: str):
 @sio.event
 async def connect(sid, environ):
     logger.info(f"Client connected: {sid}")
+    metrics.increment_socket_connection()
 
 @sio.event
 async def disconnect(sid):
     logger.info(f"Client disconnected: {sid}")
+    metrics.increment_socket_disconnection()
 
 @sio.event
 async def join_auction(sid, data):
