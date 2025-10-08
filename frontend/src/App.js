@@ -100,6 +100,22 @@ const Home = () => {
       return;
     }
 
+    // Prompt D: Validate timer configuration
+    if (leagueForm.antiSnipeSeconds >= leagueForm.timerSeconds) {
+      alert("Anti-snipe seconds must be less than the bidding timer seconds");
+      return;
+    }
+
+    if (leagueForm.timerSeconds < 15 || leagueForm.timerSeconds > 120) {
+      alert("Bidding timer must be between 15 and 120 seconds");
+      return;
+    }
+
+    if (leagueForm.antiSnipeSeconds < 0 || leagueForm.antiSnipeSeconds > 30) {
+      alert("Anti-snipe must be between 0 and 30 seconds");
+      return;
+    }
+
     try {
       const response = await axios.post(`${API}/leagues`, {
         ...leagueForm,
