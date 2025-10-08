@@ -170,6 +170,54 @@ export default function LeagueDetail() {
     }
   };
 
+  // Prompt E: Team management functions
+  const loadAvailableAssets = async () => {
+    try {
+      const response = await axios.get(`${API}/leagues/${leagueId}/available-assets`);
+      setAvailableAssets(response.data);
+      
+      // Set current selection
+      if (league?.assetsSelected) {
+        setSelectedAssetIds(league.assetsSelected);
+      } else {
+        setSelectedAssetIds(response.data.map(asset => asset.id)); // Default: all selected
+      }
+    } catch (e) {
+      console.error("Error loading available assets:", e);
+      alert("Error loading available teams");
+    }
+  };
+
+  const handleAssetToggle = (assetId) => {
+    setSelectedAssetIds(prev => {
+      if (prev.includes(assetId)) {
+        return prev.filter(id => id !== assetId);
+      } else {
+        return [...prev, assetId];
+      }
+    });
+  };
+
+  const saveAssetSelection = async () => {
+    if (selectedAssetIds.length === 0) {
+      alert("You must select at least one team for the auction");
+      return;
+    }
+
+    setLoadingAssetSelection(true);
+    try {
+      await axios.put(`${API}/leagues/${leagueId}/assets`, selectedAssetIds);
+      alert(`Team selection updated! ${selectedAssetIds.length} teams selected for auction.`);
+      setEditingAssets(false);
+      await loadLeague(); // Reload league data
+    } catch (e) {
+      console.error("Error saving asset selection:", e);
+      alert(e.response?.data?.detail || "Error saving team selection");
+    } finally {
+      setLoadingAssetSelection(false);
+    }
+  };
+
   const startAuction = async () => {
     if (!user) {
       alert("Please sign in first");
