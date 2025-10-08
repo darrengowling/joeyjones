@@ -41,6 +41,8 @@ const Home = () => {
     minManagers: 2,
     maxManagers: 8,
     clubSlots: 3,
+    timerSeconds: 30, // Prompt D: Default 30s timer
+    antiSnipeSeconds: 10, // Prompt D: Default 10s anti-snipe
   });
   const [inviteToken, setInviteToken] = useState("");
 
