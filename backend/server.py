@@ -1325,14 +1325,24 @@ async def check_auction_completion(auction_id: str):
         for p in participants:
             total_clubs_sold += len(p.get("clubsWon", []))
         
-        await sio.emit('auction_complete', {
-            'message': f'Auction completed! {total_clubs_sold} clubs sold, {total_unsold} unsold.',
+        # Determine completion reason for better user feedback
+        completion_reason = "completed"
+        if all_managers_full:
+            completion_reason = "All managers have filled their rosters"
+        elif not eligible_bidders:
+            completion_reason = "No managers can afford minimum bid"
+        elif not unsold_clubs:
+            completion_reason = "All available teams have been sold"
+        
+        await sio.emit('auction_completed', {
+            'message': f'Auction completed! {total_clubs_sold} teams sold, {total_unsold} unsold.',
+            'reason': completion_reason,
             'clubsSold': total_clubs_sold,
             'clubsUnsold': total_unsold,
             'participants': [LeagueParticipant(**p).model_dump(mode='json') for p in participants]
         })
         
-        logger.info(f"Auction {auction_id} completed - {total_clubs_sold} sold, {total_unsold} unsold")
+        logger.info(f"Auction {auction_id} completed - {total_clubs_sold} sold, {total_unsold} unsold. Reason: {completion_reason}")
 
 @api_router.post("/auction/{auction_id}/pause")
 async def pause_auction(auction_id: str, commissioner_id: str = None):
