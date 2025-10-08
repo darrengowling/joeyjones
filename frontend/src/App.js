@@ -561,13 +561,7 @@ const Home = () => {
 
           <div className="grid md:grid-cols-3 gap-6 mb-8">
             <button
-              onClick={() => {
-                if (!user) {
-                  setShowUserDialog(true);
-                } else {
-                  setShowCreateLeagueDialog(true);
-                }
-              }}
+              onClick={handleCreateCompetition}
               className="btn btn-primary bg-green-600 text-white px-6 py-4 rounded-lg hover:bg-green-700 text-lg font-semibold"
               data-testid="create-league-button"
             >
