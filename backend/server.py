@@ -952,6 +952,15 @@ async def place_bid(auction_id: str, bid_input: BidCreate):
             detail=f"Insufficient budget. You have £{participant['budgetRemaining']:,.0f} remaining"
         )
     
+    # Check if user has reached roster limit (Prompt C: Roster enforcement)
+    clubs_won_count = len(participant.get("clubsWon", []))
+    max_slots = league.get("clubSlots", 3)  # Default to 3 if not set
+    if clubs_won_count >= max_slots:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Roster full. You already own {clubs_won_count}/{max_slots} teams"
+        )
+    
     # Get current club from auction
     current_club_id = auction.get("currentClubId")
     if not current_club_id:
