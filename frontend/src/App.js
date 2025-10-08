@@ -272,7 +272,15 @@ const Home = () => {
       {showUserDialog && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4">
-            <h2 className="text-2xl font-bold mb-4 text-gray-900">Enter Your Details</h2>
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-2xl font-bold text-gray-900">Enter Your Details</h2>
+              <button
+                onClick={handleCloseUserDialog}
+                className="btn btn-secondary text-gray-500 hover:text-gray-700"
+              >
+                ✕
+              </button>
+            </div>
             {authError && (
               <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg">
                 {authError}
