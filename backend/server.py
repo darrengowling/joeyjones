@@ -1279,14 +1279,33 @@ async def check_auction_completion(auction_id: str):
     if not auction:
         return
     
+    # Get league info for roster limits
+    league = await db.leagues.find_one({"id": auction["leagueId"]})
+    if not league:
+        return
+    
     unsold_clubs = auction.get("unsoldClubs", [])
     participants = await db.league_participants.find({"leagueId": auction["leagueId"]}).to_list(100)
     minimum_budget = auction.get("minimumBudget", 1000000.0)
+    max_slots = league.get("clubSlots", 3)
     
-    # Check if any participants can still afford minimum budget
-    can_still_bid = any(p.get("budgetRemaining", 0) >= minimum_budget for p in participants)
+    # Check if all managers have reached their roster limit (Prompt C: Auto-end when slots filled)
+    all_managers_full = True
+    eligible_bidders = []
     
-    if not unsold_clubs or not can_still_bid:
+    for participant in participants:
+        clubs_won = len(participant.get("clubsWon", []))
+        has_budget = participant.get("budgetRemaining", 0) >= minimum_budget
+        has_slots = clubs_won < max_slots
+        
+        if has_slots and has_budget:
+            eligible_bidders.append(participant)
+            all_managers_full = False
+    
+    # Auction should end if: no unsold clubs, no eligible bidders, or all managers are full
+    should_complete = not unsold_clubs or not eligible_bidders or all_managers_full
+    
+    if should_complete:
         # Mark auction as complete
         await db.auctions.update_one(
             {"id": auction_id},
