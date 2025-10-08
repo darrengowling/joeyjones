@@ -695,8 +695,12 @@ async def start_auction(league_id: str):
     if existing_auction:
         return {"message": "Auction already exists", "auctionId": existing_auction["id"]}
     
-    # Create auction
-    auction_create = AuctionCreate(leagueId=league_id)
+    # Create auction with league timer settings (Prompt D)
+    auction_create = AuctionCreate(
+        leagueId=league_id,
+        bidTimer=league.get("timerSeconds", 30),
+        antiSnipeSeconds=league.get("antiSnipeSeconds", 10)
+    )
     auction_obj = Auction(**auction_create.model_dump())
     await db.auctions.insert_one(auction_obj.model_dump())
     
