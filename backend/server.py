@@ -1,4 +1,4 @@
-from fastapi import FastAPI, APIRouter, HTTPException, UploadFile, File, Depends
+from fastapi import FastAPI, APIRouter, HTTPException, UploadFile, File, Depends, Request, Response
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -12,6 +12,16 @@ import uuid
 import csv
 import io
 from datetime import datetime, timedelta, timezone
+import time
+from contextlib import asynccontextmanager
+
+# Production hardening imports
+from prometheus_client import generate_latest, CONTENT_TYPE_LATEST
+from fastapi_limiter import FastAPILimiter
+from fastapi_limiter.depends import RateLimiter
+import redis.asyncio as aioredis
+from socketio_init import sio
+import metrics
 
 from models import (
     User, UserCreate,
