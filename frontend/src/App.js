@@ -589,6 +589,13 @@ const Home = () => {
               Join the Competition
             </button>
             <button
+              onClick={handleCreateCompetition}
+              className="btn btn-primary bg-blue-600 text-white px-6 py-4 rounded-lg hover:bg-blue-700 text-lg font-semibold"
+              data-testid="create-competition-main-button"
+            >
+              Create Your Competition
+            </button>
+            <button
               onClick={() => navigate("/clubs")}
               className="btn btn-primary bg-purple-600 text-white px-6 py-4 rounded-lg hover:bg-purple-700 text-lg font-semibold"
               data-testid="view-clubs-button"
