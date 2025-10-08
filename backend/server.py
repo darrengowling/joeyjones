@@ -1643,11 +1643,14 @@ async def join_auction(sid, data):
             for p in participants:
                 p.pop('_id', None)
             
-            # Send sync state with standardized timer data
+            # Send sync state with standardized timer data (Prompt B: Include current bid info)
             sync_data = {
                 'auction': Auction(**auction).model_dump(mode='json'),
                 'currentClub': current_club,
                 'currentBids': current_bids,
+                'currentBid': auction.get("currentBid"),
+                'currentBidder': auction.get("currentBidder"),
+                'seq': auction.get("bidSequence", 0),
                 'participants': [LeagueParticipant(**p).model_dump(mode='json') for p in participants]
             }
             
