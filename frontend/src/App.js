@@ -32,6 +32,8 @@ const Home = () => {
   const [showCreateLeagueDialog, setShowCreateLeagueDialog] = useState(false);
   const [showJoinLeagueDialog, setShowJoinLeagueDialog] = useState(false);
   const [userForm, setUserForm] = useState({ name: "", email: "" });
+  const [authLoading, setAuthLoading] = useState(false);
+  const [authError, setAuthError] = useState("");
   const [leagues, setLeagues] = useState([]);
   const [sports, setSports] = useState([]);
   const [leagueForm, setLeagueForm] = useState({
