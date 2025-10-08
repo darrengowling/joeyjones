@@ -1905,13 +1905,12 @@ app.add_middleware(
 # Include the router in the main app
 app.include_router(api_router)
 
-# Mount Socket.IO - this wraps the FastAPI app
-# Note: Using 'api/socket.io' to match Kubernetes ingress routing rules
-socket_app = socketio.ASGIApp(
-    sio,
-    other_asgi_app=app,
-    socketio_path='api/socket.io'
-)
+# Mount Socket.IO at /socket.io path
+SOCKETIO_PATH = "socket.io"  # no leading slash
+socket_app = socketio.ASGIApp(sio)  # path is set client-side via `path: '/socket.io'`
+
+# Mount Socket.IO at /socket.io (ingress must route /socket.io BEFORE /api)
+app.mount("/socket.io", socket_app)
 
 @app.on_event("shutdown")
 async def shutdown_db_client():
