@@ -603,13 +603,27 @@ export default function AuctionRoom() {
                     </div>
                   </div>
 
-                  {/* Current Bid Panel (Prompt B: Visible to all users) */}
+                  {/* Current Bid Panel (Prompt G: Enhanced with bidder info) */}
                   {currentBid > 0 && currentBidder && (
                     <div className="app-card bg-green-50 border border-green-200 p-4 rounded-lg mb-6">
-                      <div className="subtle text-sm text-gray-600">💰 Current Bid</div>
-                      <div className="text-3xl font-bold text-green-600">£{currentBid.toLocaleString()}</div>
-                      <div className="text-sm text-gray-600 mt-1">
-                        by {currentBidder.displayName}
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <div className="subtle text-sm text-gray-600">💰 Current Bid</div>
+                          <div className="text-3xl font-bold text-green-600">£{currentBid.toLocaleString()}</div>
+                        </div>
+                        <div className="text-right">
+                          <div className="flex items-center space-x-2">
+                            <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                              {currentBidder.displayName.charAt(0).toUpperCase()}
+                            </div>
+                            <div>
+                              <div className="text-sm font-medium text-gray-900">
+                                {currentBidder.displayName}
+                              </div>
+                              <div className="text-xs text-gray-500">Leading bidder</div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   )}
