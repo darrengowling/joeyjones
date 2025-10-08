@@ -384,6 +384,9 @@ async def join_league(league_id: str, participant_input: LeagueParticipantCreate
     )
     await db.league_participants.insert_one(participant.model_dump())
     
+    # Metrics: Track participant joining
+    metrics.increment_participant_joined()
+    
     # Prompt A: Emit member_joined event to league room  
     await sio.emit('member_joined', {
         'userId': participant.userId,
