@@ -336,6 +336,22 @@ async def get_league_participants(league_id: str):
     participants = await db.league_participants.find({"leagueId": league_id}).to_list(100)
     return [LeagueParticipant(**p) for p in participants]
 
+@api_router.get("/leagues/{league_id}/members")
+async def get_league_members(league_id: str):
+    """Prompt A: Get ordered league members for real-time updates"""
+    participants = await db.league_participants.find({"leagueId": league_id}).sort("joinedAt", 1).to_list(100)
+    
+    # Return simplified member list
+    members = []
+    for p in participants:
+        members.append({
+            'userId': p['userId'],
+            'displayName': p['userName'],
+            'joinedAt': p['joinedAt'].isoformat() if isinstance(p['joinedAt'], datetime) else p['joinedAt']
+        })
+    
+    return members
+
 @api_router.delete("/leagues/{league_id}")
 async def delete_league(league_id: str, commissioner_id: str = None):
     """Delete a league and all associated data - only commissioner can do this"""
