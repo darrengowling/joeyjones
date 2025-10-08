@@ -1072,6 +1072,9 @@ async def get_auction(auction_id: str):
 
 @api_router.post("/auction/{auction_id}/bid", dependencies=[RateLimiter(times=20, seconds=60)])
 async def place_bid(auction_id: str, bid_input: BidCreate):
+    # Metrics: Track bid processing time
+    start_time = time.time()
+    
     # Verify auction exists and is active
     auction = await db.auctions.find_one({"id": auction_id})
     if not auction:
