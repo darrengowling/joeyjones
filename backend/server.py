@@ -61,8 +61,31 @@ asset_service = AssetService(db)
 
 # Socket.IO server imported from socketio_init.py (with Redis scaling support)
 
-# Create the main app without a prefix
-app = FastAPI()
+# Production hardening configuration
+ENABLE_RATE_LIMITING = os.getenv("ENABLE_RATE_LIMITING", "true").lower() == "true"
+REDIS_URL = os.getenv("REDIS_URL")
+
+# Lifespan management for rate limiting
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup
+    if ENABLE_RATE_LIMITING and REDIS_URL and REDIS_URL.strip():
+        try:
+            r = aioredis.from_url(REDIS_URL, encoding="utf-8", decode_responses=True)
+            await FastAPILimiter.init(r)
+            logger.info("✅ Rate limiting initialized with Redis")
+        except Exception as e:
+            logger.error(f"❌ Rate limiting initialization failed: {e}")
+    else:
+        logger.info("📝 Rate limiting disabled or Redis not configured")
+    
+    yield
+    
+    # Shutdown
+    logger.info("🔄 Application shutdown")
+
+# Create the main app with lifespan management
+app = FastAPI(lifespan=lifespan)
 
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
