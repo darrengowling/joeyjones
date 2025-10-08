@@ -1104,6 +1104,7 @@ async def place_bid(auction_id: str, bid_input: BidCreate):
     # Check minimum bid amount
     minimum_budget = auction.get("minimumBudget", 1000000.0)  # Default £1m
     if bid_input.amount < minimum_budget:
+        metrics.increment_bid_rejected("minimum_bid")
         raise HTTPException(
             status_code=400, 
             detail=f"Bid must be at least £{minimum_budget:,.0f}"
