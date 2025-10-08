@@ -1112,6 +1112,7 @@ async def place_bid(auction_id: str, bid_input: BidCreate):
     
     # Check if user has enough budget
     if bid_input.amount > participant["budgetRemaining"]:
+        metrics.increment_bid_rejected("insufficient_budget")
         raise HTTPException(
             status_code=400, 
             detail=f"Insufficient budget. You have £{participant['budgetRemaining']:,.0f} remaining"
