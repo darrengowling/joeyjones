@@ -50,9 +50,11 @@ logger = logging.getLogger(__name__)
 MONGO_URL = os.environ['MONGO_URL']
 DB_NAME = os.environ['DB_NAME']
 
-# Global variables for database connection
+# Global variables for database connection and services
 client = None
 db = None
+sport_service = None
+asset_service = None
 
 async def startup_db_client():
     global client, db, sport_service, asset_service
