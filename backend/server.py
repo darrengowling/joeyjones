@@ -611,12 +611,14 @@ async def get_league_standings(league_id: str):
     return Standing(**standing).model_dump(mode='json')
 
 @api_router.get("/leagues/{league_id}/fixtures")
-async def get_league_fixtures(league_id: str, status: Optional[str] = None, limit: int = 50, skip: int = 0):
-    """Get league fixtures with optional filtering - Prompt 1"""
+async def get_league_fixtures(league_id: str, status: Optional[str] = None, page: int = 1, limit: int = 50):
+    """Get league fixtures with optional filtering - Prompt 6: Pagination default limit=50, page=1"""
     query = {"leagueId": league_id}
     if status:
         query["status"] = status
     
+    # Prompt 6: Pagination with page support
+    skip = (page - 1) * limit
     fixtures = await db.fixtures.find(query).sort("startsAt", 1).skip(skip).limit(limit).to_list(limit)
     
     return [Fixture(**fixture).model_dump(mode='json') for fixture in fixtures]
