@@ -770,7 +770,8 @@ export default function App() {
         <Route path="/league/:leagueId" element={<LeagueDetail />} />
         <Route path="/auction/:auctionId" element={<AuctionRoom />} />
         <Route path="/app/my-competitions" element={<MyCompetitions />} />
-        <Route path="/competitions/:leagueId" element={<LeagueDetail />} />
+        <Route path="/app/competitions/:leagueId" element={<CompetitionDashboard />} />
+        <Route path="/competitions/:leagueId" element={<CompetitionDashboard />} />
       </Routes>
     </BrowserRouter>
   );
