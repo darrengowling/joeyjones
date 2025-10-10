@@ -130,7 +130,7 @@ export default function CompetitionDashboard() {
       
       // Leave league room
       if (socket.connected) {
-        socket.emit("leave_league_room", { leagueId });
+        socket.emit("leave_league", { leagueId });
       }
       
       // Disconnect socket
