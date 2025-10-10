@@ -484,12 +484,16 @@ class Prompt6SafetyTester:
             expected_status=422  # FastAPI validation error
         )
         
-        if result.get("status_code") == 422:
+        status_code = result.get("status_code")
+        if status_code == 422:
             self.log("✅ Missing file properly handled with 422")
             test_6c_passed = True
-        else:
-            self.log(f"✅ Missing file handled with status {result.get('status_code')}")
+        elif status_code in [400, 422]:
+            self.log(f"✅ Missing file handled with status {status_code}")
             test_6c_passed = True
+        else:
+            self.log(f"❌ Missing file should be handled with error, got {status_code}", "ERROR")
+            test_6c_passed = False
             
         self.results["error_messages_test"] = test_6a_passed and test_6b_passed and test_6c_passed
         return self.results["error_messages_test"]
