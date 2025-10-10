@@ -946,6 +946,14 @@ async def start_auction(league_id: str):
         asyncio.create_task(countdown_timer(auction_obj.id, timer_end, lot_id))
         
         logger.info(f"Started auction {auction_obj.id} lot {lot_id} with asset: {all_assets[0]['name']}")
+        
+        # Emit auction started event to league room for real-time updates
+        await sio.emit('auction_started', {
+            'leagueId': league_id,
+            'auctionId': auction_obj.id,
+            'message': 'Auction has started! Click "Enter Auction Room" to participate.'
+        }, room=f"league:{league_id}")
+        
         logger.info(f"Timer data - seq: {timer_data['seq']}, endsAt: {timer_data['endsAt']}")
     else:
         logger.error(f"Failed to start auction {auction_obj.id} - no assets available")
