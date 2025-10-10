@@ -567,13 +567,16 @@ const Home = () => {
           <span data-testid="nav-brand" className="h2">Friends of PIFA</span>
           {user ? (
             <div className="flex items-center gap-4">
-              <button
-                onClick={() => navigate("/app/my-competitions")}
-                className="btn btn-secondary text-sm text-blue-600 hover:underline font-semibold"
-                data-testid="nav-my-competitions"
-              >
-                My Competitions
-              </button>
+              {/* Prompt 6: Feature flag - hide My Competitions nav if flag off */}
+              {process.env.REACT_APP_FEATURE_MY_COMPETITIONS === 'true' && (
+                <button
+                  onClick={() => navigate("/app/my-competitions")}
+                  className="btn btn-secondary text-sm text-blue-600 hover:underline font-semibold"
+                  data-testid="nav-my-competitions"
+                >
+                  My Competitions
+                </button>
+              )}
               <span className="text-gray-700">
                 <strong>{user.name}</strong> ({user.email})
               </span>
