@@ -48,11 +48,47 @@ const Home = () => {
     antiSnipeSeconds: 10, // Prompt D: Default 10s anti-snipe
   });
   const [inviteToken, setInviteToken] = useState("");
+  const [userCompetitions, setUserCompetitions] = useState([]);
+  const [showCompetitionsCTA, setShowCompetitionsCTA] = useState(false);
 
   useEffect(() => {
     loadLeagues();
     loadSports();
+    
+    // Load user from localStorage
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      try {
+        const userData = JSON.parse(storedUser);
+        setUser(userData);
+      } catch (e) {
+        console.error("Error parsing user data:", e);
+      }
+    }
   }, []);
+
+  // Load user competitions when user changes
+  useEffect(() => {
+    if (user) {
+      loadUserCompetitions(user.id);
+    }
+  }, [user]);
+
+  const loadUserCompetitions = async (userId) => {
+    try {
+      const response = await axios.get(`${API}/me/competitions`, {
+        params: { userId }
+      });
+      setUserCompetitions(response.data);
+      
+      // Show CTA if user has leagues and no active auction
+      const hasLeagues = response.data.length > 0;
+      const hasActiveAuction = response.data.some(comp => comp.status === "auction_live");
+      setShowCompetitionsCTA(hasLeagues && !hasActiveAuction);
+    } catch (e) {
+      console.error("Error loading user competitions:", e);
+    }
+  };
 
   const loadSports = async () => {
     try {
