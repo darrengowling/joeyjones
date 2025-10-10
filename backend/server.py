@@ -460,6 +460,158 @@ async def get_league_members(league_id: str):
     
     return members
 
+# ===== MY COMPETITIONS ENDPOINTS - PROMPT 1 =====
+
+@api_router.get("/me/competitions")
+async def get_my_competitions(userId: str):
+    """Get all competitions for a user - Prompt 1"""
+    # Find all leagues where user is a participant
+    participants = await db.league_participants.find({"userId": userId}).to_list(100)
+    league_ids = [p["leagueId"] for p in participants]
+    
+    if not league_ids:
+        return []
+    
+    # Get league details
+    leagues = await db.leagues.find({"id": {"$in": league_ids}}).to_list(100)
+    
+    competitions = []
+    for league in leagues:
+        # Determine league status
+        auction = await db.auctions.find_one({"leagueId": league["id"]})
+        if not auction:
+            status = "pre_auction"
+        elif auction["status"] == "active":
+            status = "auction_live"
+        else:
+            status = "auction_complete"
+        
+        # Get user's assets for this league
+        participant = next((p for p in participants if p["leagueId"] == league["id"]), None)
+        assets_owned = participant.get("clubsWon", []) if participant else []
+        
+        # Get manager count
+        manager_count = await db.league_participants.count_documents({"leagueId": league["id"]})
+        
+        # Get next fixture
+        next_fixture = await db.fixtures.find_one({
+            "leagueId": league["id"],
+            "startsAt": {"$gte": datetime.now(timezone.utc)},
+            "status": "scheduled"
+        }, sort=[("startsAt", 1)])
+        
+        next_fixture_at = next_fixture["startsAt"] if next_fixture else None
+        
+        competitions.append({
+            "leagueId": league["id"],
+            "name": league["name"],
+            "sportKey": league["sportKey"],
+            "status": status,
+            "assetsOwned": assets_owned,
+            "managersCount": manager_count,
+            "timerSeconds": league.get("timerSeconds", 30),
+            "antiSnipeSeconds": league.get("antiSnipeSeconds", 10),
+            "startsAt": league.get("startsAt"),
+            "nextFixtureAt": next_fixture_at.isoformat() if next_fixture_at else None
+        })
+    
+    return competitions
+
+@api_router.get("/leagues/{league_id}/summary")
+async def get_league_summary(league_id: str, userId: str):
+    """Get detailed league summary - Prompt 1"""
+    league = await db.leagues.find_one({"id": league_id})
+    if not league:
+        raise HTTPException(status_code=404, detail="League not found")
+    
+    # Get commissioner details
+    commissioner = await db.users.find_one({"id": league["commissionerId"]})
+    
+    # Get user's roster
+    participant = await db.league_participants.find_one({"leagueId": league_id, "userId": userId})
+    user_roster = participant.get("clubsWon", []) if participant else []
+    user_budget_remaining = participant.get("budgetRemaining", 0) if participant else 0
+    
+    # Get all managers
+    participants = await db.league_participants.find({"leagueId": league_id}).to_list(100)
+    managers = [{"id": p["userId"], "name": p["userName"]} for p in participants]
+    
+    # Determine status
+    auction = await db.auctions.find_one({"leagueId": league_id})
+    if not auction:
+        status = "pre_auction"
+    elif auction["status"] == "active":
+        status = "auction_live"  
+    else:
+        status = "auction_complete"
+    
+    return {
+        "leagueId": league_id,
+        "name": league["name"],
+        "sportKey": league["sportKey"],
+        "status": status,
+        "commissioner": {
+            "id": league["commissionerId"],
+            "name": commissioner["name"] if commissioner else "Unknown"
+        },
+        "yourRoster": user_roster,
+        "yourBudgetRemaining": user_budget_remaining,
+        "managers": managers,
+        "totalBudget": league["budget"],
+        "clubSlots": league["clubSlots"],
+        "timerSeconds": league.get("timerSeconds", 30),
+        "antiSnipeSeconds": league.get("antiSnipeSeconds", 10)
+    }
+
+@api_router.get("/leagues/{league_id}/standings")
+async def get_league_standings(league_id: str):
+    """Get current league standings - Prompt 1"""
+    # Check if standings exist
+    standing = await db.standings.find_one({"leagueId": league_id})
+    
+    if not standing:
+        # Create zeroed standings
+        league = await db.leagues.find_one({"id": league_id})
+        if not league:
+            raise HTTPException(status_code=404, detail="League not found")
+        
+        participants = await db.league_participants.find({"leagueId": league_id}).to_list(100)
+        
+        table = []
+        for participant in participants:
+            table.append({
+                "userId": participant["userId"],
+                "displayName": participant["userName"],
+                "points": 0.0,
+                "assetsOwned": participant.get("clubsWon", []),
+                "tiebreakers": {"goals": 0, "wins": 0, "runs": 0, "wickets": 0}
+            })
+        
+        # Sort by displayName for initial order
+        table.sort(key=lambda x: x["displayName"])
+        
+        standing_obj = Standing(
+            leagueId=league_id,
+            sportKey=league["sportKey"],
+            table=table
+        )
+        
+        await db.standings.insert_one(standing_obj.model_dump())
+        return standing_obj.model_dump(mode='json')
+    
+    return Standing(**standing).model_dump(mode='json')
+
+@api_router.get("/leagues/{league_id}/fixtures")
+async def get_league_fixtures(league_id: str, status: Optional[str] = None, limit: int = 50, skip: int = 0):
+    """Get league fixtures with optional filtering - Prompt 1"""
+    query = {"leagueId": league_id}
+    if status:
+        query["status"] = status
+    
+    fixtures = await db.fixtures.find(query).sort("startsAt", 1).skip(skip).limit(limit).to_list(limit)
+    
+    return [Fixture(**fixture).model_dump(mode='json') for fixture in fixtures]
+
 @api_router.put("/leagues/{league_id}/assets")
 async def update_league_assets(league_id: str, asset_ids: List[str]):
     """Prompt E: Update selected assets for league (commissioner only)"""
