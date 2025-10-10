@@ -532,7 +532,11 @@ async def get_my_competitions(userId: str):
 
 @api_router.get("/leagues/{league_id}/summary")
 async def get_league_summary(league_id: str, userId: str):
-    """Get detailed league summary - Prompt 1"""
+    """Get detailed league summary - Prompt 6: Feature flag protected"""
+    # Prompt 6: Feature flag check
+    if not FEATURE_MY_COMPETITIONS:
+        raise HTTPException(status_code=404, detail="Feature not available")
+    
     league = await db.leagues.find_one({"id": league_id})
     if not league:
         raise HTTPException(status_code=404, detail="League not found")
