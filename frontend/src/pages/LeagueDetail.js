@@ -97,6 +97,9 @@ export default function LeagueDetail() {
       
       return () => {
         if (socket) {
+          socket.off('member_joined');
+          socket.off('sync_members');
+          socket.off('auction_started');
           socket.emit('leave_league', { leagueId });
           socket.disconnect();
           socket = null;
