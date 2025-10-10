@@ -1844,6 +1844,36 @@ async def check_auction_completion(auction_id: str):
             'participants': [LeagueParticipant(**p).model_dump(mode='json') for p in participants]
         })
         
+        # Prompt 1: Emit league status changed event and create initial standings
+        league = await db.leagues.find_one({"id": auction["leagueId"]})
+        if league:
+            await sio.emit('league_status_changed', {
+                'leagueId': auction["leagueId"],
+                'status': 'auction_complete'
+            }, room=f"league:{auction['leagueId']}")
+            
+            # Create initial standings if not exists
+            existing_standing = await db.standings.find_one({"leagueId": auction["leagueId"]})
+            if not existing_standing:
+                table = []
+                for participant in participants:
+                    table.append({
+                        "userId": participant["userId"],
+                        "displayName": participant["userName"],
+                        "points": 0.0,
+                        "assetsOwned": participant.get("clubsWon", []),
+                        "tiebreakers": {"goals": 0, "wins": 0, "runs": 0, "wickets": 0}
+                    })
+                
+                standing_obj = Standing(
+                    leagueId=auction["leagueId"],
+                    sportKey=league["sportKey"],
+                    table=table
+                )
+                
+                await db.standings.insert_one(standing_obj.model_dump())
+                logger.info(f"Created initial standings for league {auction['leagueId']}")
+        
         logger.info(f"Auction {auction_id} completed - {total_clubs_sold} sold, {total_unsold} unsold. Reason: {completion_reason}")
 
 @api_router.post("/auction/{auction_id}/pause")
