@@ -1771,7 +1771,7 @@ async def start_next_lot(auction_id: str, next_club_id: str):
         'club': Club(**next_club).model_dump(),
         'lotNumber': next_lot_number,
         'timer': timer_data,
-        'isUnsoldRetry': next_club_id and next_club_id in (auction.get("unsoldClubs") or [])  # Flag for UI
+        'isUnsoldRetry': next_club_id and next_club_id in (auction.get("unsoldClubs", []))  # Flag for UI
     })
     
     logger.info(f"Started lot {next_lot_number}: {next_club['name']}")
