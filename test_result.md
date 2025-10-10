@@ -532,9 +532,95 @@ test_plan:
         agent: "testing"
         comment: "CRICKET SCORING INGEST SYSTEM TESTING COMPLETED: Comprehensive testing of cricket scoring ingest system performed as requested in review. Created specialized test suite (cricket_scoring_test.py) to verify all 15 review request areas. RESULTS: ✅ Scoring Ingest Endpoint - POST /api/scoring/{leagueId}/ingest working correctly with CSV upload functionality. ✅ CSV Parsing - Correct column validation: matchId, playerExternalId, runs, wickets, catches, stumpings, runOuts. Invalid CSV formats properly rejected with 400 error. ✅ Points Calculation - get_cricket_points function working correctly with proper milestone bonuses (half-century: 50+ runs, century: 100+ runs, five-wicket haul: 5+ wickets). ✅ Schema Precedence - Verified league.scoringOverrides || sports[league.sportKey].scoringSchema logic working. ✅ Database Operations - Upsert functionality into league_stats collection working (no double counting on re-upload). Unique index working on {leagueId, matchId, playerExternalId}. Leaderboard maintenance in cricket_leaderboard collection working. ✅ Points Accumulation - Multi-match points accumulation working correctly across different matches. ✅ API Functionality - GET /api/scoring/{leagueId}/leaderboard returns correctly sorted leaderboard. Error handling working for non-cricket leagues, missing files, invalid CSV format. ✅ Acceptance Criteria - Upload updates leaderboard correctly. Re-upload same CSV gives identical totals (no double counting). Points calculation includes milestone bonuses correctly. Multi-match accumulation working properly. FIXED ISSUE: HTTPException handling in CSV processing (was being caught by generic exception handler and returned as 500 instead of 400). ALL 10/10 test suites passed successfully. Cricket scoring ingest system is production-ready and working correctly."
 
+  - task: "My Competitions - GET /api/me/competitions endpoint"
+    implemented: true
+    working: "NA"
+    file: "server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Implemented GET /api/me/competitions endpoint. Returns user's leagues with leagueId, name, sportKey, status, assetsOwned, managersCount, timer settings, startsAt, nextFixtureAt. Fixed DateTime serialization issue for startsAt field."
+
+  - task: "My Competitions - GET /api/leagues/:id/summary endpoint"
+    implemented: true
+    working: "NA"
+    file: "server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Implemented GET /api/leagues/:id/summary endpoint. Returns league details, commissioner info, user's roster, budgets, managers list, and status."
+
+  - task: "My Competitions - GET /api/leagues/:id/standings endpoint"
+    implemented: true
+    working: "NA"
+    file: "server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Implemented GET /api/leagues/:id/standings endpoint. Returns current standings or creates zeroed table if none exists. Uses Pydantic models with .model_dump(mode='json') for proper DateTime serialization."
+
+  - task: "My Competitions - GET /api/leagues/:id/fixtures endpoint"
+    implemented: true
+    working: "NA"
+    file: "server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Implemented GET /api/leagues/:id/fixtures endpoint with status filtering and pagination. Returns fixtures sorted by startsAt ASC. Uses Pydantic Fixture model for proper serialization."
+
+  - task: "My Competitions - POST /api/leagues/:id/fixtures/import-csv endpoint"
+    implemented: true
+    working: "NA"
+    file: "server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Implemented POST /api/leagues/:id/fixtures/import-csv for commissioner CSV uploads. Parses CSV with columns: startsAt, homeAssetExternalId, awayAssetExternalId, venue, round, externalMatchId. Resolves asset IDs and upserts fixtures. Supports both football (clubs) and cricket (assets)."
+
+  - task: "My Competitions - Database indexes and models"
+    implemented: true
+    working: "NA"
+    file: "server.py, models.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Added Fixture, Standing, StandingEntry Pydantic models. Created database indexes: fixtures[(leagueId,startsAt), (leagueId,status)], standings[(leagueId) unique]. Indexes created on server startup."
+
+  - task: "My Competitions - Auction completion hook"
+    implemented: true
+    working: "NA"
+    file: "server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Implemented auction completion hook. When auction completes: (a) emits league_status_changed event with status:'auction_complete' to league room, (b) creates initial standings with all managers at 0 points and their current rosters."
+
 agent_communication:
   - agent: "main"
     message: "Environment cleaned up successfully. Database cleared of all test data. Found serialization issues in backend that need fixing before testing. Socket.IO paths configured correctly. Ready for systematic testing after fixes."
+  - agent: "main"
+    message: "MY COMPETITIONS FEATURE (PROMPT 1) IMPLEMENTATION COMPLETED: All backend components for 'My Competitions' feature have been implemented. ✅ Data Models: Added Fixture, Standing, StandingEntry Pydantic models with proper DateTime handling. ✅ Database Indexes: Created indexes for fixtures and standings collections on server startup. ✅ Read APIs: Implemented GET /api/me/competitions (user's leagues list), GET /api/leagues/:id/summary (detailed league info), GET /api/leagues/:id/standings (zeroed table on first access), GET /api/leagues/:id/fixtures (with filtering and pagination). ✅ CSV Import: Implemented POST /api/leagues/:id/fixtures/import-csv for commissioner fixture uploads with asset ID resolution for both football and cricket. ✅ Auction Hook: Added league_status_changed event emission and initial standings creation on auction completion. ✅ DateTime Fix: Fixed JSON serialization issue in /me/competitions endpoint. Ready for comprehensive backend testing of all new endpoints."
   - agent: "main"
     message: "MANUAL PRODUCTION READINESS TESTING COMPLETED: Comprehensive manual testing performed as requested without using testing agents. BACKEND TESTING: ✅ Sports API endpoints working (Football + Cricket with proper configurations). ✅ Assets API working (36 football clubs, 20 cricket players). ✅ Leagues API working (27 total, 23 football, 4 cricket). ✅ Cricket scoring system working (leaderboard endpoints functional). ✅ Multi-sport filtering and configurations verified. FRONTEND TESTING: ✅ Homepage loading correctly with strategic messaging. ✅ Multi-sport assets page working with sport dropdown. ✅ Sport-aware labeling (Football Clubs vs Cricket Players). ✅ All UI elements present and functional. ✅ Navigation and basic functionality working. FINAL PRODUCTION READINESS SCORE: 95% - System is production-ready with comprehensive multi-sport functionality. All core features working correctly. Minor areas for enhancement: user authentication flow optimization and sport selection UX improvements."
   - agent: "main"
