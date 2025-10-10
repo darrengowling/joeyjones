@@ -129,13 +129,19 @@ export default function AuctionRoom() {
 
     // Prompt B: Handle bid updates for all users
     const handleBidUpdate = (data) => {
-      console.log("Bid update received:", data);
+      console.log("🔔 Bid update received:", data);
       
       // Only update if this is a newer sequence to prevent stale overwrites
       if (data.seq >= bidSequence) {
+        console.log(`✅ Updating current bid: £${data.amount} by ${data.bidder?.displayName}`);
         setCurrentBid(data.amount);
         setCurrentBidder(data.bidder);
         setBidSequence(data.seq);
+        
+        // Also reload bids list to show the new bid in the history
+        loadBids();
+      } else {
+        console.log(`⚠️ Ignoring stale bid update: seq=${data.seq}, current=${bidSequence}`);
       }
     };
 
