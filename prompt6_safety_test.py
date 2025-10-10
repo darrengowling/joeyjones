@@ -254,14 +254,24 @@ class Prompt6SafetyTester:
         
         if result.get("status_code") == 400:
             error_text = result.get("text", "")
-            if "Cannot import fixtures while auction is in progress" in error_text:
-                self.log("✅ CSV upload correctly blocked during active auction")
-                test_2a_passed = True
-            else:
-                self.log(f"✅ CSV upload correctly blocked during active auction (message: {error_text})")
-                test_2a_passed = True
+            try:
+                import json
+                error_data = json.loads(error_text)
+                if "Cannot import fixtures while auction is in progress" in error_data.get("detail", ""):
+                    self.log("✅ CSV upload correctly blocked during active auction")
+                    test_2a_passed = True
+                else:
+                    self.log(f"✅ CSV upload correctly blocked during active auction (message: {error_data.get('detail', error_text)})")
+                    test_2a_passed = True
+            except:
+                if "Cannot import fixtures while auction is in progress" in error_text:
+                    self.log("✅ CSV upload correctly blocked during active auction")
+                    test_2a_passed = True
+                else:
+                    self.log(f"✅ CSV upload correctly blocked during active auction (message: {error_text})")
+                    test_2a_passed = True
         else:
-            self.log("❌ CSV upload should have been blocked during active auction", "ERROR")
+            self.log(f"❌ CSV upload should have been blocked during active auction, got {result.get('status_code')}", "ERROR")
             test_2a_passed = False
             
         # Test 2c: Pause the auction and try again (simulating completion)
