@@ -646,6 +646,10 @@ async def get_league_fixtures(league_id: str, status: Optional[str] = None, page
 @api_router.post("/leagues/{league_id}/fixtures/import-csv")
 async def import_fixtures_csv(league_id: str, file: UploadFile = File(...), commissionerId: str = None):
     """Import fixtures from CSV - Commissioner only - Prompt 6"""
+    # Prompt 6: Feature flag check
+    if not FEATURE_MY_COMPETITIONS:
+        raise HTTPException(status_code=404, detail="Feature not available")
+    
     # Verify league exists and get commissioner
     league = await db.leagues.find_one({"id": league_id})
     if not league:
