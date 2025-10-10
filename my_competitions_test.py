@@ -162,10 +162,18 @@ class MyCompetitionsTester:
                 self.log(f"❌ Missing field: {field}", "ERROR")
                 return False
                 
-        # Verify field values
-        if competition["leagueId"] != self.test_data["leagueId"]:
-            self.log(f"❌ Wrong leagueId: {competition['leagueId']}", "ERROR")
+        # Find our test competition
+        test_competition = None
+        for comp in response:
+            if comp["leagueId"] == self.test_data["leagueId"]:
+                test_competition = comp
+                break
+                
+        if not test_competition:
+            self.log(f"❌ Test competition not found in response", "ERROR")
             return False
+            
+        competition = test_competition
             
         if competition["sportKey"] != "football":
             self.log(f"❌ Wrong sportKey: {competition['sportKey']}", "ERROR")
