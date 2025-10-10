@@ -502,6 +502,10 @@ async def get_my_competitions(userId: str):
         
         next_fixture_at = next_fixture["startsAt"] if next_fixture else None
         
+        # Serialize DateTime objects to ISO strings
+        starts_at = league.get("startsAt")
+        starts_at_iso = starts_at.isoformat() if starts_at and isinstance(starts_at, datetime) else starts_at
+        
         competitions.append({
             "leagueId": league["id"],
             "name": league["name"],
@@ -511,7 +515,7 @@ async def get_my_competitions(userId: str):
             "managersCount": manager_count,
             "timerSeconds": league.get("timerSeconds", 30),
             "antiSnipeSeconds": league.get("antiSnipeSeconds", 10),
-            "startsAt": league.get("startsAt"),
+            "startsAt": starts_at_iso,
             "nextFixtureAt": next_fixture_at.isoformat() if next_fixture_at else None
         })
     
