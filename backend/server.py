@@ -728,6 +728,12 @@ async def import_fixtures_csv(league_id: str, file: UploadFile = File(...)):
             
             fixtures_imported += 1
         
+        # Prompt 4: Emit fixtures_updated event to league room
+        await sio.emit('fixtures_updated', {
+            'leagueId': league_id,
+            'countChanged': fixtures_imported
+        }, room=f"league:{league_id}")
+        
         return {
             "message": f"Successfully imported {fixtures_imported} fixtures",
             "fixturesImported": fixtures_imported
