@@ -56,7 +56,9 @@ class Prompt6SafetyTester:
                 return {"error": f"Status {response.status_code}", "text": response.text, "status_code": response.status_code}
                 
             try:
-                return response.json()
+                result = response.json()
+                result["status_code"] = response.status_code
+                return result
             except:
                 return {"text": response.text, "status_code": response.status_code}
                 
