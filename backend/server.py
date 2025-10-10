@@ -65,6 +65,16 @@ asset_service = AssetService(db)
 ENABLE_RATE_LIMITING = os.getenv("ENABLE_RATE_LIMITING", "true").lower() == "true"
 REDIS_URL = os.getenv("REDIS_URL")
 
+# Rate limiting helper - returns dependency only if rate limiting is enabled and Redis is available
+def get_rate_limiter(times: int, seconds: int):
+    if ENABLE_RATE_LIMITING and REDIS_URL and REDIS_URL.strip():
+        return Depends(RateLimiter(times=times, seconds=seconds))
+    else:
+        # Return a dummy dependency that does nothing
+        async def dummy_limiter():
+            pass
+        return Depends(dummy_limiter)
+
 # Lifespan management for rate limiting
 @asynccontextmanager
 async def lifespan(app: FastAPI):
