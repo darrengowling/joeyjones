@@ -47,9 +47,34 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # MongoDB connection
-mongo_url = os.environ['MONGO_URL']
-client = AsyncIOMotorClient(mongo_url)
-db = client[os.environ['DB_NAME']]
+MONGO_URL = os.environ['MONGO_URL']
+DB_NAME = os.environ['DB_NAME']
+
+# Global variables for database connection
+client = None
+db = None
+
+async def startup_db_client():
+    global client, db
+    client = AsyncIOMotorClient(MONGO_URL)
+    db = client[DB_NAME]
+    
+    # Create indexes for My Competitions collections - Prompt 1
+    try:
+        # Fixtures indexes
+        await db.fixtures.create_index([("leagueId", 1), ("startsAt", 1)])
+        await db.fixtures.create_index([("leagueId", 1), ("status", 1)])
+        
+        # Standings indexes  
+        await db.standings.create_index([("leagueId", 1)], unique=True)
+        
+        logger.info("✅ My Competitions database indexes created")
+    except Exception as e:
+        logger.warning(f"⚠️ Index creation warning: {e}")
+
+# Initialize database connection (will be called during startup)
+import asyncio
+asyncio.create_task(startup_db_client())
 
 # Sports feature flags
 SPORTS_CRICKET_ENABLED = os.environ.get('SPORTS_CRICKET_ENABLED', 'false').lower() == 'true'
