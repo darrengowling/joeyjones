@@ -255,8 +255,9 @@ export default function CompetitionDashboard() {
       const formData = new FormData();
       formData.append("file", file);
 
+      // Prompt 6: Pass commissionerId for permission check
       const response = await axios.post(
-        `${API}/leagues/${leagueId}/fixtures/import-csv`,
+        `${API}/leagues/${leagueId}/fixtures/import-csv?commissionerId=${user.id}`,
         formData,
         {
           headers: {
