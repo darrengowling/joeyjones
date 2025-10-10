@@ -55,7 +55,7 @@ client = None
 db = None
 
 async def startup_db_client():
-    global client, db
+    global client, db, sport_service, asset_service
     client = AsyncIOMotorClient(MONGO_URL)
     db = client[DB_NAME]
     
@@ -71,6 +71,10 @@ async def startup_db_client():
         logger.info("✅ My Competitions database indexes created")
     except Exception as e:
         logger.warning(f"⚠️ Index creation warning: {e}")
+    
+    # Initialize services after database connection
+    sport_service = SportService(db)
+    asset_service = AssetService(db)
 
 # Sports feature flags
 SPORTS_CRICKET_ENABLED = os.environ.get('SPORTS_CRICKET_ENABLED', 'false').lower() == 'true'
