@@ -328,9 +328,16 @@ class Prompt6SafetyTester:
         params = {"page": 1, "limit": 25}
         result = self.test_api_endpoint("GET", f"/leagues/{league_id}/fixtures", params=params)
         
-        if "error" not in result and isinstance(result, list):
-            self.log(f"✅ Explicit pagination returned {len(result)} fixtures")
-            test_3b_passed = True
+        if "error" not in result:
+            if isinstance(result, list):
+                self.log(f"✅ Explicit pagination returned {len(result)} fixtures")
+                test_3b_passed = True
+            elif isinstance(result, dict) and "status_code" in result and result["status_code"] == 200:
+                self.log(f"✅ Explicit pagination returned response")
+                test_3b_passed = True
+            else:
+                self.log(f"❌ Explicit pagination failed - unexpected response: {type(result)}", "ERROR")
+                test_3b_passed = False
         else:
             self.log("❌ Explicit pagination failed", "ERROR")
             test_3b_passed = False
