@@ -6,6 +6,7 @@ import CreateLeague from "./pages/CreateLeague";
 import ClubsList from "./pages/ClubsList";
 import LeagueDetail from "./pages/LeagueDetail";
 import AuctionRoom from "./pages/AuctionRoom";
+import MyCompetitions from "./pages/MyCompetitions";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
