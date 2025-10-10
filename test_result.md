@@ -263,7 +263,13 @@ metadata:
   run_ui: true
 
 test_plan:
-  current_focus: []
+  current_focus:
+    - "My Competitions - GET /api/me/competitions endpoint"
+    - "My Competitions - GET /api/leagues/:id/summary endpoint"
+    - "My Competitions - GET /api/leagues/:id/standings endpoint"
+    - "My Competitions - GET /api/leagues/:id/fixtures endpoint"
+    - "My Competitions - POST /api/leagues/:id/fixtures/import-csv endpoint"
+    - "My Competitions - Auction completion hook"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
