@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import io from "socket.io-client";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
@@ -22,6 +23,9 @@ export default function CompetitionDashboard() {
   const [uploadingCSV, setUploadingCSV] = useState(false);
   const [uploadError, setUploadError] = useState("");
   const [uploadSuccess, setUploadSuccess] = useState("");
+
+  // Socket.IO connection (Prompt 4)
+  const socketRef = useRef(null);
 
   useEffect(() => {
     // Get user from localStorage
