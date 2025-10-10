@@ -582,7 +582,11 @@ async def get_league_summary(league_id: str, userId: str):
 
 @api_router.get("/leagues/{league_id}/standings")
 async def get_league_standings(league_id: str):
-    """Get current league standings - Prompt 1"""
+    """Get current league standings - Prompt 6: Feature flag protected"""
+    # Prompt 6: Feature flag check
+    if not FEATURE_MY_COMPETITIONS:
+        raise HTTPException(status_code=404, detail="Feature not available")
+    
     # Check if standings exist
     standing = await db.standings.find_one({"leagueId": league_id})
     
