@@ -100,6 +100,9 @@ def get_rate_limiter(times: int, seconds: int):
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup
+    # Initialize database connection and indexes
+    await startup_db_client()
+    
     if ENABLE_RATE_LIMITING and REDIS_URL and REDIS_URL.strip():
         try:
             r = aioredis.from_url(REDIS_URL, encoding="utf-8", decode_responses=True)
