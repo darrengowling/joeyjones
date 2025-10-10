@@ -118,11 +118,6 @@ const Home = () => {
       setShowUserDialog(false);
       setUserForm({ name: "", email: "" });
       setAuthError("");
-      
-      // Show success and automatically open create league dialog
-      setTimeout(() => {
-        setShowCreateLeagueDialog(true);
-      }, 100);
     } catch (error) {
       setAuthError("Something went wrong. Please try again.");
     } finally {
