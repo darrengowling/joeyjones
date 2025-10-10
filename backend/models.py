@@ -51,6 +51,46 @@ class League(BaseModel):
     # Prompt E: Team management
     assetsSelected: Optional[List[str]] = None  # If null, use sport default; else restrict to selected IDs
 
+# My Competitions Models - Prompt 1
+class Fixture(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    leagueId: str
+    sportKey: str
+    externalMatchId: Optional[str] = None
+    homeAssetId: str  # clubId or playerId depending on sport
+    awayAssetId: Optional[str] = None  # null for cricket or BYE fixtures
+    startsAt: datetime
+    venue: Optional[str] = None
+    round: Optional[str] = None
+    status: str = "scheduled"  # scheduled|live|final
+    source: str = "manual"  # csv|provider|manual
+    createdAt: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updatedAt: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class StandingEntry(BaseModel):
+    userId: str
+    displayName: str
+    points: float = 0.0
+    assetsOwned: List[str] = []
+    tiebreakers: Dict[str, float] = Field(default_factory=lambda: {
+        "goals": 0, "wins": 0, "runs": 0, "wickets": 0
+    })
+
+class Standing(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    leagueId: str
+    sportKey: str
+    table: List[StandingEntry] = []
+    lastComputedAt: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class FixtureImport(BaseModel):
+    startsAt: str
+    homeAssetExternalId: str
+    awayAssetExternalId: Optional[str] = None
+    venue: Optional[str] = None
+    round: Optional[str] = None
+    externalMatchId: Optional[str] = None
+
 class LeagueCreate(BaseModel):
     name: str
     commissionerId: str
