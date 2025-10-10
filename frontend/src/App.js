@@ -605,6 +605,24 @@ const Home = () => {
         </div>
       </div>
 
+      {/* CTA Banner - Show if user has leagues but no active auction */}
+      {user && showCompetitionsCTA && (
+        <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 shadow-md">
+          <div className="container-narrow mx-auto px-4 flex justify-between items-center">
+            <div className="flex items-center gap-3">
+              <span className="text-2xl">🏆</span>
+              <span className="font-semibold">Jump back in: Check your competitions!</span>
+            </div>
+            <button
+              onClick={() => navigate("/app/my-competitions")}
+              className="bg-white text-blue-600 px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+            >
+              View My Competitions
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Main Content */}
       <div className="container-narrow mx-auto px-4 py-8">
         <div className="bg-white rounded-lg shadow-lg p-8">
