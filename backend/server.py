@@ -628,7 +628,11 @@ async def get_league_standings(league_id: str):
 
 @api_router.get("/leagues/{league_id}/fixtures")
 async def get_league_fixtures(league_id: str, status: Optional[str] = None, page: int = 1, limit: int = 50):
-    """Get league fixtures with optional filtering - Prompt 6: Pagination default limit=50, page=1"""
+    """Get league fixtures with optional filtering - Prompt 6: Feature flag + Pagination"""
+    # Prompt 6: Feature flag check
+    if not FEATURE_MY_COMPETITIONS:
+        raise HTTPException(status_code=404, detail="Feature not available")
+    
     query = {"leagueId": league_id}
     if status:
         query["status"] = status
