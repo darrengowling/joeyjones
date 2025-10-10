@@ -104,14 +104,14 @@ const Home = () => {
     }
 
     try {
-      // Simulate brief loading for better UX
-      await new Promise(resolve => setTimeout(resolve, 500));
-
-      const userData = {
-        id: Date.now().toString(),
+      // Create user in backend
+      const userCreateData = {
         name: userForm.name.trim(),
         email: userForm.email.trim().toLowerCase(),
       };
+
+      const response = await axios.post(`${API}/users`, userCreateData);
+      const userData = response.data;
 
       setUser(userData);
       localStorage.setItem("user", JSON.stringify(userData));
