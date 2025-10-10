@@ -190,7 +190,16 @@ export default function AuctionRoom() {
 
     const handleAuctionComplete = (data) => {
       console.log("Auction complete:", data);
-      alert(data.message || "Auction complete! All clubs have been auctioned.");
+      
+      // Show toast notification
+      showToast("Auction complete. View your competition.", "success");
+      
+      // Redirect to Competition Dashboard after 2 seconds
+      setTimeout(() => {
+        if (auction?.leagueId) {
+          navigate(`/app/competitions/${auction.leagueId}`);
+        }
+      }, 2000);
     };
 
     const handleAuctionPaused = (data) => {
