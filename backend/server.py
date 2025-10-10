@@ -31,7 +31,8 @@ from models import (
     LeagueParticipant, LeagueParticipantCreate,
     Auction, AuctionCreate,
     Bid, BidCreate,
-    LeaguePoints
+    LeaguePoints,
+    Fixture, Standing, StandingEntry
 )
 from services.sport_service import SportService
 from services.asset_service import AssetService
