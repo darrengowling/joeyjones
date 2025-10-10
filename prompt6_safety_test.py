@@ -57,7 +57,9 @@ class Prompt6SafetyTester:
                 
             try:
                 result = response.json()
-                result["status_code"] = response.status_code
+                # Only add status_code if it's a dict, preserve lists as-is
+                if isinstance(result, dict):
+                    result["status_code"] = response.status_code
                 return result
             except:
                 return {"text": response.text, "status_code": response.status_code}
