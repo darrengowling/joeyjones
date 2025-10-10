@@ -429,12 +429,27 @@ class Prompt6SafetyTester:
             expected_status=403
         )
         
-        error_message = result.get("text", "")
         if result.get("status_code") == 403:
-            self.log(f"✅ Clear non-commissioner error message: {error_message}")
-            test_6a_passed = True
+            error_message = result.get("text", "")
+            if "Only the league commissioner can import fixtures" in error_message:
+                self.log(f"✅ Clear non-commissioner error message: {error_message}")
+                test_6a_passed = True
+            else:
+                # Check if it's a JSON response
+                try:
+                    import json
+                    error_data = json.loads(error_message)
+                    if "Only the league commissioner can import fixtures" in error_data.get("detail", ""):
+                        self.log(f"✅ Clear non-commissioner error message: {error_data['detail']}")
+                        test_6a_passed = True
+                    else:
+                        self.log(f"❌ Non-commissioner error message not clear: {error_message}", "ERROR")
+                        test_6a_passed = False
+                except:
+                    self.log(f"❌ Non-commissioner error message not clear: {error_message}", "ERROR")
+                    test_6a_passed = False
         else:
-            self.log("❌ Non-commissioner error message not clear", "ERROR")
+            self.log("❌ Expected 403 status code", "ERROR")
             test_6a_passed = False
             
         # Test 6b: Invalid commissionerId error
