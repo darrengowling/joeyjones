@@ -119,7 +119,9 @@ const Home = () => {
       setUserForm({ name: "", email: "" });
       setAuthError("");
     } catch (error) {
-      setAuthError("Something went wrong. Please try again.");
+      console.error("Authentication error:", error);
+      const errorMessage = error.response?.data?.detail || error.message || "Something went wrong. Please try again.";
+      setAuthError(errorMessage);
     } finally {
       setAuthLoading(false);
     }
