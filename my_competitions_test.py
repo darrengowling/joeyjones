@@ -465,23 +465,27 @@ class MyCompetitionsTester:
         self.log("✅ Completed auction lot")
         
         # Check if standings were automatically created
-        standings_response = self.test_api_endpoint("GET", f"/leagues/{self.test_data['leagueId']}/standings")
-        
-        if "error" in standings_response:
-            self.log(f"❌ Failed to get standings after auction: {standings_response}", "ERROR")
-            return False
+        try:
+            standings_response = self.test_api_endpoint("GET", f"/leagues/{self.test_data['leagueId']}/standings")
             
-        # Verify standings exist and have participants
-        if "table" not in standings_response or len(standings_response["table"]) == 0:
-            self.log("❌ Standings not created after auction completion", "ERROR")
-            return False
+            if "error" in standings_response:
+                self.log(f"❌ Failed to get standings after auction: {standings_response}", "ERROR")
+                return False
+                
+            # Verify standings exist and have participants
+            if "table" not in standings_response or len(standings_response["table"]) == 0:
+                self.log("❌ Standings not created after auction completion", "ERROR")
+                return False
+                
+            self.log("✅ Standings automatically created after auction activity")
             
-        self.log("✅ Standings automatically created after auction activity")
-        
-        # Note: Full auction completion testing would require completing all lots
-        # For this test, we verify the hook mechanism is in place
-        self.results["auction_completion_hook_ok"] = True
-        return True
+            # Note: Full auction completion testing would require completing all lots
+            # For this test, we verify the hook mechanism is in place
+            self.results["auction_completion_hook_ok"] = True
+            return True
+        except Exception as e:
+            self.log(f"❌ Exception in auction completion test: {str(e)}", "ERROR")
+            return False
 
     def test_datetime_serialization(self):
         """Test DateTime serialization in API responses"""
