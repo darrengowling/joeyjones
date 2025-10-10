@@ -7,7 +7,7 @@ import requests
 import json
 import time
 
-BASE_URL = "https://fantasy-cricket-6.preview.emergentagent.com/api"
+BASE_URL = "https://sportbid-platform.preview.emergentagent.com/api"
 
 def test_endpoint(method: str, endpoint: str, data: dict = None) -> dict:
     """Test API endpoint"""
