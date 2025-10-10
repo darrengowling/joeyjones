@@ -612,6 +612,126 @@ async def get_league_fixtures(league_id: str, status: Optional[str] = None, limi
     
     return [Fixture(**fixture).model_dump(mode='json') for fixture in fixtures]
 
+@api_router.post("/leagues/{league_id}/fixtures/import-csv")
+async def import_fixtures_csv(league_id: str, file: UploadFile = File(...)):
+    """Import fixtures from CSV - Commissioner only - Prompt 1"""
+    # Verify league exists and get commissioner
+    league = await db.leagues.find_one({"id": league_id})
+    if not league:
+        raise HTTPException(status_code=404, detail="League not found")
+    
+    # TODO: Add commissioner verification when user context is available
+    # For now, allow any user to import (will be secured later)
+    
+    if not file.filename.endswith('.csv'):
+        raise HTTPException(status_code=400, detail="File must be CSV format")
+    
+    try:
+        # Read CSV content
+        content = await file.read()
+        csv_content = content.decode('utf-8')
+        
+        # Parse CSV
+        import csv
+        import io
+        
+        reader = csv.DictReader(io.StringIO(csv_content))
+        fixtures_imported = 0
+        
+        sport_key = league["sportKey"]
+        
+        for row in reader:
+            # Parse row data
+            starts_at_str = row.get('startsAt', '').strip()
+            home_external_id = row.get('homeAssetExternalId', '').strip()
+            away_external_id = row.get('awayAssetExternalId', '').strip()
+            venue = row.get('venue', '').strip() or None
+            round_val = row.get('round', '').strip() or None
+            external_match_id = row.get('externalMatchId', '').strip() or None
+            
+            if not starts_at_str or not home_external_id:
+                continue  # Skip invalid rows
+            
+            # Parse datetime
+            try:
+                starts_at = datetime.fromisoformat(starts_at_str.replace('Z', '+00:00'))
+            except ValueError:
+                continue  # Skip invalid dates
+            
+            # Look up asset IDs
+            if sport_key == "football":
+                home_asset = await db.clubs.find_one({"uefaId": home_external_id})
+                away_asset = await db.clubs.find_one({"uefaId": away_external_id}) if away_external_id else None
+            else:
+                # For cricket, look up by externalId or name
+                home_asset = await db.assets.find_one({
+                    "sportKey": sport_key,
+                    "$or": [
+                        {"externalId": home_external_id},
+                        {"name": home_external_id}
+                    ]
+                })
+                away_asset = await db.assets.find_one({
+                    "sportKey": sport_key,
+                    "$or": [
+                        {"externalId": away_external_id},
+                        {"name": away_external_id}
+                    ]
+                }) if away_external_id else None
+            
+            if not home_asset:
+                logger.warning(f"Home asset not found: {home_external_id}")
+                continue
+                
+            home_asset_id = home_asset["id"]
+            away_asset_id = away_asset["id"] if away_asset else None
+            
+            # Create fixture
+            fixture = Fixture(
+                leagueId=league_id,
+                sportKey=sport_key,
+                externalMatchId=external_match_id,
+                homeAssetId=home_asset_id,
+                awayAssetId=away_asset_id,
+                startsAt=starts_at,
+                venue=venue,
+                round=round_val,
+                status="scheduled",
+                source="csv"
+            )
+            
+            # Upsert fixture
+            if external_match_id:
+                # Update by external match ID
+                await db.fixtures.update_one(
+                    {"leagueId": league_id, "externalMatchId": external_match_id},
+                    {"$set": fixture.model_dump()},
+                    upsert=True
+                )
+            else:
+                # Update by home/away/time combination
+                await db.fixtures.update_one(
+                    {
+                        "leagueId": league_id,
+                        "homeAssetId": home_asset_id,
+                        "awayAssetId": away_asset_id,
+                        "startsAt": starts_at
+                    },
+                    {"$set": fixture.model_dump()},
+                    upsert=True
+                )
+            
+            fixtures_imported += 1
+        
+        return {
+            "message": f"Successfully imported {fixtures_imported} fixtures",
+            "fixturesImported": fixtures_imported
+        }
+        
+    except Exception as e:
+        logger.error(f"Error importing fixtures: {e}")
+        raise HTTPException(status_code=400, detail=f"Error processing CSV: {str(e)}")
+
 @api_router.put("/leagues/{league_id}/assets")
 async def update_league_assets(league_id: str, asset_ids: List[str]):
     """Prompt E: Update selected assets for league (commissioner only)"""
