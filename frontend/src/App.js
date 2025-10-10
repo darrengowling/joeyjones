@@ -609,8 +609,8 @@ const Home = () => {
         </div>
       </div>
 
-      {/* CTA Banner - Show if user has leagues but no active auction */}
-      {user && showCompetitionsCTA && (
+      {/* CTA Banner - Show if user has leagues but no active auction - Prompt 6: Feature flag protected */}
+      {user && showCompetitionsCTA && process.env.REACT_APP_FEATURE_MY_COMPETITIONS === 'true' && (
         <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 shadow-md">
           <div className="container-narrow mx-auto px-4 flex justify-between items-center">
             <div className="flex items-center gap-3">
