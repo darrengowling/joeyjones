@@ -49,6 +49,96 @@ export default function CompetitionDashboard() {
     }
   }, [user, leagueId, activeTab]);
 
+  // Prompt 4: Socket.IO real-time updates for league events
+  useEffect(() => {
+    if (!leagueId || !user) return;
+
+    // Initialize Socket.IO connection
+    const socket = io(BACKEND_URL, {
+      path: "/api/socket.io",
+      transports: ["websocket", "polling"]
+    });
+
+    socketRef.current = socket;
+
+    socket.on("connect", () => {
+      console.log("✅ Dashboard Socket.IO connected");
+      
+      // Join league room
+      socket.emit("join_league_room", { leagueId });
+    });
+
+    socket.on("disconnect", () => {
+      console.log("❌ Dashboard Socket.IO disconnected");
+    });
+
+    // Prompt 4: Listen for league-level events
+    
+    // Event 1: league_status_changed → refresh summary header
+    socket.on("league_status_changed", (data) => {
+      console.log("📢 league_status_changed event received:", data);
+      if (data.leagueId === leagueId) {
+        // Refetch summary to get updated status
+        axios.get(`${API}/leagues/${leagueId}/summary`, {
+          params: { userId: user.id }
+        })
+        .then((response) => {
+          setSummary(response.data);
+          console.log("✅ Summary refreshed with new status");
+        })
+        .catch((e) => {
+          console.error("Error refreshing summary:", e);
+        });
+      }
+    });
+
+    // Event 2: standings_updated → refetch standings
+    socket.on("standings_updated", (data) => {
+      console.log("📢 standings_updated event received:", data);
+      if (data.leagueId === leagueId) {
+        // Refetch standings
+        axios.get(`${API}/leagues/${leagueId}/standings`)
+        .then((response) => {
+          setStandings(response.data);
+          console.log("✅ Standings refreshed");
+        })
+        .catch((e) => {
+          console.error("Error refreshing standings:", e);
+        });
+      }
+    });
+
+    // Event 3: fixtures_updated → refetch fixtures
+    socket.on("fixtures_updated", (data) => {
+      console.log("📢 fixtures_updated event received:", data);
+      if (data.leagueId === leagueId) {
+        // Refetch fixtures
+        axios.get(`${API}/leagues/${leagueId}/fixtures`)
+        .then((response) => {
+          setFixtures(response.data);
+          console.log(`✅ Fixtures refreshed (${data.countChanged} fixtures changed)`);
+        })
+        .catch((e) => {
+          console.error("Error refreshing fixtures:", e);
+        });
+      }
+    });
+
+    // Cleanup on unmount
+    return () => {
+      console.log("🧹 Cleaning up Dashboard Socket.IO connection");
+      
+      // Leave league room
+      if (socket.connected) {
+        socket.emit("leave_league_room", { leagueId });
+      }
+      
+      // Disconnect socket
+      socket.disconnect();
+      socketRef.current = null;
+    };
+  }, [leagueId, user]);
+
   const loadTabData = async (tab) => {
     // Don't refetch if already cached
     if (tab === "summary" && summary) return;
