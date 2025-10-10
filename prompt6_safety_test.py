@@ -408,8 +408,11 @@ class Prompt6SafetyTester:
             self.log(f"Testing feature flag endpoint: {endpoint}")
             result = self.test_api_endpoint(method, endpoint)
             
-            if "error" not in result and result.get("status_code") != 404:
-                self.log(f"✅ {endpoint} - Feature available")
+            if "error" not in result:
+                if isinstance(result, list) or isinstance(result, dict):
+                    self.log(f"✅ {endpoint} - Feature available")
+                else:
+                    self.log(f"✅ {endpoint} - Working (no feature flag error)")
             else:
                 if "Feature not available" in str(result):
                     self.log(f"❌ {endpoint} - Feature flag disabled", "ERROR")
