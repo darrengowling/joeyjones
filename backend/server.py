@@ -72,10 +72,6 @@ async def startup_db_client():
     except Exception as e:
         logger.warning(f"⚠️ Index creation warning: {e}")
 
-# Initialize database connection (will be called during startup)
-import asyncio
-asyncio.create_task(startup_db_client())
-
 # Sports feature flags
 SPORTS_CRICKET_ENABLED = os.environ.get('SPORTS_CRICKET_ENABLED', 'false').lower() == 'true'
 logger.info(f"Cricket feature enabled: {SPORTS_CRICKET_ENABLED}")
