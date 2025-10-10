@@ -602,6 +602,10 @@ async def get_league_standings(league_id: str):
         )
         
         await db.standings.insert_one(standing_obj.model_dump())
+        
+        # Prompt 4: standings_updated event will be emitted here when scoring feeds update points
+        # await sio.emit('standings_updated', {'leagueId': league_id, 'at': datetime.now(timezone.utc).isoformat()}, room=f"league:{league_id}")
+        
         return standing_obj.model_dump(mode='json')
     
     return Standing(**standing).model_dump(mode='json')
