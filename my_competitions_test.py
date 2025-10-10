@@ -252,8 +252,8 @@ class MyCompetitionsTester:
         # Test with invalid league ID
         invalid_response = self.test_api_endpoint("GET", "/leagues/invalid-id/summary", 
                                                 {"userId": self.test_data["userId"]}, expected_status=404)
-        if "error" not in invalid_response:
-            self.log("❌ Expected 404 for invalid league ID", "ERROR")
+        if "error" not in invalid_response or "404" not in str(invalid_response.get("error", "")):
+            self.log(f"❌ Expected 404 for invalid league ID, got: {invalid_response}", "ERROR")
             return False
             
         self.log("✅ 404 returned for invalid league ID")
