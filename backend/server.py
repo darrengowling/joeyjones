@@ -83,6 +83,10 @@ async def startup_db_client():
 SPORTS_CRICKET_ENABLED = os.environ.get('SPORTS_CRICKET_ENABLED', 'false').lower() == 'true'
 logger.info(f"Cricket feature enabled: {SPORTS_CRICKET_ENABLED}")
 
+# Prompt 6: Feature flag for My Competitions feature
+FEATURE_MY_COMPETITIONS = os.environ.get('FEATURE_MY_COMPETITIONS', 'true').lower() == 'true'
+logger.info(f"My Competitions feature enabled: {FEATURE_MY_COMPETITIONS}")
+
 # Socket.IO server imported from socketio_init.py (with Redis scaling support)
 
 # Production hardening configuration
