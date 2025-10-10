@@ -182,7 +182,8 @@ const Home = () => {
       navigate(`/league/${response.data.id}`);
     } catch (e) {
       console.error("Error creating league:", e);
-      alert("Error creating league");
+      const errorMessage = e.response?.data?.detail || e.message || "Unknown error creating league";
+      alert(`Error creating league: ${errorMessage}`);
     }
   };
 
