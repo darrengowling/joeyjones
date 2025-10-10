@@ -622,15 +622,27 @@ async def get_league_fixtures(league_id: str, status: Optional[str] = None, limi
     return [Fixture(**fixture).model_dump(mode='json') for fixture in fixtures]
 
 @api_router.post("/leagues/{league_id}/fixtures/import-csv")
-async def import_fixtures_csv(league_id: str, file: UploadFile = File(...)):
-    """Import fixtures from CSV - Commissioner only - Prompt 1"""
+async def import_fixtures_csv(league_id: str, file: UploadFile = File(...), commissionerId: str = None):
+    """Import fixtures from CSV - Commissioner only - Prompt 6"""
     # Verify league exists and get commissioner
     league = await db.leagues.find_one({"id": league_id})
     if not league:
         raise HTTPException(status_code=404, detail="League not found")
     
-    # TODO: Add commissioner verification when user context is available
-    # For now, allow any user to import (will be secured later)
+    # Prompt 6: Permissions - lock CSV import to commissioner; return 403 otherwise
+    if not commissionerId or league["commissionerId"] != commissionerId:
+        raise HTTPException(
+            status_code=403, 
+            detail="Only the league commissioner can import fixtures"
+        )
+    
+    # Prompt 6: Validation - refuse import when auction is not auction_complete
+    auction = await db.auctions.find_one({"leagueId": league_id})
+    if auction and auction["status"] != "completed":
+        raise HTTPException(
+            status_code=400,
+            detail="Cannot import fixtures while auction is in progress. Please complete the auction first."
+        )
     
     if not file.filename.endswith('.csv'):
         raise HTTPException(status_code=400, detail="File must be CSV format")
