@@ -264,7 +264,7 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Socket.IO real-time updates for Competition Dashboard (Prompt 4)"
+    - "Prompt 6 Safety and Performance Features Testing"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
