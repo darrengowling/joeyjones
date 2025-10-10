@@ -673,6 +673,18 @@ test_plan:
         agent: "testing"
         comment: "✅ COMPREHENSIVE COMPETITION DASHBOARD TESTING COMPLETED: All acceptance criteria passed successfully. ✅ ROUTE & NAVIGATION: Route /app/competitions/:leagueId accessible and loads dashboard with data-testid='comp-dashboard'. View Dashboard button from My Competitions works correctly. Back navigation to My Competitions functional. ✅ TAB NAVIGATION & CACHING: All three tabs visible with correct testids (tab-summary, tab-table, tab-fixtures). Tab switching works without unnecessary refetching - session caching confirmed with only 1 API request during multiple tab switches. Active tab styling working correctly. ✅ SUMMARY TAB CONTENT: League name, sport emoji (⚽/🏏), status chip (⏳ Pre-Auction) displayed correctly. Commissioner name, timer settings (30s/10s), total budget and slots shown. 'Your Roster' section (data-testid='summary-roster') shows 'No teams acquired yet'. 'Your Budget' section (data-testid='summary-budget') shows £500.0M remaining. 'Managers List' (data-testid='summary-managers') shows manager with avatar. ✅ LEAGUE TABLE TAB CONTENT: Table (data-testid='table-grid') displays with correct headers. Sport-aware tiebreakers working: Football shows Goals/Wins columns, Cricket shows Runs/Wickets columns. Table rows with data-testid='table-row-{userId}' present. Current user's row highlighted (bg-blue-50). All managers show 0.0 points initially. ✅ FIXTURES TAB CONTENT: Fixtures list container (data-testid='fixtures-list') present. Empty state (data-testid='fixtures-empty') displays 'No fixtures scheduled yet' message. Commissioner upload panel (data-testid='fixtures-upload') visible with file input accepting .csv files. 'View sample CSV format' link working. CSV upload instructions present. ✅ COMMISSIONER CSV UPLOAD: Upload panel fully functional for commissioners with proper file input, sample format link, and upload instructions. ✅ MULTI-SPORT SUPPORT: Both football (⚽) and cricket (🏏) leagues working correctly. Sport-aware tiebreaker columns confirmed (Goals/Wins for football, Runs/Wickets for cricket). ✅ ALL TESTIDS PRESENT: All required data-testids working correctly (comp-dashboard, tab-summary, tab-table, tab-fixtures, summary-roster, summary-budget, summary-managers, table-grid, table-row-{userId}, fixtures-list, fixtures-upload, fixtures-empty). Competition Dashboard is production-ready and fully functional."
 
+  - task: "Socket.IO real-time updates for Competition Dashboard (Prompt 4)"
+    implemented: true
+    working: "NA"
+    file: "CompetitionDashboard.js, server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Implemented Socket.IO real-time updates for Competition Dashboard. Frontend subscribes to league-level events (league_status_changed, standings_updated, fixtures_updated) and updates data without page reload. Backend emits events on CSV upload, auction completion, and future scoring updates. Uses league rooms separate from auction Socket.IO."
+
 agent_communication:
   - agent: "main"
     message: "Environment cleaned up successfully. Database cleared of all test data. Found serialization issues in backend that need fixing before testing. Socket.IO paths configured correctly. Ready for systematic testing after fixes."
