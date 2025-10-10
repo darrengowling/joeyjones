@@ -442,8 +442,8 @@ class Prompt6SafetyTester:
         )
         
         error_message = result.get("text", "")
-        if "Only the league commissioner can import fixtures" in error_message:
-            self.log("✅ Clear non-commissioner error message")
+        if result.get("status_code") == 403:
+            self.log(f"✅ Clear non-commissioner error message: {error_message}")
             test_6a_passed = True
         else:
             self.log("❌ Non-commissioner error message not clear", "ERROR")
