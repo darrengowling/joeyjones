@@ -477,26 +477,32 @@ class Prompt6SafetyTester:
         )
         
         if result.get("status_code") == 403:
-            error_message = result.get("text", "")
-            if "Only the league commissioner can import fixtures" in error_message:
-                self.log(f"✅ Clear non-commissioner error message: {error_message}")
+            # Check if the result has the error message directly (as dict)
+            if "detail" in result and "Only the league commissioner can import fixtures" in result["detail"]:
+                self.log(f"✅ Clear non-commissioner error message: {result['detail']}")
                 test_6a_passed = True
             else:
-                # Check if it's a JSON response
-                try:
-                    import json
-                    error_data = json.loads(error_message)
-                    if "Only the league commissioner can import fixtures" in error_data.get("detail", ""):
-                        self.log(f"✅ Clear non-commissioner error message: {error_data['detail']}")
-                        test_6a_passed = True
-                    else:
+                # Check if it's in the text field
+                error_message = result.get("text", "")
+                if "Only the league commissioner can import fixtures" in error_message:
+                    self.log(f"✅ Clear non-commissioner error message: {error_message}")
+                    test_6a_passed = True
+                else:
+                    # Try to parse as JSON
+                    try:
+                        import json
+                        error_data = json.loads(error_message)
+                        if "Only the league commissioner can import fixtures" in error_data.get("detail", ""):
+                            self.log(f"✅ Clear non-commissioner error message: {error_data['detail']}")
+                            test_6a_passed = True
+                        else:
+                            self.log(f"❌ Non-commissioner error message not clear: {error_message}", "ERROR")
+                            test_6a_passed = False
+                    except:
                         self.log(f"❌ Non-commissioner error message not clear: {error_message}", "ERROR")
                         test_6a_passed = False
-                except:
-                    self.log(f"❌ Non-commissioner error message not clear: {error_message}", "ERROR")
-                    test_6a_passed = False
         else:
-            self.log("❌ Expected 403 status code", "ERROR")
+            self.log(f"❌ Expected 403 status code, got {result.get('status_code')}", "ERROR")
             test_6a_passed = False
             
         # Test 6b: Invalid commissionerId error
