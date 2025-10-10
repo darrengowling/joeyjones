@@ -540,87 +540,108 @@ test_plan:
 
   - task: "My Competitions - GET /api/me/competitions endpoint"
     implemented: true
-    working: "NA"
+    working: true
     file: "server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Implemented GET /api/me/competitions endpoint. Returns user's leagues with leagueId, name, sportKey, status, assetsOwned, managersCount, timer settings, startsAt, nextFixtureAt. Fixed DateTime serialization issue for startsAt field."
+      - working: true
+        agent: "testing"
+        comment: "✅ COMPREHENSIVE TESTING PASSED: GET /api/me/competitions endpoint working correctly. Returns valid competition data with all required fields (leagueId, name, sportKey, status, assetsOwned, managersCount, timerSeconds, antiSnipeSeconds, startsAt, nextFixtureAt). Correctly handles users with no leagues (returns empty array). Field validation confirmed: sportKey='football', status='pre_auction', timer settings 30s/10s. DateTime serialization working properly."
 
   - task: "My Competitions - GET /api/leagues/:id/summary endpoint"
     implemented: true
-    working: "NA"
+    working: true
     file: "server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Implemented GET /api/leagues/:id/summary endpoint. Returns league details, commissioner info, user's roster, budgets, managers list, and status."
+      - working: true
+        agent: "testing"
+        comment: "✅ COMPREHENSIVE TESTING PASSED: GET /api/leagues/:id/summary endpoint working correctly. Returns all required fields: leagueId, name, sportKey, status, commissioner{id, name}, yourRoster, yourBudgetRemaining, managers[], totalBudget, clubSlots, timerSeconds, antiSnipeSeconds. Commissioner structure validated, managers array populated, budget values correct (£500M). Error handling confirmed: 404 for invalid league ID with proper error message."
 
   - task: "My Competitions - GET /api/leagues/:id/standings endpoint"
     implemented: true
-    working: "NA"
+    working: true
     file: "server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Implemented GET /api/leagues/:id/standings endpoint. Returns current standings or creates zeroed table if none exists. Uses Pydantic models with .model_dump(mode='json') for proper DateTime serialization."
+      - working: true
+        agent: "testing"
+        comment: "✅ COMPREHENSIVE TESTING PASSED: GET /api/leagues/:id/standings endpoint working correctly. Auto-creates zeroed standings on first call with all managers at 0 points. Table structure validated: userId, displayName, points=0.0, assetsOwned=[], tiebreakers. Second call returns existing standings (no recreation). DateTime serialization working with lastComputedAt field properly formatted as ISO string."
 
   - task: "My Competitions - GET /api/leagues/:id/fixtures endpoint"
     implemented: true
-    working: "NA"
+    working: true
     file: "server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Implemented GET /api/leagues/:id/fixtures endpoint with status filtering and pagination. Returns fixtures sorted by startsAt ASC. Uses Pydantic Fixture model for proper serialization."
+      - working: true
+        agent: "testing"
+        comment: "✅ COMPREHENSIVE TESTING PASSED: GET /api/leagues/:id/fixtures endpoint working correctly. Returns empty array for leagues with no fixtures. Pagination parameters (limit, skip) accepted and working. Status filtering parameter (?status=scheduled) accepted. All query parameters processed correctly without errors."
 
   - task: "My Competitions - POST /api/leagues/:id/fixtures/import-csv endpoint"
     implemented: true
-    working: "NA"
+    working: true
     file: "server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Implemented POST /api/leagues/:id/fixtures/import-csv for commissioner CSV uploads. Parses CSV with columns: startsAt, homeAssetExternalId, awayAssetExternalId, venue, round, externalMatchId. Resolves asset IDs and upserts fixtures. Supports both football (clubs) and cricket (assets)."
+      - working: true
+        agent: "testing"
+        comment: "✅ COMPREHENSIVE TESTING PASSED: POST /api/leagues/:id/fixtures/import-csv endpoint working correctly. Successfully imports fixtures from CSV with proper asset ID resolution (tested with MCI, LIV UEFA IDs). Fixture structure validated: leagueId, sportKey, homeAssetId, startsAt, status. Upsert functionality confirmed - re-uploading same CSV doesn't create duplicates. DateTime parsing working correctly for startsAt field."
 
   - task: "My Competitions - Database indexes and models"
     implemented: true
-    working: "NA"
+    working: true
     file: "server.py, models.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Added Fixture, Standing, StandingEntry Pydantic models. Created database indexes: fixtures[(leagueId,startsAt), (leagueId,status)], standings[(leagueId) unique]. Indexes created on server startup."
+      - working: true
+        agent: "testing"
+        comment: "✅ COMPREHENSIVE TESTING PASSED: Database indexes and models working correctly. Fixed missing imports (Fixture, Standing, StandingEntry) in server.py. Database indexes created successfully on startup. All Pydantic models working with proper JSON serialization via .model_dump(mode='json'). MongoDB operations working correctly with proper indexing for performance."
 
   - task: "My Competitions - Auction completion hook"
     implemented: true
-    working: "NA"
+    working: true
     file: "server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Implemented auction completion hook. When auction completes: (a) emits league_status_changed event with status:'auction_complete' to league room, (b) creates initial standings with all managers at 0 points and their current rosters."
+      - working: true
+        agent: "testing"
+        comment: "✅ COMPREHENSIVE TESTING PASSED: Auction completion hook mechanism working correctly. Fixed None check issue in start_next_lot function (line 1774). Hook implementation verified in check_auction_completion function: emits league_status_changed event with status:'auction_complete', creates initial standings with 0 points and empty rosters. Standings auto-creation working correctly with proper structure (userId, displayName, points=0.0, assetsOwned=[], tiebreakers). Integration with auction flow confirmed."
 
 agent_communication:
   - agent: "main"
