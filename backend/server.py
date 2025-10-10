@@ -469,7 +469,11 @@ async def get_league_members(league_id: str):
 
 @api_router.get("/me/competitions")
 async def get_my_competitions(userId: str):
-    """Get all competitions for a user - Prompt 1"""
+    """Get all competitions for a user - Prompt 6: Feature flag protected"""
+    # Prompt 6: Feature flag check
+    if not FEATURE_MY_COMPETITIONS:
+        raise HTTPException(status_code=404, detail="Feature not available")
+    
     # Find all leagues where user is a participant
     participants = await db.league_participants.find({"userId": userId}).to_list(100)
     league_ids = [p["leagueId"] for p in participants]
