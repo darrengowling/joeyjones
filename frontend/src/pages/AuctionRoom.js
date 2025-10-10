@@ -79,7 +79,12 @@ export default function AuctionRoom() {
 
     const handleConnect = () => {
       console.log("Socket connected");
+      console.log(`🚀 Joining auction room: auction:${auctionId}`);
       socket.emit("join_auction", { auctionId });
+      
+      // Request current state
+      console.log("📡 Requesting sync_state");
+      socket.emit("sync_state", { auctionId });
     };
 
     const handleJoined = (data) => {
