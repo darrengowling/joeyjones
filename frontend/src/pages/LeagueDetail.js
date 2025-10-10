@@ -86,6 +86,15 @@ export default function LeagueDetail() {
         }
       });
       
+      // Handle auction started event for real-time "Enter Auction Room" button
+      socket.on('auction_started', (data) => {
+        console.log('🎯 Auction started event received:', data);
+        if (data.leagueId === leagueId) {
+          // Reload league data to show "Enter Auction Room" button
+          loadLeague();
+        }
+      });
+      
       return () => {
         if (socket) {
           socket.emit('leave_league', { leagueId });
