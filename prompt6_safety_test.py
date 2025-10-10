@@ -175,14 +175,25 @@ class Prompt6SafetyTester:
         
         if result.get("status_code") == 403:
             error_text = result.get("text", "")
-            if "Only the league commissioner can import fixtures" in error_text:
-                self.log("✅ Regular user correctly rejected with 403")
-                test_1a_passed = True
-            else:
-                self.log(f"✅ Regular user correctly rejected with 403 (message: {error_text})")
-                test_1a_passed = True
+            # Check if it's JSON or plain text
+            try:
+                import json
+                error_data = json.loads(error_text)
+                if "Only the league commissioner can import fixtures" in error_data.get("detail", ""):
+                    self.log("✅ Regular user correctly rejected with 403")
+                    test_1a_passed = True
+                else:
+                    self.log(f"✅ Regular user correctly rejected with 403 (message: {error_data.get('detail', error_text)})")
+                    test_1a_passed = True
+            except:
+                if "Only the league commissioner can import fixtures" in error_text:
+                    self.log("✅ Regular user correctly rejected with 403")
+                    test_1a_passed = True
+                else:
+                    self.log(f"✅ Regular user correctly rejected with 403 (message: {error_text})")
+                    test_1a_passed = True
         else:
-            self.log("❌ Regular user should have been rejected with 403", "ERROR")
+            self.log(f"❌ Regular user should have been rejected with 403, got {result.get('status_code')}", "ERROR")
             test_1a_passed = False
             
         # Test 1b: Commissioner uploads CSV (should succeed)
