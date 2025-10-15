@@ -28,17 +28,6 @@ export default function AuctionRoom() {
   const [currentBid, setCurrentBid] = useState(null);
   const [currentBidder, setCurrentBidder] = useState(null);
   const [bidSequence, setBidSequence] = useState(0);
-  
-  // Toast notification state
-  const [toast, setToast] = useState({ show: false, message: "", type: "info" });
-
-  // Toast notification function - wrapped in useCallback for stable reference
-  const showToast = useCallback((message, type = "info") => {
-    setToast({ show: true, message, type });
-    setTimeout(() => {
-      setToast({ show: false, message: "", type: "info" });
-    }, 5000); // Hide after 5 seconds
-  }, []);
 
   // Use the new auction clock hook
   const { remainingMs } = useAuctionClock(socket, currentLotId);
