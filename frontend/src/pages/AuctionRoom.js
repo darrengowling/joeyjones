@@ -161,6 +161,12 @@ export default function AuctionRoom() {
       if (data.timer && data.timer.lotId) {
         setCurrentLotId(data.timer.lotId);
       }
+      
+      // CRITICAL FIX: Clear bid state when new lot starts
+      setCurrentBid(null);
+      setCurrentBidder(null);
+      setBidSequence(0);
+      console.log("✅ Cleared bid state for new lot");
     };
 
     const handleSold = (data) => {
