@@ -149,9 +149,12 @@ export default function LeagueDetail() {
   const loadStandings = async () => {
     try {
       const response = await axios.get(`${API}/leagues/${leagueId}/standings`);
-      setStandings(response.data);
+      // The endpoint returns { leagueId, sportKey, table: [...] }
+      // Extract the table array for backwards compatibility with existing code
+      setStandings(response.data.table || []);
     } catch (e) {
       console.error("Error loading standings:", e);
+      setStandings([]); // Set empty array on error
     }
   };
 
