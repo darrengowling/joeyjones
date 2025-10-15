@@ -51,16 +51,22 @@ export default function LeagueDetail() {
         transports: ['websocket', 'polling']
       });
       
-      // Join league room
-      socket.emit('join_league_room', { leagueId });
+      // Wait for connection before joining room
+      socket.on('connect', () => {
+        console.log('✅ Socket connected, joining league room:', leagueId);
+        socket.emit('join_league_room', { leagueId });
+      });
       
       // Handle member updates
       socket.on('member_joined', (data) => {
-        console.log('Member joined:', data);
+        console.log('📢 Member joined event received:', data);
         setParticipants(prev => {
           // Check if member already exists to avoid duplicates
           const exists = prev.some(p => p.userId === data.userId);
-          if (exists) return prev;
+          if (exists) {
+            console.log('Member already in list, skipping');
+            return prev;
+          }
           
           // Add new member (convert to participant format)
           const newParticipant = {
@@ -68,6 +74,7 @@ export default function LeagueDetail() {
             userName: data.displayName,
             joinedAt: data.joinedAt
           };
+          console.log('✅ Adding new member to list:', newParticipant);
           return [...prev, newParticipant];
         });
       });
