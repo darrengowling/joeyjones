@@ -124,6 +124,20 @@ export default function LeagueDetail() {
       const response = await axios.get(`${API}/leagues/${leagueId}`);
       setLeague(response.data);
       
+      // CRITICAL FIX: Check for active auction after loading league
+      // This ensures users who just joined see the "Join Auction Room" button
+      try {
+        const auctionsResponse = await axios.get(`${API}/auctions?leagueId=${leagueId}`);
+        const activeAuction = auctionsResponse.data.find(a => a.status === 'active');
+        if (activeAuction) {
+          console.log('✅ Active auction detected:', activeAuction.id);
+          // Update league status to reflect active auction
+          setLeague(prev => ({ ...prev, status: 'active', activeAuctionId: activeAuction.id }));
+        }
+      } catch (auctionError) {
+        console.error("Error checking for active auction:", auctionError);
+      }
+      
       // Load sport information based on league's sportKey
       if (response.data.sportKey) {
         try {
