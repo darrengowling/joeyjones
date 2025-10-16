@@ -243,6 +243,11 @@ class InstantAuctionNotificationTester:
                 self.log(f"User B received sync_members: {len(data.get('members', []))} members")
                 self.socket_events["user_b"].append("sync_members")
             
+            @client_b.event
+            def room_joined(data):
+                self.log(f"User B joined room: {data}")
+                self.socket_events["user_b"].append("room_joined")
+            
             # Connect both clients
             client_a.connect(SOCKET_URL, socketio_path=SOCKET_PATH)
             client_b.connect(SOCKET_URL, socketio_path=SOCKET_PATH)
