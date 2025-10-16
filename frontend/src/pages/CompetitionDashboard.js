@@ -54,29 +54,19 @@ export default function CompetitionDashboard() {
   useEffect(() => {
     if (!leagueId || !user) return;
 
-    // Initialize Socket.IO connection
-    const socket = io(BACKEND_URL, {
-      path: "/api/socket.io",
-      transports: ["websocket", "polling"]
-    });
+    // Get global Socket.IO instance
+    const socket = getSocket();
+    
+    // Set socket user for rejoining rooms after reconnect
+    setSocketUser(user);
 
-    socketRef.current = socket;
-
-    socket.on("connect", () => {
-      console.log("✅ Dashboard Socket.IO connected");
-      
-      // Join league room
-      socket.emit("join_league_room", { leagueId });
-    });
-
-    socket.on("disconnect", () => {
-      console.log("❌ Dashboard Socket.IO disconnected");
-    });
+    // Join league room
+    joinLeagueRoom(leagueId);
 
     // Prompt 4: Listen for league-level events
     
     // Event 1: league_status_changed → refresh summary header
-    socket.on("league_status_changed", (data) => {
+    const handleLeagueStatusChanged = (data) => {
       console.log("📢 league_status_changed event received:", data);
       if (data.leagueId === leagueId) {
         // Refetch summary to get updated status
@@ -91,10 +81,10 @@ export default function CompetitionDashboard() {
           console.error("Error refreshing summary:", e);
         });
       }
-    });
+    };
 
     // Event 2: standings_updated → refetch standings
-    socket.on("standings_updated", (data) => {
+    const handleStandingsUpdated = (data) => {
       console.log("📢 standings_updated event received:", data);
       if (data.leagueId === leagueId) {
         // Refetch standings
@@ -107,10 +97,10 @@ export default function CompetitionDashboard() {
           console.error("Error refreshing standings:", e);
         });
       }
-    });
+    };
 
     // Event 3: fixtures_updated → refetch fixtures
-    socket.on("fixtures_updated", (data) => {
+    const handleFixturesUpdated = (data) => {
       console.log("📢 fixtures_updated event received:", data);
       if (data.leagueId === leagueId) {
         // Refetch fixtures
@@ -123,20 +113,25 @@ export default function CompetitionDashboard() {
           console.error("Error refreshing fixtures:", e);
         });
       }
-    });
+    };
+
+    // Remove existing listeners before adding new ones (prevent duplicates)
+    socket.off("league_status_changed", handleLeagueStatusChanged);
+    socket.off("standings_updated", handleStandingsUpdated);
+    socket.off("fixtures_updated", handleFixturesUpdated);
+
+    // Add event listeners
+    socket.on("league_status_changed", handleLeagueStatusChanged);
+    socket.on("standings_updated", handleStandingsUpdated);
+    socket.on("fixtures_updated", handleFixturesUpdated);
 
     // Cleanup on unmount
     return () => {
       console.log("🧹 Cleaning up Dashboard Socket.IO connection");
-      
-      // Leave league room
-      if (socket.connected) {
-        socket.emit("leave_league", { leagueId });
-      }
-      
-      // Disconnect socket
-      socket.disconnect();
-      socketRef.current = null;
+      socket.off("league_status_changed", handleLeagueStatusChanged);
+      socket.off("standings_updated", handleStandingsUpdated);
+      socket.off("fixtures_updated", handleFixturesUpdated);
+      leaveLeagueRoom(leagueId);
     };
   }, [leagueId, user]);
 
