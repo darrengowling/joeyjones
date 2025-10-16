@@ -568,63 +568,78 @@ class BidBroadcastingTester:
         user = self.test_data["users"][0]
         current_club = self.test_data["current_club"]
         
-        # Clear tracking
-        self.bid_sequences = []
+        # Create socket client to receive bid_update events
+        client = self.create_socket_client(user["id"], "Consistency Test User")
         
-        # Place 10 bids sequentially
-        for i in range(10):
-            bid_data = {
-                "userId": user["id"],
-                "clubId": current_club["id"],
-                "amount": 10000000 + (i * 100000)  # £10M to £10.9M
-            }
+        try:
+            # Connect and join auction
+            client.connect(SOCKET_URL, socketio_path=SOCKET_PATH)
+            time.sleep(2)
             
-            result = self.test_api_endpoint("POST", f"/auction/{auction_id}/bid", bid_data)
+            client.emit('join_auction', {'auctionId': auction_id})
+            time.sleep(2)
+            
+            # Clear tracking
+            self.bid_sequences = []
+            
+            # Place 10 bids sequentially
+            for i in range(10):
+                bid_data = {
+                    "userId": user["id"],
+                    "clubId": current_club["id"],
+                    "amount": 10000000 + (i * 100000)  # £10M to £10.9M
+                }
+                
+                result = self.test_api_endpoint("POST", f"/auction/{auction_id}/bid", bid_data)
+                if "error" in result:
+                    self.log(f"Failed to place bid {i+1}: {result}", "ERROR")
+                    return False
+                
+                time.sleep(0.2)  # Small delay between bids
+            
+            # Wait for all events
+            time.sleep(3)
+            
+            # Verify we got 10 sequence numbers
+            if len(self.bid_sequences) < 10:
+                self.log(f"Expected 10 sequences, got {len(self.bid_sequences)}", "ERROR")
+                return False
+            
+            # Get the last 10 sequences
+            recent_sequences = [entry["seq"] for entry in self.bid_sequences[-10:]]
+            
+            # Verify incremental sequence: should be consecutive
+            for i in range(1, len(recent_sequences)):
+                expected = recent_sequences[i-1] + 1
+                actual = recent_sequences[i]
+                if actual != expected:
+                    self.log(f"Sequence gap detected: expected {expected}, got {actual}", "ERROR")
+                    return False
+            
+            # Verify no duplicates
+            if len(set(recent_sequences)) != len(recent_sequences):
+                self.log("Duplicate sequence numbers detected", "ERROR")
+                return False
+            
+            # Get auction to verify bidSequence matches last bid seq
+            result = self.test_api_endpoint("GET", f"/auction/{auction_id}")
             if "error" in result:
-                self.log(f"Failed to place bid {i+1}: {result}", "ERROR")
+                self.log("Failed to get auction for sequence verification", "ERROR")
                 return False
             
-            time.sleep(0.2)  # Small delay between bids
-        
-        # Wait for all events
-        time.sleep(3)
-        
-        # Verify we got 10 sequence numbers
-        if len(self.bid_sequences) < 10:
-            self.log(f"Expected 10 sequences, got {len(self.bid_sequences)}", "ERROR")
-            return False
-        
-        # Get the last 10 sequences
-        recent_sequences = [entry["seq"] for entry in self.bid_sequences[-10:]]
-        
-        # Verify incremental sequence: should be consecutive
-        for i in range(1, len(recent_sequences)):
-            expected = recent_sequences[i-1] + 1
-            actual = recent_sequences[i]
-            if actual != expected:
-                self.log(f"Sequence gap detected: expected {expected}, got {actual}", "ERROR")
+            auction_data = result.get("auction", {})
+            auction_bid_sequence = auction_data.get("bidSequence")
+            
+            if auction_bid_sequence != recent_sequences[-1]:
+                self.log(f"Auction bidSequence mismatch: auction={auction_bid_sequence}, last_event={recent_sequences[-1]}", "ERROR")
                 return False
-        
-        # Verify no duplicates
-        if len(set(recent_sequences)) != len(recent_sequences):
-            self.log("Duplicate sequence numbers detected", "ERROR")
-            return False
-        
-        # Get auction to verify bidSequence matches last bid seq
-        result = self.test_api_endpoint("GET", f"/auction/{auction_id}")
-        if "error" in result:
-            self.log("Failed to get auction for sequence verification", "ERROR")
-            return False
-        
-        auction_data = result.get("auction", {})
-        auction_bid_sequence = auction_data.get("bidSequence")
-        
-        if auction_bid_sequence != recent_sequences[-1]:
-            self.log(f"Auction bidSequence mismatch: auction={auction_bid_sequence}, last_event={recent_sequences[-1]}", "ERROR")
-            return False
-        
-        self.log("✅ Sequence number consistency verified - incremental, no gaps, no duplicates")
-        return True
+            
+            self.log("✅ Sequence number consistency verified - incremental, no gaps, no duplicates")
+            return True
+            
+        finally:
+            if client.connected:
+                client.disconnect()
     
     def test_multi_user_state_synchronization(self) -> bool:
         """Test 6: Multi-User State Synchronization"""
