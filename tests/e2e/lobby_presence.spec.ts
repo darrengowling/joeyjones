@@ -100,7 +100,7 @@ test.describe('Lobby Presence - Real-time Member Updates', () => {
     await memberPage.click('button:has-text("Join the Competition")');
     await memberPage.waitForTimeout(500);
     await memberPage.fill('input[placeholder*="token" i]', inviteToken);
-    await memberPage.click('button:has-text("Join League")');
+    await memberPage.click('button:has-text("Join the Competition")');
     
     // Wait for join confirmation
     await memberPage.waitForURL(/\/league\/[a-f0-9-]+/, { timeout: 10000 });
