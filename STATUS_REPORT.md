@@ -1044,7 +1044,7 @@ From E2E tests:
    - Owner: QA team
    - Target: 10-15 comprehensive tests
 
-8. **Implement JWT Authentication**
+6. **Implement JWT Authentication**
    - Priority: Medium
    - Effort: 1 week
    - Owner: Backend team
