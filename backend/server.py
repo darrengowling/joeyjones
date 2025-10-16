@@ -442,6 +442,24 @@ async def join_league(league_id: str, participant_input: LeagueParticipantCreate
         'message': f"{participant.userName} joined the league"
     }, room=f"league:{league_id}")
     
+    # CRITICAL FIX: Send complete member list to ALL users in league room
+    # This ensures commissioner and all users get updated list immediately
+    all_participants = await db.league_participants.find({"leagueId": league_id}).to_list(100)
+    members = []
+    for p in all_participants:
+        members.append({
+            'userId': p['userId'],
+            'displayName': p['userName'],
+            'joinedAt': p['joinedAt'].isoformat() if isinstance(p['joinedAt'], datetime) else p['joinedAt']
+        })
+    
+    await sio.emit('sync_members', {
+        'leagueId': league_id,
+        'members': members
+    }, room=f"league:{league_id}")
+    
+    logger.info(f"✅ Synced {len(members)} members to league room: league:{league_id}")
+    
     return {"message": "Joined league successfully", "participant": participant}
 
 @api_router.get("/leagues/{league_id}/participants")
