@@ -721,7 +721,7 @@ export default function AuctionRoom() {
                                 className="flex justify-between items-center p-3 bg-gray-50 rounded"
                               >
                                 <span className="font-semibold">{bid.userName}</span>
-                                <span className="text-green-600 font-bold">£{bid.amount.toLocaleString()}</span>
+                                <span className="text-green-600 font-bold">{formatCurrency(bid.amount)}</span>
                               </div>
                             ))}
                         </div>
