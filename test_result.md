@@ -392,6 +392,18 @@ test_plan:
         agent: "testing"
         comment: "PRODUCTION TESTING PASSED: Clubs list endpoint returns all 36 clubs with correct status information. Upcoming clubs sorted alphabetically (not revealing draw order for strategy). Current club appears first, sold clubs by lot order for history, upcoming clubs alphabetically. Sorting strategy working as designed to hide auction draw order."
 
+  - task: "Socket.IO Refactor Implementation Testing"
+    implemented: true
+    working: "NA"
+    file: "server.py, socketio_init.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Socket.IO refactor implementation completed. Need to test: 1) League Room Management (join_league, leave_league, rejoin_rooms, sync_members), 2) Real-Time Member Updates (member_joined events), 3) Auction Room Management (join_auction, sync_state), 4) Critical User-Reported Issues (Enter Auction Room button, bid visibility), 5) Backend Event Emissions (league and auction room events)"
+
   - task: "SPORTS_CRICKET_ENABLED environment variable setup"
     implemented: true
     working: true
