@@ -2277,9 +2277,9 @@ async def join_auction(sid, data):
     room_name = f"auction:{auction_id}"
     sio.enter_room(sid, room_name)
     logger.info(f"🟧 Socket {sid} joined auction room: {room_name}")
-        
-        # Send current auction state for reconnection
-        auction = await db.auctions.find_one({"id": auction_id})
+    
+    # Send current auction state for reconnection
+    auction = await db.auctions.find_one({"id": auction_id})
         if auction:
             logger.info(f"Sending sync_state to client {sid} for auction {auction_id}")
             
