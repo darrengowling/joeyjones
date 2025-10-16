@@ -135,16 +135,7 @@ The Friends of PIFA multi-sport auction platform has undergone comprehensive Soc
 - **Mitigation:** FastAPILimiter configured, Redis backend ready
 - **Next Step:** Load test with realistic traffic patterns
 
-#### 2. Remove/Gate Debug Endpoint
-- **Severity:** Low (completed)
-- **Scope:** GET /api/debug/rooms/{scope}/{id}
-- **Impact:** ✅ RESOLVED - Information disclosure prevented in production
-- **Implementation:** Environment guard with ENV variable
-- **Testing:** ✅ Returns 404 in production, works in development
-- **Status:** ✅ COMPLETE
-- **Documentation:** See DEBUG_ENDPOINT_SECURITY.md
-
-#### 5. Frontend Build Warnings
+#### 3. Frontend Build Warnings
 - **Severity:** Low
 - **Scope:** Build process (React hot reload overlay)
 - **Impact:** Development experience only
