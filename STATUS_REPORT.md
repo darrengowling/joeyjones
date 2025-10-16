@@ -1055,7 +1055,7 @@ From E2E tests:
    - Effort: 2 days
    - Owner: QA team
 
-8. **Set Up Sentry Alerting**
+7. **Set Up Sentry Alerting**
     - Priority: Medium
     - Effort: 4 hours
     - Owner: DevOps team
