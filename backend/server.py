@@ -2359,25 +2359,25 @@ async def join_league(sid, data):
     room_name = f"league:{league_id}"
     sio.enter_room(sid, room_name)
     logger.info(f"🟦 Socket {sid} joined league room: {room_name}")
-        
-        # Get all sockets currently in this room
-        room_sockets = sio.manager.rooms.get(f"league:{league_id}", set())
-        logger.info(f"🔵 Room league:{league_id} now has {len(room_sockets)} connected sockets")
-        
-        # Send current participants list to the joining user
-        participants = await db.league_participants.find({"leagueId": league_id}).to_list(100)
-        members = []
-        for p in participants:
-            members.append({
-                'userId': p['userId'],
-                'displayName': p['userName'],
-                'joinedAt': p['joinedAt'].isoformat() if isinstance(p['joinedAt'], datetime) else p['joinedAt']
-            })
-        
-        logger.info(f"🔵 Broadcasting sync_members with {len(members)} members to room league:{league_id}")
-        
-        # CRITICAL FIX: Broadcast to ALL users in league room, not just this socket
-        await sio.emit('sync_members', {
+    
+    # Get all sockets currently in this room
+    room_sockets = sio.manager.rooms.get(f"league:{league_id}", set())
+    logger.info(f"🔵 Room league:{league_id} now has {len(room_sockets)} connected sockets")
+    
+    # Send current participants list to the joining user
+    participants = await db.league_participants.find({"leagueId": league_id}).to_list(100)
+    members = []
+    for p in participants:
+        members.append({
+            'userId': p['userId'],
+            'displayName': p['userName'],
+            'joinedAt': p['joinedAt'].isoformat() if isinstance(p['joinedAt'], datetime) else p['joinedAt']
+        })
+    
+    logger.info(f"🔵 Broadcasting sync_members with {len(members)} members to room league:{league_id}")
+    
+    # CRITICAL FIX: Broadcast to ALL users in league room, not just this socket
+    await sio.emit('sync_members', {
             'leagueId': league_id,
             'members': members
         }, room=f"league:{league_id}")
