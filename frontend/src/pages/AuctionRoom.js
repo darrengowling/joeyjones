@@ -808,7 +808,7 @@ export default function AuctionRoom() {
                           </div>
                           {club.status === 'sold' && club.winningBid && (
                             <div className="text-xs font-semibold">
-                              £{club.winningBid.toLocaleString()}
+                              {formatCurrency(club.winningBid)}
                             </div>
                           )}
                         </div>
