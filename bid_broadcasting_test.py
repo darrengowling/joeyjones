@@ -800,12 +800,12 @@ class BidBroadcastingTester:
         
         # Run all test scenarios
         test_scenarios = [
-            # ("monotonic_sequence_numbers", self.test_monotonic_sequence_numbers),
-            # ("bid_update_event_broadcast", self.test_bid_update_event_broadcast),
-            # ("sync_state_initialization", self.test_sync_state_initialization),
+            ("monotonic_sequence_numbers", self.test_monotonic_sequence_numbers),
+            ("bid_update_event_broadcast", self.test_bid_update_event_broadcast),
+            ("sync_state_initialization", self.test_sync_state_initialization),
             ("rapid_fire_bidding", self.test_rapid_fire_bidding),
-            # ("sequence_number_consistency", self.test_sequence_number_consistency),
-            # ("multi_user_state_synchronization", self.test_multi_user_state_synchronization),
+            ("sequence_number_consistency", self.test_sequence_number_consistency),
+            ("multi_user_state_synchronization", self.test_multi_user_state_synchronization),
         ]
         
         for test_name, test_func in test_scenarios:
