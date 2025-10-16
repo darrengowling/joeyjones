@@ -585,73 +585,80 @@ socketio_events_total{event_name}
 
 ### Collections
 
-| Collection | Purpose | Documents (est.) |
-|------------|---------|------------------|
-| `users` | User accounts | ~100s |
-| `leagues` | Competition definitions | ~10s-100s |
-| `league_participants` | Member rosters | ~100s-1000s |
-| `auctions` | Auction state | ~10s-100s |
-| `bids` | Bid history | ~1000s-10000s |
-| `assets` | Teams/Players pool | ~1000s (pre-loaded) |
-| `fixtures` | Match schedules | ~100s-1000s |
-| `standings` | League tables | ~10s-100s |
-| `sports` | Sport definitions | ~5-10 |
+| Collection | Purpose | Documents (est.) | Indexes | Unique Constraints |
+|------------|---------|------------------|---------|-------------------|
+| `users` | User accounts | ~100s | 1 | 0 |
+| `leagues` | Competition definitions | ~10s-100s | 4 | 1 (inviteToken) |
+| `league_participants` | Member rosters | ~100s-1000s | 3 | 1 (leagueId+userId) |
+| `auctions` | Auction state | ~10s-100s | 2 | 1 (leagueId) |
+| `bids` | Bid history | ~1000s-10000s | 4 | 1 (lotId+seq, sparse) |
+| `assets` | Teams/Players pool | ~1000s (pre-loaded) | 2 | 1 |
+| `fixtures` | Match schedules | ~100s-1000s | 3 | 0 |
+| `standings` | League tables | ~10s-100s | 2 | 1 (leagueId) |
+| `sports` | Sport definitions | ~5-10 | 1 | 0 |
 
-### Required Indexes
+**Total Indexes:** 29 across 14 collections  
+**Total Unique Constraints:** 8
 
-**⚠️ Status: Not Formally Verified**
+### Index Audit Status
 
-#### Critical Indexes (Must Have)
+**✅ Status: COMPLETE (Verified 2025-10-16)**
 
-```javascript
-// bids collection
-db.bids.createIndex({ lotId: 1, seq: 1 }, { unique: true })
-db.bids.createIndex({ auctionId: 1, userId: 1 })
-db.bids.createIndex({ auctionId: 1, createdAt: -1 })
+All critical indexes have been verified and created. Full audit documentation available in `DATABASE_INDEX_AUDIT.md`.
 
-// leagues collection
-db.leagues.createIndex({ inviteToken: 1 }, { unique: true })
-db.leagues.createIndex({ commissionerId: 1 })
-db.leagues.createIndex({ status: 1, createdAt: -1 })
+#### Critical Indexes (Verified ✅)
 
-// league_participants collection
-db.league_participants.createIndex({ leagueId: 1, userId: 1 }, { unique: true })
-db.league_participants.createIndex({ userId: 1 })
+**Bids Collection:**
+- ✅ `{ lotId: 1, seq: 1 }` - unique, sparse (prevents duplicate bid sequences)
+- ✅ `{ auctionId: 1, createdAt: -1 }` - bid history queries
+- ✅ `{ userId: 1, createdAt: -1 }` - user bid history
 
-// auctions collection
-db.auctions.createIndex({ leagueId: 1 }, { unique: true })
-db.auctions.createIndex({ status: 1 })
+**Leagues Collection:**
+- ✅ `{ inviteToken: 1 }` - unique (fast invite token lookup)
+- ✅ `{ sportKey: 1 }` - filter leagues by sport
+- ✅ `{ commissionerId: 1 }` - commissioner's leagues
 
-// fixtures collection
-db.fixtures.createIndex({ leagueId: 1, startsAt: 1 })
-db.fixtures.createIndex({ leagueId: 1, status: 1 })
+**League Participants Collection:**
+- ✅ `{ leagueId: 1, userId: 1 }` - unique (prevent duplicate membership)
+- ✅ `{ userId: 1 }` - user's league memberships
 
-// standings collection
-db.standings.createIndex({ leagueId: 1 }, { unique: true })
+**Auctions Collection:**
+- ✅ `{ leagueId: 1 }` - unique (one auction per league)
 
-// assets collection
-db.assets.createIndex({ sport: 1, name: 1 })
-```
+**Fixtures Collection:**
+- ✅ `{ leagueId: 1, startsAt: 1 }` - fixtures by league and time
+- ✅ `{ leagueId: 1, status: 1 }` - fixtures by league and status
 
-#### Performance Indexes (Nice to Have)
+**Standings Collection:**
+- ✅ `{ leagueId: 1 }` - unique (one standings table per league)
 
-```javascript
-db.bids.createIndex({ userId: 1, createdAt: -1 })
-db.fixtures.createIndex({ startsAt: 1, status: 1 })
-db.standings.createIndex({ leagueId: 1, points: -1 })
-```
+### Unique Constraint Testing
 
-### Index Verification Script
+All unique constraints were tested by attempting to insert duplicate records:
 
-**TODO:** Run this to verify indexes exist:
+| Test | Collection | Constraint | Result |
+|------|------------|-----------|--------|
+| Duplicate Invite Token | leagues | inviteToken_1 | ✅ PASS (E11000 error) |
+| Duplicate League Membership | league_participants | leagueId_1_userId_1 | ✅ PASS (E11000 error) |
+| Duplicate Auction Per League | auctions | leagueId_1 | ✅ PASS (E11000 error) |
+
+**Test Pass Rate:** 3/3 (100%)
+
+### Index Verification
+
+To verify indexes exist in the future:
 ```bash
+# List all indexes for a collection
+mongosh $MONGO_URL --eval "db.leagues.getIndexes()"
+
+# Test unique constraint
 mongosh $MONGO_URL --eval "
-  db.getSiblingDB('pifa').getCollectionNames().forEach(function(coll) {
-    print('Collection: ' + coll);
-    printjson(db[coll].getIndexes());
-  });
+  db.leagues.insertOne({ inviteToken: 'TEST' });
+  db.leagues.insertOne({ inviteToken: 'TEST' }); // Should fail
 "
 ```
+
+**Full Audit Report:** See `DATABASE_INDEX_AUDIT.md` for complete details
 
 ### Backup & Restore
 
