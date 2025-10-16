@@ -541,7 +541,7 @@ class InstantAuctionNotificationTester:
         self.test_api_endpoint("POST", f"/leagues/{league_id_2}/join", join_data)
         
         # User A joins second league room
-        self.socket_clients["user_a"].emit('join_league_room', {
+        self.socket_clients["user_a"].emit('join_league', {
             'leagueId': league_id_2,
             'userId': self.test_data["user_a_id"]
         })
