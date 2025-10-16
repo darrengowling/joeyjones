@@ -151,6 +151,11 @@ class SocketIORefactorTester:
                 self.socket_events[client_id].append(("joined", data))
             
             @client.event
+            def room_joined(data):
+                self.log(f"Client {client_id} joined league room: {data}")
+                self.socket_events[client_id].append(("room_joined", data))
+            
+            @client.event
             def member_joined(data):
                 self.log(f"Client {client_id} received member_joined: {data}")
                 self.socket_events[client_id].append(("member_joined", data))
