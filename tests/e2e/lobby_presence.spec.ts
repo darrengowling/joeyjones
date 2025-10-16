@@ -74,9 +74,15 @@ test.describe('Lobby Presence - Real-time Member Updates', () => {
     
     // Step 3: Open member page and create account
     await memberPage.goto(BASE_URL);
-    await memberPage.fill('input[placeholder*="name" i]', 'Test Member');
-    await memberPage.fill('input[type="email"]', `member-${Date.now()}@test.com`);
+    
+    // Click Sign In button to open modal
     await memberPage.click('button:has-text("Sign In")');
+    await memberPage.waitForTimeout(500);
+    
+    // Fill sign-in form
+    await memberPage.fill('input[placeholder*="name" i]', 'Test Member');
+    await memberPage.fill('input[placeholder*="email" i]', `member-${Date.now()}@test.com`);
+    await memberPage.click('button:has-text("Continue")');
     
     await memberPage.waitForSelector('text=/Join.*League|Competition/i', { timeout: 10000 });
     
