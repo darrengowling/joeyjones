@@ -25,9 +25,6 @@ export default function CompetitionDashboard() {
   const [uploadError, setUploadError] = useState("");
   const [uploadSuccess, setUploadSuccess] = useState("");
 
-  // Socket.IO connection (Prompt 4)
-  const socketRef = useRef(null);
-
   useEffect(() => {
     // Get user from localStorage
     const storedUser = localStorage.getItem("user");
