@@ -2280,44 +2280,44 @@ async def join_auction(sid, data):
     
     # Send current auction state for reconnection
     auction = await db.auctions.find_one({"id": auction_id})
-        if auction:
-            logger.info(f"Sending sync_state to client {sid} for auction {auction_id}")
+    if auction:
+        logger.info(f"Sending sync_state to client {sid} for auction {auction_id}")
+        
+        # Get current club if exists
+        current_club = None
+        if auction.get("currentClubId"):
+            club = await db.clubs.find_one({"id": auction["currentClubId"]})
+            if club:
+                current_club = Club(**club).model_dump()
+        
+        # Get all bids for current club
+        current_bids = []
+        if auction.get("currentClubId"):
+            bids = await db.bids.find({
+                "auctionId": auction_id,
+                "clubId": auction["currentClubId"]
+            }).to_list(100)
+            current_bids = [Bid(**b).model_dump(mode='json') for b in bids]
+        
+        # Create timer data if timer is active
+        timer_data = None
+        if auction.get("timerEndsAt") and auction.get("status") == "active":
+            timer_end = auction["timerEndsAt"]
+            if timer_end.tzinfo is None:
+                timer_end = timer_end.replace(tzinfo=timezone.utc)
+            ends_at_ms = int(timer_end.timestamp() * 1000)
             
-            # Get current club if exists
-            current_club = None
-            if auction.get("currentClubId"):
-                club = await db.clubs.find_one({"id": auction["currentClubId"]})
-                if club:
-                    current_club = Club(**club).model_dump()
+            # Get or create lot ID
+            lot_id = auction.get("currentLotId")
+            if not lot_id and auction.get("currentLot"):
+                lot_id = f"{auction_id}-lot-{auction['currentLot']}"
             
-            # Get all bids for current club
-            current_bids = []
-            if auction.get("currentClubId"):
-                bids = await db.bids.find({
-                    "auctionId": auction_id,
-                    "clubId": auction["currentClubId"]
-                }).to_list(100)
-                current_bids = [Bid(**b).model_dump(mode='json') for b in bids]
-            
-            # Create timer data if timer is active
-            timer_data = None
-            if auction.get("timerEndsAt") and auction.get("status") == "active":
-                timer_end = auction["timerEndsAt"]
-                if timer_end.tzinfo is None:
-                    timer_end = timer_end.replace(tzinfo=timezone.utc)
-                ends_at_ms = int(timer_end.timestamp() * 1000)
-                
-                # Get or create lot ID
-                lot_id = auction.get("currentLotId")
-                if not lot_id and auction.get("currentLot"):
-                    lot_id = f"{auction_id}-lot-{auction['currentLot']}"
-                
-                if lot_id:
-                    timer_data = create_timer_event(lot_id, ends_at_ms)
-                    logger.info(f"Sync state timer data - seq: {timer_data['seq']}, endsAt: {timer_data['endsAt']}")
-            
-            # Get participants
-            participants = await db.league_participants.find({"leagueId": auction["leagueId"]}).to_list(100)
+            if lot_id:
+                timer_data = create_timer_event(lot_id, ends_at_ms)
+                logger.info(f"Sync state timer data - seq: {timer_data['seq']}, endsAt: {timer_data['endsAt']}")
+        
+        # Get participants
+        participants = await db.league_participants.find({"leagueId": auction["leagueId"]}).to_list(100)
             
             # Remove MongoDB _id field
             for p in participants:
