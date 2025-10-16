@@ -144,9 +144,13 @@ class LoadTestRunner:
                     json={
                         "name": f"Rate Test League {user_id}-{request_count}",
                         "sportKey": "football",
+                        "commissionerId": f"load-test-user-{user_id}",
                         "budget": 500000000,
-                        "rosterSlots": 3,
-                        "auctionTimerSeconds": 30
+                        "minManagers": 2,
+                        "maxManagers": 8,
+                        "clubSlots": 3,
+                        "timerSeconds": 30,
+                        "antiSnipeSeconds": 10
                     },
                     headers={"Content-Type": "application/json"}
                 ) as resp:
