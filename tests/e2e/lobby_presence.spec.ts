@@ -36,9 +36,15 @@ test.describe('Lobby Presence - Real-time Member Updates', () => {
   test('Commissioner sees new member join in real-time without refresh', async () => {
     // Step 1: Commissioner creates account and league
     await commissionerPage.goto(BASE_URL);
-    await commissionerPage.fill('input[placeholder*="name" i]', 'Commissioner');
-    await commissionerPage.fill('input[type="email"]', `commissioner-${Date.now()}@test.com`);
+    
+    // Click Sign In button to open modal
     await commissionerPage.click('button:has-text("Sign In")');
+    await commissionerPage.waitForTimeout(500);
+    
+    // Fill sign-in form
+    await commissionerPage.fill('input[placeholder*="name" i]', 'Commissioner');
+    await commissionerPage.fill('input[placeholder*="email" i]', `commissioner-${Date.now()}@test.com`);
+    await commissionerPage.click('button:has-text("Continue")');
     
     await commissionerPage.waitForSelector('text=/Create.*Competition/i', { timeout: 10000 });
     await commissionerPage.click('text=/Create.*Competition/i');
