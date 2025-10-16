@@ -48,25 +48,30 @@ export default function LeagueDetail() {
     // Join league room on mount
     joinLeagueRoom(leagueId);
     
-    // Handle member updates
+    // Handle member updates (upsert pattern)
     const handleMemberJoined = (data) => {
       console.log('📢 Member joined event received:', data);
       setParticipants(prev => {
-        // Check if member already exists to avoid duplicates
-        const exists = prev.some(p => p.userId === data.userId);
-        if (exists) {
-          console.log('Member already in list, skipping');
-          return prev;
-        }
+        // Upsert: update if exists, add if not
+        const existingIndex = prev.findIndex(p => p.userId === data.userId);
         
-        // Add new member (convert to participant format)
-        const newParticipant = {
+        const newMember = {
           userId: data.userId,
           userName: data.displayName,
           joinedAt: data.joinedAt
         };
-        console.log('✅ Adding new member to list:', newParticipant);
-        return [...prev, newParticipant];
+        
+        if (existingIndex >= 0) {
+          // Update existing member
+          console.log('🔄 Updating existing member:', data.userId);
+          const updated = [...prev];
+          updated[existingIndex] = newMember;
+          return updated;
+        } else {
+          // Add new member
+          console.log('✅ Adding new member to list:', newMember);
+          return [...prev, newMember];
+        }
       });
     };
     
