@@ -1583,6 +1583,10 @@ async def place_bid(auction_id: str, bid_input: BidCreate):
                 
                 logger.info(f"Anti-snipe triggered for lot {lot_id}: seq={timer_data['seq']}, new end={timer_data['endsAt']}")
     
+    # CRITICAL FIX: Check if auction should complete after this bid
+    # This handles the case where all rosters just became full
+    await check_auction_completion(auction_id)
+    
     return {"message": "Bid placed successfully", "bid": bid_obj}
 
 @api_router.post("/auction/{auction_id}/start-lot/{club_id}")
