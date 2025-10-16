@@ -98,7 +98,8 @@ test.describe('Enter Auction Room Button - Real-time Appearance', () => {
     const beforeStartTime = Date.now();
     console.log(`⏱️  Starting auction at: ${new Date(beforeStartTime).toISOString()}`);
     
-    await commissionerPage.click('button:has-text("Start Auction")');
+    // Use the data-testid attribute for more reliable selection
+    await commissionerPage.click('[data-testid="start-auction-button"]');
     
     // Wait for commissioner to see their own button (as confirmation auction started)
     await commissionerPage.waitForSelector('text=/Enter.*Auction.*Room/i', { timeout: 5000 });
