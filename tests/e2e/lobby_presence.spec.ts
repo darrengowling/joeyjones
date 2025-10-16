@@ -65,9 +65,12 @@ test.describe('Lobby Presence - Real-time Member Updates', () => {
     
     console.log(`✅ League created: ${leagueId}`);
     
-    // Get invite token from the page
-    const inviteTokenText = await commissionerPage.locator('text=/Token:/i').textContent();
-    inviteToken = inviteTokenText?.match(/[a-f0-9]{8}/)?.[0] || '';
+    // Get invite token by fetching league details from API
+    const leagueResponse = await commissionerPage.evaluate(async (id) => {
+      const response = await fetch(`${window.location.origin}/api/leagues/${id}`);
+      return response.json();
+    }, leagueId);
+    inviteToken = leagueResponse.inviteToken;
     expect(inviteToken).toBeTruthy();
     
     console.log(`✅ Invite token: ${inviteToken}`);
