@@ -225,7 +225,7 @@ class LoadTestRunner:
         self.results['end_time'] = datetime.now()
         self.print_results()
     
-    def print_results(self):
+    def print_results(self, test_type='bid'):
         """Print test results summary"""
         print(f"\n{'='*80}")
         print(f"Test Results")
