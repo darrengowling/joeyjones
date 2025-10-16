@@ -70,16 +70,17 @@ export default function LeagueDetail() {
       });
     };
     
-    // Handle sync_members for reconciliation
+    // Handle sync_members for reconciliation (source of truth)
     const handleSyncMembers = (data) => {
       console.log('🔄 Sync members received:', data);
-      if (data.members) {
-        // Convert members to participant format and update
+      if (data.members && Array.isArray(data.members)) {
+        // Replace entire participant list with sync_members (source of truth)
         const updatedParticipants = data.members.map(member => ({
           userId: member.userId,
           userName: member.displayName,
           joinedAt: member.joinedAt
         }));
+        console.log(`✅ Replacing participants with ${updatedParticipants.length} members from sync_members`);
         setParticipants(updatedParticipants);
       }
     };
