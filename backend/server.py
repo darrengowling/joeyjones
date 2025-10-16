@@ -2499,6 +2499,47 @@ async def leave_league(sid, data):
 async def root():
     return {"message": "Friends of Pifa API"}
 
+# Debug endpoint to inspect Socket.IO room membership (dev only)
+@api_router.get("/debug/rooms/{scope}/{room_id}")
+async def debug_room_membership(scope: str, room_id: str):
+    """
+    Debug endpoint to inspect Socket.IO room membership
+    Returns member counts and socket IDs for a given room
+    
+    scope: 'league' or 'auction'
+    room_id: The ID of the league or auction
+    """
+    room_name = f"{scope}:{room_id}"
+    
+    # Get all sockets in the room
+    room_sockets = sio.manager.rooms.get(room_name, set())
+    socket_ids = list(room_sockets)
+    
+    # Try to get user info for each socket (if session data is available)
+    socket_info = []
+    for sid in socket_ids:
+        user_id = None
+        if hasattr(sio, 'get_session'):
+            try:
+                session = sio.get_session(sid)
+                user_id = session.get('userId') if session else None
+            except:
+                pass
+        
+        socket_info.append({
+            "sid": sid,
+            "userId": user_id
+        })
+    
+    return {
+        "room": room_name,
+        "scope": scope,
+        "id": room_id,
+        "memberCount": len(socket_ids),
+        "sockets": socket_info,
+        "timestamp": datetime.now(timezone.utc).isoformat()
+    }
+
 # Add CORS middleware to main app
 app.add_middleware(
     CORSMiddleware,
