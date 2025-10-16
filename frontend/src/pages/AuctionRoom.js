@@ -205,6 +205,7 @@ export default function AuctionRoom() {
 
     // Remove existing listeners before adding new ones (prevent duplicates)
     socket.off("connect_error", handleConnectError);
+    socket.off("connect", handleConnect);
     socket.off("joined", handleJoined);
     socket.off("sync_state", handleSyncState);
     socket.off("bid_placed", handleBidPlaced);
@@ -219,6 +220,7 @@ export default function AuctionRoom() {
 
     // Add listeners
     socket.on("connect_error", handleConnectError);
+    socket.on("connect", handleConnect);
     socket.on("joined", handleJoined);
     socket.on("sync_state", handleSyncState);
     socket.on("bid_placed", handleBidPlaced);
