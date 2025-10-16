@@ -1034,7 +1034,7 @@ From E2E tests:
 
 #### Nice to Have
 
-4. **Enable Redis Socket.IO Adapter**
+3. **Enable Redis Socket.IO Adapter**
    - Priority: Medium
    - Effort: 2 hours
    - Owner: Backend team
