@@ -32,90 +32,80 @@ export default function LeagueDetail() {
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
     if (savedUser) {
-      setUser(JSON.parse(savedUser));
+      const userData = JSON.parse(savedUser);
+      setUser(userData);
+      // Set socket user for rejoining rooms after reconnect
+      setSocketUser(userData);
     }
     loadLeague();
     loadParticipants();
     loadStandings();
     loadAssets();
     
-    // Prompt A: Initialize Socket.IO for real-time member updates
-    const initializeSocket = () => {
-      if (socket) {
-        socket.disconnect();
-      }
-      
-      socket = io(BACKEND_URL, {
-        path: '/api/socket.io',
-        transports: ['websocket', 'polling']
-      });
-      
-      // Wait for connection before joining room
-      socket.on('connect', () => {
-        console.log('✅ Socket connected, joining league room:', leagueId);
-        socket.emit('join_league_room', { leagueId });
-      });
-      
-      // Handle member updates
-      socket.on('member_joined', (data) => {
-        console.log('📢 Member joined event received:', data);
-        setParticipants(prev => {
-          // Check if member already exists to avoid duplicates
-          const exists = prev.some(p => p.userId === data.userId);
-          if (exists) {
-            console.log('Member already in list, skipping');
-            return prev;
-          }
-          
-          // Add new member (convert to participant format)
-          const newParticipant = {
-            userId: data.userId,
-            userName: data.displayName,
-            joinedAt: data.joinedAt
-          };
-          console.log('✅ Adding new member to list:', newParticipant);
-          return [...prev, newParticipant];
-        });
-      });
-      
-      // Handle sync_members for reconciliation
-      socket.on('sync_members', (data) => {
-        console.log('Sync members:', data);
-        if (data.members) {
-          // Convert members to participant format and update
-          const updatedParticipants = data.members.map(member => ({
-            userId: member.userId,
-            userName: member.displayName,
-            joinedAt: member.joinedAt
-          }));
-          setParticipants(updatedParticipants);
+    // Use global Socket.IO instance for real-time member updates
+    const socket = getSocket();
+    
+    // Join league room on mount
+    joinLeagueRoom(leagueId);
+    
+    // Handle member updates
+    const handleMemberJoined = (data) => {
+      console.log('📢 Member joined event received:', data);
+      setParticipants(prev => {
+        // Check if member already exists to avoid duplicates
+        const exists = prev.some(p => p.userId === data.userId);
+        if (exists) {
+          console.log('Member already in list, skipping');
+          return prev;
         }
+        
+        // Add new member (convert to participant format)
+        const newParticipant = {
+          userId: data.userId,
+          userName: data.displayName,
+          joinedAt: data.joinedAt
+        };
+        console.log('✅ Adding new member to list:', newParticipant);
+        return [...prev, newParticipant];
       });
-      
-      // Handle auction started event for real-time "Enter Auction Room" button
-      socket.on('auction_started', (data) => {
-        console.log('🎯 Auction started event received:', data);
-        if (data.leagueId === leagueId) {
-          // Reload league data to show "Enter Auction Room" button
-          loadLeague();
-        }
-      });
-      
-      return () => {
-        if (socket) {
-          socket.off('member_joined');
-          socket.off('sync_members');
-          socket.off('auction_started');
-          socket.emit('leave_league', { leagueId });
-          socket.disconnect();
-          socket = null;
-        }
-      };
     };
     
-    const cleanupSocket = initializeSocket();
+    // Handle sync_members for reconciliation
+    const handleSyncMembers = (data) => {
+      console.log('🔄 Sync members received:', data);
+      if (data.members) {
+        // Convert members to participant format and update
+        const updatedParticipants = data.members.map(member => ({
+          userId: member.userId,
+          userName: member.displayName,
+          joinedAt: member.joinedAt
+        }));
+        setParticipants(updatedParticipants);
+      }
+    };
     
-    return cleanupSocket;
+    // Handle auction started event for real-time "Enter Auction Room" button
+    const handleAuctionStarted = (data) => {
+      console.log('🎯 Auction started event received:', data);
+      if (data.leagueId === leagueId) {
+        // Reload league data to show "Enter Auction Room" button
+        loadLeague();
+      }
+    };
+    
+    // Register event listeners
+    socket.on('member_joined', handleMemberJoined);
+    socket.on('sync_members', handleSyncMembers);
+    socket.on('auction_started', handleAuctionStarted);
+    
+    // Cleanup on unmount
+    return () => {
+      console.log('🧹 Cleaning up LeagueDetail socket listeners');
+      socket.off('member_joined', handleMemberJoined);
+      socket.off('sync_members', handleSyncMembers);
+      socket.off('auction_started', handleAuctionStarted);
+      leaveLeagueRoom(leagueId);
+    };
   }, [leagueId]);
 
   const loadLeague = async () => {
