@@ -80,8 +80,8 @@ test.describe('Lobby Presence - Real-time Member Updates', () => {
     await memberPage.waitForTimeout(500);
     
     // Fill sign-in form
-    await memberPage.fill('input[placeholder="Your name"]', 'Test Member');
-    await memberPage.fill('input[placeholder="email@example.com"]', `member-${Date.now()}@test.com`);
+    await memberPage.fill('input[placeholder="Enter your full name"]', 'Test Member');
+    await memberPage.fill('input[placeholder="your.email@example.com"]', `member-${Date.now()}@test.com`);
     await memberPage.click('button:has-text("Continue")');
     
     await memberPage.waitForTimeout(2000);
