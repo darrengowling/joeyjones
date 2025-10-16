@@ -149,8 +149,15 @@ export default function LeagueDetail() {
 
   const loadParticipants = async () => {
     try {
-      const response = await axios.get(`${API}/leagues/${leagueId}/participants`);
-      setParticipants(response.data);
+      // Use /members endpoint for ordered member list (source of truth)
+      const response = await axios.get(`${API}/leagues/${leagueId}/members`);
+      // Convert to participant format
+      const members = response.data.map(m => ({
+        userId: m.userId,
+        userName: m.displayName,
+        joinedAt: m.joinedAt
+      }));
+      setParticipants(members);
     } catch (e) {
       console.error("Error loading participants:", e);
     }
