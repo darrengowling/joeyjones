@@ -1021,7 +1021,7 @@ From E2E tests:
    - Effort: 15 minutes
    - Owner: DevOps team
 
-4. **Rate Limiting Load Test**
+2. **Rate Limiting Load Test**
    - Priority: High
    - Effort: 4 hours
    - Owner: QA team
