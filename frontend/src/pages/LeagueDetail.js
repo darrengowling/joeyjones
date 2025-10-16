@@ -301,6 +301,13 @@ export default function LeagueDetail() {
 
   const goToAuction = async () => {
     try {
+      // Use activeAuctionId from league state if available (from real-time event)
+      if (league.activeAuctionId) {
+        navigate(`/auction/${league.activeAuctionId}`);
+        return;
+      }
+      
+      // Fallback to API call if activeAuctionId not in state
       const response = await axios.get(`${API}/leagues/${leagueId}/auction`);
       navigate(`/auction/${response.data.auctionId}`);
     } catch (e) {
