@@ -1039,7 +1039,7 @@ From E2E tests:
    - Effort: 2 hours
    - Owner: Backend team
 
-5. **Expand E2E Test Suite**
+4. **Expand E2E Test Suite**
    - Priority: Medium
    - Effort: 1 week
    - Owner: QA team
