@@ -40,7 +40,7 @@ The Friends of PIFA multi-sport auction platform has undergone comprehensive Soc
 | **Authentication** | 🟢 Green | Magic link + localStorage working |
 | **Database** | 🟢 Green | All indexes verified and created; unique constraints tested |
 | **Infrastructure** | 🟢 Green | Backend/Frontend running on K8s, supervisor managed |
-| **Security** | 🟡 Yellow | CORS configured, rate limiting present, needs audit |
+| **Security** | 🟢 Green | CORS tightened, rate limiting enabled, debug endpoints secured |
 | **Observability** | 🟢 Green | JSON logging, /metrics endpoint, debug tools available |
 
 ### Key Achievements
