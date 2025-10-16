@@ -48,11 +48,14 @@ test.describe('Lobby Presence - Real-time Member Updates', () => {
     
     await commissionerPage.waitForTimeout(2000);
     await commissionerPage.click('button:has-text("Create Your Competition")');
-    await commissionerPage.waitForTimeout(500);
+    await commissionerPage.waitForTimeout(1000);
     
-    // Fill league creation form (exact field labels from UI)
-    await commissionerPage.fill('input[placeholder="Enter league name"]', 'Lobby Test League');
-    // Budget is already set to 500m by default, no need to fill
+    // Fill league creation form - no placeholders, using CSS nth-child selectors
+    // First text input is League Name
+    const inputs = await commissionerPage.locator('input[type="text"]').all();
+    await inputs[0].fill('Lobby Test League');
+    
+    // Click Create League button
     await commissionerPage.click('button:has-text("Create League")');
     
     // Wait for league to be created and navigate to lobby
