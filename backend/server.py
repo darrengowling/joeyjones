@@ -2515,9 +2515,19 @@ async def debug_room_membership(scope: str, room_id: str):
     Debug endpoint to inspect Socket.IO room membership
     Returns member counts and socket IDs for a given room
     
+    **Only available in development environment**
+    
     scope: 'league' or 'auction'
     room_id: The ID of the league or auction
     """
+    # Guard: Only allow in development environment
+    env = os.environ.get('ENV', 'production')
+    if env != 'development':
+        raise HTTPException(
+            status_code=404, 
+            detail="Not Found"
+        )
+    
     room_name = f"{scope}:{room_id}"
     
     # Get all sockets in the room
@@ -2530,7 +2540,7 @@ async def debug_room_membership(scope: str, room_id: str):
         user_id = None
         if hasattr(sio, 'get_session'):
             try:
-                session = sio.get_session(sid)
+                session = await sio.get_session(sid)
                 user_id = session.get('userId') if session else None
             except Exception:
                 pass
@@ -2546,7 +2556,8 @@ async def debug_room_membership(scope: str, room_id: str):
         "id": room_id,
         "memberCount": len(socket_ids),
         "sockets": socket_info,
-        "timestamp": datetime.now(timezone.utc).isoformat()
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "environment": env
     }
 
 # Add CORS middleware to main app
