@@ -90,26 +90,48 @@ export default function LeagueDetail() {
       }
     };
     
-    // Handle auction started event for real-time "Enter Auction Room" button
-    const handleAuctionStarted = (data) => {
-      console.log('🎯 Auction started event received:', data);
+    // Handle league status changes for instant auction start/complete notifications
+    const handleLeagueStatusChanged = (data) => {
+      console.log('🎯 League status changed event received:', data);
       if (data.leagueId === leagueId) {
-        // Reload league data to show "Enter Auction Room" button
-        loadLeague();
+        if (data.status === 'auction_started') {
+          console.log('✅ Auction started - updating league data');
+          // Update league to show "Enter Auction Room" button
+          setLeague(prev => ({
+            ...prev,
+            status: 'active',
+            activeAuctionId: data.auctionId
+          }));
+        } else if (data.status === 'auction_complete') {
+          console.log('✅ Auction completed - updating league data');
+          // Update league status
+          setLeague(prev => ({
+            ...prev,
+            status: 'completed',
+            activeAuctionId: null
+          }));
+        }
       }
     };
     
     // Register event listeners
     socket.on('member_joined', handleMemberJoined);
     socket.on('sync_members', handleSyncMembers);
-    socket.on('auction_started', handleAuctionStarted);
+    socket.on('league_status_changed', handleLeagueStatusChanged);
+    
+    // Setup 30s fallback polling in case events are missed
+    const pollInterval = setInterval(() => {
+      console.log('🔄 Fallback polling league status...');
+      loadLeague();
+    }, 30000); // 30 seconds
     
     // Cleanup on unmount
     return () => {
       console.log('🧹 Cleaning up LeagueDetail socket listeners');
       socket.off('member_joined', handleMemberJoined);
       socket.off('sync_members', handleSyncMembers);
-      socket.off('auction_started', handleAuctionStarted);
+      socket.off('league_status_changed', handleLeagueStatusChanged);
+      clearInterval(pollInterval);
       leaveLeagueRoom(leagueId);
     };
   }, [leagueId]);
