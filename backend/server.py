@@ -1619,7 +1619,24 @@ async def place_bid(auction_id: str, bid_input: BidCreate):
     updated_auction = await db.auctions.find_one({"id": auction_id}, {"bidSequence": 1})
     new_bid_sequence = updated_auction.get("bidSequence", 1)
     
-    # Emit bid update to all users (Prompt B: Everyone sees current bid)
+    # Get room size for debugging
+    room_sockets = sio.manager.rooms.get(f"auction:{auction_id}", set())
+    room_size = len(room_sockets)
+    
+    # JSON log for debugging
+    logger.info(json.dumps({
+        "event": "bid_update",
+        "auctionId": auction_id,
+        "lotId": auction.get("currentLotId"),
+        "seq": new_bid_sequence,
+        "amount": bid_input.amount,
+        "bidderId": bid_input.userId,
+        "bidderName": user["name"],
+        "roomSize": room_size,
+        "timestamp": datetime.now(timezone.utc).isoformat()
+    }))
+    
+    # Emit bid update to all users (Everyone sees current bid)
     await sio.emit('bid_update', {
         'lotId': auction.get("currentLotId"),
         'amount': bid_input.amount,
