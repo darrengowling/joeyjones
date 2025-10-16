@@ -44,18 +44,17 @@ export default function LeagueDetail() {
     loadStandings();
     loadAssets();
   }, [leagueId]);
-    
-    // Use global Socket.IO instance for real-time member updates
-    const socket = getSocket();
-    
-    // Join league room on mount
-    joinLeagueRoom(leagueId);
-    
+
+  // Socket event handlers - single useEffect with proper cleanup
+  useEffect(() => {
+    if (!user) return;
+
+    console.log(`🎧 [LeagueDetail] Setting up socket listeners (Count: ${listenerCount})`);
+
     // Handle member updates (upsert pattern)
-    const handleMemberJoined = (data) => {
+    const onMemberJoined = (data) => {
       console.log('📢 Member joined event received:', data);
       setParticipants(prev => {
-        // Upsert: update if exists, add if not
         const existingIndex = prev.findIndex(p => p.userId === data.userId);
         
         const newMember = {
@@ -65,13 +64,11 @@ export default function LeagueDetail() {
         };
         
         if (existingIndex >= 0) {
-          // Update existing member
           console.log('🔄 Updating existing member:', data.userId);
           const updated = [...prev];
           updated[existingIndex] = newMember;
           return updated;
         } else {
-          // Add new member
           console.log('✅ Adding new member to list:', newMember);
           return [...prev, newMember];
         }
@@ -79,10 +76,9 @@ export default function LeagueDetail() {
     };
     
     // Handle sync_members for reconciliation (source of truth)
-    const handleSyncMembers = (data) => {
+    const onSyncMembers = (data) => {
       console.log('🔄 Sync members received:', data);
       if (data.members && Array.isArray(data.members)) {
-        // Replace entire participant list with sync_members (source of truth)
         const updatedParticipants = data.members.map(member => ({
           userId: member.userId,
           userName: member.displayName,
@@ -94,12 +90,11 @@ export default function LeagueDetail() {
     };
     
     // Handle league status changes for instant auction start/complete notifications
-    const handleLeagueStatusChanged = (data) => {
+    const onLeagueStatusChanged = (data) => {
       console.log('🎯 League status changed event received:', data);
       if (data.leagueId === leagueId) {
         if (data.status === 'auction_started') {
           console.log('✅ Auction started - updating league data');
-          // Update league to show "Enter Auction Room" button
           setLeague(prev => ({
             ...prev,
             status: 'active',
@@ -107,7 +102,6 @@ export default function LeagueDetail() {
           }));
         } else if (data.status === 'auction_complete') {
           console.log('✅ Auction completed - updating league data');
-          // Update league status
           setLeague(prev => ({
             ...prev,
             status: 'completed',
@@ -118,26 +112,25 @@ export default function LeagueDetail() {
     };
     
     // Register event listeners
-    socket.on('member_joined', handleMemberJoined);
-    socket.on('sync_members', handleSyncMembers);
-    socket.on('league_status_changed', handleLeagueStatusChanged);
+    socket.on('member_joined', onMemberJoined);
+    socket.on('sync_members', onSyncMembers);
+    socket.on('league_status_changed', onLeagueStatusChanged);
     
     // Setup 30s fallback polling in case events are missed
     const pollInterval = setInterval(() => {
       console.log('🔄 Fallback polling league status...');
       loadLeague();
-    }, 30000); // 30 seconds
+    }, 30000);
     
-    // Cleanup on unmount
+    // Cleanup function
     return () => {
-      console.log('🧹 Cleaning up LeagueDetail socket listeners');
-      socket.off('member_joined', handleMemberJoined);
-      socket.off('sync_members', handleSyncMembers);
-      socket.off('league_status_changed', handleLeagueStatusChanged);
+      console.log('🧹 [LeagueDetail] Removing socket listeners');
+      socket.off('member_joined', onMemberJoined);
+      socket.off('sync_members', onSyncMembers);
+      socket.off('league_status_changed', onLeagueStatusChanged);
       clearInterval(pollInterval);
-      leaveLeagueRoom(leagueId);
     };
-  }, [leagueId]);
+  }, [leagueId, user, listenerCount]);
 
   const loadLeague = async () => {
     try {
