@@ -2221,8 +2221,12 @@ async def countdown_timer(auction_id: str, end_time: datetime, lot_id: str):
 # ===== SOCKET.IO EVENTS =====
 @sio.event
 async def connect(sid, environ):
-    logger.info(f"Client connected: {sid}")
-    metrics.increment_socket_connection()
+    logger.info(f"🟢 Client connected: {sid}")
+    
+    # Send connection confirmation
+    await sio.emit('connected', {'sid': sid}, room=sid)
+    
+    # NOTE: Client will emit 'rejoin_rooms' with user context to rejoin their active rooms
 
 @sio.event
 async def disconnect(sid):
