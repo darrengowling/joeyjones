@@ -2229,8 +2229,42 @@ async def connect(sid, environ):
     # NOTE: Client will emit 'rejoin_rooms' with user context to rejoin their active rooms
 
 @sio.event
+async def rejoin_rooms(sid, data):
+    """Handle reconnection - rejoin user's active rooms"""
+    user_id = data.get('userId')
+    if not user_id:
+        return
+    
+    logger.info(f"🔄 Rejoining rooms for user {user_id} (socket {sid})")
+    
+    # Find all leagues this user participates in
+    participants = await db.league_participants.find({"userId": user_id}).to_list(100)
+    
+    for participant in participants:
+        league_id = participant["leagueId"]
+        room_name = f"league:{league_id}"
+        sio.enter_room(sid, room_name)
+        logger.info(f"  ✅ Rejoined league room: {room_name}")
+    
+    # Find all active auctions for user's leagues
+    league_ids = [p["leagueId"] for p in participants]
+    if league_ids:
+        auctions = await db.auctions.find({
+            "leagueId": {"$in": league_ids},
+            "status": "active"
+        }).to_list(100)
+        
+        for auction in auctions:
+            auction_id = auction["id"]
+            room_name = f"auction:{auction_id}"
+            sio.enter_room(sid, room_name)
+            logger.info(f"  ✅ Rejoined auction room: {room_name}")
+    
+    logger.info(f"🔄 Rejoin complete for user {user_id}")
+
+@sio.event
 async def disconnect(sid):
-    logger.info(f"Client disconnected: {sid}")
+    logger.info(f"🔴 Client disconnected: {sid}")
     metrics.increment_socket_disconnection()
 
 @sio.event
