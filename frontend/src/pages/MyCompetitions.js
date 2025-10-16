@@ -215,19 +215,24 @@ export default function MyCompetitions() {
                 <div className="mb-4">
                   <p className="text-sm font-semibold text-gray-700 mb-2">Your Teams:</p>
                   {comp.assetsOwned && comp.assetsOwned.length > 0 ? (
-                    <div className="flex flex-wrap gap-2">
-                      {comp.assetsOwned.slice(0, 4).map((assetId, idx) => (
-                        <span
+                    <div className="space-y-2">
+                      {comp.assetsOwned.slice(0, 4).map((asset, idx) => (
+                        <div
                           key={idx}
-                          className="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm border border-blue-200"
+                          className="flex items-center justify-between p-2 bg-blue-50 rounded-lg border border-blue-200"
                         >
-                          Team {idx + 1}
-                        </span>
+                          <span className="text-sm font-semibold text-blue-900">
+                            {asset.name || `Team ${idx + 1}`}
+                          </span>
+                          <span className="text-sm text-blue-700 font-bold">
+                            {formatCurrency(asset.price)}
+                          </span>
+                        </div>
                       ))}
                       {comp.assetsOwned.length > 4 && (
-                        <span className="px-3 py-1 bg-gray-50 text-gray-700 rounded-full text-sm border border-gray-200">
-                          +{comp.assetsOwned.length - 4} more
-                        </span>
+                        <div className="text-sm text-gray-600 italic">
+                          + {comp.assetsOwned.length - 4} more teams
+                        </div>
                       )}
                     </div>
                   ) : (
