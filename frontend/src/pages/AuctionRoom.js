@@ -602,27 +602,27 @@ export default function AuctionRoom() {
                         className="flex-1 px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg"
                         value={bidAmount}
                         onChange={(e) => setBidAmount(e.target.value)}
-                        disabled={!syncReceived}
+                        disabled={!ready}
                         data-testid="bid-amount-input"
                       />
                       <button
                         onClick={placeBid}
-                        disabled={!syncReceived || participants.find((p) => p.userId === user?.id)?.clubsWon?.length >= (league?.clubSlots || 3)}
+                        disabled={!ready || participants.find((p) => p.userId === user?.id)?.clubsWon?.length >= (league?.clubSlots || 3)}
                         className={`btn btn-primary px-8 py-3 rounded-lg font-semibold text-lg ${
-                          !syncReceived || participants.find((p) => p.userId === user?.id)?.clubsWon?.length >= (league?.clubSlots || 3) 
+                          !ready || participants.find((p) => p.userId === user?.id)?.clubsWon?.length >= (league?.clubSlots || 3) 
                             ? 'bg-gray-400 cursor-not-allowed' 
                             : 'bg-blue-600 text-white hover:bg-blue-700'
                         }`}
                         data-testid="place-bid-button"
                         title={
-                          !syncReceived 
+                          !ready 
                             ? "Loading auction state..." 
                             : participants.find((p) => p.userId === user?.id)?.clubsWon?.length >= (league?.clubSlots || 3) 
                               ? "Roster full" 
                               : ""
                         }
                       >
-                        {!syncReceived 
+                        {!ready 
                           ? "Loading..." 
                           : participants.find((p) => p.userId === user?.id)?.clubsWon?.length >= (league?.clubSlots || 3) 
                             ? "Roster Full" 
