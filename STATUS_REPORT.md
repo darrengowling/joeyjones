@@ -58,7 +58,7 @@ The Friends of PIFA multi-sport auction platform has undergone comprehensive Soc
 ### Remaining Risks
 
 1. **Low**: Cricket scoring system in pilot phase (football fully operational)
-2. **Low**: Rate limiting thresholds need load test validation (mitigated: conservative defaults in place)
+2. **Low**: IP-based rate limiting may affect users behind NAT (mitigated: per-user limits recommended for production)
 
 ---
 
