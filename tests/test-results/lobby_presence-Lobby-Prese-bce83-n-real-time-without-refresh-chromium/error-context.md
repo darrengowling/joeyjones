@@ -10,7 +10,7 @@
       - generic [ref=e9]:
         - generic [ref=e10]:
           - generic [ref=e11]: League Name
-          - textbox [ref=e12]
+          - textbox [active] [ref=e12]: Lobby Test League
         - generic [ref=e13]:
           - generic [ref=e14]: Sport
           - combobox [ref=e15]:
@@ -52,7 +52,7 @@
         - button "My Competitions" [ref=e50] [cursor=pointer]
         - generic [ref=e51]:
           - strong [ref=e52]: Commissioner
-          - text: (commissioner-1760583772569@test.com)
+          - text: (commissioner-1760583972980@test.com)
         - button "Change" [ref=e53] [cursor=pointer]
         - button "Logout" [ref=e54] [cursor=pointer]
     - generic [ref=e56]:
@@ -60,7 +60,7 @@
       - paragraph [ref=e58]: Sports Gaming with Friends. No Gambling. All Strategy.
       - paragraph [ref=e59]: Bid for exclusive ownership of players and teams who score your points. Experience the thrill of sports through strategic competition and community.
       - generic [ref=e60]:
-        - button "Create Your Competition" [active] [ref=e61] [cursor=pointer]
+        - button "Create Your Competition" [ref=e61] [cursor=pointer]
         - button "Join the Competition" [ref=e62] [cursor=pointer]
         - button "Explore Available Teams" [ref=e63] [cursor=pointer]
       - generic [ref=e64]:
