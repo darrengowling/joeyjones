@@ -2246,7 +2246,7 @@ async def rejoin_rooms(sid, data):
     for participant in participants:
         league_id = participant["leagueId"]
         room_name = f"league:{league_id}"
-        sio.enter_room(sid, room_name)
+        await sio.enter_room(sid, room_name)
         logger.info(f"  ✅ Rejoined league room: {room_name}")
     
     # Find all active auctions for user's leagues
@@ -2260,7 +2260,7 @@ async def rejoin_rooms(sid, data):
         for auction in auctions:
             auction_id = auction["id"]
             room_name = f"auction:{auction_id}"
-            sio.enter_room(sid, room_name)
+            await sio.enter_room(sid, room_name)
             logger.info(f"  ✅ Rejoined auction room: {room_name}")
     
     logger.info(f"🔄 Rejoin complete for user {user_id}")
