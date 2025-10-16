@@ -40,23 +40,29 @@ test.describe('Bid Visibility - Real-time Synchronization', () => {
   test('All users see identical current bid after rapid-fire bidding', async () => {
     // Step 1: Create league and get 3 users to join
     await bidder1Page.goto(BASE_URL);
-    await bidder1Page.fill('input[placeholder*="name" i]', 'Bidder 1');
-    await bidder1Page.fill('input[type="email"]', `bidder1-${Date.now()}@test.com`);
     await bidder1Page.click('button:has-text("Sign In")');
+    await bidder1Page.waitForTimeout(500);
+    await bidder1Page.fill('input[placeholder="Enter your full name"]', 'Bidder 1');
+    await bidder1Page.fill('input[placeholder="your.email@example.com"]', `bidder1-${Date.now()}@test.com`);
+    await bidder1Page.click('button:has-text("Continue")');
     
-    await bidder1Page.waitForSelector('text=/Create.*Competition/i', { timeout: 10000 });
-    await bidder1Page.click('text=/Create.*Competition/i');
+    await bidder1Page.waitForTimeout(2000);
+    await bidder1Page.click('button:has-text("Create Your Competition")');
+    await bidder1Page.waitForTimeout(1000);
     
-    await bidder1Page.fill('input[placeholder*="league name" i]', 'Bid Test League');
-    await bidder1Page.fill('input[placeholder*="budget" i]', '100');
-    await bidder1Page.click('button:has-text("Create League")');
+    const inputs = await bidder1Page.locator('input[type="text"]').all();
+    await inputs[0].fill('Bid Test League');
+    await bidder1Page.waitForTimeout(500);
+    await bidder1Page.click('button:has-text("Create Competition")');
     
     await bidder1Page.waitForURL(/\/league\/[a-f0-9-]+/, { timeout: 10000 });
     const leagueId = bidder1Page.url().match(/\/league\/([a-f0-9-]+)/)?.[1] || '';
     
-    const inviteTokenElement = await bidder1Page.locator('text=/invite.*token/i').first();
-    const inviteTokenText = await inviteTokenElement.textContent();
-    const inviteToken = inviteTokenText?.match(/[A-Z0-9]{6}/)?.[0] || '';
+    const leagueResponse = await bidder1Page.evaluate(async (id) => {
+      const response = await fetch(`${window.location.origin}/api/leagues/${id}`);
+      return response.json();
+    }, leagueId);
+    const inviteToken = leagueResponse.inviteToken;
     
     console.log(`✅ League created: ${leagueId}`);
     console.log(`✅ Invite token: ${inviteToken}`);
