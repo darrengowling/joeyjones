@@ -237,6 +237,7 @@ export default function AuctionRoom() {
     return () => {
       console.log('🧹 Cleaning up AuctionRoom socket listeners');
       socket.off("connect_error", handleConnectError);
+      socket.off("connect", handleConnect);
       socket.off("joined", handleJoined);
       socket.off("sync_state", handleSyncState);
       socket.off("bid_placed", handleBidPlaced);
