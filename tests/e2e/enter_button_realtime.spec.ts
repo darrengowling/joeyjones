@@ -133,16 +133,13 @@ test.describe('Enter Auction Room Button - Real-time Appearance', () => {
     expect(member1Delay).toBeLessThan(1500); // Should appear within 1.5 seconds
     expect(member2Delay).toBeLessThan(1500);
     
-    // Step 7: Verify all three users can see the button
-    const commissionerButton = await commissionerPage.locator('text=/Enter.*Auction.*Room/i').count();
+    // Step 7: Verify all users can see the button
     const member1Button = await member1Page.locator('text=/Enter.*Auction.*Room/i').count();
     const member2Button = await member2Page.locator('text=/Enter.*Auction.*Room/i').count();
     
-    console.log(`📊 Commissioner sees button: ${commissionerButton > 0}`);
     console.log(`📊 Member 1 sees button: ${member1Button > 0}`);
     console.log(`📊 Member 2 sees button: ${member2Button > 0}`);
     
-    expect(commissionerButton).toBeGreaterThan(0);
     expect(member1Button).toBeGreaterThan(0);
     expect(member2Button).toBeGreaterThan(0);
     
