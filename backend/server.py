@@ -2401,7 +2401,7 @@ async def leave_league(sid, data):
         return
     
     room_name = f"league:{league_id}"
-    sio.leave_room(sid, room_name)
+    await sio.leave_room(sid, room_name)
     logger.info(f"🟦 Socket {sid} left league room: {room_name}")
 
 # ===== ROOT ENDPOINT =====
