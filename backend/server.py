@@ -2307,9 +2307,16 @@ async def join_league_room(sid, data):
                 'joinedAt': p['joinedAt'].isoformat() if isinstance(p['joinedAt'], datetime) else p['joinedAt']
             })
         
+        # CRITICAL FIX: Broadcast to ALL users in league room, not just this socket
         await sio.emit('sync_members', {
             'leagueId': league_id,
             'members': members
+        }, room=f"league:{league_id}")
+        
+        # Also send confirmation to the joining user
+        await sio.emit('room_joined', {
+            'leagueId': league_id,
+            'memberCount': len(members)
         }, room=sid)
 
 @sio.event
