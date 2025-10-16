@@ -2560,13 +2560,18 @@ async def debug_room_membership(scope: str, room_id: str):
         "environment": env
     }
 
-# Add CORS middleware to main app
+# Add CORS middleware to main app with production-ready configuration
+# Get CORS origins from environment, default to localhost for dev
+cors_origins_str = os.environ.get('CORS_ORIGINS', 'http://localhost:3000')
+cors_origins = [origin.strip() for origin in cors_origins_str.split(',') if origin.strip()]
+
 app.add_middleware(
     CORSMiddleware,
+    allow_origins=cors_origins,
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_headers=["Authorization", "Content-Type", "Accept"],
     allow_credentials=True,
-    allow_origins=os.environ.get('CORS_ORIGINS', '*').split(','),
-    allow_methods=["*"],
-    allow_headers=["*"],
+    max_age=600,  # Cache preflight for 10 minutes
 )
 
 # Include the router in the main app
