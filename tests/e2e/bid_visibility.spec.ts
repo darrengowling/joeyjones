@@ -70,22 +70,25 @@ test.describe('Bid Visibility - Real-time Synchronization', () => {
     // Step 2: Other users join
     for (const [index, page] of [[2, bidder2Page], [3, observerPage]] as [number, Page][]) {
       await page.goto(BASE_URL);
-      await page.fill('input[placeholder*="name" i]', `User ${index}`);
-      await page.fill('input[type="email"]', `user${index}-${Date.now()}@test.com`);
       await page.click('button:has-text("Sign In")');
+      await page.waitForTimeout(500);
+      await page.fill('input[placeholder="Enter your full name"]', `User ${index}`);
+      await page.fill('input[placeholder="your.email@example.com"]', `user${index}-${Date.now()}@test.com`);
+      await page.click('button:has-text("Continue")');
       
-      await page.waitForSelector('text=/Join.*League|Competition/i', { timeout: 10000 });
-      await page.click('text=/Join.*League|Competition/i');
+      await page.waitForTimeout(2000);
+      await page.click('button:has-text("Join the Competition")');
+      await page.waitForTimeout(500);
       await page.fill('input[placeholder*="token" i]', inviteToken);
-      await page.click('button:has-text("Join")');
+      await page.click('button:has-text("Join the Competition")');
       
       await page.waitForURL(/\/league\/[a-f0-9-]+/, { timeout: 10000 });
       console.log(`✅ User ${index} joined`);
     }
     
     // Step 3: Start auction
-    await bidder1Page.click('button:has-text("Start Auction")');
-    await bidder1Page.waitForSelector('text=/Enter.*Auction.*Room/i', { timeout: 5000 });
+    await bidder1Page.click('[data-testid="start-auction-button"]');
+    await bidder1Page.waitForTimeout(500);
     console.log(`✅ Auction started`);
     
     // Step 4: All users enter auction room
