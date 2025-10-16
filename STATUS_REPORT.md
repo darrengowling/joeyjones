@@ -1100,6 +1100,8 @@ Liverpool,Arsenal,2025-10-20T17:30:00Z
 - `/app/docs/SOCKET_IO_FIX.md` - Real-time infrastructure refactor
 - `/app/docs/TEST_GUIDE.md` - Testing procedures
 - `/app/PRODUCTION_HARDENING_SUMMARY.md` - Security features
+- `/app/DATABASE_INDEX_AUDIT.md` - ✅ NEW: Database index audit and verification
+- `/app/DEBUG_ENDPOINT_SECURITY.md` - ✅ NEW: Debug endpoint security implementation
 - `/app/tests/e2e/README_MY_COMPETITIONS_TESTS.md` - E2E test documentation
 
 ### Backend Log Examples
