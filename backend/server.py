@@ -2524,7 +2524,7 @@ async def debug_room_membership(scope: str, room_id: str):
             try:
                 session = sio.get_session(sid)
                 user_id = session.get('userId') if session else None
-            except:
+            except Exception:
                 pass
         
         socket_info.append({
