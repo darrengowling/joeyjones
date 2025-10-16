@@ -234,46 +234,61 @@ class BidBroadcastingTester:
         user = self.test_data["users"][0]
         current_club = self.test_data["current_club"]
         
-        # Clear sequence tracking
-        self.bid_sequences = []
+        # Create socket client to receive bid_update events
+        client = self.create_socket_client(user["id"], "Monotonic Test User")
         
-        # Place multiple bids in succession
-        bid_amounts = [1000000, 1500000, 2000000, 2500000, 3000000]  # £1M to £3M
-        
-        for i, amount in enumerate(bid_amounts):
-            bid_data = {
-                "userId": user["id"],
-                "clubId": current_club["id"],
-                "amount": amount
-            }
+        try:
+            # Connect and join auction
+            client.connect(SOCKET_URL, socketio_path=SOCKET_PATH)
+            time.sleep(2)
             
-            result = self.test_api_endpoint("POST", f"/auction/{auction_id}/bid", bid_data)
-            if "error" in result:
-                self.log(f"Failed to place bid {i+1}: {result}", "ERROR")
+            client.emit('join_auction', {'auctionId': auction_id})
+            time.sleep(2)
+            
+            # Clear sequence tracking
+            self.bid_sequences = []
+            
+            # Place multiple bids in succession
+            bid_amounts = [1000000, 1500000, 2000000, 2500000, 3000000]  # £1M to £3M
+            
+            for i, amount in enumerate(bid_amounts):
+                bid_data = {
+                    "userId": user["id"],
+                    "clubId": current_club["id"],
+                    "amount": amount
+                }
+                
+                result = self.test_api_endpoint("POST", f"/auction/{auction_id}/bid", bid_data)
+                if "error" in result:
+                    self.log(f"Failed to place bid {i+1}: {result}", "ERROR")
+                    return False
+                
+                self.log(f"Placed bid {i+1}: £{amount:,}")
+                time.sleep(0.2)  # Small delay between bids
+            
+            # Wait for all events to be processed
+            time.sleep(3)
+            
+            # Verify sequence numbers are monotonic
+            if len(self.bid_sequences) == 0:
+                self.log("No bid sequences recorded", "ERROR")
                 return False
             
-            self.log(f"Placed bid {i+1}: £{amount:,}")
-            time.sleep(0.1)  # Small delay between bids
-        
-        # Wait for all events to be processed
-        time.sleep(2)
-        
-        # Verify sequence numbers are monotonic
-        if len(self.bid_sequences) == 0:
-            self.log("No bid sequences recorded", "ERROR")
-            return False
-        
-        sequences = [entry["seq"] for entry in self.bid_sequences]
-        self.log(f"Recorded sequences: {sequences}")
-        
-        # Check if sequences are strictly increasing
-        for i in range(1, len(sequences)):
-            if sequences[i] <= sequences[i-1]:
-                self.log(f"Sequence not monotonic: {sequences[i-1]} -> {sequences[i]}", "ERROR")
-                return False
-        
-        self.log("✅ Sequence numbers are strictly monotonic")
-        return True
+            sequences = [entry["seq"] for entry in self.bid_sequences]
+            self.log(f"Recorded sequences: {sequences}")
+            
+            # Check if sequences are strictly increasing
+            for i in range(1, len(sequences)):
+                if sequences[i] <= sequences[i-1]:
+                    self.log(f"Sequence not monotonic: {sequences[i-1]} -> {sequences[i]}", "ERROR")
+                    return False
+            
+            self.log("✅ Sequence numbers are strictly monotonic")
+            return True
+            
+        finally:
+            if client.connected:
+                client.disconnect()
     
     def test_bid_update_event_broadcast(self) -> bool:
         """Test 2: Bid Update Event Broadcast"""
