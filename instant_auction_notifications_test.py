@@ -520,12 +520,16 @@ class InstantAuctionNotificationTester:
             self.log(f"User C received league_status_changed: {data}")
             self.socket_events["user_c"].append("league_status_changed")
         
-        # Connect User C
-        client_c.connect(SOCKET_URL, socketio_path=SOCKET_PATH)
-        time.sleep(2)
-        
-        if "connected" not in self.socket_events["user_c"]:
-            self.log("User C Socket.IO connection failed", "ERROR")
+        try:
+            # Connect User C
+            client_c.connect(SOCKET_URL, socketio_path=SOCKET_PATH)
+            time.sleep(2)
+            
+            if "connected" not in self.socket_events["user_c"]:
+                self.log("User C Socket.IO connection failed", "ERROR")
+                return False
+        except Exception as e:
+            self.log(f"User C connection failed: {str(e)}", "ERROR")
             return False
         
         # User C does NOT join the league room (they're not a member)
