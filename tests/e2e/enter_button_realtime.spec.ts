@@ -40,23 +40,29 @@ test.describe('Enter Auction Room Button - Real-time Appearance', () => {
   test('All users see Enter Auction Room button appear via socket event', async () => {
     // Step 1: Commissioner creates league
     await commissionerPage.goto(BASE_URL);
-    await commissionerPage.fill('input[placeholder*="name" i]', 'Commissioner');
-    await commissionerPage.fill('input[type="email"]', `comm-${Date.now()}@test.com`);
     await commissionerPage.click('button:has-text("Sign In")');
+    await commissionerPage.waitForTimeout(500);
+    await commissionerPage.fill('input[placeholder="Enter your full name"]', 'Commissioner');
+    await commissionerPage.fill('input[placeholder="your.email@example.com"]', `comm-${Date.now()}@test.com`);
+    await commissionerPage.click('button:has-text("Continue")');
     
-    await commissionerPage.waitForSelector('text=/Create.*Competition/i', { timeout: 10000 });
-    await commissionerPage.click('text=/Create.*Competition/i');
+    await commissionerPage.waitForTimeout(2000);
+    await commissionerPage.click('button:has-text("Create Your Competition")');
+    await commissionerPage.waitForTimeout(1000);
     
-    await commissionerPage.fill('input[placeholder*="league name" i]', 'Button Test League');
-    await commissionerPage.fill('input[placeholder*="budget" i]', '100');
-    await commissionerPage.click('button:has-text("Create League")');
+    const inputs = await commissionerPage.locator('input[type="text"]').all();
+    await inputs[0].fill('Button Test League');
+    await commissionerPage.waitForTimeout(500);
+    await commissionerPage.click('button:has-text("Create Competition")');
     
     await commissionerPage.waitForURL(/\/league\/[a-f0-9-]+/, { timeout: 10000 });
     leagueId = commissionerPage.url().match(/\/league\/([a-f0-9-]+)/)?.[1] || '';
     
-    const inviteTokenElement = await commissionerPage.locator('text=/invite.*token/i').first();
-    const inviteTokenText = await inviteTokenElement.textContent();
-    inviteToken = inviteTokenText?.match(/[A-Z0-9]{6}/)?.[0] || '';
+    const leagueResponse = await commissionerPage.evaluate(async (id) => {
+      const response = await fetch(`${window.location.origin}/api/leagues/${id}`);
+      return response.json();
+    }, leagueId);
+    inviteToken = leagueResponse.inviteToken;
     
     console.log(`✅ League created: ${leagueId}`);
     console.log(`✅ Invite token: ${inviteToken}`);
