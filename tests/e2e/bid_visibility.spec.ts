@@ -91,16 +91,16 @@ test.describe('Bid Visibility - Real-time Synchronization', () => {
     await bidder1Page.waitForTimeout(1500); // Wait for auction to start and button to appear
     console.log(`✅ Auction started`);
     
-    // Step 4: All users enter auction room
-    for (const page of [bidder1Page, bidder2Page, observerPage]) {
+    // Step 4: Two users (not the commissioner) enter auction room
+    for (const page of [bidder2Page, observerPage]) {
       // Wait for button and click
       await page.waitForSelector('text=/Enter.*Auction.*Room/i', { timeout: 5000 });
       await page.click('text=/Enter.*Auction.*Room/i');
       await page.waitForURL(/\/auction\/[a-f0-9-]+/, { timeout: 5000 });
     }
     
-    auctionId = bidder1Page.url().match(/\/auction\/([a-f0-9-]+)/)?.[1] || '';
-    console.log(`✅ All users in auction room: ${auctionId}`);
+    auctionId = bidder2Page.url().match(/\/auction\/([a-f0-9-]+)/)?.[1] || '';
+    console.log(`✅ Users entered auction room: ${auctionId}`);
     
     // Step 5: Wait for all clients to receive sync_state
     await bidder1Page.waitForTimeout(2000);
