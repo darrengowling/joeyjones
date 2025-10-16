@@ -1943,7 +1943,7 @@ async def check_auction_completion(auction_id: str):
             completion_reason = "All managers have filled their rosters"
         elif not eligible_bidders:
             completion_reason = "No managers can afford minimum bid"
-        elif not unsold_clubs:
+        elif not clubs_remaining:
             completion_reason = "All available teams have been sold"
         
         await sio.emit('auction_completed', {
