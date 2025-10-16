@@ -139,7 +139,7 @@ export default function AuctionRoom() {
       
       // Only update if this is a newer sequence to prevent stale overwrites
       if (data.seq >= bidSequence) {
-        console.log(`✅ Updating current bid: £${data.amount} by ${data.bidder?.displayName}`);
+        console.log(`✅ Updating current bid: ${formatCurrency(data.amount)} by ${data.bidder?.displayName}`);
         setCurrentBid(data.amount);
         setCurrentBidder(data.bidder);
         setBidSequence(data.seq);
