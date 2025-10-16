@@ -27,6 +27,7 @@ export default function AuctionRoom() {
   const [currentBid, setCurrentBid] = useState(null);
   const [currentBidder, setCurrentBidder] = useState(null);
   const [bidSequence, setBidSequence] = useState(0);
+  const [syncReceived, setSyncReceived] = useState(false); // Track if sync_state received
 
   // Get global Socket.IO instance
   const socket = getSocket();
