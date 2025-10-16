@@ -2290,14 +2290,29 @@ async def join_auction(sid, data):
     if not auction_id:
         return
     
+    # Get user ID from session if available
+    user_id = sio.get_session(sid).get('userId') if hasattr(sio, 'get_session') else None
+    
     room_name = f"auction:{auction_id}"
     await sio.enter_room(sid, room_name)
-    logger.info(f"🟧 Socket {sid} joined auction room: {room_name}")
+    
+    # Get room size after join
+    room_sockets = sio.manager.rooms.get(f"auction:{auction_id}", set())
+    room_size = len(room_sockets)
+    
+    # JSON log for debugging
+    logger.info(json.dumps({
+        "event": "join_auction_room",
+        "sid": sid,
+        "auctionId": auction_id,
+        "userId": user_id,
+        "roomSize": room_size,
+        "timestamp": datetime.now(timezone.utc).isoformat()
+    }))
     
     # Send current auction state for reconnection
     auction = await db.auctions.find_one({"id": auction_id})
     if auction:
-        logger.info(f"Sending sync_state to client {sid} for auction {auction_id}")
         
         # Get current club if exists
         current_club = None
