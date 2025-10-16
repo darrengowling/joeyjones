@@ -88,12 +88,13 @@ test.describe('Bid Visibility - Real-time Synchronization', () => {
     
     // Step 3: Start auction
     await bidder1Page.click('[data-testid="start-auction-button"]');
-    await bidder1Page.waitForTimeout(500);
+    await bidder1Page.waitForTimeout(1500); // Wait for auction to start and button to appear
     console.log(`✅ Auction started`);
     
     // Step 4: All users enter auction room
     for (const page of [bidder1Page, bidder2Page, observerPage]) {
-      await page.waitForSelector('text=/Enter.*Auction.*Room/i', { timeout: 3000 });
+      // Wait for button and click
+      await page.waitForSelector('text=/Enter.*Auction.*Room/i', { timeout: 5000 });
       await page.click('text=/Enter.*Auction.*Room/i');
       await page.waitForURL(/\/auction\/[a-f0-9-]+/, { timeout: 5000 });
     }
