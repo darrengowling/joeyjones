@@ -124,9 +124,9 @@ The Friends of PIFA multi-sport auction platform has undergone comprehensive Soc
 - **Mitigation:** Football fully tested and operational
 - **Next Step:** Complete cricket E2E test suite
 
-### Low Severity: 3
+### Low Severity: 2
 
-#### 3. Rate Limiting Thresholds Not Load Tested
+#### 2. Rate Limiting Thresholds Not Load Tested
 - **Severity:** Low
 - **Scope:** All API endpoints with @limiter decorator
 - **Impact:** May need tuning under real load
