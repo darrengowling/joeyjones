@@ -62,6 +62,14 @@ export default function AuctionRoom() {
     const handleConnectError = (error) => {
       console.error("Socket.IO connection error:", error);
     };
+    
+    // Handle reconnection - rejoin room and request sync
+    const handleConnect = () => {
+      console.log("🔄 Socket reconnected - rejoining auction room");
+      setSyncReceived(false); // Disable bid UI until sync received
+      joinAuctionRoom(auctionId);
+      socket.emit("sync_state", { auctionId });
+    };
 
     const handleJoined = (data) => {
       console.log("Joined auction:", data);
