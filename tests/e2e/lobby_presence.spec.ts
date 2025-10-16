@@ -50,13 +50,13 @@ test.describe('Lobby Presence - Real-time Member Updates', () => {
     await commissionerPage.click('button:has-text("Create Your Competition")');
     await commissionerPage.waitForTimeout(1000);
     
-    // Fill league creation form - no placeholders, using CSS nth-child selectors
-    // First text input is League Name
+    // Fill league creation form - first text input is League Name
     const inputs = await commissionerPage.locator('input[type="text"]').all();
     await inputs[0].fill('Lobby Test League');
+    await commissionerPage.waitForTimeout(500);
     
-    // Click Create League button
-    await commissionerPage.click('button:has-text("Create League")');
+    // Click Create Competition button
+    await commissionerPage.click('button:has-text("Create Competition")');
     
     // Wait for league to be created and navigate to lobby
     await commissionerPage.waitForURL(/\/league\/[a-f0-9-]+/, { timeout: 10000 });
