@@ -412,13 +412,18 @@ class InstantAuctionNotificationTester:
         self.socket_events["user_a"] = []
         self.socket_events["user_b"] = []
         
-        # Complete the auction (force complete)
-        self.log("Completing auction...")
-        result = self.test_api_endpoint("POST", f"/auction/{auction_id}/complete")
+        # Complete lots to trigger auction completion
+        self.log("Completing lots to trigger auction completion...")
         
-        if "error" in result:
-            self.log("Auction completion failed", "ERROR")
-            return False
+        # Complete multiple lots to trigger auction completion
+        for i in range(5):  # Complete several lots
+            result = self.test_api_endpoint("POST", f"/auction/{auction_id}/complete-lot")
+            if "error" in result:
+                self.log(f"Lot {i+1} completion failed: {result}", "ERROR")
+                break
+            else:
+                self.log(f"Completed lot {i+1}")
+                time.sleep(1)  # Wait between lot completions
         
         # Wait for completion events
         time.sleep(3)
