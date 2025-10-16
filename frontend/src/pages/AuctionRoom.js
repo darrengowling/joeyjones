@@ -687,7 +687,7 @@ export default function AuctionRoom() {
                     {participants.find((p) => p.userId === user?.id) && (
                       <div className="text-sm text-gray-600 space-y-1">
                         <p>
-                          Your strategic budget remaining: £{participants.find((p) => p.userId === user.id).budgetRemaining.toLocaleString()}
+                          Your strategic budget remaining: {formatCurrency(participants.find((p) => p.userId === user.id).budgetRemaining)}
                         </p>
                         <p className="flex items-center">
                           <span>Roster:</span>
