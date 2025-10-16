@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { formatCurrency } from "../utils/currency";
-import { getSocket, joinLeagueRoom, leaveLeagueRoom, setSocketUser } from "../utils/socket";
+import { useSocketRoom } from "../hooks/useSocketRoom";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
@@ -29,18 +29,21 @@ export default function LeagueDetail() {
   const [editingAssets, setEditingAssets] = useState(false);
   const [loadingAssetSelection, setLoadingAssetSelection] = useState(false);
 
+  // Use shared socket room hook
+  const { socket, connected, ready, listenerCount } = useSocketRoom('league', leagueId, { user });
+
+  // Initial setup: load user and data
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
     if (savedUser) {
       const userData = JSON.parse(savedUser);
       setUser(userData);
-      // Set socket user for rejoining rooms after reconnect
-      setSocketUser(userData);
     }
     loadLeague();
     loadParticipants();
     loadStandings();
     loadAssets();
+  }, [leagueId]);
     
     // Use global Socket.IO instance for real-time member updates
     const socket = getSocket();
