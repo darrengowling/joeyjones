@@ -2389,9 +2389,14 @@ async def join_league(sid, data):
 
 @sio.event
 async def leave_league(sid, data):
+    """Leave a league room"""
     league_id = data.get('leagueId')
-    if league_id:
-        sio.leave_room(sid, f"league:{league_id}")
+    if not league_id:
+        return
+    
+    room_name = f"league:{league_id}"
+    sio.leave_room(sid, room_name)
+    logger.info(f"🟦 Socket {sid} left league room: {room_name}")
 
 # ===== ROOT ENDPOINT =====
 @api_router.get("/")
