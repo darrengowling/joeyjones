@@ -2378,17 +2378,17 @@ async def join_league(sid, data):
     
     # CRITICAL FIX: Broadcast to ALL users in league room, not just this socket
     await sio.emit('sync_members', {
-            'leagueId': league_id,
-            'members': members
-        }, room=f"league:{league_id}")
-        
-        logger.info(f"🔵 Sent sync_members event to league:{league_id}")
-        
-        # Also send confirmation to the joining user
-        await sio.emit('room_joined', {
-            'leagueId': league_id,
-            'memberCount': len(members)
-        }, room=sid)
+        'leagueId': league_id,
+        'members': members
+    }, room=f"league:{league_id}")
+    
+    logger.info(f"🔵 Sent sync_members event to league:{league_id}")
+    
+    # Also send confirmation to the joining user
+    await sio.emit('room_joined', {
+        'leagueId': league_id,
+        'memberCount': len(members)
+    }, room=sid)
 
 @sio.event
 async def leave_league(sid, data):
