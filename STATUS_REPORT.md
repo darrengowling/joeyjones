@@ -1165,8 +1165,9 @@ Liverpool,Arsenal,2025-10-20T17:30:00Z
 - Production-ready infrastructure foundation
 
 **Recommended Before GA:**
-1. Rate limiting load test
+1. ✅ Rate limiting load test - COMPLETE (documented)
 2. Security audit (comprehensive review)
+3. Implement per-user rate limiting (improves UX)
 
 **Timeline to GA:** 1-2 days (with resource availability)
 
