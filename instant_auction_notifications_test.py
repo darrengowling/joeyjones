@@ -272,13 +272,13 @@ class InstantAuctionNotificationTester:
         
         try:
             # User A joins league room
-            self.socket_clients["user_a"].emit('join_league_room', {
+            self.socket_clients["user_a"].emit('join_league', {
                 'leagueId': league_id,
                 'userId': self.test_data["user_a_id"]
             })
             
             # User B joins league room
-            self.socket_clients["user_b"].emit('join_league_room', {
+            self.socket_clients["user_b"].emit('join_league', {
                 'leagueId': league_id,
                 'userId': self.test_data["user_b_id"]
             })
