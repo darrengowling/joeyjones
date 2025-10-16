@@ -495,9 +495,36 @@ async def get_my_competitions(userId: str):
         else:
             status = "auction_complete"
         
-        # Get user's assets for this league
+        # Get user's assets for this league with full details (name, price)
         participant = next((p for p in participants if p["leagueId"] == league["id"]), None)
-        assets_owned = participant.get("clubsWon", []) if participant else []
+        asset_ids = participant.get("clubsWon", []) if participant else []
+        
+        # Enrich with team names and prices from bids
+        assets_owned = []
+        for asset_id in asset_ids:
+            # Get the winning bid for this asset
+            winning_bid = await db.bids.find_one({
+                "auctionId": auction["id"] if auction else None,
+                "clubId": asset_id,
+                "userId": userId
+            }, sort=[("amount", -1)])
+            
+            # Get asset details
+            asset = await db.clubs.find_one({"id": asset_id})
+            
+            if asset:
+                assets_owned.append({
+                    "id": asset_id,
+                    "name": asset.get("clubName") or asset.get("name", "Unknown Team"),
+                    "price": winning_bid["amount"] if winning_bid else 0
+                })
+            else:
+                # Fallback if asset not found
+                assets_owned.append({
+                    "id": asset_id,
+                    "name": "Team",
+                    "price": winning_bid["amount"] if winning_bid else 0
+                })
         
         # Get manager count
         manager_count = await db.league_participants.count_documents({"leagueId": league["id"]})
