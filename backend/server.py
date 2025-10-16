@@ -1343,12 +1343,15 @@ async def start_auction(league_id: str):
         
         logger.info(f"Started auction {auction_obj.id} lot {lot_id} with asset: {all_assets[0]['name']}")
         
-        # Emit auction started event to league room for real-time updates
-        await sio.emit('auction_started', {
+        # Emit league_status_changed event to league room for instant updates
+        await sio.emit('league_status_changed', {
             'leagueId': league_id,
+            'status': 'auction_started',
             'auctionId': auction_obj.id,
             'message': 'Auction has started! Click "Enter Auction Room" to participate.'
         }, room=f"league:{league_id}")
+        
+        logger.info(f"📢 Emitted league_status_changed (auction_started) to league:{league_id}")
         
         logger.info(f"Timer data - seq: {timer_data['seq']}, endsAt: {timer_data['endsAt']}")
     else:
