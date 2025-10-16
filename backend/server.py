@@ -1354,6 +1354,20 @@ async def start_auction(league_id: str):
         
         logger.info(f"Started auction {auction_obj.id} lot {lot_id} with asset: {all_assets[0]['name']}")
         
+        # Get room size for debugging
+        room_sockets = sio.manager.rooms.get(f"league:{league_id}", set())
+        room_size = len(room_sockets)
+        
+        # JSON log for debugging
+        logger.info(json.dumps({
+            "event": "league_status_changed",
+            "leagueId": league_id,
+            "status": "auction_started",
+            "auctionId": auction_obj.id,
+            "roomSize": room_size,
+            "timestamp": datetime.now(timezone.utc).isoformat()
+        }))
+        
         # Emit league_status_changed event to league room for instant updates
         await sio.emit('league_status_changed', {
             'leagueId': league_id,
@@ -1361,8 +1375,6 @@ async def start_auction(league_id: str):
             'auctionId': auction_obj.id,
             'message': 'Auction has started! Click "Enter Auction Room" to participate.'
         }, room=f"league:{league_id}")
-        
-        logger.info(f"📢 Emitted league_status_changed (auction_started) to league:{league_id}")
         
         logger.info(f"Timer data - seq: {timer_data['seq']}, endsAt: {timer_data['endsAt']}")
     else:
