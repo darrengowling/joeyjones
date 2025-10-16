@@ -49,6 +49,7 @@ const Home = () => {
     timerSeconds: 30, // Prompt D: Default 30s timer
     antiSnipeSeconds: 10, // Prompt D: Default 10s anti-snipe
   });
+  const [budgetDisplay, setBudgetDisplay] = useState("500"); // Display in millions
   const [inviteToken, setInviteToken] = useState("");
   const [userCompetitions, setUserCompetitions] = useState([]);
   const [showCompetitionsCTA, setShowCompetitionsCTA] = useState(false);
