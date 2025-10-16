@@ -1,0 +1,1069 @@
+{
+  "config": {
+    "configFile": "/app/tests/playwright.config.ts",
+    "rootDir": "/app/tests/e2e",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "/app/tests/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/app/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.55.1",
+    "workers": 1,
+    "webServer": {
+      "command": "echo \"Using existing server\"",
+      "port": 3000,
+      "reuseExistingServer": true
+    }
+  },
+  "suites": [
+    {
+      "title": "auction_timer.spec.ts",
+      "file": "auction_timer.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Auction Timer Synchronization",
+          "file": "auction_timer.spec.ts",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "sync_state cannot overwrite newer tick events",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5903,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "=== TESTING TIMER SYNC PROTECTION ===\n"
+                        },
+                        {
+                          "text": "No lfc1 league found - test skipped\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-16T03:31:09.490Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "e2d97356ba1916245ce2-74325ac23bef1e19ed46",
+              "file": "auction_timer.spec.ts",
+              "line": 5,
+              "column": 7
+            },
+            {
+              "title": "timer counts down smoothly without jumps",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5797,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "=== TESTING SMOOTH TIMER COUNTDOWN ===\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-16T03:31:15.523Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "e2d97356ba1916245ce2-1c838970a0f6a4eb39dd",
+              "file": "auction_timer.spec.ts",
+              "line": 85,
+              "column": 7
+            },
+            {
+              "title": "anti-snipe functionality extends timer",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5527,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "=== TESTING ANTI-SNIPE FUNCTIONALITY ===\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-16T03:31:21.329Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "e2d97356ba1916245ce2-2c5033361e081d95026f",
+              "file": "auction_timer.spec.ts",
+              "line": 140,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "bid_visibility.spec.ts",
+      "file": "bid_visibility.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Bid Visibility - Real-time Synchronization",
+          "file": "bid_visibility.spec.ts",
+          "line": 18,
+          "column": 6,
+          "specs": [
+            {
+              "title": "All users see identical current bid after rapid-fire bidding",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 24080,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ League created: 8208f3c4-c98a-43b4-b0d0-9a3bcb7a453d\n"
+                        },
+                        {
+                          "text": "✅ Invite token: 085228c7\n"
+                        },
+                        {
+                          "text": "✅ User 2 joined\n"
+                        },
+                        {
+                          "text": "✅ User 3 joined\n"
+                        },
+                        {
+                          "text": "✅ Auction started\n"
+                        },
+                        {
+                          "text": "✅ Users entered auction room: 2f3a4e9c-ee96-4cdc-a560-093ba2186688\n"
+                        },
+                        {
+                          "text": "📊 Bidder 2 can bid: true\n"
+                        },
+                        {
+                          "text": "🚀 Placing a single bid to test synchronization...\n"
+                        },
+                        {
+                          "text": "💰 Bid placed: £10m\n"
+                        },
+                        {
+                          "text": "📊 Bidder 2 sees bids: £500m, £0m, £500m, £0m, £500m, £0m, £10m, £10m, £500m, £10m\n"
+                        },
+                        {
+                          "text": "📊 Observer sees bids: £500m, £0m, £500m, £0m, £500m, £0m, £10m, £10m, £500m, £10m\n"
+                        },
+                        {
+                          "text": "📊 Bidder 2 sees: £500m, £0m, £500m, £0m, £500m, £0m, £10m, £10m, £500m, £10m\n"
+                        },
+                        {
+                          "text": "📊 Observer sees: £500m, £0m, £500m, £0m, £500m, £0m, £10m, £10m, £500m, £10m\n"
+                        },
+                        {
+                          "text": "📊 Bidder 2 sees £10m: true\n"
+                        },
+                        {
+                          "text": "📊 Observer sees £10m: true\n"
+                        },
+                        {
+                          "text": "✅ TEST PASSED: Both users see identical bid state in real-time\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-16T03:31:26.989Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "11e98b67c8f07bda46e9-f409ce56c4a3844a74a0",
+              "file": "bid_visibility.spec.ts",
+              "line": 40,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "competition_dashboard_tabs.spec.ts",
+      "file": "competition_dashboard_tabs.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Competition Dashboard Tabs",
+          "file": "competition_dashboard_tabs.spec.ts",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should switch between dashboard tabs and verify testids",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 12306,
+                      "error": {
+                        "message": "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Sign In\")').last()\u001b[22m\n\u001b[2m    - locator resolved to <button data-testid=\"login-button\" class=\"btn btn-primary bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700\">Sign In</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    19 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <div class=\"fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n",
+                        "stack": "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Sign In\")').last()\u001b[22m\n\u001b[2m    - locator resolved to <button data-testid=\"login-button\" class=\"btn btn-primary bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700\">Sign In</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    19 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <div class=\"fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\n    at /app/tests/e2e/competition_dashboard_tabs.spec.ts:20:32",
+                        "location": {
+                          "file": "/app/tests/e2e/competition_dashboard_tabs.spec.ts",
+                          "column": 32,
+                          "line": 20
+                        },
+                        "snippet": "  18 |     \n  19 |     const submitButtons = page.locator('button:has-text(\"Sign In\")');\n> 20 |     await submitButtons.last().click();\n     |                                ^\n  21 |     await page.waitForTimeout(2000);\n  22 |\n  23 |     // Create a league"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/app/tests/e2e/competition_dashboard_tabs.spec.ts",
+                            "column": 32,
+                            "line": 20
+                          },
+                          "message": "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Sign In\")').last()\u001b[22m\n\u001b[2m    - locator resolved to <button data-testid=\"login-button\" class=\"btn btn-primary bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700\">Sign In</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    19 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <div class=\"fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\n\n  18 |     \n  19 |     const submitButtons = page.locator('button:has-text(\"Sign In\")');\n> 20 |     await submitButtons.last().click();\n     |                                ^\n  21 |     await page.waitForTimeout(2000);\n  22 |\n  23 |     // Create a league\n    at /app/tests/e2e/competition_dashboard_tabs.spec.ts:20:32"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-16T03:31:51.518Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/app/tests/test-results/competition_dashboard_tabs-2bedf-ard-tabs-and-verify-testids-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/app/tests/test-results/competition_dashboard_tabs-2bedf-ard-tabs-and-verify-testids-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/app/tests/test-results/competition_dashboard_tabs-2bedf-ard-tabs-and-verify-testids-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/app/tests/e2e/competition_dashboard_tabs.spec.ts",
+                        "column": 32,
+                        "line": 20
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "480dfbc95a3e70d9e424-70880b92437ddc0a413d",
+              "file": "competition_dashboard_tabs.spec.ts",
+              "line": 40,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "cricket_smoke.spec.ts",
+      "file": "cricket_smoke.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Cricket Smoke Test",
+          "file": "cricket_smoke.spec.ts",
+          "line": 8,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Cricket API and Scoring Workflow",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "location": {
+                        "file": "/app/tests/e2e/cricket_smoke.spec.ts",
+                        "line": 5,
+                        "column": 8
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": -1,
+                      "parallelIndex": -1,
+                      "status": "skipped",
+                      "duration": 0,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-16T03:32:03.988Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "098aeacb7255b280f3b5-94b0d53111b7a4a53835",
+              "file": "cricket_smoke.spec.ts",
+              "line": 9,
+              "column": 7
+            },
+            {
+              "title": "Cricket flag controls sport availability",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "location": {
+                        "file": "/app/tests/e2e/cricket_smoke.spec.ts",
+                        "line": 5,
+                        "column": 8
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": -1,
+                      "parallelIndex": -1,
+                      "status": "skipped",
+                      "duration": 0,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-16T03:32:03.988Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "098aeacb7255b280f3b5-0f0ebaf0986aa9072fa2",
+              "file": "cricket_smoke.spec.ts",
+              "line": 107,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "Football E2E Unaffected",
+          "file": "cricket_smoke.spec.ts",
+          "line": 120,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Football functionality still works with cricket enabled",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "location": {
+                        "file": "/app/tests/e2e/cricket_smoke.spec.ts",
+                        "line": 5,
+                        "column": 8
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": -1,
+                      "parallelIndex": -1,
+                      "status": "skipped",
+                      "duration": 0,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-16T03:32:03.988Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "098aeacb7255b280f3b5-532ebbca20ce009e4bdc",
+              "file": "cricket_smoke.spec.ts",
+              "line": 121,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "enter_button_realtime.spec.ts",
+      "file": "enter_button_realtime.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Enter Auction Room Button - Real-time Appearance",
+          "file": "enter_button_realtime.spec.ts",
+          "line": 17,
+          "column": 6,
+          "specs": [
+            {
+              "title": "All users see Enter Auction Room button appear via socket event",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 18408,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ League created: 2e5e0878-4f6d-4239-9f9a-92cd995c53c4\n"
+                        },
+                        {
+                          "text": "✅ Invite token: 232df273\n"
+                        },
+                        {
+                          "text": "✅ Member 1 joined\n"
+                        },
+                        {
+                          "text": "✅ Member 2 joined\n"
+                        },
+                        {
+                          "text": "📊 Button visible before start: 0\n"
+                        },
+                        {
+                          "text": "⏱️  Starting auction at: 2025-10-16T03:32:22.461Z\n"
+                        },
+                        {
+                          "text": "✅ Auction started at: 2025-10-16T03:32:22.995Z\n"
+                        },
+                        {
+                          "text": "⏱️  Member 1 saw button in: 21ms\n"
+                        },
+                        {
+                          "text": "⏱️  Member 2 saw button in: 19ms\n"
+                        },
+                        {
+                          "text": "📊 Member 1 sees button: true\n"
+                        },
+                        {
+                          "text": "📊 Member 2 sees button: true\n"
+                        },
+                        {
+                          "text": "✅ Member 1 successfully entered auction room\n"
+                        },
+                        {
+                          "text": "✅ Member 2 successfully entered auction room\n"
+                        },
+                        {
+                          "text": "✅ TEST PASSED: Real-time auction button appearance working correctly\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-16T03:32:04.421Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "6689505723cef0dee34d-373c3bb3982c9729bae4",
+              "file": "enter_button_realtime.spec.ts",
+              "line": 40,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "fixtures_import_csv.spec.ts",
+      "file": "fixtures_import_csv.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Fixtures CSV Import (Commissioner)",
+          "file": "fixtures_import_csv.spec.ts",
+          "line": 5,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should upload CSV and see fixtures list increase",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 12609,
+                      "error": {
+                        "message": "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Sign In\")').last()\u001b[22m\n\u001b[2m    - locator resolved to <button data-testid=\"login-button\" class=\"btn btn-primary bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700\">Sign In</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    19 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <div class=\"fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n",
+                        "stack": "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Sign In\")').last()\u001b[22m\n\u001b[2m    - locator resolved to <button data-testid=\"login-button\" class=\"btn btn-primary bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700\">Sign In</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    19 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <div class=\"fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\n    at /app/tests/e2e/fixtures_import_csv.spec.ts:22:32",
+                        "location": {
+                          "file": "/app/tests/e2e/fixtures_import_csv.spec.ts",
+                          "column": 32,
+                          "line": 22
+                        },
+                        "snippet": "  20 |     \n  21 |     const submitButtons = page.locator('button:has-text(\"Sign In\")');\n> 22 |     await submitButtons.last().click();\n     |                                ^\n  23 |     await page.waitForTimeout(2000);\n  24 |\n  25 |     // Seed clubs if needed (to ensure we have clubs for CSV)"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/app/tests/e2e/fixtures_import_csv.spec.ts",
+                            "column": 32,
+                            "line": 22
+                          },
+                          "message": "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Sign In\")').last()\u001b[22m\n\u001b[2m    - locator resolved to <button data-testid=\"login-button\" class=\"btn btn-primary bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700\">Sign In</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    19 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <div class=\"fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\n\n  20 |     \n  21 |     const submitButtons = page.locator('button:has-text(\"Sign In\")');\n> 22 |     await submitButtons.last().click();\n     |                                ^\n  23 |     await page.waitForTimeout(2000);\n  24 |\n  25 |     // Seed clubs if needed (to ensure we have clubs for CSV)\n    at /app/tests/e2e/fixtures_import_csv.spec.ts:22:32"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-16T03:32:23.489Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/app/tests/test-results/fixtures_import_csv-Fixtur-4a95f--see-fixtures-list-increase-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/app/tests/test-results/fixtures_import_csv-Fixtur-4a95f--see-fixtures-list-increase-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/app/tests/test-results/fixtures_import_csv-Fixtur-4a95f--see-fixtures-list-increase-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/app/tests/e2e/fixtures_import_csv.spec.ts",
+                        "column": 32,
+                        "line": 22
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "1386eeeb4d580d45d28d-adc339a9bbe41c966009",
+              "file": "fixtures_import_csv.spec.ts",
+              "line": 57,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "league_table_zero_state.spec.ts",
+      "file": "league_table_zero_state.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "League Table Zero State",
+          "file": "league_table_zero_state.spec.ts",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should show zero points for all managers in league table",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 12607,
+                      "error": {
+                        "message": "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Sign In\")').last()\u001b[22m\n\u001b[2m    - locator resolved to <button data-testid=\"login-button\" class=\"btn btn-primary bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700\">Sign In</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    18 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <div class=\"fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n",
+                        "stack": "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Sign In\")').last()\u001b[22m\n\u001b[2m    - locator resolved to <button data-testid=\"login-button\" class=\"btn btn-primary bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700\">Sign In</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    18 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <div class=\"fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\n    at /app/tests/e2e/league_table_zero_state.spec.ts:21:32",
+                        "location": {
+                          "file": "/app/tests/e2e/league_table_zero_state.spec.ts",
+                          "column": 32,
+                          "line": 21
+                        },
+                        "snippet": "  19 |     \n  20 |     const submitButtons = page.locator('button:has-text(\"Sign In\")');\n> 21 |     await submitButtons.last().click();\n     |                                ^\n  22 |     await page.waitForTimeout(2000);\n  23 |\n  24 |     // Create a league"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/app/tests/e2e/league_table_zero_state.spec.ts",
+                            "column": 32,
+                            "line": 21
+                          },
+                          "message": "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Sign In\")').last()\u001b[22m\n\u001b[2m    - locator resolved to <button data-testid=\"login-button\" class=\"btn btn-primary bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700\">Sign In</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    18 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <div class=\"fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\n\n  19 |     \n  20 |     const submitButtons = page.locator('button:has-text(\"Sign In\")');\n> 21 |     await submitButtons.last().click();\n     |                                ^\n  22 |     await page.waitForTimeout(2000);\n  23 |\n  24 |     // Create a league\n    at /app/tests/e2e/league_table_zero_state.spec.ts:21:32"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-16T03:32:36.653Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/app/tests/test-results/league_table_zero_state-Le-88de0-ll-managers-in-league-table-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/app/tests/test-results/league_table_zero_state-Le-88de0-ll-managers-in-league-table-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/app/tests/test-results/league_table_zero_state-Le-88de0-ll-managers-in-league-table-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/app/tests/e2e/league_table_zero_state.spec.ts",
+                        "column": 32,
+                        "line": 21
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "4eb32973641be0bf77ef-d2a8ea1a5513d3edd407",
+              "file": "league_table_zero_state.spec.ts",
+              "line": 41,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "lobby_presence.spec.ts",
+      "file": "lobby_presence.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Lobby Presence - Real-time Member Updates",
+          "file": "lobby_presence.spec.ts",
+          "line": 16,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Commissioner sees new member join in real-time without refresh",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 11997,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ League created: 0ab63fcf-3bd7-4d74-ae1b-c6e45de53a72\n"
+                        },
+                        {
+                          "text": "✅ Invite token: 4748ff7a\n"
+                        },
+                        {
+                          "text": "⏱️  Recording join time: 2025-10-16T03:33:01.347Z\n"
+                        },
+                        {
+                          "text": "✅ Member joined at: 2025-10-16T03:33:02.089Z\n"
+                        },
+                        {
+                          "text": "⏱️  Member appeared in: 102ms\n"
+                        },
+                        {
+                          "text": "✅ TEST PASSED: Real-time lobby presence working correctly\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-16T03:32:49.909Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "f6522ae5043be6b2ba04-0bcab278af7dfd7ddc59",
+              "file": "lobby_presence.spec.ts",
+              "line": 36,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "me_competitions_list.spec.ts",
+      "file": "me_competitions_list.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "My Competitions List",
+          "file": "me_competitions_list.spec.ts",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should navigate to My Competitions page and view dashboard",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 12404,
+                      "error": {
+                        "message": "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Sign In\")').last()\u001b[22m\n\u001b[2m    - locator resolved to <button data-testid=\"login-button\" class=\"btn btn-primary bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700\">Sign In</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    19 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <div class=\"fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n",
+                        "stack": "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Sign In\")').last()\u001b[22m\n\u001b[2m    - locator resolved to <button data-testid=\"login-button\" class=\"btn btn-primary bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700\">Sign In</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    19 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <div class=\"fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\n    at /app/tests/e2e/me_competitions_list.spec.ts:18:32",
+                        "location": {
+                          "file": "/app/tests/e2e/me_competitions_list.spec.ts",
+                          "column": 32,
+                          "line": 18
+                        },
+                        "snippet": "  16 |     \n  17 |     const submitButtons = page.locator('button:has-text(\"Sign In\")');\n> 18 |     await submitButtons.last().click();\n     |                                ^\n  19 |     await page.waitForTimeout(2000);\n  20 |\n  21 |     // Create a league to ensure we have at least one competition"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/app/tests/e2e/me_competitions_list.spec.ts",
+                            "column": 32,
+                            "line": 18
+                          },
+                          "message": "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Sign In\")').last()\u001b[22m\n\u001b[2m    - locator resolved to <button data-testid=\"login-button\" class=\"btn btn-primary bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700\">Sign In</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    19 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <div class=\"fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\n\n  16 |     \n  17 |     const submitButtons = page.locator('button:has-text(\"Sign In\")');\n> 18 |     await submitButtons.last().click();\n     |                                ^\n  19 |     await page.waitForTimeout(2000);\n  20 |\n  21 |     // Create a league to ensure we have at least one competition\n    at /app/tests/e2e/me_competitions_list.spec.ts:18:32"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-16T03:33:02.393Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/app/tests/test-results/me_competitions_list-My-Co-5b753-ons-page-and-view-dashboard-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/app/tests/test-results/me_competitions_list-My-Co-5b753-ons-page-and-view-dashboard-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/app/tests/test-results/me_competitions_list-My-Co-5b753-ons-page-and-view-dashboard-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/app/tests/e2e/me_competitions_list.spec.ts",
+                        "column": 32,
+                        "line": 18
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "88f90680b3ec173073eb-434ca96175e47a1b8e7c",
+              "file": "me_competitions_list.spec.ts",
+              "line": 4,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "socket_status_fixture_refresh.spec.ts",
+      "file": "socket_status_fixture_refresh.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Socket.IO Real-time Fixture Refresh",
+          "file": "socket_status_fixture_refresh.spec.ts",
+          "line": 5,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should refresh fixtures in Tab B when Tab A uploads CSV",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 12490,
+                      "error": {
+                        "message": "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Sign In\")').last()\u001b[22m\n\u001b[2m    - locator resolved to <button data-testid=\"login-button\" class=\"btn btn-primary bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700\">Sign In</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    18 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <div class=\"fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n",
+                        "stack": "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Sign In\")').last()\u001b[22m\n\u001b[2m    - locator resolved to <button data-testid=\"login-button\" class=\"btn btn-primary bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700\">Sign In</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    18 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <div class=\"fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\n    at /app/tests/e2e/socket_status_fixture_refresh.spec.ts:34:34",
+                        "location": {
+                          "file": "/app/tests/e2e/socket_status_fixture_refresh.spec.ts",
+                          "column": 34,
+                          "line": 34
+                        },
+                        "snippet": "  32 |       \n  33 |       let submitButtons = pageA.locator('button:has-text(\"Sign In\")');\n> 34 |       await submitButtons.last().click();\n     |                                  ^\n  35 |       await pageA.waitForTimeout(2000);\n  36 |\n  37 |       // Create a league"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/app/tests/e2e/socket_status_fixture_refresh.spec.ts",
+                            "column": 34,
+                            "line": 34
+                          },
+                          "message": "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Sign In\")').last()\u001b[22m\n\u001b[2m    - locator resolved to <button data-testid=\"login-button\" class=\"btn btn-primary bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700\">Sign In</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    18 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <div class=\"fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\n\n  32 |       \n  33 |       let submitButtons = pageA.locator('button:has-text(\"Sign In\")');\n> 34 |       await submitButtons.last().click();\n     |                                  ^\n  35 |       await pageA.waitForTimeout(2000);\n  36 |\n  37 |       // Create a league\n    at /app/tests/e2e/socket_status_fixture_refresh.spec.ts:34:34"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-16T03:33:15.323Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/app/tests/test-results/socket_status_fixture_refr-e7162-ab-B-when-Tab-A-uploads-CSV-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/app/tests/test-results/socket_status_fixture_refr-e7162-ab-B-when-Tab-A-uploads-CSV-chromium/test-failed-2.png"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/app/tests/e2e/socket_status_fixture_refresh.spec.ts",
+                        "column": 34,
+                        "line": 34
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "2d86f8c997841cd58352-a41762d781e080575bd3",
+              "file": "socket_status_fixture_refresh.spec.ts",
+              "line": 6,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2025-10-16T03:31:08.610Z",
+    "duration": 139227.808,
+    "expected": 6,
+    "skipped": 3,
+    "unexpected": 5,
+    "flaky": 0
+  }
+}
