@@ -42,8 +42,8 @@ test.describe('Lobby Presence - Real-time Member Updates', () => {
     await commissionerPage.waitForTimeout(500);
     
     // Fill sign-in form (correct field names from UI)
-    await commissionerPage.fill('input[placeholder="Your name"]', 'Commissioner');
-    await commissionerPage.fill('input[placeholder="email@example.com"]', `commissioner-${Date.now()}@test.com`);
+    await commissionerPage.fill('input[placeholder="Enter your full name"]', 'Commissioner');
+    await commissionerPage.fill('input[placeholder="your.email@example.com"]', `commissioner-${Date.now()}@test.com`);
     await commissionerPage.click('button:has-text("Continue")');
     
     await commissionerPage.waitForTimeout(2000);
