@@ -223,7 +223,7 @@ class LoadTestRunner:
             await asyncio.gather(*tasks)
         
         self.results['end_time'] = datetime.now()
-        self.print_results()
+        self.print_results(test_type=test_type)
     
     def print_results(self, test_type='bid'):
         """Print test results summary"""
