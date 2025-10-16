@@ -18,6 +18,7 @@ export default function CreateLeague() {
     maxManagers: 12,
     clubSlots: 3,
   });
+  const [budgetDisplay, setBudgetDisplay] = useState("500"); // Display in millions
 
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
