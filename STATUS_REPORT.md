@@ -113,18 +113,9 @@ The Friends of PIFA multi-sport auction platform has undergone comprehensive Soc
 
 *All previously critical Socket.IO issues have been resolved and verified.*
 
-### Medium Severity: 2
+### Medium Severity: 1
 
-#### 1. Database Indexes Not Formally Documented
-- **Severity:** Medium
-- **Scope:** All collections (bids, leagues, participants, fixtures, standings)
-- **Impact:** Queries working but performance not guaranteed at scale
-- **Reproduce:** N/A - preventative issue
-- **Suspected Cause:** Indexes created ad-hoc during development
-- **Mitigation:** Document and verify all indexes exist
-- **Next Step:** Run index audit script (see Appendix)
-
-#### 2. Cricket Scoring System Test Coverage
+#### 1. Cricket Scoring System Test Coverage
 - **Severity:** Medium  
 - **Scope:** Cricket-specific features (/api/leagues/:id/score/recompute)
 - **Impact:** Pilot phase, limited production use
