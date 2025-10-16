@@ -107,14 +107,13 @@ export default function AuctionRoom() {
       loadClubs(); // Reload clubs to update status
     };
 
-    // Prompt B: Handle bid updates for all users
+    // Handle bid updates for all users - prevent stale updates
     const handleBidUpdate = (data) => {
       console.log("🔔 Bid update received:", data);
       
-      // CRITICAL FIX: Accept any bid update with seq > 0, or if current is 0 (just joined)
-      // This ensures new users see bids even if they join mid-auction
-      if (data.seq > bidSequence || bidSequence === 0) {
-        console.log(`✅ Updating current bid: ${formatCurrency(data.amount)} by ${data.bidder?.displayName}`);
+      // Only accept bid updates with seq >= current seq (prevents stale updates)
+      if (data.seq >= bidSequence) {
+        console.log(`✅ Updating current bid: ${formatCurrency(data.amount)} by ${data.bidder?.displayName} (seq: ${data.seq})`);
         setCurrentBid(data.amount);
         setCurrentBidder(data.bidder);
         setBidSequence(data.seq);
