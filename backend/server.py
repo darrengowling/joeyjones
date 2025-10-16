@@ -1572,21 +1572,29 @@ async def place_bid(auction_id: str, bid_input: BidCreate):
     metrics.increment_bid_accepted(auction_id)
     metrics.observe_bid_latency(time.time() - start_time)
     
-    # Update auction with current bid info and increment sequence (Prompt B)
-    new_bid_sequence = auction.get("bidSequence", 0) + 1
+    # Update auction with current bid info and increment sequence atomically (Prompt B)
     current_bidder = {
         "userId": bid_input.userId,
         "displayName": user["name"]
     }
     
-    await db.auctions.update_one(
+    # Use atomic increment to avoid race conditions in rapid bidding
+    update_result = await db.auctions.update_one(
         {"id": auction_id},
-        {"$set": {
-            "currentBid": bid_input.amount,
-            "currentBidder": current_bidder,
-            "bidSequence": new_bid_sequence
-        }}
+        {
+            "$set": {
+                "currentBid": bid_input.amount,
+                "currentBidder": current_bidder
+            },
+            "$inc": {
+                "bidSequence": 1
+            }
+        }
     )
+    
+    # Get the updated sequence number
+    updated_auction = await db.auctions.find_one({"id": auction_id}, {"bidSequence": 1})
+    new_bid_sequence = updated_auction.get("bidSequence", 1)
     
     # Emit bid update to all users (Prompt B: Everyone sees current bid)
     await sio.emit('bid_update', {
