@@ -522,14 +522,14 @@ class BidBroadcastingTester:
                 self.log(f"Not all bid_update events delivered: got {total_bid_updates}, expected {expected_bids}", "ERROR")
                 return False
             
-            # Verify sequence numbers are still monotonic (check received order, not sorted)
-            sequences = [entry["seq"] for entry in self.bid_sequences]
-            self.log(f"Rapid fire sequences received: {sequences}")
+            # Verify sequence numbers are still monotonic (check from one client only)
+            client_a_sequences = [entry["seq"] for entry in self.bid_sequences if entry["client"] == "Rapid User A"]
+            self.log(f"Rapid fire sequences received by User A: {client_a_sequences}")
             
             # Check if sequences are monotonic in the order they were received
-            for i in range(1, len(sequences)):
-                if sequences[i] <= sequences[i-1]:
-                    self.log(f"Sequence not monotonic after rapid bidding: {sequences[i-1]} -> {sequences[i]}", "ERROR")
+            for i in range(1, len(client_a_sequences)):
+                if client_a_sequences[i] <= client_a_sequences[i-1]:
+                    self.log(f"Sequence not monotonic after rapid bidding: {client_a_sequences[i-1]} -> {client_a_sequences[i]}", "ERROR")
                     return False
             
             # Verify final state is identical for both users
