@@ -1016,17 +1016,7 @@ From E2E tests:
 
 #### Must Before GA
 
-1. **Database Index Audit & Creation**
-   - Priority: High
-   - Effort: 2 hours
-   - Owner: Backend team
-
-2. **Remove/Gate Debug Endpoint**
-   - Priority: High
-   - Effort: 30 minutes
-   - Owner: Backend team
-
-3. **Production CORS Configuration**
+1. **Production CORS Configuration**
    - Priority: High
    - Effort: 15 minutes
    - Owner: DevOps team
