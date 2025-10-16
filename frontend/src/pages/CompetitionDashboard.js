@@ -211,9 +211,7 @@ export default function CompetitionDashboard() {
     }
   };
 
-  const formatCurrency = (amount) => {
-    return `£${(amount / 1000000).toFixed(1)}M`;
-  };
+  // Using imported formatCurrency from utils
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
