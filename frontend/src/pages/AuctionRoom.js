@@ -1,14 +1,12 @@
 import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import io from "socket.io-client";
 import { useAuctionClock } from "../hooks/useAuctionClock";
 import { formatCurrency, parseCurrencyInput, isValidCurrencyInput } from "../utils/currency";
+import { getSocket, joinAuctionRoom, leaveAuctionRoom, setSocketUser } from "../utils/socket";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
-
-let socket = null;
 
 export default function AuctionRoom() {
   const { auctionId } = useParams();
