@@ -332,16 +332,18 @@ export default function AuctionRoom() {
       return;
     }
 
-    const amount = parseFloat(bidAmount);
-    if (isNaN(amount) || amount <= 0) {
-      alert("Please enter a valid strategic bid amount for team ownership");
+    // Parse £m input (e.g., "5m", "£5m", "5")
+    if (!isValidCurrencyInput(bidAmount)) {
+      alert("Please enter a valid bid amount (e.g., 5m, £10m, 23m)");
       return;
     }
+    
+    const amount = parseCurrencyInput(bidAmount);
 
     // Check user's budget
     const userParticipant = participants.find((p) => p.userId === user.id);
     if (userParticipant && amount > userParticipant.budgetRemaining) {
-      alert(`Strategic budget exceeded. You have £${userParticipant.budgetRemaining.toLocaleString()} remaining for team ownership`);
+      alert(`Strategic budget exceeded. You have ${formatCurrency(userParticipant.budgetRemaining)} remaining for team ownership`);
       return;
     }
 
@@ -350,7 +352,7 @@ export default function AuctionRoom() {
     if (currentBids.length > 0) {
       const highestBid = Math.max(...currentBids.map((b) => b.amount));
       if (amount <= highestBid) {
-        alert(`Strategic bid must exceed current leading bid: £${highestBid.toLocaleString()}`);
+        alert(`Strategic bid must exceed current leading bid: ${formatCurrency(highestBid)}`);
         return;
       }
     }
