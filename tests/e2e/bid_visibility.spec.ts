@@ -93,6 +93,7 @@ test.describe('Bid Visibility - Real-time Synchronization', () => {
     
     // Step 4: All users enter auction room
     for (const page of [bidder1Page, bidder2Page, observerPage]) {
+      await page.waitForSelector('text=/Enter.*Auction.*Room/i', { timeout: 3000 });
       await page.click('text=/Enter.*Auction.*Room/i');
       await page.waitForURL(/\/auction\/[a-f0-9-]+/, { timeout: 5000 });
     }
