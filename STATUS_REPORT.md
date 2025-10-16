@@ -144,6 +144,31 @@ The Friends of PIFA multi-sport auction platform has undergone comprehensive Soc
 - **Mitigation:** Does not affect production build
 - **Next Step:** Review and suppress warnings
 
+### Historical Issues - RESOLVED ✅
+
+#### Issue D: Database Indexes Not Formally Documented
+- **Previous State:** ❌ Indexes created ad-hoc, no formal verification
+- **Root Cause:** Development velocity, no index audit process
+- **Fix Applied:**
+  - Connected to MongoDB and audited all collections
+  - Created 8 new critical indexes (unique constraints and query optimization)
+  - Created sparse index for bids (lotId, seq) to handle legacy null data
+  - Tested all unique constraints (100% pass rate)
+- **Current Status:** ✅ **RESOLVED**
+- **Evidence:** All 3 unique constraint tests passed, 9 critical indexes verified
+- **Documentation:** See DATABASE_INDEX_AUDIT.md
+
+#### Issue E: Debug Endpoint Information Disclosure
+- **Previous State:** ❌ Debug endpoint exposed room membership data in all environments
+- **Root Cause:** No environment-based access control
+- **Fix Applied:**
+  - Added ENV environment variable guard to debug endpoints
+  - Returns 404 in production (secure by default)
+  - Tested in both development and production modes
+- **Current Status:** ✅ **RESOLVED**
+- **Evidence:** Endpoint returns 404 when ENV=production, 200 when ENV=development
+- **Documentation:** See DEBUG_ENDPOINT_SECURITY.md
+
 ### Historical Pain Points - RESOLVED ✅
 
 #### Issue A: Lobby Presence (Commissioner Not Seeing Joiners)
