@@ -101,7 +101,7 @@ export default function AuctionRoom() {
         setCurrentBid(data.amount);
         setCurrentBidder(data.bidder);
         setBidSequence(data.seq);
-        loadBids();
+        // Note: Bid history list will be refreshed on next lot or page load
       } else {
         console.log(`⚠️ Ignoring stale bid update: seq=${data.seq}, current=${bidSequence}`);
       }
