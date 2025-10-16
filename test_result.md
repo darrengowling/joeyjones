@@ -264,7 +264,7 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Prompt 6 Safety and Performance Features Testing"
+    - "Socket.IO Refactor Implementation Testing"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
