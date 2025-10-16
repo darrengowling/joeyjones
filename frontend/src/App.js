@@ -417,17 +417,54 @@ const Home = () => {
 
               <div className="mb-4">
                 <label className="block text-gray-700 mb-2 font-semibold">
-                  Budget per Manager (£)
+                  Budget per Manager
                 </label>
-                <input
-                  type="number"
-                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  value={leagueForm.budget}
-                  onChange={(e) => setLeagueForm({ ...leagueForm, budget: Number(e.target.value) })}
-                  min="100"
-                  required
-                  data-testid="league-budget-input"
-                />
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const currentMillions = leagueForm.budget / 1000000;
+                      const newMillions = Math.max(10, currentMillions - 10);
+                      setLeagueForm({ ...leagueForm, budget: newMillions * 1000000 });
+                      setBudgetDisplay(newMillions.toString());
+                    }}
+                    className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg font-bold text-xl"
+                  >
+                    −
+                  </button>
+                  <div className="flex-1 relative">
+                    <input
+                      type="text"
+                      className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-center font-semibold text-lg"
+                      value={budgetDisplay}
+                      onChange={(e) => {
+                        const value = e.target.value.replace(/[^0-9]/g, '');
+                        setBudgetDisplay(value);
+                        if (value) {
+                          setLeagueForm({ ...leagueForm, budget: Number(value) * 1000000 });
+                        }
+                      }}
+                      required
+                      data-testid="league-budget-input"
+                    />
+                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 font-semibold">m</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const currentMillions = leagueForm.budget / 1000000;
+                      const newMillions = currentMillions + 10;
+                      setLeagueForm({ ...leagueForm, budget: newMillions * 1000000 });
+                      setBudgetDisplay(newMillions.toString());
+                    }}
+                    className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg font-bold text-xl"
+                  >
+                    +
+                  </button>
+                </div>
+                <p className="text-sm text-gray-500 mt-1">
+                  Current: {formatCurrency(leagueForm.budget)} (adjust in £10m increments)
+                </p>
               </div>
 
               <div className="grid grid-cols-2 gap-4 mb-4">
