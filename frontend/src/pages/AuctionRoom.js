@@ -34,13 +34,12 @@ export default function AuctionRoom() {
   // Use the new auction clock hook with socket from useSocketRoom
   const { remainingMs } = useAuctionClock(socket, currentLotId);
 
+  // Initial setup: load user and data
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
     if (savedUser) {
       const userData = JSON.parse(savedUser);
       setUser(userData);
-      // Set socket user for rejoining rooms after reconnect
-      setSocketUser(userData);
     } else {
       alert("Please sign in first");
       navigate("/");
@@ -49,34 +48,17 @@ export default function AuctionRoom() {
 
     loadAuction();
     loadClubs();
+  }, [auctionId]);
 
-    // Join auction room on mount
-    joinAuctionRoom(auctionId);
-    
-    // Request current state
-    console.log("📡 Requesting sync_state");
-    socket.emit("sync_state", { auctionId });
+  // Socket event handlers - single useEffect with proper cleanup
+  useEffect(() => {
+    if (!user) return;
 
-    // Define event handlers as named functions for proper cleanup
-    const handleConnectError = (error) => {
-      console.error("Socket.IO connection error:", error);
-    };
-    
-    // Handle reconnection - rejoin room and request sync
-    const handleConnect = () => {
-      console.log("🔄 Socket reconnected - rejoining auction room");
-      setSyncReceived(false); // Disable bid UI until sync received
-      joinAuctionRoom(auctionId);
-      socket.emit("sync_state", { auctionId });
-    };
+    console.log(`🎧 [AuctionRoom] Setting up socket listeners (Count: ${listenerCount})`);
 
-    const handleJoined = (data) => {
-      console.log("Joined auction:", data);
-    };
-
-    const handleSyncState = (data) => {
+    // Handle sync_state to initialize auction state
+    const onSyncState = (data) => {
       console.log("Received sync state:", data);
-      // Update state with current auction data (timer handled by useAuctionClock)
       if (data.currentClub) {
         setCurrentClub(data.currentClub);
       }
@@ -86,7 +68,6 @@ export default function AuctionRoom() {
       if (data.participants) {
         setParticipants(data.participants);
       }
-      // Update current bid info - initialize from sync_state
       if (data.currentBid !== undefined) {
         setCurrentBid(data.currentBid);
       }
@@ -96,31 +77,22 @@ export default function AuctionRoom() {
       if (data.seq !== undefined) {
         setBidSequence(data.seq);
       }
-      // Extract lot ID from auction data for the clock hook
       if (data.auction && data.auction.currentLotId) {
         setCurrentLotId(data.auction.currentLotId);
       }
-      
-      // Mark sync as received - enables bid UI
-      setSyncReceived(true);
-      console.log("✅ Sync state received - bid UI enabled");
+      console.log("✅ Sync state processed");
     };
 
-    const handleBidPlaced = (data) => {
+    // Handle bid_placed (adds to bid history)
+    const onBidPlaced = (data) => {
       console.log("Bid placed event received:", data);
-      console.log("Current bids before update:", bids);
-      console.log("Current club:", currentClub);
-      setBids((prev) => {
-        const newBids = [data.bid, ...prev];
-        console.log("New bids after update:", newBids);
-        return newBids;
-      });
+      setBids((prev) => [data.bid, ...prev]);
       loadAuction();
-      loadClubs(); // Reload clubs to update status
+      loadClubs();
     };
 
-    // Handle bid updates for all users - prevent stale updates
-    const handleBidUpdate = (data) => {
+    // Handle bid_update (updates current bid display) - prevents stale updates
+    const onBidUpdate = (data) => {
       console.log("🔔 Bid update received:", data);
       
       // Only accept bid updates with seq >= current seq (prevents stale updates)
@@ -129,15 +101,14 @@ export default function AuctionRoom() {
         setCurrentBid(data.amount);
         setCurrentBidder(data.bidder);
         setBidSequence(data.seq);
-        
-        // Also reload bids list to show the new bid in the history
         loadBids();
       } else {
         console.log(`⚠️ Ignoring stale bid update: seq=${data.seq}, current=${bidSequence}`);
       }
     };
 
-    const handleLotStarted = (data) => {
+    // Handle lot_started (new club on auction block)
+    const onLotStarted = (data) => {
       console.log("Lot started:", data);
       
       if (data.isUnsoldRetry) {
@@ -149,14 +120,15 @@ export default function AuctionRoom() {
         setCurrentLotId(data.timer.lotId);
       }
       
-      // CRITICAL FIX: Clear bid state when new lot starts
+      // Clear bid state when new lot starts
       setCurrentBid(null);
       setCurrentBidder(null);
       setBidSequence(0);
       console.log("✅ Cleared bid state for new lot");
     };
 
-    const handleSold = (data) => {
+    // Handle sold event
+    const onSold = (data) => {
       console.log("Lot sold:", data);
       
       if (data.unsold) {
@@ -173,84 +145,60 @@ export default function AuctionRoom() {
         setParticipants(data.participants);
       }
       loadAuction();
-      loadClubs(); // Reload clubs to update status
+      loadClubs();
     };
 
-    const handleAntiSnipe = (data) => {
+    // Handle anti-snipe event
+    const onAntiSnipe = (data) => {
       console.log("Anti-snipe triggered:", data);
       alert(`🔥 Anti-snipe! Timer extended!`);
     };
 
-    const handleAuctionComplete = (data) => {
+    // Handle auction_complete event
+    const onAuctionComplete = (data) => {
       console.log("Auction complete:", data);
       alert(data.message || "Auction complete! All clubs have been auctioned.");
     };
 
-    const handleAuctionPaused = (data) => {
+    // Handle auction_paused event
+    const onAuctionPaused = (data) => {
       console.log("Auction paused:", data);
       alert(`⏸️ ${data.message}`);
-      loadAuction(); // Reload to show paused state
+      loadAuction();
     };
 
-    const handleAuctionResumed = (data) => {
+    // Handle auction_resumed event
+    const onAuctionResumed = (data) => {
       console.log("Auction resumed:", data);
       alert(`▶️ ${data.message}`);
-      loadAuction(); // Reload to show resumed state
+      loadAuction();
     };
 
-    const handleDisconnect = () => {
-      console.log("Socket disconnected");
-    };
+    // Register all event listeners
+    socket.on('sync_state', onSyncState);
+    socket.on('bid_placed', onBidPlaced);
+    socket.on('bid_update', onBidUpdate);
+    socket.on('lot_started', onLotStarted);
+    socket.on('sold', onSold);
+    socket.on('anti_snipe', onAntiSnipe);
+    socket.on('auction_complete', onAuctionComplete);
+    socket.on('auction_paused', onAuctionPaused);
+    socket.on('auction_resumed', onAuctionResumed);
 
-    // Remove existing listeners before adding new ones (prevent duplicates)
-    socket.off("connect_error", handleConnectError);
-    socket.off("connect", handleConnect);
-    socket.off("joined", handleJoined);
-    socket.off("sync_state", handleSyncState);
-    socket.off("bid_placed", handleBidPlaced);
-    socket.off("bid_update", handleBidUpdate);
-    socket.off("lot_started", handleLotStarted);
-    socket.off("sold", handleSold);
-    socket.off("anti_snipe", handleAntiSnipe);
-    socket.off("auction_complete", handleAuctionComplete);
-    socket.off("auction_paused", handleAuctionPaused);
-    socket.off("auction_resumed", handleAuctionResumed);
-    socket.off("disconnect", handleDisconnect);
-
-    // Add listeners
-    socket.on("connect_error", handleConnectError);
-    socket.on("connect", handleConnect);
-    socket.on("joined", handleJoined);
-    socket.on("sync_state", handleSyncState);
-    socket.on("bid_placed", handleBidPlaced);
-    socket.on("bid_update", handleBidUpdate);
-    socket.on("lot_started", handleLotStarted);
-    socket.on("sold", handleSold);
-    socket.on("anti_snipe", handleAntiSnipe);
-    socket.on("auction_complete", handleAuctionComplete);
-    socket.on("auction_paused", handleAuctionPaused);
-    socket.on("auction_resumed", handleAuctionResumed);
-    socket.on("disconnect", handleDisconnect);
-
-    // Cleanup on unmount
+    // Cleanup function - remove all listeners
     return () => {
-      console.log('🧹 Cleaning up AuctionRoom socket listeners');
-      socket.off("connect_error", handleConnectError);
-      socket.off("connect", handleConnect);
-      socket.off("joined", handleJoined);
-      socket.off("sync_state", handleSyncState);
-      socket.off("bid_placed", handleBidPlaced);
-      socket.off("bid_update", handleBidUpdate);
-      socket.off("lot_started", handleLotStarted);
-      socket.off("sold", handleSold);
-      socket.off("anti_snipe", handleAntiSnipe);
-      socket.off("auction_complete", handleAuctionComplete);
-      socket.off("auction_paused", handleAuctionPaused);
-      socket.off("auction_resumed", handleAuctionResumed);
-      socket.off("disconnect", handleDisconnect);
-      leaveAuctionRoom(auctionId);
+      console.log('🧹 [AuctionRoom] Removing socket listeners');
+      socket.off('sync_state', onSyncState);
+      socket.off('bid_placed', onBidPlaced);
+      socket.off('bid_update', onBidUpdate);
+      socket.off('lot_started', onLotStarted);
+      socket.off('sold', onSold);
+      socket.off('anti_snipe', onAntiSnipe);
+      socket.off('auction_complete', onAuctionComplete);
+      socket.off('auction_paused', onAuctionPaused);
+      socket.off('auction_resumed', onAuctionResumed);
     };
-  }, [auctionId]);
+  }, [auctionId, user, bidSequence, listenerCount]);
 
   const loadAuction = async () => {
     try {
