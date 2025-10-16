@@ -1,0 +1,149 @@
+import { test, expect, Page } from '@playwright/test';
+
+/**
+ * Test: Real-time Enter Auction Room Button
+ * 
+ * Proves: When commissioner starts auction, all users see "Enter Auction Room" button
+ *         appear immediately via socket event (no refresh)
+ * 
+ * Fixes validated:
+ * - league_status_changed event with status: 'auction_started'
+ * - Event broadcast to all sockets in league room
+ * - Button appears instantly on all client UIs
+ */
+
+const BASE_URL = process.env.REACT_APP_BACKEND_URL || 'https://bidmaster-9.preview.emergentagent.com';
+
+test.describe('Enter Auction Room Button - Real-time Appearance', () => {
+  let commissionerPage: Page;
+  let member1Page: Page;
+  let member2Page: Page;
+  let leagueId: string;
+  let inviteToken: string;
+
+  test.beforeAll(async ({ browser }) => {
+    const commissionerContext = await browser.newContext();
+    const member1Context = await browser.newContext();
+    const member2Context = await browser.newContext();
+    
+    commissionerPage = await commissionerContext.newPage();
+    member1Page = await member1Context.newPage();
+    member2Page = await member2Context.newPage();
+  });
+
+  test.afterAll(async () => {
+    await commissionerPage.close();
+    await member1Page.close();
+    await member2Page.close();
+  });
+
+  test('All users see Enter Auction Room button appear via socket event', async () => {
+    // Step 1: Commissioner creates league
+    await commissionerPage.goto(BASE_URL);
+    await commissionerPage.fill('input[placeholder*="name" i]', 'Commissioner');
+    await commissionerPage.fill('input[type="email"]', `comm-${Date.now()}@test.com`);
+    await commissionerPage.click('button:has-text("Sign In")');
+    
+    await commissionerPage.waitForSelector('text=/Create.*Competition/i', { timeout: 10000 });
+    await commissionerPage.click('text=/Create.*Competition/i');
+    
+    await commissionerPage.fill('input[placeholder*="league name" i]', 'Button Test League');
+    await commissionerPage.fill('input[placeholder*="budget" i]', '100');
+    await commissionerPage.click('button:has-text("Create League")');
+    
+    await commissionerPage.waitForURL(/\/league\/[a-f0-9-]+/, { timeout: 10000 });
+    leagueId = commissionerPage.url().match(/\/league\/([a-f0-9-]+)/)?.[1] || '';
+    
+    const inviteTokenElement = await commissionerPage.locator('text=/invite.*token/i').first();
+    const inviteTokenText = await inviteTokenElement.textContent();
+    inviteToken = inviteTokenText?.match(/[A-Z0-9]{6}/)?.[0] || '';
+    
+    console.log(`✅ League created: ${leagueId}`);
+    console.log(`✅ Invite token: ${inviteToken}`);
+    
+    // Step 2: Two members join the league
+    for (const [index, page] of [[1, member1Page], [2, member2Page]] as [number, Page][]) {
+      await page.goto(BASE_URL);
+      await page.fill('input[placeholder*="name" i]', `Member ${index}`);
+      await page.fill('input[type="email"]', `member${index}-${Date.now()}@test.com`);
+      await page.click('button:has-text("Sign In")');
+      
+      await page.waitForSelector('text=/Join.*League|Competition/i', { timeout: 10000 });
+      await page.click('text=/Join.*League|Competition/i');
+      await page.fill('input[placeholder*="token" i]', inviteToken);
+      await page.click('button:has-text("Join")');
+      
+      await page.waitForURL(/\/league\/[a-f0-9-]+/, { timeout: 10000 });
+      console.log(`✅ Member ${index} joined`);
+    }
+    
+    // Step 3: Wait a moment for all WebSocket connections to stabilize
+    await commissionerPage.waitForTimeout(1000);
+    
+    // Step 4: Verify button is NOT visible before auction starts
+    const buttonBeforeStart = await member1Page.locator('text=/Enter.*Auction.*Room/i').count();
+    console.log(`📊 Button visible before start: ${buttonBeforeStart}`);
+    expect(buttonBeforeStart).toBe(0);
+    
+    // Step 5: Record timestamp and start auction
+    const beforeStartTime = Date.now();
+    console.log(`⏱️  Starting auction at: ${new Date(beforeStartTime).toISOString()}`);
+    
+    await commissionerPage.click('button:has-text("Start Auction")');
+    
+    // Wait for commissioner to see their own button (as confirmation auction started)
+    await commissionerPage.waitForSelector('text=/Enter.*Auction.*Room/i', { timeout: 5000 });
+    const auctionStartedTime = Date.now();
+    console.log(`✅ Auction started at: ${new Date(auctionStartedTime).toISOString()}`);
+    
+    // Step 6: CRITICAL TEST - Both members should see button WITHOUT refresh
+    const member1ButtonPromise = member1Page.waitForSelector(
+      'text=/Enter.*Auction.*Room/i',
+      { timeout: 2000, state: 'visible' }
+    ).then(() => Date.now());
+    
+    const member2ButtonPromise = member2Page.waitForSelector(
+      'text=/Enter.*Auction.*Room/i',
+      { timeout: 2000, state: 'visible' }
+    ).then(() => Date.now());
+    
+    const [member1ButtonTime, member2ButtonTime] = await Promise.all([
+      member1ButtonPromise,
+      member2ButtonPromise
+    ]);
+    
+    const member1Delay = member1ButtonTime - auctionStartedTime;
+    const member2Delay = member2ButtonTime - auctionStartedTime;
+    
+    console.log(`⏱️  Member 1 saw button in: ${member1Delay}ms`);
+    console.log(`⏱️  Member 2 saw button in: ${member2Delay}ms`);
+    
+    // Assertions
+    expect(member1Delay).toBeLessThan(1500); // Should appear within 1.5 seconds
+    expect(member2Delay).toBeLessThan(1500);
+    
+    // Step 7: Verify all three users can see the button
+    const commissionerButton = await commissionerPage.locator('text=/Enter.*Auction.*Room/i').count();
+    const member1Button = await member1Page.locator('text=/Enter.*Auction.*Room/i').count();
+    const member2Button = await member2Page.locator('text=/Enter.*Auction.*Room/i').count();
+    
+    console.log(`📊 Commissioner sees button: ${commissionerButton > 0}`);
+    console.log(`📊 Member 1 sees button: ${member1Button > 0}`);
+    console.log(`📊 Member 2 sees button: ${member2Button > 0}`);
+    
+    expect(commissionerButton).toBeGreaterThan(0);
+    expect(member1Button).toBeGreaterThan(0);
+    expect(member2Button).toBeGreaterThan(0);
+    
+    // Step 8: Verify buttons are clickable (navigate to auction room)
+    await member1Page.click('text=/Enter.*Auction.*Room/i');
+    await member1Page.waitForURL(/\/auction\/[a-f0-9-]+/, { timeout: 5000 });
+    console.log(`✅ Member 1 successfully entered auction room`);
+    
+    await member2Page.click('text=/Enter.*Auction.*Room/i');
+    await member2Page.waitForURL(/\/auction\/[a-f0-9-]+/, { timeout: 5000 });
+    console.log(`✅ Member 2 successfully entered auction room`);
+    
+    console.log('✅ TEST PASSED: Real-time auction button appearance working correctly');
+  });
+});
