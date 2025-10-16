@@ -7,8 +7,6 @@ import { getSocket, joinLeagueRoom, leaveLeagueRoom, setSocketUser } from "../ut
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
-let socket = null;
-
 export default function LeagueDetail() {
   const { leagueId } = useParams();
   const navigate = useNavigate();
