@@ -177,7 +177,7 @@ export default function AuctionRoom() {
         alert(`❌ Club went unsold! "${data.clubId}" will be offered again later.`);
       } else {
         const winnerName = data.winningBid ? data.winningBid.userName : "Unknown";
-        const amount = data.winningBid ? `£${data.winningBid.amount.toLocaleString()}` : "";
+        const amount = data.winningBid ? formatCurrency(data.winningBid.amount) : "";
         alert(`✅ Club sold to ${winnerName} for ${amount}!`);
       }
       
