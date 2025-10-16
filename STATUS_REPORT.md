@@ -1050,7 +1050,7 @@ From E2E tests:
    - Effort: 1 week
    - Owner: Backend team
 
-7. **Cricket Scoring E2E Tests**
+6. **Cricket Scoring E2E Tests**
    - Priority: Low
    - Effort: 2 days
    - Owner: QA team
