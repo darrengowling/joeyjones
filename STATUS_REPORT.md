@@ -978,8 +978,8 @@ From E2E tests:
 - [x] E2E tests passing (3/3)
 - [x] Backend syntax validation passing
 - [x] Services running and stable
-- [ ] Database indexes verified
-- [ ] Debug endpoints removed/gated
+- [x] Database indexes verified ✅ NEW
+- [x] Debug endpoints removed/gated ✅ NEW
 - [ ] CORS configured for production
 - [ ] Rate limiting load tested
 - [ ] Backup/restore tested
@@ -989,7 +989,7 @@ From E2E tests:
 - [ ] Load testing performed
 - [ ] Security audit completed
 
-**Completion:** 10/14 items (71%)
+**Completion:** 12/14 items (86%)
 
 ### Rollback Plan
 
