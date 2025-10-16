@@ -574,7 +574,7 @@ export default function AuctionRoom() {
                     </div>
                     <div className="stack-md">
                       <div className="chip text-2xl font-bold text-green-600">
-                        £{p.budgetRemaining.toLocaleString()}
+                        {formatCurrency(p.budgetRemaining)}
                       </div>
                       <div className="subtle text-xs text-gray-500">
                         Spent: £{p.totalSpent.toLocaleString()}
