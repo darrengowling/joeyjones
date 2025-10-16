@@ -70,14 +70,17 @@ test.describe('Enter Auction Room Button - Real-time Appearance', () => {
     // Step 2: Two members join the league
     for (const [index, page] of [[1, member1Page], [2, member2Page]] as [number, Page][]) {
       await page.goto(BASE_URL);
-      await page.fill('input[placeholder*="name" i]', `Member ${index}`);
-      await page.fill('input[type="email"]', `member${index}-${Date.now()}@test.com`);
       await page.click('button:has-text("Sign In")');
+      await page.waitForTimeout(500);
+      await page.fill('input[placeholder="Enter your full name"]', `Member ${index}`);
+      await page.fill('input[placeholder="your.email@example.com"]', `member${index}-${Date.now()}@test.com`);
+      await page.click('button:has-text("Continue")');
       
-      await page.waitForSelector('text=/Join.*League|Competition/i', { timeout: 10000 });
-      await page.click('text=/Join.*League|Competition/i');
+      await page.waitForTimeout(2000);
+      await page.click('button:has-text("Join the Competition")');
+      await page.waitForTimeout(500);
       await page.fill('input[placeholder*="token" i]', inviteToken);
-      await page.click('button:has-text("Join")');
+      await page.click('button:has-text("Join the Competition")');
       
       await page.waitForURL(/\/league\/[a-f0-9-]+/, { timeout: 10000 });
       console.log(`✅ Member ${index} joined`);
