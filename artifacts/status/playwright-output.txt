@@ -250,3 +250,56 @@ Running 14 tests using 1 worker
 [1A[2K✅ TEST PASSED: Real-time lobby presence working correctly
 
 [1A[2K[13/14] [chromium] › e2e/me_competitions_list.spec.ts:4:7 › My Competitions List › should navigate to My Competitions page and view dashboard
+[1A[2K  4) [chromium] › e2e/me_competitions_list.spec.ts:4:7 › My Competitions List › should navigate to My Competitions page and view dashboard 
+
+    TimeoutError: locator.click: Timeout 10000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('button:has-text("Sign In")').last()[22m
+    [2m    - locator resolved to <button data-testid="login-button" class="btn btn-primary bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Sign In</button>[22m
+    [2m  - attempting click action[22m
+    [2m    2 × waiting for element to be visible, enabled and stable[22m
+    [2m      - element is visible, enabled and stable[22m
+    [2m      - scrolling into view if needed[22m
+    [2m      - done scrolling[22m
+    [2m      - <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">…</div> intercepts pointer events[22m
+    [2m    - retrying click action[22m
+    [2m    - waiting 20ms[22m
+    [2m    2 × waiting for element to be visible, enabled and stable[22m
+    [2m      - element is visible, enabled and stable[22m
+    [2m      - scrolling into view if needed[22m
+    [2m      - done scrolling[22m
+    [2m      - <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">…</div> intercepts pointer events[22m
+    [2m    - retrying click action[22m
+    [2m      - waiting 100ms[22m
+    [2m    19 × waiting for element to be visible, enabled and stable[22m
+    [2m       - element is visible, enabled and stable[22m
+    [2m       - scrolling into view if needed[22m
+    [2m       - done scrolling[22m
+    [2m       - <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">…</div> intercepts pointer events[22m
+    [2m     - retrying click action[22m
+    [2m       - waiting 500ms[22m
+
+
+      16 |     
+      17 |     const submitButtons = page.locator('button:has-text("Sign In")');
+    > 18 |     await submitButtons.last().click();
+         |                                ^
+      19 |     await page.waitForTimeout(2000);
+      20 |
+      21 |     // Create a league to ensure we have at least one competition
+        at /app/tests/e2e/me_competitions_list.spec.ts:18:32
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/me_competitions_list-My-Co-5b753-ons-page-and-view-dashboard-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/me_competitions_list-My-Co-5b753-ons-page-and-view-dashboard-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/me_competitions_list-My-Co-5b753-ons-page-and-view-dashboard-chromium/error-context.md
+
+
+[1A[2K[14/14] [chromium] › e2e/socket_status_fixture_refresh.spec.ts:6:7 › Socket.IO Real-time Fixture Refresh › should refresh fixtures in Tab B when Tab A uploads CSV
+
+
