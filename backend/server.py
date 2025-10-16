@@ -2269,11 +2269,14 @@ async def disconnect(sid):
 
 @sio.event
 async def join_auction(sid, data):
+    """Join an auction room - used by AuctionRoom page"""
     auction_id = data.get('auctionId')
-    if auction_id:
-        room_name = f"auction:{auction_id}"
-        sio.enter_room(sid, room_name)
-        logger.info(f"Client {sid} joined auction room: {room_name}")
+    if not auction_id:
+        return
+    
+    room_name = f"auction:{auction_id}"
+    sio.enter_room(sid, room_name)
+    logger.info(f"🟧 Socket {sid} joined auction room: {room_name}")
         
         # Send current auction state for reconnection
         auction = await db.auctions.find_one({"id": auction_id})
