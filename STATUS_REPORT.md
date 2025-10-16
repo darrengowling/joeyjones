@@ -681,20 +681,37 @@ mongosh $MONGO_URL --eval "
 
 ### CORS Configuration
 
-**Status:** ✅ Configured
+**Status:** ✅ Production-Ready (Tightened)
 
 ```python
+# Production-ready CORS configuration
+cors_origins_str = os.environ.get('CORS_ORIGINS', 'http://localhost:3000')
+cors_origins = [origin.strip() for origin in cors_origins_str.split(',') if origin.strip()]
+
 app.add_middleware(
     CORSMiddleware,
+    allow_origins=cors_origins,
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_headers=["Authorization", "Content-Type", "Accept"],
     allow_credentials=True,
-    allow_origins=os.environ.get('CORS_ORIGINS', '*').split(','),
-    allow_methods=["*"],
-    allow_headers=["*"],
+    max_age=600,  # Cache preflight for 10 minutes
 )
 ```
 
-**Current:** `CORS_ORIGINS=*` (development)  
-**TODO:** Restrict to specific domain for production
+**Configuration:**
+- **Allowed Origins:** `https://bid-socket-system.preview.emergentagent.com`
+- **Allowed Methods:** GET, POST, PUT, DELETE, OPTIONS (no wildcards)
+- **Allowed Headers:** Authorization, Content-Type, Accept (no wildcards)
+- **Credentials:** Enabled
+- **Preflight Cache:** 600 seconds
+
+**Testing Results (4/4 Passed):**
+- ✅ Preflight from allowed origin: Returns proper CORS headers
+- ✅ GET from allowed origin: Returns proper CORS headers
+- ✅ Preflight from blocked origin: Returns 400 "Disallowed CORS origin"
+- ✅ GET from blocked origin: No CORS headers (blocked)
+
+**Documentation:** See `CORS_CONFIGURATION.md` for complete details
 
 ### Authentication Model
 
