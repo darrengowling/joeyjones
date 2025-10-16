@@ -2313,10 +2313,14 @@ async def join_league_room(sid, data):
     league_id = data.get('leagueId')
     if league_id:
         sio.enter_room(sid, f"league:{league_id}")
-        logger.info(f"Client {sid} joined league:{league_id}")
+        logger.info(f"🔵 Socket {sid} joined league room: league:{league_id}")
         
-        # Prompt A: Send current member list for sync
-        participants = await db.league_participants.find({"leagueId": league_id}).sort("joinedAt", 1).to_list(100)
+        # Get all sockets currently in this room
+        room_sockets = sio.manager.rooms.get(f"league:{league_id}", set())
+        logger.info(f"🔵 Room league:{league_id} now has {len(room_sockets)} connected sockets")
+        
+        # Send current participants list to the joining user
+        participants = await db.league_participants.find({"leagueId": league_id}).to_list(100)
         members = []
         for p in participants:
             members.append({
@@ -2325,11 +2329,15 @@ async def join_league_room(sid, data):
                 'joinedAt': p['joinedAt'].isoformat() if isinstance(p['joinedAt'], datetime) else p['joinedAt']
             })
         
+        logger.info(f"🔵 Broadcasting sync_members with {len(members)} members to room league:{league_id}")
+        
         # CRITICAL FIX: Broadcast to ALL users in league room, not just this socket
         await sio.emit('sync_members', {
             'leagueId': league_id,
             'members': members
         }, room=f"league:{league_id}")
+        
+        logger.info(f"🔵 Sent sync_members event to league:{league_id}")
         
         # Also send confirmation to the joining user
         await sio.emit('room_joined', {
