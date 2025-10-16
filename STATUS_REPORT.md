@@ -1020,14 +1020,9 @@ From E2E tests:
 
 ### Open TODOs
 
-#### Must Before GA
+#### Recommended Before GA
 
-1. **Production CORS Configuration**
-   - Priority: High
-   - Effort: 15 minutes
-   - Owner: DevOps team
-
-2. **Rate Limiting Load Test**
+1. **Rate Limiting Load Test**
    - Priority: High
    - Effort: 4 hours
    - Owner: QA team
