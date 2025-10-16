@@ -47,12 +47,12 @@
       - generic [ref=e52]:
         - heading "🔥 Current Team Ownership" [level=2] [ref=e53]
         - generic [ref=e54]:
-          - generic [ref=e56]: 00:30
+          - generic [ref=e56]: 00:29
           - generic [ref=e57]: Time Remaining
         - generic [ref=e59]:
-          - heading "Sparta Prague" [level=3] [ref=e60]
-          - paragraph [ref=e61]: Czech Republic
-          - paragraph [ref=e62]: "UEFA ID: SPP"
+          - heading "RB Leipzig" [level=3] [ref=e60]
+          - paragraph [ref=e61]: Germany
+          - paragraph [ref=e62]: "UEFA ID: RBL"
         - generic [ref=e63]:
           - generic [ref=e64]: 💰 No bids yet
           - generic [ref=e65]: Be the first to claim ownership!
@@ -88,8 +88,8 @@
         - generic [ref=e97]:
           - generic [ref=e99]:
             - generic [ref=e100]:
-              - generic [ref=e101]: Sparta Prague
-              - generic [ref=e102]: Czech Republic
+              - generic [ref=e101]: RB Leipzig
+              - generic [ref=e102]: Germany
             - generic [ref=e105]: 🔥
           - generic [ref=e107]:
             - generic [ref=e108]:
@@ -218,28 +218,28 @@
             - generic [ref=e305]: ⏳
           - generic [ref=e307]:
             - generic [ref=e308]:
-              - generic [ref=e309]: RB Leipzig
-              - generic [ref=e310]: Germany
+              - generic [ref=e309]: Rangers
+              - generic [ref=e310]: Scotland
             - generic [ref=e313]: ⏳
           - generic [ref=e315]:
             - generic [ref=e316]:
-              - generic [ref=e317]: Rangers
-              - generic [ref=e318]: Scotland
+              - generic [ref=e317]: Real Madrid
+              - generic [ref=e318]: Spain
             - generic [ref=e321]: ⏳
           - generic [ref=e323]:
             - generic [ref=e324]:
-              - generic [ref=e325]: Real Madrid
-              - generic [ref=e326]: Spain
+              - generic [ref=e325]: Red Star Belgrade
+              - generic [ref=e326]: Serbia
             - generic [ref=e329]: ⏳
           - generic [ref=e331]:
             - generic [ref=e332]:
-              - generic [ref=e333]: Red Star Belgrade
-              - generic [ref=e334]: Serbia
+              - generic [ref=e333]: Shakhtar Donetsk
+              - generic [ref=e334]: Ukraine
             - generic [ref=e337]: ⏳
           - generic [ref=e339]:
             - generic [ref=e340]:
-              - generic [ref=e341]: Shakhtar Donetsk
-              - generic [ref=e342]: Ukraine
+              - generic [ref=e341]: Sparta Prague
+              - generic [ref=e342]: Czech Republic
             - generic [ref=e345]: ⏳
           - generic [ref=e347]:
             - generic [ref=e348]:
