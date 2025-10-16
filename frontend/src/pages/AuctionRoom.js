@@ -28,7 +28,10 @@ export default function AuctionRoom() {
   const [currentBidder, setCurrentBidder] = useState(null);
   const [bidSequence, setBidSequence] = useState(0);
 
-  // Use the new auction clock hook
+  // Get global Socket.IO instance
+  const socket = getSocket();
+
+  // Use the new auction clock hook with global socket
   const { remainingMs } = useAuctionClock(socket, currentLotId);
 
   useEffect(() => {
