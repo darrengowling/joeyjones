@@ -403,6 +403,9 @@ test_plan:
       - working: "NA"
         agent: "main"
         comment: "Socket.IO refactor implementation completed. Need to test: 1) League Room Management (join_league, leave_league, rejoin_rooms, sync_members), 2) Real-Time Member Updates (member_joined events), 3) Auction Room Management (join_auction, sync_state), 4) Critical User-Reported Issues (Enter Auction Room button, bid visibility), 5) Backend Event Emissions (league and auction room events)"
+      - working: false
+        agent: "testing"
+        comment: "SOCKET.IO REFACTOR TESTING COMPLETED: Mixed results from comprehensive testing. ✅ WORKING AREAS: Socket.IO connection established successfully at /api/socket.io path, auction room functionality working (join_auction, sync_state events), clients can join auction rooms and receive initial state correctly. ❌ FAILING AREAS: League room sync_members events not being received when joining via Socket.IO, real-time bid events (bid_placed, bid_update) not reaching clients despite backend emitting them, member_joined events not being received when new users join leagues via API. CRITICAL ISSUE: Backend indentation errors were found and fixed in server.py (lines 2282, 2364, 2380) which were preventing server startup. Backend now starts correctly but Socket.IO event delivery has issues. Core Socket.IO infrastructure is working but event propagation needs investigation."
 
   - task: "SPORTS_CRICKET_ENABLED environment variable setup"
     implemented: true
