@@ -38,14 +38,21 @@ class LoadTestRunner:
     async def create_test_league(self, session):
         """Create a test league for auction bid testing"""
         try:
+            # First create a test user to be commissioner
+            test_commissioner_id = f"load-test-commissioner-{int(time.time())}"
+            
             async with session.post(
                 f"{BASE_URL}/leagues",
                 json={
                     "name": f"Load Test League {datetime.now().strftime('%Y%m%d%H%M%S')}",
                     "sportKey": "football",
+                    "commissionerId": test_commissioner_id,
                     "budget": 500000000,
-                    "rosterSlots": 3,
-                    "auctionTimerSeconds": 30
+                    "minManagers": 2,
+                    "maxManagers": 8,
+                    "clubSlots": 3,
+                    "timerSeconds": 30,
+                    "antiSnipeSeconds": 10
                 },
                 headers={"Content-Type": "application/json"}
             ) as resp:
