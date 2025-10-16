@@ -137,8 +137,9 @@ export default function AuctionRoom() {
     const handleBidUpdate = (data) => {
       console.log("🔔 Bid update received:", data);
       
-      // Only update if this is a newer sequence to prevent stale overwrites
-      if (data.seq >= bidSequence) {
+      // CRITICAL FIX: Accept any bid update with seq > 0, or if current is 0 (just joined)
+      // This ensures new users see bids even if they join mid-auction
+      if (data.seq > bidSequence || bidSequence === 0) {
         console.log(`✅ Updating current bid: ${formatCurrency(data.amount)} by ${data.bidder?.displayName}`);
         setCurrentBid(data.amount);
         setCurrentBidder(data.bidder);
