@@ -1,0 +1,460 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - generic [ref=e5]:
+      - generic [ref=e6]: Friends of PIFA
+      - button "Sign In" [ref=e7] [cursor=pointer]
+    - generic [ref=e9]:
+      - heading "Welcome to Friends of PIFA" [level=2] [ref=e10]
+      - paragraph [ref=e11]: Sports Gaming with Friends. No Gambling. All Strategy.
+      - paragraph [ref=e12]: Bid for exclusive ownership of players and teams who score your points. Experience the thrill of sports through strategic competition and community.
+      - generic [ref=e13]:
+        - button "Create Your Competition" [ref=e14] [cursor=pointer]
+        - button "Join the Competition" [ref=e15] [cursor=pointer]
+        - button "Explore Available Teams" [ref=e16] [cursor=pointer]
+      - generic [ref=e17]:
+        - generic [ref=e18]:
+          - heading "Active Leagues" [level=3] [ref=e19]
+          - paragraph [ref=e20]: 23 competitions
+        - generic [ref=e22]:
+          - generic [ref=e23] [cursor=pointer]:
+            - generic [ref=e25] [cursor=pointer]:
+              - generic [ref=e26] [cursor=pointer]: ⚽
+              - generic [ref=e27] [cursor=pointer]: Football
+            - heading "lfc2" [level=4] [ref=e28] [cursor=pointer]
+            - generic [ref=e29] [cursor=pointer]:
+              - generic [ref=e30] [cursor=pointer]:
+                - generic [ref=e31] [cursor=pointer]: "Budget:"
+                - generic [ref=e32] [cursor=pointer]: £500M
+              - generic [ref=e33] [cursor=pointer]:
+                - generic [ref=e34] [cursor=pointer]: "Managers:"
+                - generic [ref=e35] [cursor=pointer]: 3/8
+              - generic [ref=e36] [cursor=pointer]:
+                - generic [ref=e37] [cursor=pointer]: "Slots:"
+                - generic [ref=e38] [cursor=pointer]: "3"
+            - generic [ref=e40] [cursor=pointer]: ✓ Ready for Competition
+            - paragraph [ref=e42] [cursor=pointer]:
+              - text: "Token:"
+              - code [ref=e43] [cursor=pointer]: a6e7dbcd
+          - generic [ref=e44] [cursor=pointer]:
+            - generic [ref=e46] [cursor=pointer]:
+              - generic [ref=e47] [cursor=pointer]: ⚽
+              - generic [ref=e48] [cursor=pointer]: Football
+            - heading "lfc3" [level=4] [ref=e49] [cursor=pointer]
+            - generic [ref=e50] [cursor=pointer]:
+              - generic [ref=e51] [cursor=pointer]:
+                - generic [ref=e52] [cursor=pointer]: "Budget:"
+                - generic [ref=e53] [cursor=pointer]: £500M
+              - generic [ref=e54] [cursor=pointer]:
+                - generic [ref=e55] [cursor=pointer]: "Managers:"
+                - generic [ref=e56] [cursor=pointer]: 2/8
+              - generic [ref=e57] [cursor=pointer]:
+                - generic [ref=e58] [cursor=pointer]: "Slots:"
+                - generic [ref=e59] [cursor=pointer]: "3"
+            - generic [ref=e61] [cursor=pointer]: ✓ Ready for Competition
+            - paragraph [ref=e63] [cursor=pointer]:
+              - text: "Token:"
+              - code [ref=e64] [cursor=pointer]: 2aa9fb0e
+          - generic [ref=e65] [cursor=pointer]:
+            - generic [ref=e67] [cursor=pointer]:
+              - generic [ref=e68] [cursor=pointer]: ⚽
+              - generic [ref=e69] [cursor=pointer]: Football
+            - heading "lfc4" [level=4] [ref=e70] [cursor=pointer]
+            - generic [ref=e71] [cursor=pointer]:
+              - generic [ref=e72] [cursor=pointer]:
+                - generic [ref=e73] [cursor=pointer]: "Budget:"
+                - generic [ref=e74] [cursor=pointer]: £500M
+              - generic [ref=e75] [cursor=pointer]:
+                - generic [ref=e76] [cursor=pointer]: "Managers:"
+                - generic [ref=e77] [cursor=pointer]: 2/8
+              - generic [ref=e78] [cursor=pointer]:
+                - generic [ref=e79] [cursor=pointer]: "Slots:"
+                - generic [ref=e80] [cursor=pointer]: "3"
+            - generic [ref=e82] [cursor=pointer]: ✓ Ready for Competition
+            - paragraph [ref=e84] [cursor=pointer]:
+              - text: "Token:"
+              - code [ref=e85] [cursor=pointer]: 2ab350df
+          - generic [ref=e86] [cursor=pointer]:
+            - generic [ref=e88] [cursor=pointer]:
+              - generic [ref=e89] [cursor=pointer]: ⚽
+              - generic [ref=e90] [cursor=pointer]: Football
+            - heading "lfc6" [level=4] [ref=e91] [cursor=pointer]
+            - generic [ref=e92] [cursor=pointer]:
+              - generic [ref=e93] [cursor=pointer]:
+                - generic [ref=e94] [cursor=pointer]: "Budget:"
+                - generic [ref=e95] [cursor=pointer]: £500M
+              - generic [ref=e96] [cursor=pointer]:
+                - generic [ref=e97] [cursor=pointer]: "Managers:"
+                - generic [ref=e98] [cursor=pointer]: 2/8
+              - generic [ref=e99] [cursor=pointer]:
+                - generic [ref=e100] [cursor=pointer]: "Slots:"
+                - generic [ref=e101] [cursor=pointer]: "3"
+            - generic [ref=e103] [cursor=pointer]: ✓ Ready for Competition
+            - paragraph [ref=e105] [cursor=pointer]:
+              - text: "Token:"
+              - code [ref=e106] [cursor=pointer]: ff8c9810
+          - generic [ref=e107] [cursor=pointer]:
+            - generic [ref=e109] [cursor=pointer]:
+              - generic [ref=e110] [cursor=pointer]: ⚽
+              - generic [ref=e111] [cursor=pointer]: Football
+            - heading "lfc7" [level=4] [ref=e112] [cursor=pointer]
+            - generic [ref=e113] [cursor=pointer]:
+              - generic [ref=e114] [cursor=pointer]:
+                - generic [ref=e115] [cursor=pointer]: "Budget:"
+                - generic [ref=e116] [cursor=pointer]: £500M
+              - generic [ref=e117] [cursor=pointer]:
+                - generic [ref=e118] [cursor=pointer]: "Managers:"
+                - generic [ref=e119] [cursor=pointer]: 2/8
+              - generic [ref=e120] [cursor=pointer]:
+                - generic [ref=e121] [cursor=pointer]: "Slots:"
+                - generic [ref=e122] [cursor=pointer]: "3"
+            - generic [ref=e124] [cursor=pointer]: ✓ Ready for Competition
+            - paragraph [ref=e126] [cursor=pointer]:
+              - text: "Token:"
+              - code [ref=e127] [cursor=pointer]: 4f494806
+          - generic [ref=e128] [cursor=pointer]:
+            - generic [ref=e130] [cursor=pointer]:
+              - generic [ref=e131] [cursor=pointer]: ⚽
+              - generic [ref=e132] [cursor=pointer]: Football
+            - heading "Fresh Socket Test League" [level=4] [ref=e133] [cursor=pointer]
+            - generic [ref=e134] [cursor=pointer]:
+              - generic [ref=e135] [cursor=pointer]:
+                - generic [ref=e136] [cursor=pointer]: "Budget:"
+                - generic [ref=e137] [cursor=pointer]: £500M
+              - generic [ref=e138] [cursor=pointer]:
+                - generic [ref=e139] [cursor=pointer]: "Managers:"
+                - generic [ref=e140] [cursor=pointer]: 1/4
+              - generic [ref=e141] [cursor=pointer]:
+                - generic [ref=e142] [cursor=pointer]: "Slots:"
+                - generic [ref=e143] [cursor=pointer]: "3"
+            - paragraph [ref=e145] [cursor=pointer]:
+              - text: "Token:"
+              - code [ref=e146] [cursor=pointer]: c3c54bc6
+          - generic [ref=e147] [cursor=pointer]:
+            - generic [ref=e149] [cursor=pointer]:
+              - generic [ref=e150] [cursor=pointer]: ⚽
+              - generic [ref=e151] [cursor=pointer]: Football
+            - heading "Fresh Socket Test League" [level=4] [ref=e152] [cursor=pointer]
+            - generic [ref=e153] [cursor=pointer]:
+              - generic [ref=e154] [cursor=pointer]:
+                - generic [ref=e155] [cursor=pointer]: "Budget:"
+                - generic [ref=e156] [cursor=pointer]: £500M
+              - generic [ref=e157] [cursor=pointer]:
+                - generic [ref=e158] [cursor=pointer]: "Managers:"
+                - generic [ref=e159] [cursor=pointer]: 1/4
+              - generic [ref=e160] [cursor=pointer]:
+                - generic [ref=e161] [cursor=pointer]: "Slots:"
+                - generic [ref=e162] [cursor=pointer]: "3"
+            - paragraph [ref=e164] [cursor=pointer]:
+              - text: "Token:"
+              - code [ref=e165] [cursor=pointer]: 78eaf6ee
+          - generic [ref=e166] [cursor=pointer]:
+            - generic [ref=e168] [cursor=pointer]:
+              - generic [ref=e169] [cursor=pointer]: ⚽
+              - generic [ref=e170] [cursor=pointer]: Football
+            - heading "InstantLobbyTest_1760579840" [level=4] [ref=e171] [cursor=pointer]
+            - generic [ref=e172] [cursor=pointer]:
+              - generic [ref=e173] [cursor=pointer]:
+                - generic [ref=e174] [cursor=pointer]: "Budget:"
+                - generic [ref=e175] [cursor=pointer]: £500M
+              - generic [ref=e176] [cursor=pointer]:
+                - generic [ref=e177] [cursor=pointer]: "Managers:"
+                - generic [ref=e178] [cursor=pointer]: 0/8
+              - generic [ref=e179] [cursor=pointer]:
+                - generic [ref=e180] [cursor=pointer]: "Slots:"
+                - generic [ref=e181] [cursor=pointer]: "3"
+            - paragraph [ref=e183] [cursor=pointer]:
+              - text: "Token:"
+              - code [ref=e184] [cursor=pointer]: 614f3be1
+          - generic [ref=e185] [cursor=pointer]:
+            - generic [ref=e187] [cursor=pointer]:
+              - generic [ref=e188] [cursor=pointer]: ⚽
+              - generic [ref=e189] [cursor=pointer]: Football
+            - heading "LobbyAPITest_1760579918" [level=4] [ref=e190] [cursor=pointer]
+            - generic [ref=e191] [cursor=pointer]:
+              - generic [ref=e192] [cursor=pointer]:
+                - generic [ref=e193] [cursor=pointer]: "Budget:"
+                - generic [ref=e194] [cursor=pointer]: £500M
+              - generic [ref=e195] [cursor=pointer]:
+                - generic [ref=e196] [cursor=pointer]: "Managers:"
+                - generic [ref=e197] [cursor=pointer]: 4/8
+              - generic [ref=e198] [cursor=pointer]:
+                - generic [ref=e199] [cursor=pointer]: "Slots:"
+                - generic [ref=e200] [cursor=pointer]: "3"
+            - generic [ref=e202] [cursor=pointer]: ✓ Ready for Competition
+            - paragraph [ref=e204] [cursor=pointer]:
+              - text: "Token:"
+              - code [ref=e205] [cursor=pointer]: 4a102142
+          - generic [ref=e206] [cursor=pointer]:
+            - generic [ref=e208] [cursor=pointer]:
+              - generic [ref=e209] [cursor=pointer]: ⚽
+              - generic [ref=e210] [cursor=pointer]: Football
+            - heading "Instant Notification Test League" [level=4] [ref=e211] [cursor=pointer]
+            - generic [ref=e212] [cursor=pointer]:
+              - generic [ref=e213] [cursor=pointer]:
+                - generic [ref=e214] [cursor=pointer]: "Budget:"
+                - generic [ref=e215] [cursor=pointer]: £500M
+              - generic [ref=e216] [cursor=pointer]:
+                - generic [ref=e217] [cursor=pointer]: "Managers:"
+                - generic [ref=e218] [cursor=pointer]: 2/4
+              - generic [ref=e219] [cursor=pointer]:
+                - generic [ref=e220] [cursor=pointer]: "Slots:"
+                - generic [ref=e221] [cursor=pointer]: "3"
+            - generic [ref=e223] [cursor=pointer]: ✓ Ready for Competition
+            - paragraph [ref=e225] [cursor=pointer]:
+              - text: "Token:"
+              - code [ref=e226] [cursor=pointer]: aa91688b
+          - generic [ref=e227] [cursor=pointer]:
+            - generic [ref=e229] [cursor=pointer]:
+              - generic [ref=e230] [cursor=pointer]: ⚽
+              - generic [ref=e231] [cursor=pointer]: Football
+            - heading "Room Targeting Test League" [level=4] [ref=e232] [cursor=pointer]
+            - generic [ref=e233] [cursor=pointer]:
+              - generic [ref=e234] [cursor=pointer]:
+                - generic [ref=e235] [cursor=pointer]: "Budget:"
+                - generic [ref=e236] [cursor=pointer]: £500M
+              - generic [ref=e237] [cursor=pointer]:
+                - generic [ref=e238] [cursor=pointer]: "Managers:"
+                - generic [ref=e239] [cursor=pointer]: 1/4
+              - generic [ref=e240] [cursor=pointer]:
+                - generic [ref=e241] [cursor=pointer]: "Slots:"
+                - generic [ref=e242] [cursor=pointer]: "3"
+            - paragraph [ref=e244] [cursor=pointer]:
+              - text: "Token:"
+              - code [ref=e245] [cursor=pointer]: 8a3385f6
+          - generic [ref=e246] [cursor=pointer]:
+            - generic [ref=e248] [cursor=pointer]:
+              - generic [ref=e249] [cursor=pointer]: ⚽
+              - generic [ref=e250] [cursor=pointer]: Football
+            - heading "Instant Notification Test League" [level=4] [ref=e251] [cursor=pointer]
+            - generic [ref=e252] [cursor=pointer]:
+              - generic [ref=e253] [cursor=pointer]:
+                - generic [ref=e254] [cursor=pointer]: "Budget:"
+                - generic [ref=e255] [cursor=pointer]: £500M
+              - generic [ref=e256] [cursor=pointer]:
+                - generic [ref=e257] [cursor=pointer]: "Managers:"
+                - generic [ref=e258] [cursor=pointer]: 2/4
+              - generic [ref=e259] [cursor=pointer]:
+                - generic [ref=e260] [cursor=pointer]: "Slots:"
+                - generic [ref=e261] [cursor=pointer]: "3"
+            - generic [ref=e263] [cursor=pointer]: ✓ Ready for Competition
+            - paragraph [ref=e265] [cursor=pointer]:
+              - text: "Token:"
+              - code [ref=e266] [cursor=pointer]: 442701f7
+          - generic [ref=e267] [cursor=pointer]:
+            - generic [ref=e269] [cursor=pointer]:
+              - generic [ref=e270] [cursor=pointer]: ⚽
+              - generic [ref=e271] [cursor=pointer]: Football
+            - heading "Room Targeting Test League" [level=4] [ref=e272] [cursor=pointer]
+            - generic [ref=e273] [cursor=pointer]:
+              - generic [ref=e274] [cursor=pointer]:
+                - generic [ref=e275] [cursor=pointer]: "Budget:"
+                - generic [ref=e276] [cursor=pointer]: £500M
+              - generic [ref=e277] [cursor=pointer]:
+                - generic [ref=e278] [cursor=pointer]: "Managers:"
+                - generic [ref=e279] [cursor=pointer]: 1/4
+              - generic [ref=e280] [cursor=pointer]:
+                - generic [ref=e281] [cursor=pointer]: "Slots:"
+                - generic [ref=e282] [cursor=pointer]: "3"
+            - paragraph [ref=e284] [cursor=pointer]:
+              - text: "Token:"
+              - code [ref=e285] [cursor=pointer]: d25867e8
+          - generic [ref=e286] [cursor=pointer]:
+            - generic [ref=e288] [cursor=pointer]:
+              - generic [ref=e289] [cursor=pointer]: ⚽
+              - generic [ref=e290] [cursor=pointer]: Football
+            - heading "Debug League" [level=4] [ref=e291] [cursor=pointer]
+            - generic [ref=e292] [cursor=pointer]:
+              - generic [ref=e293] [cursor=pointer]:
+                - generic [ref=e294] [cursor=pointer]: "Budget:"
+                - generic [ref=e295] [cursor=pointer]: £500M
+              - generic [ref=e296] [cursor=pointer]:
+                - generic [ref=e297] [cursor=pointer]: "Managers:"
+                - generic [ref=e298] [cursor=pointer]: 1/4
+              - generic [ref=e299] [cursor=pointer]:
+                - generic [ref=e300] [cursor=pointer]: "Slots:"
+                - generic [ref=e301] [cursor=pointer]: "3"
+            - paragraph [ref=e303] [cursor=pointer]:
+              - text: "Token:"
+              - code [ref=e304] [cursor=pointer]: faf080b4
+          - generic [ref=e305] [cursor=pointer]:
+            - generic [ref=e307] [cursor=pointer]:
+              - generic [ref=e308] [cursor=pointer]: ⚽
+              - generic [ref=e309] [cursor=pointer]: Football
+            - heading "Debug League" [level=4] [ref=e310] [cursor=pointer]
+            - generic [ref=e311] [cursor=pointer]:
+              - generic [ref=e312] [cursor=pointer]:
+                - generic [ref=e313] [cursor=pointer]: "Budget:"
+                - generic [ref=e314] [cursor=pointer]: £500M
+              - generic [ref=e315] [cursor=pointer]:
+                - generic [ref=e316] [cursor=pointer]: "Managers:"
+                - generic [ref=e317] [cursor=pointer]: 1/4
+              - generic [ref=e318] [cursor=pointer]:
+                - generic [ref=e319] [cursor=pointer]: "Slots:"
+                - generic [ref=e320] [cursor=pointer]: "3"
+            - paragraph [ref=e322] [cursor=pointer]:
+              - text: "Token:"
+              - code [ref=e323] [cursor=pointer]: a769c901
+          - generic [ref=e324] [cursor=pointer]:
+            - generic [ref=e326] [cursor=pointer]:
+              - generic [ref=e327] [cursor=pointer]: ⚽
+              - generic [ref=e328] [cursor=pointer]: Football
+            - heading "Instant Notification Test League" [level=4] [ref=e329] [cursor=pointer]
+            - generic [ref=e330] [cursor=pointer]:
+              - generic [ref=e331] [cursor=pointer]:
+                - generic [ref=e332] [cursor=pointer]: "Budget:"
+                - generic [ref=e333] [cursor=pointer]: £500M
+              - generic [ref=e334] [cursor=pointer]:
+                - generic [ref=e335] [cursor=pointer]: "Managers:"
+                - generic [ref=e336] [cursor=pointer]: 2/4
+              - generic [ref=e337] [cursor=pointer]:
+                - generic [ref=e338] [cursor=pointer]: "Slots:"
+                - generic [ref=e339] [cursor=pointer]: "3"
+            - generic [ref=e341] [cursor=pointer]: ✓ Ready for Competition
+            - paragraph [ref=e343] [cursor=pointer]:
+              - text: "Token:"
+              - code [ref=e344] [cursor=pointer]: d1cf514c
+          - generic [ref=e345] [cursor=pointer]:
+            - generic [ref=e347] [cursor=pointer]:
+              - generic [ref=e348] [cursor=pointer]: ⚽
+              - generic [ref=e349] [cursor=pointer]: Football
+            - heading "Instant Notification Test League" [level=4] [ref=e350] [cursor=pointer]
+            - generic [ref=e351] [cursor=pointer]:
+              - generic [ref=e352] [cursor=pointer]:
+                - generic [ref=e353] [cursor=pointer]: "Budget:"
+                - generic [ref=e354] [cursor=pointer]: £500M
+              - generic [ref=e355] [cursor=pointer]:
+                - generic [ref=e356] [cursor=pointer]: "Managers:"
+                - generic [ref=e357] [cursor=pointer]: 2/4
+              - generic [ref=e358] [cursor=pointer]:
+                - generic [ref=e359] [cursor=pointer]: "Slots:"
+                - generic [ref=e360] [cursor=pointer]: "3"
+            - generic [ref=e362] [cursor=pointer]: ✓ Ready for Competition
+            - paragraph [ref=e364] [cursor=pointer]:
+              - text: "Token:"
+              - code [ref=e365] [cursor=pointer]: 0b1d72b5
+          - generic [ref=e366] [cursor=pointer]:
+            - generic [ref=e368] [cursor=pointer]:
+              - generic [ref=e369] [cursor=pointer]: ⚽
+              - generic [ref=e370] [cursor=pointer]: Football
+            - heading "Room Targeting Test League" [level=4] [ref=e371] [cursor=pointer]
+            - generic [ref=e372] [cursor=pointer]:
+              - generic [ref=e373] [cursor=pointer]:
+                - generic [ref=e374] [cursor=pointer]: "Budget:"
+                - generic [ref=e375] [cursor=pointer]: £500M
+              - generic [ref=e376] [cursor=pointer]:
+                - generic [ref=e377] [cursor=pointer]: "Managers:"
+                - generic [ref=e378] [cursor=pointer]: 1/4
+              - generic [ref=e379] [cursor=pointer]:
+                - generic [ref=e380] [cursor=pointer]: "Slots:"
+                - generic [ref=e381] [cursor=pointer]: "3"
+            - paragraph [ref=e383] [cursor=pointer]:
+              - text: "Token:"
+              - code [ref=e384] [cursor=pointer]: 832a1ae5
+          - generic [ref=e385] [cursor=pointer]:
+            - generic [ref=e387] [cursor=pointer]:
+              - generic [ref=e388] [cursor=pointer]: ⚽
+              - generic [ref=e389] [cursor=pointer]: Football
+            - heading "Bid Broadcasting Test League" [level=4] [ref=e390] [cursor=pointer]
+            - generic [ref=e391] [cursor=pointer]:
+              - generic [ref=e392] [cursor=pointer]:
+                - generic [ref=e393] [cursor=pointer]: "Budget:"
+                - generic [ref=e394] [cursor=pointer]: £100M
+              - generic [ref=e395] [cursor=pointer]:
+                - generic [ref=e396] [cursor=pointer]: "Managers:"
+                - generic [ref=e397] [cursor=pointer]: 2/4
+              - generic [ref=e398] [cursor=pointer]:
+                - generic [ref=e399] [cursor=pointer]: "Slots:"
+                - generic [ref=e400] [cursor=pointer]: "5"
+            - generic [ref=e402] [cursor=pointer]: ✓ Ready for Competition
+            - paragraph [ref=e404] [cursor=pointer]:
+              - text: "Token:"
+              - code [ref=e405] [cursor=pointer]: 8e82c65b
+          - generic [ref=e406] [cursor=pointer]:
+            - generic [ref=e408] [cursor=pointer]:
+              - generic [ref=e409] [cursor=pointer]: ⚽
+              - generic [ref=e410] [cursor=pointer]: Football
+            - heading "Bid Broadcasting Test League" [level=4] [ref=e411] [cursor=pointer]
+            - generic [ref=e412] [cursor=pointer]:
+              - generic [ref=e413] [cursor=pointer]:
+                - generic [ref=e414] [cursor=pointer]: "Budget:"
+                - generic [ref=e415] [cursor=pointer]: £100M
+              - generic [ref=e416] [cursor=pointer]:
+                - generic [ref=e417] [cursor=pointer]: "Managers:"
+                - generic [ref=e418] [cursor=pointer]: 2/4
+              - generic [ref=e419] [cursor=pointer]:
+                - generic [ref=e420] [cursor=pointer]: "Slots:"
+                - generic [ref=e421] [cursor=pointer]: "5"
+            - generic [ref=e423] [cursor=pointer]: ✓ Ready for Competition
+            - paragraph [ref=e425] [cursor=pointer]:
+              - text: "Token:"
+              - code [ref=e426] [cursor=pointer]: 9f3fea2a
+          - generic [ref=e427] [cursor=pointer]:
+            - generic [ref=e429] [cursor=pointer]:
+              - generic [ref=e430] [cursor=pointer]: ⚽
+              - generic [ref=e431] [cursor=pointer]: Football
+            - heading "Bid Broadcasting Test League" [level=4] [ref=e432] [cursor=pointer]
+            - generic [ref=e433] [cursor=pointer]:
+              - generic [ref=e434] [cursor=pointer]:
+                - generic [ref=e435] [cursor=pointer]: "Budget:"
+                - generic [ref=e436] [cursor=pointer]: £100M
+              - generic [ref=e437] [cursor=pointer]:
+                - generic [ref=e438] [cursor=pointer]: "Managers:"
+                - generic [ref=e439] [cursor=pointer]: 2/4
+              - generic [ref=e440] [cursor=pointer]:
+                - generic [ref=e441] [cursor=pointer]: "Slots:"
+                - generic [ref=e442] [cursor=pointer]: "5"
+            - generic [ref=e444] [cursor=pointer]: ✓ Ready for Competition
+            - paragraph [ref=e446] [cursor=pointer]:
+              - text: "Token:"
+              - code [ref=e447] [cursor=pointer]: d31bd394
+          - generic [ref=e448] [cursor=pointer]:
+            - generic [ref=e450] [cursor=pointer]:
+              - generic [ref=e451] [cursor=pointer]: ⚽
+              - generic [ref=e452] [cursor=pointer]: Football
+            - heading "Bid Broadcasting Test League" [level=4] [ref=e453] [cursor=pointer]
+            - generic [ref=e454] [cursor=pointer]:
+              - generic [ref=e455] [cursor=pointer]:
+                - generic [ref=e456] [cursor=pointer]: "Budget:"
+                - generic [ref=e457] [cursor=pointer]: £100M
+              - generic [ref=e458] [cursor=pointer]:
+                - generic [ref=e459] [cursor=pointer]: "Managers:"
+                - generic [ref=e460] [cursor=pointer]: 2/4
+              - generic [ref=e461] [cursor=pointer]:
+                - generic [ref=e462] [cursor=pointer]: "Slots:"
+                - generic [ref=e463] [cursor=pointer]: "5"
+            - generic [ref=e465] [cursor=pointer]: ✓ Ready for Competition
+            - paragraph [ref=e467] [cursor=pointer]:
+              - text: "Token:"
+              - code [ref=e468] [cursor=pointer]: 6945b066
+          - generic [ref=e469] [cursor=pointer]:
+            - generic [ref=e471] [cursor=pointer]:
+              - generic [ref=e472] [cursor=pointer]: ⚽
+              - generic [ref=e473] [cursor=pointer]: Football
+            - heading "Bid Broadcasting Test League" [level=4] [ref=e474] [cursor=pointer]
+            - generic [ref=e475] [cursor=pointer]:
+              - generic [ref=e476] [cursor=pointer]:
+                - generic [ref=e477] [cursor=pointer]: "Budget:"
+                - generic [ref=e478] [cursor=pointer]: £100M
+              - generic [ref=e479] [cursor=pointer]:
+                - generic [ref=e480] [cursor=pointer]: "Managers:"
+                - generic [ref=e481] [cursor=pointer]: 2/4
+              - generic [ref=e482] [cursor=pointer]:
+                - generic [ref=e483] [cursor=pointer]: "Slots:"
+                - generic [ref=e484] [cursor=pointer]: "5"
+            - generic [ref=e486] [cursor=pointer]: ✓ Ready for Competition
+            - paragraph [ref=e488] [cursor=pointer]:
+              - text: "Token:"
+              - code [ref=e489] [cursor=pointer]: 9406ad43
+          - generic [ref=e490] [cursor=pointer]:
+            - generic [ref=e491] [cursor=pointer]: +
+            - heading "Create New Competition" [level=4] [ref=e492] [cursor=pointer]
+            - paragraph [ref=e493] [cursor=pointer]: Start your own strategic arena
+  - link "Made with Emergent" [ref=e494] [cursor=pointer]:
+    - /url: https://app.emergent.sh/?utm_source=emergent-badge
+    - generic [ref=e495] [cursor=pointer]:
+      - img [ref=e496] [cursor=pointer]
+      - paragraph [ref=e497] [cursor=pointer]: Made with Emergent
+```
