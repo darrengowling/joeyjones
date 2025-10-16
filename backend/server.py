@@ -1985,9 +1985,23 @@ async def check_auction_completion(auction_id: str):
             'participants': [LeagueParticipant(**p).model_dump(mode='json') for p in participants]
         })
         
-        # Prompt 1: Emit league status changed event and create initial standings
+        # Emit league status changed event
         league = await db.leagues.find_one({"id": auction["leagueId"]})
         if league:
+            # Get room size for debugging
+            room_sockets = sio.manager.rooms.get(f"league:{auction['leagueId']}", set())
+            room_size = len(room_sockets)
+            
+            # JSON log for debugging
+            logger.info(json.dumps({
+                "event": "league_status_changed",
+                "leagueId": auction['leagueId'],
+                "status": "auction_complete",
+                "auctionId": None,
+                "roomSize": room_size,
+                "timestamp": datetime.now(timezone.utc).isoformat()
+            }))
+            
             await sio.emit('league_status_changed', {
                 'leagueId': auction["leagueId"],
                 'status': 'auction_complete'
