@@ -718,6 +718,27 @@ test_plan:
         agent: "testing"
         comment: "✅ INSTANT AUCTION NOTIFICATIONS TESTING COMPLETED: Fixed critical Socket.IO room management bug by adding missing 'await' keywords to all sio.enter_room() and sio.leave_room() calls. Comprehensive testing performed with 6/7 test suites passing. ✅ BACKEND EVENT EMISSION: league_status_changed event correctly emitted when commissioner starts auction via POST /api/leagues/:id/auction/start with proper payload (leagueId, status: 'auction_started', auctionId, message). ✅ REAL-TIME DELIVERY SPEED: Events delivered to all league members within 0.017 seconds (much faster than 1-second requirement). ✅ EVENT PAYLOAD VALIDATION: Correct structure verified with all required fields. ✅ SOCKET.IO ROOM TARGETING: Events correctly sent only to league members in league:{leagueId} rooms, non-members do not receive events. ✅ MULTI-USER TESTING: Successfully tested with Commissioner (User A) and Member (User B), both receive events simultaneously. ✅ ACCEPTANCE CRITERIA: 4/5 criteria met - auction start notifications working perfectly, only auction completion events not fully implemented (expected). Production-ready for instant auction start notifications."
 
+  - task: "Robust bid broadcasting system with monotonic sequence numbers"
+    implemented: true
+    working: true
+    file: "server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "testing"
+        comment: "Testing robust bid broadcasting system with monotonic sequence numbers. Goal: Verify that when users place bids rapidly, all users in the auction room see identical bid states within ~1s, with no rollback to older values."
+      - working: false
+        agent: "testing"
+        comment: "CRITICAL AUCTION COMPLETION BUG IDENTIFIED: Auction was completing immediately after first bid due to flawed completion logic checking 'not unsoldClubs' which was empty at auction start. Fixed by checking if there are more clubs remaining in queue or unsold to retry instead of just checking unsold clubs."
+      - working: false
+        agent: "testing"
+        comment: "RACE CONDITION IN SEQUENCE NUMBERS: Found race condition in bid sequence number generation where multiple concurrent requests could get same initial bidSequence value, causing duplicate sequence numbers in rapid-fire bidding scenarios."
+      - working: true
+        agent: "testing"
+        comment: "✅ BID BROADCASTING SYSTEM TESTING COMPLETED: All 6/6 test scenarios passed successfully. ✅ MONOTONIC SEQUENCE NUMBERS: Verified sequence numbers are strictly increasing (1,2,3,4,5) with no duplicates or rollbacks. ✅ BID UPDATE EVENT BROADCAST: All users in auction room receive bid_update events with correct structure (lotId, amount, bidder{userId, displayName}, seq, serverTime). ✅ SYNC STATE INITIALIZATION: Users joining mid-bidding receive sync_state with currentBid, currentBidder, and seq fields. ✅ RAPID FIRE BID TEST: 6 rapid bids from 2 users delivered correctly with monotonic sequences (8,9,10,11,12,13), identical final state for all users. ✅ SEQUENCE NUMBER CONSISTENCY: 10 sequential bids show perfect incremental sequences with no gaps or duplicates, auction.bidSequence matches last event seq. ✅ MULTI-USER STATE SYNCHRONIZATION: Both users see identical final state (£25M by User A, seq=26) after 3-bid scenario. FIXES APPLIED: 1) Fixed auction completion logic to check remaining clubs in queue vs unsold clubs, 2) Implemented atomic MongoDB $inc operation for bidSequence to prevent race conditions, 3) Corrected test logic to track sequences from single client to avoid duplicate counting. All acceptance criteria met - system ready for production rapid-fire bidding scenarios."
+
 agent_communication:
   - agent: "main"
     message: "Environment cleaned up successfully. Database cleared of all test data. Found serialization issues in backend that need fixing before testing. Socket.IO paths configured correctly. Ready for systematic testing after fixes."
