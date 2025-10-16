@@ -169,7 +169,7 @@ The Friends of PIFA multi-sport auction platform has undergone comprehensive Soc
 - **Evidence:** Endpoint returns 404 when ENV=production, 200 when ENV=development
 - **Documentation:** See DEBUG_ENDPOINT_SECURITY.md
 
-### Historical Pain Points - RESOLVED ✅
+### Historical Socket.IO Issues - RESOLVED ✅
 
 #### Issue A: Lobby Presence (Commissioner Not Seeing Joiners)
 - **Previous State:** ❌ Commissioner required manual refresh to see new members
