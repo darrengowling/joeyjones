@@ -232,7 +232,7 @@ class SocketIORefactorTester:
         
         # Check if user1 joined league room
         user1_events = [event[0] for event in self.socket_events["user1"]]
-        if "joined" not in user1_events:
+        if "room_joined" not in user1_events:
             self.log("User1 failed to join league room", "ERROR")
             return False
         
