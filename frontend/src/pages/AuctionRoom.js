@@ -577,7 +577,7 @@ export default function AuctionRoom() {
                         {formatCurrency(p.budgetRemaining)}
                       </div>
                       <div className="subtle text-xs text-gray-500">
-                        Spent: £{p.totalSpent.toLocaleString()}
+                        Spent: {formatCurrency(p.totalSpent)}
                       </div>
                       <div className="subtle text-xs text-gray-500">
                         🏆 Clubs: {p.clubsWon.length}
