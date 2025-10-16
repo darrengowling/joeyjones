@@ -2360,7 +2360,7 @@ async def join_league(sid, data):
         return
     
     room_name = f"league:{league_id}"
-    sio.enter_room(sid, room_name)
+    await sio.enter_room(sid, room_name)
     logger.info(f"🟦 Socket {sid} joined league room: {room_name}")
     
     # Get all sockets currently in this room
