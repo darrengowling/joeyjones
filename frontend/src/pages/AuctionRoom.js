@@ -593,8 +593,8 @@ export default function AuctionRoom() {
                 <div>
                   <h2 className="h2 text-2xl font-bold mb-4 text-gray-900">🔥 Current Team Ownership</h2>
                   
-                  {/* Timer */}
-                  <div className="bg-gradient-to-r from-red-700 to-orange-600 text-white p-6 rounded-lg mb-6 text-center shadow-lg">
+                  {/* Timer - WHITE ON BLACK for maximum visibility */}
+                  <div className="bg-black text-white p-6 rounded-lg mb-6 text-center shadow-lg border-2 border-white">
                     <div className="text-5xl font-bold">
                       {(() => {
                         const s = Math.ceil((remainingMs ?? 0) / 1000);
@@ -602,13 +602,13 @@ export default function AuctionRoom() {
                         const ss = String(s % 60).padStart(2, "0");
                         const warn = (remainingMs ?? 0) < 10000;
                         return (
-                          <span data-testid="auction-timer" className={`chip ${warn ? 'warn' : ''}`}>
+                          <span data-testid="auction-timer" className={warn ? 'text-red-400' : 'text-white'}>
                             {mm}:{ss}
                           </span>
                         );
                       })()}
                     </div>
-                    <div className="text-sm mt-2">Time Remaining</div>
+                    <div className="text-sm mt-2 text-white">Time Remaining</div>
                   </div>
 
                   {/* Club Info */}
