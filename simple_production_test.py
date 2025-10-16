@@ -7,7 +7,7 @@ import requests
 import json
 import time
 
-BASE_URL = "https://bidmaster-9.preview.emergentagent.com/api"
+BASE_URL = "https://bid-socket-system.preview.emergentagent.com/api"
 
 def test_endpoint(method: str, endpoint: str, data: dict = None) -> dict:
     """Test API endpoint"""

@@ -9,7 +9,7 @@ import time
 from datetime import datetime
 
 # Configuration
-BASE_URL = "https://bidmaster-9.preview.emergentagent.com/api"
+BASE_URL = "https://bid-socket-system.preview.emergentagent.com/api"
 
 def log(message: str, level: str = "INFO"):
     timestamp = datetime.now().strftime("%H:%M:%S")
