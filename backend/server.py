@@ -2447,7 +2447,11 @@ async def join_league(sid, data):
         return
     
     # Get user ID from session if available
-    user_id = sio.get_session(sid).get('userId') if hasattr(sio, 'get_session') else None
+    try:
+        session = await sio.get_session(sid)
+        user_id = session.get('userId') if session else None
+    except:
+        user_id = None
     
     room_name = f"league:{league_id}"
     await sio.enter_room(sid, room_name)
