@@ -2,8 +2,8 @@ import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuctionClock } from "../hooks/useAuctionClock";
+import { useSocketRoom } from "../hooks/useSocketRoom";
 import { formatCurrency, parseCurrencyInput, isValidCurrencyInput } from "../utils/currency";
-import { getSocket, joinAuctionRoom, leaveAuctionRoom, setSocketUser } from "../utils/socket";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
@@ -27,12 +27,11 @@ export default function AuctionRoom() {
   const [currentBid, setCurrentBid] = useState(null);
   const [currentBidder, setCurrentBidder] = useState(null);
   const [bidSequence, setBidSequence] = useState(0);
-  const [syncReceived, setSyncReceived] = useState(false); // Track if sync_state received
 
-  // Get global Socket.IO instance
-  const socket = getSocket();
+  // Use shared socket room hook
+  const { socket, connected, ready, listenerCount } = useSocketRoom('auction', auctionId, { user });
 
-  // Use the new auction clock hook with global socket
+  // Use the new auction clock hook with socket from useSocketRoom
   const { remainingMs } = useAuctionClock(socket, currentLotId);
 
   useEffect(() => {
