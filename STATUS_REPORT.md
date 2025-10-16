@@ -937,13 +937,15 @@ From E2E tests:
    - All three historical regressions resolved
    - Verified via E2E tests
 
-2. ⚠️ **Database Index Audit** - REQUIRED
-   - Run index verification script
-   - Create missing indexes
-   - Document all indexes
+2. ✅ **Database Index Audit** - DONE
+   - All indexes verified and created
+   - Unique constraints tested (100% pass rate)
+   - Documentation: DATABASE_INDEX_AUDIT.md
 
-3. ⚠️ **Remove Debug Endpoint** - REQUIRED
-   - Remove or gate `/api/debug/rooms` behind feature flag
+3. ✅ **Debug Endpoint Security** - DONE
+   - Guarded with ENV variable
+   - Returns 404 in production
+   - Documentation: DEBUG_ENDPOINT_SECURITY.md
 
 4. ⚠️ **Configure Production CORS** - REQUIRED
    - Set `CORS_ORIGINS` to production domain(s)
