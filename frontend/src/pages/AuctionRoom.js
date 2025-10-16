@@ -661,7 +661,7 @@ export default function AuctionRoom() {
                     <div className="flex gap-4 mb-2">
                       <input
                         type="number"
-                        placeholder="Enter bid amount"
+                        placeholder="e.g., 5m, £10m, 23m"
                         className="flex-1 px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg"
                         value={bidAmount}
                         onChange={(e) => setBidAmount(e.target.value)}
