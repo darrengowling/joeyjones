@@ -1,0 +1,235 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e5]:
+    - button "← Back to Home" [ref=e6] [cursor=pointer]
+    - generic [ref=e7]:
+      - generic [ref=e8]:
+        - heading "Button Test League" [level=1] [ref=e9]
+        - generic [ref=e10]:
+          - generic [ref=e11]:
+            - generic [ref=e12]: pending
+            - generic [ref=e13]: 3/8 managers
+          - generic [ref=e14]:
+            - text: "Invite Token:"
+            - code [ref=e15]: "73215917"
+      - generic [ref=e16]:
+        - button "Begin Strategic Competition" [ref=e18] [cursor=pointer]
+        - button "Delete League" [ref=e19] [cursor=pointer]
+    - generic [ref=e20]:
+      - heading "League Participants" [level=3] [ref=e21]
+      - generic [ref=e22]:
+        - generic [ref=e24]:
+          - generic [ref=e25]: Commissioner
+          - generic [ref=e26]: Commissioner
+        - generic [ref=e29]: Member 1
+        - generic [ref=e32]: Member 2
+    - generic [ref=e33]:
+      - heading "Available Clubs in Competition" [level=3] [ref=e34]
+      - paragraph [ref=e35]: 36 clubs available for auction in this competition.
+      - generic [ref=e36]:
+        - generic [ref=e37]:
+          - heading "Real Madrid" [level=4] [ref=e38]
+          - paragraph [ref=e39]: Spain
+          - paragraph [ref=e40]: "UEFA ID: RM"
+        - generic [ref=e41]:
+          - heading "Barcelona" [level=4] [ref=e42]
+          - paragraph [ref=e43]: Spain
+          - paragraph [ref=e44]: "UEFA ID: FCB"
+        - generic [ref=e45]:
+          - heading "Atlético Madrid" [level=4] [ref=e46]
+          - paragraph [ref=e47]: Spain
+          - paragraph [ref=e48]: "UEFA ID: ATM"
+        - generic [ref=e49]:
+          - heading "Athletic Bilbao" [level=4] [ref=e50]
+          - paragraph [ref=e51]: Spain
+          - paragraph [ref=e52]: "UEFA ID: ATH"
+        - generic [ref=e53]:
+          - heading "Manchester City" [level=4] [ref=e54]
+          - paragraph [ref=e55]: England
+          - paragraph [ref=e56]: "UEFA ID: MCI"
+        - generic [ref=e57]:
+          - heading "Arsenal" [level=4] [ref=e58]
+          - paragraph [ref=e59]: England
+          - paragraph [ref=e60]: "UEFA ID: ARS"
+        - generic [ref=e61]:
+          - heading "Liverpool" [level=4] [ref=e62]
+          - paragraph [ref=e63]: England
+          - paragraph [ref=e64]: "UEFA ID: LIV"
+        - generic [ref=e65]:
+          - heading "Aston Villa" [level=4] [ref=e66]
+          - paragraph [ref=e67]: England
+          - paragraph [ref=e68]: "UEFA ID: AVL"
+        - generic [ref=e69]:
+          - heading "Bayer Leverkusen" [level=4] [ref=e70]
+          - paragraph [ref=e71]: Germany
+          - paragraph [ref=e72]: "UEFA ID: B04"
+        - generic [ref=e73]:
+          - heading "Bayern Munich" [level=4] [ref=e74]
+          - paragraph [ref=e75]: Germany
+          - paragraph [ref=e76]: "UEFA ID: FCB"
+        - generic [ref=e77]:
+          - heading "VfB Stuttgart" [level=4] [ref=e78]
+          - paragraph [ref=e79]: Germany
+          - paragraph [ref=e80]: "UEFA ID: VFB"
+        - generic [ref=e81]:
+          - heading "RB Leipzig" [level=4] [ref=e82]
+          - paragraph [ref=e83]: Germany
+          - paragraph [ref=e84]: "UEFA ID: RBL"
+        - generic [ref=e85]:
+          - heading "Inter Milan" [level=4] [ref=e86]
+          - paragraph [ref=e87]: Italy
+          - paragraph [ref=e88]: "UEFA ID: INT"
+        - generic [ref=e89]:
+          - heading "AC Milan" [level=4] [ref=e90]
+          - paragraph [ref=e91]: Italy
+          - paragraph [ref=e92]: "UEFA ID: ACM"
+        - generic [ref=e93]:
+          - heading "Juventus" [level=4] [ref=e94]
+          - paragraph [ref=e95]: Italy
+          - paragraph [ref=e96]: "UEFA ID: JUV"
+        - generic [ref=e97]:
+          - heading "Atalanta" [level=4] [ref=e98]
+          - paragraph [ref=e99]: Italy
+          - paragraph [ref=e100]: "UEFA ID: ATA"
+        - generic [ref=e101]:
+          - heading "Paris Saint-Germain" [level=4] [ref=e102]
+          - paragraph [ref=e103]: France
+          - paragraph [ref=e104]: "UEFA ID: PSG"
+        - generic [ref=e105]:
+          - heading "AS Monaco" [level=4] [ref=e106]
+          - paragraph [ref=e107]: France
+          - paragraph [ref=e108]: "UEFA ID: ASM"
+        - generic [ref=e109]:
+          - heading "Brest" [level=4] [ref=e110]
+          - paragraph [ref=e111]: France
+          - paragraph [ref=e112]: "UEFA ID: SB29"
+        - generic [ref=e113]:
+          - heading "Sporting CP" [level=4] [ref=e114]
+          - paragraph [ref=e115]: Portugal
+          - paragraph [ref=e116]: "UEFA ID: SCP"
+        - generic [ref=e117]:
+          - heading "Benfica" [level=4] [ref=e118]
+          - paragraph [ref=e119]: Portugal
+          - paragraph [ref=e120]: "UEFA ID: SLB"
+        - generic [ref=e121]:
+          - heading "FC Porto" [level=4] [ref=e122]
+          - paragraph [ref=e123]: Portugal
+          - paragraph [ref=e124]: "UEFA ID: FCP"
+        - generic [ref=e125]:
+          - heading "PSV Eindhoven" [level=4] [ref=e126]
+          - paragraph [ref=e127]: Netherlands
+          - paragraph [ref=e128]: "UEFA ID: PSV"
+        - generic [ref=e129]:
+          - heading "Feyenoord" [level=4] [ref=e130]
+          - paragraph [ref=e131]: Netherlands
+          - paragraph [ref=e132]: "UEFA ID: FEY"
+        - generic [ref=e133]:
+          - heading "Club Brugge" [level=4] [ref=e134]
+          - paragraph [ref=e135]: Belgium
+          - paragraph [ref=e136]: "UEFA ID: CLB"
+        - generic [ref=e137]:
+          - heading "Union Saint-Gilloise" [level=4] [ref=e138]
+          - paragraph [ref=e139]: Belgium
+          - paragraph [ref=e140]: "UEFA ID: USG"
+        - generic [ref=e141]:
+          - heading "Celtic" [level=4] [ref=e142]
+          - paragraph [ref=e143]: Scotland
+          - paragraph [ref=e144]: "UEFA ID: CEL"
+        - generic [ref=e145]:
+          - heading "Rangers" [level=4] [ref=e146]
+          - paragraph [ref=e147]: Scotland
+          - paragraph [ref=e148]: "UEFA ID: RAN"
+        - generic [ref=e149]:
+          - heading "Sturm Graz" [level=4] [ref=e150]
+          - paragraph [ref=e151]: Austria
+          - paragraph [ref=e152]: "UEFA ID: STU"
+        - generic [ref=e153]:
+          - heading "Sparta Prague" [level=4] [ref=e154]
+          - paragraph [ref=e155]: Czech Republic
+          - paragraph [ref=e156]: "UEFA ID: SPP"
+        - generic [ref=e157]:
+          - heading "Dinamo Zagreb" [level=4] [ref=e158]
+          - paragraph [ref=e159]: Croatia
+          - paragraph [ref=e160]: "UEFA ID: DZG"
+        - generic [ref=e161]:
+          - heading "Young Boys" [level=4] [ref=e162]
+          - paragraph [ref=e163]: Switzerland
+          - paragraph [ref=e164]: "UEFA ID: YB"
+        - generic [ref=e165]:
+          - heading "Red Star Belgrade" [level=4] [ref=e166]
+          - paragraph [ref=e167]: Serbia
+          - paragraph [ref=e168]: "UEFA ID: RSB"
+        - generic [ref=e169]:
+          - heading "Shakhtar Donetsk" [level=4] [ref=e170]
+          - paragraph [ref=e171]: Ukraine
+          - paragraph [ref=e172]: "UEFA ID: SHA"
+        - generic [ref=e173]:
+          - heading "FC Copenhagen" [level=4] [ref=e174]
+          - paragraph [ref=e175]: Denmark
+          - paragraph [ref=e176]: "UEFA ID: FCK"
+        - generic [ref=e177]:
+          - heading "Jagiellonia Białystok" [level=4] [ref=e178]
+          - paragraph [ref=e179]: Poland
+          - paragraph [ref=e180]: "UEFA ID: JAG"
+    - generic [ref=e181]:
+      - generic [ref=e182]:
+        - heading "League Settings" [level=3] [ref=e183]
+        - generic [ref=e184]:
+          - generic [ref=e185]:
+            - generic [ref=e186]: "Budget per Manager:"
+            - generic [ref=e187]: £500m
+          - generic [ref=e188]:
+            - generic [ref=e189]: "Min Managers:"
+            - generic [ref=e190]: "2"
+          - generic [ref=e191]:
+            - generic [ref=e192]: "Max Managers:"
+            - generic [ref=e193]: "8"
+          - generic [ref=e194]:
+            - generic [ref=e195]: "Club Slots:"
+            - generic [ref=e196]: "3"
+      - generic [ref=e197]:
+        - heading "Auction Info" [level=3] [ref=e198]
+        - generic [ref=e199]:
+          - generic [ref=e200]:
+            - generic [ref=e201]: "Bid Timer:"
+            - generic [ref=e202]: 60 seconds
+          - generic [ref=e203]:
+            - generic [ref=e204]: "Anti-Snipe:"
+            - generic [ref=e205]: 30 seconds
+          - generic [ref=e206]: "* Timer extends by 30 seconds if bid placed in last 30 seconds"
+    - generic [ref=e207]:
+      - generic [ref=e208]:
+        - generic [ref=e209]:
+          - heading "Manage Clubs" [level=3] [ref=e210]
+          - paragraph [ref=e211]: Choose which clubs will be available in your auction
+        - button "Select Clubs" [ref=e212] [cursor=pointer]
+      - generic [ref=e214]: All available clubs will be included in the auction
+    - generic [ref=e215]:
+      - heading "How It Works" [level=3] [ref=e216]
+      - list [ref=e217]:
+        - listitem [ref=e218]:
+          - generic [ref=e219]: •
+          - text: The commissioner starts the auction and selects clubs to bid on
+        - listitem [ref=e220]:
+          - generic [ref=e221]: •
+          - text: Each club is auctioned for 60 seconds
+        - listitem [ref=e222]:
+          - generic [ref=e223]: •
+          - text: If a bid is placed in the last 30 seconds, the timer extends by 30 seconds
+        - listitem [ref=e224]:
+          - generic [ref=e225]: •
+          - text: The highest bidder wins the club when the timer expires
+        - listitem [ref=e226]:
+          - generic [ref=e227]: •
+          - text: Each manager can bid up to their budget across multiple clubs
+    - generic [ref=e228]:
+      - paragraph [ref=e229]: 🎯 You are the commissioner of this league
+      - paragraph [ref=e230]: You can start the auction when ready
+  - link "Made with Emergent" [ref=e231] [cursor=pointer]:
+    - /url: https://app.emergent.sh/?utm_source=emergent-badge
+    - generic [ref=e232] [cursor=pointer]:
+      - img [ref=e233] [cursor=pointer]
+      - paragraph [ref=e234] [cursor=pointer]: Made with Emergent
+```
