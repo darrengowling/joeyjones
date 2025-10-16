@@ -629,7 +629,7 @@ export default function AuctionRoom() {
                       <div className="flex items-center justify-between">
                         <div>
                           <div className="subtle text-sm text-gray-600">💰 Current Bid</div>
-                          <div className="text-3xl font-bold text-green-600">£{currentBid.toLocaleString()}</div>
+                          <div className="text-3xl font-bold text-green-600">{formatCurrency(currentBid)}</div>
                         </div>
                         <div className="text-right">
                           <div className="flex items-center space-x-2">
