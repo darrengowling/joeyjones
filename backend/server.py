@@ -2347,11 +2347,15 @@ async def leave_auction(sid, data):
         logger.info(f"Client {sid} left auction:{auction_id}")
 
 @sio.event
-async def join_league_room(sid, data):
+async def join_league(sid, data):
+    """Join a league room - used by Lobby/LeagueDetail pages"""
     league_id = data.get('leagueId')
-    if league_id:
-        sio.enter_room(sid, f"league:{league_id}")
-        logger.info(f"🔵 Socket {sid} joined league room: league:{league_id}")
+    if not league_id:
+        return
+    
+    room_name = f"league:{league_id}"
+    sio.enter_room(sid, room_name)
+    logger.info(f"🟦 Socket {sid} joined league room: {room_name}")
         
         # Get all sockets currently in this room
         room_sockets = sio.manager.rooms.get(f"league:{league_id}", set())
