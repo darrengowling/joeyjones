@@ -1027,7 +1027,7 @@ From E2E tests:
    - Effort: 4 hours
    - Owner: QA team
 
-3. **Security Audit**
+2. **Security Audit**
    - Priority: High
    - Effort: 1 day
    - Owner: Security team
