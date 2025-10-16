@@ -2349,7 +2349,7 @@ async def join_auction(sid, data):
 async def leave_auction(sid, data):
     auction_id = data.get('auctionId')
     if auction_id:
-        sio.leave_room(sid, f"auction:{auction_id}")
+        await sio.leave_room(sid, f"auction:{auction_id}")
         logger.info(f"Client {sid} left auction:{auction_id}")
 
 @sio.event
