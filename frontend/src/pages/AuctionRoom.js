@@ -79,7 +79,7 @@ export default function AuctionRoom() {
       if (data.participants) {
         setParticipants(data.participants);
       }
-      // Update current bid info (Prompt B: Bid visibility for all)
+      // Update current bid info - initialize from sync_state
       if (data.currentBid !== undefined) {
         setCurrentBid(data.currentBid);
       }
@@ -93,6 +93,10 @@ export default function AuctionRoom() {
       if (data.auction && data.auction.currentLotId) {
         setCurrentLotId(data.auction.currentLotId);
       }
+      
+      // Mark sync as received - enables bid UI
+      setSyncReceived(true);
+      console.log("✅ Sync state received - bid UI enabled");
     };
 
     const handleBidPlaced = (data) => {
