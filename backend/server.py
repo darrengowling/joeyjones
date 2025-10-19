@@ -1970,13 +1970,17 @@ async def start_next_lot(auction_id: str, next_club_id: str):
 
 async def check_auction_completion(auction_id: str):
     """Check if auction is complete and handle completion"""
+    logger.info(f"🔍 check_auction_completion CALLED for {auction_id}")
+    
     auction = await db.auctions.find_one({"id": auction_id})
     if not auction:
+        logger.warning(f"❌ check_auction_completion: Auction {auction_id} not found")
         return
     
     # Get league info for roster limits
     league = await db.leagues.find_one({"id": auction["leagueId"]})
     if not league:
+        logger.warning(f"❌ check_auction_completion: League not found for auction {auction_id}")
         return
     
     unsold_clubs = auction.get("unsoldClubs", [])
@@ -1985,6 +1989,8 @@ async def check_auction_completion(auction_id: str):
     participants = await db.league_participants.find({"leagueId": auction["leagueId"]}).to_list(100)
     minimum_budget = auction.get("minimumBudget", 1000000.0)
     max_slots = league.get("clubSlots", 3)
+    
+    logger.info(f"  Current state: lot {current_lot}/{len(club_queue)}, {len(participants)} participants, max_slots={max_slots}")
     
     # Check if all managers have reached their roster limit (Prompt C: Auto-end when slots filled)
     all_managers_full = True
