@@ -145,6 +145,24 @@ class LeagueCreate(BaseModel):
         """Apply validation and cleaning to assetsSelected"""
         return validate_assets_selected(v)
 
+# Prompt 1: League update model for PATCH/PUT operations
+class LeagueUpdate(BaseModel):
+    """Model for updating league settings (commissioner only)"""
+    name: Optional[str] = None
+    budget: Optional[float] = None
+    minManagers: Optional[int] = None
+    maxManagers: Optional[int] = None
+    clubSlots: Optional[int] = None
+    timerSeconds: Optional[int] = None
+    antiSnipeSeconds: Optional[int] = None
+    assetsSelected: Optional[List[str]] = None  # Update selected assets
+    
+    @field_validator('assetsSelected')
+    @classmethod
+    def validate_assets(cls, v):
+        """Apply validation and cleaning to assetsSelected"""
+        return validate_assets_selected(v)
+
 # League Participant Models
 class LeagueParticipant(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
