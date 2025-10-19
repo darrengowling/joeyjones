@@ -1348,10 +1348,10 @@ async def start_auction(league_id: str):
             all_assets = await db.assets.find({"sportKey": sport_key}).to_list(100)
         
         logger.info("auction.seed_queue", extra={
+            "leagueId": league_id,
             "mode": "all",
             "selected_count": len(all_assets),
-            "leagueId": league_id,
-            "sport": sport_key,
+            "sportKey": sport_key,
             "feature_enabled": FEATURE_ASSET_SELECTION
         })
     
