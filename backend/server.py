@@ -339,6 +339,15 @@ async def create_league(input: LeagueCreate):
     # Metrics: Track league creation
     metrics.increment_league_created(input.sportKey)
     
+    # Prompt 2: Log asset selection persistence
+    assets_selected = league_obj.assetsSelected or []
+    logger.info("league.assets_selection.persisted", extra={
+        "leagueId": league_obj.id,
+        "count": len(assets_selected),
+        "sportKey": league_obj.sportKey,
+        "mode": "selected" if assets_selected else "all"
+    })
+    
     return league_obj
 
 @api_router.get("/leagues", response_model=List[League])
