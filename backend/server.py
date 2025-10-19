@@ -626,9 +626,43 @@ async def get_league_summary(league_id: str, userId: str):
     # Get commissioner details
     commissioner = await db.users.find_one({"id": league["commissionerId"]})
     
-    # Get user's roster
+    # Get user's roster with enriched details (name and price)
     participant = await db.league_participants.find_one({"leagueId": league_id, "userId": userId})
-    user_roster = participant.get("clubsWon", []) if participant else []
+    asset_ids = participant.get("clubsWon", []) if participant else []
+    
+    # Enrich roster with asset names and prices
+    user_roster = []
+    auction = await db.auctions.find_one({"leagueId": league_id})
+    
+    for asset_id in asset_ids:
+        # Get the winning bid for this asset
+        winning_bid = await db.bids.find_one({
+            "auctionId": auction["id"] if auction else None,
+            "clubId": asset_id,
+            "userId": userId
+        }, sort=[("amount", -1)])
+        
+        # Get asset details
+        sport_key = league.get("sportKey", "football")
+        if sport_key == "football":
+            asset = await db.clubs.find_one({"id": asset_id})
+        else:
+            asset = await db.assets.find_one({"id": asset_id, "sportKey": sport_key})
+        
+        if asset:
+            user_roster.append({
+                "id": asset_id,
+                "name": asset.get("clubName") or asset.get("name", "Unknown Team"),
+                "price": winning_bid["amount"] if winning_bid else 0
+            })
+        else:
+            # Fallback if asset not found
+            user_roster.append({
+                "id": asset_id,
+                "name": "Team",
+                "price": winning_bid["amount"] if winning_bid else 0
+            })
+    
     user_budget_remaining = participant.get("budgetRemaining", 0) if participant else 0
     
     # Get all managers
@@ -636,7 +670,6 @@ async def get_league_summary(league_id: str, userId: str):
     managers = [{"id": p["userId"], "name": p["userName"]} for p in participants]
     
     # Determine status
-    auction = await db.auctions.find_one({"leagueId": league_id})
     if not auction:
         status = "pre_auction"
     elif auction["status"] == "active":
@@ -653,7 +686,7 @@ async def get_league_summary(league_id: str, userId: str):
             "id": league["commissionerId"],
             "name": commissioner["name"] if commissioner else "Unknown"
         },
-        "yourRoster": user_roster,
+        "yourRoster": user_roster,  # Now enriched with name and price
         "yourBudgetRemaining": user_budget_remaining,
         "managers": managers,
         "totalBudget": league["budget"],
