@@ -157,6 +157,33 @@ export default function AuctionRoom() {
     // Handle auction_complete event
     const onAuctionComplete = (data) => {
       console.log("Auction complete:", data);
+      
+      // Update participants with final state
+      if (data.participants) {
+        setParticipants(data.participants);
+      }
+      
+      // If final club info provided, ensure it's marked as sold
+      if (data.finalClubId && data.finalWinningBid) {
+        setClubs(prevClubs => 
+          prevClubs.map(club => 
+            club.id === data.finalClubId 
+              ? { ...club, status: 'sold', winner: data.finalWinningBid.userName, winningBid: data.finalWinningBid.amount }
+              : club
+          )
+        );
+        
+        // Clear current bid if it's the final club
+        if (currentClub?.id === data.finalClubId) {
+          setCurrentBid(null);
+          setCurrentBidder(null);
+        }
+      }
+      
+      // Reload auction to get final state
+      loadAuction();
+      loadClubs();
+      
       alert(data.message || "Auction complete! All clubs have been auctioned.");
     };
 
