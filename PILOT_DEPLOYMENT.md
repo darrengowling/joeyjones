@@ -29,14 +29,14 @@ This pilot deployment configuration removes Redis dependency, disables rate limi
 ```bash
 MONGO_URL="mongodb://localhost:27017"
 DB_NAME="test_database"
-CORS_ORIGINS="https://bid-socket-system.preview.emergentagent.com"
+CORS_ORIGINS="https://multisport-bid.preview.emergentagent.com"
 SPORTS_CRICKET_ENABLED=true
 # Pilot deployment configuration (no Redis, single replica)
 REDIS_URL=
 ENABLE_RATE_LIMITING=false
 ENABLE_METRICS=true
 JWT_SECRET=dev-secret-change-in-production
-FRONTEND_ORIGIN="https://bid-socket-system.preview.emergentagent.com"
+FRONTEND_ORIGIN="https://multisport-bid.preview.emergentagent.com"
 FEATURE_MY_COMPETITIONS=true
 ENV="production"
 ```
@@ -130,7 +130,7 @@ app.add_middleware(
 )
 ```
 
-**Result:** CORS restricted to `https://bid-socket-system.preview.emergentagent.com`.
+**Result:** CORS restricted to `https://multisport-bid.preview.emergentagent.com`.
 
 ---
 
@@ -306,7 +306,7 @@ Pass Criteria:
 
 **8. Metrics Verification**
 ```
-1. Open: https://bid-socket-system.preview.emergentagent.com/api/metrics
+1. Open: https://multisport-bid.preview.emergentagent.com/api/metrics
 2. Search for metrics:
    - bids_placed_total (should be > 0)
    - participants_joined_total (should be > 0)

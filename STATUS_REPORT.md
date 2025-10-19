@@ -699,7 +699,7 @@ app.add_middleware(
 ```
 
 **Configuration:**
-- **Allowed Origins:** `https://bid-socket-system.preview.emergentagent.com`
+- **Allowed Origins:** `https://multisport-bid.preview.emergentagent.com`
 - **Allowed Methods:** GET, POST, PUT, DELETE, OPTIONS (no wildcards)
 - **Allowed Headers:** Authorization, Content-Type, Accept (no wildcards)
 - **Credentials:** Enabled

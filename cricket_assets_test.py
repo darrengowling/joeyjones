@@ -23,7 +23,7 @@ backend_dir = Path(__file__).parent / "backend"
 load_dotenv(backend_dir / '.env')
 
 # Configuration
-BACKEND_URL = "https://bid-socket-system.preview.emergentagent.com/api"
+BACKEND_URL = "https://multisport-bid.preview.emergentagent.com/api"
 MONGO_URL = os.environ.get('MONGO_URL', 'mongodb://localhost:27017')
 DB_NAME = os.environ.get('DB_NAME', 'test_database')
 
