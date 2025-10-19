@@ -333,6 +333,18 @@ async def seed_clubs():
 # ===== LEAGUE ENDPOINTS =====
 @api_router.post("/leagues", response_model=League, dependencies=[get_rate_limiter(times=5, seconds=300)])
 async def create_league(input: LeagueCreate):
+    # Prompt 4: Validate assets selection size
+    from models import validate_assets_selection_size
+    try:
+        validate_assets_selection_size(
+            input.assetsSelected,
+            input.clubSlots,
+            input.minManagers,
+            logger
+        )
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    
     league_obj = League(**input.model_dump())
     await db.leagues.insert_one(league_obj.model_dump())
     
