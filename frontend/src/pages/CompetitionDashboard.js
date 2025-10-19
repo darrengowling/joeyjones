@@ -333,17 +333,24 @@ export default function CompetitionDashboard() {
         <div className="bg-white rounded-lg shadow p-6" data-testid="summary-roster">
           <h3 className="text-lg font-bold text-gray-900 mb-3">Your Roster</h3>
           {summary.yourRoster && summary.yourRoster.length > 0 ? (
-            <div className="flex flex-wrap gap-2">
-              {summary.yourRoster.map((assetId, idx) => (
-                <span
+            <div className="space-y-2">
+              {summary.yourRoster.map((asset, idx) => (
+                <div
                   key={idx}
-                  className="px-4 py-2 bg-blue-50 text-blue-700 rounded-full text-sm border border-blue-200 flex items-center gap-2"
+                  className="flex items-center justify-between p-2 bg-blue-50 rounded-lg border border-blue-200"
                 >
-                  <span className="w-6 h-6 bg-blue-200 rounded-full flex items-center justify-center text-xs font-bold">
-                    {idx + 1}
+                  <div className="flex items-center gap-2">
+                    <span className="w-6 h-6 bg-blue-200 rounded-full flex items-center justify-center text-xs font-bold">
+                      {idx + 1}
+                    </span>
+                    <span className="text-sm font-semibold text-blue-900">
+                      {asset.name || `Team ${idx + 1}`}
+                    </span>
+                  </div>
+                  <span className="text-sm text-blue-700 font-bold">
+                    {formatCurrency(asset.price)}
                   </span>
-                  Team {idx + 1}
-                </span>
+                </div>
               ))}
             </div>
           ) : (
