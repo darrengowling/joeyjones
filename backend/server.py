@@ -1527,8 +1527,9 @@ async def get_auction_clubs(auction_id: str):
             status = "unsold"
         
         # Add club with status
+        club_data = Club(**club).model_dump() if sport_key == "football" else club
         clubs_with_status.append({
-            **Club(**club).model_dump() if sport_key == "football" else club,
+            **club_data,
             "status": status,
             "lotNumber": lot_number,
             "winner": winner,
