@@ -1847,27 +1847,32 @@ async def complete_lot(auction_id: str):
         **sold_data
     })
     
-    # Determine next club to offer
+    # ALWAYS evaluate completion first (before considering next lot)
+    await check_auction_completion(auction_id)
+    
+    # Re-read auction status idempotently (single source of truth)
+    auction = await db.auctions.find_one({"id": auction_id})
+    if not auction or auction.get("status") != "active":
+        # Auction already completed by check_auction_completion
+        logger.info(f"auction.completion_halted", extra={
+            "auction_id": auction_id,
+            "status": auction.get("status") if auction else "not_found"
+        })
+        return  # Do NOT start another lot
+    
+    # Only now consider starting the next lot
     next_club_id = await get_next_club_to_auction(auction_id)
     
-    # DIAGNOSTIC: Check completion status before proceeding to next lot
-    auction = await db.auctions.find_one({"id": auction_id})
-    if auction:
-        league = await db.leagues.find_one({"id": auction["leagueId"]})
-        participants = await db.league_participants.find({"leagueId": auction["leagueId"]}).to_list(100)
-        auction_state = {
-            "lots_sold": sum(1 for p in participants for c in p.get("clubsWon", [])),
-            "current_lot": auction.get("currentLot", 0),
-            "total_lots": len(auction.get("clubQueue", [])),
-            "unsold_count": len(auction.get("unsoldClubs", []))
-        }
-        status = compute_auction_status(league, participants, auction_state)
-        logger.info(f"🔍 AUCTION_STATUS after lot complete: {json.dumps(status)}")
+    logger.info(f"auction.next_lot_decision", extra={
+        "auction_id": auction_id,
+        "will_start_next": bool(next_club_id and auction.get('status') == 'active'),
+        "next_club_id": next_club_id if next_club_id else None
+    })
     
     if next_club_id:
         await start_next_lot(auction_id, next_club_id)
     else:
-        # Check if auction is complete
+        # Also call completion here to handle "no more clubs" end case
         await check_auction_completion(auction_id)
 
 
