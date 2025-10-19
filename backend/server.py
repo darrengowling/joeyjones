@@ -2179,6 +2179,8 @@ async def check_auction_completion(auction_id: str, final_club_id: str = None, f
             'reason': completion_reason,
             'clubsSold': total_clubs_sold,
             'clubsUnsold': total_unsold,
+            'finalClubId': final_club_id,  # Include final club sold
+            'finalWinningBid': Bid(**final_winning_bid).model_dump(mode='json') if final_winning_bid else None,
             'participants': [LeagueParticipant(**p).model_dump(mode='json') for p in participants]
         })
         
