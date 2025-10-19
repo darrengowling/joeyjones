@@ -49,6 +49,27 @@ export default function CreateLeague() {
     fetchSports();
   }, []);
 
+  useEffect(() => {
+    // Fetch available assets when sport changes (if feature enabled)
+    if (FEATURE_ASSET_SELECTION) {
+      const fetchAssets = async () => {
+        try {
+          if (form.sportKey === "football") {
+            const response = await axios.get(`${API}/clubs`);
+            setAvailableAssets(response.data);
+          } else {
+            const response = await axios.get(`${API}/assets?sport=${form.sportKey}`);
+            setAvailableAssets(response.data);
+          }
+        } catch (error) {
+          console.error("Error fetching assets:", error);
+        }
+      };
+      
+      fetchAssets();
+    }
+  }, [form.sportKey]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!user) {
