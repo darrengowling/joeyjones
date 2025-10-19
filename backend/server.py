@@ -1838,6 +1838,20 @@ async def complete_lot(auction_id: str):
     # Determine next club to offer
     next_club_id = await get_next_club_to_auction(auction_id)
     
+    # DIAGNOSTIC: Check completion status before proceeding to next lot
+    auction = await db.auctions.find_one({"id": auction_id})
+    if auction:
+        league = await db.leagues.find_one({"id": auction["leagueId"]})
+        participants = await db.league_participants.find({"leagueId": auction["leagueId"]}).to_list(100)
+        auction_state = {
+            "lots_sold": sum(1 for p in participants for c in p.get("clubsWon", [])),
+            "current_lot": auction.get("currentLot", 0),
+            "total_lots": len(auction.get("clubQueue", [])),
+            "unsold_count": len(auction.get("unsoldClubs", []))
+        }
+        status = compute_auction_status(league, participants, auction_state)
+        logger.info(f"🔍 AUCTION_STATUS after lot complete: {json.dumps(status)}")
+    
     if next_club_id:
         await start_next_lot(auction_id, next_club_id)
     else:
