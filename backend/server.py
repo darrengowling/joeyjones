@@ -2174,7 +2174,7 @@ async def check_auction_completion(auction_id: str, final_club_id: str = None, f
         elif not clubs_remaining:
             completion_reason = "All available teams have been sold"
         
-        await sio.emit('auction_completed', {
+        await sio.emit('auction_complete', {
             'message': f'Auction completed! {total_clubs_sold} teams sold, {total_unsold} unsold.',
             'reason': completion_reason,
             'clubsSold': total_clubs_sold,
