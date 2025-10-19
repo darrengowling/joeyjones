@@ -1537,18 +1537,15 @@ async def get_auction_clubs(auction_id: str):
         
         if club_id == current_club_id:
             status = "current"
-        elif club_id in bids_by_club:
-            # Club has bids - check if it's been completed
-            if current_lot > lot_number if lot_number else False:
-                winning_bid_data = bids_by_club[club_id]
-                winner = winning_bid_data.get("userName", "Unknown")
-                winning_bid = winning_bid_data.get("amount", 0)
-                status = "sold"
         elif club_id in unsold_clubs:
             status = "unsold"
-        elif lot_number and current_lot > lot_number:
-            # Lot has passed but no bids
-            status = "unsold"
+        elif club_id in bids_by_club:
+            # Club has bids and lot has passed
+            winning_bid_data = bids_by_club[club_id]
+            winner = winning_bid_data.get("userName", "Unknown")
+            winning_bid = winning_bid_data.get("amount", 0)
+            status = "sold"
+        # If none of above, status remains "upcoming"
         
         # Add club with status
         club_data = Club(**club).model_dump() if sport_key == "football" else club
