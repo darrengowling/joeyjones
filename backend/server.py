@@ -1298,13 +1298,33 @@ async def start_auction(league_id: str):
         if len(all_assets) == 0:
             raise HTTPException(status_code=400, detail="No valid selected teams found. Please select teams in league settings before starting auction.")
     else:
-        # Use all available assets for this sport (default behavior)
+        # Smart default: Calculate appropriate number of teams based on roster requirements
+        # Formula: (maxManagers × clubSlots) + buffer for variety and unsold teams
+        max_managers = league.get("maxManagers", 8)
+        club_slots = league.get("clubSlots", 3)
+        buffer = 3  # Extra teams for variety and unsold/reoffer scenarios
+        teams_needed = (max_managers * club_slots) + buffer
+        
+        logger.info(f"Smart default: Calculating teams needed for league {league_id}")
+        logger.info(f"  Max managers: {max_managers}, Club slots: {club_slots}, Buffer: {buffer}")
+        logger.info(f"  Teams needed: {teams_needed} (instead of all available)")
+        
+        # Fetch all available assets for this sport
         if sport_key == "football":
             all_assets = await db.clubs.find().to_list(100)
         else:
             all_assets = await db.assets.find({"sportKey": sport_key}).to_list(100)
+        
+        # Randomly select only the needed subset
+        random.shuffle(all_assets)
+        all_assets = all_assets[:teams_needed]
+        
+        logger.info(f"  Selected {len(all_assets)} teams from available pool")
     
-    random.shuffle(all_assets)
+    # Note: If assetsSelected was provided, all_assets is already the commissioner's selection
+    # and doesn't need further shuffling
+    if not assets_selected:
+        random.shuffle(all_assets)  # Re-shuffle the selected subset for randomness
     
     # Auto-start first asset
     if all_assets:
