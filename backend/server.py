@@ -1945,7 +1945,12 @@ async def complete_lot(auction_id: str):
     })
     
     # ALWAYS evaluate completion first (before considering next lot)
-    await check_auction_completion(auction_id)
+    # Pass final club info to ensure frontend gets complete state
+    await check_auction_completion(
+        auction_id, 
+        final_club_id=current_club_id,
+        final_winning_bid=winning_bid
+    )
     
     # Re-read auction status idempotently (single source of truth)
     auction = await db.auctions.find_one({"id": auction_id})
