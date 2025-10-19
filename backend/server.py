@@ -702,17 +702,19 @@ async def get_league_standings(league_id: str):
     if not FEATURE_MY_COMPETITIONS:
         raise HTTPException(status_code=404, detail="Feature not available")
     
+    # Get league
+    league = await db.leagues.find_one({"id": league_id})
+    if not league:
+        raise HTTPException(status_code=404, detail="League not found")
+    
+    # Always get current participants to ensure standings reflect all members
+    participants = await db.league_participants.find({"leagueId": league_id}).to_list(100)
+    
     # Check if standings exist
     standing = await db.standings.find_one({"leagueId": league_id})
     
     if not standing:
-        # Create zeroed standings
-        league = await db.leagues.find_one({"id": league_id})
-        if not league:
-            raise HTTPException(status_code=404, detail="League not found")
-        
-        participants = await db.league_participants.find({"leagueId": league_id}).to_list(100)
-        
+        # Create zeroed standings with ALL current participants
         table = []
         for participant in participants:
             table.append({
@@ -734,10 +736,42 @@ async def get_league_standings(league_id: str):
         
         await db.standings.insert_one(standing_obj.model_dump())
         
-        # Prompt 4: standings_updated event will be emitted here when scoring feeds update points
-        # await sio.emit('standings_updated', {'leagueId': league_id, 'at': datetime.now(timezone.utc).isoformat()}, room=f"league:{league_id}")
-        
         return standing_obj.model_dump(mode='json')
+    
+    # Standing exists - ensure it includes ALL current participants
+    existing_table = standing.get("table", [])
+    existing_user_ids = {entry["userId"] for entry in existing_table}
+    
+    # Find participants not in standings
+    missing_participants = [p for p in participants if p["userId"] not in existing_user_ids]
+    
+    if missing_participants:
+        # Add missing participants with 0 points
+        for participant in missing_participants:
+            existing_table.append({
+                "userId": participant["userId"],
+                "displayName": participant["userName"],
+                "points": 0.0,
+                "assetsOwned": participant.get("clubsWon", []),
+                "tiebreakers": {"goals": 0, "wins": 0, "runs": 0, "wickets": 0}
+            })
+        
+        # Update standings in database
+        await db.standings.update_one(
+            {"leagueId": league_id},
+            {"$set": {"table": existing_table}}
+        )
+        
+        standing["table"] = existing_table
+    
+    # Update assetsOwned for all participants to reflect current state
+    for entry in standing["table"]:
+        participant = next((p for p in participants if p["userId"] == entry["userId"]), None)
+        if participant:
+            entry["assetsOwned"] = participant.get("clubsWon", [])
+    
+    # Re-sort by points (descending), then by displayName
+    standing["table"].sort(key=lambda x: (-x["points"], x["displayName"]))
     
     return Standing(**standing).model_dump(mode='json')
 
