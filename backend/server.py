@@ -23,6 +23,7 @@ from fastapi_limiter.depends import RateLimiter
 import redis.asyncio as aioredis
 from socketio_init import sio
 import metrics
+from auction.completion import compute_auction_status
 
 from models import (
     User, UserCreate,
