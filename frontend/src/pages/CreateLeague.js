@@ -5,11 +5,16 @@ import { formatCurrency, parseCurrencyInput } from "../utils/currency";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
+const FEATURE_ASSET_SELECTION = process.env.REACT_APP_FEATURE_ASSET_SELECTION === 'true';
 
 export default function CreateLeague() {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [sports, setSports] = useState([]);
+  const [availableAssets, setAvailableAssets] = useState([]);
+  const [teamMode, setTeamMode] = useState("all"); // "all" or "select"
+  const [selectedAssets, setSelectedAssets] = useState([]);
+  const [assetSearchTerm, setAssetSearchTerm] = useState("");
   const [form, setForm] = useState({
     name: "",
     sportKey: "football", // Default to football
