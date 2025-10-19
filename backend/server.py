@@ -1285,12 +1285,15 @@ async def start_auction(league_id: str):
         {"$set": {"status": "active"}}
     )
     
-    # Prompt E: Get assets based on league selection or all available assets
+    # Get assets based on feature flag and league selection
     import random
-    assets_selected = league.get("assetsSelected")
+    assets_selected = league.get("assetsSelected", [])
+    seed_mode = "all"  # Default mode
     
-    if assets_selected:
-        # Use commissioner's selected assets
+    # Feature flag: Only use assetsSelected if FEATURE_ASSET_SELECTION is enabled
+    if FEATURE_ASSET_SELECTION and assets_selected and len(assets_selected) > 0:
+        # Use commissioner's selected assets (feature flag ON + assets selected)
+        seed_mode = "selected"
         if sport_key == "football":
             all_assets = await db.clubs.find({"id": {"$in": assets_selected}}).to_list(100)
         else:
@@ -1299,14 +1302,33 @@ async def start_auction(league_id: str):
                 "sportKey": sport_key
             }).to_list(100)
         
+        # Validation: Ensure selected assets are valid
         if len(all_assets) == 0:
-            raise HTTPException(status_code=400, detail="No valid selected teams found. Please select teams in league settings before starting auction.")
+            raise HTTPException(
+                status_code=400, 
+                detail="No valid selected teams found. Please select teams in league settings before starting auction."
+            )
+        
+        logger.info("auction.seed_queue", extra={
+            "mode": "selected",
+            "selected_count": len(all_assets),
+            "leagueId": league_id,
+            "sport": sport_key
+        })
     else:
-        # Use all available assets for this sport (default behavior)
+        # Use all available assets for this sport (default behavior or feature flag OFF)
         if sport_key == "football":
             all_assets = await db.clubs.find().to_list(100)
         else:
             all_assets = await db.assets.find({"sportKey": sport_key}).to_list(100)
+        
+        logger.info("auction.seed_queue", extra={
+            "mode": "all",
+            "selected_count": len(all_assets),
+            "leagueId": league_id,
+            "sport": sport_key,
+            "feature_enabled": FEATURE_ASSET_SELECTION
+        })
     
     random.shuffle(all_assets)
     
