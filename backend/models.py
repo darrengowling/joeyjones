@@ -72,7 +72,7 @@ def validate_assets_selection_size(assets_selected: Optional[List[str]],
                 "club_slots": club_slots,
                 "min_managers": min_managers,
                 "recommended_minimum": recommended_minimum,
-                "message": f"Selected {selected_count} teams may not be enough for {min_managers} managers with {club_slots} slots each (recommended: {recommended_minimum})"
+                "warning_detail": f"Selected {selected_count} teams may not be enough for {min_managers} managers with {club_slots} slots each (recommended: {recommended_minimum})"
             })
 
 # User Models
