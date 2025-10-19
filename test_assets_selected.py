@@ -5,6 +5,7 @@ Tests Prompt 1 acceptance criteria
 """
 import sys
 import asyncio
+sys.path.insert(0, '/app/backend')
 from motor.motor_asyncio import AsyncIOMotorClient
 from models import League, LeagueCreate, LeagueUpdate, validate_assets_selected
 
