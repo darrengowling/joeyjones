@@ -848,7 +848,7 @@ async def import_fixtures_csv(league_id: str, file: UploadFile = File(...), comm
 
 @api_router.put("/leagues/{league_id}/assets")
 async def update_league_assets(league_id: str, asset_ids: List[str]):
-    """Prompt E: Update selected assets for league (commissioner only)"""
+    """Prompt 1: Update selected assets for league (commissioner only)"""
     # Verify league exists
     league = await db.leagues.find_one({"id": league_id})
     if not league:
@@ -859,31 +859,39 @@ async def update_league_assets(league_id: str, asset_ids: List[str]):
     if existing_auction:
         raise HTTPException(status_code=400, detail="Cannot edit teams after auction has started")
     
+    # Validate and clean the asset IDs using helper
+    from models import validate_assets_selected
+    try:
+        cleaned_asset_ids = validate_assets_selected(asset_ids)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    
+    # If cleaned list is None or empty, reject (must select at least one)
+    if not cleaned_asset_ids:
+        raise HTTPException(status_code=400, detail="Must select at least one team for the auction")
+    
     # Validate that all asset IDs exist for this sport
     sport_key = league.get("sportKey", "football")
     if sport_key == "football":
         # Validate club IDs
-        valid_assets = await db.clubs.find({"id": {"$in": asset_ids}}).to_list(len(asset_ids))
+        valid_assets = await db.clubs.find({"id": {"$in": cleaned_asset_ids}}).to_list(len(cleaned_asset_ids))
     else:
         # Validate other sport assets
         valid_assets = await db.assets.find({
-            "id": {"$in": asset_ids},
+            "id": {"$in": cleaned_asset_ids},
             "sportKey": sport_key
-        }).to_list(len(asset_ids))
+        }).to_list(len(cleaned_asset_ids))
     
-    if len(valid_assets) != len(asset_ids):
-        raise HTTPException(status_code=400, detail="Some asset IDs are invalid")
-    
-    if len(asset_ids) == 0:
-        raise HTTPException(status_code=400, detail="Must select at least one team for the auction")
+    if len(valid_assets) != len(cleaned_asset_ids):
+        raise HTTPException(status_code=400, detail="Some asset IDs are invalid for this sport")
     
     # Update league with selected assets
     await db.leagues.update_one(
         {"id": league_id},
-        {"$set": {"assetsSelected": asset_ids}}
+        {"$set": {"assetsSelected": cleaned_asset_ids}}
     )
     
-    return {"message": f"Updated league with {len(asset_ids)} selected teams", "count": len(asset_ids)}
+    return {"message": f"Updated league with {len(cleaned_asset_ids)} selected teams", "count": len(cleaned_asset_ids)}
 
 @api_router.get("/leagues/{league_id}/available-assets")
 async def get_available_assets_for_league(league_id: str):
