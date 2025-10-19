@@ -1974,12 +1974,17 @@ async def start_next_lot(auction_id: str, next_club_id: str):
 
 
 async def check_auction_completion(auction_id: str):
-    """Check if auction is complete and handle completion"""
+    """Check if auction is complete and handle completion (idempotent)"""
     logger.info(f"🔍 check_auction_completion CALLED for {auction_id}")
     
     auction = await db.auctions.find_one({"id": auction_id})
     if not auction:
         logger.warning(f"❌ check_auction_completion: Auction {auction_id} not found")
+        return
+    
+    # Idempotent: If already completed, do nothing (return fast)
+    if auction.get("status") == "completed":
+        logger.info(f"✅ Auction {auction_id} already completed - returning")
         return
     
     # Get league info for roster limits
@@ -1995,9 +2000,8 @@ async def check_auction_completion(auction_id: str):
     minimum_budget = auction.get("minimumBudget", 1000000.0)
     max_slots = league.get("clubSlots", 3)
     
-    logger.info(f"  Current state: lot {current_lot}/{len(club_queue)}, {len(participants)} participants, max_slots={max_slots}")
-    
-    # Check if all managers have reached their roster limit (Prompt C: Auto-end when slots filled)
+    # Calculate remaining demand (sum of max(0, slots - clubsWon) per manager)
+    remaining_demand = 0
     all_managers_full = True
     eligible_bidders = []
     
@@ -2005,6 +2009,10 @@ async def check_auction_completion(auction_id: str):
         clubs_won = len(participant.get("clubsWon", []))
         has_budget = participant.get("budgetRemaining", 0) >= minimum_budget
         has_slots = clubs_won < max_slots
+        
+        # Calculate demand for this manager
+        demand = max(0, max_slots - clubs_won)
+        remaining_demand += demand
         
         if has_slots and has_budget:
             eligible_bidders.append(participant)
@@ -2016,23 +2024,31 @@ async def check_auction_completion(auction_id: str):
     # Auction should end if: no clubs remaining, no eligible bidders, or all managers are full
     should_complete = not clubs_remaining or not eligible_bidders or all_managers_full
     
-    # Log decision variables
-    logger.info(f"  Decision variables:")
-    logger.info(f"    all_managers_full: {all_managers_full}")
-    logger.info(f"    eligible_bidders: {len(eligible_bidders)}")
-    logger.info(f"    clubs_remaining: {clubs_remaining} (current_lot={current_lot}, queue_len={len(club_queue)}, unsold={len(unsold_clubs)})")
-    logger.info(f"    should_complete: {should_complete}")
-    
-    for p in participants:
-        clubs_won = len(p.get("clubsWon", []))
-        logger.info(f"    Manager {p.get('userId', 'unknown')[:8]}: {clubs_won}/{max_slots} slots, budget=£{p.get('budgetRemaining', 0):,.0f}")
+    # Structured logging
+    logger.info("auction.completion_check", extra={
+        "auction_id": auction_id,
+        "remaining_demand": remaining_demand,
+        "status": auction.get("status"),
+        "all_managers_full": all_managers_full,
+        "eligible_bidders": len(eligible_bidders),
+        "clubs_remaining": clubs_remaining,
+        "should_complete": should_complete
+    })
     
     if should_complete:
-        # Mark auction as complete
-        await db.auctions.update_one(
-            {"id": auction_id},
-            {"$set": {"status": "completed"}}
+        # Atomically set status to completed (only if currently active)
+        result = await db.auctions.update_one(
+            {"id": auction_id, "status": "active"},
+            {"$set": {
+                "status": "completed",
+                "completedAt": datetime.now(timezone.utc).isoformat()
+            }}
         )
+        
+        # Check if we actually updated (atomic guard against double-completion)
+        if result.modified_count == 0:
+            logger.info(f"⚠️ Auction {auction_id} was not updated (already completed or not active)")
+            return
         
         # Update league status
         await db.leagues.update_one(
