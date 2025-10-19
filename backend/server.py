@@ -2103,7 +2103,9 @@ async def check_auction_completion(auction_id: str):
                 await db.standings.insert_one(standing_obj.model_dump())
                 logger.info(f"Created initial standings for league {auction['leagueId']}")
         
-        logger.info(f"Auction {auction_id} completed - {total_clubs_sold} sold, {total_unsold} unsold. Reason: {completion_reason}")
+        logger.info(f"✅ AUCTION COMPLETED: {auction_id} - {total_clubs_sold} sold, {total_unsold} unsold. Reason: {completion_reason}")
+    else:
+        logger.info(f"❌ Auction NOT completing: should_complete={should_complete}")
 
 @api_router.post("/auction/{auction_id}/pause")
 async def pause_auction(auction_id: str, commissioner_id: str = None):
