@@ -243,6 +243,88 @@ export default function CreateLeague() {
               />
             </div>
 
+            {/* Team Selection (Feature Flag) */}
+            {FEATURE_ASSET_SELECTION && (
+              <div className="border-t pt-4">
+                <label className="block text-gray-700 mb-3 font-semibold">Team Selection</label>
+                
+                {/* Radio Group */}
+                <div className="space-y-2 mb-4">
+                  <label className="flex items-center space-x-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="teamMode"
+                      value="all"
+                      checked={teamMode === "all"}
+                      onChange={(e) => {
+                        setTeamMode(e.target.value);
+                        setSelectedAssets([]);
+                      }}
+                      className="w-4 h-4"
+                      data-testid="rules-team-mode-include-all"
+                    />
+                    <span>Include all teams</span>
+                  </label>
+                  
+                  <label className="flex items-center space-x-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="teamMode"
+                      value="select"
+                      checked={teamMode === "select"}
+                      onChange={(e) => setTeamMode(e.target.value)}
+                      className="w-4 h-4"
+                      data-testid="rules-team-mode-select"
+                    />
+                    <span>Select teams for auction</span>
+                  </label>
+                </div>
+
+                {/* Team Checklist (only visible when "select" mode) */}
+                {teamMode === "select" && (
+                  <div className="border rounded-lg p-4 bg-gray-50">
+                    <div className="mb-3">
+                      <input
+                        type="text"
+                        placeholder="Search teams..."
+                        className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        value={assetSearchTerm}
+                        onChange={(e) => setAssetSearchTerm(e.target.value)}
+                      />
+                    </div>
+                    
+                    <div className="max-h-64 overflow-y-auto space-y-2" data-testid="rules-team-checklist">
+                      {availableAssets
+                        .filter(asset => 
+                          asset.name.toLowerCase().includes(assetSearchTerm.toLowerCase())
+                        )
+                        .map(asset => (
+                          <label key={asset.id} className="flex items-center space-x-2 cursor-pointer hover:bg-gray-100 p-2 rounded">
+                            <input
+                              type="checkbox"
+                              checked={selectedAssets.includes(asset.id)}
+                              onChange={(e) => {
+                                if (e.target.checked) {
+                                  setSelectedAssets([...selectedAssets, asset.id]);
+                                } else {
+                                  setSelectedAssets(selectedAssets.filter(id => id !== asset.id));
+                                }
+                              }}
+                              className="w-4 h-4"
+                            />
+                            <span>{asset.name}</span>
+                          </label>
+                        ))}
+                    </div>
+                    
+                    <div className="mt-3 text-sm text-gray-600">
+                      Selected: {selectedAssets.length} / {availableAssets.length} teams
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
             <button
               type="submit"
               className="btn btn-primary w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 font-semibold text-lg"
