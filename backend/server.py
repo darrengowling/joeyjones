@@ -1710,6 +1710,18 @@ async def start_lot(auction_id: str, club_id: str):
     if not club:
         raise HTTPException(status_code=404, detail="Club not found")
     
+    # DIAGNOSTIC: Check completion status before starting next lot
+    league = await db.leagues.find_one({"id": auction["leagueId"]})
+    participants = await db.league_participants.find({"leagueId": auction["leagueId"]}).to_list(100)
+    auction_state = {
+        "lots_sold": sum(1 for p in participants for c in p.get("clubsWon", [])),
+        "current_lot": auction.get("currentLot", 0),
+        "total_lots": len(auction.get("clubQueue", [])),
+        "unsold_count": len(auction.get("unsoldClubs", []))
+    }
+    status = compute_auction_status(league, participants, auction_state)
+    logger.info(f"🔍 AUCTION_STATUS before starting lot: {json.dumps(status)}")
+    
     # Update auction with current lot
     new_lot_number = auction["currentLot"] + 1
     lot_id = f"{auction_id}-lot-{new_lot_number}"
