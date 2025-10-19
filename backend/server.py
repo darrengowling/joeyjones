@@ -2075,7 +2075,7 @@ async def start_next_lot(auction_id: str, next_club_id: str):
     asyncio.create_task(countdown_timer(auction_id, timer_end, next_lot_id))
 
 
-async def check_auction_completion(auction_id: str):
+async def check_auction_completion(auction_id: str, final_club_id: str = None, final_winning_bid: dict = None):
     """Check if auction is complete and handle completion (idempotent)"""
     logger.info(f"🔍 check_auction_completion CALLED for {auction_id}")
     
