@@ -1450,8 +1450,37 @@ async def get_auction_clubs(auction_id: str):
     if not auction:
         raise HTTPException(status_code=404, detail="Auction not found")
     
-    # Get all clubs
-    all_clubs = await db.clubs.find().to_list(100)
+    # Get club queue - these are the ONLY clubs in this auction
+    club_queue = auction.get("clubQueue", [])
+    unsold_clubs = auction.get("unsoldClubs", [])
+    current_club_id = auction.get("currentClubId")
+    current_lot = auction.get("currentLot", 0)
+    
+    # Prompt 3: Only get clubs that are in the auction queue
+    # This respects assetsSelected - if 9 clubs selected, only those 9 are in queue
+    if not club_queue:
+        return {
+            "clubs": [],
+            "summary": {
+                "totalClubs": 0,
+                "soldClubs": 0,
+                "unsoldClubs": 0,
+                "remainingClubs": 0
+            }
+        }
+    
+    # Get league to determine sport
+    league = await db.leagues.find_one({"id": auction["leagueId"]})
+    sport_key = league.get("sportKey", "football") if league else "football"
+    
+    # Fetch only clubs that are in the auction queue
+    if sport_key == "football":
+        auction_clubs = await db.clubs.find({"id": {"$in": club_queue}}).to_list(len(club_queue))
+    else:
+        auction_clubs = await db.assets.find({
+            "id": {"$in": club_queue},
+            "sportKey": sport_key
+        }).to_list(len(club_queue))
     
     # Get all bids to determine sold clubs
     all_bids = await db.bids.find({"auctionId": auction_id}).to_list(1000)
@@ -1463,15 +1492,9 @@ async def get_auction_clubs(auction_id: str):
         if club_id not in bids_by_club or bid["amount"] > bids_by_club[club_id]["amount"]:
             bids_by_club[club_id] = bid
     
-    # Build club status information
-    club_queue = auction.get("clubQueue", [])
-    unsold_clubs = auction.get("unsoldClubs", [])
-    current_club_id = auction.get("currentClubId")
-    current_lot = auction.get("currentLot", 0)
-    
     clubs_with_status = []
     
-    for club in all_clubs:
+    for club in auction_clubs:
         club.pop('_id', None)  # Remove MongoDB ID
         
         # Determine club status
@@ -1505,7 +1528,7 @@ async def get_auction_clubs(auction_id: str):
         
         # Add club with status
         clubs_with_status.append({
-            **Club(**club).model_dump(),
+            **Club(**club).model_dump() if sport_key == "football" else club,
             "status": status,
             "lotNumber": lot_number,
             "winner": winner,
@@ -1527,10 +1550,12 @@ async def get_auction_clubs(auction_id: str):
     
     return {
         "clubs": clubs_with_status,
-        "totalClubs": len(all_clubs),
-        "soldClubs": len([c for c in clubs_with_status if c["status"] == "sold"]),
-        "unsoldClubs": len([c for c in clubs_with_status if c["status"] == "unsold"]),
-        "remainingClubs": len([c for c in clubs_with_status if c["status"] in ["upcoming", "current"]])
+        "summary": {
+            "totalClubs": len(auction_clubs),  # Prompt 3: Only clubs in auction queue
+            "soldClubs": len([c for c in clubs_with_status if c["status"] == "sold"]),
+            "unsoldClubs": len([c for c in clubs_with_status if c["status"] == "unsold"]),
+            "remainingClubs": len([c for c in clubs_with_status if c["status"] in ["upcoming", "current"]])
+        }
     }
 
 @api_router.get("/auction/{auction_id}")
