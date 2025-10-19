@@ -136,6 +136,14 @@ class LeagueCreate(BaseModel):
     # Prompt D: Timer configuration in league creation
     timerSeconds: int = 30  # Default 30s
     antiSnipeSeconds: int = 10  # Default 10s
+    # Prompt 1: Team selection (Prompt E enhancement)
+    assetsSelected: Optional[List[str]] = None  # If null/empty, use all assets for sport
+    
+    @field_validator('assetsSelected')
+    @classmethod
+    def validate_assets(cls, v):
+        """Apply validation and cleaning to assetsSelected"""
+        return validate_assets_selected(v)
 
 # League Participant Models
 class LeagueParticipant(BaseModel):
