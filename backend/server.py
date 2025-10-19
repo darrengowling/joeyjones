@@ -1335,10 +1335,10 @@ async def start_auction(league_id: str):
             )
         
         logger.info("auction.seed_queue", extra={
+            "leagueId": league_id,
             "mode": "selected",
             "selected_count": len(all_assets),
-            "leagueId": league_id,
-            "sport": sport_key
+            "sportKey": sport_key
         })
     else:
         # Use all available assets for this sport (default behavior or feature flag OFF)
