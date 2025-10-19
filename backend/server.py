@@ -89,6 +89,9 @@ logger.info(f"Cricket feature enabled: {SPORTS_CRICKET_ENABLED}")
 FEATURE_MY_COMPETITIONS = os.environ.get('FEATURE_MY_COMPETITIONS', 'true').lower() == 'true'
 logger.info(f"My Competitions feature enabled: {FEATURE_MY_COMPETITIONS}")
 
+FEATURE_ASSET_SELECTION = os.environ.get('FEATURE_ASSET_SELECTION', 'false').lower() == 'true'
+logger.info(f"Asset Selection feature enabled: {FEATURE_ASSET_SELECTION}")
+
 # Socket.IO server imported from socketio_init.py (with Redis scaling support)
 
 # Production hardening configuration
