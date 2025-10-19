@@ -77,11 +77,24 @@ export default function CreateLeague() {
       return;
     }
 
+    // Validation: If team mode is "select" and no teams selected
+    if (FEATURE_ASSET_SELECTION && teamMode === "select" && selectedAssets.length === 0) {
+      alert("Please select at least one team for the auction, or choose 'Include all teams'");
+      return;
+    }
+
     try {
-      const response = await axios.post(`${API}/leagues`, {
+      const leagueData = {
         ...form,
         commissionerId: user.id,
-      });
+      };
+      
+      // Only include assetsSelected if feature enabled and teams are selected
+      if (FEATURE_ASSET_SELECTION && teamMode === "select" && selectedAssets.length > 0) {
+        leagueData.assetsSelected = selectedAssets;
+      }
+      
+      const response = await axios.post(`${API}/leagues`, leagueData);
       alert("League created successfully!");
       navigate(`/league/${response.data.id}`);
     } catch (e) {
