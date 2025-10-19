@@ -37,6 +37,44 @@ def validate_assets_selected(assets: Optional[List[str]]) -> Optional[List[str]]
     # Return None if empty (treat as "include all")
     return cleaned if cleaned else None
 
+def validate_assets_selection_size(assets_selected: Optional[List[str]], 
+                                   club_slots: int, 
+                                   min_managers: int,
+                                   logger=None) -> None:
+    """
+    Prompt 4: Validate that selected assets are sufficient for league requirements.
+    
+    Hard validation: Must have at least clubSlots items (absolute minimum)
+    Soft validation: Warn if less than clubSlots * minManagers (recommended)
+    
+    Raises:
+        ValueError: If hard validation fails
+    """
+    # If no selection, skip validation (means "all teams")
+    if not assets_selected:
+        return
+    
+    selected_count = len(assets_selected)
+    
+    # Hard validation: Must select at least enough for one full roster
+    if selected_count < club_slots:
+        raise ValueError(
+            f"Selected teams ({selected_count}) must be at least equal to slots per manager ({club_slots}), "
+            f"or leave selection empty to include all."
+        )
+    
+    # Soft validation: Warn if less than optimal
+    recommended_minimum = club_slots * min_managers
+    if selected_count < recommended_minimum:
+        if logger:
+            logger.warning("assets_selection.insufficient", extra={
+                "selected_count": selected_count,
+                "club_slots": club_slots,
+                "min_managers": min_managers,
+                "recommended_minimum": recommended_minimum,
+                "message": f"Selected {selected_count} teams may not be enough for {min_managers} managers with {club_slots} slots each (recommended: {recommended_minimum})"
+            })
+
 # User Models
 class User(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
