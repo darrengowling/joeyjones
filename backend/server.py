@@ -891,6 +891,18 @@ async def update_league_assets(league_id: str, asset_ids: List[str]):
     if not cleaned_asset_ids:
         raise HTTPException(status_code=400, detail="Must select at least one team for the auction")
     
+    # Prompt 4: Validate assets selection size
+    from models import validate_assets_selection_size
+    try:
+        validate_assets_selection_size(
+            cleaned_asset_ids,
+            league.get("clubSlots", 3),
+            league.get("minManagers", 2),
+            logger
+        )
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    
     # Validate that all asset IDs exist for this sport
     sport_key = league.get("sportKey", "football")
     if sport_key == "football":
