@@ -1681,6 +1681,18 @@ async def place_bid(auction_id: str, bid_input: BidCreate):
                 
                 logger.info(f"Anti-snipe triggered for lot {lot_id}: seq={timer_data['seq']}, new end={timer_data['endsAt']}")
     
+    # DIAGNOSTIC: Check what completion status should be after this bid
+    league = await db.leagues.find_one({"id": auction["leagueId"]})
+    participants = await db.league_participants.find({"leagueId": auction["leagueId"]}).to_list(100)
+    auction_state = {
+        "lots_sold": sum(1 for p in participants for c in p.get("clubsWon", [])),
+        "current_lot": auction.get("currentLot", 0),
+        "total_lots": len(auction.get("clubQueue", [])),
+        "unsold_count": len(auction.get("unsoldClubs", []))
+    }
+    status = compute_auction_status(league, participants, auction_state)
+    logger.info(f"🔍 AUCTION_STATUS after bid: {json.dumps(status)}")
+    
     # CRITICAL FIX: Check if auction should complete after this bid
     # This handles the case where all rosters just became full
     await check_auction_completion(auction_id)
