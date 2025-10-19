@@ -1,7 +1,41 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 from typing import Optional, List, Dict, Any
 from datetime import datetime, timezone
 import uuid
+
+# Validation helpers for assetsSelected field
+def validate_assets_selected(assets: Optional[List[str]]) -> Optional[List[str]]:
+    """
+    Validate and clean assetsSelected field.
+    - Deduplicate while preserving order
+    - Trim whitespace from IDs
+    - Enforce max size (200)
+    - Return None if empty list
+    """
+    if assets is None:
+        return None
+    
+    if not isinstance(assets, list):
+        raise ValueError("assetsSelected must be a list")
+    
+    # Trim whitespace and deduplicate while preserving order
+    seen = set()
+    cleaned = []
+    for asset_id in assets:
+        if not isinstance(asset_id, str):
+            raise ValueError("Asset IDs must be strings")
+        
+        trimmed = asset_id.strip()
+        if trimmed and trimmed not in seen:
+            seen.add(trimmed)
+            cleaned.append(trimmed)
+    
+    # Enforce max size
+    if len(cleaned) > 200:
+        raise ValueError("Cannot select more than 200 assets")
+    
+    # Return None if empty (treat as "include all")
+    return cleaned if cleaned else None
 
 # User Models
 class User(BaseModel):
