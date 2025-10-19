@@ -900,6 +900,14 @@ async def update_league_assets(league_id: str, asset_ids: List[str]):
         {"$set": {"assetsSelected": cleaned_asset_ids}}
     )
     
+    # Prompt 2: Log asset selection update
+    logger.info("league.assets_selection.updated", extra={
+        "leagueId": league_id,
+        "count": len(cleaned_asset_ids),
+        "sportKey": sport_key,
+        "mode": "selected"
+    })
+    
     return {"message": f"Updated league with {len(cleaned_asset_ids)} selected teams", "count": len(cleaned_asset_ids)}
 
 @api_router.get("/leagues/{league_id}/available-assets")
