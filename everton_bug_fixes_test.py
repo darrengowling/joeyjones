@@ -243,7 +243,7 @@ class EvertonBugFixesTester:
         
         error_detail = result.get("detail", result.get("text", ""))
         if error_detail and ("reserve" in error_detail.lower() or "remaining" in error_detail.lower()):
-            self.log("✅ £150m bid correctly rejected (budget reserve enforcement)")
+            self.log("✅ £50m bid correctly rejected (budget reserve enforcement)")
         else:
             self.log(f"Error message doesn't mention budget reserve: {error_detail}", "ERROR")
             return False
