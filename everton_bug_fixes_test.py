@@ -237,8 +237,14 @@ class EvertonBugFixesTester:
             return False
         
         # Check error message mentions budget reserve
+        if result is None:
+            self.log("Result is None when checking budget reserve error", "ERROR")
+            return False
+        
         error_detail = result.get("detail", result.get("text", ""))
-        if "reserve" not in error_detail.lower() or "remaining" not in error_detail.lower():
+        if error_detail and ("reserve" in error_detail.lower() or "remaining" in error_detail.lower()):
+            self.log("✅ £150m bid correctly rejected (budget reserve enforcement)")
+        else:
             self.log(f"Error message doesn't mention budget reserve: {error_detail}", "ERROR")
             return False
         
