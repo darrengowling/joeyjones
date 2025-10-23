@@ -214,6 +214,9 @@ class EvertonBugFixesTester:
         
         # Get updated auction state
         result = self.test_api_endpoint("GET", f"/auction/{auction_id}")
+        if result is None:
+            self.log("Get auction returned None", "ERROR")
+            return False
         if "error" in result:
             self.log("Get auction after first lot failed", "ERROR")
             return False
