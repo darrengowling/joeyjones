@@ -158,32 +158,48 @@ export default function AuctionRoom() {
     // Handle auction_complete event
     const onAuctionComplete = (data) => {
       console.log("Auction complete:", data);
+      console.log("Final club ID:", data.finalClubId);
+      console.log("Final winning bid:", data.finalWinningBid);
       
       // Update participants with final state
       if (data.participants) {
         setParticipants(data.participants);
       }
       
-      // If final club info provided, ensure it's marked as sold
+      // CRITICAL FIX: Update final club status BEFORE reloading
+      // This ensures the UI shows correct sold count immediately
       if (data.finalClubId && data.finalWinningBid) {
-        setClubs(prevClubs => 
-          prevClubs.map(club => 
+        console.log("Updating final club status to 'sold'");
+        setClubs(prevClubs => {
+          const updated = prevClubs.map(club => 
             club.id === data.finalClubId 
               ? { ...club, status: 'sold', winner: data.finalWinningBid.userName, winningBid: data.finalWinningBid.amount }
               : club
-          )
-        );
+          );
+          console.log("Clubs after final update:", updated.filter(c => c.status === 'sold').length, "sold");
+          return updated;
+        });
         
         // Clear current bid if it's the final club
         if (currentClub?.id === data.finalClubId) {
           setCurrentBid(null);
           setCurrentBidder(null);
         }
+        
+        // Reload auction to get final state (but clubs already updated above)
+        loadAuction();
+        
+        // Small delay before loading clubs to ensure backend has caught up
+        // This prevents race condition where loadClubs() overwrites our manual update
+        setTimeout(() => {
+          console.log("Loading clubs after delay to ensure backend sync");
+          loadClubs();
+        }, 500);
+      } else {
+        // No final club info, just reload normally
+        loadAuction();
+        loadClubs();
       }
-      
-      // Reload auction to get final state
-      loadAuction();
-      loadClubs();
       
       alert(data.message || "Auction complete! All clubs have been auctioned.");
     };
