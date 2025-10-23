@@ -315,7 +315,7 @@ class EvertonBugFixesTester:
         
         result = self.test_api_endpoint("POST", f"/auction/{auction_id}/bid", bid_data)
         if "error" in result:
-            self.log(f"£51m bid should have been accepted but was rejected: {result.get('text')}", "ERROR")
+            self.log(f"£1m bid should have been accepted but was rejected: {result.get('text')}", "ERROR")
             return False
         
         # Complete the lot to win the team
