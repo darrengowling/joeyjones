@@ -1516,7 +1516,7 @@ async def start_auction(league_id: str):
             'message': 'Auction created! Commissioner can start when ready.'
         }, room=f"league:{league_id}")
         
-        logger.info(f"Timer data - seq: {timer_data['seq']}, endsAt: {timer_data['endsAt']}")
+        logger.info(f"Created auction {auction_obj.id} in waiting state with {len(asset_queue)} assets")
     else:
         logger.error(f"Failed to start auction {auction_obj.id} - no assets available")
         raise HTTPException(status_code=500, detail="No assets available to auction")
