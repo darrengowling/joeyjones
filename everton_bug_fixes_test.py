@@ -442,9 +442,7 @@ class EvertonBugFixesTester:
         # Commissioner calls POST /auction/{auction_id}/begin → auction status changes to "active"
         self.log("Step 4: Commissioner starts auction (should change status to 'active')...")
         
-        result = self.test_api_endpoint("POST", f"/auction/{auction_id}/begin", {
-            "commissionerId": self.test_data["commissioner_id"]  # Correct commissioner
-        })
+        result = self.test_api_endpoint("POST", f"/auction/{auction_id}/begin?commissionerId={self.test_data['commissioner_id']}")
         
         if "error" in result:
             self.log(f"Commissioner should be able to start auction: {result.get('text')}", "ERROR")
