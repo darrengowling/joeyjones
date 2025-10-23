@@ -426,9 +426,7 @@ class EvertonBugFixesTester:
         # Non-commissioner should NOT be able to start auction (403)
         self.log("Step 3: Testing non-commissioner start (should return 403)...")
         
-        result = self.test_api_endpoint("POST", f"/auction/{auction_id}/begin", {
-            "commissionerId": self.test_data["participant_id"]  # Non-commissioner
-        }, expected_status=403)
+        result = self.test_api_endpoint("POST", f"/auction/{auction_id}/begin?commissionerId={self.test_data['participant_id']}", expected_status=403)
         
         if "error" not in result and "detail" not in result:
             self.log("Non-commissioner should not be able to start auction", "ERROR")
