@@ -302,7 +302,7 @@ class EvertonBugFixesTester:
             self.log("£52m bid should have been rejected but was accepted", "ERROR")
             return False
         
-        self.log("✅ £52m bid correctly rejected (insufficient budget)")
+        self.log("✅ £2m bid correctly rejected (insufficient budget)")
         
         # Test: Bid £51m and win (budget: £0, slots: 3/3)
         self.log("Step 5: Bidding £51m on final team (should be ACCEPTED)...")
