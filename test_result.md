@@ -270,11 +270,11 @@ frontend:
 
   - task: "Everton Bug Fix 5: Roster visibility for all users"
     implemented: true
-    working: "NA"
+    working: true
     file: "CompetitionDashboard.js, server.py"
     stuck_count: 0
     priority: "medium"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
@@ -282,6 +282,9 @@ frontend:
       - working: "NA"
         agent: "main"
         comment: "Implementation complete. Backend: Enhanced GET /leagues/{league_id}/summary to include roster and budgetRemaining for each manager. Frontend: Updated Managers List section to display each manager's roster with team names and prices, budget remaining, and slots filled. Current user's roster is highlighted with blue border. Ready for testing."
+      - working: true
+        agent: "testing"
+        comment: "✅ ROSTER VISIBILITY TESTING COMPLETED: Enhanced summary endpoint working correctly. ✅ GET /leagues/{league_id}/summary returns yourRoster with team names and prices for requesting user. ✅ managers array includes all participants with complete roster information (id, name, roster array with team details, budgetRemaining). ✅ Roster data structure validated: each roster item contains id, name, and price fields. ✅ Endpoint works consistently across different users - each sees same manager data but different yourRoster. ✅ All acceptance criteria met - roster visibility for all users implemented and functional."
 
 metadata:
   created_by: "main_agent"
