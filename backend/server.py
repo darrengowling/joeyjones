@@ -1731,6 +1731,25 @@ async def place_bid(auction_id: str, bid_input: BidCreate):
             detail=f"Insufficient budget. You have £{participant['budgetRemaining']:,.0f} remaining"
         )
     
+    # Everton Bug Fix: Enforce budget reserve for remaining slots
+    # User must keep £1m per remaining slot (except on final slot)
+    clubs_won_count = len(participant.get("clubsWon", []))
+    max_slots = league.get("clubSlots", 3)
+    slots_remaining = max_slots - clubs_won_count
+    
+    if slots_remaining > 1:  # Not on final slot
+        # Must reserve £1m per remaining slot
+        reserve_needed = (slots_remaining - 1) * 1_000_000
+        max_allowed_bid = participant["budgetRemaining"] - reserve_needed
+        
+        if bid_input.amount > max_allowed_bid:
+            metrics.increment_bid_rejected("insufficient_reserve")
+            raise HTTPException(
+                status_code=400,
+                detail=f"Must reserve £{reserve_needed/1_000_000:.0f}m for {slots_remaining - 1} remaining slot(s). "
+                       f"Max bid: £{max_allowed_bid/1_000_000:.1f}m"
+            )
+    
     # Check if user has reached roster limit (Prompt C: Roster enforcement)
     clubs_won_count = len(participant.get("clubsWon", []))
     max_slots = league.get("clubSlots", 3)  # Default to 3 if not set
