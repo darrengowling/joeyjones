@@ -304,13 +304,13 @@ class EvertonBugFixesTester:
         
         self.log("✅ £2m bid correctly rejected (insufficient budget)")
         
-        # Test: Bid £51m and win (budget: £0, slots: 3/3)
-        self.log("Step 5: Bidding £51m on final team (should be ACCEPTED)...")
+        # Test: Bid £1m and win (budget: £0, slots: 3/3)
+        self.log("Step 5: Bidding £1m on final team (should be ACCEPTED)...")
         
         bid_data = {
             "userId": self.test_data["commissioner_id"],
             "clubId": current_club["id"],
-            "amount": 51000000.0  # £51m - should be accepted
+            "amount": 1000000.0  # £1m - should be accepted
         }
         
         result = self.test_api_endpoint("POST", f"/auction/{auction_id}/bid", bid_data)
