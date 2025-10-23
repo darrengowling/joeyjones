@@ -552,9 +552,7 @@ class EvertonBugFixesTester:
         auction_id = result.get("auctionId")
         self.test_data["roster_auction_id"] = auction_id
         
-        result = self.test_api_endpoint("POST", f"/auction/{auction_id}/begin", {
-            "commissionerId": self.test_data["commissioner_id"]
-        })
+        result = self.test_api_endpoint("POST", f"/auction/{auction_id}/begin?commissionerId={self.test_data['commissioner_id']}")
         if "error" in result:
             self.log("Auction begin failed", "ERROR")
             return False
