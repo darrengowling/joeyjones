@@ -1448,75 +1448,31 @@ async def start_auction(league_id: str):
     
     random.shuffle(all_assets)
     
-    # Auto-start first asset
+    # Everton Bug Fix: Don't auto-start first lot - wait for commissioner
+    # Create auction in "waiting" state with queue prepared
     if all_assets:
         # Initialize asset queue (randomized order)
         asset_queue = [asset["id"] for asset in all_assets]
-        first_asset_id = asset_queue[0]
-        lot_id = f"{auction_obj.id}-lot-1"  # Create lot ID
-        timer_end = datetime.now(timezone.utc) + timedelta(seconds=auction_obj.bidTimer)
         
         await db.auctions.update_one(
             {"id": auction_obj.id},
             {"$set": {
-                "status": "active",
-                "currentClubId": first_asset_id,
-                "currentLot": 1,
-                "timerEndsAt": timer_end,
-                "currentLotId": lot_id,  # Store lot ID
-                "clubQueue": asset_queue,  # Initialize asset queue
-                "unsoldClubs": [],  # Initialize empty unsold list
-                "minimumBudget": 1000000.0  # £1m minimum budget
+                "status": "waiting",  # Changed from "active"
+                "clubQueue": asset_queue,
+                "unsoldClubs": [],
+                "minimumBudget": 1000000.0,
+                "currentLot": 0  # Not started yet
             }}
         )
         
-        # Create timer event for lot start
-        if timer_end.tzinfo is None:
-            timer_end = timer_end.replace(tzinfo=timezone.utc)
-        ends_at_ms = int(timer_end.timestamp() * 1000)
-        timer_data = create_timer_event(lot_id, ends_at_ms)
+        logger.info(f"Created auction {auction_obj.id} in waiting state with {len(asset_queue)} assets")
         
-        # Emit lot start with standardized timer data
-        # For football, use Club model, for others use generic asset data
-        if sport_key == "football":
-            asset_data = Club(**all_assets[0]).model_dump()
-        else:
-            asset_data = all_assets[0].copy()
-            # Remove MongoDB ObjectId if present
-            if "_id" in asset_data:
-                del asset_data["_id"]
-        
-        await sio.emit('lot_started', {
-            'club': asset_data,  # Keep 'club' for backward compatibility 
-            'lotNumber': 1,
-            'timer': timer_data  # Include standardized timer data
-        })
-        
-        # Start timer countdown
-        asyncio.create_task(countdown_timer(auction_obj.id, timer_end, lot_id))
-        
-        logger.info(f"Started auction {auction_obj.id} lot {lot_id} with asset: {all_assets[0]['name']}")
-        
-        # Get room size for debugging
-        room_sockets = sio.manager.rooms.get(f"league:{league_id}", set())
-        room_size = len(room_sockets)
-        
-        # JSON log for debugging
-        logger.info(json.dumps({
-            "event": "league_status_changed",
-            "leagueId": league_id,
-            "status": "auction_started",
-            "auctionId": auction_obj.id,
-            "roomSize": room_size,
-            "timestamp": datetime.now(timezone.utc).isoformat()
-        }))
-        
-        # Emit league_status_changed event to league room for instant updates
+        # Emit league_status_changed event to league room
         await sio.emit('league_status_changed', {
             'leagueId': league_id,
-            'status': 'auction_started',
+            'status': 'auction_created',
             'auctionId': auction_obj.id,
-            'message': 'Auction has started! Click "Enter Auction Room" to participate.'
+            'message': 'Auction created! Commissioner can start when ready.'
         }, room=f"league:{league_id}")
         
         logger.info(f"Timer data - seq: {timer_data['seq']}, endsAt: {timer_data['endsAt']}")
