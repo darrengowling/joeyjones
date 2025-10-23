@@ -222,13 +222,13 @@ class EvertonBugFixesTester:
         
         self.log(f"Second club: {current_club.get('name')}")
         
-        # Test: Try to bid £150m on next team → SHOULD BE REJECTED (must reserve £1m for last slot, max bid £149m)
-        self.log("Step 2: Testing £150m bid (should be REJECTED - must reserve £1m for last slot)...")
+        # Test: Try to bid £50m on next team → SHOULD BE REJECTED (must reserve £1m for last slot, max bid £49m)
+        self.log("Step 2: Testing £50m bid (should be REJECTED - must reserve £1m for last slot)...")
         
         bid_data = {
             "userId": self.test_data["commissioner_id"],
             "clubId": current_club["id"],
-            "amount": 150000000.0  # £150m - should be rejected
+            "amount": 50000000.0  # £50m - should be rejected
         }
         
         result = self.test_api_endpoint("POST", f"/auction/{auction_id}/bid", bid_data, expected_status=400)
