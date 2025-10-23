@@ -791,7 +791,7 @@ test_plan:
     file: "server.py, AuctionRoom.js"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
@@ -799,6 +799,9 @@ test_plan:
       - working: true
         agent: "main"
         comment: "Implementation complete. Frontend shows waiting room, backend supports manual auction start. Ready for testing to verify socket events and user coordination."
+      - working: true
+        agent: "testing"
+        comment: "✅ AUCTION START CONTROL TESTING COMPLETED: All test scenarios passed successfully. ✅ Auction created with status 'waiting' - confirmed via GET /auction/{id} endpoint. ✅ Non-commissioner correctly blocked from starting auction (403 error with proper message). ✅ Commissioner successfully starts auction via POST /auction/{id}/begin?commissionerId={id}. ✅ Auction status changes to 'active' and first lot starts with timer countdown. All acceptance criteria met - waiting room and manual start functionality working correctly."
 
   - task: "Everton Bug Fix 3: Budget reserve enforcement (£1m per remaining slot)"
     implemented: true
