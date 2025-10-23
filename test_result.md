@@ -269,16 +269,19 @@ frontend:
         comment: "Bug reported: Shows 8/9 teams sold when 9th team is actually allocated. Need to investigate if previous fix is still working or if race condition has returned. Will check auction_complete event and final club state handling."
 
   - task: "Everton Bug Fix 5: Roster visibility for all users"
-    implemented: false
+    implemented: true
     working: "NA"
-    file: "CompetitionDashboard.js"
+    file: "CompetitionDashboard.js, server.py"
     stuck_count: 0
     priority: "medium"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Users can currently only see their own roster in dashboard. Need to implement UI to show all participants' rosters for transparency. Options: Add 'Rosters' tab or enhance League Table with expandable rows showing each user's roster."
+      - working: "NA"
+        agent: "main"
+        comment: "Implementation complete. Backend: Enhanced GET /leagues/{league_id}/summary to include roster and budgetRemaining for each manager. Frontend: Updated Managers List section to display each manager's roster with team names and prices, budget remaining, and slots filled. Current user's roster is highlighted with blue border. Ready for testing."
 
 metadata:
   created_by: "main_agent"
