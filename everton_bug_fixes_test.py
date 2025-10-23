@@ -270,7 +270,7 @@ class EvertonBugFixesTester:
             self.log("Complete second lot failed", "ERROR")
             return False
         
-        self.log("✅ Second team won for £149m")
+        self.log("✅ Second team won for £49m")
         
         # Wait for next lot to start
         time.sleep(3)
