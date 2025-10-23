@@ -324,7 +324,7 @@ class EvertonBugFixesTester:
             self.log("Complete third lot failed", "ERROR")
             return False
         
-        self.log("✅ Third team won for £51m")
+        self.log("✅ Third team won for £1m")
         
         # Verify auction completes successfully
         time.sleep(3)
