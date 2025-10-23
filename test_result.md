@@ -287,7 +287,11 @@ metadata:
   run_ui: true
 
 test_plan:
-  current_focus: []
+  current_focus:
+    - "Everton Bug Fix 2: Auction start control with waiting room"
+    - "Everton Bug Fix 3: Budget reserve enforcement (£1m per remaining slot)"
+    - "Everton Bug Fix 4: Final team display issue investigation"
+    - "Everton Bug Fix 5: Roster visibility for all users"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
