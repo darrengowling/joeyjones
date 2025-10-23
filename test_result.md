@@ -256,6 +256,30 @@ frontend:
         agent: "testing"
         comment: "Clubs list fully functional: Displays 36 UCL clubs, search functionality working, country filter working, proper club information display with flags and UEFA IDs. Navigation and filtering work correctly."
 
+  - task: "Everton Bug Fix 4: Final team display issue investigation"
+    implemented: false
+    working: "NA"
+    file: "AuctionRoom.js, server.py"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Bug reported: Shows 8/9 teams sold when 9th team is actually allocated. Need to investigate if previous fix is still working or if race condition has returned. Will check auction_complete event and final club state handling."
+
+  - task: "Everton Bug Fix 5: Roster visibility for all users"
+    implemented: false
+    working: "NA"
+    file: "CompetitionDashboard.js"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Users can currently only see their own roster in dashboard. Need to implement UI to show all participants' rosters for transparency. Options: Add 'Rosters' tab or enhance League Table with expandable rows showing each user's roster."
+
 metadata:
   created_by: "main_agent"
   version: "1.0"
