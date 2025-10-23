@@ -27,6 +27,7 @@ export default function AuctionRoom() {
   const [currentBid, setCurrentBid] = useState(null);
   const [currentBidder, setCurrentBidder] = useState(null);
   const [bidSequence, setBidSequence] = useState(0);
+  const [timerSettings, setTimerSettings] = useState({ timerSeconds: 30, antiSnipeSeconds: 10 }); // Everton Bug Fix 3
 
   // Use shared socket room hook
   const { socket, connected, ready, listenerCount } = useSocketRoom('auction', auctionId, { user });
