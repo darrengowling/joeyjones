@@ -110,11 +110,11 @@ class EvertonBugFixesTester:
         """
         self.log("=== Testing Budget Reserve Enforcement (Bug 3) ===")
         
-        # Create a league with 3 slots and £300m budget
+        # Create a league with 3 slots and £150m budget (adjusted to trigger reserve enforcement)
         league_data = {
             "name": "Budget Reserve Test League",
             "commissionerId": self.test_data["commissioner_id"],
-            "budget": 300000000.0,  # £300m budget
+            "budget": 150000000.0,  # £150m budget (adjusted for proper testing)
             "minManagers": 2,
             "maxManagers": 4,
             "clubSlots": 3  # 3 slots total
