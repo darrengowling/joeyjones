@@ -138,6 +138,18 @@ export default function AuctionRoom() {
         const winnerName = data.winningBid ? data.winningBid.userName : "Unknown";
         const amount = data.winningBid ? formatCurrency(data.winningBid.amount) : "";
         alert(`✅ Club sold to ${winnerName} for ${amount}!`);
+        
+        // Immediately update club status to 'sold' in local state
+        // This ensures the UI updates before any async operations
+        if (data.clubId && data.winningBid) {
+          setClubs(prevClubs => 
+            prevClubs.map(club => 
+              club.id === data.clubId 
+                ? { ...club, status: 'sold', winner: winnerName, winningBid: data.winningBid.amount }
+                : club
+            )
+          );
+        }
       }
       
       setCurrentClub(null);
