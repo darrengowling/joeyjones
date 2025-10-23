@@ -184,7 +184,7 @@ class EvertonBugFixesTester:
         
         self.log(f"Current club: {current_club.get('name')}")
         
-        # Test Scenario: User wins first team for £100m (budget: £200m, slots: 1/3, remaining: 2 slots)
+        # Test Scenario: User wins first team for £100m (budget: £50m remaining, slots: 1/3, remaining: 2 slots)
         self.log("Step 1: User wins first team for £100m...")
         
         bid_data = {
