@@ -248,6 +248,12 @@ export default function AuctionRoom() {
       const leagueResponse = await axios.get(`${API}/leagues/${response.data.auction.leagueId}`);
       setLeague(leagueResponse.data);
       
+      // Everton Bug Fix 3: Load timer settings from league
+      setTimerSettings({
+        timerSeconds: leagueResponse.data.timerSeconds || 30,
+        antiSnipeSeconds: leagueResponse.data.antiSnipeSeconds || 10
+      });
+      
       // Load sport information based on league's sportKey
       if (leagueResponse.data.sportKey) {
         try {
