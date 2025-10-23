@@ -1480,7 +1480,96 @@ async def start_auction(league_id: str):
         logger.error(f"Failed to start auction {auction_obj.id} - no assets available")
         raise HTTPException(status_code=500, detail="No assets available to auction")
     
-    return {"message": "Auction created and started", "auctionId": auction_obj.id}
+    return {"message": "Auction created and waiting for commissioner to begin", "auctionId": auction_obj.id, "status": "waiting"}
+
+@api_router.post("/auction/{auction_id}/begin")
+async def begin_auction(auction_id: str, commissionerId: str):
+    """Everton Bug Fix: Commissioner manually starts the auction after all users have joined"""
+    # Verify auction exists and is waiting
+    auction = await db.auctions.find_one({"id": auction_id})
+    if not auction:
+        raise HTTPException(status_code=404, detail="Auction not found")
+    
+    if auction["status"] != "waiting":
+        raise HTTPException(status_code=400, detail=f"Auction is not in waiting state (current: {auction['status']})")
+    
+    # Verify commissioner
+    league = await db.leagues.find_one({"id": auction["leagueId"]})
+    if not league:
+        raise HTTPException(status_code=404, detail="League not found")
+    
+    if league["commissionerId"] != commissionerId:
+        raise HTTPException(status_code=403, detail="Only the commissioner can start the auction")
+    
+    # Get sport key for asset retrieval
+    sport_key = league.get("sportKey", "football")
+    
+    # Get the club queue
+    asset_queue = auction.get("clubQueue", [])
+    if not asset_queue:
+        raise HTTPException(status_code=400, detail="No assets in auction queue")
+    
+    # Get first asset details
+    first_asset_id = asset_queue[0]
+    if sport_key == "football":
+        first_asset = await db.clubs.find_one({"id": first_asset_id})
+    else:
+        first_asset = await db.assets.find_one({"id": first_asset_id, "sportKey": sport_key})
+    
+    if not first_asset:
+        raise HTTPException(status_code=404, detail="First asset not found")
+    
+    # Start first lot
+    lot_id = f"{auction_id}-lot-1"
+    timer_end = datetime.now(timezone.utc) + timedelta(seconds=auction.get("bidTimer", 30))
+    
+    await db.auctions.update_one(
+        {"id": auction_id},
+        {"$set": {
+            "status": "active",
+            "currentClubId": first_asset_id,
+            "currentLot": 1,
+            "timerEndsAt": timer_end,
+            "currentLotId": lot_id
+        }}
+    )
+    
+    # Create timer event
+    if timer_end.tzinfo is None:
+        timer_end = timer_end.replace(tzinfo=timezone.utc)
+    ends_at_ms = int(timer_end.timestamp() * 1000)
+    timer_data = create_timer_event(lot_id, ends_at_ms)
+    
+    # Prepare asset data for emission
+    if sport_key == "football":
+        asset_data = Club(**first_asset).model_dump()
+    else:
+        asset_data = first_asset.copy()
+        if "_id" in asset_data:
+            del asset_data["_id"]
+    
+    # Emit lot start to auction room
+    await sio.emit('lot_started', {
+        'club': asset_data,
+        'lotNumber': 1,
+        'timer': timer_data
+    }, room=f"auction:{auction_id}")
+    
+    # Start timer countdown
+    asyncio.create_task(countdown_timer(auction_id, timer_end, lot_id))
+    
+    logger.info(f"Commissioner started auction {auction_id}, first lot: {first_asset.get('name')}")
+    
+    # Emit to league room as well
+    await sio.emit('league_status_changed', {
+        'leagueId': league["id"],
+        'status': 'auction_active',
+        'auctionId': auction_id,
+        'message': 'Auction has begun!'
+    }, room=f"league:{league['id']}")
+    
+    return {"message": "Auction started successfully", "auctionId": auction_id, "firstAsset": first_asset.get("name")}
+
 
 @api_router.get("/leagues/{league_id}/auction")
 async def get_league_auction(league_id: str):
