@@ -665,9 +665,50 @@ async def get_league_summary(league_id: str, userId: str):
     
     user_budget_remaining = participant.get("budgetRemaining", 0) if participant else 0
     
-    # Get all managers
+    # Get all managers with their rosters (Everton Bug Fix 5: Roster Visibility)
     participants = await db.league_participants.find({"leagueId": league_id}).to_list(100)
-    managers = [{"id": p["userId"], "name": p["userName"]} for p in participants]
+    managers = []
+    
+    for p in participants:
+        # Get manager's roster with enriched details
+        manager_asset_ids = p.get("clubsWon", [])
+        manager_roster = []
+        
+        for asset_id in manager_asset_ids:
+            # Get the winning bid for this asset by this manager
+            winning_bid = await db.bids.find_one({
+                "auctionId": auction["id"] if auction else None,
+                "clubId": asset_id,
+                "userId": p["userId"]
+            }, sort=[("amount", -1)])
+            
+            # Get asset details
+            sport_key = league.get("sportKey", "football")
+            if sport_key == "football":
+                asset = await db.clubs.find_one({"id": asset_id})
+            else:
+                asset = await db.assets.find_one({"id": asset_id, "sportKey": sport_key})
+            
+            if asset:
+                manager_roster.append({
+                    "id": asset_id,
+                    "name": asset.get("clubName") or asset.get("name", "Unknown Team"),
+                    "price": winning_bid["amount"] if winning_bid else 0
+                })
+            else:
+                # Fallback if asset not found
+                manager_roster.append({
+                    "id": asset_id,
+                    "name": "Team",
+                    "price": winning_bid["amount"] if winning_bid else 0
+                })
+        
+        managers.append({
+            "id": p["userId"],
+            "name": p["userName"],
+            "roster": manager_roster,
+            "budgetRemaining": p.get("budgetRemaining", 0)
+        })
     
     # Determine status
     if not auction:
@@ -688,7 +729,7 @@ async def get_league_summary(league_id: str, userId: str):
         },
         "yourRoster": user_roster,  # Now enriched with name and price
         "yourBudgetRemaining": user_budget_remaining,
-        "managers": managers,
+        "managers": managers,  # Now includes roster and budget for each manager
         "totalBudget": league["budget"],
         "clubSlots": league["clubSlots"],
         "timerSeconds": league.get("timerSeconds", 30),
