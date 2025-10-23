@@ -200,6 +200,9 @@ class EvertonBugFixesTester:
         
         # Complete the lot to win the team
         result = self.test_api_endpoint("POST", f"/auction/{auction_id}/complete-lot")
+        if result is None:
+            self.log("Complete lot returned None", "ERROR")
+            return False
         if "error" in result:
             self.log("Complete first lot failed", "ERROR")
             return False
