@@ -583,6 +583,9 @@ export default function AuctionRoom() {
                       })()}
                     </div>
                     <div className="text-sm mt-2 text-white">Time Remaining</div>
+                    <div className="text-xs mt-1 text-gray-300">
+                      {timerSettings.timerSeconds}s per team | Extends by {timerSettings.antiSnipeSeconds}s on late bids
+                    </div>
                   </div>
 
                   {/* Club Info */}
