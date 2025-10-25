@@ -146,16 +146,20 @@ export default function AuctionRoom() {
         const amount = data.winningBid ? formatCurrency(data.winningBid.amount) : "";
         alert(`✅ Club sold to ${winnerName} for ${amount}!`);
         
-        // Immediately update club status to 'sold' in local state
-        // This ensures the UI updates before any async operations
+        // CRITICAL FIX: Immediately update club status to 'sold' in local state
+        // DON'T reload clubs - rely on this update to avoid race conditions
         if (data.clubId && data.winningBid) {
-          setClubs(prevClubs => 
-            prevClubs.map(club => 
+          console.log(`✅ Marking club ${data.clubId} as sold to ${winnerName}`);
+          setClubs(prevClubs => {
+            const updated = prevClubs.map(club => 
               club.id === data.clubId 
                 ? { ...club, status: 'sold', winner: winnerName, winningBid: data.winningBid.amount }
                 : club
-            )
-          );
+            );
+            const soldCount = updated.filter(c => c.status === 'sold').length;
+            console.log(`📊 Current sold count: ${soldCount}/${updated.length}`);
+            return updated;
+          });
         }
       }
       
@@ -165,7 +169,7 @@ export default function AuctionRoom() {
         setParticipants(data.participants);
       }
       loadAuction();
-      loadClubs();
+      // REMOVED: loadClubs() - we trust the sold event data instead of reloading
     };
 
     // Handle anti-snipe event
