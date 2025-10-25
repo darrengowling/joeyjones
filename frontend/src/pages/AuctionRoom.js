@@ -343,9 +343,13 @@ export default function AuctionRoom() {
         }
       }
 
-      // Load participants
+      // Prompt A: Load participants with new API format (count + participants array)
       const participantsResponse = await axios.get(`${API}/leagues/${response.data.auction.leagueId}/participants`);
-      setParticipants(participantsResponse.data);
+      console.log("📊 Participants loaded:", participantsResponse.data);
+      
+      // Set both count and participants from server response
+      setParticipantCount(participantsResponse.data.count || 0);
+      setParticipants(participantsResponse.data.participants || []);
     } catch (e) {
       console.error("Error loading auction:", e);
     } finally {
