@@ -2463,13 +2463,20 @@ async def start_next_lot(auction_id: str, next_club_id: str):
     ends_at_ms = int(timer_end.timestamp() * 1000)
     timer_data = create_timer_event(next_lot_id, ends_at_ms)
     
-    # Emit lot start
-    await sio.emit('lot_started', {
-        'club': Club(**next_club).model_dump(),
+    # Emit lot start - send appropriate data based on sport
+    lot_data = {
         'lotNumber': next_lot_number,
         'timer': timer_data,
-        'isUnsoldRetry': next_club_id and next_club_id in (auction.get("unsoldClubs", []))  # Flag for UI
-    }, room=f"auction:{auction_id}")
+        'isUnsoldRetry': next_club_id and next_club_id in (auction.get("unsoldClubs", []))
+    }
+    
+    if sport_key == "football":
+        lot_data['club'] = Club(**next_club).model_dump()
+    else:
+        # For cricket and other sports, send raw asset data
+        lot_data['club'] = next_club
+    
+    await sio.emit('lot_started', lot_data, room=f"auction:{auction_id}")
     
     logger.info(f"Started lot {next_lot_number}: {next_club['name']}")
     
