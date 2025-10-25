@@ -1550,7 +1550,7 @@ async def start_auction(league_id: str):
         logger.error(f"Failed to start auction {auction_obj.id} - no assets available")
         raise HTTPException(status_code=500, detail="No assets available to auction")
     
-    return {"message": "Auction created and waiting for commissioner to begin", "auctionId": auction_obj.id, "status": "waiting"}
+    return {"message": "Auction started successfully", "auctionId": auction_obj.id}
 
 @api_router.post("/auction/{auction_id}/begin")
 async def begin_auction(auction_id: str, commissionerId: str):
