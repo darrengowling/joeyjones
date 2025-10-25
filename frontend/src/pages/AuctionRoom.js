@@ -787,7 +787,7 @@ export default function AuctionRoom() {
             <div className="lg:col-span-2 bg-white rounded-lg shadow-lg p-6 app-card">
               {currentClub ? (
                 <div>
-                  <h2 className="h2 text-2xl font-bold mb-4 text-gray-900">🔥 Current Team Ownership</h2>
+                  <h2 className="h2 text-2xl font-bold mb-4 text-gray-900">🔥 Current {uiHints.assetLabel} Ownership</h2>
                   
                   {/* Timer - WHITE ON BLACK for maximum visibility */}
                   <div className="bg-black text-white p-6 rounded-lg mb-6 text-center shadow-lg border-2 border-white">
