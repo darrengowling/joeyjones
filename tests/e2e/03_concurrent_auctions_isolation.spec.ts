@@ -174,6 +174,12 @@ test.describe('03 - Concurrent Auctions Isolation', () => {
     // Step 6: All users enter their respective auction rooms
     console.log('\n6️⃣ Users entering auction rooms...');
     
+    // Prompt C: Set user sessions before navigation
+    await setUserSession(pageA1, userA1);
+    await setUserSession(pageA2, userA2);
+    await setUserSession(pageB1, userB1);
+    await setUserSession(pageB2, userB2);
+    
     await pageA1.goto(`${BASE_URL}/auction/${auctionIdA}`);
     await pageA1.waitForTimeout(1000);
     console.log(`   ✅ User A1 entered Auction A`);
