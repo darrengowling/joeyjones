@@ -2448,7 +2448,7 @@ async def pause_auction(auction_id: str, commissioner_id: str = None):
     await sio.emit('auction_paused', {
         'message': 'Auction has been paused by the commissioner',
         'remainingTime': remaining_time
-    })
+    }, room=f"auction:{auction_id}")
     
     logger.info(f"Auction {auction_id} paused with {remaining_time}s remaining")
     
