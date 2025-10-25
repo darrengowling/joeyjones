@@ -14,6 +14,7 @@ export default function CompetitionDashboard() {
   const [activeTab, setActiveTab] = useState("summary");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [uiHints, setUiHints] = useState({ assetLabel: "Team", assetPlural: "Teams" }); // Default
 
   // Tab data (cached per session)
   const [summary, setSummary] = useState(null);
