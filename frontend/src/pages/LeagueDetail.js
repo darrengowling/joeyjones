@@ -93,8 +93,8 @@ export default function LeagueDetail() {
     const onLeagueStatusChanged = (data) => {
       console.log('🎯 League status changed event received:', data);
       if (data.leagueId === leagueId) {
-        if (data.status === 'auction_created' || data.status === 'auction_started') {
-          console.log('✅ Auction created/started - updating league data');
+        if (data.status === 'auction_created' || data.status === 'auction_started' || data.status === 'auction_active') {
+          console.log('✅ Auction created/started/active - updating league data');
           setLeague(prev => ({
             ...prev,
             status: 'active',
