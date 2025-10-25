@@ -51,23 +51,6 @@ export default function AuctionRoom() {
     loadClubs();
   }, [auctionId]);
 
-  // CRITICAL FIX: Poll auction status every 1 second while in waiting room
-  // MUST be at top level before any conditional returns
-  useEffect(() => {
-    if (auction?.status === "waiting") {
-      console.log("⏳ Starting waiting room polling");
-      const waitingPoll = setInterval(() => {
-        console.log("🔄 Polling auction status from waiting room...");
-        loadAuction();
-      }, 1000);
-      
-      return () => {
-        console.log("🛑 Stopping waiting room polling");
-        clearInterval(waitingPoll);
-      };
-    }
-  }, [auction?.status]);
-
   // Socket event handlers - single useEffect with proper cleanup
   useEffect(() => {
     if (!user) return;
