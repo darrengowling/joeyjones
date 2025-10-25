@@ -577,11 +577,11 @@ agent_communication:
 
   - task: "Cricket scoring ingest system with CSV upload and leaderboard maintenance"
     implemented: true
-    working: true
+    working: false
     file: "server.py, services/scoring/cricket.py, scripts/create_league_stats_index.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: "NA"
         agent: "main"
@@ -589,6 +589,9 @@ agent_communication:
       - working: true
         agent: "testing"
         comment: "CRICKET SCORING INGEST TESTING COMPLETED: All 15/15 test areas passed successfully. ✅ CSV Upload Functionality - POST endpoint working with proper column validation and error handling. ✅ Points Calculation - get_cricket_points function working correctly with milestone bonuses (half-century, century, five-wicket haul). ✅ Database Operations - Upsert functionality working with no double counting on re-upload, unique index prevents duplicates. ✅ Leaderboard Maintenance - cricket_leaderboard collection properly updated with point accumulation across matches. ✅ Schema Precedence - league.scoringOverrides || sports[league.sportKey].scoringSchema logic verified. ✅ Acceptance Criteria - Upload updates leaderboard ✓, re-upload gives identical totals (no double counting) ✓, milestone bonuses working ✓, multi-match accumulation working ✓. Fixed HTTPException handling bug for proper error responses. System is production-ready for cricket scoring operations."
+      - working: false
+        agent: "testing"
+        comment: "MILESTONE BONUS CALCULATION ISSUE IDENTIFIED: Cricket scoring system is working but milestone bonuses are not being calculated correctly. Test case: P003 with 101 runs should receive 101 (runs) + 10 (half-century bonus) + 25 (century bonus) = 136 total points, but system shows only 101 points. This indicates the get_cricket_points function is not applying milestone bonuses properly. CSV upload and leaderboard functionality working correctly, but points calculation needs investigation."
 
   - task: "Multi-sport functionality implementation"
     implemented: true
