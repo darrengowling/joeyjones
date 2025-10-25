@@ -1011,15 +1011,18 @@ agent_communication:
 
   - task: "E2E Test 2: Non-Commissioner Authorization"
     implemented: true
-    working: "NA"
+    working: false
     file: "tests/e2e/02_non_commissioner_forbidden.spec.ts"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Created E2E test for non-commissioner authorization. Tests: non-commissioner receives 403 when calling POST /auction/{id}/begin, error message mentions authorization, auction remains in waiting state, commissioner can successfully begin. Ready for testing."
+      - working: false
+        agent: "testing"
+        comment: "AUTHORIZATION TEST FAILED: Expected 403 Forbidden but received 401 Unauthorized. Root cause identified - test is not sending X-User-ID header in the API request, so backend returns 401 (missing auth) instead of 403 (insufficient permissions). Test needs to send proper X-User-ID header to test authorization logic correctly."
 
   - task: "E2E Test 3: Concurrent Auctions Isolation"
     implemented: true
