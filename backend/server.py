@@ -1701,9 +1701,9 @@ async def get_league_state(league_id: str):
 @api_router.post("/auction/{auction_id}/begin")
 async def begin_auction(
     auction_id: str,
-    request: Request
+    user_id: str = Depends(require_user_id)
 ):
-    """Prompt G: Commissioner manually starts the auction - guarded by FEATURE_WAITING_ROOM flag"""
+    """Prompt B: Commissioner manually starts the auction with proper auth (401/403 clarity)"""
     
     # Prompt G: Check feature flag - return 404 if waiting room feature is disabled
     if not FEATURE_WAITING_ROOM:
@@ -1712,11 +1712,6 @@ async def begin_auction(
             "feature": "waiting_room_disabled"
         })
         raise HTTPException(status_code=404, detail="Waiting room feature is not enabled")
-    
-    # Get user ID from header
-    user_id = request.headers.get("X-User-ID")
-    if not user_id:
-        raise HTTPException(status_code=401, detail="User authentication required")
     
     # Verify auction exists and is waiting
     auction = await db.auctions.find_one({"id": auction_id})
@@ -1731,7 +1726,7 @@ async def begin_auction(
     if not league:
         raise HTTPException(status_code=404, detail="League not found")
     
-    # Check if current user is the commissioner
+    # Prompt B: Check if current user is the commissioner - return 403 if not
     if league["commissionerId"] != user_id:
         logger.warning("begin_auction.unauthorized", extra={
             "auctionId": auction_id,
