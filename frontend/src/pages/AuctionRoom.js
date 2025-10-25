@@ -177,7 +177,7 @@ export default function AuctionRoom() {
       console.log("  unsold:", data.unsold);
       console.log("  winningBid:", data.winningBid);
       
-      const playerName = data.clubName || "Unknown player";
+      const playerName = data.clubName || `Unknown ${uiHints.assetLabel.toLowerCase()}`;
       
       if (data.unsold) {
         alert(`❌ ${playerName} went unsold and will be offered again later.`);
