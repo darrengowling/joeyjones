@@ -4,6 +4,7 @@
  */
 
 import { test, expect, chromium, Browser, BrowserContext, Page } from '@playwright/test';
+import { setUserSession } from './helpers/session';  // Prompt C
 
 const BASE_URL = 'https://multisport-auction.preview.emergentagent.com';
 
