@@ -115,6 +115,9 @@ test.describe('02 - Non-Commissioner Authorization', () => {
       const beginResponse = await pageB.request.post(
         `${BASE_URL}/api/auction/${auctionId}/begin`,
         {
+          headers: {
+            'X-User-ID': userB.id  // Prompt B: Send auth header to test 403 path
+          },
           failOnStatusCode: false // Don't throw on non-2xx status
         }
       );
@@ -122,7 +125,7 @@ test.describe('02 - Non-Commissioner Authorization', () => {
       const status = beginResponse.status();
       console.log(`   📊 Response status: ${status}`);
       
-      // Verify we got 403 Forbidden
+      // Prompt B: Verify we got 403 Forbidden (not 401)
       expect(status).toBe(403);
       console.log(`   ✅ Correctly received 403 Forbidden`);
       
