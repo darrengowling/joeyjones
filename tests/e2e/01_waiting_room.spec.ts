@@ -5,7 +5,7 @@
 
 import { test, expect, chromium, Browser, BrowserContext, Page } from '@playwright/test';
 
-const BASE_URL = 'https://auction-buddy-8.preview.emergentagent.com';
+const BASE_URL = 'https://multisport-auction.preview.emergentagent.com';
 
 test.describe('01 - Waiting Room UX', () => {
   let browserA: Browser;
