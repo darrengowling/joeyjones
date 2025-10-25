@@ -21,6 +21,7 @@ export default function AuctionRoom() {
   const [selectedClubForLot, setSelectedClubForLot] = useState(null);
   const [league, setLeague] = useState(null);
   const [participants, setParticipants] = useState([]);
+  const [participantCount, setParticipantCount] = useState(0); // Prompt A: Server-authoritative count
   const [currentLotId, setCurrentLotId] = useState(null);
   const [sport, setSport] = useState(null);
   const [uiHints, setUiHints] = useState({ assetLabel: "Club", assetPlural: "Clubs" }); // Default to football
