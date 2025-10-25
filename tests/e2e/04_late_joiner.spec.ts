@@ -195,6 +195,9 @@ test.describe('04 - Late Joiner Sync', () => {
     // Step 8: User C joins auction room (late joiner)
     console.log('\n8️⃣ Late joiner (User C) entering auction room...');
     
+    // Prompt C: Set user session for late joiner
+    await setUserSession(pageC, userC);
+    
     await pageC.goto(`${BASE_URL}/auction/${auctionId}`);
     console.log(`   ✅ User C navigated to auction room`);
 
