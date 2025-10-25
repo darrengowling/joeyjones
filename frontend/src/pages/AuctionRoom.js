@@ -537,7 +537,7 @@ export default function AuctionRoom() {
               {/* Participants List */}
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
                 <h3 className="font-bold text-gray-900 mb-3">
-                  Participants in Room ({participants.length})
+                  Participants in Room ({participantCount})
                 </h3>
                 <div className="flex flex-wrap gap-2">
                   {participants.map(p => (
