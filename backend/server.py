@@ -884,7 +884,46 @@ async def get_league_fixtures(league_id: str, status: Optional[str] = None, page
     skip = (page - 1) * limit
     fixtures = await db.fixtures.find(query).sort("startsAt", 1).skip(skip).limit(limit).to_list(limit)
     
-    return [Fixture(**fixture).model_dump(mode='json') for fixture in fixtures]
+    # Get league to determine sport
+    league = await db.leagues.find_one({"id": league_id})
+    sport_key = league.get("sportKey", "football") if league else "football"
+    
+    # Enrich fixtures with asset details
+    enriched_fixtures = []
+    for fixture in fixtures:
+        fixture_dict = Fixture(**fixture).model_dump(mode='json')
+        
+        # Get home asset details
+        if fixture.get("homeAssetId"):
+            if sport_key == "football":
+                home_asset = await db.clubs.find_one({"id": fixture["homeAssetId"]})
+            else:
+                home_asset = await db.assets.find_one({"id": fixture["homeAssetId"], "sportKey": sport_key})
+            
+            if home_asset:
+                fixture_dict["homeAsset"] = {
+                    "id": home_asset["id"],
+                    "name": home_asset.get("name"),
+                    "externalId": home_asset.get("externalId")
+                }
+        
+        # Get away asset details
+        if fixture.get("awayAssetId"):
+            if sport_key == "football":
+                away_asset = await db.clubs.find_one({"id": fixture["awayAssetId"]})
+            else:
+                away_asset = await db.assets.find_one({"id": fixture["awayAssetId"], "sportKey": sport_key})
+            
+            if away_asset:
+                fixture_dict["awayAsset"] = {
+                    "id": away_asset["id"],
+                    "name": away_asset.get("name"),
+                    "externalId": away_asset.get("externalId")
+                }
+        
+        enriched_fixtures.append(fixture_dict)
+    
+    return enriched_fixtures
 
 @api_router.post("/leagues/{league_id}/fixtures/import-csv")
 async def import_fixtures_csv(league_id: str, file: UploadFile = File(...), commissionerId: str = None):
