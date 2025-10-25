@@ -505,8 +505,25 @@ async def join_league(league_id: str, participant_input: LeagueParticipantCreate
 
 @api_router.get("/leagues/{league_id}/participants")
 async def get_league_participants(league_id: str):
+    """Prompt A: Server-authoritative participants with count - normalized response"""
     participants = await db.league_participants.find({"leagueId": league_id}).to_list(100)
-    return [LeagueParticipant(**p) for p in participants]
+    
+    # Normalize participant data with safe defaults
+    normalized_participants = []
+    for p in participants:
+        normalized_participants.append({
+            "userId": p.get("userId", ""),
+            "userName": p.get("userName", p.get("displayName", "Unknown")),
+            "userEmail": p.get("userEmail", ""),
+            "budgetRemaining": p.get("budgetRemaining", 0),
+            "clubsWon": p.get("clubsWon", 0)
+        })
+    
+    # Return count + participants array
+    return {
+        "count": len(normalized_participants),
+        "participants": normalized_participants
+    }
 
 @api_router.get("/leagues/{league_id}/members")
 async def get_league_members(league_id: str):
