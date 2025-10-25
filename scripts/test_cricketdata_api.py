@@ -155,7 +155,7 @@ class CricketDataAPITester:
         print("📋 LISTING CURRENT MATCHES")
         print("="*60)
         
-        data = self._make_request("v1/current_matches")
+        data = self._make_request("v1/currentMatches", {"offset": 0})
         
         if data and 'data' in data:
             matches = data['data']
@@ -165,7 +165,7 @@ class CricketDataAPITester:
                 print(f"\n   {i}. {match.get('name', 'Unknown')}")
                 print(f"      ID: {match.get('id')}")
                 print(f"      Status: {match.get('status')}")
-                print(f"      Teams: {match.get('teamA')} vs {match.get('teamB')}")
+                print(f"      Teams: {match.get('teams', [])}")
             
             return matches
         else:
