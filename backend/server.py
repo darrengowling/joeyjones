@@ -2463,7 +2463,9 @@ async def start_next_lot(auction_id: str, next_club_id: str):
             "currentClubId": next_club_id,
             "currentLot": next_lot_number,
             "currentLotId": next_lot_id,
-            "timerEndsAt": timer_end
+            "timerEndsAt": timer_end,
+            "currentBid": None,
+            "currentBidder": None
         }}
     )
     
