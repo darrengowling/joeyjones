@@ -171,14 +171,20 @@ export default function AuctionRoom() {
 
     // Handle sold event
     const onSold = (data) => {
-      console.log("Lot sold:", data);
+      console.log("=== SOLD EVENT RECEIVED ===");
+      console.log("  clubId:", data.clubId);
+      console.log("  clubName:", data.clubName);
+      console.log("  unsold:", data.unsold);
+      console.log("  winningBid:", data.winningBid);
+      
+      const playerName = data.clubName || "Unknown player";
       
       if (data.unsold) {
-        alert(`❌ ${uiHints.assetLabel} went unsold! "${data.clubId}" will be offered again later.`);
+        alert(`❌ ${playerName} went unsold and will be offered again later.`);
       } else {
         const winnerName = data.winningBid ? data.winningBid.userName : "Unknown";
         const amount = data.winningBid ? formatCurrency(data.winningBid.amount) : "";
-        alert(`✅ ${uiHints.assetLabel} sold to ${winnerName} for ${amount}!`);
+        alert(`✅ ${playerName} sold to ${winnerName} for ${amount}!`);
         
         // CRITICAL FIX: Immediately update club status to 'sold' in local state
         // DON'T reload clubs - rely on this update to avoid race conditions
