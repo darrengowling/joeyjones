@@ -458,23 +458,6 @@ export default function AuctionRoom() {
     );
   }
 
-  // CRITICAL FIX: Poll auction status every 1 second while in waiting room
-  // This ensures we catch the transition even if Socket.IO events are missed
-  useEffect(() => {
-    if (auction?.status === "waiting") {
-      console.log("⏳ Starting waiting room polling");
-      const waitingPoll = setInterval(() => {
-        console.log("🔄 Polling auction status from waiting room...");
-        loadAuction();
-      }, 1000);
-      
-      return () => {
-        console.log("🛑 Stopping waiting room polling");
-        clearInterval(waitingPoll);
-      };
-    }
-  }, [auction?.status]);
-
   // Everton Bug Fix 2: Show waiting room if auction status is "waiting"
   if (auction?.status === "waiting") {
     const isCommissioner = league?.commissionerId === user?.id;
