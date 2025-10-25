@@ -221,14 +221,15 @@ class LeagueParticipantCreate(BaseModel):
 class Auction(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     leagueId: str
-    status: str = "pending"  # pending, active, paused, completed
-    currentLot: int = 0
+    # Prompt A: Strict status types with "waiting" as default
+    status: Literal["waiting", "active", "paused", "completed"] = "waiting"
+    currentLot: int = 0  # 0 = not started, 1+ = lot number
     currentClubId: Optional[str] = None
     currentLotId: Optional[str] = None  # Track lot ID for timer events
     bidTimer: int = 60  # seconds
     antiSnipeSeconds: int = 30
     timerEndsAt: Optional[datetime] = None
-    clubQueue: List[str] = []  # Queue of club IDs to auction
+    clubQueue: List[str] = []  # Queue of club IDs to auction (prepared at creation)
     unsoldClubs: List[str] = []  # Clubs that went unsold, will be re-offered
     minimumBudget: float = 1000000.0  # £1m minimum budget per user
     pausedRemainingTime: Optional[float] = None  # Stored time when paused
