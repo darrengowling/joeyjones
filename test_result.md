@@ -931,3 +931,52 @@ agent_communication:
     message: "BID BROADCASTING SYSTEM WITH MONOTONIC SEQUENCE NUMBERS TESTING COMPLETED: Comprehensive testing of robust bid broadcasting system performed successfully with all 6/6 test scenarios passing. ✅ CRITICAL FIXES APPLIED: Fixed auction completion logic bug that was ending auctions immediately after first bid, implemented atomic MongoDB $inc operation to prevent race conditions in sequence number generation during rapid-fire bidding. ✅ MONOTONIC SEQUENCE VERIFICATION: Confirmed sequence numbers are strictly increasing (1→2→3→4→5) with no duplicates, gaps, or rollbacks even under rapid-fire stress testing. ✅ REAL-TIME EVENT DELIVERY: All users in auction rooms receive bid_update events within milliseconds containing lotId, amount, bidder{userId, displayName}, seq, serverTime. ✅ SYNC STATE FUNCTIONALITY: Users joining mid-bidding receive complete current state with currentBid, currentBidder, and sequence number. ✅ STRESS TEST RESULTS: 6 rapid bids from 2 concurrent users delivered correctly with perfect sequence monotonicity (8→9→10→11→12→13), identical final state across all clients. ✅ MULTI-USER SYNCHRONIZATION: Verified both users see identical final bid state (£25M by User A, seq=26) after complex bidding scenarios. System is production-ready for high-frequency bidding with guaranteed state consistency and no stale updates. All acceptance criteria met: ✅ Monotonic sequences ✅ Complete bid_update events ✅ Universal event delivery ✅ Sync state initialization ✅ Rapid-fire consistency ✅ No stale updates."
   - agent: "main"
     message: "EVERTON BUGS IMPLEMENTATION COMPLETED: Implemented 5 bug fixes from user testing sessions. ✅ Bug 1 (Timer Display): Frontend already fetches and displays league's custom timer settings (timerSeconds, antiSnipeSeconds) in auction room. ✅ Bug 2 (Auction Start Control): Complete implementation - backend creates auctions in 'waiting' state with POST /auction/{auction_id}/begin endpoint, frontend shows waiting room with participants list, 'Begin Auction' button for commissioner, 'Waiting for commissioner' message for others. ✅ Bug 3 (Budget Reserve): Backend bid validation enforces £1m reserve per remaining roster slot to prevent users from running out of budget. ✅ Bug 4 (Final Team Display): Investigation pending - need to verify if previous race condition fix is still working. ✅ Bug 5 (Roster Visibility): Complete implementation - backend enhanced to return roster + budgetRemaining for all managers, frontend displays all rosters with team names, prices, and budget info in Managers section. Ready for comprehensive testing."
+
+
+  - task: "E2E Test 1: Waiting Room Core Flow"
+    implemented: true
+    working: "NA"
+    file: "tests/e2e/01_waiting_room.spec.ts"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Created E2E test for core waiting room flow. Tests: both users see waiting room, commissioner sees Begin button, participant sees waiting message, both see participants list, transition to active < 2s, both see first lot. Ready for testing."
+
+  - task: "E2E Test 2: Non-Commissioner Authorization"
+    implemented: true
+    working: "NA"
+    file: "tests/e2e/02_non_commissioner_forbidden.spec.ts"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Created E2E test for non-commissioner authorization. Tests: non-commissioner receives 403 when calling POST /auction/{id}/begin, error message mentions authorization, auction remains in waiting state, commissioner can successfully begin. Ready for testing."
+
+  - task: "E2E Test 3: Concurrent Auctions Isolation"
+    implemented: true
+    working: "NA"
+    file: "tests/e2e/03_concurrent_auctions_isolation.spec.ts"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Created E2E test for Socket.IO room isolation. Tests: creates two separate auctions running simultaneously, verifies lot_started events don't leak between auctions, verifies Auction A users receive events while Auction B users do not, checks UI state in both auctions. Critical test given recent room isolation bugs. Ready for testing."
+
+  - task: "E2E Test 4: Late Joiner Sync"
+    implemented: true
+    working: "NA"
+    file: "tests/e2e/04_late_joiner.spec.ts"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Created E2E test for late joiner sync. Tests: user joins waiting room after auction created, verifies they receive auction_snapshot event, sees correct waiting room UI, sees same participant count as early joiners, transitions to active with all other users. Ready for testing."
