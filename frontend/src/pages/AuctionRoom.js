@@ -246,7 +246,8 @@ export default function AuctionRoom() {
     };
 
     // Register all event listeners
-    socket.on('sync_state', onSyncState);
+    socket.on('auction_snapshot', onAuctionSnapshot);
+    socket.on('sync_state', onSyncState);  // Legacy support
     socket.on('bid_placed', onBidPlaced);
     socket.on('bid_update', onBidUpdate);
     socket.on('lot_started', onLotStarted);
