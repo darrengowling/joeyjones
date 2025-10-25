@@ -265,6 +265,16 @@ export default function AuctionRoom() {
       loadAuction();
     };
 
+    // Prompt A: Handle participants_changed for live count updates
+    const onParticipantsChanged = (data) => {
+      console.log("👥 Participants changed:", data);
+      
+      // Re-fetch participants from API to get latest data
+      if (auction?.leagueId) {
+        loadParticipants();
+      }
+    };
+
     // Register all event listeners
     socket.on('auction_snapshot', onAuctionSnapshot);
     socket.on('sync_state', onSyncState);  // Legacy support
@@ -276,6 +286,7 @@ export default function AuctionRoom() {
     socket.on('auction_complete', onAuctionComplete);
     socket.on('auction_paused', onAuctionPaused);
     socket.on('auction_resumed', onAuctionResumed);
+    socket.on('participants_changed', onParticipantsChanged); // Prompt A
 
     // Cleanup function - remove all listeners
     return () => {
@@ -290,6 +301,7 @@ export default function AuctionRoom() {
       socket.off('auction_complete', onAuctionComplete);
       socket.off('auction_paused', onAuctionPaused);
       socket.off('auction_resumed', onAuctionResumed);
+      socket.off('participants_changed', onParticipantsChanged); // Prompt A
     };
   }, [auctionId, user, bidSequence, listenerCount]);
 
