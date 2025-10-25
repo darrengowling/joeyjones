@@ -50,6 +50,13 @@ export default function LeagueDetail() {
     if (!user) return;
 
     console.log(`🎧 [LeagueDetail] Setting up socket listeners (Count: ${listenerCount})`);
+    
+    // Prompt D: Join league room on connect
+    socket.emit('join_league', { leagueId, userId: user.id }, (ack) => {
+      if (ack && ack.ok) {
+        console.log(`✅ Joined league room: ${ack.room}, size: ${ack.roomSize}`);
+      }
+    });
 
     // Handle member updates (upsert pattern)
     const onMemberJoined = (data) => {
