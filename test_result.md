@@ -1097,3 +1097,21 @@ agent_communication:
       - working: "NA"
         agent: "main"
         comment: "Root cause identified: useSocketRoom hook only listens to 'sync_state' event to set ready=true, but backend sends 'auction_snapshot' instead. Added auction_snapshot handler to useSocketRoom.js to mark room as ready when snapshot received."
+
+  - task: "Multi-sport support in start_next_lot function"
+    implemented: true
+    working: true
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "critical"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "user"
+        comment: "Timer doesn't restart for second player after first player bought in cricket auction"
+      - working: false
+        agent: "main"
+        comment: "Root cause: start_next_lot() only queries db.clubs collection (football), not db.assets (cricket). Function fails silently when club not found, leaving auction stuck."
+      - working: "NA"
+        agent: "main"
+        comment: "Fixed start_next_lot() to check league's sportKey and query correct collection (db.clubs for football, db.assets for cricket). Also fixed join_auction Socket.IO handler with same issue."
