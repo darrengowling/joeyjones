@@ -1493,39 +1493,142 @@ async def start_auction(league_id: str):
     
     random.shuffle(all_assets)
     
-    # Prompt B: Create auction in "waiting" state, prepare queue only (no lots yet)
-    if all_assets:
-        # Initialize asset queue (randomized order)
-        asset_queue = [asset["id"] for asset in all_assets]
-        
-        # Update auction with queue, but stay in "waiting" state
-        await db.auctions.update_one(
-            {"id": auction_obj.id},
-            {"$set": {
+    # Prompt G: Feature flag - determines if auction starts in "waiting" or "active" state
+    if FEATURE_WAITING_ROOM:
+        # NEW BEHAVIOR: Create auction in "waiting" state (Prompt B)
+        if all_assets:
+            # Initialize asset queue (randomized order)
+            asset_queue = [asset["id"] for asset in all_assets]
+            
+            # Update auction with queue, but stay in "waiting" state
+            await db.auctions.update_one(
+                {"id": auction_obj.id},
+                {"$set": {
+                    "status": "waiting",
+                    "currentLot": 0,  # Not started yet
+                    "currentClubId": None,
+                    "clubQueue": asset_queue,
+                    "unsoldClubs": [],
+                    "timerEndsAt": None,  # No timer yet
+                    "currentLotId": None,
+                    "minimumBudget": 1000000.0
+                }}
+            )
+            
+            # Prompt G: Structured logging for auction creation
+            logger.info("auction.created", extra={
+                "leagueId": league_id,
+                "auctionId": auction_obj.id,
                 "status": "waiting",
-                "currentLot": 0,  # Not started yet
-                "currentClubId": None,
-                "clubQueue": asset_queue,
-                "unsoldClubs": [],
-                "timerEndsAt": None,  # No timer yet
-                "currentLotId": None,
-                "minimumBudget": 1000000.0
-            }}
-        )
+                "assetCount": len(asset_queue),
+                "sportKey": sport_key,
+                "feature": "waiting_room_enabled"
+            })
+            
+            # Emit to LEAGUE room (not auction room - users haven't entered yet)
+            await sio.emit('league_status_changed', {
+                'leagueId': league_id,
+                'status': 'auction_created',
+                'auctionId': auction_obj.id
+            }, room=f"league:{league_id}")
+            
+            # Prompt G: Log league status change event
+            league_room_size = len(sio.manager.rooms.get(f"league:{league_id}", {}).get("/", set()))
+            logger.info("league_status_changed.emitted", extra={
+                "leagueId": league_id,
+                "auctionId": auction_obj.id,
+                "status": "auction_created",
+                "room": f"league:{league_id}",
+                "roomSize": league_room_size
+            })
+            
+            logger.info(f"Created auction {auction_obj.id} in waiting state with {len(asset_queue)} assets queued")
+        else:
+            logger.error(f"Failed to create auction {auction_obj.id} - no assets available")
+            raise HTTPException(status_code=500, detail="No assets available to auction")
         
-        # Emit to LEAGUE room (not auction room - users haven't entered yet)
-        await sio.emit('league_status_changed', {
-            'leagueId': league_id,
-            'status': 'auction_created',
-            'auctionId': auction_obj.id
-        }, room=f"league:{league_id}")
-        
-        logger.info(f"Created auction {auction_obj.id} in waiting state with {len(asset_queue)} assets queued")
-    else:
-        logger.error(f"Failed to create auction {auction_obj.id} - no assets available")
-        raise HTTPException(status_code=500, detail="No assets available to auction")
+        return {"auctionId": auction_obj.id, "status": "waiting"}
     
-    return {"auctionId": auction_obj.id, "status": "waiting"}
+    else:
+        # OLD BEHAVIOR: Start auction immediately in "active" state (pre-waiting room)
+        if all_assets:
+            # Initialize asset queue
+            asset_queue = [asset["id"] for asset in all_assets]
+            
+            # Get first asset
+            first_asset_id = asset_queue[0]
+            if sport_key == "football":
+                first_asset = await db.clubs.find_one({"id": first_asset_id})
+            else:
+                first_asset = await db.assets.find_one({"id": first_asset_id, "sportKey": sport_key})
+            
+            if not first_asset:
+                raise HTTPException(status_code=404, detail="First asset not found")
+            
+            # Start first lot immediately
+            lot_id = f"{auction_obj.id}-lot-1"
+            timer_end = datetime.now(timezone.utc) + timedelta(seconds=auction_obj.bidTimer)
+            
+            await db.auctions.update_one(
+                {"id": auction_obj.id},
+                {"$set": {
+                    "status": "active",
+                    "currentClubId": first_asset_id,
+                    "currentLot": 1,
+                    "clubQueue": asset_queue,
+                    "unsoldClubs": [],
+                    "timerEndsAt": timer_end,
+                    "currentLotId": lot_id,
+                    "minimumBudget": 1000000.0
+                }}
+            )
+            
+            # Prompt G: Log legacy immediate start
+            logger.info("auction.created", extra={
+                "leagueId": league_id,
+                "auctionId": auction_obj.id,
+                "status": "active",
+                "assetCount": len(asset_queue),
+                "sportKey": sport_key,
+                "feature": "waiting_room_disabled_legacy_behavior"
+            })
+            
+            # Create timer event
+            if timer_end.tzinfo is None:
+                timer_end = timer_end.replace(tzinfo=timezone.utc)
+            ends_at_ms = int(timer_end.timestamp() * 1000)
+            timer_data = create_timer_event(lot_id, ends_at_ms)
+            
+            # Prepare asset data for emission
+            if sport_key == "football":
+                asset_data = Club(**first_asset).model_dump()
+            else:
+                asset_data = first_asset.copy()
+                if "_id" in asset_data:
+                    del asset_data["_id"]
+            
+            # Emit auction start and first lot
+            await sio.emit('league_status_changed', {
+                'leagueId': league_id,
+                'status': 'auction_started',
+                'auctionId': auction_obj.id
+            }, room=f"league:{league_id}")
+            
+            await sio.emit('lot_started', {
+                'club': asset_data,
+                'lotNumber': 1,
+                'timer': timer_data
+            }, room=f"auction:{auction_obj.id}")
+            
+            # Start timer countdown
+            asyncio.create_task(countdown_timer(auction_obj.id, timer_end, lot_id))
+            
+            logger.info(f"Created and started auction {auction_obj.id} immediately (legacy mode) with {len(asset_queue)} assets")
+        else:
+            logger.error(f"Failed to create auction {auction_obj.id} - no assets available")
+            raise HTTPException(status_code=500, detail="No assets available to auction")
+        
+        return {"auctionId": auction_obj.id, "status": "active"}
 
 @api_router.get("/leagues/{league_id}/state")
 async def get_league_state(league_id: str):
