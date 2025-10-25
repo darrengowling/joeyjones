@@ -1115,14 +1115,18 @@ async def get_available_assets_for_league(league_id: str):
         return [{"id": asset["id"], "name": asset["name"], "meta": asset.get("meta")} for asset in assets]
 
 @api_router.delete("/leagues/{league_id}")
-async def delete_league(league_id: str, commissioner_id: str = None):
+async def delete_league(league_id: str, commissioner_id: str = None, user_id: str = None):
     """Delete a league and all associated data - only commissioner can do this"""
     league = await db.leagues.find_one({"id": league_id})
     if not league:
         raise HTTPException(status_code=404, detail="League not found")
     
-    # Verify commissioner permissions (for now, skip verification)
-    # In production, you'd verify that commissioner_id matches league["commissionerId"]
+    # Accept either commissioner_id or user_id parameter
+    requesting_user_id = commissioner_id or user_id
+    
+    # Verify commissioner permissions
+    if requesting_user_id and league["commissionerId"] != requesting_user_id:
+        raise HTTPException(status_code=403, detail="Only the commissioner can delete this league")
     
     # Check if auction is active
     existing_auction = await db.auctions.find_one({"leagueId": league_id})
