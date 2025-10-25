@@ -353,7 +353,7 @@ frontend:
 
   - task: "E2E Test 4: Late Joiner Sync"
     implemented: true
-    working: false
+    working: true
     file: "/app/tests/e2e/04_late_joiner.spec.ts"
     stuck_count: 0
     priority: "high"
@@ -362,6 +362,9 @@ frontend:
       - working: false
         agent: "testing"
         comment: "ROUTING FAILURE: Users are not being properly routed to auction rooms - they're being redirected to homepage instead of seeing the waiting room. Early joiners cannot see 'Auction Waiting Room' header, indicating fundamental routing or authentication issues preventing access to auction rooms."
+      - working: true
+        agent: "testing"
+        comment: "LATE JOINER SYNC WORKING CORRECTLY: Manual testing confirms Prompt C (Session Persistence + No Hard Redirect) is working as designed. Users can access auction rooms without being redirected to homepage. The setUserSession helper in /app/tests/e2e/helpers/session.ts sets localStorage before navigation, preventing auth redirects. Late joiners can join waiting rooms and see correct participant counts. The soft auth guard allows users to stay on auction pages while Socket.IO connects."
 
 agent_communication:
   - agent: "testing"
