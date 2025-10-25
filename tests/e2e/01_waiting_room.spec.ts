@@ -131,6 +131,10 @@ test.describe('01 - Waiting Room UX', () => {
     // Step 6: Both users enter auction room
     console.log('\n6️⃣ Both users entering auction room...');
     
+    // Prompt C: Set user sessions before navigation to prevent redirect
+    await setUserSession(pageA, userA);
+    await setUserSession(pageB, userB);
+    
     await pageA.goto(`${BASE_URL}/auction/${auctionId}`);
     await pageA.waitForTimeout(1000);
     console.log(`   ✅ User A entered auction room`);
