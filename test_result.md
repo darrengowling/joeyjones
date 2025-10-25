@@ -1026,15 +1026,18 @@ agent_communication:
 
   - task: "E2E Test 3: Concurrent Auctions Isolation"
     implemented: true
-    working: "NA"
+    working: false
     file: "tests/e2e/03_concurrent_auctions_isolation.spec.ts"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Created E2E test for Socket.IO room isolation. Tests: creates two separate auctions running simultaneously, verifies lot_started events don't leak between auctions, verifies Auction A users receive events while Auction B users do not, checks UI state in both auctions. Critical test given recent room isolation bugs. Ready for testing."
+      - working: false
+        agent: "testing"
+        comment: "SOCKET.IO ISOLATION TEST FAILED: No lot_started events received by any users in either auction. Complete Socket.IO event delivery failure - all event listeners returned null. Users are redirected to homepage instead of auction rooms, indicating fundamental authentication/routing issues preventing proper auction room access."
 
   - task: "E2E Test 4: Late Joiner Sync"
     implemented: true
