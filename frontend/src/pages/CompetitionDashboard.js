@@ -365,7 +365,7 @@ export default function CompetitionDashboard() {
               ))}
             </div>
           ) : (
-            <p className="text-sm text-gray-500 italic">No teams acquired yet</p>
+            <p className="text-sm text-gray-500 italic">No {uiHints.assetPlural.toLowerCase()} acquired yet</p>
           )}
         </div>
 
