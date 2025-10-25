@@ -606,6 +606,27 @@ export default function AuctionRoom() {
   }
   const highestBid = currentClubBids.length > 0 ? Math.max(...currentClubBids.map((b) => b.amount)) : 0;
 
+  // Prompt C: Soft guard - render message instead of redirecting
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 py-8 flex items-center justify-center">
+        <div 
+          data-testid="auth-required" 
+          className="bg-white rounded-lg shadow-xl p-8 max-w-md text-center"
+        >
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Authentication Required</h2>
+          <p className="text-gray-600 mb-6">Please sign in to access the auction room.</p>
+          <button
+            onClick={() => navigate("/")}
+            className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition"
+          >
+            Go to Home
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 py-8">
       <div className="container mx-auto px-4">
