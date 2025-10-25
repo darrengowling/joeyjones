@@ -185,17 +185,18 @@ export default function AuctionRoom() {
         setParticipants(data.participants);
       }
       
-      // CRITICAL FIX: Update final club status BEFORE reloading
-      // This ensures the UI shows correct sold count immediately
+      // CRITICAL FIX: Update final club status immediately and DON'T reload clubs
+      // Reloading causes race condition - trust the event data
       if (data.finalClubId && data.finalWinningBid) {
-        console.log("Updating final club status to 'sold'");
+        console.log("✅ Updating final club status to 'sold' (no reload)");
         setClubs(prevClubs => {
           const updated = prevClubs.map(club => 
             club.id === data.finalClubId 
               ? { ...club, status: 'sold', winner: data.finalWinningBid.userName, winningBid: data.finalWinningBid.amount }
               : club
           );
-          console.log("Clubs after final update:", updated.filter(c => c.status === 'sold').length, "sold");
+          const soldCount = updated.filter(c => c.status === 'sold').length;
+          console.log(`📊 Clubs after final update: ${soldCount} sold out of ${updated.length} total`);
           return updated;
         });
         
@@ -205,17 +206,10 @@ export default function AuctionRoom() {
           setCurrentBidder(null);
         }
         
-        // Reload auction to get final state (but clubs already updated above)
+        // Only reload auction status, NOT clubs (to preserve our manual update)
         loadAuction();
-        
-        // Small delay before loading clubs to ensure backend has caught up
-        // This prevents race condition where loadClubs() overwrites our manual update
-        setTimeout(() => {
-          console.log("Loading clubs after delay to ensure backend sync");
-          loadClubs();
-        }, 500);
       } else {
-        // No final club info, just reload normally
+        // No final club info, reload everything
         loadAuction();
         loadClubs();
       }
