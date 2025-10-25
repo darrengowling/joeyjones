@@ -445,6 +445,21 @@ export default function AuctionRoom() {
   if (auction?.status === "waiting") {
     const isCommissioner = league?.commissionerId === user?.id;
     
+    // CRITICAL FIX: Poll auction status every 1 second while in waiting room
+    // This ensures we catch the transition even if Socket.IO events are missed
+    React.useEffect(() => {
+      console.log("⏳ Starting waiting room polling");
+      const waitingPoll = setInterval(() => {
+        console.log("🔄 Polling auction status from waiting room...");
+        loadAuction();
+      }, 1000);
+      
+      return () => {
+        console.log("🛑 Stopping waiting room polling");
+        clearInterval(waitingPoll);
+      };
+    }, []);
+    
     const handleBeginAuction = async () => {
       try {
         await axios.post(`${API}/auction/${auctionId}/begin`, null, {
