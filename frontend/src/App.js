@@ -779,6 +779,19 @@ const Home = () => {
                             Token: <code className="bg-gray-100 px-1 py-0.5 rounded text-xs">{league.inviteToken}</code>
                           </p>
                         </div>
+                        
+                        {/* Delete button for commissioners */}
+                        {isCommissioner && (
+                          <div className="mt-3">
+                            <button
+                              onClick={(e) => handleDeleteLeague(league, e)}
+                              className="w-full px-3 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition text-sm font-medium"
+                              data-testid={`delete-league-${league.id}`}
+                            >
+                              🗑️ Delete League
+                            </button>
+                          </div>
+                        )}
                       </div>
                     );
                   })}
