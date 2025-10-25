@@ -1041,12 +1041,15 @@ agent_communication:
 
   - task: "E2E Test 4: Late Joiner Sync"
     implemented: true
-    working: "NA"
+    working: false
     file: "tests/e2e/04_late_joiner.spec.ts"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Created E2E test for late joiner sync. Tests: user joins waiting room after auction created, verifies they receive auction_snapshot event, sees correct waiting room UI, sees same participant count as early joiners, transitions to active with all other users. Ready for testing."
+      - working: false
+        agent: "testing"
+        comment: "LATE JOINER TEST FAILED: Users cannot see 'Auction Waiting Room' header and are being redirected to homepage instead of auction rooms. Fundamental routing or authentication issues preventing access to auction rooms. Late joiner cannot access waiting room at all."
