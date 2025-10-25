@@ -2316,6 +2316,18 @@ async def complete_lot(auction_id: str):
     for p in participants:
         p.pop('_id', None)
     
+    # Get current club/player details for the event
+    current_asset = None
+    league = await db.leagues.find_one({"id": auction["leagueId"]})
+    sport_key = league.get("sportKey", "football") if league else "football"
+    
+    if sport_key == "football":
+        current_asset = await db.clubs.find_one({"id": current_club_id})
+    else:
+        current_asset = await db.assets.find_one({"id": current_club_id, "sportKey": sport_key})
+    
+    asset_name = current_asset.get("name") if current_asset else "Unknown"
+    
     # Emit sold/unsold event
     current_lot_id = auction.get("currentLotId")
     if not current_lot_id and auction.get("currentLot"):
@@ -2328,6 +2340,7 @@ async def complete_lot(auction_id: str):
     
     await sio.emit('sold', {
         'clubId': current_club_id,
+        'clubName': asset_name,  # Include player/club name
         'winningBid': Bid(**winning_bid).model_dump(mode='json') if winning_bid else None,
         'unsold': not bool(winning_bid),  # Flag if club went unsold
         'participants': [LeagueParticipant(**p).model_dump(mode='json') for p in participants],
