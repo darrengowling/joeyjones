@@ -1543,7 +1543,10 @@ async def get_league_state(league_id: str):
     }
 
 @api_router.post("/auction/{auction_id}/begin")
-async def begin_auction(auction_id: str, commissionerId: str):
+async def begin_auction(
+    auction_id: str,
+    current_user: dict = Depends(get_current_user_from_header)
+):
     """Everton Bug Fix: Commissioner manually starts the auction after all users have joined"""
     # Verify auction exists and is waiting
     auction = await db.auctions.find_one({"id": auction_id})
@@ -1558,7 +1561,8 @@ async def begin_auction(auction_id: str, commissionerId: str):
     if not league:
         raise HTTPException(status_code=404, detail="League not found")
     
-    if league["commissionerId"] != commissionerId:
+    # Check if current user is the commissioner
+    if league["commissionerId"] != current_user["id"]:
         raise HTTPException(status_code=403, detail="Only the commissioner can start the auction")
     
     # Get sport key for asset retrieval
