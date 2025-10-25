@@ -112,6 +112,17 @@ def get_rate_limiter(times: int, seconds: int):
             pass
         return Depends(dummy_limiter)
 
+# Prompt B: Auth dependency - reads X-User-ID header, returns 401 if missing
+def require_user_id(request: Request) -> str:
+    """
+    Dependency that extracts user ID from X-User-ID header.
+    Raises 401 if header is missing.
+    """
+    user_id = request.headers.get("X-User-ID")
+    if not user_id:
+        raise HTTPException(status_code=401, detail="Authentication required: X-User-ID header missing")
+    return user_id
+
 # Lifespan management for rate limiting
 @asynccontextmanager
 async def lifespan(app: FastAPI):
