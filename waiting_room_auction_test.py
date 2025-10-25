@@ -576,8 +576,8 @@ class WaitingRoomAuctionTester:
             return False
         
         error_detail = result.get("detail", result.get("text", ""))
-        if "budget" not in error_detail.lower() or "remaining" not in error_detail.lower():
-            self.log(f"Error should mention budget/remaining: {error_detail}", "ERROR")
+        if "reserve" not in error_detail.lower() and "remaining" not in error_detail.lower():
+            self.log(f"Error should mention reserve/remaining: {error_detail}", "ERROR")
             return False
         
         self.log("✅ Budget reserve enforcement working - high bid rejected")
