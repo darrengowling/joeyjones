@@ -35,6 +35,22 @@ export default function AuctionRoom() {
   // Use the new auction clock hook with socket from useSocketRoom
   const { remainingMs } = useAuctionClock(socket, currentLotId);
 
+  // Prompt E: Polling fallback for waiting room (top-level hook, conditional inside)
+  useEffect(() => {
+    if (auction?.status === "waiting") {
+      console.log("⏳ Starting waiting room polling (every 2s)");
+      const pollInterval = setInterval(() => {
+        console.log("🔄 Polling auction status from waiting room...");
+        loadAuction();
+      }, 2000);
+
+      return () => {
+        console.log("🛑 Stopping waiting room polling");
+        clearInterval(pollInterval);
+      };
+    }
+  }, [auction?.status]);
+
   // Initial setup: load user and data
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
