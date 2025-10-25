@@ -115,6 +115,7 @@ export function useSocketRoom(roomType, roomId, options = {}) {
     
     if (roomType === 'auction') {
       socket.on('sync_state', handleSyncState);
+      socket.on('auction_snapshot', handleAuctionSnapshot);
     } else if (roomType === 'league') {
       socket.on('room_joined', handleRoomJoined);
     }
