@@ -641,7 +641,7 @@ export default function CompetitionDashboard() {
                             </div>
                             <div className="flex-1">
                               <div className="text-sm font-medium text-gray-900">
-                                Home Team {fixture.homeAssetId} vs {fixture.awayAssetId ? `Away Team ${fixture.awayAssetId}` : "TBD"}
+                                {fixture.homeAsset?.name || fixture.homeAssetId} vs {fixture.awayAsset?.name || fixture.awayAssetId || "TBD"}
                               </div>
                               {fixture.venue && (
                                 <div className="text-xs text-gray-500 mt-1">
