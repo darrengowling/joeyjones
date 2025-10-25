@@ -10,19 +10,19 @@ The Friends of Pifa cricket scoring system provides comprehensive points calcula
 | Action | Points | Description |
 |--------|--------|-------------|
 | **Run** | 1 point | Per run scored |
-| **Wicket** | 25 points | Per wicket taken (bowling) |
+| **Wicket** | 20 points | Per wicket taken (bowling) |
 | **Catch** | 10 points | Per catch taken (fielding) |
-| **Stumping** | 15 points | Per stumping (wicket-keeping) |
-| **Run Out** | 10 points | Per run out (fielding/backing up) |
+| **Stumping** | 25 points | Per stumping (wicket-keeping) |
+| **Run Out** | 20 points | Per run out (fielding/backing up) |
 
 ### Milestone Bonuses
 | Milestone | Threshold | Bonus Points | Auto-Applied |
 |-----------|-----------|--------------|--------------|
-| **Half Century** | 50+ runs | +10 points | ✅ Enabled |
-| **Century** | 100+ runs | +25 points | ✅ Enabled |
-| **Five Wicket Haul** | 5+ wickets | +25 points | ✅ Enabled |
+| **Half Century** | 50+ runs | +10 points | ❌ **DISABLED** |
+| **Century** | 100+ runs | +25 points | ❌ **DISABLED** |
+| **Five Wicket Haul** | 5+ wickets | +25 points | ❌ **DISABLED** |
 
-**Note:** Milestone bonuses are cumulative. A century (101 runs) earns both half-century (+10) and century (+25) bonuses.
+**Note:** Milestone bonuses are **currently disabled** for NZ vs England series. Points are awarded purely for base actions (runs, wickets, catches, stumpings, run-outs).
 
 ## Sample CSV Format
 
