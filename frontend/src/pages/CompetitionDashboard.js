@@ -148,6 +148,16 @@ export default function CompetitionDashboard() {
           params: { userId: user.id }
         });
         setSummary(response.data);
+        
+        // Load sport uiHints for dynamic terminology
+        if (response.data.sportKey) {
+          try {
+            const sportResponse = await axios.get(`${API}/sports/${response.data.sportKey}`);
+            setUiHints(sportResponse.data.uiHints);
+          } catch (e) {
+            console.error("Error loading sport info:", e);
+          }
+        }
       } else if (tab === "table") {
         const response = await axios.get(`${API}/leagues/${leagueId}/standings`);
         setStandings(response.data);
