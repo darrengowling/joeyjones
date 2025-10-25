@@ -2114,7 +2114,7 @@ async def complete_lot(auction_id: str):
         'unsold': not bool(winning_bid),  # Flag if club went unsold
         'participants': [LeagueParticipant(**p).model_dump(mode='json') for p in participants],
         **sold_data
-    })
+    }, room=f"auction:{auction_id}")
     
     # ALWAYS evaluate completion first (before considering next lot)
     # Pass final club info to ensure frontend gets complete state
