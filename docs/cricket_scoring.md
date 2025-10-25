@@ -48,28 +48,24 @@ IPL_2024_M002,rashid_khan,8,5,1,0,0
 **Virat Kohli (Match 1): 89 runs, 1 catch**
 - Runs: 89 × 1 = 89 points
 - Catch: 1 × 10 = 10 points
-- Half-century bonus: +10 points (89 ≥ 50)
-- **Total: 109 points**
+- **Total: 99 points** *(no milestone bonuses)*
 
 **MS Dhoni (Match 1): 45 runs, 2 catches, 3 stumpings, 1 run out**
 - Runs: 45 × 1 = 45 points
 - Catches: 2 × 10 = 20 points
-- Stumpings: 3 × 15 = 45 points
-- Run out: 1 × 10 = 10 points
-- **Total: 120 points**
+- Stumpings: 3 × 25 = 75 points
+- Run out: 1 × 20 = 20 points
+- **Total: 160 points**
 
 **Virat Kohli (Match 2): 112 runs**
 - Runs: 112 × 1 = 112 points
-- Half-century bonus: +10 points (112 ≥ 50)
-- Century bonus: +25 points (112 ≥ 100)
-- **Total: 147 points**
+- **Total: 112 points** *(no milestone bonuses)*
 
 **Rashid Khan (Match 2): 8 runs, 5 wickets, 1 catch**
 - Runs: 8 × 1 = 8 points
-- Wickets: 5 × 25 = 125 points
+- Wickets: 5 × 20 = 100 points
 - Catch: 1 × 10 = 10 points
-- Five-wicket haul bonus: +25 points (5 ≥ 5)
-- **Total: 168 points**
+- **Total: 118 points** *(no milestone bonuses)*
 
 ## Scoring Upload Process
 
