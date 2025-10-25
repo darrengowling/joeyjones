@@ -22,7 +22,7 @@ import os
 
 # API Configuration
 API_KEY = "82fec341-b050-4b1c-9a9d-72359c591820"
-BASE_URL = "https://api.cricketdata.org"
+BASE_URL = "https://api.cricapi.com"
 
 # NZ vs England ODI Series Matches
 MATCHES = {
