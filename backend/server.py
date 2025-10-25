@@ -2815,10 +2815,13 @@ async def leave_auction(sid, data):
 
 @sio.event
 async def join_league(sid, data):
-    """Join a league room - used by Lobby/LeagueDetail pages"""
+    """
+    Prompt D: Join a league room - used by Lobby/LeagueDetail pages
+    Returns ack with {ok:true, room, roomSize}
+    """
     league_id = data.get('leagueId')
     if not league_id:
-        return
+        return {'ok': False, 'error': 'leagueId required'}
     
     # Get user ID from session if available
     try:
@@ -2865,6 +2868,9 @@ async def join_league(sid, data):
         'leagueId': league_id,
         'memberCount': len(members)
     }, room=sid)
+    
+    # Prompt D: Return ack
+    return {'ok': True, 'room': room_name, 'roomSize': room_size}
 
 @sio.event
 async def leave_league(sid, data):
