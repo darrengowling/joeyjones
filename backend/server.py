@@ -92,6 +92,10 @@ logger.info(f"My Competitions feature enabled: {FEATURE_MY_COMPETITIONS}")
 FEATURE_ASSET_SELECTION = os.environ.get('FEATURE_ASSET_SELECTION', 'false').lower() == 'true'
 logger.info(f"Asset Selection feature enabled: {FEATURE_ASSET_SELECTION}")
 
+# Prompt G: Feature flag for Waiting Room (Auction Start Control)
+FEATURE_WAITING_ROOM = os.environ.get('FEATURE_WAITING_ROOM', 'true').lower() == 'true'
+logger.info(f"Waiting Room feature enabled: {FEATURE_WAITING_ROOM}")
+
 # Socket.IO server imported from socketio_init.py (with Redis scaling support)
 
 # Production hardening configuration
