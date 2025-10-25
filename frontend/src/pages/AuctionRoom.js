@@ -58,11 +58,8 @@ export default function AuctionRoom() {
     if (savedUser) {
       const userData = JSON.parse(savedUser);
       setUser(userData);
-    } else {
-      alert("Please sign in first");
-      navigate("/");
-      return;
     }
+    // Prompt C: No hard redirect - will show soft guard below if no user
 
     loadAuction();
     loadClubs();
