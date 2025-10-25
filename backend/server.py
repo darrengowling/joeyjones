@@ -2258,7 +2258,7 @@ async def start_next_lot(auction_id: str, next_club_id: str):
         'lotNumber': next_lot_number,
         'timer': timer_data,
         'isUnsoldRetry': next_club_id and next_club_id in (auction.get("unsoldClubs", []))  # Flag for UI
-    })
+    }, room=f"auction:{auction_id}")
     
     logger.info(f"Started lot {next_lot_number}: {next_club['name']}")
     
