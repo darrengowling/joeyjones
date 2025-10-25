@@ -2714,10 +2714,14 @@ async def disconnect(sid):
 
 @sio.event
 async def join_auction(sid, data):
-    """Join an auction room - used by AuctionRoom page"""
+    """
+    Prompt D: Join an auction room - used by AuctionRoom page
+    Sends one-shot auction_snapshot to late joiners
+    Returns ack with {ok:true, room, roomSize}
+    """
     auction_id = data.get('auctionId')
     if not auction_id:
-        return
+        return {'ok': False, 'error': 'auctionId required'}
     
     # Get user ID from session if available
     try:
@@ -2743,7 +2747,7 @@ async def join_auction(sid, data):
         "timestamp": datetime.now(timezone.utc).isoformat()
     }))
     
-    # Send current auction state for reconnection
+    # Prompt D: Send auction_snapshot for late joiners (one-shot, read-only)
     auction = await db.auctions.find_one({"id": auction_id})
     if auction:
         
@@ -2778,7 +2782,7 @@ async def join_auction(sid, data):
             
             if lot_id:
                 timer_data = create_timer_event(lot_id, ends_at_ms)
-                logger.info(f"Sync state timer data - seq: {timer_data['seq']}, endsAt: {timer_data['endsAt']}")
+                logger.info(f"Auction snapshot timer data - seq: {timer_data['seq']}, endsAt: {timer_data['endsAt']}")
         
         # Get participants
         participants = await db.league_participants.find({"leagueId": auction["leagueId"]}).to_list(100)
@@ -2787,24 +2791,44 @@ async def join_auction(sid, data):
         for p in participants:
             p.pop('_id', None)
         
-        # Send sync state with standardized timer data (Prompt B: Include current bid info)
-        sync_data = {
-            'auction': Auction(**auction).model_dump(mode='json'),
+        # Get sold/unsold lists for snapshot
+        sold_clubs = []
+        unsold_clubs = auction.get("unsoldClubs", [])
+        
+        # Calculate sold clubs (all bids with winners)
+        all_bids = await db.bids.find({"auctionId": auction_id}).to_list(1000)
+        sold_club_ids = set()
+        for bid in all_bids:
+            if bid.get("clubId"):
+                sold_club_ids.add(bid["clubId"])
+        sold_clubs = list(sold_club_ids)
+        
+        # Prompt D: Send auction_snapshot with: status, currentLot, currentClubId, currentBid, timerEndsAt, sold/unsold lists
+        snapshot_data = {
+            'status': auction.get("status"),
+            'currentLot': auction.get("currentLot", 0),
+            'currentClubId': auction.get("currentClubId"),
             'currentClub': current_club,
-            'currentBids': current_bids,
             'currentBid': auction.get("currentBid"),
             'currentBidder': auction.get("currentBidder"),
+            'timerEndsAt': auction.get("timerEndsAt").isoformat() if auction.get("timerEndsAt") else None,
+            'soldClubs': sold_clubs,
+            'unsoldClubs': unsold_clubs,
             'seq': auction.get("bidSequence", 0),
-            'participants': [LeagueParticipant(**p).model_dump(mode='json') for p in participants]
+            'participants': [LeagueParticipant(**p).model_dump(mode='json') for p in participants],
+            'currentBids': current_bids
         }
         
         # Add timer data if available
         if timer_data:
-            sync_data['timer'] = timer_data
+            snapshot_data['timer'] = timer_data
         
-        await sio.emit('sync_state', sync_data, room=sid)
+        # Send one-shot snapshot to this client only
+        await sio.emit('auction_snapshot', snapshot_data, room=sid)
+        logger.info(f"Sent auction_snapshot to {sid} - status: {auction.get('status')}, lot: {auction.get('currentLot')}")
     
-    await sio.emit('joined', {'auctionId': auction_id}, room=sid)
+    # Prompt D: Return ack
+    return {'ok': True, 'room': room_name, 'roomSize': room_size}
 
 @sio.event
 async def leave_auction(sid, data):
