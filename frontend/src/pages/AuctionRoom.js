@@ -372,7 +372,11 @@ export default function AuctionRoom() {
       if (!auction) return;
       const leagueId = auction.leagueId;
       const response = await axios.get(`${API}/leagues/${leagueId}/participants`);
-      setParticipants(response.data);
+      
+      // Prompt A: Use new API format with count and participants
+      console.log("📊 Participants refreshed:", response.data);
+      setParticipantCount(response.data.count || 0);
+      setParticipants(response.data.participants || []);
     } catch (e) {
       console.error("Error loading participants:", e);
     }
