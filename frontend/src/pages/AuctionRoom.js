@@ -455,6 +455,108 @@ export default function AuctionRoom() {
   }
 
   const isCommissioner = league && user && league.commissionerId === user.id;
+
+  // Prompt E: Show waiting room if auction status is "waiting"
+  if (auction?.status === "waiting") {
+    const handleBeginAuction = async () => {
+      try {
+        await axios.post(`${API}/auction/${auctionId}/begin`, null, {
+          params: { commissionerId: user.id }
+        });
+        console.log("✅ Auction begin request sent");
+        // State will update via lot_started event
+      } catch (error) {
+        console.error("Error starting auction:", error);
+        alert(error.response?.data?.detail || "Failed to start auction");
+      }
+    };
+
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 py-8">
+        <div className="container mx-auto px-4">
+          <div className="max-w-2xl mx-auto">
+            <button
+              onClick={() => navigate("/")}
+              className="text-white hover:underline mb-4"
+            >
+              ← Back to Home
+            </button>
+            
+            <div className="bg-white rounded-lg shadow-xl p-8">
+              <div className="text-center mb-6">
+                <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                  ⏳ Auction Waiting Room
+                </h1>
+                <p className="text-gray-600">
+                  Waiting for commissioner to begin the auction
+                </p>
+              </div>
+
+              {/* Participants List */}
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                <h3 className="font-bold text-gray-900 mb-3">
+                  Participants in Room ({participants.length})
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {participants.map(p => (
+                    <div
+                      key={p.userId}
+                      className="flex items-center gap-2 bg-white px-3 py-2 rounded-full border border-gray-300"
+                    >
+                      <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
+                        {p.userName?.charAt(0).toUpperCase() || '?'}
+                      </div>
+                      <span className="text-sm font-medium text-gray-900">
+                        {p.userName}
+                      </span>
+                      {p.userId === user.id && (
+                        <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">
+                          You
+                        </span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Commissioner or Participant View */}
+              <div className="text-center">
+                {isCommissioner ? (
+                  <div>
+                    <button
+                      onClick={handleBeginAuction}
+                      className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-lg text-lg shadow-lg transition-colors"
+                    >
+                      🚀 Begin Auction
+                    </button>
+                    <p className="text-sm text-gray-500 mt-3">
+                      Start when all participants are ready
+                    </p>
+                  </div>
+                ) : (
+                  <div>
+                    <div className="inline-block animate-pulse">
+                      <div className="bg-gray-200 rounded-full p-4 mb-3">
+                        <svg className="w-12 h-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                      </div>
+                    </div>
+                    <p className="text-lg font-medium text-gray-700">
+                      Waiting for commissioner to start...
+                    </p>
+                    <p className="text-sm text-gray-500 mt-2">
+                      The auction will begin shortly
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
   const currentClubBids = currentClub ? bids.filter((b) => b.clubId === currentClub.id) : [];
   
   // Debug logging for bid display
