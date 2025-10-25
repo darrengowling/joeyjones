@@ -2037,7 +2037,7 @@ async def start_lot(auction_id: str, club_id: str):
         'club': Club(**club).model_dump(),
         'lotNumber': new_lot_number,
         'timer': timer_data
-    })
+    }, room=f"auction:{auction_id}")
     
     logger.info(f"Manual start lot {lot_id}: {club['name']}, seq={timer_data['seq']}")
     
