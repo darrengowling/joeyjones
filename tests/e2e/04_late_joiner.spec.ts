@@ -144,6 +144,10 @@ test.describe('04 - Late Joiner Sync', () => {
     // Step 5: User A and B enter auction room (early joiners)
     console.log('\n5️⃣ Early joiners entering auction room...');
     
+    // Prompt C: Set user sessions before navigation
+    await setUserSession(pageA, userA);
+    await setUserSession(pageB, userB);
+    
     await pageA.goto(`${BASE_URL}/auction/${auctionId}`);
     await pageA.waitForTimeout(1000);
     console.log(`   ✅ User A entered (early)`);
