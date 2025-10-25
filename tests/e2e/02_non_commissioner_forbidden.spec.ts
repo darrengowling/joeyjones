@@ -151,8 +151,20 @@ test.describe('02 - Non-Commissioner Authorization', () => {
       throw error;
     }
 
-    // Step 6: Verify auction is still in waiting state
-    console.log('\n6️⃣ Verifying auction still in waiting state...');
+    // Step 6: Test 401 when header is missing (Prompt B)
+    console.log('\n6️⃣ Testing 401 when X-User-ID header missing...');
+    const noAuthResponse = await pageB.request.post(
+      `${BASE_URL}/api/auction/${auctionId}/begin`,
+      {
+        failOnStatusCode: false
+      }
+    );
+    
+    expect(noAuthResponse.status()).toBe(401);
+    console.log(`   ✅ Correctly received 401 Unauthorized for missing header`);
+
+    // Step 7: Verify auction is still in waiting state
+    console.log('\n7️⃣ Verifying auction still in waiting state...');
     const stateResponse = await pageA.request.get(
       `${BASE_URL}/api/auction/${auctionId}`
     );
@@ -162,10 +174,15 @@ test.describe('02 - Non-Commissioner Authorization', () => {
     console.log(`   ✅ Auction status: ${auctionState.status}`);
     console.log(`   ✅ Auction did not transition to active`);
 
-    // Step 7: User A (commissioner) can successfully begin auction
-    console.log('\n7️⃣ User A (commissioner) beginning auction (should succeed)...');
+    // Step 8: User A (commissioner) can successfully begin auction
+    console.log('\n8️⃣ User A (commissioner) beginning auction (should succeed)...');
     const commBeginResponse = await pageA.request.post(
-      `${BASE_URL}/api/auction/${auctionId}/begin`
+      `${BASE_URL}/api/auction/${auctionId}/begin`,
+      {
+        headers: {
+          'X-User-ID': userA.id  // Prompt B: Commissioner with auth header
+        }
+      }
     );
     
     expect(commBeginResponse.status()).toBe(200);
