@@ -411,7 +411,9 @@ class WaitingRoomAuctionTester:
                 return False
             
             # Get current club details
-            current_club = auction_result.get("currentClub", {})
+            current_club = auction_result.get("currentClub")
+            if current_club is None:
+                current_club = {}
             club_name = current_club.get("name", "Unknown")
             
             self.log(f"Current club: {club_name}")
