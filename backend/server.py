@@ -1652,7 +1652,7 @@ async def get_league_state(league_id: str):
 @api_router.post("/auction/{auction_id}/begin")
 async def begin_auction(
     auction_id: str,
-    current_user: dict = Depends(get_current_user_from_header)
+    request: Request
 ):
     """Prompt G: Commissioner manually starts the auction - guarded by FEATURE_WAITING_ROOM flag"""
     
@@ -1660,10 +1660,14 @@ async def begin_auction(
     if not FEATURE_WAITING_ROOM:
         logger.warning("begin_auction.feature_disabled", extra={
             "auctionId": auction_id,
-            "userId": current_user["id"],
             "feature": "waiting_room_disabled"
         })
         raise HTTPException(status_code=404, detail="Waiting room feature is not enabled")
+    
+    # Get user ID from header
+    user_id = request.headers.get("X-User-ID")
+    if not user_id:
+        raise HTTPException(status_code=401, detail="User authentication required")
     
     # Verify auction exists and is waiting
     auction = await db.auctions.find_one({"id": auction_id})
@@ -1679,11 +1683,11 @@ async def begin_auction(
         raise HTTPException(status_code=404, detail="League not found")
     
     # Check if current user is the commissioner
-    if league["commissionerId"] != current_user["id"]:
+    if league["commissionerId"] != user_id:
         logger.warning("begin_auction.unauthorized", extra={
             "auctionId": auction_id,
             "leagueId": auction["leagueId"],
-            "userId": current_user["id"],
+            "userId": user_id,
             "commissionerId": league["commissionerId"]
         })
         raise HTTPException(status_code=403, detail="Only the commissioner can start the auction")
@@ -1693,7 +1697,7 @@ async def begin_auction(
     logger.info("begin_auction.called", extra={
         "auctionId": auction_id,
         "leagueId": auction["leagueId"],
-        "userId": current_user["id"],
+        "userId": user_id,
         "commissionerId": league["commissionerId"],
         "auctionRoomSize": auction_room_size
     })
