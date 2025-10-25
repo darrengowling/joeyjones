@@ -1053,3 +1053,15 @@ agent_communication:
       - working: false
         agent: "testing"
         comment: "LATE JOINER TEST FAILED: Users cannot see 'Auction Waiting Room' header and are being redirected to homepage instead of auction rooms. Fundamental routing or authentication issues preventing access to auction rooms. Late joiner cannot access waiting room at all."
+
+  - task: "E2E Test 5: Cricket Smoke Test"
+    implemented: true
+    working: true
+    file: "tests/e2e/cricket_smoke.spec.ts"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "✅ CRICKET SMOKE TEST PASSED: All 3 cricket functionality tests passed successfully. Cricket league creation works correctly, cricket players are displayed properly, and auction functionality works for cricket sport. Cricket implementation is not affected by waiting room changes and remains fully functional."
