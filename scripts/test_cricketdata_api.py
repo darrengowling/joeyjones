@@ -182,18 +182,17 @@ class CricketDataAPITester:
         
         for match in matches:
             name = match.get('name', '').lower()
-            teamA = match.get('teamA', '').lower()
-            teamB = match.get('teamB', '').lower()
+            teams = match.get('teams', [])
+            team_names = ' '.join([str(t) for t in teams]).lower()
             
             # Look for New Zealand and England
             if ('new zealand' in name or 'england' in name or 
-                'new zealand' in teamA or 'england' in teamA or
-                'new zealand' in teamB or 'england' in teamB):
+                'new zealand' in team_names or 'england' in team_names):
                 
                 print(f"\n   ✅ FOUND POTENTIAL MATCH:")
                 print(f"      ID: {match.get('id')}")
                 print(f"      Name: {match.get('name')}")
-                print(f"      Teams: {match.get('teamA')} vs {match.get('teamB')}")
+                print(f"      Teams: {teams}")
                 
                 return match.get('id')
         
