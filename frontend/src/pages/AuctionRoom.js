@@ -57,7 +57,24 @@ export default function AuctionRoom() {
 
     console.log(`🎧 [AuctionRoom] Setting up socket listeners (Count: ${listenerCount})`);
 
-    // Handle sync_state to initialize auction state
+    // Prompt E: Handle auction_snapshot for late joiners (replaces sync_state)
+    const onAuctionSnapshot = (data) => {
+      console.log("📸 Auction snapshot received:", data);
+      
+      // Hydrate full state from snapshot
+      if (data.status) setAuction(prev => ({ ...prev, status: data.status }));
+      if (data.currentClub) setCurrentClub(data.currentClub);
+      if (data.currentBid !== undefined) setCurrentBid(data.currentBid);
+      if (data.currentBidder) setCurrentBidder(data.currentBidder);
+      if (data.seq !== undefined) setBidSequence(data.seq);
+      if (data.participants) setParticipants(data.participants);
+      if (data.currentBids) setBids(data.currentBids);
+      if (data.timer && data.timer.lotId) setCurrentLotId(data.timer.lotId);
+      
+      console.log("✅ State hydrated from auction_snapshot");
+    };
+
+    // Handle sync_state (legacy) - same as auction_snapshot
     const onSyncState = (data) => {
       console.log("Received sync state:", data);
       if (data.currentClub) {
