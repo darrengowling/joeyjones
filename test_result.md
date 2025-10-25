@@ -1082,3 +1082,18 @@ agent_communication:
       - working: true
         agent: "testing"
         comment: "✅ CRICKET SMOKE TEST PASSED: All 3 cricket functionality tests passed successfully. Cricket league creation works correctly, cricket players are displayed properly, and auction functionality works for cricket sport. Cricket implementation is not affected by waiting room changes and remains fully functional."
+
+  - task: "Auction room bid button loading state"
+    implemented: true
+    working: false
+    file: "frontend/src/hooks/useSocketRoom.js"
+    stuck_count: 0
+    priority: "critical"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "user"
+        comment: "User reports: Can't enter bid amount in input field, bid button stuck on 'Loading' in test auction 'nz1'"
+      - working: "NA"
+        agent: "main"
+        comment: "Root cause identified: useSocketRoom hook only listens to 'sync_state' event to set ready=true, but backend sends 'auction_snapshot' instead. Added auction_snapshot handler to useSocketRoom.js to mark room as ready when snapshot received."
