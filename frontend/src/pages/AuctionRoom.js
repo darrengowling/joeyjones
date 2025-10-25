@@ -70,6 +70,13 @@ export default function AuctionRoom() {
     if (!user) return;
 
     console.log(`🎧 [AuctionRoom] Setting up socket listeners (Count: ${listenerCount})`);
+    
+    // Prompt D: Join auction room on connect
+    socket.emit('join_auction', { auctionId, userId: user.id }, (ack) => {
+      if (ack && ack.ok) {
+        console.log(`✅ Joined auction room: ${ack.room}, size: ${ack.roomSize}`);
+      }
+    });
 
     // Prompt E: Handle auction_snapshot for late joiners (replaces sync_state)
     const onAuctionSnapshot = (data) => {
