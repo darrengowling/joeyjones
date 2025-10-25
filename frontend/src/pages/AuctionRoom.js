@@ -116,6 +116,13 @@ export default function AuctionRoom() {
         alert(`🔄 Re-offering unsold club: ${data.club.name}!`);
       }
       
+      // EVERTON FIX: If auction is in waiting state and lot starts, reload auction status
+      // This ensures users transition from waiting room to active auction
+      if (auction?.status === "waiting") {
+        console.log("🚀 Auction beginning - transitioning from waiting to active");
+        loadAuction();
+      }
+      
       setCurrentClub(data.club);
       if (data.timer && data.timer.lotId) {
         setCurrentLotId(data.timer.lotId);
