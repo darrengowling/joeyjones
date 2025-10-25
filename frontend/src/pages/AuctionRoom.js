@@ -110,17 +110,16 @@ export default function AuctionRoom() {
 
     // Handle lot_started (new club on auction block)
     const onLotStarted = (data) => {
-      console.log("Lot started:", data);
+      console.log("🚀 Lot started event received:", data);
+      
+      // CRITICAL FIX: Always reload auction when lot starts
+      // This ensures users transition from waiting room to active auction
+      // We can't rely on checking auction.status due to stale closure
+      console.log("Reloading auction to transition from waiting room");
+      loadAuction();
       
       if (data.isUnsoldRetry) {
         alert(`🔄 Re-offering unsold club: ${data.club.name}!`);
-      }
-      
-      // EVERTON FIX: If auction is in waiting state and lot starts, reload auction status
-      // This ensures users transition from waiting room to active auction
-      if (auction?.status === "waiting") {
-        console.log("🚀 Auction beginning - transitioning from waiting to active");
-        loadAuction();
       }
       
       setCurrentClub(data.club);
