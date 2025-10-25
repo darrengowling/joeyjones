@@ -978,14 +978,46 @@ async def import_fixtures_csv(league_id: str, file: UploadFile = File(...), comm
             round_val = row.get('round', '').strip() or None
             external_match_id = row.get('externalMatchId', '').strip() or None
             
-            if not starts_at_str or not home_external_id:
-                continue  # Skip invalid rows
+            if not starts_at_str:
+                continue  # Skip rows without start time
             
             # Parse datetime
             try:
                 starts_at = datetime.fromisoformat(starts_at_str.replace('Z', '+00:00'))
             except ValueError:
                 continue  # Skip invalid dates
+            
+            # For international matches (no home/away specified), create fixture with nulls
+            if not home_external_id and not away_external_id:
+                fixture = Fixture(
+                    leagueId=league_id,
+                    sportKey=sport_key,
+                    externalMatchId=external_match_id,
+                    homeAssetId=None,
+                    awayAssetId=None,
+                    startsAt=starts_at,
+                    venue=venue,
+                    round=round_val,
+                    status="scheduled",
+                    source="csv"
+                )
+                
+                # Upsert fixture by external match ID or time
+                if external_match_id:
+                    await db.fixtures.update_one(
+                        {"leagueId": league_id, "externalMatchId": external_match_id},
+                        {"$set": fixture.model_dump()},
+                        upsert=True
+                    )
+                else:
+                    await db.fixtures.update_one(
+                        {"leagueId": league_id, "startsAt": starts_at},
+                        {"$set": fixture.model_dump()},
+                        upsert=True
+                    )
+                
+                fixtures_imported += 1
+                continue
             
             # Look up asset IDs
             if sport_key == "football":
