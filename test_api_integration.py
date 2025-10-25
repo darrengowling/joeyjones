@@ -7,7 +7,7 @@ import requests
 import json
 import sys
 
-BACKEND_URL = "https://multisport-auction.preview.emergentagent.com/api"
+BACKEND_URL = "https://auction-room-wizard.preview.emergentagent.com/api"
 
 def test_league_creation_with_assets():
     """Test creating a league with assetsSelected via API"""

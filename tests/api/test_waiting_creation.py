@@ -9,7 +9,7 @@ import httpx
 import asyncio
 import uuid
 
-BASE_URL = "https://multisport-auction.preview.emergentagent.com/api"
+BASE_URL = "https://auction-room-wizard.preview.emergentagent.com/api"
 
 @pytest.mark.asyncio
 async def test_waiting_room_creation():

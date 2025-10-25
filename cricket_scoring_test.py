@@ -14,7 +14,7 @@ from datetime import datetime, timezone
 from typing import Dict, List, Optional
 
 # Configuration
-BASE_URL = "https://multisport-auction.preview.emergentagent.com/api"
+BASE_URL = "https://auction-room-wizard.preview.emergentagent.com/api"
 
 class CricketScoringTester:
     def __init__(self):

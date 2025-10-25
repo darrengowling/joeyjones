@@ -1,83 +1,93 @@
 <analysis>
-The AI engineer's work primarily revolved around stabilizing and enhancing a multi-sport auction application, focusing heavily on bug fixes and feature re-implementation after user testing. The initial phase addressed the Select Teams for Auction feature and several UI inconsistencies and race conditions. A major portion of the trajectory details the iterative debugging of Socket.IO real-time updates and React hooks, particularly concerning an auction waiting room feature. This led to multiple regressions and fixes. Concurrently, significant effort was dedicated to setting up cricket functionality, including player seeding, scoring rules, and CSV import/export. The work concluded with a structured re-implementation of the waiting room feature, broken into precise prompts, and the initiation of comprehensive smoke tests. Critical Socket.IO room isolation bugs, causing cross-auction contamination, were also identified and fixed.
+The AI engineer's work largely focused on stabilizing and enhancing a multi-sport auction application, driven by user feedback and identified bugs. Key efforts included a structured re-implementation of the auction waiting room feature, meticulously addressing backend logic for auction states, Socket.IO real-time updates for participant counts and auction transitions, and frontend UI synchronization. Significant work was also done to refine cricket scoring rules, implement a commissioner-controlled league deletion process, and ensure sport-specific terminology and auction timer settings were dynamically displayed across the UI. The process was iterative, involving E2E tests, debugging, and continuous verification, culminating in robust fixes for authentication, session persistence, and event delivery. The final phase saw a cautious approach to external cricket API integration, prioritizing shadow testing due to past stability issues.
 </analysis>
 
 <product_requirements>
-The application, initially a UEFA club auction platform, expanded to support multi-sport (Football, Cricket) auctions with asset concepts and dynamic UI. Key features include roster limits, auto-ending auctions, real-time bid visibility, live lobby updates, and commissioner-configurable auction timers. Production hardening included Redis-backed Socket.IO, Prometheus metrics, and API rate limiting. A My Competitions section with user-joined leagues, auction status, owned assets, league tables, and fixture imports was a primary goal, requiring robust real-time updates, E2E tests, security, currency consistency, database indexing, and debug endpoint guarding.
+The application, initially a UEFA club auction platform, evolved into a multi-sport (Football, Cricket) auction system with asset concepts and dynamic UI. Core features include roster limits, auto-ending auctions, real-time bid visibility, live lobby updates, and commissioner-configurable auction timers. Production hardening was achieved with Redis-backed Socket.IO, Prometheus metrics, and API rate limiting.
 
-Recent explicit requests included:
-1. Re-implementing a Select Teams for Auction feature for commissioners.
-2. Resolving a Socket.IO race condition affecting final team display (e.g., 5/6 teams sold instead of 6/6).
-3. Fixing UI inconsistencies on the Competition Dashboard: generic roster names and single user in league tab.
-4. Implementing budget enforcement requiring a £1m reserve per slot.
-5. Implementing a commissioner-controlled auction start (waiting room).
-6. Setting up comprehensive cricket functionality for a New Zealand vs England ODI series, including specific squads, flexible league rules (budget, player slots), real-life fixtures, CSV-based scoring (1pt run, 20pt wicket, 10pt catch/stumping/run-out), and potentially score scraping.
-7. Addressing Socket.IO real-time update issues on LeagueDetail and AuctionRoom pages (users needing manual refresh).
-8. Fixing critical Socket.IO room isolation bugs where events from other auctions were broadcast.
-9. Structured re-implementation of the auction waiting room feature with clear prompts (A-E) to ensure stability and user control.
+Recent development centered on:
+1.  **Auction Waiting Room:** A commissioner-controlled feature allowing auctions to enter a waiting state before official start, requiring robust backend state management, Socket.IO emissions, and a synchronized frontend experience. This involved detailed prompts (A-E) for stable re-implementation.
+2.  **Cricket Functionality:** Setup for a New Zealand vs. England ODI series, including player seeding, flexible league rules, real-life fixtures, and CSV-based scoring (1pt run, 20pt wicket, 10pt catch/stumping/run-out).
+3.  **Bug Fixes & UI Enhancements:**
+    *   Resolving Socket.IO race conditions and room isolation issues.
+    *   Fixing UI inconsistencies like generic roster names and ensuring all managers' rosters are visible on the Competition Dashboard.
+    *   Correcting bid and anti-snipe timing display.
+    *   Implementing dynamic, sport-specific terminology (e.g., club vs. player) in notifications.
+    *   Re-implementing a Select Teams for Auction feature.
+    *   Clearing active leagues and fixing commissioner-level delete functionality on the homepage.
+4.  **External Integrations:** Investigating and planning for automatic cricket scoring updates via a third-party API, with a cautious shadow testing approach.
 </product_requirements>
 
 <key_technical_concepts>
-- **Backend:** FastAPI, Pydantic, Motor (MongoDB), Socket.IO, Redis, Prometheus, , .
-- **Frontend:** React, Socket.IO Client, React Router,  hook,  hook, feature flags.
-- **Architecture:** Service layer, Feature Flagging, Multi-sport asset concept, Kubernetes ingress rules.
-- **Data Handling:** UUIDs, ISO strings for DateTime,  currency, Pydantic validation.
-- **Testing & Debugging:** Playwright E2E tests, structured JSON logging, Python-based load testing.
+-   **Backend:** FastAPI, Pydantic, Motor (MongoDB), Socket.IO, Redis, Prometheus, , .
+-   **Frontend:** React, Socket.IO Client, React Router,  hook,  hook, feature flags.
+-   **Architecture:** Service layer, Feature Flagging, Multi-sport asset concept, Kubernetes ingress rules.
+-   **Data Handling:** UUIDs, ISO strings for DateTime,  currency, Pydantic validation.
+-   **Testing & Debugging:** Playwright E2E tests, structured JSON logging.
 </key_technical_concepts>
 
 <code_architecture>
 
--   ****: Main API and Socket.IO logic.
-    -   **Summary**: Central to backend operations. Handles core league, auction, bidding, and real-time Socket.IO events. Implements feature flags, rate limiting, and core application flow.
+-   ****:
+    -   **Summary**: Core backend logic for API endpoints, Socket.IO, league, auction, and bidding. Manages feature flags and rate limiting.
     -   **Changes**:
-        -   Enhanced  to return all managers' rosters for improved roster visibility.
-        -   Corrected numerous Socket.IO emits (, , , , , , ) to use  for proper room isolation.
-        -   Modified  and  Socket.IO handlers to return acks with room details and  for late joiners (formerly ).
-        -   Implemented Prompt B:  now creates auctions in  without starting lots, and emits  (status: ).
-        -   Added  endpoint to return league status and active auction ID.
-        -   Reverted previous waiting room implementation and then re-implemented for Prompt C, ensuring  correctly transitions waiting auctions to active.
--   ****: Pydantic models for data validation and database interaction.
-    -   **Summary**: Defines data structures like , , ,  with validation rules.
-    -   **Changes**: Updated  model to support  (default waiting), , , , ,  (Prompt A).
--   ****: Auction UI.
-    -   **Summary**: Displays live auction information, including current bid, timer, and roster. Integrates with Socket.IO for real-time updates.
+        -   Fixed  to correctly handle  from headers and include commissioner authorization.
+        -   Implemented  flag to conditionally enable/disable waiting room functionality.
+        -   Updated  to return normalized participant data with a  field.
+        -   Added  Socket.IO emission after successful league joins/leaves.
+        -   Modified  to accept either  or  for authorization.
+        -   Ensured  and  rooms receive correct Socket.IO emissions (, ).
+-   ****:
+    -   **Summary**: Defines Pydantic models for data validation and MongoDB schemas, including  and .
+    -   **Changes**:  model supports .
+-   ****:
+    -   **Summary**: Logic for calculating cricket fantasy points.
+    -   **Changes**: Base rules updated:  changed to 25 points,  to 20 points. Milestone bonuses explicitly disabled.
+-   ****:
+    -   **Summary**: Main React application component, handling routing and global state like user authentication and league lists.
+    -   **Changes**: Added a delete button to league cards for commissioners, wired to , which refreshes the league list.
+-   ****:
+    -   **Summary**: Real-time auction UI, displaying bids, timer, and roster. Integrates heavily with Socket.IO.
     -   **Changes**:
-        -   Added .
-        -   Aggressive 1-second polling () within the waiting room to ensure UI updates.
-        -   Fixed React hooks errors by ensuring all hooks are at the top level of the component and not within conditionals.
-        -   Modified  and  handlers to avoid race conditions with  for final team display.
-        -   Implemented Prompt E: Added  Socket.IO handler, integrated waiting room UI (conditional render for commissioner's Begin Auction button), and ensured  calls  for non-commissioners.
--   ****: League creation form.
-    -   **Summary**: User interface for creating new leagues, including selecting sport, budget, and managers. Also includes the Select teams for auction UI.
-    -   **Changes**: Conditional display of team selection UI based on  and logic to persist selected asset IDs (from earlier work).
--   ****: Displays league summary and standings.
-    -   **Summary**: Shows a user's roster, budget, and league standings.
-    -   **Changes**: Updated to display actual team names and prices for all managers' rosters (not just the user's) for improved roster visibility.
--   ****: Displays league details, participants, and entry to auction.
-    -   **Summary**: Central page for league information, and entry point to the auction.
-    -   **Changes**: Updated  to handle , , and  events for real-time updates. Implemented aggressive 3-second polling as a fallback.
--   ** & **: Environment variables.
-    -   **Summary**: Configures backend/frontend settings.
-    -   **Changes**:  (from earlier work).  set to test_database.
--   ****: New Python and shell scripts.
-    -   **Summary**: Contains utilities for seeding data, creating templates, and running migrations.
-    -   **Created**: , , , , , , , .
--   ****: New API test.
-    -   **Summary**: New API test for Prompt F.
--   **New Documentation/Reports**: Many  files created, including , , , , , , , , .
+        -   Fixed React hooks errors by ensuring  calls are at the top level.
+        -   Implemented soft guard for unauthenticated users instead of hard redirect.
+        -   Consumes  Socket.IO event and displays server-authoritative participant count.
+        -   Ensures  is emitted on mount.
+        -   Updated notifications and sold item counts to use dynamic  and  for sport-specific terminology.
+        -   Confirmed  handling and 2-second polling fallback for waiting state.
+-   ****:
+    -   **Summary**: Displays league summary, standings, and user's roster.
+    -   **Changes**: Loads  for the league's sport and uses dynamic terminology for teams to reflect players in cricket, ensuring all managers' rosters are visible.
+-   ****:
+    -   **Summary**: Displays league information, participants, and entry to auction rooms.
+    -   **Changes**:
+        -   Ensures  is emitted on mount.
+        -   Fixed hardcoded bid and anti-snipe timer displays to correctly show commissioner-configured values from league data.
+-   ****:
+    -   **Summary**: Environment variables for backend configuration.
+    -   **Changes**: Added .
+-   ****:
+    -   **Summary**: Contains Playwright end-to-end tests for critical application flows.
+    -   **Created**: , , , .
+    -   **Changes**: All waiting room tests updated to use  for consistent user session setup and  headers where required for authentication tests.  specifically tests for 401 and 403 status codes.
+-   ****:
+    -   **Summary**: New utility file for Playwright E2E tests.
+    -   **Created**: Contains  function to inject user data into  before page navigation.
+-   ****:
+    -   **Summary**: Contains utilities for seeding data and managing cricket-specific data.
+    -   **Files**: , , , , , .
+-   **New Documentation Files**: , , , , , , , , , .
 </code_architecture>
 
 <pending_tasks>
--   **Implement E2E Smoke Tests (Prompt F):** Create , , , .
--   **Pilot Readiness Assessment:** This was requested earlier, differentiating between feature completeness (high) and production readiness (low). While bugs were fixed, the overall readiness state needs a re-assessment in light of recent regressions and fixes.
+-   **Implement Cricket Data API Shadow Testing:** Execute the plan for fetching live cricket data in parallel without integrating it into the core app.
+-   **Pilot Readiness Assessment:** A re-assessment of overall production readiness after recent fixes and regressions is due.
 </pending_tasks>
 
 <current_work>
-Immediately prior to this summary, the AI engineer was engaged in the structured re-implementation of the auction waiting room feature and its comprehensive verification. This involved completing Prompt E - Frontend: Waiting Room UX by adding the waiting room UI,  handler, and aggressive polling to , while carefully resolving multiple React hooks errors that arose during this process. The final fix for React hooks errors involved meticulously moving all  calls to the very top level of  to prevent conditional rendering violations.
-
-Following the successful completion and verification of Prompts A-E (covering backend model updates, auction creation in waiting state, commissioner-only begin endpoint with scoped Socket.IO emits, and frontend waiting room UX), the AI engineer had just begun implementing Prompt F - Smoke tests. Specifically, the  file was created, and the next step was to create the E2E tests for the waiting room functionality.
+Immediately prior to this summary, the AI engineer was engaged with the user regarding the integration of a live cricket data feed API. The user, cautious due to previous integration issues and rollbacks, explicitly requested *not* to implement the auto-updater integration directly. Instead, the user opted for option c from a previously generated plan, which involved testing the API without fully integrating it. The AI engineer has just created a detailed shadow testing plan, documented in , outlining how to fetch data from the API in parallel with the manual CSV system, allowing for thorough validation during the first ODI match without affecting the production application. This concludes the immediate discussion, setting the stage for the next phase of cautious external API validation.
 </current_work>
 
 <optional_next_step>
-Continue creating the E2E smoke tests for Prompt F, starting with .
+Proceed with implementing the  for the cricket data API.
 </optional_next_step>
