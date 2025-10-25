@@ -2632,7 +2632,7 @@ async def countdown_timer(auction_id: str, end_time: datetime, lot_id: str):
             # Metrics: Track timer ticks
             metrics.increment_timer_tick(auction_id)
             
-            await sio.emit('tick', timer_data)  # Broadcast to all clients
+            await sio.emit('tick', timer_data, room=f"auction:{auction_id}")  # Broadcast to auction room only
     
     except asyncio.CancelledError:
         logger.info(f"Timer for auction {auction_id} was cancelled")
