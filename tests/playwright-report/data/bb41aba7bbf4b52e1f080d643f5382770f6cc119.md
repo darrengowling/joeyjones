@@ -12,14 +12,13 @@
         - heading "Participants in Room (1)" [level=3] [ref=e12]
         - generic [ref=e14]:
           - generic [ref=e15]: W
-          - generic [ref=e16]: WaitingE2E_ParticipantB_1761369827114
+          - generic [ref=e16]: WaitingE2E_ParticipantB_1761373038218
       - generic [ref=e18]:
-        - img [ref=e21]
-        - paragraph [ref=e23]: Waiting for commissioner to start...
-        - paragraph [ref=e24]: The auction will begin shortly
-  - link "Made with Emergent" [ref=e25] [cursor=pointer]:
+        - button "🚀 Begin Auction" [ref=e19] [cursor=pointer]
+        - paragraph [ref=e20]: Start when all participants are ready
+  - link "Made with Emergent" [ref=e21] [cursor=pointer]:
     - /url: https://app.emergent.sh/?utm_source=emergent-badge
-    - generic [ref=e26] [cursor=pointer]:
-      - img [ref=e27] [cursor=pointer]
-      - paragraph [ref=e28] [cursor=pointer]: Made with Emergent
+    - generic [ref=e22] [cursor=pointer]:
+      - img [ref=e23] [cursor=pointer]
+      - paragraph [ref=e24] [cursor=pointer]: Made with Emergent
 ```
