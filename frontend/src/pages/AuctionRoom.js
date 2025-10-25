@@ -151,7 +151,7 @@ export default function AuctionRoom() {
       console.log("🚀 Lot started:", data);
       
       if (data.isUnsoldRetry) {
-        alert(`🔄 Re-offering unsold club: ${data.club.name}!`);
+        alert(`🔄 Re-offering unsold ${uiHints.assetLabel.toLowerCase()}: ${data.club.name}!`);
       }
       
       // Prompt E: Load auction to transition from waiting to active
@@ -174,16 +174,16 @@ export default function AuctionRoom() {
       console.log("Lot sold:", data);
       
       if (data.unsold) {
-        alert(`❌ Club went unsold! "${data.clubId}" will be offered again later.`);
+        alert(`❌ ${uiHints.assetLabel} went unsold! "${data.clubId}" will be offered again later.`);
       } else {
         const winnerName = data.winningBid ? data.winningBid.userName : "Unknown";
         const amount = data.winningBid ? formatCurrency(data.winningBid.amount) : "";
-        alert(`✅ Club sold to ${winnerName} for ${amount}!`);
+        alert(`✅ ${uiHints.assetLabel} sold to ${winnerName} for ${amount}!`);
         
         // CRITICAL FIX: Immediately update club status to 'sold' in local state
         // DON'T reload clubs - rely on this update to avoid race conditions
         if (data.clubId && data.winningBid) {
-          console.log(`✅ Marking club ${data.clubId} as sold to ${winnerName}`);
+          console.log(`✅ Marking ${uiHints.assetLabel.toLowerCase()} ${data.clubId} as sold to ${winnerName}`);
           setClubs(prevClubs => {
             const updated = prevClubs.map(club => 
               club.id === data.clubId 
