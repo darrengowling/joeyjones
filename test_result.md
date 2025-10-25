@@ -294,10 +294,10 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Everton Bug Fix 2: Auction start control with waiting room"
-    - "Everton Bug Fix 3: Budget reserve enforcement (£1m per remaining slot)"
-    - "Everton Bug Fix 4: Final team display issue investigation"
-    - "Everton Bug Fix 5: Roster visibility for all users"
+    - "E2E Test 1: Waiting Room Core Flow"
+    - "E2E Test 2: Non-Commissioner Authorization"
+    - "E2E Test 3: Concurrent Auctions Isolation"
+    - "E2E Test 4: Late Joiner Sync"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
