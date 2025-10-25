@@ -302,6 +302,59 @@ test_plan:
   test_all: false
   test_priority: "high_first"
 
+frontend:
+  - task: "E2E Test 1: Waiting Room Core Flow"
+    implemented: true
+    working: false
+    file: "/app/tests/e2e/01_waiting_room.spec.ts"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: false
+        agent: "testing"
+        comment: "CRITICAL ISSUES IDENTIFIED: 1) Commissioner cannot see 'Begin Auction' button - waiting room shows 'Participants in Room (1)' instead of (2), indicating participant count issue. 2) Backend API mismatch - frontend sends commissionerId as query param but backend expects it differently. 3) Waiting room UI not displaying correctly for commissioners vs participants."
+
+  - task: "E2E Test 2: Non-Commissioner Authorization"
+    implemented: true
+    working: false
+    file: "/app/tests/e2e/02_non_commissioner_forbidden.spec.ts"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: false
+        agent: "testing"
+        comment: "AUTHORIZATION BUG: Expected 403 Forbidden but received 422 Unprocessable Entity. This indicates the authorization logic is not working correctly - the endpoint is not properly validating commissioner permissions before processing the request."
+
+  - task: "E2E Test 3: Concurrent Auctions Isolation"
+    implemented: true
+    working: false
+    file: "/app/tests/e2e/03_concurrent_auctions_isolation.spec.ts"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: false
+        agent: "testing"
+        comment: "SOCKET.IO EVENT DELIVERY FAILURE: None of the users (A1, A2, B1, B2) received expected lot_started events. All event listeners returned null, indicating Socket.IO events are not being delivered properly from backend to clients. This suggests issues with Socket.IO room management or event emission."
+
+  - task: "E2E Test 4: Late Joiner Sync"
+    implemented: true
+    working: false
+    file: "/app/tests/e2e/04_late_joiner.spec.ts"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: false
+        agent: "testing"
+        comment: "ROUTING FAILURE: Users are not being properly routed to auction rooms - they're being redirected to homepage instead of seeing the waiting room. Early joiners cannot see 'Auction Waiting Room' header, indicating fundamental routing or authentication issues preventing access to auction rooms."
+
+agent_communication:
+  - agent: "testing"
+    message: "CRITICAL WAITING ROOM FAILURES IDENTIFIED: All 4 E2E tests failed due to multiple critical issues: 1) Backend API parameter mismatch (commissionerId handling), 2) Socket.IO event delivery completely broken, 3) Authorization returning wrong HTTP status codes, 4) Users cannot access auction rooms properly. The waiting room feature is not functional and requires immediate fixes to backend API endpoints, Socket.IO event system, and routing logic."
+
   - task: "Clubs list UI feature"
     implemented: true
     working: true
