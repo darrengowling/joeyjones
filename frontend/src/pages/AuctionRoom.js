@@ -143,11 +143,14 @@ export default function AuctionRoom() {
 
     // Handle lot_started (new club on auction block)
     const onLotStarted = (data) => {
-      console.log("Lot started:", data);
+      console.log("🚀 Lot started:", data);
       
       if (data.isUnsoldRetry) {
         alert(`🔄 Re-offering unsold club: ${data.club.name}!`);
       }
+      
+      // Prompt E: Load auction to transition from waiting to active
+      loadAuction();
       
       setCurrentClub(data.club);
       if (data.timer && data.timer.lotId) {
