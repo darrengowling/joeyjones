@@ -17,7 +17,7 @@
       - generic [ref=e17]:
         - generic [ref=e18]:
           - heading "Active Leagues" [level=3] [ref=e19]
-          - paragraph [ref=e20]: 72 competitions
+          - paragraph [ref=e20]: 77 competitions
         - generic [ref=e22]:
           - generic [ref=e23] [cursor=pointer]:
             - generic [ref=e25] [cursor=pointer]:
@@ -1361,12 +1361,102 @@
               - text: "Token:"
               - code [ref=e1480] [cursor=pointer]: e0bbf608
           - generic [ref=e1481] [cursor=pointer]:
-            - generic [ref=e1482] [cursor=pointer]: +
-            - heading "Create New Competition" [level=4] [ref=e1483] [cursor=pointer]
-            - paragraph [ref=e1484] [cursor=pointer]: Start your own strategic arena
-  - link "Made with Emergent" [ref=e1485] [cursor=pointer]:
+            - generic [ref=e1483] [cursor=pointer]:
+              - generic [ref=e1484] [cursor=pointer]: ⚽
+              - generic [ref=e1485] [cursor=pointer]: Football
+            - heading "E2E Late Joiner Test 1761369715473" [level=4] [ref=e1486] [cursor=pointer]
+            - generic [ref=e1487] [cursor=pointer]:
+              - generic [ref=e1488] [cursor=pointer]:
+                - generic [ref=e1489] [cursor=pointer]: "Budget:"
+                - generic [ref=e1490] [cursor=pointer]: £180M
+              - generic [ref=e1491] [cursor=pointer]:
+                - generic [ref=e1492] [cursor=pointer]: "Managers:"
+                - generic [ref=e1493] [cursor=pointer]: 2/3
+              - generic [ref=e1494] [cursor=pointer]:
+                - generic [ref=e1495] [cursor=pointer]: "Slots:"
+                - generic [ref=e1496] [cursor=pointer]: "4"
+            - paragraph [ref=e1498] [cursor=pointer]:
+              - text: "Token:"
+              - code [ref=e1499] [cursor=pointer]: 73aec5e0
+          - generic [ref=e1500] [cursor=pointer]:
+            - generic [ref=e1502] [cursor=pointer]:
+              - generic [ref=e1503] [cursor=pointer]: ⚽
+              - generic [ref=e1504] [cursor=pointer]: Football
+            - heading "E2E Waiting Room 1761369827114" [level=4] [ref=e1505] [cursor=pointer]
+            - generic [ref=e1506] [cursor=pointer]:
+              - generic [ref=e1507] [cursor=pointer]:
+                - generic [ref=e1508] [cursor=pointer]: "Budget:"
+                - generic [ref=e1509] [cursor=pointer]: £200M
+              - generic [ref=e1510] [cursor=pointer]:
+                - generic [ref=e1511] [cursor=pointer]: "Managers:"
+                - generic [ref=e1512] [cursor=pointer]: 1/2
+              - generic [ref=e1513] [cursor=pointer]:
+                - generic [ref=e1514] [cursor=pointer]: "Slots:"
+                - generic [ref=e1515] [cursor=pointer]: "3"
+            - paragraph [ref=e1517] [cursor=pointer]:
+              - text: "Token:"
+              - code [ref=e1518] [cursor=pointer]: 240bb47e
+          - generic [ref=e1519] [cursor=pointer]:
+            - generic [ref=e1521] [cursor=pointer]:
+              - generic [ref=e1522] [cursor=pointer]: ⚽
+              - generic [ref=e1523] [cursor=pointer]: Football
+            - heading "E2E Auth Test 1761369839814" [level=4] [ref=e1524] [cursor=pointer]
+            - generic [ref=e1525] [cursor=pointer]:
+              - generic [ref=e1526] [cursor=pointer]:
+                - generic [ref=e1527] [cursor=pointer]: "Budget:"
+                - generic [ref=e1528] [cursor=pointer]: £200M
+              - generic [ref=e1529] [cursor=pointer]:
+                - generic [ref=e1530] [cursor=pointer]: "Managers:"
+                - generic [ref=e1531] [cursor=pointer]: 1/2
+              - generic [ref=e1532] [cursor=pointer]:
+                - generic [ref=e1533] [cursor=pointer]: "Slots:"
+                - generic [ref=e1534] [cursor=pointer]: "3"
+            - paragraph [ref=e1536] [cursor=pointer]:
+              - text: "Token:"
+              - code [ref=e1537] [cursor=pointer]: b9748df2
+          - generic [ref=e1538] [cursor=pointer]:
+            - generic [ref=e1540] [cursor=pointer]:
+              - generic [ref=e1541] [cursor=pointer]: ⚽
+              - generic [ref=e1542] [cursor=pointer]: Football
+            - heading "E2E Isolation League A 1761369841419" [level=4] [ref=e1543] [cursor=pointer]
+            - generic [ref=e1544] [cursor=pointer]:
+              - generic [ref=e1545] [cursor=pointer]:
+                - generic [ref=e1546] [cursor=pointer]: "Budget:"
+                - generic [ref=e1547] [cursor=pointer]: £150M
+              - generic [ref=e1548] [cursor=pointer]:
+                - generic [ref=e1549] [cursor=pointer]: "Managers:"
+                - generic [ref=e1550] [cursor=pointer]: 1/2
+              - generic [ref=e1551] [cursor=pointer]:
+                - generic [ref=e1552] [cursor=pointer]: "Slots:"
+                - generic [ref=e1553] [cursor=pointer]: "3"
+            - paragraph [ref=e1555] [cursor=pointer]:
+              - text: "Token:"
+              - code [ref=e1556] [cursor=pointer]: 1702f6e6
+          - generic [ref=e1557] [cursor=pointer]:
+            - generic [ref=e1559] [cursor=pointer]:
+              - generic [ref=e1560] [cursor=pointer]: ⚽
+              - generic [ref=e1561] [cursor=pointer]: Football
+            - heading "E2E Isolation League B 1761369841419" [level=4] [ref=e1562] [cursor=pointer]
+            - generic [ref=e1563] [cursor=pointer]:
+              - generic [ref=e1564] [cursor=pointer]:
+                - generic [ref=e1565] [cursor=pointer]: "Budget:"
+                - generic [ref=e1566] [cursor=pointer]: £200M
+              - generic [ref=e1567] [cursor=pointer]:
+                - generic [ref=e1568] [cursor=pointer]: "Managers:"
+                - generic [ref=e1569] [cursor=pointer]: 1/2
+              - generic [ref=e1570] [cursor=pointer]:
+                - generic [ref=e1571] [cursor=pointer]: "Slots:"
+                - generic [ref=e1572] [cursor=pointer]: "4"
+            - paragraph [ref=e1574] [cursor=pointer]:
+              - text: "Token:"
+              - code [ref=e1575] [cursor=pointer]: 75c490eb
+          - generic [ref=e1576] [cursor=pointer]:
+            - generic [ref=e1577] [cursor=pointer]: +
+            - heading "Create New Competition" [level=4] [ref=e1578] [cursor=pointer]
+            - paragraph [ref=e1579] [cursor=pointer]: Start your own strategic arena
+  - link "Made with Emergent" [ref=e1580] [cursor=pointer]:
     - /url: https://app.emergent.sh/?utm_source=emergent-badge
-    - generic [ref=e1486] [cursor=pointer]:
-      - img [ref=e1487] [cursor=pointer]
-      - paragraph [ref=e1488] [cursor=pointer]: Made with Emergent
+    - generic [ref=e1581] [cursor=pointer]:
+      - img [ref=e1582] [cursor=pointer]
+      - paragraph [ref=e1583] [cursor=pointer]: Made with Emergent
 ```
