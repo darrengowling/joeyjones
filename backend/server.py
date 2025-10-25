@@ -2501,7 +2501,7 @@ async def resume_auction(auction_id: str, commissioner_id: str = None):
         'message': 'Auction has been resumed by the commissioner',
         'newEndTime': new_end_time.isoformat(),
         'remainingTime': remaining_time
-    })
+    }, room=f"auction:{auction_id}")
     
     logger.info(f"Auction {auction_id} resumed with {remaining_time}s remaining")
     
