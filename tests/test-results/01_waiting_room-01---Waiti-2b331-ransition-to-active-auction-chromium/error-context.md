@@ -12,7 +12,7 @@
         - heading "Participants in Room (1)" [level=3] [ref=e12]
         - generic [ref=e14]:
           - generic [ref=e15]: W
-          - generic [ref=e16]: WaitingE2E_ParticipantB_1761373038218
+          - generic [ref=e16]: WaitingE2E_ParticipantB_1761373167763
       - generic [ref=e18]:
         - button "🚀 Begin Auction" [ref=e19] [cursor=pointer]
         - paragraph [ref=e20]: Start when all participants are ready
