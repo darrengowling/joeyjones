@@ -636,14 +636,14 @@ export default function LeagueDetail() {
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-gray-600">Bid Timer:</span>
-                  <span className="font-semibold">60 seconds</span>
+                  <span className="font-semibold">{league.timerSeconds || 30} seconds</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Anti-Snipe:</span>
-                  <span className="font-semibold">30 seconds</span>
+                  <span className="font-semibold">{league.antiSnipeSeconds || 5} seconds</span>
                 </div>
                 <div className="text-sm text-gray-500 mt-4">
-                  * Timer extends by 30 seconds if bid placed in last 30 seconds
+                  * Timer extends by {league.antiSnipeSeconds || 5} seconds if bid placed in last {league.antiSnipeSeconds || 5} seconds
                 </div>
               </div>
             </div>
