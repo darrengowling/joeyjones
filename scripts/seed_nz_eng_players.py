@@ -109,12 +109,15 @@ async def seed_players():
         update_result = await db.sports.update_one(
             {"key": "cricket"},
             {"$set": {
-                "scoringSchema.rules.wicket": 20,  # Changed from 25 to 20
-                "scoringSchema.rules.stumping": 10,  # Changed from 15 to 10
+                "scoringSchema.rules.run": 1,
+                "scoringSchema.rules.wicket": 20,
+                "scoringSchema.rules.catch": 10,
+                "scoringSchema.rules.stumping": 25,  # UPDATED: 25 points
+                "scoringSchema.rules.runOut": 20,
                 "scoringSchema.milestones": {}  # Remove all milestones
             }}
         )
-        print(f"✅ Updated cricket scoring rules (wicket: 20pts, stumping: 10pts, no milestones)")
+        print(f"✅ Updated cricket scoring rules (run: 1pt, wicket: 20pts, catch: 10pts, stumping: 25pts, runOut: 20pts, no milestones)")
     
     client.close()
     print("🎉 Cricket players seeded successfully!")
