@@ -480,7 +480,9 @@ export default function AuctionRoom() {
     const handleBeginAuction = async () => {
       try {
         await axios.post(`${API}/auction/${auctionId}/begin`, null, {
-          params: { commissionerId: user.id }
+          headers: {
+            'X-User-ID': user.id
+          }
         });
         console.log("✅ Auction begin request sent");
         // State will update via lot_started event
