@@ -252,7 +252,7 @@ export default function AuctionRoom() {
         loadClubs();
       }
       
-      alert(data.message || "Auction complete! All clubs have been auctioned.");
+      alert(data.message || `Auction complete! All ${uiHints.assetPlural.toLowerCase()} have been auctioned.`);
     };
 
     // Handle auction_paused event
