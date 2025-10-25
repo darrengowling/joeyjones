@@ -447,7 +447,7 @@ export default function AuctionRoom() {
     
     // CRITICAL FIX: Poll auction status every 1 second while in waiting room
     // This ensures we catch the transition even if Socket.IO events are missed
-    React.useEffect(() => {
+    useEffect(() => {
       console.log("⏳ Starting waiting room polling");
       const waitingPoll = setInterval(() => {
         console.log("🔄 Polling auction status from waiting room...");
