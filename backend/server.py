@@ -1099,6 +1099,34 @@ async def import_fixtures_csv(league_id: str, file: UploadFile = File(...), comm
         logger.error(f"Error importing fixtures: {e}")
         raise HTTPException(status_code=400, detail=f"Error processing CSV: {str(e)}")
 
+@api_router.delete("/leagues/{league_id}/fixtures/clear")
+async def clear_all_fixtures(league_id: str, commissionerId: str = Query(...)):
+    """Delete all fixtures from a league - Commissioner only"""
+    if not FEATURE_MY_COMPETITIONS:
+        raise HTTPException(status_code=404, detail="Feature not available")
+    
+    # Verify league exists and commissioner
+    league = await db.leagues.find_one({"id": league_id})
+    if not league:
+        raise HTTPException(status_code=404, detail="League not found")
+    
+    if league["commissionerId"] != commissionerId:
+        raise HTTPException(status_code=403, detail="Only the league commissioner can delete fixtures")
+    
+    # Delete all fixtures
+    result = await db.fixtures.delete_many({"leagueId": league_id})
+    
+    # Emit update event
+    await sio.emit('fixtures_updated', {
+        'leagueId': league_id,
+        'countChanged': -result.deleted_count
+    }, room=f"league:{league_id}")
+    
+    return {
+        "message": f"Successfully deleted {result.deleted_count} fixtures",
+        "fixturesDeleted": result.deleted_count
+    }
+
 @api_router.put("/leagues/{league_id}/assets")
 async def update_league_assets(league_id: str, asset_ids: List[str]):
     """Prompt 1: Update selected assets for league (commissioner only)"""
