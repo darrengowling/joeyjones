@@ -140,7 +140,7 @@ class CricketDataAPITester:
         print("="*60)
         
         # Try current matches endpoint
-        data = self._make_request("v1/current_matches")
+        data = self._make_request("v1/currentMatches", {"offset": 0})
         
         if data:
             print("\n✅ API is accessible!")
