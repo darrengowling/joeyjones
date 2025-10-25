@@ -307,13 +307,16 @@ frontend:
     implemented: true
     working: false
     file: "/app/tests/e2e/01_waiting_room.spec.ts"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
     needs_retesting: false
     status_history:
       - working: false
         agent: "testing"
         comment: "CRITICAL ISSUES IDENTIFIED: 1) Commissioner cannot see 'Begin Auction' button - waiting room shows 'Participants in Room (1)' instead of (2), indicating participant count issue. 2) Backend API mismatch - frontend sends commissionerId as query param but backend expects it differently. 3) Waiting room UI not displaying correctly for commissioners vs participants."
+      - working: false
+        agent: "testing"
+        comment: "COMPREHENSIVE E2E TESTING FAILED: Test creates users and league successfully, but commissioner cannot see 'Begin Auction' button in waiting room. Participant count shows (1) instead of (2), indicating participants are not being loaded correctly from league participants endpoint. Waiting room UI is implemented correctly in frontend but participant synchronization is broken."
 
   - task: "E2E Test 2: Non-Commissioner Authorization"
     implemented: true
