@@ -501,6 +501,27 @@ async def join_league(league_id: str, participant_input: LeagueParticipantCreate
         'members': members
     }, room=f"league:{league_id}")
     
+    # Prompt A: Emit participants_changed for waiting room live updates
+    await sio.emit('participants_changed', {
+        'leagueId': league_id,
+        'count': len(all_participants)
+    }, room=f"league:{league_id}")
+    
+    # Prompt A: Also emit to auction room if auction exists and is in waiting state
+    auction = await db.auctions.find_one({"leagueId": league_id, "status": "waiting"})
+    if auction:
+        await sio.emit('participants_changed', {
+            'leagueId': league_id,
+            'count': len(all_participants)
+        }, room=f"auction:{auction['id']}")
+        
+        logger.info("participants_changed.emitted", extra={
+            "leagueId": league_id,
+            "auctionId": auction['id'],
+            "count": len(all_participants),
+            "rooms": [f"league:{league_id}", f"auction:{auction['id']}"]
+        })
+    
     return {"message": "Joined league successfully", "participant": participant}
 
 @api_router.get("/leagues/{league_id}/participants")
