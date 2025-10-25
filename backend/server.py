@@ -2422,10 +2422,22 @@ async def start_next_lot(auction_id: str, next_club_id: str):
     if not auction:
         return
     
-    # Get club details
-    next_club = await db.clubs.find_one({"id": next_club_id})
+    # Get league to determine sport
+    league = await db.leagues.find_one({"id": auction["leagueId"]})
+    if not league:
+        logger.error(f"League not found for auction {auction_id}")
+        return
+    
+    sport_key = league.get("sportKey", "football")
+    
+    # Get club/asset details based on sport
+    if sport_key == "football":
+        next_club = await db.clubs.find_one({"id": next_club_id})
+    else:
+        next_club = await db.assets.find_one({"id": next_club_id, "sportKey": sport_key})
+    
     if not next_club:
-        logger.error(f"Club not found: {next_club_id}")
+        logger.error(f"Club/Asset not found: {next_club_id} (sport: {sport_key})")
         return
     
     next_lot_number = auction["currentLot"] + 1
