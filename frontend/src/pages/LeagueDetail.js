@@ -116,11 +116,13 @@ export default function LeagueDetail() {
     socket.on('sync_members', onSyncMembers);
     socket.on('league_status_changed', onLeagueStatusChanged);
     
-    // Setup 30s fallback polling in case events are missed
+    // Setup aggressive 3s polling for real-time updates (EVERTON FIX)
+    // Socket.IO should work, but this ensures UI updates even if events are missed
     const pollInterval = setInterval(() => {
-      console.log('🔄 Fallback polling league status...');
+      console.log('🔄 Polling league status...');
       loadLeague();
-    }, 30000);
+      loadParticipants();
+    }, 3000);
     
     // Cleanup function
     return () => {
@@ -135,6 +137,9 @@ export default function LeagueDetail() {
   const loadLeague = async () => {
     try {
       const response = await axios.get(`${API}/leagues/${leagueId}`);
+      console.log('📋 League loaded:', response.data);
+      console.log('   Status:', response.data.status);
+      console.log('   Active Auction:', response.data.activeAuctionId);
       setLeague(response.data);
       
       // CRITICAL FIX: Check for active auction after loading league
