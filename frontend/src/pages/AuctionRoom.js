@@ -205,6 +205,8 @@ export default function AuctionRoom() {
       
       setCurrentClub(null);
       setBidAmount("");
+      setCurrentBid(null);
+      setCurrentBidder(null);
       if (data.participants) {
         setParticipants(data.participants);
       }
