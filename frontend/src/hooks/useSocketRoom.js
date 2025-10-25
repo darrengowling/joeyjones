@@ -85,6 +85,18 @@ export function useSocketRoom(roomType, roomId, options = {}) {
       }
     };
 
+    // Handle auction_snapshot for auction rooms (also marks as ready)
+    const handleAuctionSnapshot = (data) => {
+      if (roomType === 'auction') {
+        console.log(`📸 [useSocketRoom] Auction snapshot received for ${roomKey} - marking as ready`);
+        setReady(true);
+        if (readyResolveRef.current) {
+          readyResolveRef.current();
+          readyResolveRef.current = null; // Only resolve once
+        }
+      }
+    };
+
     // Handle room_joined for league rooms (marks as ready)
     const handleRoomJoined = (data) => {
       if (roomType === 'league' && data.leagueId === roomId) {
