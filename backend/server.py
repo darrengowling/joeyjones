@@ -1654,7 +1654,17 @@ async def begin_auction(
     auction_id: str,
     current_user: dict = Depends(get_current_user_from_header)
 ):
-    """Everton Bug Fix: Commissioner manually starts the auction after all users have joined"""
+    """Prompt G: Commissioner manually starts the auction - guarded by FEATURE_WAITING_ROOM flag"""
+    
+    # Prompt G: Check feature flag - return 404 if waiting room feature is disabled
+    if not FEATURE_WAITING_ROOM:
+        logger.warning("begin_auction.feature_disabled", extra={
+            "auctionId": auction_id,
+            "userId": current_user["id"],
+            "feature": "waiting_room_disabled"
+        })
+        raise HTTPException(status_code=404, detail="Waiting room feature is not enabled")
+    
     # Verify auction exists and is waiting
     auction = await db.auctions.find_one({"id": auction_id})
     if not auction:
@@ -1670,7 +1680,23 @@ async def begin_auction(
     
     # Check if current user is the commissioner
     if league["commissionerId"] != current_user["id"]:
+        logger.warning("begin_auction.unauthorized", extra={
+            "auctionId": auction_id,
+            "leagueId": auction["leagueId"],
+            "userId": current_user["id"],
+            "commissionerId": league["commissionerId"]
+        })
         raise HTTPException(status_code=403, detail="Only the commissioner can start the auction")
+    
+    # Prompt G: Log begin_auction call
+    auction_room_size = len(sio.manager.rooms.get(f"auction:{auction_id}", {}).get("/", set()))
+    logger.info("begin_auction.called", extra={
+        "auctionId": auction_id,
+        "leagueId": auction["leagueId"],
+        "userId": current_user["id"],
+        "commissionerId": league["commissionerId"],
+        "auctionRoomSize": auction_room_size
+    })
     
     # Get sport key for asset retrieval
     sport_key = league.get("sportKey", "football")
@@ -1725,6 +1751,16 @@ async def begin_auction(
         'lotNumber': 1,
         'timer': timer_data
     }, room=f"auction:{auction_id}")
+    
+    # Prompt G: Log lot_started emission
+    logger.info("lot_started.emitted", extra={
+        "auctionId": auction_id,
+        "leagueId": auction["leagueId"],
+        "lotNumber": 1,
+        "assetId": first_asset_id,
+        "room": f"auction:{auction_id}",
+        "roomSize": auction_room_size
+    })
     
     # Start timer countdown
     asyncio.create_task(countdown_timer(auction_id, timer_end, lot_id))
