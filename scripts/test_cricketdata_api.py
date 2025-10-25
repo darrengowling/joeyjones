@@ -205,7 +205,7 @@ class CricketDataAPITester:
         print(f"📊 FETCHING MATCH SCORECARD: {match_id}")
         print("="*60)
         
-        data = self._make_request(f"v1/match_scorecard", {"match_id": match_id})
+        data = self._make_request(f"v1/match_info", {"id": match_id})
         
         if data:
             self._save_snapshot(data, f"scorecard_{match_id}")
