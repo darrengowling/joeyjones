@@ -2962,12 +2962,21 @@ async def join_auction(sid, data):
     auction = await db.auctions.find_one({"id": auction_id})
     if auction:
         
+        # Get league to determine sport
+        league = await db.leagues.find_one({"id": auction["leagueId"]})
+        sport_key = league.get("sportKey", "football") if league else "football"
+        
         # Get current club if exists
         current_club = None
         if auction.get("currentClubId"):
-            club = await db.clubs.find_one({"id": auction["currentClubId"]})
+            if sport_key == "football":
+                club = await db.clubs.find_one({"id": auction["currentClubId"]})
+            else:
+                club = await db.assets.find_one({"id": auction["currentClubId"], "sportKey": sport_key})
+            
             if club:
-                current_club = Club(**club).model_dump()
+                club.pop('_id', None)
+                current_club = Club(**club).model_dump() if sport_key == "football" else club
         
         # Get all bids for current club
         current_bids = []
