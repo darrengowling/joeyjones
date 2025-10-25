@@ -260,7 +260,8 @@ export default function AuctionRoom() {
     // Cleanup function - remove all listeners
     return () => {
       console.log('🧹 [AuctionRoom] Removing socket listeners');
-      socket.off('sync_state', onSyncState);
+      socket.off('auction_snapshot', onAuctionSnapshot);
+      socket.off('sync_state', onSyncState);  // Legacy
       socket.off('bid_placed', onBidPlaced);
       socket.off('bid_update', onBidUpdate);
       socket.off('lot_started', onLotStarted);
