@@ -129,7 +129,7 @@ class Fixture(BaseModel):
     leagueId: str
     sportKey: str
     externalMatchId: Optional[str] = None
-    homeAssetId: str  # clubId or playerId depending on sport
+    homeAssetId: Optional[str] = None  # clubId or playerId depending on sport (None for international matches)
     awayAssetId: Optional[str] = None  # null for cricket or BYE fixtures
     startsAt: datetime
     venue: Optional[str] = None
