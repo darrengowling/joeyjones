@@ -1523,6 +1523,25 @@ async def start_auction(league_id: str):
     
     return {"auctionId": auction_obj.id, "status": "waiting"}
 
+@api_router.get("/leagues/{league_id}/state")
+async def get_league_state(league_id: str):
+    """
+    Prompt B: Lightweight endpoint to get league status and active auction
+    Returns: {leagueId, status, activeAuctionId (if exists)}
+    """
+    league = await db.leagues.find_one({"id": league_id})
+    if not league:
+        raise HTTPException(status_code=404, detail="League not found")
+    
+    # Check for active auction
+    auction = await db.auctions.find_one({"leagueId": league_id})
+    
+    return {
+        "leagueId": league_id,
+        "status": league.get("status", "pending"),
+        "activeAuctionId": auction["id"] if auction else None
+    }
+
 @api_router.post("/auction/{auction_id}/begin")
 async def begin_auction(auction_id: str, commissionerId: str):
     """Everton Bug Fix: Commissioner manually starts the auction after all users have joined"""
