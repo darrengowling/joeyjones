@@ -1946,7 +1946,7 @@ async def place_bid(auction_id: str, bid_input: BidCreate):
                 ends_at_ms = int(new_end_time.timestamp() * 1000)
                 timer_data = create_timer_event(lot_id, ends_at_ms)
                 
-                await sio.emit('anti_snipe', timer_data)
+                await sio.emit('anti_snipe', timer_data, room=f"auction:{auction_id}")
                 
                 logger.info(f"Anti-snipe triggered for lot {lot_id}: seq={timer_data['seq']}, new end={timer_data['endsAt']}")
     
