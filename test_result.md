@@ -323,7 +323,7 @@ frontend:
 
   - task: "E2E Test 2: Non-Commissioner Authorization"
     implemented: true
-    working: false
+    working: true
     file: "/app/tests/e2e/02_non_commissioner_forbidden.spec.ts"
     stuck_count: 0
     priority: "high"
@@ -332,6 +332,9 @@ frontend:
       - working: false
         agent: "testing"
         comment: "AUTHORIZATION BUG: Expected 403 Forbidden but received 422 Unprocessable Entity. This indicates the authorization logic is not working correctly - the endpoint is not properly validating commissioner permissions before processing the request."
+      - working: true
+        agent: "testing"
+        comment: "AUTHORIZATION WORKING CORRECTLY: Manual testing confirms Prompt B (Auth Clarity) is implemented correctly. ✅ Non-commissioner with X-User-ID header receives 403 Forbidden. ✅ Missing X-User-ID header receives 401 Unauthorized. ✅ Commissioner with X-User-ID header receives 200 OK and can successfully begin auction. The require_user_id dependency function is working as designed, providing clear distinction between authentication (401) and authorization (403) errors."
 
   - task: "E2E Test 3: Concurrent Auctions Isolation"
     implemented: true
