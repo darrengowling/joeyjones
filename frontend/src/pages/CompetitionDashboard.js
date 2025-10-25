@@ -410,7 +410,7 @@ export default function CompetitionDashboard() {
                           )}
                         </div>
                         <div className="text-xs text-gray-500">
-                          {managerRoster.length} / {summary.clubSlots} teams • {formatCurrency(manager.budgetRemaining)} remaining
+                          {managerRoster.length} / {summary.clubSlots} {uiHints.assetPlural.toLowerCase()} • {formatCurrency(manager.budgetRemaining)} remaining
                         </div>
                       </div>
                     </div>
