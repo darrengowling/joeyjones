@@ -196,10 +196,10 @@ test.describe('02 - Non-Commissioner Authorization', () => {
     console.log('✅ ALL TESTS PASSED');
     console.log('========================================');
     console.log('\nTest Summary:');
-    console.log('  - Non-commissioner cannot begin auction ✓');
-    console.log('  - 403 Forbidden returned correctly ✓');
+    console.log('  - Non-commissioner with auth gets 403 Forbidden ✓');
+    console.log('  - Missing auth header gets 401 Unauthorized ✓');
     console.log('  - Error message mentions authorization ✓');
     console.log('  - Auction remains in waiting state ✓');
-    console.log('  - Commissioner can successfully begin ✓');
+    console.log('  - Commissioner with auth can successfully begin ✓');
   });
 });
