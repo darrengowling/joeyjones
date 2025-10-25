@@ -996,15 +996,18 @@ agent_communication:
 
   - task: "E2E Test 1: Waiting Room Core Flow"
     implemented: true
-    working: "NA"
+    working: false
     file: "tests/e2e/01_waiting_room.spec.ts"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Created E2E test for core waiting room flow. Tests: both users see waiting room, commissioner sees Begin button, participant sees waiting message, both see participants list, transition to active < 2s, both see first lot. Ready for testing."
+      - working: false
+        agent: "testing"
+        comment: "E2E TEST FAILED: Commissioner cannot see 'Begin Auction' button in waiting room. Participant count shows (1) instead of (2), indicating participants are not being loaded correctly from league participants endpoint. Waiting room UI is implemented correctly in frontend but participant synchronization is broken. Test creates users and league successfully but waiting room functionality fails."
 
   - task: "E2E Test 2: Non-Commissioner Authorization"
     implemented: true
