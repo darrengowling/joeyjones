@@ -23,7 +23,8 @@ class BackendTester:
             "league_creation_management": {},
             "auction_core_functionality": {},
             "cricket_specific_features": {},
-            "my_competitions_endpoints": {}
+            "my_competitions_endpoints": {},
+            "socket_io": {}
         }
         self.test_user_id = None
         self.test_league_id = None
