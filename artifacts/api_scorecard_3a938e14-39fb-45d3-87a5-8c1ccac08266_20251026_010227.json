@@ -1,0 +1,45 @@
+{
+  "apikey": "82fec341-b050-4b1c-9a9d-72359c591820",
+  "data": {
+    "id": "3a938e14-39fb-45d3-87a5-8c1ccac08266",
+    "name": "New Zealand vs England, 1st ODI",
+    "matchType": "odi",
+    "status": "Match not started",
+    "venue": "Bay Oval, Mount Maunganui",
+    "date": "2025-10-26",
+    "dateTimeGMT": "2025-10-26T01:00:00",
+    "teams": [
+      "New Zealand",
+      "England"
+    ],
+    "teamInfo": [
+      {
+        "name": "England",
+        "shortname": "ENG",
+        "img": "https://g.cricapi.com/iapi/23-637877072894080569.webp?w=48"
+      },
+      {
+        "name": "New Zealand",
+        "shortname": "NZ",
+        "img": "https://g.cricapi.com/iapi/57-637877076980737903.webp?w=48"
+      }
+    ],
+    "series_id": "f7bad62b-6627-45b1-9931-ea68c41eb6fd",
+    "fantasyEnabled": false,
+    "bbbEnabled": false,
+    "hasSquad": true,
+    "matchStarted": true,
+    "matchEnded": false
+  },
+  "status": "success",
+  "info": {
+    "hitsToday": 69,
+    "hitsUsed": 1,
+    "hitsLimit": 100,
+    "credits": 0,
+    "server": 12,
+    "queryTime": 11.2561,
+    "s": 0,
+    "cache": 0
+  }
+}
