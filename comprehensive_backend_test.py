@@ -243,12 +243,9 @@ class BackendTester:
             self.log_test("auction_core_functionality", "prerequisites_missing", False, "No test league or user available")
             return
         
-        # Test POST /api/auction/begin (start auction for test league)
+        # Test POST /api/leagues/:id/auction/start (start auction for test league)
         try:
-            headers = {"X-User-ID": self.test_user_id}
-            response = requests.post(f"{BACKEND_URL}/auction/begin", 
-                                   json={"leagueId": self.test_league_id}, 
-                                   headers=headers)
+            response = requests.post(f"{BACKEND_URL}/leagues/{self.test_league_id}/auction/start")
             if response.status_code == 200:
                 auction = response.json()
                 self.test_auction_id = auction["id"]
@@ -260,13 +257,13 @@ class BackendTester:
         except Exception as e:
             self.log_test("auction_core_functionality", "begin_auction", False, f"Exception: {str(e)}")
         
-        # Test GET /api/auction/:id/status (verify auction active)
+        # Test GET /api/auction/:id (verify auction details)
         if self.test_auction_id:
             try:
-                response = requests.get(f"{BACKEND_URL}/auction/{self.test_auction_id}/status")
+                response = requests.get(f"{BACKEND_URL}/auction/{self.test_auction_id}")
                 if response.status_code == 200:
-                    status = response.json()
-                    auction_status = status.get("status")
+                    auction_data = response.json()
+                    auction_status = auction_data.get("status")
                     self.log_test("auction_core_functionality", "auction_status", True, 
                                 f"Auction status: {auction_status}", response.status_code)
                 else:
