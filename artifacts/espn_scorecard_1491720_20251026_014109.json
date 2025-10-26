@@ -1,0 +1,24 @@
+{
+  "match_id": "1491720",
+  "timestamp": "2025-10-26T01:41:09.743682",
+  "match_status": "unknown",
+  "teams": {},
+  "player_stats": [
+    {
+      "name": "MJ Henry",
+      "role": "bowler",
+      "runs": 0,
+      "wickets": 16,
+      "overs": "",
+      "runs_conceded": 1
+    },
+    {
+      "name": "ZG Foulkes",
+      "role": "bowler",
+      "runs": 0,
+      "wickets": 13,
+      "overs": "",
+      "runs_conceded": 1
+    }
+  ]
+}
