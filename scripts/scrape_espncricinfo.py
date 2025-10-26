@@ -292,15 +292,19 @@ class ESPNCricinfoScraper:
         
         csv_lines = ["playerExternalId,runs,wickets,catches,stumpings,runOuts"]
         
-        for player in data["player_stats"]:
-            player_id = player["name"].lower().replace(" ", "-")
-            runs = player.get("runs", 0)
-            wickets = player.get("wickets", 0)
-            catches = player.get("catches", 0)
-            stumpings = player.get("stumpings", 0)
-            run_outs = player.get("runOuts", 0)
+        for player_name, stats in data["player_stats"].items():
+            # Convert name to external ID format (lowercase with hyphens)
+            player_id = player_name.lower().replace(" ", "-").replace(".", "")
+            runs = stats.get("runs", 0)
+            wickets = stats.get("wickets", 0)
+            catches = stats.get("catches", 0)
+            stumpings = stats.get("stumpings", 0)
+            run_outs = stats.get("runOuts", 0)
             
-            csv_lines.append(f"{player_id},{runs},{wickets},{catches},{stumpings},{run_outs}")
+            # Only include players with some activity
+            if runs > 0 or wickets > 0 or catches > 0 or stumpings > 0 or run_outs > 0:
+                csv_lines.append(f"{player_id},{runs},{wickets},{catches},{stumpings},{run_outs}")
+                print(f"   ✓ {player_name}: R{runs} W{wickets} C{catches} St{stumpings} RO{run_outs}")
         
         csv_content = "\n".join(csv_lines)
         
@@ -311,7 +315,8 @@ class ESPNCricinfoScraper:
         with open(filename, 'w') as f:
             f.write(csv_content)
         
-        print(f"   ✅ CSV saved: {filename}")
+        print(f"\n   💾 CSV saved: {filename}")
+        print(f"   📊 Total players: {len(csv_lines) - 1}")
         return filename
     
     def run_single_scrape(self):
