@@ -6,7 +6,7 @@ Simple cricket scoring test to debug the issue
 import requests
 import json
 
-BASE_URL = "https://auction-room-wizard.preview.emergentagent.com/api"
+BASE_URL = "https://bidflowfix.preview.emergentagent.com/api"
 
 def simple_test():
     # Create test user and cricket league

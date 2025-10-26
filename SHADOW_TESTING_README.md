@@ -147,7 +147,7 @@ All data saved to `/app/artifacts/`:
 grep "API_KEY" /app/scripts/test_cricketdata_api.py
 
 # Test with curl
-curl "https://api.cricketdata.org/v1/current_matches?apikey=82fec341-b050-4b1c-9a9d-72359c591820"
+curl "https://api.cricketdata.org/v1/current_matches?apikey=bidflowfix"
 ```
 
 ### "Match not found"

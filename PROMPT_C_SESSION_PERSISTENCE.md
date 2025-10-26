@@ -345,7 +345,7 @@ npx playwright test e2e/01_waiting_room.spec.ts --headed
 
 **Test Without Session** (browser manually):
 ```
-1. Open browser to https://auction-room-wizard.preview.emergentagent.com
+1. Open browser to https://bidflowfix.preview.emergentagent.com
 2. Manually navigate to /auction/some-id
 3. See auth panel (not redirect) ✅
 4. Click "Go to Home" → navigates to / ✅
