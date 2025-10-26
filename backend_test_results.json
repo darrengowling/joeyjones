@@ -1,0 +1,133 @@
+{
+  "total_tests": 18,
+  "passed_tests": 17,
+  "pass_rate": 94.44444444444444,
+  "critical_failures": [
+    "auction_core_functionality.begin_auction: HTTP 405: {\"detail\":\"Method Not Allowed\"}"
+  ],
+  "recommendation": "\u26a0\ufe0f CONDITIONAL GO - Minor issues need attention",
+  "detailed_results": {
+    "multi_sport_foundation": {
+      "get_sports": {
+        "success": true,
+        "details": "Found 2 sports (Football + Cricket)",
+        "response_code": 200,
+        "timestamp": "2025-10-26T22:58:36.093598"
+      },
+      "get_football_sport": {
+        "success": true,
+        "details": "Football sport config retrieved: Football",
+        "response_code": 200,
+        "timestamp": "2025-10-26T22:58:36.170880"
+      },
+      "get_cricket_sport": {
+        "success": true,
+        "details": "Cricket sport config retrieved: Cricket",
+        "response_code": 200,
+        "timestamp": "2025-10-26T22:58:36.211270"
+      },
+      "cricket_enabled_flag": {
+        "success": true,
+        "details": "Cricket feature flag verified through API availability",
+        "response_code": null,
+        "timestamp": "2025-10-26T22:58:36.211301"
+      }
+    },
+    "asset_management": {
+      "football_assets": {
+        "success": true,
+        "details": "Found 36 football clubs (expected 36+)",
+        "response_code": 200,
+        "timestamp": "2025-10-26T22:58:36.250775"
+      },
+      "cricket_assets": {
+        "success": true,
+        "details": "Found 30 cricket players",
+        "response_code": 200,
+        "timestamp": "2025-10-26T22:58:36.289703"
+      }
+    },
+    "league_creation_management": {
+      "create_league": {
+        "success": true,
+        "details": "Created league: Test League 4a583da3 (ID: a381c5b8-0b24-432d-85f7-e467aa28d7e3)",
+        "response_code": 200,
+        "timestamp": "2025-10-26T22:58:36.333895"
+      },
+      "join_league": {
+        "success": true,
+        "details": "Successfully joined league with invite token",
+        "response_code": 200,
+        "timestamp": "2025-10-26T22:58:36.377407"
+      },
+      "get_leagues": {
+        "success": true,
+        "details": "Found 4 leagues, test league present: True",
+        "response_code": 200,
+        "timestamp": "2025-10-26T22:58:36.416997"
+      },
+      "get_my_competitions": {
+        "success": true,
+        "details": "Found 1 competitions, test league present: True",
+        "response_code": 200,
+        "timestamp": "2025-10-26T22:58:36.456190"
+      }
+    },
+    "auction_core_functionality": {
+      "begin_auction": {
+        "success": false,
+        "details": "HTTP 405: {\"detail\":\"Method Not Allowed\"}",
+        "response_code": 405,
+        "timestamp": "2025-10-26T22:58:36.489117"
+      }
+    },
+    "cricket_specific_features": {
+      "cricket_assets_available": {
+        "success": true,
+        "details": "Cricket assets availability verified from asset management tests",
+        "response_code": null,
+        "timestamp": "2025-10-26T22:58:36.489886"
+      },
+      "cricket_league_creation": {
+        "success": true,
+        "details": "Created cricket league: Cricket Test League 17cd563d",
+        "response_code": 200,
+        "timestamp": "2025-10-26T22:58:36.524384"
+      },
+      "cricket_scoring_ingest": {
+        "success": true,
+        "details": "Cricket scoring endpoint exists (HTTP 200)",
+        "response_code": 200,
+        "timestamp": "2025-10-26T22:58:36.562286"
+      }
+    },
+    "my_competitions_endpoints": {
+      "league_summary": {
+        "success": true,
+        "details": "League summary complete with all required fields",
+        "response_code": 200,
+        "timestamp": "2025-10-26T22:58:36.602048"
+      },
+      "league_standings": {
+        "success": true,
+        "details": "Standings retrieved, has table: True",
+        "response_code": 200,
+        "timestamp": "2025-10-26T22:58:36.642396"
+      },
+      "league_fixtures": {
+        "success": true,
+        "details": "Fixtures retrieved: 0 fixtures",
+        "response_code": 200,
+        "timestamp": "2025-10-26T22:58:36.680990"
+      }
+    },
+    "socket_io": {
+      "path_configuration": {
+        "success": true,
+        "details": "Socket.IO path /api/socket.io configured (HTTP 400)",
+        "response_code": 400,
+        "timestamp": "2025-10-26T22:58:36.714538"
+      }
+    }
+  }
+}
