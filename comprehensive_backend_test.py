@@ -248,7 +248,20 @@ class BackendTester:
             response = requests.post(f"{BACKEND_URL}/leagues/{self.test_league_id}/auction/start")
             if response.status_code == 200:
                 auction = response.json()
-                self.test_auction_id = auction["id"]
+                print(f"DEBUG: Auction response: {auction}")
+                # Handle different response formats
+                if "id" in auction:
+                    self.test_auction_id = auction["id"]
+                elif "auction" in auction and "id" in auction["auction"]:
+                    self.test_auction_id = auction["auction"]["id"]
+                else:
+                    # Try to find auction ID in response
+                    auction_keys = [k for k in auction.keys() if "id" in k.lower()]
+                    if auction_keys:
+                        self.test_auction_id = auction[auction_keys[0]]
+                    else:
+                        raise KeyError("No auction ID found in response")
+                
                 self.log_test("auction_core_functionality", "begin_auction", True, 
                             f"Started auction: {self.test_auction_id}", response.status_code)
             else:
