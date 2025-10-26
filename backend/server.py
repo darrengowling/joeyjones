@@ -2739,7 +2739,7 @@ async def check_auction_completion(auction_id: str, final_club_id: str = None, f
                         "displayName": participant["userName"],
                         "points": 0.0,
                         "assetsOwned": participant.get("clubsWon", []),
-                        "tiebreakers": {"goals": 0, "wins": 0, "runs": 0, "wickets": 0}
+                        "tiebreakers": {"goals": 0, "wins": 0, "runs": 0, "wickets": 0, "catches": 0, "stumpings": 0, "runOuts": 0}
                     })
                 
                 standing_obj = Standing(
