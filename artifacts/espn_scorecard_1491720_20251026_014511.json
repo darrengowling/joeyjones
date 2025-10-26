@@ -1,0 +1,34 @@
+{
+  "match_id": "1491720",
+  "timestamp": "2025-10-26T01:45:11.862720",
+  "match_status": "In Progress",
+  "teams": {},
+  "player_stats": {
+    "MJ Henry": {
+      "name": "MJ Henry",
+      "runs": 0,
+      "balls": 1,
+      "fours": 2,
+      "sixes": 0,
+      "wickets": 15,
+      "catches": 0,
+      "stumpings": 0,
+      "runOuts": 0,
+      "overs": "",
+      "runs_conceded": 1
+    },
+    "ZG Foulkes": {
+      "name": "ZG Foulkes",
+      "runs": 4,
+      "balls": 1,
+      "fours": 3,
+      "sixes": 0,
+      "wickets": 17,
+      "catches": 0,
+      "stumpings": 0,
+      "runOuts": 0,
+      "overs": "",
+      "runs_conceded": 1
+    }
+  }
+}
