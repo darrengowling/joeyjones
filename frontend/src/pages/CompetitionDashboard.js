@@ -534,6 +534,19 @@ export default function CompetitionDashboard() {
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {isCricket ? entry.tiebreakers.wickets : entry.tiebreakers.wins}
                   </td>
+                  {isCricket && (
+                    <>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {entry.tiebreakers.catches || 0}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {entry.tiebreakers.stumpings || 0}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {entry.tiebreakers.runOuts || 0}
+                      </td>
+                    </>
+                  )}
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {entry.assetsOwned.length}
                   </td>
