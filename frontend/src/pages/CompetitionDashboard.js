@@ -628,60 +628,118 @@ export default function CompetitionDashboard() {
       <div className="space-y-6">
         {/* Commissioner CSV Upload Panel */}
         {isCommissioner && (
-          <div className="bg-white rounded-lg shadow p-6" data-testid="fixtures-upload">
-            <h3 className="text-lg font-bold text-gray-900 mb-3">Import Fixtures (CSV)</h3>
-            <p className="text-sm text-gray-600 mb-4">
-              Upload a CSV file to schedule fixtures. Required columns: startsAt, homeAssetExternalId, awayAssetExternalId, venue, round, externalMatchId
-            </p>
-            
-            <div className="mb-4">
-              <label className="block">
-                <span className="sr-only">Choose CSV file</span>
-                <input
-                  type="file"
-                  accept=".csv"
-                  onChange={handleCSVUpload}
-                  disabled={uploadingCSV}
-                  className="block w-full text-sm text-gray-500
-                    file:mr-4 file:py-2 file:px-4
-                    file:rounded-lg file:border-0
-                    file:text-sm file:font-semibold
-                    file:bg-blue-50 file:text-blue-700
-                    hover:file:bg-blue-100
-                    disabled:opacity-50"
-                />
-              </label>
+          <>
+            <div className="bg-white rounded-lg shadow p-6" data-testid="fixtures-upload">
+              <h3 className="text-lg font-bold text-gray-900 mb-3">Import Fixtures (CSV)</h3>
+              <p className="text-sm text-gray-600 mb-4">
+                Upload a CSV file to schedule fixtures. Required columns: startsAt, homeAssetExternalId, awayAssetExternalId, venue, round, externalMatchId
+              </p>
+              
+              <div className="mb-4">
+                <label className="block">
+                  <span className="sr-only">Choose CSV file</span>
+                  <input
+                    type="file"
+                    accept=".csv"
+                    onChange={handleCSVUpload}
+                    disabled={uploadingCSV}
+                    className="block w-full text-sm text-gray-500
+                      file:mr-4 file:py-2 file:px-4
+                      file:rounded-lg file:border-0
+                      file:text-sm file:font-semibold
+                      file:bg-blue-50 file:text-blue-700
+                      hover:file:bg-blue-100
+                      disabled:opacity-50"
+                  />
+                </label>
+              </div>
+
+              {uploadingCSV && (
+                <div className="text-sm text-blue-600">Uploading...</div>
+              )}
+              
+              {uploadSuccess && (
+                <div className="text-sm text-green-600 bg-green-50 border border-green-200 rounded p-3">
+                  {uploadSuccess}
+                </div>
+              )}
+              
+              {uploadError && (
+                <div className="text-sm text-red-600 bg-red-50 border border-red-200 rounded p-3">
+                  {uploadError}
+                </div>
+              )}
+
+              <div className="mt-4 text-sm text-gray-500">
+                <a
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    alert("Sample CSV format:\nstartsAt,homeAssetExternalId,awayAssetExternalId,venue,round,externalMatchId\n2025-01-15T19:00:00Z,MCI,LIV,Etihad Stadium,1,match001");
+                  }}
+                  className="text-blue-600 hover:underline"
+                >
+                  View sample CSV format
+                </a>
+              </div>
             </div>
 
-            {uploadingCSV && (
-              <div className="text-sm text-blue-600">Uploading...</div>
-            )}
-            
-            {uploadSuccess && (
-              <div className="text-sm text-green-600 bg-green-50 border border-green-200 rounded p-3">
-                {uploadSuccess}
+            {/* Score Upload Panel */}
+            <div className="bg-green-50 border-2 border-green-200 rounded-lg shadow p-6" data-testid="score-upload">
+              <h3 className="text-lg font-bold text-green-900 mb-3">📊 Upload Match Scores (CSV)</h3>
+              <p className="text-sm text-gray-700 mb-4">
+                Upload match results after a game is complete. Required columns: matchId, playerExternalId, runs, wickets, catches, stumpings, runOuts
+              </p>
+              
+              <div className="mb-4">
+                <label className="block">
+                  <span className="sr-only">Choose Scores CSV file</span>
+                  <input
+                    type="file"
+                    accept=".csv"
+                    onChange={handleScoreUpload}
+                    disabled={uploadingCSV}
+                    className="block w-full text-sm text-gray-700
+                      file:mr-4 file:py-2 file:px-4
+                      file:rounded-lg file:border-0
+                      file:text-sm file:font-semibold
+                      file:bg-green-100 file:text-green-800
+                      hover:file:bg-green-200
+                      disabled:opacity-50"
+                  />
+                </label>
               </div>
-            )}
-            
-            {uploadError && (
-              <div className="text-sm text-red-600 bg-red-50 border border-red-200 rounded p-3">
-                {uploadError}
-              </div>
-            )}
 
-            <div className="mt-4 text-sm text-gray-500">
-              <a
-                href="#"
-                onClick={(e) => {
-                  e.preventDefault();
-                  alert("Sample CSV format:\nstartsAt,homeAssetExternalId,awayAssetExternalId,venue,round,externalMatchId\n2025-01-15T19:00:00Z,MCI,LIV,Etihad Stadium,1,match001");
-                }}
-                className="text-blue-600 hover:underline"
-              >
-                View sample CSV format
-              </a>
+              {uploadingCSV && (
+                <div className="text-sm text-green-700">Uploading scores...</div>
+              )}
+              
+              {uploadSuccess && (
+                <div className="text-sm text-green-800 bg-green-100 border border-green-300 rounded p-3 font-semibold">
+                  {uploadSuccess}
+                </div>
+              )}
+              
+              {uploadError && (
+                <div className="text-sm text-red-700 bg-red-50 border border-red-200 rounded p-3">
+                  {uploadError}
+                </div>
+              )}
+
+              <div className="mt-4 text-sm text-gray-600">
+                <a
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    alert("Sample Scoring CSV format:\nmatchId,playerExternalId,runs,wickets,catches,stumpings,runOuts\nnz-eng-odi-1-2025,harry-brook,67,0,1,0,0\nnz-eng-odi-1-2025,matt-henry,0,2,0,0,0");
+                  }}
+                  className="text-green-700 hover:underline font-medium"
+                >
+                  View sample scoring CSV format
+                </a>
+              </div>
             </div>
-          </div>
+          </>
         )}
 
         {/* Fixtures List */}
