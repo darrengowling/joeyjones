@@ -248,7 +248,6 @@ class BackendTester:
             response = requests.post(f"{BACKEND_URL}/leagues/{self.test_league_id}/auction/start")
             if response.status_code == 200:
                 auction = response.json()
-                print(f"DEBUG: Auction response: {auction}")
                 # Handle different response formats
                 if "id" in auction:
                     self.test_auction_id = auction["id"]
