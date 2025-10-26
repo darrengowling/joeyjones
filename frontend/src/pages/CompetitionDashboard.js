@@ -245,6 +245,52 @@ export default function CompetitionDashboard() {
     return groups;
   };
 
+  const handleScoreUpload = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    if (!file.name.endsWith('.csv')) {
+      setUploadError("Please upload a CSV file");
+      return;
+    }
+
+    setUploadingCSV(true);
+    setUploadError("");
+    setUploadSuccess("");
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const response = await axios.post(
+        `${API}/scoring/${leagueId}/ingest`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }
+      );
+
+      setUploadSuccess(`✅ Scores uploaded successfully! Processed ${response.data.processedRows} rows.`);
+      
+      // Reload standings after score upload
+      setTimeout(() => {
+        setStandings(null); // Clear cached standings
+        if (activeTab === "standings") {
+          loadTabData("standings");
+        }
+      }, 1000);
+
+    } catch (err) {
+      console.error("Score upload error:", err);
+      setUploadError(err.response?.data?.detail || "Failed to upload scores. Please check your CSV format.");
+    } finally {
+      setUploadingCSV(false);
+      event.target.value = ""; // Reset file input
+    }
+  };
+
   const handleCSVUpload = async (event) => {
     const file = event.target.files[0];
     if (!file) return;
