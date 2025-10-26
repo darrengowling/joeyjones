@@ -1480,14 +1480,35 @@ async def ingest_cricket_scoring(league_id: str, file: UploadFile = File(...)):
         # Update leaderboard projection - recalculate total points per player
         leaderboard_results = []
         for player_external_id in leaderboard_updates:
-            # Calculate total points for this player across all matches
+            # Calculate total points and stats for this player across all matches
             pipeline = [
                 {"$match": {"leagueId": league_id, "playerExternalId": player_external_id}},
-                {"$group": {"_id": None, "totalPoints": {"$sum": "$points"}}}
+                {"$group": {
+                    "_id": None, 
+                    "totalPoints": {"$sum": "$points"},
+                    "totalRuns": {"$sum": "$performance.runs"},
+                    "totalWickets": {"$sum": "$performance.wickets"},
+                    "totalCatches": {"$sum": "$performance.catches"},
+                    "totalStumpings": {"$sum": "$performance.stumpings"},
+                    "totalRunOuts": {"$sum": "$performance.runOuts"}
+                }}
             ]
             
             result = await db.league_stats.aggregate(pipeline).to_list(1)
-            total_points = result[0]["totalPoints"] if result else 0
+            if result:
+                total_points = result[0]["totalPoints"]
+                total_runs = result[0].get("totalRuns", 0)
+                total_wickets = result[0].get("totalWickets", 0)
+                total_catches = result[0].get("totalCatches", 0)
+                total_stumpings = result[0].get("totalStumpings", 0)
+                total_run_outs = result[0].get("totalRunOuts", 0)
+            else:
+                total_points = 0
+                total_runs = 0
+                total_wickets = 0
+                total_catches = 0
+                total_stumpings = 0
+                total_run_outs = 0
             
             # Update or create leaderboard entry
             await db.cricket_leaderboard.update_one(
@@ -1497,12 +1518,85 @@ async def ingest_cricket_scoring(league_id: str, file: UploadFile = File(...)):
                         "leagueId": league_id,
                         "playerExternalId": player_external_id,
                         "totalPoints": total_points,
+                        "totalRuns": total_runs,
+                        "totalWickets": total_wickets,
+                        "totalCatches": total_catches,
+                        "totalStumpings": total_stumpings,
+                        "totalRunOuts": total_run_outs,
                         "updatedAt": datetime.now(timezone.utc)
                     }
                 },
                 upsert=True
             )
-            leaderboard_results.append({"playerExternalId": player_external_id, "totalPoints": total_points})
+            leaderboard_results.append({
+                "playerExternalId": player_external_id, 
+                "totalPoints": total_points,
+                "runs": total_runs,
+                "wickets": total_wickets,
+                "catches": total_catches,
+                "stumpings": total_stumpings,
+                "runOuts": total_run_outs
+            })
+        
+        # Update standings table with aggregated stats per manager
+        # Get all participants to calculate their total points from owned players
+        participants = await db.league_participants.find({"leagueId": league_id}).to_list(100)
+        
+        updated_table = []
+        for participant in participants:
+            user_id = participant["userId"]
+            assets_owned = participant.get("clubsWon", [])  # player IDs
+            
+            # Get player external IDs from asset IDs
+            assets = await db.assets.find({"id": {"$in": assets_owned}}).to_list(100)
+            player_external_ids = [asset.get("externalId") for asset in assets if asset.get("externalId")]
+            
+            # Calculate totals for this manager
+            manager_points = 0
+            manager_runs = 0
+            manager_wickets = 0
+            manager_catches = 0
+            manager_stumpings = 0
+            manager_run_outs = 0
+            
+            for player_ext_id in player_external_ids:
+                player_leaderboard = await db.cricket_leaderboard.find_one({
+                    "leagueId": league_id,
+                    "playerExternalId": player_ext_id
+                })
+                if player_leaderboard:
+                    manager_points += player_leaderboard.get("totalPoints", 0)
+                    manager_runs += player_leaderboard.get("totalRuns", 0)
+                    manager_wickets += player_leaderboard.get("totalWickets", 0)
+                    manager_catches += player_leaderboard.get("totalCatches", 0)
+                    manager_stumpings += player_leaderboard.get("totalStumpings", 0)
+                    manager_run_outs += player_leaderboard.get("totalRunOuts", 0)
+            
+            updated_table.append({
+                "userId": user_id,
+                "displayName": participant.get("userName", "Unknown"),
+                "points": manager_points,
+                "assetsOwned": assets_owned,
+                "tiebreakers": {
+                    "goals": 0,
+                    "wins": 0,
+                    "runs": manager_runs,
+                    "wickets": manager_wickets,
+                    "catches": manager_catches,
+                    "stumpings": manager_stumpings,
+                    "runOuts": manager_run_outs
+                }
+            })
+        
+        # Sort by points descending
+        updated_table.sort(key=lambda x: x["points"], reverse=True)
+        
+        # Update standings document
+        await db.standings.update_one(
+            {"leagueId": league_id},
+            {"$set": {"table": updated_table}},
+            upsert=True
+        )
         
         return {
             "message": "Cricket scoring data ingested successfully",
