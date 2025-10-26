@@ -89,126 +89,189 @@ class ESPNCricinfoScraper:
         data = {
             "match_id": self.match_id,
             "timestamp": datetime.now().isoformat(),
-            "match_status": "unknown",
+            "match_status": "In Progress",
             "teams": {},
-            "player_stats": []
+            "player_stats": {}  # Use dict for easier lookup by name
         }
         
-        # Extract match status
-        status_elem = soup.find('span', class_='ds-text-tight-s')
-        if status_elem:
-            data["match_status"] = status_elem.get_text(strip=True)
+        print("\n   📊 Extracting match data...")
         
-        # Extract team scores
-        score_elems = soup.find_all('div', class_='ds-text-compact-xxs')
-        for elem in score_elems:
-            text = elem.get_text(strip=True)
-            if "/" in text and "(" in text:
-                # This is likely a score
-                print(f"   Found score: {text}")
+        # Extract all player links to get full names
+        player_links = soup.find_all('a', href=lambda x: x and 'player' in str(x))
         
-        # Extract batting statistics
-        print("\n   📊 Extracting batting statistics...")
-        batting_tables = soup.find_all('table', class_='ds-table')
+        # Extract batting statistics from each innings
+        print("\n   🏏 Extracting batting statistics...")
         
-        for table in batting_tables:
-            rows = table.find_all('tr')
-            for row in rows[1:]:  # Skip header
-                cols = row.find_all('td')
-                if len(cols) >= 8:
-                    try:
-                        player_link = cols[0].find('a')
-                        if not player_link:
-                            continue
-                        
-                        player_name = player_link.get_text(strip=True)
-                        runs = cols[2].get_text(strip=True)
-                        balls = cols[3].get_text(strip=True)
-                        fours = cols[5].get_text(strip=True)
-                        sixes = cols[6].get_text(strip=True)
-                        
-                        # Check dismissal for catches/stumpings/run-outs
-                        dismissal = cols[1].get_text(strip=True).lower()
-                        caught = 1 if ('c ' in dismissal or 'caught' in dismissal) else 0
-                        stumped = 1 if ('st ' in dismissal or 'stumped' in dismissal) else 0
-                        run_out = 1 if ('run out' in dismissal or 'ro ' in dismissal) else 0
-                        
-                        player_stat = {
-                            "name": player_name,
-                            "role": "batsman",
-                            "runs": int(runs) if runs.isdigit() else 0,
-                            "balls": int(balls) if balls.isdigit() else 0,
-                            "fours": int(fours) if fours.isdigit() else 0,
-                            "sixes": int(sixes) if sixes.isdigit() else 0,
-                            "dismissal": dismissal
-                        }
-                        
-                        data["player_stats"].append(player_stat)
-                        print(f"      ✓ {player_name}: {runs} runs")
-                        
-                    except Exception as e:
+        # Find all rows with player batting data
+        batting_rows = soup.find_all('tr')
+        for row in batting_rows:
+            cells = row.find_all('td')
+            if len(cells) >= 8:
+                try:
+                    # Check if this is a batting row (has player link in first cell)
+                    player_link = cells[0].find('a')
+                    if not player_link:
                         continue
+                    
+                    player_name = player_link.get_text(strip=True)
+                    dismissal_text = cells[1].get_text(strip=True)
+                    runs_text = cells[2].get_text(strip=True)
+                    balls_text = cells[3].get_text(strip=True)
+                    fours_text = cells[5].get_text(strip=True)
+                    sixes_text = cells[6].get_text(strip=True)
+                    
+                    # Initialize or update player entry
+                    if player_name not in data["player_stats"]:
+                        data["player_stats"][player_name] = {
+                            "name": player_name,
+                            "runs": 0,
+                            "balls": 0,
+                            "fours": 0,
+                            "sixes": 0,
+                            "wickets": 0,
+                            "catches": 0,
+                            "stumpings": 0,
+                            "runOuts": 0
+                        }
+                    
+                    # Update batting stats
+                    player_stat = data["player_stats"][player_name]
+                    player_stat["runs"] = int(runs_text) if runs_text.isdigit() else 0
+                    player_stat["balls"] = int(balls_text) if balls_text.isdigit() else 0
+                    player_stat["fours"] = int(fours_text) if fours_text.isdigit() else 0
+                    player_stat["sixes"] = int(sixes_text) if sixes_text.isdigit() else 0
+                    
+                    print(f"      ✓ {player_name}: {player_stat['runs']} runs off {player_stat['balls']} balls")
+                    
+                    # Parse dismissal for fielding stats
+                    dismissal_lower = dismissal_text.lower()
+                    
+                    # Extract catch - format: "c FielderName b BowlerName" or "c †WKName b BowlerName"
+                    if 'c ' in dismissal_lower and ' b ' in dismissal_lower:
+                        parts = dismissal_text.split()
+                        c_index = next((i for i, p in enumerate(parts) if p.lower() == 'c'), None)
+                        b_index = next((i for i, p in enumerate(parts) if p.lower() == 'b'), None)
+                        
+                        if c_index is not None and b_index is not None and c_index < b_index:
+                            fielder_name = ' '.join(parts[c_index+1:b_index]).replace('†', '').strip()
+                            # Initialize fielder if needed
+                            if fielder_name and fielder_name not in data["player_stats"]:
+                                data["player_stats"][fielder_name] = {
+                                    "name": fielder_name,
+                                    "runs": 0,
+                                    "balls": 0,
+                                    "fours": 0,
+                                    "sixes": 0,
+                                    "wickets": 0,
+                                    "catches": 0,
+                                    "stumpings": 0,
+                                    "runOuts": 0
+                                }
+                            if fielder_name in data["player_stats"]:
+                                data["player_stats"][fielder_name]["catches"] += 1
+                                print(f"      ✓ Catch credited to {fielder_name}")
+                    
+                    # Extract stumping - format: "st †WKName b BowlerName"
+                    if 'st ' in dismissal_lower or 'stumped' in dismissal_lower:
+                        parts = dismissal_text.split()
+                        st_index = next((i for i, p in enumerate(parts) if p.lower() in ['st', 'stumped']), None)
+                        b_index = next((i for i, p in enumerate(parts) if p.lower() == 'b'), None)
+                        
+                        if st_index is not None and b_index is not None:
+                            wk_name = ' '.join(parts[st_index+1:b_index]).replace('†', '').strip()
+                            if wk_name and wk_name not in data["player_stats"]:
+                                data["player_stats"][wk_name] = {
+                                    "name": wk_name,
+                                    "runs": 0,
+                                    "balls": 0,
+                                    "fours": 0,
+                                    "sixes": 0,
+                                    "wickets": 0,
+                                    "catches": 0,
+                                    "stumpings": 0,
+                                    "runOuts": 0
+                                }
+                            if wk_name in data["player_stats"]:
+                                data["player_stats"][wk_name]["stumpings"] += 1
+                                print(f"      ✓ Stumping credited to {wk_name}")
+                    
+                    # Extract run out - format: "run out (FielderName)" or "run out (F1/F2)"
+                    if 'run out' in dismissal_lower:
+                        # Try to extract fielder names from parentheses
+                        import re
+                        ro_match = re.search(r'run out \(([^)]+)\)', dismissal_text, re.IGNORECASE)
+                        if ro_match:
+                            fielders = ro_match.group(1).split('/')
+                            for fielder in fielders:
+                                fielder_name = fielder.strip()
+                                if fielder_name and fielder_name not in data["player_stats"]:
+                                    data["player_stats"][fielder_name] = {
+                                        "name": fielder_name,
+                                        "runs": 0,
+                                        "balls": 0,
+                                        "fours": 0,
+                                        "sixes": 0,
+                                        "wickets": 0,
+                                        "catches": 0,
+                                        "stumpings": 0,
+                                        "runOuts": 0
+                                    }
+                                if fielder_name in data["player_stats"]:
+                                    data["player_stats"][fielder_name]["runOuts"] += 1
+                                    print(f"      ✓ Run out credited to {fielder_name}")
+                    
+                except Exception as e:
+                    print(f"      ⚠️  Error parsing batting row: {e}")
+                    continue
         
         # Extract bowling statistics
         print("\n   🎯 Extracting bowling statistics...")
-        bowling_sections = soup.find_all('table')
         
-        for table in bowling_sections:
-            # Check if this is a bowling table
-            header = table.find('th')
-            if header and 'Bowling' in str(header):
-                rows = table.find_all('tr')
-                for row in rows[1:]:
-                    cols = row.find_all('td')
-                    if len(cols) >= 6:
+        # Find bowling table by looking for "Bowling" header
+        for table in soup.find_all('table'):
+            # Check if table has bowling data (look for O, M, R, W headers)
+            headers = [th.get_text(strip=True) for th in table.find_all('th')]
+            if 'O' in headers and 'W' in headers:
+                rows = table.find_all('tr')[1:]  # Skip header
+                for row in rows:
+                    cells = row.find_all('td')
+                    if len(cells) >= 5:
                         try:
-                            player_link = cols[0].find('a')
+                            player_link = cells[0].find('a')
                             if not player_link:
                                 continue
                             
                             player_name = player_link.get_text(strip=True)
-                            overs = cols[1].get_text(strip=True)
-                            runs_conceded = cols[3].get_text(strip=True)
-                            wickets = cols[4].get_text(strip=True)
+                            overs = cells[1].get_text(strip=True)
+                            maidens = cells[2].get_text(strip=True)
+                            runs_conceded = cells[3].get_text(strip=True)
+                            wickets = cells[4].get_text(strip=True)
                             
-                            # Find or create player stat entry
-                            player_stat = next((p for p in data["player_stats"] if p["name"] == player_name), None)
-                            if not player_stat:
-                                player_stat = {
+                            # Initialize player if needed
+                            if player_name not in data["player_stats"]:
+                                data["player_stats"][player_name] = {
                                     "name": player_name,
-                                    "role": "bowler",
-                                    "runs": 0
+                                    "runs": 0,
+                                    "balls": 0,
+                                    "fours": 0,
+                                    "sixes": 0,
+                                    "wickets": 0,
+                                    "catches": 0,
+                                    "stumpings": 0,
+                                    "runOuts": 0
                                 }
-                                data["player_stats"].append(player_stat)
                             
+                            # Update bowling stats
+                            player_stat = data["player_stats"][player_name]
                             player_stat["wickets"] = int(wickets) if wickets.isdigit() else 0
                             player_stat["overs"] = overs
                             player_stat["runs_conceded"] = int(runs_conceded) if runs_conceded.isdigit() else 0
                             
-                            print(f"      ✓ {player_name}: {wickets} wickets")
+                            print(f"      ✓ {player_name}: {player_stat['wickets']} wickets, {runs_conceded} runs")
                             
                         except Exception as e:
+                            print(f"      ⚠️  Error parsing bowling row: {e}")
                             continue
-        
-        # Extract fielding statistics (catches, stumpings)
-        print("\n   🧤 Extracting fielding statistics...")
-        # Fielding stats are in dismissal text - parse "c †Latham" = catch by Latham
-        for stat in data["player_stats"]:
-            if "dismissal" in stat:
-                dismissal_text = stat["dismissal"]
-                
-                # Extract fielders from dismissal text
-                if "c " in dismissal_text or "caught" in dismissal_text:
-                    # Find the fielder name
-                    parts = dismissal_text.split()
-                    for i, part in enumerate(parts):
-                        if part == 'c' and i + 1 < len(parts):
-                            fielder_name = parts[i + 1].replace('†', '').strip()
-                            # Add catch to this fielder
-                            fielder_stat = next((p for p in data["player_stats"] if fielder_name in p["name"]), None)
-                            if fielder_stat:
-                                fielder_stat["catches"] = fielder_stat.get("catches", 0) + 1
-                                print(f"      ✓ Catch credited to {fielder_name}")
         
         return data
     
