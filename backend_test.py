@@ -1,53 +1,66 @@
 #!/usr/bin/env python3
 """
-Comprehensive Backend API Testing for Friends of Pifa UEFA Club Auction
-Tests all CRUD operations, Socket.IO connections, and real-time auction flow
+Comprehensive Backend Readiness Test for Pilot Report
+Tests all core backend functionality as requested in the review.
 """
 
-import asyncio
-import json
 import requests
-import socketio
+import json
+import uuid
 import time
+import csv
+import io
 from datetime import datetime, timezone
-from typing import Dict, List, Optional
 
-# Configuration
-BASE_URL = "https://bidflowfix.preview.emergentagent.com/api"
-SOCKET_URL = "https://bidflowfix.preview.emergentagent.com"
-SOCKET_PATH = "/api/socket.io"
+# Backend URL from frontend/.env
+BACKEND_URL = "https://bidflowfix.preview.emergentagent.com/api"
 
 class BackendTester:
     def __init__(self):
-        self.session = requests.Session()
-        self.test_data = {}
-        self.socket_client = None
-        self.socket_events = []
+        self.test_results = {
+            "multi_sport_foundation": {},
+            "asset_management": {},
+            "league_creation_management": {},
+            "auction_core_functionality": {},
+            "cricket_specific_features": {},
+            "my_competitions_endpoints": {}
+        }
+        self.test_user_id = None
+        self.test_league_id = None
+        self.test_auction_id = None
+        self.invite_token = None
         
-    def log(self, message: str, level: str = "INFO"):
-        timestamp = datetime.now().strftime("%H:%M:%S")
-        print(f"[{timestamp}] {level}: {message}")
+    def log_test(self, category, test_name, success, details="", response_code=None):
+        """Log test result"""
+        self.test_results[category][test_name] = {
+            "success": success,
+            "details": details,
+            "response_code": response_code,
+            "timestamp": datetime.now().isoformat()
+        }
+        status = "✅ PASS" if success else "❌ FAIL"
+        print(f"{status} {category}.{test_name}: {details}")
         
-    def test_api_endpoint(self, method: str, endpoint: str, data: dict = None, expected_status: int = 200) -> dict:
-        """Test API endpoint and return response"""
-        url = f"{BASE_URL}{endpoint}"
-        
+    def create_test_user(self):
+        """Create a test user for authentication"""
         try:
-            if method.upper() == "GET":
-                response = self.session.get(url)
-            elif method.upper() == "POST":
-                response = self.session.post(url, json=data)
-            elif method.upper() == "DELETE":
-                response = self.session.delete(url)
-            else:
-                raise ValueError(f"Unsupported method: {method}")
-                
-            self.log(f"{method} {endpoint} -> {response.status_code}")
+            user_data = {
+                "name": f"TestUser_{uuid.uuid4().hex[:8]}",
+                "email": f"test_{uuid.uuid4().hex[:8]}@example.com"
+            }
             
-            if response.status_code != expected_status:
-                self.log(f"Expected {expected_status}, got {response.status_code}: {response.text}", "ERROR")
-                return {"error": f"Status {response.status_code}", "text": response.text}
-                
+            response = requests.post(f"{BACKEND_URL}/users", json=user_data)
+            if response.status_code == 200:
+                user = response.json()
+                self.test_user_id = user["id"]
+                print(f"✅ Created test user: {user['name']} (ID: {self.test_user_id})")
+                return True
+            else:
+                print(f"❌ Failed to create test user: {response.status_code} - {response.text}")
+                return False
+        except Exception as e:
+            print(f"❌ Error creating test user: {str(e)}")
+            return False
             try:
                 return response.json()
             except:
