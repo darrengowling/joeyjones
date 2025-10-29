@@ -617,20 +617,33 @@ async def get_my_competitions(userId: str):
                 "userId": userId
             }, sort=[("amount", -1)])
             
-            # Get asset details
-            asset = await db.clubs.find_one({"id": asset_id})
+            # Get asset details - query correct collection based on sport
+            sport_key = league.get("sportKey", "football")
+            if sport_key == "football":
+                asset = await db.clubs.find_one({"id": asset_id})
+            else:
+                # For cricket and other sports, use assets collection
+                asset = await db.assets.find_one({"id": asset_id})
             
             if asset:
+                # Get name from appropriate field based on sport
+                if sport_key == "football":
+                    asset_name = asset.get("clubName") or asset.get("name", "Unknown Team")
+                else:
+                    # For cricket, use playerName
+                    asset_name = asset.get("playerName") or asset.get("name", "Unknown Player")
+                
                 assets_owned.append({
                     "id": asset_id,
-                    "name": asset.get("clubName") or asset.get("name", "Unknown Team"),
+                    "name": asset_name,
                     "price": winning_bid["amount"] if winning_bid else 0
                 })
             else:
                 # Fallback if asset not found
+                fallback_name = "Team" if sport_key == "football" else "Player"
                 assets_owned.append({
                     "id": asset_id,
-                    "name": "Team",
+                    "name": fallback_name,
                     "price": winning_bid["amount"] if winning_bid else 0
                 })
         
