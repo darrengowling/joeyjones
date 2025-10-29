@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import "@/App.css";
 import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 import CreateLeague from "./pages/CreateLeague";
 import ClubsList from "./pages/ClubsList";
 import LeagueDetail from "./pages/LeagueDetail";
