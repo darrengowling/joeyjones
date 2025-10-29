@@ -56,7 +56,7 @@ export default function ClubsList() {
       setAssets(assetsBySport);
     } catch (e) {
       console.error("Error loading sports and assets:", e);
-      alert("Error loading sports data");
+      toast.error("Error loading sports data");
     } finally {
       setLoading(false);
     }
