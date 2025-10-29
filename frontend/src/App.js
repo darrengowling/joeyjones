@@ -187,23 +187,23 @@ const Home = () => {
   const handleCreateLeague = async (e) => {
     e.preventDefault();
     if (!user) {
-      alert("Please sign in first");
+      toast.error("Please sign in first");
       return;
     }
 
     // Prompt D: Validate timer configuration
     if (leagueForm.antiSnipeSeconds >= leagueForm.timerSeconds) {
-      alert("Anti-snipe seconds must be less than the bidding timer seconds");
+      toast.error("Anti-snipe seconds must be less than the bidding timer seconds");
       return;
     }
 
     if (leagueForm.timerSeconds < 15 || leagueForm.timerSeconds > 120) {
-      alert("Bidding timer must be between 15 and 120 seconds");
+      toast.error("Bidding timer must be between 15 and 120 seconds");
       return;
     }
 
     if (leagueForm.antiSnipeSeconds < 0 || leagueForm.antiSnipeSeconds > 30) {
-      alert("Anti-snipe must be between 0 and 30 seconds");
+      toast.error("Anti-snipe must be between 0 and 30 seconds");
       return;
     }
 
@@ -219,14 +219,14 @@ const Home = () => {
         inviteToken: response.data.inviteToken,
       });
       
-      alert(`Strategic competition created! Share this invite token with your competitors: ${response.data.inviteToken}`);
+      toast.success(`Competition created! Invite token: ${response.data.inviteToken}`);
       setShowCreateLeagueDialog(false);
       loadLeagues();
       navigate(`/league/${response.data.id}`);
     } catch (e) {
       console.error("Error creating league:", e);
       const errorMessage = e.response?.data?.detail || e.message || "Unknown error creating league";
-      alert(`Error creating league: ${errorMessage}`);
+      toast.error(`Error creating league: ${errorMessage}`);
     }
   };
 
