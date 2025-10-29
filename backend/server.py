@@ -1543,6 +1543,7 @@ async def ingest_cricket_scoring(league_id: str, file: UploadFile = File(...)):
         processed_rows = 0
         updated_rows = 0
         leaderboard_updates = {}  # Track points by playerExternalId for leaderboard
+        match_ids_processed = set()  # Track which matches were uploaded
         
         for row in csv_reader:
             try:
@@ -1552,6 +1553,9 @@ async def ingest_cricket_scoring(league_id: str, file: UploadFile = File(...)):
                 if not match_id or not player_external_id:
                     logger.warning(f"Skipping row with empty matchId or playerExternalId: {row}")
                     continue
+                
+                # Track this match ID
+                match_ids_processed.add(match_id)
                 
                 # Prepare performance data for points calculation
                 performance_data = {
