@@ -120,7 +120,7 @@ export default function ClubsList() {
               >
                 {sports.map((sport) => (
                   <option key={sport.key} value={sport.key}>
-                    {sport.name} ({sport.uiHints.assetPlural})
+                    {sport.key === 'football' ? '⚽' : '🏏'} {sport.name} ({sport.uiHints.assetPlural})
                   </option>
                 ))}
               </select>
