@@ -558,10 +558,11 @@ const Home = () => {
 
               <button
                 type="submit"
-                className="btn btn-primary w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 font-semibold text-lg"
+                className="btn btn-primary w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 font-semibold text-lg disabled:opacity-50 disabled:cursor-not-allowed"
                 data-testid="create-league-submit"
+                disabled={creatingLeague}
               >
-                Create Competition
+                {creatingLeague ? "Creating Competition..." : "Create Competition"}
               </button>
             </form>
           </div>
