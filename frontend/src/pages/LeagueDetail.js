@@ -253,7 +253,7 @@ export default function LeagueDetail() {
       }
     } catch (e) {
       console.error("Error loading available assets:", e);
-      alert("Error loading available teams");
+      toast.error("Error loading available teams");
     }
   };
 
@@ -269,19 +269,19 @@ export default function LeagueDetail() {
 
   const saveAssetSelection = async () => {
     if (selectedAssetIds.length === 0) {
-      alert("You must select at least one team for the auction");
+      toast.error("You must select at least one team for the auction");
       return;
     }
 
     setLoadingAssetSelection(true);
     try {
       await axios.put(`${API}/leagues/${leagueId}/assets`, selectedAssetIds);
-      alert(`Team selection updated! ${selectedAssetIds.length} teams selected for auction.`);
+      toast.success(`Team selection updated! ${selectedAssetIds.length} teams selected for auction.`);
       setEditingAssets(false);
       await loadLeague(); // Reload league data
     } catch (e) {
       console.error("Error saving asset selection:", e);
-      alert(e.response?.data?.detail || "Error saving team selection");
+      toast.error(e.response?.data?.detail || "Error saving team selection");
     } finally {
       setLoadingAssetSelection(false);
     }
@@ -289,22 +289,22 @@ export default function LeagueDetail() {
 
   const startAuction = async () => {
     if (!user) {
-      alert("Please sign in first");
+      toast.error("Please sign in first");
       return;
     }
 
     if (league.commissionerId !== user.id) {
-      alert("Only the league commissioner can start the auction");
+      toast.error("Only the league commissioner can start the auction");
       return;
     }
 
     try {
       const response = await axios.post(`${API}/leagues/${leagueId}/auction/start`);
-      alert("Auction started!");
+      toast.success("Auction started!");
       navigate(`/auction/${response.data.auctionId}`);
     } catch (e) {
       console.error("Error starting auction:", e);
-      alert("Error starting auction");
+      toast.error("Error starting auction");
     }
   };
 
