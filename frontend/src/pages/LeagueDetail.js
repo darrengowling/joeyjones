@@ -321,18 +321,18 @@ export default function LeagueDetail() {
       navigate(`/auction/${response.data.auctionId}`);
     } catch (e) {
       console.error("Error getting auction:", e);
-      alert("No auction found for this league");
+      toast.error("No auction found for this league");
     }
   };
 
   const deleteLeague = async () => {
     if (!user) {
-      alert("Please sign in first");
+      toast.error("Please sign in first");
       return;
     }
 
     if (league.commissionerId !== user.id) {
-      alert("Only the league commissioner can delete this league");
+      toast.error("Only the league commissioner can delete this league");
       return;
     }
 
@@ -344,11 +344,11 @@ export default function LeagueDetail() {
 
     try {
       await axios.delete(`${API}/leagues/${leagueId}?user_id=${user.id}`);
-      alert("League deleted successfully");
+      toast.success("League deleted successfully");
       navigate("/");
     } catch (e) {
       console.error("Error deleting league:", e);
-      alert(e.response?.data?.detail || "Error deleting league");
+      toast.error(e.response?.data?.detail || "Error deleting league");
     }
   };
 
