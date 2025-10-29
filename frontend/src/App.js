@@ -679,7 +679,7 @@ const Home = () => {
           <div className="grid md:grid-cols-3 gap-6 mb-8">
             <button
               onClick={handleCreateCompetition}
-              className="btn btn-primary bg-green-600 text-white px-6 py-4 rounded-lg hover:bg-green-700 text-lg font-semibold"
+              className="btn btn-primary bg-blue-600 text-white px-6 py-4 rounded-lg hover:bg-blue-700 text-lg font-semibold"
               data-testid="create-league-button"
             >
               Create Your Competition
@@ -692,14 +692,14 @@ const Home = () => {
                   setShowJoinLeagueDialog(true);
                 }
               }}
-              className="btn btn-primary bg-blue-600 text-white px-6 py-4 rounded-lg hover:bg-blue-700 text-lg font-semibold"
+              className="btn btn-secondary bg-gray-100 text-gray-900 px-6 py-4 rounded-lg hover:bg-gray-200 text-lg font-semibold border border-gray-300"
               data-testid="join-league-button"
             >
               Join the Competition
             </button>
             <button
               onClick={() => navigate("/clubs")}
-              className="btn btn-primary bg-purple-600 text-white px-6 py-4 rounded-lg hover:bg-purple-700 text-lg font-semibold"
+              className="btn btn-outline bg-transparent text-blue-600 px-6 py-4 rounded-lg hover:bg-blue-600 hover:text-white text-lg font-semibold border-2 border-blue-600"
               data-testid="view-clubs-button"
             >
               Explore Available Teams
