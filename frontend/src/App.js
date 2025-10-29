@@ -111,7 +111,8 @@ const Home = () => {
       const leaguesWithParticipants = await Promise.all(
         response.data.map(async (league) => {
           const participantsResponse = await axios.get(`${API}/leagues/${league.id}/participants`);
-          return { ...league, participantCount: participantsResponse.data.length };
+          // Backend returns { count: X, participants: [...] }
+          return { ...league, participantCount: participantsResponse.data.count || 0 };
         })
       );
       setLeagues(leaguesWithParticipants);
