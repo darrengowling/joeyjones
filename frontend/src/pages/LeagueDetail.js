@@ -936,11 +936,11 @@ export default function LeagueDetail() {
               </li>
               <li className="flex items-start">
                 <span className="text-blue-600 mr-2">•</span>
-                Each {uiHints.assetLabel.toLowerCase()} is auctioned for 60 seconds
+                Each {uiHints.assetLabel.toLowerCase()} is auctioned for {league.timerSeconds} seconds
               </li>
               <li className="flex items-start">
                 <span className="text-blue-600 mr-2">•</span>
-                If a bid is placed in the last 30 seconds, the timer extends by 30 seconds
+                If a bid is placed in the last {league.antiSnipeSeconds} seconds, the timer extends by {league.antiSnipeSeconds} seconds
               </li>
               <li className="flex items-start">
                 <span className="text-blue-600 mr-2">•</span>
