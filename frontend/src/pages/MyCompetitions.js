@@ -10,6 +10,7 @@ export default function MyCompetitions() {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [competitions, setCompetitions] = useState([]);
+  const [sports, setSports] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -20,6 +21,7 @@ export default function MyCompetitions() {
       try {
         const userData = JSON.parse(storedUser);
         setUser(userData);
+        loadSports();
         loadCompetitions(userData.id);
       } catch (e) {
         console.error("Error parsing user data:", e);
@@ -30,6 +32,15 @@ export default function MyCompetitions() {
       navigate("/");
     }
   }, [navigate]);
+
+  const loadSports = async () => {
+    try {
+      const response = await axios.get(`${API}/sports`);
+      setSports(response.data);
+    } catch (e) {
+      console.error("Error loading sports:", e);
+    }
+  };
 
   const loadCompetitions = async (userId) => {
     try {
