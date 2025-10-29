@@ -473,12 +473,12 @@ const Home = () => {
                     +
                   </button>
                 </div>
-                <p className="text-sm text-gray-500 mt-1">
+                <p className="text-sm text-gray-500 mt-2">
                   Current: {formatCurrency(leagueForm.budget)} (adjust in £10m increments)
                 </p>
               </div>
 
-              <div className="grid grid-cols-2 gap-4 mb-4">
+              <div className="grid grid-cols-2 gap-4 mb-6">
                 <div>
                   <label className="block text-gray-700 mb-2 font-semibold">Min Managers</label>
                   <input
@@ -508,7 +508,7 @@ const Home = () => {
                 </div>
               </div>
 
-              <div className="mb-4">
+              <div className="mb-6">
                 <label className="block text-gray-700 mb-2 font-semibold">
                   {sports.find(s => s.key === leagueForm.sportKey)?.uiHints.assetPlural || "Assets"} per Manager (1-10)
                 </label>
@@ -525,7 +525,7 @@ const Home = () => {
               </div>
 
               {/* Prompt D: Timer Configuration */}
-              <div className="grid md:grid-cols-2 gap-4 mb-4">
+              <div className="grid md:grid-cols-2 gap-4 mb-6">
                 <div>
                   <label className="block text-gray-700 mb-2 font-semibold">Bidding Timer (seconds)</label>
                   <input
@@ -538,7 +538,7 @@ const Home = () => {
                     required
                     data-testid="league-timer-seconds-input"
                   />
-                  <p className="text-xs text-gray-500 mt-1">15-120 seconds</p>
+                  <p className="text-sm text-gray-500 mt-2">15-120 seconds</p>
                 </div>
                 <div>
                   <label className="block text-gray-700 mb-2 font-semibold">Anti-Snipe (seconds)</label>
