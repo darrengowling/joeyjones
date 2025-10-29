@@ -42,8 +42,13 @@ body { background: var(--surface); color: var(--text); }
 .btn-danger:hover { filter: brightness(1.05); transform: translateY(-1px); }
 
 /* Inputs */
-.input, .select { background: var(--surface); color: var(--text); border: 1px solid var(--border); border-radius: calc(var(--radius) - 6px); padding: 0.55rem 0.7rem; }
-.input:focus, .select:focus { outline: 2px solid color-mix(in oklab, var(--primary) 40%, transparent); outline-offset: 2px; }
+.input, .select { background: var(--surface); color: var(--text); border: 1px solid var(--border); border-radius: calc(var(--radius) - 6px); padding: 0.55rem 0.7rem; transition: all 0.2s ease; }
+.input:focus, .select:focus { outline: 2px solid color-mix(in oklab, var(--primary) 40%, transparent); outline-offset: 2px; border-color: var(--primary); }
+.input:focus-visible, .select:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+
+/* Focus indicators for accessibility */
+button:focus-visible, a:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
 /* Small chips */
 .chip { display:inline-flex; align-items:center; gap:.4rem; border-radius:9999px; padding:.25rem .6rem; border:1px solid var(--border); background: var(--surface-muted); }
