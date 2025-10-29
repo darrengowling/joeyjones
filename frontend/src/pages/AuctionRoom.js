@@ -397,7 +397,7 @@ export default function AuctionRoom() {
 
   const placeBid = async () => {
     if (!user || !currentClub || !bidAmount) {
-      alert("Please enter your strategic bid amount to claim ownership");
+      toast.error("Please enter your strategic bid amount to claim ownership");
       return;
     }
 
