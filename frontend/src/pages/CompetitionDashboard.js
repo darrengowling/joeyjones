@@ -735,7 +735,10 @@ export default function CompetitionDashboard() {
                   href="#"
                   onClick={(e) => {
                     e.preventDefault();
-                    alert("Sample Scoring CSV format:\nmatchId,playerExternalId,runs,wickets,catches,stumpings,runOuts\nnz-eng-odi-1-2025,harry-brook,67,0,1,0,0\nnz-eng-odi-1-2025,matt-henry,0,2,0,0,0");
+                    toast("Sample Scoring CSV format:\nmatchId,playerExternalId,runs,wickets,catches,stumpings,runOuts\nnz-eng-odi-1-2025,harry-brook,67,0,1,0,0\nnz-eng-odi-1-2025,matt-henry,0,2,0,0,0", {
+                      duration: 6000,
+                      style: { maxWidth: '600px' }
+                    });
                   }}
                   className="text-green-700 hover:underline font-medium"
                 >
