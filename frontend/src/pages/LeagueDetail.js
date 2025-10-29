@@ -177,7 +177,7 @@ export default function LeagueDetail() {
       }
     } catch (e) {
       console.error("Error loading league:", e);
-      alert("League not found");
+      toast.error("League not found");
       navigate("/");
     } finally {
       setLoading(false);
@@ -230,10 +230,10 @@ export default function LeagueDetail() {
     try {
       await axios.post(`${API}/leagues/${leagueId}/score/recompute`);
       await loadStandings();
-      alert("Scores recomputed successfully!");
+      toast.success("Scores recomputed successfully!");
     } catch (e) {
       console.error("Error recomputing scores:", e);
-      alert(e.response?.data?.detail || "Error recomputing scores");
+      toast.error(e.response?.data?.detail || "Error recomputing scores");
     } finally {
       setLoadingScores(false);
     }
