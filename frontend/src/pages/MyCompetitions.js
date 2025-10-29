@@ -94,6 +94,14 @@ export default function MyCompetitions() {
     }
   };
 
+  const getUiHints = (sportKey) => {
+    const sport = sports.find(s => s.key === sportKey);
+    return sport?.uiHints || {
+      assetLabel: "Team",
+      assetPlural: "Teams"
+    };
+  };
+
   const formatRelativeTime = (dateString) => {
     if (!dateString) return null;
     
