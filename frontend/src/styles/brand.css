@@ -31,11 +31,15 @@ body { background: var(--surface); color: var(--text); }
 .app-muted { background: var(--surface-muted); }
 
 /* Buttons – drop-in utility classes */
-.btn { border-radius: calc(var(--radius) - 4px); padding: 0.6rem 0.9rem; font-weight: 600; border: 1px solid transparent; }
+.btn { border-radius: calc(var(--radius) - 4px); padding: 0.6rem 0.9rem; font-weight: 600; border: 1px solid transparent; transition: all 0.2s ease; cursor: pointer; }
 .btn-primary { background: var(--primary); color: var(--primary-contrast); }
-.btn-primary:hover { filter: brightness(1.05); }
+.btn-primary:hover { filter: brightness(1.05); transform: translateY(-1px); box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }
 .btn-secondary { background: var(--surface-muted); color: var(--text); border-color: var(--border); }
+.btn-secondary:hover { background: var(--border); }
+.btn-outline { background: transparent; color: var(--primary); border-color: var(--primary); }
+.btn-outline:hover { background: var(--primary); color: var(--primary-contrast); }
 .btn-danger { background: var(--danger); color: #fff; }
+.btn-danger:hover { filter: brightness(1.05); transform: translateY(-1px); }
 
 /* Inputs */
 .input, .select { background: var(--surface); color: var(--text); border: 1px solid var(--border); border-radius: calc(var(--radius) - 6px); padding: 0.55rem 0.7rem; }
