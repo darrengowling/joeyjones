@@ -676,7 +676,10 @@ export default function CompetitionDashboard() {
                   href="#"
                   onClick={(e) => {
                     e.preventDefault();
-                    alert("Sample CSV format:\nstartsAt,homeAssetExternalId,awayAssetExternalId,venue,round,externalMatchId\n2025-01-15T19:00:00Z,MCI,LIV,Etihad Stadium,1,match001");
+                    toast("Sample CSV format:\nstartsAt,homeAssetExternalId,awayAssetExternalId,venue,round,externalMatchId\n2025-01-15T19:00:00Z,MCI,LIV,Etihad Stadium,1,match001", {
+                      duration: 6000,
+                      style: { maxWidth: '600px' }
+                    });
                   }}
                   className="text-blue-600 hover:underline"
                 >
