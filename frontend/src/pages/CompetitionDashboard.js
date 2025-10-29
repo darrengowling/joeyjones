@@ -792,6 +792,12 @@ export default function CompetitionDashboard() {
                                   📍 {fixture.venue}
                                 </div>
                               )}
+                              {/* Display Match ID for CSV reference */}
+                              {fixture.externalMatchId && (
+                                <div className="text-xs text-gray-600 mt-1 font-mono bg-gray-100 px-2 py-1 rounded inline-block">
+                                  Match ID: <span className="font-semibold text-blue-600">{fixture.externalMatchId}</span>
+                                </div>
+                              )}
                             </div>
                           </div>
                           <div className="flex items-center gap-3">
@@ -802,14 +808,16 @@ export default function CompetitionDashboard() {
                             )}
                             <span
                               className={`text-xs px-3 py-1 rounded-full font-semibold ${
-                                fixture.status === "live"
+                                fixture.status === "completed"
+                                  ? "bg-green-100 text-green-700"
+                                  : fixture.status === "live"
                                   ? "bg-red-100 text-red-700"
                                   : fixture.status === "final"
                                   ? "bg-gray-100 text-gray-700"
-                                  : "bg-green-100 text-green-700"
+                                  : "bg-yellow-100 text-yellow-700"
                               }`}
                             >
-                              {fixture.status === "live" ? "🔴 Live" : fixture.status === "final" ? "✅ Final" : "⏳ Scheduled"}
+                              {fixture.status === "completed" ? "✅ Completed" : fixture.status === "live" ? "🔴 Live" : fixture.status === "final" ? "✅ Final" : "⏳ Scheduled"}
                             </span>
                           </div>
                         </div>
