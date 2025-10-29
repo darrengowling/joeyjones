@@ -616,43 +616,72 @@ const Home = () => {
       {/* Header */}
       <div className="bg-white shadow-md app-header">
         <div className="container-narrow mx-auto px-4 py-4 flex justify-between items-center">
-          <span data-testid="nav-brand" className="h2">Friends of PIFA</span>
+          <span data-testid="nav-brand" className="h2 text-lg md:text-2xl">Friends of PIFA</span>
           {user ? (
-            <div className="flex items-center gap-4">
-              {/* Prompt 6: Feature flag - hide My Competitions nav if flag off */}
-              {process.env.REACT_APP_FEATURE_MY_COMPETITIONS === 'true' && (
+            <div className="flex items-center gap-2 md:gap-4">
+              {/* Desktop view - show all items */}
+              <div className="hidden md:flex items-center gap-4">
+                {/* Prompt 6: Feature flag - hide My Competitions nav if flag off */}
+                {process.env.REACT_APP_FEATURE_MY_COMPETITIONS === 'true' && (
+                  <button
+                    onClick={() => navigate("/app/my-competitions")}
+                    className="btn btn-secondary text-sm text-blue-600 hover:underline font-semibold"
+                    data-testid="nav-my-competitions"
+                  >
+                    My Competitions
+                  </button>
+                )}
+                <span className="text-gray-700 text-sm">
+                  <strong>{user.name}</strong> ({user.email})
+                </span>
                 <button
-                  onClick={() => navigate("/app/my-competitions")}
-                  className="btn btn-secondary text-sm text-blue-600 hover:underline font-semibold"
-                  data-testid="nav-my-competitions"
+                  onClick={() => setShowUserDialog(true)}
+                  className="btn btn-secondary text-sm text-blue-600 hover:underline"
                 >
-                  My Competitions
+                  Change
                 </button>
-              )}
-              <span className="text-gray-700">
-                <strong>{user.name}</strong> ({user.email})
-              </span>
-              <button
-                onClick={() => setShowUserDialog(true)}
-                className="btn btn-secondary text-sm text-blue-600 hover:underline"
-              >
-                Change
-              </button>
-              <button
-                onClick={() => {
-                  localStorage.removeItem("user");
-                  setUser(null);
-                }}
-                className="btn btn-secondary text-sm text-red-600 hover:underline"
-                data-testid="logout-button"
-              >
-                Logout
-              </button>
+                <button
+                  onClick={() => {
+                    localStorage.removeItem("user");
+                    setUser(null);
+                  }}
+                  className="btn btn-secondary text-sm text-red-600 hover:underline"
+                  data-testid="logout-button"
+                >
+                  Logout
+                </button>
+              </div>
+              
+              {/* Mobile view - show condensed */}
+              <div className="flex md:hidden items-center gap-2">
+                <span className="text-gray-700 text-xs truncate max-w-[120px]">
+                  <strong>{user.name}</strong>
+                </span>
+                {process.env.REACT_APP_FEATURE_MY_COMPETITIONS === 'true' && (
+                  <button
+                    onClick={() => navigate("/app/my-competitions")}
+                    className="btn btn-secondary text-xs px-2 py-1 text-blue-600 hover:underline"
+                    data-testid="nav-my-competitions"
+                  >
+                    My Comps
+                  </button>
+                )}
+                <button
+                  onClick={() => {
+                    localStorage.removeItem("user");
+                    setUser(null);
+                  }}
+                  className="btn btn-danger text-xs px-2 py-1 text-red-600 hover:underline"
+                  data-testid="logout-button"
+                >
+                  Logout
+                </button>
+              </div>
             </div>
           ) : (
             <button
               onClick={() => setShowUserDialog(true)}
-              className="btn btn-primary bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+              className="btn btn-primary bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-sm md:text-base"
               data-testid="login-button"
             >
               Sign In
