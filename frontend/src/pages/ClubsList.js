@@ -180,9 +180,31 @@ export default function ClubsList() {
             ))}
           </div>
 
-          {filteredAssets.length === 0 && (
-            <div className="text-center text-gray-500 py-8">
-              No {currentSport?.uiHints.assetPlural.toLowerCase() || 'assets'} found matching your criteria
+          {filteredAssets.length === 0 && currentAssets.length > 0 && (
+            <div className="text-center py-12">
+              <div className="text-6xl mb-4">
+                {selectedSport === 'football' ? '⚽' : '🏏'}
+              </div>
+              <p className="text-gray-600 mb-2 text-lg font-semibold">
+                No {currentSport?.uiHints.assetPlural.toLowerCase() || 'assets'} found
+              </p>
+              <p className="text-sm text-gray-500">
+                Try adjusting your search criteria
+              </p>
+            </div>
+          )}
+          
+          {currentAssets.length === 0 && !loading && (
+            <div className="text-center py-12">
+              <div className="text-6xl mb-4">
+                {selectedSport === 'football' ? '⚽' : '🏏'}
+              </div>
+              <p className="text-gray-600 mb-2 text-lg font-semibold">
+                No {currentSport?.uiHints.assetPlural || 'Assets'} available
+              </p>
+              <p className="text-sm text-gray-500">
+                Try selecting a different sport above
+              </p>
             </div>
           )}
         </div>
