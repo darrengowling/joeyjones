@@ -439,7 +439,7 @@ export default function LeagueDetail() {
 
   const handleSaveScoring = async () => {
     if (!isCommissioner) {
-      alert("Only commissioners can modify scoring rules");
+      toast.error("Only commissioners can modify scoring rules");
       return;
     }
 
@@ -452,11 +452,11 @@ export default function LeagueDetail() {
       if (response.data) {
         setLeague(prev => ({ ...prev, scoringOverrides: scoringOverrides }));
         setEditingScoring(false);
-        alert("Scoring rules updated successfully!");
+        toast.success("Scoring rules updated successfully!");
       }
     } catch (error) {
       console.error("Error saving scoring overrides:", error);
-      alert("Failed to save scoring rules. Please try again.");
+      toast.error("Failed to save scoring rules. Please try again.");
     } finally {
       setSavingScoring(false);
     }
