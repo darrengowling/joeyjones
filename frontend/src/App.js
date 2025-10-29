@@ -552,7 +552,7 @@ const Home = () => {
                     required
                     data-testid="league-anti-snipe-input"
                   />
-                  <p className="text-xs text-gray-500 mt-1">0-30 seconds, must be less than timer</p>
+                  <p className="text-sm text-gray-500 mt-2">0-30 seconds, must be less than timer</p>
                 </div>
               </div>
 
