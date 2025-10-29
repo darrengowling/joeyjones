@@ -38,6 +38,8 @@ const Home = () => {
   const [userForm, setUserForm] = useState({ name: "", email: "" });
   const [authLoading, setAuthLoading] = useState(false);
   const [authError, setAuthError] = useState("");
+  const [creatingLeague, setCreatingLeague] = useState(false);
+  const [joiningLeague, setJoiningLeague] = useState(false);
   const [leagues, setLeagues] = useState([]);
   const [sports, setSports] = useState([]);
   const [leagueForm, setLeagueForm] = useState({
