@@ -261,20 +261,20 @@ export default function AuctionRoom() {
         loadClubs();
       }
       
-      alert(data.message || `Auction complete! All ${uiHints.assetPlural.toLowerCase()} have been auctioned.`);
+      toast.success(data.message || `Auction complete! All ${uiHints.assetPlural.toLowerCase()} have been auctioned.`, { duration: 5000 });
     };
 
     // Handle auction_paused event
     const onAuctionPaused = (data) => {
       console.log("Auction paused:", data);
-      alert(`⏸️ ${data.message}`);
+      toast(`⏸️ ${data.message}`, { duration: 4000, icon: '⏸️' });
       loadAuction();
     };
 
     // Handle auction_resumed event
     const onAuctionResumed = (data) => {
       console.log("Auction resumed:", data);
-      alert(`▶️ ${data.message}`);
+      toast(`▶️ ${data.message}`, { duration: 4000, icon: '▶️' });
       loadAuction();
     };
 
