@@ -230,9 +230,11 @@ export default function MyCompetitions() {
                   </span>
                 </div>
 
-                {/* Your Teams */}
+                {/* Your Teams/Players */}
                 <div className="mb-4">
-                  <p className="text-sm font-semibold text-gray-700 mb-2">Your Teams:</p>
+                  <p className="text-sm font-semibold text-gray-700 mb-2">
+                    Your {getUiHints(comp.sportKey).assetPlural}:
+                  </p>
                   {comp.assetsOwned && comp.assetsOwned.length > 0 ? (
                     <div className="space-y-2">
                       {comp.assetsOwned.slice(0, 4).map((asset, idx) => (
@@ -241,7 +243,7 @@ export default function MyCompetitions() {
                           className="flex items-center justify-between p-2 bg-blue-50 rounded-lg border border-blue-200"
                         >
                           <span className="text-sm font-semibold text-blue-900">
-                            {asset.name || `Team ${idx + 1}`}
+                            {asset.name || `${getUiHints(comp.sportKey).assetLabel} ${idx + 1}`}
                           </span>
                           <span className="text-sm text-blue-700 font-bold">
                             {formatCurrency(asset.price)}
@@ -250,12 +252,14 @@ export default function MyCompetitions() {
                       ))}
                       {comp.assetsOwned.length > 4 && (
                         <div className="text-sm text-gray-600 italic">
-                          + {comp.assetsOwned.length - 4} more teams
+                          + {comp.assetsOwned.length - 4} more {getUiHints(comp.sportKey).assetPlural.toLowerCase()}
                         </div>
                       )}
                     </div>
                   ) : (
-                    <p className="text-sm text-gray-500 italic">No teams acquired yet</p>
+                    <p className="text-sm text-gray-500 italic">
+                      No {getUiHints(comp.sportKey).assetPlural.toLowerCase()} acquired yet
+                    </p>
                   )}
                 </div>
 
