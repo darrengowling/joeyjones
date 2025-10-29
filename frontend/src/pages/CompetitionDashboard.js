@@ -140,6 +140,7 @@ export default function CompetitionDashboard() {
     if (tab === "summary" && summary) return;
     if (tab === "table" && standings) return;
     if (tab === "fixtures" && fixtures) return;
+    if (tab === "breakdown" && matchBreakdown) return;
 
     setLoading(true);
     setError("");
@@ -166,6 +167,9 @@ export default function CompetitionDashboard() {
       } else if (tab === "fixtures") {
         const response = await axios.get(`${API}/leagues/${leagueId}/fixtures`);
         setFixtures(response.data);
+      } else if (tab === "breakdown") {
+        const response = await axios.get(`${API}/leagues/${leagueId}/match-breakdown`);
+        setMatchBreakdown(response.data);
       }
     } catch (e) {
       console.error(`Error loading ${tab} data:`, e);
