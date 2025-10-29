@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import toast from "react-hot-toast";
 import { useAuctionClock } from "../hooks/useAuctionClock";
 import { useSocketRoom } from "../hooks/useSocketRoom";
 import { formatCurrency, parseCurrencyInput, isValidCurrencyInput } from "../utils/currency";
