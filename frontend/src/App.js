@@ -209,6 +209,7 @@ const Home = () => {
       return;
     }
 
+    setCreatingLeague(true);
     try {
       const response = await axios.post(`${API}/leagues`, {
         ...leagueForm,
@@ -229,6 +230,8 @@ const Home = () => {
       console.error("Error creating league:", e);
       const errorMessage = e.response?.data?.detail || e.message || "Unknown error creating league";
       toast.error(`Error creating league: ${errorMessage}`);
+    } finally {
+      setCreatingLeague(false);
     }
   };
 
