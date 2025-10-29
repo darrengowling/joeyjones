@@ -1723,11 +1723,24 @@ async def ingest_cricket_scoring(league_id: str, file: UploadFile = File(...)):
             upsert=True
         )
         
+        # Auto-update fixture status to "completed" for all matches in the uploaded CSV
+        fixtures_updated = 0
+        for match_id in match_ids_processed:
+            result = await db.fixtures.update_one(
+                {"leagueId": league_id, "externalMatchId": match_id},
+                {"$set": {"status": "completed"}}
+            )
+            if result.modified_count > 0:
+                fixtures_updated += 1
+        
+        logger.info(f"Auto-marked {fixtures_updated} fixture(s) as completed for league {league_id}")
+        
         return {
             "message": "Cricket scoring data ingested successfully",
             "processedRows": processed_rows,
             "updatedRows": updated_rows,
             "leaderboardUpdates": len(leaderboard_updates),
+            "fixturesCompleted": fixtures_updated,
             "leaderboard": sorted(leaderboard_results, key=lambda x: x["totalPoints"], reverse=True)
         }
         
