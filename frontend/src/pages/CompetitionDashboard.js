@@ -825,6 +825,108 @@ export default function CompetitionDashboard() {
     );
   };
 
+  const renderMatchBreakdownTab = () => {
+    if (!matchBreakdown) return <div>Loading match breakdown...</div>;
+    
+    const { managers, matchNames, fixtureCount } = matchBreakdown;
+    
+    if (fixtureCount === 0) {
+      return (
+        <div className="bg-white rounded-lg p-8 text-center">
+          <div className="text-6xl mb-4">📊</div>
+          <p className="text-gray-600 text-lg mb-2">No completed matches yet</p>
+          <p className="text-sm text-gray-500">
+            Match-by-match scoring will appear here once fixtures are completed
+          </p>
+        </div>
+      );
+    }
+
+    return (
+      <div className="bg-white rounded-lg shadow overflow-hidden">
+        <div className="p-6 border-b border-gray-200">
+          <h3 className="text-xl font-bold text-gray-900">Match-by-Match Breakdown</h3>
+          <p className="text-sm text-gray-600 mt-1">
+            View individual {uiHints.assetLabel.toLowerCase()} scores across all completed matches
+          </p>
+        </div>
+
+        {/* Horizontal scroll container for mobile */}
+        <div className="overflow-x-auto">
+          <div className="min-w-max">
+            {managers.map((manager, managerIdx) => (
+              <div key={manager.userId} className={managerIdx > 0 ? "border-t-4 border-gray-300" : ""}>
+                {/* Manager Header */}
+                <div className="bg-blue-50 px-6 py-4 border-b border-blue-200">
+                  <div className="flex items-center justify-between">
+                    <h4 className="text-lg font-bold text-blue-900">
+                      {manager.userName}
+                    </h4>
+                    <div className="text-right">
+                      <div className="text-2xl font-bold text-blue-900">
+                        {manager.overallTotal}
+                      </div>
+                      <div className="text-xs text-blue-700 uppercase">Total Points</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Match Scores Table */}
+                <table className="w-full">
+                  <thead>
+                    <tr className="bg-gray-100 border-b border-gray-200">
+                      <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider sticky left-0 bg-gray-100">
+                        {uiHints.assetLabel}
+                      </th>
+                      {matchNames.map((matchName, idx) => (
+                        <th key={idx} className="px-4 py-3 text-center text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                          {matchName}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {manager.assets.map((asset, assetIdx) => (
+                      <tr key={asset.assetId} className={assetIdx % 2 === 0 ? "bg-white" : "bg-gray-50"}>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 sticky left-0 bg-inherit">
+                          {asset.assetName}
+                        </td>
+                        {matchNames.map((_, matchIdx) => {
+                          const score = asset.matchScores[`match_${matchIdx}`] || 0;
+                          return (
+                            <td key={matchIdx} className="px-4 py-4 text-center text-sm text-gray-900">
+                              <span className={score === 0 ? "text-gray-400 font-normal" : "font-semibold"}>
+                                {score}
+                              </span>
+                            </td>
+                          );
+                        })}
+                      </tr>
+                    ))}
+                    {/* Total Row */}
+                    <tr className="bg-blue-100 border-t-2 border-blue-300 font-bold">
+                      <td className="px-6 py-4 text-sm text-blue-900 sticky left-0 bg-blue-100">
+                        Total
+                      </td>
+                      {matchNames.map((_, matchIdx) => {
+                        const total = manager.matchTotals[`match_${matchIdx}`] || 0;
+                        return (
+                          <td key={matchIdx} className="px-4 py-4 text-center text-sm text-blue-900">
+                            {total}
+                          </td>
+                        );
+                      })}
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
