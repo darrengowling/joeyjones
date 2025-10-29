@@ -152,7 +152,7 @@ export default function AuctionRoom() {
       console.log("🚀 Lot started:", data);
       
       if (data.isUnsoldRetry) {
-        alert(`🔄 Re-offering unsold ${uiHints.assetLabel.toLowerCase()}: ${data.club.name}!`);
+        toast(`🔄 Re-offering unsold ${uiHints.assetLabel.toLowerCase()}: ${data.club.name}!`, { duration: 4000 });
       }
       
       // Prompt E: Load auction to transition from waiting to active
@@ -181,11 +181,11 @@ export default function AuctionRoom() {
       const playerName = data.clubName || `Unknown ${uiHints.assetLabel.toLowerCase()}`;
       
       if (data.unsold) {
-        alert(`❌ ${playerName} went unsold and will be offered again later.`);
+        toast.error(`${playerName} went unsold and will be offered again later.`);
       } else {
         const winnerName = data.winningBid ? data.winningBid.userName : "Unknown";
         const amount = data.winningBid ? formatCurrency(data.winningBid.amount) : "";
-        alert(`✅ ${playerName} sold to ${winnerName} for ${amount}!`);
+        toast.success(`${playerName} sold to ${winnerName} for ${amount}!`, { duration: 4000 });
         
         // CRITICAL FIX: Immediately update club status to 'sold' in local state
         // DON'T reload clubs - rely on this update to avoid race conditions
@@ -218,7 +218,7 @@ export default function AuctionRoom() {
     // Handle anti-snipe event
     const onAntiSnipe = (data) => {
       console.log("Anti-snipe triggered:", data);
-      alert(`🔥 Anti-snipe! Timer extended!`);
+      toast("🔥 Anti-snipe! Timer extended!", { duration: 3000, icon: '⏱️' });
     };
 
     // Handle auction_complete event
