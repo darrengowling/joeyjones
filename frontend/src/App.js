@@ -242,12 +242,14 @@ const Home = () => {
       return;
     }
 
+    setJoiningLeague(true);
     try {
       // Trim whitespace and normalize token (handle copy-paste issues)
       const normalizedToken = inviteToken.trim().toLowerCase();
       
       if (!normalizedToken) {
         toast.error("Please enter an invite token");
+        setJoiningLeague(false);
         return;
       }
 
@@ -259,6 +261,7 @@ const Home = () => {
       
       if (!league) {
         toast.error(`Invalid invite token "${inviteToken.trim()}". Please check with your commissioner.`);
+        setJoiningLeague(false);
         return;
       }
 
@@ -276,6 +279,8 @@ const Home = () => {
       console.error("Error joining league:", e);
       // Show the backend error message which includes helpful details
       toast.error(e.response?.data?.detail || "Error joining league");
+    } finally {
+      setJoiningLeague(false);
     }
   };
 
