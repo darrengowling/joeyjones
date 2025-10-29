@@ -376,7 +376,7 @@ const Home = () => {
                 data-testid="user-submit-button"
                 disabled={authLoading}
               >
-                {authLoading ? "Sending Magic Link..." : "Send Magic Link"}
+                {authLoading ? "Signing In..." : "Continue"}
               </button>
             </form>
           </div>
