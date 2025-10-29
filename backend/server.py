@@ -1011,7 +1011,8 @@ async def get_match_breakdown(league_id: str):
                            if s.get("playerExternalId") == asset.get("externalId") 
                            and s.get("matchId") == ext_match_id), None)
                 
-                score = stat.get("fantasyPoints", 0) if stat else 0
+                # Use 'points' field (not 'fantasyPoints')
+                score = stat.get("points", 0) if stat else 0
                 match_scores[f"match_{idx}"] = score
                 
                 # Add to manager's total for this match
