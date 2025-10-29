@@ -233,7 +233,7 @@ const Home = () => {
   const handleJoinLeague = async (e) => {
     e.preventDefault();
     if (!user) {
-      alert("Please sign in first");
+      toast.error("Please sign in first");
       return;
     }
 
@@ -242,7 +242,7 @@ const Home = () => {
       const normalizedToken = inviteToken.trim().toLowerCase();
       
       if (!normalizedToken) {
-        alert("Please enter an invite token");
+        toast.error("Please enter an invite token");
         return;
       }
 
@@ -253,7 +253,7 @@ const Home = () => {
       );
       
       if (!league) {
-        alert(`Invalid invite token "${inviteToken.trim()}". Please check with your league commissioner for the correct token.`);
+        toast.error(`Invalid invite token "${inviteToken.trim()}". Please check with your commissioner.`);
         return;
       }
 
@@ -262,7 +262,7 @@ const Home = () => {
         inviteToken: inviteToken.trim(), // Send trimmed token to backend
       });
 
-      alert(`Successfully joined the strategic competition "${league.name}"! Ready to start bidding.`);
+      toast.success(`Successfully joined "${league.name}"! Ready to start bidding.`);
       setShowJoinLeagueDialog(false);
       setInviteToken("");
       loadLeagues();
@@ -270,7 +270,7 @@ const Home = () => {
     } catch (e) {
       console.error("Error joining league:", e);
       // Show the backend error message which includes helpful details
-      alert(e.response?.data?.detail || "Error joining league");
+      toast.error(e.response?.data?.detail || "Error joining league");
     }
   };
 
@@ -278,12 +278,12 @@ const Home = () => {
     e.stopPropagation(); // Prevent navigation to league detail
     
     if (!user) {
-      alert("Please sign in first");
+      toast.error("Please sign in first");
       return;
     }
 
     if (league.commissionerId !== user.id) {
-      alert("Only the commissioner can delete this league");
+      toast.error("Only the commissioner can delete this league");
       return;
     }
 
@@ -295,11 +295,11 @@ const Home = () => {
 
     try {
       await axios.delete(`${API}/leagues/${league.id}?user_id=${user.id}`);
-      alert("League deleted successfully");
+      toast.success("League deleted successfully");
       loadLeagues();
     } catch (e) {
       console.error("Error deleting league:", e);
-      alert(e.response?.data?.detail || "Error deleting league");
+      toast.error(e.response?.data?.detail || "Error deleting league");
     }
   };
 
