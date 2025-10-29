@@ -402,7 +402,7 @@ export default function CompetitionDashboard() {
                       {idx + 1}
                     </span>
                     <span className="text-sm font-semibold text-blue-900">
-                      {asset.name || `Team ${idx + 1}`}
+                      {asset.name || `${uiHints.assetLabel} ${idx + 1}`}
                     </span>
                   </div>
                   <span className="text-sm text-blue-700 font-bold">
