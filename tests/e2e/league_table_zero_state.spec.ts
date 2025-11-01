@@ -86,7 +86,7 @@ test.describe('League Table Zero State', () => {
     // Verify API response also has zero points
     const apiUrl = page.url().includes('localhost') 
       ? `http://localhost:8001/api/leagues/${leagueId}/standings`
-      : `https://bidflowfix.preview.emergentagent.com/api/leagues/${leagueId}/standings`;
+      : `https://cricket-bid-arena.preview.emergentagent.com/api/leagues/${leagueId}/standings`;
     
     const apiResponse = await request.get(apiUrl);
     expect(apiResponse.status()).toBe(200);

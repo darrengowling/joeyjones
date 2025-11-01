@@ -6,7 +6,7 @@ test.describe('Auction Timer Synchronization', () => {
     console.log('=== TESTING TIMER SYNC PROTECTION ===');
     
     // Navigate to homepage and sign in
-    await page.goto('https://bidflowfix.preview.emergentagent.com');
+    await page.goto('https://cricket-bid-arena.preview.emergentagent.com');
     await page.waitForLoadState('networkidle');
     
     // Sign in
@@ -85,7 +85,7 @@ test.describe('Auction Timer Synchronization', () => {
   test('timer counts down smoothly without jumps', async ({ page }) => {
     console.log('=== TESTING SMOOTH TIMER COUNTDOWN ===');
     
-    await page.goto('https://bidflowfix.preview.emergentagent.com');
+    await page.goto('https://cricket-bid-arena.preview.emergentagent.com');
     await page.waitForLoadState('networkidle');
     
     // Sign in and navigate to auction if available
@@ -143,7 +143,7 @@ test.describe('Auction Timer Synchronization', () => {
     // This test would need a controlled environment with fresh auction
     // For now, we'll verify the basic bid functionality exists
     
-    await page.goto('https://bidflowfix.preview.emergentagent.com');
+    await page.goto('https://cricket-bid-arena.preview.emergentagent.com');
     await page.waitForLoadState('networkidle');
     
     await page.click('button:has-text("Sign In")');

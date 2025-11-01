@@ -7,7 +7,7 @@ import requests
 import json
 import time
 
-BASE_URL = "https://bidflowfix.preview.emergentagent.com/api"
+BASE_URL = "https://cricket-bid-arena.preview.emergentagent.com/api"
 
 def test_budget_reserve_detailed():
     session = requests.Session()

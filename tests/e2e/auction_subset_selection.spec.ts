@@ -14,7 +14,7 @@
 
 import { test, expect } from '@playwright/test';
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'https://bidflowfix.preview.emergentagent.com';
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'https://cricket-bid-arena.preview.emergentagent.com';
 
 test.describe('Auction Subset Selection (FEATURE_ASSET_SELECTION=true)', () => {
   
