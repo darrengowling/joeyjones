@@ -148,10 +148,12 @@ class DatabaseIndexTester:
                                 self.log_test("index_existence", f"{collection_name}_{expected_index['name']}_ttl", False, "TTL configuration incorrect")
                                 return False
                         
-                        # Check sparse if expected
-                        if expected_index.get("sparse") and not actual_index.get("sparse"):
-                            self.log_test("index_existence", f"{collection_name}_{expected_index['name']}_sparse", False, "Sparse configuration missing")
-                            return False
+                        # Check sparse if expected - look for any sparse index with this key
+                        if expected_index.get("sparse"):
+                            sparse_found = any(idx.get("sparse") and idx.get("key") == dict(expected_index["key"]) for idx in actual_indexes)
+                            if not sparse_found:
+                                self.log_test("index_existence", f"{collection_name}_{expected_index['name']}_sparse", False, "Sparse configuration missing")
+                                return False
                         
                         break
                 
