@@ -34,13 +34,25 @@ from models import (
     Auction, AuctionCreate,
     Bid, BidCreate,
     LeaguePoints,
-    Fixture, Standing, StandingEntry
+    Fixture, Standing, StandingEntry,
+    MagicLink, AuthTokenResponse
 )
 from services.sport_service import SportService
 from services.asset_service import AssetService
 from services.scoring.cricket import get_cricket_points
 from uefa_clubs import UEFA_CL_CLUBS
 from scoring_service import recompute_league_scores, get_league_standings
+from auth import (
+    generate_magic_token,
+    hash_token,
+    create_access_token,
+    create_refresh_token,
+    decode_token,
+    get_current_user,
+    require_commissioner,
+    MAGIC_LINK_EXPIRE_MINUTES,
+    ACCESS_TOKEN_EXPIRE_MINUTES
+)
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
