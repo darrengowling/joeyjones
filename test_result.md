@@ -183,6 +183,17 @@ backend:
         comment: "PRODUCTION TESTING COMPLETED: All review request areas tested successfully. ✅ League Creation & Joining Flow with £500M budget working. ✅ Auction Management with club queue randomization working. ✅ Real-time Bidding System with minimum £1M validation working. ✅ Club Status & Budget Management working. ✅ Commissioner Controls (pause/resume/delete) working. ✅ Clubs list endpoint sorting alphabetically working. Backend logs confirm Socket.IO events being emitted correctly. All core auction functionality ready for production."
 
 frontend:
+  - task: "JWT Auth Integration - Frontend"
+    implemented: true
+    working: "NA"
+    file: "App.js"
+    stuck_count: 0
+    priority: "critical"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Integrated JWT authentication in frontend. CHANGES: 1) Updated auth dialog to two-step flow (email → magic token). 2) Added authStep state to track 'email' or 'token' step. 3) Updated handleAuth function: Step 1 calls /auth/magic-link, Step 2 calls /auth/verify-magic-link. 4) Store accessToken, refreshToken, user in localStorage. 5) Created axios interceptors: request interceptor adds Authorization: Bearer header and maintains X-User-ID for backward compatibility, response interceptor handles 401 with automatic token refresh. 6) Updated logout to clear all tokens. 7) Enhanced auth dialog UI with token display (pilot mode), expiry notice, back button. Frontend restarted successfully. Ready for comprehensive testing."
   - task: "Socket.IO client connection"
     implemented: true
     working: true
