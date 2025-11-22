@@ -38,6 +38,9 @@ const Home = () => {
   const [userForm, setUserForm] = useState({ name: "", email: "" });
   const [authLoading, setAuthLoading] = useState(false);
   const [authError, setAuthError] = useState("");
+  const [authStep, setAuthStep] = useState("email"); // "email" or "token"
+  const [magicToken, setMagicToken] = useState(""); // Token returned from magic link endpoint
+  const [tokenInput, setTokenInput] = useState(""); // User's token input
   const [creatingLeague, setCreatingLeague] = useState(false);
   const [joiningLeague, setJoiningLeague] = useState(false);
   const [leagues, setLeagues] = useState([]);
