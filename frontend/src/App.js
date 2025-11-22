@@ -41,6 +41,24 @@ axios.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
+    // Capture API errors in Sentry
+    if (error.response) {
+      // Server responded with error status
+      captureException(error, {
+        url: originalRequest?.url,
+        method: originalRequest?.method,
+        status: error.response.status,
+        data: error.response.data,
+      });
+    } else if (error.request) {
+      // Request was made but no response
+      captureException(error, {
+        url: originalRequest?.url,
+        method: originalRequest?.method,
+        message: "No response from server",
+      });
+    }
+
     // If 401 and we haven't retried yet, try to refresh token
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
@@ -64,6 +82,7 @@ axios.interceptors.response.use(
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
         localStorage.removeItem("user");
+        clearSentryUser();
         window.location.href = "/";
         return Promise.reject(refreshError);
       }
