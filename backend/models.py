@@ -86,6 +86,24 @@ class UserCreate(BaseModel):
     name: str
     email: str
 
+# Magic Link Models
+class MagicLink(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    email: str
+    tokenHash: str  # Hashed token for security
+    expiresAt: datetime
+    used: bool = False
+    usedAt: Optional[datetime] = None
+    createdAt: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    ipAddress: Optional[str] = None  # Track request IP for security
+
+class AuthTokenResponse(BaseModel):
+    accessToken: str
+    refreshToken: str
+    tokenType: str = "bearer"
+    expiresIn: int  # seconds
+    user: User
+
 # Sport Models
 class Sport(BaseModel):
     key: str
