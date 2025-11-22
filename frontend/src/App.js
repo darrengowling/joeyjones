@@ -211,6 +211,9 @@ const Home = () => {
     setUserForm({ name: "", email: "" });
     setAuthError("");
     setAuthLoading(false);
+    setAuthStep("email");
+    setTokenInput("");
+    setMagicToken("");
   };
 
   const handleCreateLeague = async (e) => {
