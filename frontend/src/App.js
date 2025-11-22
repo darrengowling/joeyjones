@@ -833,6 +833,8 @@ const Home = () => {
                     localStorage.removeItem("accessToken");
                     localStorage.removeItem("refreshToken");
                     setUser(null);
+                    clearSentryUser(); // Clear Sentry user context
+                    addBreadcrumb("User signed out", {}, "auth");
                     toast.success("Signed out successfully");
                   }}
                   className="btn btn-danger text-xs px-2 py-1 text-red-600 hover:underline"
