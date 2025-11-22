@@ -124,7 +124,7 @@ async def startup_db_client():
         # Users indexes - CRITICAL for auth
         await db.users.create_index("email", unique=True)
         
-        logger.info("✅ Production database indexes created")
+        logger.info("✅ Production database indexes created/verified")
     except Exception as e:
         logger.warning(f"⚠️ Index creation warning: {e}")
     
