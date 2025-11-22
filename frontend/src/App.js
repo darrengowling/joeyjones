@@ -367,7 +367,7 @@ const Home = () => {
                 {authError}
               </div>
             )}
-            <form onSubmit={handleUserSubmit}>
+            <form onSubmit={handleAuth}>
               <div className="mb-4">
                 <label className="block text-gray-700 mb-2">Name</label>
                 <input
