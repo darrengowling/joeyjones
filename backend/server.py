@@ -248,7 +248,7 @@ async def get_user(user_id: str):
         raise HTTPException(status_code=404, detail="User not found")
     return User(**user)
 
-@api_router.post("/auth/magic-link", dependencies=[Depends(RateLimiter(times=5, seconds=60))])
+@api_router.post("/auth/magic-link", dependencies=[get_rate_limiter(times=5, seconds=60)])
 async def send_magic_link(email_input: dict, request: Request):
     """
     Generate a secure magic link for authentication
