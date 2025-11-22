@@ -802,6 +802,8 @@ const Home = () => {
                     localStorage.removeItem("accessToken");
                     localStorage.removeItem("refreshToken");
                     setUser(null);
+                    clearSentryUser(); // Clear Sentry user context
+                    addBreadcrumb("User signed out", {}, "auth");
                     toast.success("Signed out successfully");
                   }}
                   className="btn btn-secondary text-sm text-red-600 hover:underline"
