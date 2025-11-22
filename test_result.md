@@ -102,9 +102,20 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "Production hardening for 150-user pilot: Phase 1 focuses on authentication hardening with JWT tokens, magic link expiry (15min), one-time use tokens, RBAC (Commissioner vs Manager permissions), session management with Redis, and rate limiting on auth endpoints. This is Day 1-2 of the 2-week hardening plan."
+user_problem_statement: "Production hardening for 150-user pilot: Day 3 focuses on database optimization with comprehensive index creation for all critical collections (bids, league_stats, fixtures, assets, clubs, auctions, leagues, participants, users, magic_links). Added 26 indexes total to ensure optimal query performance at scale."
 
 backend:
+  - task: "Database optimization - Index creation"
+    implemented: true
+    working: "NA"
+    file: "server.py, scripts/optimize_database_indexes.py"
+    stuck_count: 0
+    priority: "critical"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Implemented comprehensive database index optimization. CHANGES: 1) Created optimize_database_indexes.py script that adds all missing indexes identified in pilot readiness assessment. 2) Updated server.py startup to create all critical indexes on application start. INDEXES ADDED: Bids collection (auctionId+createdAt, userId+createdAt, auctionId+amount), League_stats (leagueId+matchId+playerExternalId unique, leagueId+points leaderboard, leagueId+playerExternalId), Fixtures (leagueId+startsAt, leagueId+status, leagueId+externalMatchId), Assets (sportKey, sportKey+name, sportKey+externalId), Clubs (leagueId, leagueId+owner, uefaId), Auctions (leagueId, leagueId+status), Leagues (sportKey, commissionerId, inviteToken), Participants (userId, leagueId+joinedAt), Users (email unique), Magic_links (email+tokenHash, expiresAt TTL). TOTAL: 26 indexes created/verified. Script ran successfully with 16 new indexes created, 10 already existing. Backend restarted successfully with index creation on startup. Ready for performance testing."
   - task: "Auth hardening - JWT token system"
     implemented: true
     working: true
