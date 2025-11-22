@@ -777,7 +777,10 @@ const Home = () => {
                 <button
                   onClick={() => {
                     localStorage.removeItem("user");
+                    localStorage.removeItem("accessToken");
+                    localStorage.removeItem("refreshToken");
                     setUser(null);
+                    toast.success("Signed out successfully");
                   }}
                   className="btn btn-secondary text-sm text-red-600 hover:underline"
                   data-testid="logout-button"
