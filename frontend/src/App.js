@@ -259,6 +259,8 @@ const Home = () => {
         localStorage.setItem("user", JSON.stringify(user));
 
         setUser(user);
+        setSentryUser(user); // Track user in Sentry
+        addBreadcrumb("User signed in", { email: user.email }, "auth");
         setShowUserDialog(false);
         setUserForm({ name: "", email: "" });
         setTokenInput("");
