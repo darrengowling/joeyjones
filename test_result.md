@@ -102,9 +102,20 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "Implement complete multi-sport functionality: add environment variable SPORTS_CRICKET_ENABLED, make leagues sport-aware with sportKey field, create sports collection with Football and Cricket configurations, enable sport selection in frontend, and run migration to backfill existing leagues with sportKey:'football'. Enable cricket functionality for user testing."
+user_problem_statement: "Production hardening for 150-user pilot: Phase 1 focuses on authentication hardening with JWT tokens, magic link expiry (15min), one-time use tokens, RBAC (Commissioner vs Manager permissions), session management with Redis, and rate limiting on auth endpoints. This is Day 1-2 of the 2-week hardening plan."
 
 backend:
+  - task: "Auth hardening - JWT token system"
+    implemented: true
+    working: "NA"
+    file: "auth.py, server.py, models.py"
+    stuck_count: 0
+    priority: "critical"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Implemented complete JWT authentication system: Created auth.py with JWT token generation/validation, magic link token generation with secure hashing, RBAC support (commissioner/manager roles), get_current_user dependency for JWT validation with backward compatibility for X-User-ID header. Created MagicLink and AuthTokenResponse models. Enhanced auth endpoints: POST /auth/magic-link (rate limited 5/min, generates secure token with 15min expiry, stores hashed token in DB), POST /auth/verify-magic-link (validates token, one-time use, returns JWT access+refresh tokens), POST /auth/refresh (refresh JWT tokens), GET /auth/me (get current user). Added JWT_SECRET_KEY env var support, token expiry management (access: 24h, refresh: 30 days), token blacklist support for logout. Ready for testing."
   - task: "Database cleanup and reset"
     implemented: true
     working: true
