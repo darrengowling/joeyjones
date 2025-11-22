@@ -219,6 +219,12 @@ class DatabaseIndexTester:
             
             self.test_auction_id = auction_result["auctionId"]
             
+            # Begin the auction to get it to active state
+            begin_result = self.test_api_endpoint("POST", f"/auction/{self.test_auction_id}/begin", headers={"X-User-ID": self.test_user_id})
+            if "error" in begin_result:
+                self.log_test("setup", "begin_auction", False, f"Failed to begin auction: {begin_result}")
+                return False
+            
             self.log_test("setup", "test_data", True, "Test data created successfully")
             return True
             
