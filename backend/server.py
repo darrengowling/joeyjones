@@ -81,11 +81,50 @@ async def startup_db_client():
         # Fixtures indexes
         await db.fixtures.create_index([("leagueId", 1), ("startsAt", 1)])
         await db.fixtures.create_index([("leagueId", 1), ("status", 1)])
+        await db.fixtures.create_index([("leagueId", 1), ("externalMatchId", 1)])
         
         # Standings indexes  
         await db.standings.create_index([("leagueId", 1)], unique=True)
         
-        logger.info("✅ My Competitions database indexes created")
+        # Bids indexes - CRITICAL for auction performance
+        await db.bids.create_index([("auctionId", 1), ("createdAt", -1)])
+        await db.bids.create_index([("userId", 1), ("createdAt", -1)])
+        await db.bids.create_index([("auctionId", 1), ("amount", -1)])
+        
+        # League stats indexes - CRITICAL for scoring/leaderboards
+        await db.league_stats.create_index([
+            ("leagueId", 1), ("matchId", 1), ("playerExternalId", 1)
+        ], unique=True)
+        await db.league_stats.create_index([("leagueId", 1), ("points", -1)])
+        await db.league_stats.create_index([("leagueId", 1), ("playerExternalId", 1)])
+        
+        # Assets indexes - CRITICAL for multi-sport queries
+        await db.assets.create_index("sportKey")
+        await db.assets.create_index([("sportKey", 1), ("name", 1)])
+        await db.assets.create_index([("sportKey", 1), ("externalId", 1)])
+        
+        # Clubs indexes - for legacy football data
+        await db.clubs.create_index("leagueId")
+        await db.clubs.create_index([("leagueId", 1), ("owner", 1)])
+        await db.clubs.create_index("uefaId")
+        
+        # Auctions indexes
+        await db.auctions.create_index("leagueId")
+        await db.auctions.create_index([("leagueId", 1), ("status", 1)])
+        
+        # Leagues indexes
+        await db.leagues.create_index("sportKey")
+        await db.leagues.create_index("commissionerId")
+        await db.leagues.create_index("inviteToken", sparse=True)
+        
+        # Participants indexes
+        await db.league_participants.create_index("userId")
+        await db.league_participants.create_index([("leagueId", 1), ("joinedAt", 1)])
+        
+        # Users indexes - CRITICAL for auth
+        await db.users.create_index("email", unique=True)
+        
+        logger.info("✅ Production database indexes created")
     except Exception as e:
         logger.warning(f"⚠️ Index creation warning: {e}")
     
