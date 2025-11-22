@@ -65,6 +65,33 @@ load_dotenv(ROOT_DIR / '.env')
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+# Initialize Sentry for error tracking (Production Hardening Day 6)
+SENTRY_DSN = os.environ.get('SENTRY_DSN', '')
+SENTRY_ENVIRONMENT = os.environ.get('SENTRY_ENVIRONMENT', 'pilot')
+SENTRY_TRACES_SAMPLE_RATE = float(os.environ.get('SENTRY_TRACES_SAMPLE_RATE', '0.1'))
+
+if SENTRY_DSN:
+    sentry_sdk.init(
+        dsn=SENTRY_DSN,
+        environment=SENTRY_ENVIRONMENT,
+        traces_sample_rate=SENTRY_TRACES_SAMPLE_RATE,
+        integrations=[
+            FastApiIntegration(),
+            StarletteIntegration(),
+            PyMongoIntegration(),
+        ],
+        # Send additional context
+        send_default_pii=False,  # Don't send personally identifiable info
+        attach_stacktrace=True,
+        # Performance monitoring
+        enable_tracing=True,
+        # Release tracking (optional - can be set from CI/CD)
+        release=os.environ.get('SENTRY_RELEASE', 'unknown'),
+    )
+    logger.info(f"✅ Sentry error tracking initialized (env: {SENTRY_ENVIRONMENT})")
+else:
+    logger.info("⚠️  Sentry DSN not configured - error tracking disabled")
+
 # MongoDB connection
 MONGO_URL = os.environ['MONGO_URL']
 DB_NAME = os.environ['DB_NAME']
