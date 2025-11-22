@@ -338,7 +338,10 @@ async def verify_magic_link(token_input: dict):
         raise HTTPException(status_code=401, detail="Invalid or expired magic link")
     
     # Check if token has expired
-    if magic_link["expiresAt"] < datetime.now(timezone.utc):
+    expires_at = magic_link["expiresAt"]
+    if expires_at.tzinfo is None:
+        expires_at = expires_at.replace(tzinfo=timezone.utc)
+    if expires_at < datetime.now(timezone.utc):
         raise HTTPException(status_code=401, detail="Magic link has expired")
     
     # Check if token has already been used (one-time use)
