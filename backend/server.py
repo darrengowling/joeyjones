@@ -24,6 +24,10 @@ import redis.asyncio as aioredis
 from socketio_init import sio
 import metrics
 from auction.completion import compute_auction_status
+import sentry_sdk
+from sentry_sdk.integrations.fastapi import FastApiIntegration
+from sentry_sdk.integrations.starlette import StarletteIntegration
+from sentry_sdk.integrations.pymongo import PyMongoIntegration
 
 from models import (
     User, UserCreate,
