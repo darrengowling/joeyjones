@@ -248,59 +248,212 @@ async def get_user(user_id: str):
         raise HTTPException(status_code=404, detail="User not found")
     return User(**user)
 
-@api_router.post("/auth/magic-link")
-async def send_magic_link(email_input: dict):
+@api_router.post("/auth/magic-link", dependencies=[Depends(RateLimiter(times=5, seconds=60))])
+async def send_magic_link(email_input: dict, request: Request):
     """
-    Placeholder for magic-link authentication
-    In production: Generate token, send email with link
-    For pilot: Just return the token
+    Generate a secure magic link for authentication
+    Rate limited to 5 requests per minute per IP
+    
+    Flow:
+    1. Validate email
+    2. Create or find user
+    3. Generate secure token with 15-minute expiry
+    4. Store hashed token in database
+    5. Return token (in pilot mode) or send via email (production)
     """
-    email = email_input.get("email")
-    if not email:
-        raise HTTPException(status_code=400, detail="Email required")
+    email = email_input.get("email", "").strip().lower()
+    if not email or "@" not in email:
+        raise HTTPException(status_code=400, detail="Valid email required")
     
     # Check if user exists, create if not
     user = await db.users.find_one({"email": email})
     if not user:
-        # For pilot, create user with email as name
+        # Create new user
         user_create = UserCreate(name=email.split("@")[0], email=email)
         user_obj = User(**user_create.model_dump())
         await db.users.insert_one(user_obj.model_dump())
         user = user_obj.model_dump()
+        logger.info(f"Created new user: {email}")
     
-    # Generate magic token (in production, store and send via email)
-    magic_token = str(uuid.uuid4())[:12]
+    # Generate secure magic token
+    magic_token = generate_magic_token()
+    token_hash = hash_token(magic_token)
+    
+    # Calculate expiry time
+    expires_at = datetime.now(timezone.utc) + timedelta(minutes=MAGIC_LINK_EXPIRE_MINUTES)
+    
+    # Store magic link in database
+    magic_link = MagicLink(
+        email=email,
+        tokenHash=token_hash,
+        expiresAt=expires_at,
+        ipAddress=request.client.host if request.client else None
+    )
+    await db.magic_links.insert_one(magic_link.model_dump())
+    
+    # Create index for automatic cleanup of expired tokens
+    await db.magic_links.create_index("expiresAt", expireAfterSeconds=0)
+    
+    logger.info(f"Generated magic link for {email}, expires at {expires_at}")
     
     # For pilot: Return token directly
+    # In production: Send email with magic link
     return {
-        "message": "Magic link generated (pilot mode)",
+        "message": "Magic link generated successfully",
         "email": email,
-        "token": magic_token,
-        "user": User(**user),
-        "note": "In production, this would be sent via email"
+        "token": magic_token,  # Remove this in production
+        "expiresIn": MAGIC_LINK_EXPIRE_MINUTES * 60,  # seconds
+        "note": "In production, this token would be sent via email"
     }
 
-@api_router.post("/auth/verify-magic-link")
+@api_router.post("/auth/verify-magic-link", response_model=AuthTokenResponse)
 async def verify_magic_link(token_input: dict):
     """
-    Placeholder for magic-link verification
-    For pilot: Just validate email and return user
+    Verify magic link token and issue JWT tokens
+    
+    Flow:
+    1. Validate token format
+    2. Find magic link by hashed token
+    3. Check expiration and usage status
+    4. Mark token as used (one-time use)
+    5. Generate JWT access and refresh tokens
+    6. Return tokens and user info
     """
-    email = token_input.get("email")
-    token = token_input.get("token")
+    email = token_input.get("email", "").strip().lower()
+    token = token_input.get("token", "").strip()
     
     if not email or not token:
         raise HTTPException(status_code=400, detail="Email and token required")
     
-    # For pilot: Just find user by email
+    # Hash the provided token to compare with stored hash
+    token_hash = hash_token(token)
+    
+    # Find the magic link
+    magic_link = await db.magic_links.find_one({
+        "email": email,
+        "tokenHash": token_hash
+    })
+    
+    if not magic_link:
+        raise HTTPException(status_code=401, detail="Invalid or expired magic link")
+    
+    # Check if token has expired
+    if magic_link["expiresAt"] < datetime.now(timezone.utc):
+        raise HTTPException(status_code=401, detail="Magic link has expired")
+    
+    # Check if token has already been used (one-time use)
+    if magic_link.get("used", False):
+        raise HTTPException(status_code=401, detail="Magic link has already been used")
+    
+    # Mark token as used
+    await db.magic_links.update_one(
+        {"id": magic_link["id"]},
+        {
+            "$set": {
+                "used": True,
+                "usedAt": datetime.now(timezone.utc)
+            }
+        }
+    )
+    
+    # Find user
     user = await db.users.find_one({"email": email})
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     
-    return {
-        "message": "Magic link verified (pilot mode)",
-        "user": User(**user)
-    }
+    # Update last login
+    await db.users.update_one(
+        {"id": user["id"]},
+        {"$set": {"lastLogin": datetime.now(timezone.utc)}}
+    )
+    
+    # Generate JWT tokens
+    access_token = create_access_token(
+        data={
+            "sub": user["id"],
+            "email": user["email"],
+            "name": user["name"],
+            "role": "manager"  # Default role
+        }
+    )
+    
+    refresh_token = create_refresh_token(user["id"])
+    
+    logger.info(f"User {email} authenticated successfully via magic link")
+    
+    return AuthTokenResponse(
+        accessToken=access_token,
+        refreshToken=refresh_token,
+        expiresIn=ACCESS_TOKEN_EXPIRE_MINUTES * 60,
+        user=User(**user)
+    )
+
+@api_router.post("/auth/refresh", response_model=AuthTokenResponse)
+async def refresh_access_token(refresh_token_input: dict):
+    """
+    Refresh an access token using a refresh token
+    
+    Flow:
+    1. Validate refresh token
+    2. Check token type
+    3. Find user
+    4. Generate new access token
+    5. Return new token
+    """
+    refresh_token = refresh_token_input.get("refreshToken", "").strip()
+    
+    if not refresh_token:
+        raise HTTPException(status_code=400, detail="Refresh token required")
+    
+    # Decode and validate refresh token
+    try:
+        payload = decode_token(refresh_token)
+    except HTTPException:
+        raise HTTPException(status_code=401, detail="Invalid refresh token")
+    
+    # Verify token type
+    if payload.get("type") != "refresh":
+        raise HTTPException(status_code=401, detail="Invalid token type")
+    
+    user_id = payload.get("sub")
+    if not user_id:
+        raise HTTPException(status_code=401, detail="Invalid token payload")
+    
+    # Find user
+    user = await db.users.find_one({"id": user_id})
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    # Generate new access token
+    access_token = create_access_token(
+        data={
+            "sub": user["id"],
+            "email": user["email"],
+            "name": user["name"],
+            "role": "manager"
+        }
+    )
+    
+    logger.info(f"Refreshed access token for user {user['email']}")
+    
+    return AuthTokenResponse(
+        accessToken=access_token,
+        refreshToken=refresh_token,  # Return same refresh token
+        expiresIn=ACCESS_TOKEN_EXPIRE_MINUTES * 60,
+        user=User(**user)
+    )
+
+@api_router.get("/auth/me", response_model=User)
+async def get_current_user_info(current_user: dict = Depends(get_current_user)):
+    """
+    Get current authenticated user information
+    Requires valid JWT token
+    """
+    user = await db.users.find_one({"id": current_user["id"]})
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    return User(**user)
 
 # ===== SPORT ENDPOINTS =====
 @api_router.get("/sports", response_model=List[Sport])
