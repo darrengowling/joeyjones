@@ -491,10 +491,10 @@ class DatabaseIndexTester:
             cricket_assets = list(assets_collection.find({"sportKey": "cricket"}))
             query1_time = time.time() - start_time
             
-            if len(cricket_assets) == 20:
-                self.log_test("asset_queries", "assets_by_sport_query", True, f"Retrieved cricket assets in {query1_time:.3f}s")
+            if len(cricket_assets) >= 20:  # Allow for existing cricket assets
+                self.log_test("asset_queries", "assets_by_sport_query", True, f"Retrieved {len(cricket_assets)} cricket assets in {query1_time:.3f}s")
             else:
-                self.log_test("asset_queries", "assets_by_sport_query", False, f"Expected 20 cricket assets, got {len(cricket_assets)}")
+                self.log_test("asset_queries", "assets_by_sport_query", False, f"Expected at least 20 cricket assets, got {len(cricket_assets)}")
                 return False
             
             # Test Query 2: Search assets by name (uses sportKey+name index)
