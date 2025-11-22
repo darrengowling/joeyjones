@@ -806,7 +806,10 @@ const Home = () => {
                 <button
                   onClick={() => {
                     localStorage.removeItem("user");
+                    localStorage.removeItem("accessToken");
+                    localStorage.removeItem("refreshToken");
                     setUser(null);
+                    toast.success("Signed out successfully");
                   }}
                   className="btn btn-danger text-xs px-2 py-1 text-red-600 hover:underline"
                   data-testid="logout-button"
