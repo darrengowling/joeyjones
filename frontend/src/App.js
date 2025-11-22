@@ -124,53 +124,76 @@ const Home = () => {
     }
   };
 
-  const handleUserSubmit = async (e) => {
+  const handleAuth = async (e) => {
     e.preventDefault();
-    setAuthError("");
     setAuthLoading(true);
+    setAuthError("");
 
-    // Enhanced validation
-    if (!userForm.name?.trim()) {
-      setAuthError("Name is required");
-      setAuthLoading(false);
+    // Step 1: Request magic link
+    if (authStep === "email") {
+      if (!userForm.email || !userForm.email.includes("@")) {
+        setAuthError("Please enter a valid email address");
+        setAuthLoading(false);
+        return;
+      }
+
+      try {
+        // Request magic link
+        const response = await axios.post(`${API}/auth/magic-link`, {
+          email: userForm.email.trim().toLowerCase(),
+        });
+
+        // Store the token (in pilot mode, it's returned directly)
+        setMagicToken(response.data.token);
+        setAuthStep("token");
+        setAuthError("");
+        toast.success("Magic link generated! Enter the token below.");
+      } catch (error) {
+        console.error("Magic link generation error:", error);
+        const errorMessage = error.response?.data?.detail || error.message || "Failed to generate magic link. Please try again.";
+        setAuthError(errorMessage);
+      } finally {
+        setAuthLoading(false);
+      }
       return;
     }
 
-    if (!userForm.email?.trim()) {
-      setAuthError("Email is required");
-      setAuthLoading(false);
-      return;
-    }
+    // Step 2: Verify magic link token
+    if (authStep === "token") {
+      if (!tokenInput.trim()) {
+        setAuthError("Please enter the magic link token");
+        setAuthLoading(false);
+        return;
+      }
 
-    // Email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(userForm.email)) {
-      setAuthError("Please enter a valid email address");
-      setAuthLoading(false);
-      return;
-    }
+      try {
+        // Verify magic link and get JWT tokens
+        const response = await axios.post(`${API}/auth/verify-magic-link`, {
+          email: userForm.email.trim().toLowerCase(),
+          token: tokenInput.trim(),
+        });
 
-    try {
-      // Create user in backend
-      const userCreateData = {
-        name: userForm.name.trim(),
-        email: userForm.email.trim().toLowerCase(),
-      };
+        const { accessToken, refreshToken, user } = response.data;
 
-      const response = await axios.post(`${API}/users`, userCreateData);
-      const userData = response.data;
+        // Store tokens and user data
+        localStorage.setItem("accessToken", accessToken);
+        localStorage.setItem("refreshToken", refreshToken);
+        localStorage.setItem("user", JSON.stringify(user));
 
-      setUser(userData);
-      localStorage.setItem("user", JSON.stringify(userData));
-      setShowUserDialog(false);
-      setUserForm({ name: "", email: "" });
-      setAuthError("");
-    } catch (error) {
-      console.error("Authentication error:", error);
-      const errorMessage = error.response?.data?.detail || error.message || "Something went wrong. Please try again.";
-      setAuthError(errorMessage);
-    } finally {
-      setAuthLoading(false);
+        setUser(user);
+        setShowUserDialog(false);
+        setUserForm({ name: "", email: "" });
+        setTokenInput("");
+        setAuthStep("email");
+        setAuthError("");
+        toast.success("Successfully signed in!");
+      } catch (error) {
+        console.error("Token verification error:", error);
+        const errorMessage = error.response?.data?.detail || error.message || "Invalid or expired token. Please try again.";
+        setAuthError(errorMessage);
+      } finally {
+        setAuthLoading(false);
+      }
     }
   };
 
