@@ -313,16 +313,13 @@ frontend:
 
 metadata:
   created_by: "main_agent"
-  version: "1.0"
-  test_sequence: 0
+  version: "2.0"
+  test_sequence: 2
   run_ui: true
 
 test_plan:
   current_focus:
-    - "E2E Test 1: Waiting Room Core Flow"
-    - "E2E Test 2: Non-Commissioner Authorization"
-    - "E2E Test 3: Concurrent Auctions Isolation"
-    - "E2E Test 4: Late Joiner Sync"
+    - "JWT Auth Integration - Frontend"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
