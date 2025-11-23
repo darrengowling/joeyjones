@@ -70,7 +70,7 @@ def start_auction(access_token, league_id):
     print("\nStarting auction...")
     
     headers = {"Authorization": f"Bearer {access_token}"}
-    response = requests.post(f"{API}/auctions/start", json={"leagueId": league_id}, headers=headers)
+    response = requests.post(f"{API}/leagues/{league_id}/auction/start", headers=headers)
     
     if response.status_code != 200:
         print(f"❌ Failed to start auction: {response.text}")
