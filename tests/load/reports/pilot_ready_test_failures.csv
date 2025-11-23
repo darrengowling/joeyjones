@@ -1,2 +1,2 @@
 Method,Name,Error,Occurrences
-GET,/api/me/competitions,CatchResponseError('Failed: 422'),788
+GET,/api/me/competitions,CatchResponseError('Failed: 422'),803
