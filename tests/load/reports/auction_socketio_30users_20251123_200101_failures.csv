@@ -1,0 +1,4 @@
+Method,Name,Error,Occurrences
+POST,Auth: Magic Link,HTTPError('503 Server Error: Service Unavailable for url: Auth: Magic Link'),30
+SocketIO,Connect & Join Room,ConnectionError('Connection error'),1
+POST,Auth: Verify Token,HTTPError('503 Server Error: Service Unavailable for url: Auth: Verify Token'),2
