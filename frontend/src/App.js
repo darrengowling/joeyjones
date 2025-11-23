@@ -801,6 +801,13 @@ const Home = () => {
                     My Competitions
                   </button>
                 )}
+                <button
+                  onClick={() => navigate("/help")}
+                  className="btn btn-secondary text-sm text-gray-600 hover:text-gray-800 hover:underline"
+                  data-testid="nav-help"
+                >
+                  Help
+                </button>
                 <span className="text-gray-700 text-sm">
                   <strong>{user.name}</strong> ({user.email})
                 </span>
