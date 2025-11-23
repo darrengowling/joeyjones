@@ -14,8 +14,8 @@ from datetime import datetime, timezone
 from typing import Dict, List, Optional
 
 # Configuration
-BASE_URL = "https://cricket-bid-arena.preview.emergentagent.com/api"
-SOCKET_URL = "https://cricket-bid-arena.preview.emergentagent.com"
+BASE_URL = "https://auction-hardening.preview.emergentagent.com/api"
+SOCKET_URL = "https://auction-hardening.preview.emergentagent.com"
 SOCKET_PATH = "/api/socket.io"
 
 class InstantAuctionNotificationTester:

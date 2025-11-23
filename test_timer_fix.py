@@ -9,8 +9,8 @@ import socketio
 import time
 import json
 
-BASE_URL = "https://cricket-bid-arena.preview.emergentagent.com/api"
-SOCKET_URL = "https://cricket-bid-arena.preview.emergentagent.com"
+BASE_URL = "https://auction-hardening.preview.emergentagent.com/api"
+SOCKET_URL = "https://auction-hardening.preview.emergentagent.com"
 SOCKET_PATH = "/api/socket.io"
 
 async def test_timer_fix():

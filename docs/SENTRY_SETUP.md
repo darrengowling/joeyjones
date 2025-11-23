@@ -53,7 +53,7 @@ sudo supervisorctl restart frontend
 **Backend Test:**
 ```bash
 # Trigger a test error
-curl -X POST https://cricket-bid-arena.preview.emergentagent.com/api/test-error
+curl -X POST https://auction-hardening.preview.emergentagent.com/api/test-error
 ```
 
 **Frontend Test:**
