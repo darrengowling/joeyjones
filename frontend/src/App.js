@@ -875,13 +875,22 @@ const Home = () => {
               </div>
             </div>
           ) : (
-            <button
-              onClick={() => setShowUserDialog(true)}
-              className="btn btn-primary bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-sm md:text-base"
-              data-testid="login-button"
-            >
-              Sign In
-            </button>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => navigate("/help")}
+                className="btn btn-secondary text-sm text-gray-600 hover:text-gray-800 hover:underline"
+                data-testid="nav-help-logged-out"
+              >
+                Help
+              </button>
+              <button
+                onClick={() => setShowUserDialog(true)}
+                className="btn btn-primary bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-sm md:text-base"
+                data-testid="login-button"
+              >
+                Sign In
+              </button>
+            </div>
           )}
         </div>
       </div>
