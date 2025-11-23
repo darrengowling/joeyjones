@@ -2590,7 +2590,7 @@ async def get_auction(auction_id: str):
         "currentClub": current_asset  # Keep field name for backward compatibility
     }
 
-@api_router.post("/auction/{auction_id}/bid", dependencies=[get_rate_limiter(times=40, seconds=60)])
+@api_router.post("/auction/{auction_id}/bid")
 async def place_bid(auction_id: str, bid_input: BidCreate):
     # Metrics: Track bid processing time
     start_time = time.time()
