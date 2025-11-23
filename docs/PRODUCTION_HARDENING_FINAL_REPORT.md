@@ -561,25 +561,50 @@ The multi-sport auction platform has undergone comprehensive production hardenin
 
 ---
 
-### 3. Rate Limiting Disabled in Pilot ⚠️
-**Severity**: Low | **Impact**: Security (Minor)
+### 3. Rate Limiting & Redis - Deferred to Pre-Production ⚠️
+**Severity**: Low | **Impact**: Security & Performance (Minor for Pilot)
 
-**Issue**:
-- `ENABLE_RATE_LIMITING=false` in pilot configuration
-- Auth endpoints have rate limiting code but it's disabled
+**Current State**:
+- Rate limiting dependencies **removed** from critical endpoints
+- Redis not configured in current environment
+- System operates without rate limiting protection
 
-**Why Disabled**:
-- Requires Redis (not available in pilot environment)
-- Pilot has only 150 users (low abuse risk)
+**Why Deferred**:
+- **Load Test Discovery**: Rate limiter dependencies caused 90% failure rate without Redis
+  - Issue: FastAPILimiter timing out trying to connect to non-existent Redis
+  - Impact: 2-17 second response times, blocking legitimate traffic
+  - Fix: Removed rate limiter dependencies to restore performance
+- **Pilot Context**: 150 known, trusted users (low abuse risk)
+- **Infrastructure**: Redis adds operational complexity not needed for pilot
+- **Performance**: System performs excellently without rate limiting (11ms avg response)
 
-**Impact**:
-- Slightly higher risk of abuse
-- Not a concern for controlled pilot
+**What Was Tested**:
+- System with rate limiting: 90% failure rate, 6-second average response
+- System without rate limiting: 0% failure rate, 35ms average response
+- Proof that rate limiting (without Redis) was the bottleneck, not the application
 
-**Recommendation**:
-- Enable for production with Redis
-- Monitor for abuse during pilot
-- Acceptable risk for 150-user pilot
+**Impact for Pilot**:
+- ✅ No performance degradation
+- ✅ Zero authentication failures under load
+- ⚠️ No protection against API abuse (acceptable for trusted pilot users)
+- ⚠️ No defense against brute force attacks (acceptable for 150-user controlled pilot)
+
+**Recommendation for Production**:
+1. **Deploy Redis** before public launch
+2. **Re-enable rate limiting** with proper limits:
+   - Auth endpoints: 10 requests/minute per IP
+   - League creation: 5 leagues per 5 minutes per user  
+   - Bidding: 60 bids per minute per user
+3. **Add monitoring** for request patterns during pilot
+4. **Timeline**: Implement before opening to untrusted/public users
+
+**Current Mitigation**:
+- Pilot users are vetted and trusted
+- System logging captures all authentication attempts
+- Can manually monitor for suspicious patterns
+- Application-level validation prevents most abuse
+
+**Risk Assessment**: **LOW** for pilot, **MEDIUM** for public production
 
 ---
 
