@@ -830,6 +830,101 @@ ls -lh /app/backups/mongodb/  # Check backups directory
 
 ---
 
+### Priority 4: Pre-Production Improvements (Before Public Launch) 🔴
+
+#### 11. Implement Redis & Rate Limiting
+**Effort**: 4-6 hours  
+**Owner**: DevOps + Backend Team  
+**Priority**: CRITICAL before public launch
+
+**Background**:
+- Rate limiting currently disabled due to Redis unavailability
+- Load testing revealed rate limiter dependencies caused 90% failures without Redis
+- Acceptable for 150-user controlled pilot, required for public production
+
+**Tasks**:
+1. **Deploy Redis**:
+   - Set up Redis instance (cloud or self-hosted)
+   - Configure connection parameters
+   - Test connectivity
+
+2. **Re-enable Rate Limiting**:
+   - Add rate limiter dependencies back to endpoints
+   - Configure appropriate limits:
+     ```python
+     Auth endpoints: 10 requests/minute per IP
+     League creation: 5 per 5 minutes per user
+     Bidding: 60 per minute per user
+     ```
+   - Test under load to ensure Redis integration works
+
+3. **Verify**:
+   - Run load tests with rate limiting enabled
+   - Confirm legitimate traffic isn't blocked
+   - Test rate limit exceeded scenarios
+
+**Files to Modify**:
+- `/app/backend/server.py` - Re-add `dependencies=[get_rate_limiter(...)]`
+- Environment configuration for Redis connection
+- Update operations documentation
+
+**Why Deferred**:
+- Pilot has 150 trusted users (low abuse risk)
+- Adding Redis now increases operational complexity
+- Current system performs excellently without it
+- Rate limiting can be tested post-pilot
+
+**Risk if Not Implemented**: API abuse, brute force attacks, resource exhaustion
+
+---
+
+#### 12. Optimize Authentication for High Concurrency
+**Effort**: 4-8 hours  
+**Owner**: Backend Team  
+**Priority**: HIGH before scaling beyond 150 users
+
+**Issue Identified**: 
+- 100 concurrent signups caused 68-second authentication delays
+- Likely database connection pool exhaustion
+- Only occurs during unrealistic burst signup scenarios
+
+**Tasks**:
+1. **Database Connection Pooling**:
+   - Increase MongoDB connection pool size
+   - Add connection pool monitoring
+   - Tune maxPoolSize parameter
+
+2. **Authentication Optimization**:
+   - Add caching for user lookups
+   - Optimize user creation queries
+   - Consider async user creation
+   - Add queue/throttling for concurrent signups
+
+3. **Load Test Validation**:
+   - Re-run 100-user test after optimizations
+   - Target: <5 second authentication even at peak
+
+**Current Workaround**: Stage user onboarding (30 users per day)
+
+---
+
+#### 13. Socket.IO Connection Tuning
+**Effort**: 2-3 hours  
+**Owner**: Backend Team  
+**Priority**: MEDIUM
+
+**Issue Identified**: 6% connection failure at 100 concurrent connections
+
+**Tasks**:
+- Increase Socket.IO connection timeout limits
+- Add connection retry logic on client side
+- Optimize handshake process
+- Review server resource limits
+
+**Target**: <1% failure rate at 100+ concurrent connections
+
+---
+
 ## Pilot Rollout Strategy
 
 ### Phased Approach (Recommended)
