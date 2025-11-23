@@ -11,6 +11,7 @@ import MyCompetitions from "./pages/MyCompetitions";
 import CompetitionDashboard from "./pages/CompetitionDashboard";
 import { formatCurrency } from "./utils/currency";
 import { setUser as setSentryUser, clearUser as clearSentryUser, captureException, addBreadcrumb } from "./utils/sentry";
+import { clearSocketUser } from "./utils/socket";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
