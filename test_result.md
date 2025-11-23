@@ -340,6 +340,18 @@ frontend:
         agent: "testing"
         comment: "All basic UI components working: Homepage loads correctly, sign in/out functionality, navigation between pages, create/join league flows. User authentication and session management working properly."
 
+  - task: "In-app Help Center / User Manual"
+    implemented: true
+    working: true
+    file: "frontend/src/pages/Help.js, App.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Created comprehensive in-app help center with static documentation. FEATURES: 1) Created Help.js page with collapsible sections for Getting Started, For League Admins, For Players, Viewing Dashboards & Results, and FAQ. 2) Covers all key topics: account setup & magic link login, creating/joining competitions, auction setup and participation, dashboard viewing and match breakdowns. 3) Added Help navigation button in header (visible for both logged-in and logged-out users). 4) Includes quick navigation buttons, step-by-step guides, pro tips, troubleshooting info, and FAQ section. 5) Mobile-responsive design with back-to-home button. 6) Route added at /help with lazy loading for performance. 7) Compilation issue fixed (ErrorBoundary.js import path corrected from './sentry' to '../utils/sentry'). Help page tested and working correctly, displays all sections with expand/collapse functionality."
+
   - task: "League management functionality"
     implemented: true
     working: true
