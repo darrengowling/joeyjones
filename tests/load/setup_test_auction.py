@@ -90,7 +90,7 @@ def main():
     access_token, user_id = create_test_user()
     
     # Create league
-    league_id = create_test_league(access_token)
+    league_id = create_test_league(access_token, user_id)
     
     # Start auction
     auction_id = start_auction(access_token, league_id)
