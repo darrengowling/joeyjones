@@ -618,7 +618,7 @@ async def seed_clubs():
     return {"message": f"Seeded {len(clubs)} UEFA Champions League clubs"}
 
 # ===== LEAGUE ENDPOINTS =====
-@api_router.post("/leagues", response_model=League, dependencies=[get_rate_limiter(times=5, seconds=300)])
+@api_router.post("/leagues", response_model=League)
 async def create_league(input: LeagueCreate):
     # Prompt 4: Validate assets selection size
     from models import validate_assets_selection_size
