@@ -1,15 +1,29 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo, useCallback, memo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useAuctionClock } from "../hooks/useAuctionClock";
 import { useSocketRoom } from "../hooks/useSocketRoom";
 import { formatCurrency, parseCurrencyInput, isValidCurrencyInput } from "../utils/currency";
+import { debounceSocketEvent } from "../utils/performance";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
-export default function AuctionRoom() {
+// Memoized sub-components for better performance (Production Hardening Day 11)
+const BidHistoryItem = memo(({ bid, isWinning }) => (
+  <div className={`p-3 border-l-4 ${isWinning ? 'border-green-500 bg-green-50' : 'border-gray-300 bg-white'} rounded`}>
+    <div className="flex justify-between items-center">
+      <span className="font-medium text-gray-900">{bid.userName || 'Anonymous'}</span>
+      <span className="font-bold text-green-600">{formatCurrency(bid.amount)}</span>
+    </div>
+    <span className="text-xs text-gray-500">{new Date(bid.createdAt).toLocaleTimeString()}</span>
+  </div>
+));
+
+BidHistoryItem.displayName = 'BidHistoryItem';
+
+function AuctionRoom() {
   const { auctionId } = useParams();
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
