@@ -356,7 +356,53 @@ The multi-sport auction platform has undergone comprehensive production hardenin
 
 ---
 
-### 8. Operations Playbook ✅
+### 8. In-App Help Center / User Manual ✅
+**Day 13** | **Status**: Complete
+
+**Implemented**:
+- Comprehensive in-app help page with collapsible sections
+- Static documentation covering all key workflows
+- Mobile-responsive design
+- Quick navigation with jump links
+- FAQ and troubleshooting guide
+
+**Topics Covered**:
+1. **Getting Started**: Magic link authentication setup and sign-in process
+2. **For League Admins**: 
+   - Creating competitions with detailed configuration
+   - Running auctions (start, manage, control flow)
+   - Commissioner controls and responsibilities
+3. **For Players**:
+   - Joining competitions with invite tokens
+   - Auction bidding strategies and best practices
+   - Budget management tips
+4. **Viewing Results**:
+   - Competition dashboards and leaderboards
+   - Match-by-match breakdown analysis
+   - Finding your competitions
+5. **FAQ & Troubleshooting**: Common questions and solutions
+
+**Features**:
+- Accessible via "Help" link in navigation (logged in and logged out states)
+- Expandable/collapsible sections for easy navigation
+- Step-by-step guides with numbered instructions
+- Pro tips and warning callouts
+- Color-coded quick navigation buttons
+- Back-to-home navigation
+
+**User Experience**:
+- Clear, plain-language explanations (no technical jargon)
+- Visual organization with icons and color coding
+- Searchable by section
+- Comprehensive without being overwhelming
+
+**Files**:
+- `/app/frontend/src/pages/Help.js` - Help page component
+- `/app/frontend/src/App.js` - Route and navigation integration
+
+---
+
+### 9. Operations Playbook ✅
 **Days 12-13** | **Status**: Complete
 
 **Implemented**:
