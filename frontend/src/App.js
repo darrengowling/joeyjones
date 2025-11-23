@@ -1074,6 +1074,7 @@ export default function App() {
           <Route path="/app/my-competitions" element={<MyCompetitions />} />
           <Route path="/app/competitions/:leagueId" element={<CompetitionDashboard />} />
           <Route path="/competitions/:leagueId" element={<CompetitionDashboard />} />
+          <Route path="/help" element={<Help />} />
         </Routes>
       </Suspense>
     </BrowserRouter>
