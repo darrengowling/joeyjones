@@ -850,6 +850,13 @@ const Home = () => {
                   </button>
                 )}
                 <button
+                  onClick={() => navigate("/help")}
+                  className="btn btn-secondary text-xs px-2 py-1 text-gray-600 hover:underline"
+                  data-testid="nav-help"
+                >
+                  Help
+                </button>
+                <button
                   onClick={() => {
                     localStorage.removeItem("user");
                     localStorage.removeItem("accessToken");
