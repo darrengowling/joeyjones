@@ -233,6 +233,40 @@ app = FastAPI(lifespan=lifespan)
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
 
+# Health check endpoint (Production Hardening - Days 9-10)
+@api_router.get("/health")
+async def health_check():
+    """
+    Health check endpoint for monitoring and connectivity testing
+    Returns system status including database connectivity
+    """
+    health_status = {
+        "status": "healthy",
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "services": {}
+    }
+    
+    # Check database connectivity
+    try:
+        await db.command("ping")
+        health_status["services"]["database"] = "healthy"
+    except Exception as e:
+        health_status["status"] = "degraded"
+        health_status["services"]["database"] = "unhealthy"
+        health_status["error"] = str(e)
+    
+    # Check if API is responding
+    health_status["services"]["api"] = "healthy"
+    
+    # Return appropriate status code
+    status_code = 200 if health_status["status"] == "healthy" else 503
+    
+    return Response(
+        content=json.dumps(health_status),
+        status_code=status_code,
+        media_type="application/json"
+    )
+
 # Add metrics endpoint to API router
 @api_router.get("/metrics")
 def get_metrics():
