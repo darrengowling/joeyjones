@@ -836,6 +836,7 @@ const Home = () => {
                     localStorage.removeItem("refreshToken");
                     setUser(null);
                     clearSentryUser(); // Clear Sentry user context
+                    clearSocketUser(); // Clear Socket.IO user context
                     addBreadcrumb("User signed out", {}, "auth");
                     toast.success("Signed out successfully");
                   }}
