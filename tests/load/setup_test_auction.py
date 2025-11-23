@@ -77,9 +77,11 @@ def start_auction(access_token, league_id):
         sys.exit(1)
     
     auction = response.json()
-    print(f"✅ Auction started: {auction['id']}")
-    print(f"   Status: {auction['status']}")
-    return auction["id"]
+    print(f"Response: {auction}")
+    auction_id = auction.get("auctionId")
+    print(f"✅ Auction started: {auction_id}")
+    print(f"   First Asset: {auction.get('firstAsset')}")
+    return auction_id
 
 def main():
     print("=" * 60)
