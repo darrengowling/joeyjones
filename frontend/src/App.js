@@ -1,17 +1,29 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import "@/App.css";
 import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
-import CreateLeague from "./pages/CreateLeague";
-import ClubsList from "./pages/ClubsList";
-import LeagueDetail from "./pages/LeagueDetail";
-import AuctionRoom from "./pages/AuctionRoom";
-import MyCompetitions from "./pages/MyCompetitions";
-import CompetitionDashboard from "./pages/CompetitionDashboard";
 import { formatCurrency } from "./utils/currency";
 import { setUser as setSentryUser, clearUser as clearSentryUser, captureException, addBreadcrumb } from "./utils/sentry";
 import { clearSocketUser } from "./utils/socket";
+
+// Lazy load route components for better performance (Production Hardening Day 11)
+const CreateLeague = lazy(() => import("./pages/CreateLeague"));
+const ClubsList = lazy(() => import("./pages/ClubsList"));
+const LeagueDetail = lazy(() => import("./pages/LeagueDetail"));
+const AuctionRoom = lazy(() => import("./pages/AuctionRoom"));
+const MyCompetitions = lazy(() => import("./pages/MyCompetitions"));
+const CompetitionDashboard = lazy(() => import("./pages/CompetitionDashboard"));
+
+// Loading component for lazy-loaded routes
+const PageLoader = () => (
+  <div className="min-h-screen flex items-center justify-center bg-gray-50">
+    <div className="text-center">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+      <p className="text-gray-600">Loading...</p>
+    </div>
+  </div>
+);
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
