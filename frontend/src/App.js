@@ -1063,16 +1063,18 @@ export default function App() {
           },
         }}
       />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/create-league" element={<CreateLeague />} />
-        <Route path="/clubs" element={<ClubsList />} />
-        <Route path="/league/:leagueId" element={<LeagueDetail />} />
-        <Route path="/auction/:auctionId" element={<AuctionRoom />} />
-        <Route path="/app/my-competitions" element={<MyCompetitions />} />
-        <Route path="/app/competitions/:leagueId" element={<CompetitionDashboard />} />
-        <Route path="/competitions/:leagueId" element={<CompetitionDashboard />} />
-      </Routes>
+      <Suspense fallback={<PageLoader />}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/create-league" element={<CreateLeague />} />
+          <Route path="/clubs" element={<ClubsList />} />
+          <Route path="/league/:leagueId" element={<LeagueDetail />} />
+          <Route path="/auction/:auctionId" element={<AuctionRoom />} />
+          <Route path="/app/my-competitions" element={<MyCompetitions />} />
+          <Route path="/app/competitions/:leagueId" element={<CompetitionDashboard />} />
+          <Route path="/competitions/:leagueId" element={<CompetitionDashboard />} />
+        </Routes>
+      </Suspense>
     </BrowserRouter>
   );
 }
