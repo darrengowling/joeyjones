@@ -14,6 +14,7 @@ const LeagueDetail = lazy(() => import("./pages/LeagueDetail"));
 const AuctionRoom = lazy(() => import("./pages/AuctionRoom"));
 const MyCompetitions = lazy(() => import("./pages/MyCompetitions"));
 const CompetitionDashboard = lazy(() => import("./pages/CompetitionDashboard"));
+const Help = lazy(() => import("./pages/Help"));
 
 // Loading component for lazy-loaded routes
 const PageLoader = () => (
