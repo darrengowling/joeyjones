@@ -6,7 +6,7 @@
  */
 
 import React from 'react';
-import { captureException } from './sentry';
+import { captureException } from '../utils/sentry';
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
