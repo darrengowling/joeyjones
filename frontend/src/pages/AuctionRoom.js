@@ -1055,3 +1055,5 @@ function AuctionRoom() {
     </div>
   );
 }
+
+export default memo(AuctionRoom);
