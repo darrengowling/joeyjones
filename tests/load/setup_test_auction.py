@@ -37,7 +37,7 @@ def create_test_user():
     print(f"✅ Commissioner user created: {data['user']['id']}")
     return data["accessToken"], data["user"]["id"]
 
-def create_test_league(access_token):
+def create_test_league(access_token, user_id):
     """Create a test league for load testing"""
     print("\nCreating test league...")
     
@@ -50,7 +50,8 @@ def create_test_league(access_token):
         "maxManagers": 50,  # Support up to 50 concurrent bidders
         "clubSlots": 3,
         "timerSeconds": 30,
-        "antiSnipeSeconds": 10
+        "antiSnipeSeconds": 10,
+        "commissionerId": user_id
     }
     
     response = requests.post(f"{API}/leagues", json=league_data, headers=headers)
