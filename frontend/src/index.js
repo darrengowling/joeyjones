@@ -4,6 +4,7 @@ import "@/index.css";
 import "./styles/brand.css";
 import App from "@/App";
 import * as Sentry from "@sentry/react";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 // Initialize Sentry for error tracking (Production Hardening Day 6)
 const SENTRY_DSN = process.env.REACT_APP_SENTRY_DSN;
@@ -40,6 +41,8 @@ if (SENTRY_DSN) {
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <App />
+    <ErrorBoundary>
+      <App />
+    </ErrorBoundary>
   </React.StrictMode>,
 );
