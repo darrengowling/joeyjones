@@ -759,6 +759,37 @@ async def search_leagues(name: str = None):
     
     return results
 
+@api_router.get("/leagues/by-token/{invite_token}")
+async def get_league_by_token(invite_token: str):
+    """Find a league by its invite token (for debugging join issues)"""
+    normalized_token = invite_token.strip().lower()
+    
+    # Search for league with matching token
+    league = await db.leagues.find_one({
+        "inviteToken": {"$regex": f"^{invite_token}$", "$options": "i"}
+    })
+    
+    if not league:
+        # List all leagues to help debug
+        all_leagues = await db.leagues.find({}).to_list(100)
+        return {
+            "found": False,
+            "searchedToken": invite_token,
+            "normalizedToken": normalized_token,
+            "totalLeagues": len(all_leagues),
+            "availableTokens": [l.get("inviteToken") for l in all_leagues[:10]]
+        }
+    
+    return {
+        "found": True,
+        "league": {
+            "id": league["id"],
+            "name": league["name"],
+            "inviteToken": league["inviteToken"],
+            "status": league["status"]
+        }
+    }
+
 @api_router.get("/leagues/{league_id}", response_model=League)
 async def get_league(league_id: str):
     league = await db.leagues.find_one({"id": league_id})
