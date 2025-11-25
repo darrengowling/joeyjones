@@ -327,6 +327,73 @@ async def get_fixture_by_id(fixture_id: str):
         logger.error(f"Error fetching fixture {fixture_id}: {str(e)}")
         raise HTTPException(status_code=500, detail="Error fetching fixture")
 
+
+@api_router.get("/leagues/{league_id}/fixtures")
+async def get_league_fixtures(league_id: str):
+    """
+    Get fixtures for teams that are part of this league
+    Shows which matches the league's teams are playing in
+    """
+    try:
+        # Get league details
+        league = await db.leagues.find_one({"id": league_id})
+        if not league:
+            raise HTTPException(status_code=404, detail="League not found")
+        
+        sport_key = league.get("sportKey", "football")
+        
+        # Get teams selected for this league
+        selected_asset_ids = league.get("assetsSelected", [])
+        
+        if not selected_asset_ids:
+            # No teams selected yet
+            return {
+                "fixtures": [],
+                "message": "No teams selected for this league yet"
+            }
+        
+        # Get team details
+        if sport_key == "football":
+            # For football, teams are in clubs collection
+            teams = await db.clubs.find({"id": {"$in": selected_asset_ids}}).to_list(length=None)
+            team_names = [team["name"] for team in teams]
+        else:
+            # For other sports, teams are in assets collection
+            teams = await db.assets.find({"id": {"$in": selected_asset_ids}}).to_list(length=None)
+            team_names = [team["name"] for team in teams]
+        
+        if not team_names:
+            return {
+                "fixtures": [],
+                "message": "No teams found for this league"
+            }
+        
+        # Get fixtures where any of the league's teams are playing
+        fixtures = await db.fixtures.find({
+            "sportKey": sport_key,
+            "$or": [
+                {"homeTeam": {"$in": team_names}},
+                {"awayTeam": {"$in": team_names}}
+            ]
+        }).sort("matchDate", 1).to_list(length=None)
+        
+        # Add flag to indicate if team is in this league
+        for fixture in fixtures:
+            fixture["homeTeamInLeague"] = fixture["homeTeam"] in team_names
+            fixture["awayTeamInLeague"] = fixture["awayTeam"] in team_names
+        
+        return {
+            "fixtures": fixtures,
+            "total": len(fixtures),
+            "leagueTeams": team_names
+        }
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error fetching fixtures for league {league_id}: {str(e)}")
+        raise HTTPException(status_code=500, detail="Error fetching fixtures")
+
 # Add metrics endpoint to API router
 @api_router.get("/metrics")
 def get_metrics():
