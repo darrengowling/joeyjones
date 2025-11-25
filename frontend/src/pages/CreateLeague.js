@@ -289,32 +289,28 @@ export default function CreateLeague() {
                         <label className="block text-sm font-medium text-gray-700 mb-1">Filter by Competition</label>
                         <select
                           className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          onChange={(e) => {
+                          onChange={async (e) => {
                             const filter = e.target.value;
-                            if (filter === "all") {
-                              setAssetSearchTerm("");
-                            } else if (filter === "epl") {
-                              // EPL teams have uefaId starting with "EPL_" or are specific teams
-                              const eplTeams = availableAssets.filter(asset => 
-                                asset.uefaId?.startsWith("EPL_") || 
-                                ["Brentford", "Burnley", "Leeds United", "Sunderland", "Crystal Palace", 
-                                 "Everton", "Fulham", "Manchester United", "Newcastle United", 
-                                 "Nottingham Forest", "Tottenham Hotspur", "West Ham United", 
-                                 "Wolverhampton Wanderers", "AFC Bournemouth", "Brighton & Hove Albion", "Chelsea"].includes(asset.name)
-                              );
-                              setSelectedAssets(eplTeams.map(t => t.id));
-                            } else if (filter === "cl") {
-                              // CL teams don't have EPL_ prefix
-                              const clTeams = availableAssets.filter(asset => 
-                                asset.uefaId && !asset.uefaId.startsWith("EPL_")
-                              );
-                              setSelectedAssets(clTeams.map(t => t.id));
+                            try {
+                              let response;
+                              if (filter === "all") {
+                                response = await axios.get(`${API}/clubs`);
+                              } else {
+                                response = await axios.get(`${API}/clubs?competition=${filter}`);
+                              }
+                              setAvailableAssets(response.data);
+                              // Auto-select all teams in filtered view
+                              if (filter !== "all") {
+                                setSelectedAssets(response.data.map(t => t.id));
+                              }
+                            } catch (error) {
+                              console.error("Error filtering clubs:", error);
                             }
                           }}
                         >
                           <option value="all">All Teams (52)</option>
-                          <option value="epl">Premier League Only (~20)</option>
-                          <option value="cl">Champions League Only (~36)</option>
+                          <option value="EPL">Premier League Only (20)</option>
+                          <option value="UCL">Champions League Only (36)</option>
                         </select>
                       </div>
                     )}
