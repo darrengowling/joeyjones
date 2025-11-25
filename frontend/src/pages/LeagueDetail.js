@@ -969,6 +969,94 @@ export default function LeagueDetail() {
             </ul>
           </div>
 
+          {/* Fixtures Section */}
+          {fixtures.length > 0 && (
+            <div className="bg-white border border-gray-200 rounded-lg p-6 mt-8">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Match Fixtures</h3>
+              
+              {loadingFixtures ? (
+                <p className="text-gray-500 text-center py-4">Loading fixtures...</p>
+              ) : (
+                <div className="space-y-4">
+                  {/* Upcoming Fixtures */}
+                  {fixtures.filter(f => f.status === 'scheduled').length > 0 && (
+                    <div>
+                      <h4 className="text-md font-semibold text-gray-700 mb-2">Upcoming Matches</h4>
+                      <div className="space-y-2">
+                        {fixtures.filter(f => f.status === 'scheduled').map((fixture) => (
+                          <div key={fixture.id} className="flex items-center justify-between border border-gray-200 rounded-lg p-4 hover:bg-gray-50">
+                            <div className="flex items-center space-x-4 flex-1">
+                              <div className={`text-right flex-1 ${fixture.homeTeamInLeague ? 'font-semibold text-blue-600' : 'text-gray-700'}`}>
+                                {fixture.homeTeam}
+                              </div>
+                              <div className="text-gray-400 font-semibold">vs</div>
+                              <div className={`text-left flex-1 ${fixture.awayTeamInLeague ? 'font-semibold text-blue-600' : 'text-gray-700'}`}>
+                                {fixture.awayTeam}
+                              </div>
+                            </div>
+                            <div className="text-sm text-gray-500 ml-4">
+                              {new Date(fixture.matchDate).toLocaleDateString('en-GB', { 
+                                weekday: 'short', 
+                                day: 'numeric', 
+                                month: 'short',
+                                hour: '2-digit',
+                                minute: '2-digit'
+                              })}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* Completed Fixtures */}
+                  {fixtures.filter(f => f.status !== 'scheduled').length > 0 && (
+                    <div className="mt-6">
+                      <h4 className="text-md font-semibold text-gray-700 mb-2">Completed Matches</h4>
+                      <div className="space-y-2">
+                        {fixtures.filter(f => f.status !== 'scheduled').map((fixture) => (
+                          <div key={fixture.id} className="flex items-center justify-between border border-gray-200 rounded-lg p-4 bg-gray-50">
+                            <div className="flex items-center space-x-4 flex-1">
+                              <div className={`text-right flex-1 ${fixture.homeTeamInLeague ? 'font-semibold text-blue-600' : 'text-gray-700'}`}>
+                                {fixture.homeTeam}
+                                {fixture.goalsHome !== null && fixture.goalsHome !== undefined && (
+                                  <span className={`ml-2 text-lg ${fixture.winner === fixture.homeTeam ? 'text-green-600 font-bold' : 'text-gray-600'}`}>
+                                    {fixture.goalsHome}
+                                  </span>
+                                )}
+                              </div>
+                              <div className="text-gray-400 font-semibold">-</div>
+                              <div className={`text-left flex-1 ${fixture.awayTeamInLeague ? 'font-semibold text-blue-600' : 'text-gray-700'}`}>
+                                {fixture.goalsAway !== null && fixture.goalsAway !== undefined && (
+                                  <span className={`mr-2 text-lg ${fixture.winner === fixture.awayTeam ? 'text-green-600 font-bold' : 'text-gray-600'}`}>
+                                    {fixture.goalsAway}
+                                  </span>
+                                )}
+                                {fixture.awayTeam}
+                              </div>
+                            </div>
+                            <div className="text-sm text-gray-500 ml-4">
+                              <span className="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-semibold">
+                                {fixture.status === 'ft' || fixture.status === 'finished' ? 'FT' : fixture.status.toUpperCase()}
+                              </span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  
+                  <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                    <p className="text-sm text-blue-800">
+                      <strong>Note:</strong> Teams in <span className="font-semibold text-blue-600">blue</span> are part of this league. 
+                      After matches complete on Nov 29-30, scores will be updated automatically.
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Standings */}
           {league.status === "active" && (
             <div className="bg-white border border-gray-200 rounded-lg p-6 mt-8">
