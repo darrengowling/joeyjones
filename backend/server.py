@@ -233,39 +233,98 @@ app = FastAPI(lifespan=lifespan)
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
 
-# Health check endpoint (Production Hardening - Days 9-10)
+# ===== HEALTH CHECK ENDPOINT (Production Hardening Day 10) =====
 @api_router.get("/health")
 async def health_check():
     """
-    Health check endpoint for monitoring and connectivity testing
-    Returns system status including database connectivity
+    System health check endpoint
+    Returns 200 (healthy) or 503 (degraded)
     """
-    health_status = {
-        "status": "healthy",
-        "timestamp": datetime.now(timezone.utc).isoformat(),
-        "services": {}
-    }
-    
-    # Check database connectivity
     try:
+        # Check database connectivity
         await db.command("ping")
-        health_status["services"]["database"] = "healthy"
+        return {
+            "status": "healthy",
+            "database": "connected",
+            "timestamp": datetime.now(timezone.utc).isoformat()
+        }
     except Exception as e:
-        health_status["status"] = "degraded"
-        health_status["services"]["database"] = "unhealthy"
-        health_status["error"] = str(e)
+        logger.error(f"Health check failed: {str(e)}")
+        return JSONResponse(
+            status_code=503,
+            content={
+                "status": "degraded",
+                "database": "disconnected",
+                "error": str(e)
+            }
+        )
+
+
+# ===== SPORTS DATA API ENDPOINTS (Day 13) =====
+@api_router.post("/fixtures/update-scores")
+async def update_fixture_scores(fixture_ids: List[str] = None):
+    """
+    Manually trigger fixture score updates from API-FOOTBALL
+    If fixture_ids provided, update only those fixtures
+    Otherwise, update all EPL fixtures for Nov 29-30, 2025
+    """
+    from sports_data_client import update_fixtures_from_api
     
-    # Check if API is responding
-    health_status["services"]["api"] = "healthy"
-    
-    # Return appropriate status code
-    status_code = 200 if health_status["status"] == "healthy" else 503
-    
-    return Response(
-        content=json.dumps(health_status),
-        status_code=status_code,
-        media_type="application/json"
-    )
+    try:
+        result = await update_fixtures_from_api(db, fixture_ids)
+        return {
+            "status": "completed",
+            "updated": result["updated"],
+            "errors": result.get("errors", []),
+            "api_requests_remaining": result.get("requests_remaining", 0),
+            "timestamp": datetime.now(timezone.utc).isoformat()
+        }
+    except Exception as e:
+        logger.error(f"Error updating fixture scores: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error updating scores: {str(e)}")
+
+
+@api_router.get("/fixtures")
+async def get_fixtures(sport_key: str = "football", date: str = None):
+    """
+    Get all fixtures for a sport, optionally filtered by date
+    Date format: YYYY-MM-DD
+    """
+    try:
+        query = {"sportKey": sport_key}
+        
+        if date:
+            query["matchDate"] = {
+                "$gte": f"{date}T00:00:00Z",
+                "$lte": f"{date}T23:59:59Z"
+            }
+        
+        fixtures = await db.fixtures.find(query).to_list(length=None)
+        
+        return {
+            "fixtures": fixtures,
+            "count": len(fixtures)
+        }
+    except Exception as e:
+        logger.error(f"Error fetching fixtures: {str(e)}")
+        raise HTTPException(status_code=500, detail="Error fetching fixtures")
+
+
+@api_router.get("/fixtures/{fixture_id}")
+async def get_fixture_by_id(fixture_id: str):
+    """Get detailed information for a specific fixture"""
+    try:
+        fixture = await db.fixtures.find_one({"id": fixture_id})
+        
+        if not fixture:
+            raise HTTPException(status_code=404, detail="Fixture not found")
+        
+        return fixture
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error fetching fixture {fixture_id}: {str(e)}")
+        raise HTTPException(status_code=500, detail="Error fetching fixture")
 
 # Add metrics endpoint to API router
 @api_router.get("/metrics")
