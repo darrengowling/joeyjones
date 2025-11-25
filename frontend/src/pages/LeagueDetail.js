@@ -29,6 +29,9 @@ export default function LeagueDetail() {
   const [selectedAssetIds, setSelectedAssetIds] = useState([]);
   const [editingAssets, setEditingAssets] = useState(false);
   const [loadingAssetSelection, setLoadingAssetSelection] = useState(false);
+  // Fixtures state
+  const [fixtures, setFixtures] = useState([]);
+  const [loadingFixtures, setLoadingFixtures] = useState(false);
 
   // Use shared socket room hook
   const { socket, connected, ready, listenerCount } = useSocketRoom('league', leagueId, { user });
