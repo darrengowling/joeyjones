@@ -216,6 +216,18 @@ export default function LeagueDetail() {
     }
   };
 
+  const loadFixtures = async () => {
+    setLoadingFixtures(true);
+    try {
+      const response = await axios.get(`${API}/leagues/${leagueId}/fixtures`);
+      setFixtures(response.data.fixtures || []);
+    } catch (e) {
+      console.error("Error loading fixtures:", e);
+    } finally {
+      setLoadingFixtures(false);
+    }
+  };
+
   const loadAssets = async () => {
     setLoadingAssets(true);
     try {
