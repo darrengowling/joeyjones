@@ -46,6 +46,7 @@ export default function LeagueDetail() {
     loadLeague();
     loadParticipants();
     loadStandings();
+    loadFixtures();
     loadAssets();
   }, [leagueId]);
 
