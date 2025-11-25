@@ -997,7 +997,22 @@ export default function LeagueDetail() {
           {/* Fixtures Section */}
           {fixtures.length > 0 && (
             <div className="bg-white border border-gray-200 rounded-lg p-6 mt-8">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Match Fixtures</h3>
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-lg font-semibold text-gray-900">Match Fixtures</h3>
+                {isCommissioner && (
+                  <button
+                    onClick={handleUpdateScores}
+                    disabled={loadingFixtures}
+                    className={`px-4 py-2 rounded-lg font-semibold text-sm ${
+                      loadingFixtures
+                        ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                        : "bg-green-600 text-white hover:bg-green-700"
+                    }`}
+                  >
+                    {loadingFixtures ? "Updating..." : "Update Match Scores"}
+                  </button>
+                )}
+              </div>
               
               {loadingFixtures ? (
                 <p className="text-gray-500 text-center py-4">Loading fixtures...</p>
