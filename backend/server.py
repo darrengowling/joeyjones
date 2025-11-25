@@ -738,8 +738,19 @@ async def get_league_assets(league_id: str, search: Optional[str] = None, page: 
 
 # ===== CLUB ENDPOINTS =====
 @api_router.get("/clubs", response_model=List[Club])
-async def get_clubs():
-    clubs = await db.clubs.find().to_list(100)
+async def get_clubs(competition: str = None):
+    """
+    Get all football clubs, optionally filtered by competition
+    competition: 'EPL', 'UCL', or None for all
+    """
+    query = {}
+    if competition:
+        if competition.upper() == "EPL":
+            query["competitionShort"] = "EPL"
+        elif competition.upper() == "UCL":
+            query["competitionShort"] = "UCL"
+    
+    clubs = await db.clubs.find(query).to_list(100)
     return [Club(**club) for club in clubs]
 
 @api_router.post("/clubs/seed")
