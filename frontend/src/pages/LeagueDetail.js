@@ -1087,10 +1087,15 @@ export default function LeagueDetail() {
                   )}
                   
                   <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                    <p className="text-sm text-blue-800">
-                      <strong>Note:</strong> Teams in <span className="font-semibold text-blue-600">blue</span> are part of this league. 
-                      After matches complete on Nov 29-30, scores will be updated automatically.
+                    <p className="text-sm text-blue-800 mb-2">
+                      <strong>Note:</strong> Teams in <span className="font-semibold text-blue-600">blue</span> are part of this league.
                     </p>
+                    {isCommissioner && (
+                      <p className="text-sm text-blue-800">
+                        <strong>Commissioner:</strong> After matches complete (Nov 29-30), click <strong>"Update Match Scores"</strong> above to fetch latest results. 
+                        Then click <strong>"Recompute Scores"</strong> in the Standings section to update league rankings.
+                      </p>
+                    )}
                   </div>
                 </div>
               )}
