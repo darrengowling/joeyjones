@@ -283,14 +283,69 @@ export default function CreateLeague() {
                 {/* Team Checklist (only visible when "select" mode) */}
                 {teamMode === "select" && (
                   <div className="border rounded-lg p-4 bg-gray-50">
-                    <div className="mb-3">
+                    {/* Competition Filter for Football */}
+                    {form.sportKey === "football" && (
+                      <div className="mb-3">
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Filter by Competition</label>
+                        <select
+                          className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          onChange={(e) => {
+                            const filter = e.target.value;
+                            if (filter === "all") {
+                              setAssetSearchTerm("");
+                            } else if (filter === "epl") {
+                              // EPL teams have uefaId starting with "EPL_" or are specific teams
+                              const eplTeams = availableAssets.filter(asset => 
+                                asset.uefaId?.startsWith("EPL_") || 
+                                ["Brentford", "Burnley", "Leeds United", "Sunderland", "Crystal Palace", 
+                                 "Everton", "Fulham", "Manchester United", "Newcastle United", 
+                                 "Nottingham Forest", "Tottenham Hotspur", "West Ham United", 
+                                 "Wolverhampton Wanderers", "AFC Bournemouth", "Brighton & Hove Albion", "Chelsea"].includes(asset.name)
+                              );
+                              setSelectedAssets(eplTeams.map(t => t.id));
+                            } else if (filter === "cl") {
+                              // CL teams don't have EPL_ prefix
+                              const clTeams = availableAssets.filter(asset => 
+                                asset.uefaId && !asset.uefaId.startsWith("EPL_")
+                              );
+                              setSelectedAssets(clTeams.map(t => t.id));
+                            }
+                          }}
+                        >
+                          <option value="all">All Teams (52)</option>
+                          <option value="epl">Premier League Only (~20)</option>
+                          <option value="cl">Champions League Only (~36)</option>
+                        </select>
+                      </div>
+                    )}
+                    
+                    <div className="mb-3 flex gap-2">
                       <input
                         type="text"
                         placeholder="Search teams..."
-                        className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="flex-1 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                         value={assetSearchTerm}
                         onChange={(e) => setAssetSearchTerm(e.target.value)}
                       />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const filtered = availableAssets.filter(asset => 
+                            asset.name.toLowerCase().includes(assetSearchTerm.toLowerCase())
+                          );
+                          setSelectedAssets(filtered.map(a => a.id));
+                        }}
+                        className="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-semibold"
+                      >
+                        Select All
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setSelectedAssets([])}
+                        className="px-3 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 text-sm font-semibold"
+                      >
+                        Clear
+                      </button>
                     </div>
                     
                     <div className="max-h-64 overflow-y-auto space-y-2" data-testid="rules-team-checklist">
