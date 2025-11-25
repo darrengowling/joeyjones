@@ -120,6 +120,10 @@ class Club(BaseModel):
     uefaId: str
     country: str
     logo: Optional[str] = None
+    competition: Optional[str] = None  # e.g., "English Premier League", "UEFA Champions League"
+    competitionShort: Optional[str] = None  # e.g., "EPL", "UCL"
+    competitions: Optional[List[str]] = None  # For clubs in multiple competitions
+    apiFootballId: Optional[str] = None  # API-FOOTBALL team ID for score updates
 
 # League Models
 class League(BaseModel):
