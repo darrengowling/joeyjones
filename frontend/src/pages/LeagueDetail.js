@@ -228,6 +228,31 @@ export default function LeagueDetail() {
     }
   };
 
+  const handleUpdateScores = async () => {
+    setLoadingFixtures(true);
+    try {
+      const response = await axios.post(`${API}/fixtures/update-scores`);
+      
+      if (response.data.updated > 0) {
+        toast.success(`Updated ${response.data.updated} match results! Refresh to see scores.`);
+        // Reload fixtures to show updated scores
+        await loadFixtures();
+      } else {
+        toast.info("No new match results available yet. Check again after matches complete.");
+      }
+      
+      // Show API usage info
+      if (response.data.api_requests_remaining !== undefined) {
+        console.log(`API requests remaining today: ${response.data.api_requests_remaining}/100`);
+      }
+    } catch (e) {
+      console.error("Error updating scores:", e);
+      toast.error(e.response?.data?.detail || "Failed to update scores. Please try again.");
+    } finally {
+      setLoadingFixtures(false);
+    }
+  };
+
   const loadAssets = async () => {
     setLoadingAssets(true);
     try {
