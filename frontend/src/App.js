@@ -369,7 +369,7 @@ const Home = () => {
     setJoiningLeague(true);
     try {
       // Trim whitespace and normalize token (handle copy-paste issues)
-      const normalizedToken = inviteToken.trim().toLowerCase();
+      const normalizedToken = inviteToken.trim();
       
       if (!normalizedToken) {
         toast.error("Please enter an invite token");
@@ -377,21 +377,20 @@ const Home = () => {
         return;
       }
 
-      // Find league by invite token (case-insensitive)
-      const leaguesResponse = await axios.get(`${API}/leagues`);
-      const league = leaguesResponse.data.find((l) => 
-        l.inviteToken.trim().toLowerCase() === normalizedToken
-      );
+      // Find league by invite token using dedicated endpoint (fixes issue with 100+ leagues)
+      const tokenSearchResponse = await axios.get(`${API}/leagues/by-token/${normalizedToken}`);
       
-      if (!league) {
-        toast.error(`Invalid invite token "${inviteToken.trim()}". Please check with your commissioner.`);
+      if (!tokenSearchResponse.data.found) {
+        toast.error(`Invalid invite token "${normalizedToken}". Please check with your commissioner.`);
         setJoiningLeague(false);
         return;
       }
 
+      const league = tokenSearchResponse.data.league;
+
       await axios.post(`${API}/leagues/${league.id}/join`, {
         userId: user.id,
-        inviteToken: inviteToken.trim(), // Send trimmed token to backend
+        inviteToken: normalizedToken, // Send trimmed token to backend
       });
 
       toast.success(`Successfully joined "${league.name}"! Ready to start bidding.`);
