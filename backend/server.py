@@ -736,7 +736,7 @@ async def get_league_assets(league_id: str, search: Optional[str] = None, page: 
     
     # For football, return all clubs (not paginated assets)
     if sport_key == "football":
-        clubs = await db.clubs.find().to_list(100)
+        clubs = await db.clubs.find({}, {"_id": 0}).to_list(100)
         clubs_as_models = [Club(**club) for club in clubs]
         # Format to match asset_service response structure
         return {
@@ -989,7 +989,7 @@ async def join_league(league_id: str, participant_input: LeagueParticipantCreate
     }, room=f"league:{league_id}")
     
     # Send complete member list to ALL users in league room
-    all_participants = await db.league_participants.find({"leagueId": league_id}).to_list(100)
+    all_participants = await db.league_participants.find({"leagueId": league_id}, {"_id": 0}).to_list(100)
     members = []
     for p in all_participants:
         members.append({
@@ -1029,7 +1029,7 @@ async def join_league(league_id: str, participant_input: LeagueParticipantCreate
 @api_router.get("/leagues/{league_id}/participants")
 async def get_league_participants(league_id: str):
     """Prompt A: Server-authoritative participants with count - normalized response"""
-    participants = await db.league_participants.find({"leagueId": league_id}).to_list(100)
+    participants = await db.league_participants.find({"leagueId": league_id}, {"_id": 0}).to_list(100)
     
     # Normalize participant data with safe defaults
     normalized_participants = []
@@ -1051,7 +1051,7 @@ async def get_league_participants(league_id: str):
 @api_router.get("/leagues/{league_id}/members")
 async def get_league_members(league_id: str):
     """Prompt A: Get ordered league members for real-time updates"""
-    participants = await db.league_participants.find({"leagueId": league_id}).sort("joinedAt", 1).to_list(100)
+    participants = await db.league_participants.find({"leagueId": league_id}, {"_id": 0}).sort("joinedAt", 1).to_list(100)
     
     # Return simplified member list
     members = []
@@ -1074,7 +1074,7 @@ async def get_my_competitions(userId: str):
         raise HTTPException(status_code=404, detail="Feature not available")
     
     # Find all leagues where user is a participant
-    participants = await db.league_participants.find({"userId": userId}).to_list(100)
+    participants = await db.league_participants.find({"userId": userId}, {"_id": 0}).to_list(100)
     league_ids = [p["leagueId"] for p in participants]
     
     if not league_ids:
@@ -1223,7 +1223,7 @@ async def get_league_summary(league_id: str, userId: str):
     user_budget_remaining = participant.get("budgetRemaining", 0) if participant else 0
     
     # Get all managers with their rosters (Everton Bug Fix 5: Roster Visibility)
-    participants = await db.league_participants.find({"leagueId": league_id}).to_list(100)
+    participants = await db.league_participants.find({"leagueId": league_id}, {"_id": 0}).to_list(100)
     managers = []
     
     for p in participants:
@@ -1306,7 +1306,7 @@ async def get_league_standings(league_id: str):
         raise HTTPException(status_code=404, detail="League not found")
     
     # Always get current participants to ensure standings reflect all members
-    participants = await db.league_participants.find({"leagueId": league_id}).to_list(100)
+    participants = await db.league_participants.find({"leagueId": league_id}, {"_id": 0}).to_list(100)
     
     # Check if standings exist
     standing = await db.standings.find_one({"leagueId": league_id})
@@ -1389,10 +1389,10 @@ async def get_match_breakdown(league_id: str):
     }, {"_id": 0}).sort("startsAt", 1).to_list(100)
     
     # Get all participants
-    participants = await db.league_participants.find({"leagueId": league_id}).to_list(100)
+    participants = await db.league_participants.find({"leagueId": league_id}, {"_id": 0}).to_list(100)
     
     # Get league stats (contains per-player/team per-match scoring)
-    league_stats = await db.league_stats.find({"leagueId": league_id}).to_list(1000)
+    league_stats = await db.league_stats.find({"leagueId": league_id}, {"_id": 0}).to_list(1000)
     
     # Build match names from fixtures
     match_names = []
@@ -1762,11 +1762,11 @@ async def get_available_assets_for_league(league_id: str):
     
     if sport_key == "football":
         # Get all clubs
-        assets = await db.clubs.find().to_list(100)
+        assets = await db.clubs.find({}, {"_id": 0}).to_list(100)
         return [{"id": asset["id"], "name": asset["name"], "country": asset.get("country")} for asset in assets]
     else:
         # Get assets for other sports
-        assets = await db.assets.find({"sportKey": sport_key}).to_list(100)
+        assets = await db.assets.find({"sportKey": sport_key}, {"_id": 0}).to_list(100)
         return [{"id": asset["id"], "name": asset["name"], "meta": asset.get("meta")} for asset in assets]
 
 @api_router.delete("/leagues/{league_id}")
@@ -2100,7 +2100,7 @@ async def ingest_cricket_scoring(league_id: str, file: UploadFile = File(...)):
         
         # Update standings table with aggregated stats per manager
         # Get all participants to calculate their total points from owned players
-        participants = await db.league_participants.find({"leagueId": league_id}).to_list(100)
+        participants = await db.league_participants.find({"leagueId": league_id}, {"_id": 0}).to_list(100)
         
         updated_table = []
         for participant in participants:
@@ -2310,9 +2310,9 @@ async def start_auction(league_id: str):
     else:
         # Use all available assets for this sport (default behavior or feature flag OFF)
         if sport_key == "football":
-            all_assets = await db.clubs.find().to_list(100)
+            all_assets = await db.clubs.find({}, {"_id": 0}).to_list(100)
         else:
-            all_assets = await db.assets.find({"sportKey": sport_key}).to_list(100)
+            all_assets = await db.assets.find({"sportKey": sport_key}, {"_id": 0}).to_list(100)
         
         logger.info("auction.seed_queue", extra={
             "leagueId": league_id,
@@ -2656,7 +2656,7 @@ async def get_auction_clubs(auction_id: str):
         }).to_list(len(club_queue))
     
     # Get all bids to determine sold clubs
-    all_bids = await db.bids.find({"auctionId": auction_id}).to_list(1000)
+    all_bids = await db.bids.find({"auctionId": auction_id}, {"_id": 0}).to_list(1000)
     
     # Group bids by club to find winners
     bids_by_club = {}
@@ -2736,7 +2736,7 @@ async def get_auction(auction_id: str):
         raise HTTPException(status_code=404, detail="Auction not found")
     
     # Get all bids for this auction
-    bids = await db.bids.find({"auctionId": auction_id}).to_list(1000)
+    bids = await db.bids.find({"auctionId": auction_id}, {"_id": 0}).to_list(1000)
     
     # Get current asset if exists
     current_asset = None
@@ -2948,7 +2948,7 @@ async def place_bid(auction_id: str, bid_input: BidCreate):
     
     # DIAGNOSTIC: Check what completion status should be after this bid
     league = await db.leagues.find_one({"id": auction["leagueId"]})
-    participants = await db.league_participants.find({"leagueId": auction["leagueId"]}).to_list(100)
+    participants = await db.league_participants.find({"leagueId": auction["leagueId"]}, {"_id": 0}).to_list(100)
     auction_state = {
         "lots_sold": sum(1 for p in participants for c in p.get("clubsWon", [])),
         "current_lot": auction.get("currentLot", 0),
@@ -2977,7 +2977,7 @@ async def start_lot(auction_id: str, club_id: str):
     
     # DIAGNOSTIC: Check completion status before starting next lot
     league = await db.leagues.find_one({"id": auction["leagueId"]})
-    participants = await db.league_participants.find({"leagueId": auction["leagueId"]}).to_list(100)
+    participants = await db.league_participants.find({"leagueId": auction["leagueId"]}, {"_id": 0}).to_list(100)
     auction_state = {
         "lots_sold": sum(1 for p in participants for c in p.get("clubsWon", [])),
         "current_lot": auction.get("currentLot", 0),
@@ -3044,7 +3044,7 @@ async def complete_lot(auction_id: str):
     bids = await db.bids.find({
         "auctionId": auction_id,
         "clubId": current_club_id
-    }).sort("amount", -1).to_list(1)
+    }, {"_id": 0}).sort("amount", -1).to_list(1)
     
     winning_bid = bids[0] if bids else None
     
@@ -3107,7 +3107,7 @@ async def complete_lot(auction_id: str):
         logger.info(f"Club unsold - {current_club_id} moved to end of queue")
     
     # Get updated participants
-    participants = await db.league_participants.find({"leagueId": auction["leagueId"]}).to_list(100)
+    participants = await db.league_participants.find({"leagueId": auction["leagueId"]}, {"_id": 0}).to_list(100)
     for p in participants:
         p.pop('_id', None)
     
@@ -3194,7 +3194,7 @@ async def get_next_club_to_auction(auction_id: str) -> Optional[str]:
     # Initial round complete - check for unsold clubs
     if unsold_clubs:
         # Check if any participants can still bid (budget + roster slots) - Prompt C
-        participants = await db.league_participants.find({"leagueId": auction["leagueId"]}).to_list(100)
+        participants = await db.league_participants.find({"leagueId": auction["leagueId"]}, {"_id": 0}).to_list(100)
         league = await db.leagues.find_one({"id": auction["leagueId"]})
         minimum_budget = auction.get("minimumBudget", 1000000.0)
         max_slots = league.get("clubSlots", 3) if league else 3
@@ -3317,7 +3317,7 @@ async def check_auction_completion(auction_id: str, final_club_id: str = None, f
     unsold_clubs = auction.get("unsoldClubs", [])
     club_queue = auction.get("clubQueue", [])
     current_lot = auction.get("currentLot", 0)
-    participants = await db.league_participants.find({"leagueId": auction["leagueId"]}).to_list(100)
+    participants = await db.league_participants.find({"leagueId": auction["leagueId"]}, {"_id": 0}).to_list(100)
     minimum_budget = auction.get("minimumBudget", 1000000.0)
     max_slots = league.get("clubSlots", 3)
     
@@ -3590,7 +3590,7 @@ async def delete_auction(auction_id: str, commissioner_id: str = None):
     bid_result = await db.bids.delete_many({"auctionId": auction_id})
     
     # Reset participant budgets and clubs won (since auction is being deleted)
-    participants = await db.league_participants.find({"leagueId": auction["leagueId"]}).to_list(100)
+    participants = await db.league_participants.find({"leagueId": auction["leagueId"]}, {"_id": 0}).to_list(100)
     for participant in participants:
         await db.league_participants.update_one(
             {"id": participant["id"]},
@@ -3721,7 +3721,7 @@ async def rejoin_rooms(sid, data):
     logger.info(f"🔄 Rejoining rooms for user {user_id} (socket {sid})")
     
     # Find all leagues this user participates in
-    participants = await db.league_participants.find({"userId": user_id}).to_list(100)
+    participants = await db.league_participants.find({"userId": user_id}, {"_id": 0}).to_list(100)
     
     for participant in participants:
         league_id = participant["leagueId"]
@@ -3811,7 +3811,7 @@ async def join_auction(sid, data):
             bids = await db.bids.find({
                 "auctionId": auction_id,
                 "clubId": auction["currentClubId"]
-            }).to_list(100)
+            }, {"_id": 0}).to_list(100)
             current_bids = [Bid(**b).model_dump(mode='json') for b in bids]
         
         # Create timer data if timer is active
@@ -3832,7 +3832,7 @@ async def join_auction(sid, data):
                 logger.info(f"Auction snapshot timer data - seq: {timer_data['seq']}, endsAt: {timer_data['endsAt']}")
         
         # Get participants
-        participants = await db.league_participants.find({"leagueId": auction["leagueId"]}).to_list(100)
+        participants = await db.league_participants.find({"leagueId": auction["leagueId"]}, {"_id": 0}).to_list(100)
         
         # Remove MongoDB _id field
         for p in participants:
@@ -3843,7 +3843,7 @@ async def join_auction(sid, data):
         unsold_clubs = auction.get("unsoldClubs", [])
         
         # Calculate sold clubs (all bids with winners)
-        all_bids = await db.bids.find({"auctionId": auction_id}).to_list(1000)
+        all_bids = await db.bids.find({"auctionId": auction_id}, {"_id": 0}).to_list(1000)
         sold_club_ids = set()
         for bid in all_bids:
             if bid.get("clubId"):
@@ -3919,7 +3919,7 @@ async def join_league(sid, data):
     }))
     
     # Get all participants for sync
-    participants = await db.league_participants.find({"leagueId": league_id}).to_list(100)
+    participants = await db.league_participants.find({"leagueId": league_id}, {"_id": 0}).to_list(100)
     members = []
     for p in participants:
         members.append({
