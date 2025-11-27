@@ -349,7 +349,7 @@ async def get_league_fixtures(league_id: str):
     """
     try:
         # Get league details
-        league = await db.leagues.find_one({"id": league_id})
+        league = await db.leagues.find_one({"id": league_id}, {"_id": 0})
         if not league:
             raise HTTPException(status_code=404, detail="League not found")
         
@@ -477,7 +477,7 @@ logger = logging.getLogger(__name__)
 @api_router.post("/users", response_model=User)
 async def create_user(input: UserCreate):
     # Check if user exists
-    existing = await db.users.find_one({"email": input.email})
+    existing = await db.users.find_one({"email": input.email}, {"_id": 0})
     if existing:
         return User(**existing)
     
@@ -487,7 +487,7 @@ async def create_user(input: UserCreate):
 
 @api_router.get("/users/{user_id}", response_model=User)
 async def get_user(user_id: str):
-    user = await db.users.find_one({"id": user_id})
+    user = await db.users.find_one({"id": user_id}, {"_id": 0})
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     return User(**user)
@@ -510,7 +510,7 @@ async def send_magic_link(email_input: dict, request: Request):
         raise HTTPException(status_code=400, detail="Valid email required")
     
     # Check if user exists, create if not
-    user = await db.users.find_one({"email": email})
+    user = await db.users.find_one({"email": email}, {"_id": 0})
     if not user:
         # Create new user
         user_create = UserCreate(name=email.split("@")[0], email=email)
@@ -576,7 +576,7 @@ async def verify_magic_link(token_input: dict):
     magic_link = await db.magic_links.find_one({
         "email": email,
         "tokenHash": token_hash
-    })
+    }, {"_id": 0})
     
     if not magic_link:
         raise HTTPException(status_code=401, detail="Invalid or expired magic link")
@@ -604,7 +604,7 @@ async def verify_magic_link(token_input: dict):
     )
     
     # Find user
-    user = await db.users.find_one({"email": email})
+    user = await db.users.find_one({"email": email}, {"_id": 0})
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     
@@ -667,7 +667,7 @@ async def refresh_access_token(refresh_token_input: dict):
         raise HTTPException(status_code=401, detail="Invalid token payload")
     
     # Find user
-    user = await db.users.find_one({"id": user_id})
+    user = await db.users.find_one({"id": user_id}, {"_id": 0})
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     
@@ -696,7 +696,7 @@ async def get_current_user_info(current_user: dict = Depends(get_current_user)):
     Get current authenticated user information
     Requires valid JWT token
     """
-    user = await db.users.find_one({"id": current_user["id"]})
+    user = await db.users.find_one({"id": current_user["id"]}, {"_id": 0})
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     
@@ -728,7 +728,7 @@ async def get_assets(sportKey: str, search: Optional[str] = None, page: int = 1,
 async def get_league_assets(league_id: str, search: Optional[str] = None, page: int = 1, pageSize: int = 100):
     """Get assets for a specific league based on its sportKey"""
     # Get league to determine sportKey
-    league = await db.leagues.find_one({"id": league_id})
+    league = await db.leagues.find_one({"id": league_id}, {"_id": 0})
     if not league:
         raise HTTPException(status_code=404, detail="League not found")
     
@@ -906,7 +906,7 @@ async def get_league_by_token(invite_token: str):
 
 @api_router.get("/leagues/{league_id}", response_model=League)
 async def get_league(league_id: str):
-    league = await db.leagues.find_one({"id": league_id})
+    league = await db.leagues.find_one({"id": league_id}, {"_id": 0})
     if not league:
         raise HTTPException(status_code=404, detail="League not found")
     return League(**league)
@@ -914,7 +914,7 @@ async def get_league(league_id: str):
 @api_router.post("/leagues/{league_id}/join")
 async def join_league(league_id: str, participant_input: LeagueParticipantCreate):
     # Verify league exists
-    league = await db.leagues.find_one({"id": league_id})
+    league = await db.leagues.find_one({"id": league_id}, {"_id": 0})
     if not league:
         raise HTTPException(status_code=404, detail="League not found")
     
@@ -931,7 +931,7 @@ async def join_league(league_id: str, participant_input: LeagueParticipantCreate
     existing = await db.league_participants.find_one({
         "leagueId": league_id,
         "userId": participant_input.userId
-    })
+    }, {"_id": 0})
     if existing:
         return {"message": "Already joined", "participant": LeagueParticipant(**existing)}
     
@@ -941,7 +941,7 @@ async def join_league(league_id: str, participant_input: LeagueParticipantCreate
         raise HTTPException(status_code=400, detail="League is full")
     
     # Get user details
-    user = await db.users.find_one({"id": participant_input.userId})
+    user = await db.users.find_one({"id": participant_input.userId}, {"_id": 0})
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     
@@ -1010,7 +1010,7 @@ async def join_league(league_id: str, participant_input: LeagueParticipantCreate
     }, room=f"league:{league_id}")
     
     # Prompt A: Also emit to auction room if auction exists and is in waiting state
-    auction = await db.auctions.find_one({"leagueId": league_id, "status": "waiting"})
+    auction = await db.auctions.find_one({"leagueId": league_id, "status": "waiting"}, {"_id": 0})
     if auction:
         await sio.emit('participants_changed', {
             'leagueId': league_id,
@@ -1086,7 +1086,7 @@ async def get_my_competitions(userId: str):
     competitions = []
     for league in leagues:
         # Determine league status
-        auction = await db.auctions.find_one({"leagueId": league["id"]})
+        auction = await db.auctions.find_one({"leagueId": league["id"]}, {"_id": 0})
         if not auction:
             status = "pre_auction"
         elif auction["status"] == "active":
@@ -1111,10 +1111,10 @@ async def get_my_competitions(userId: str):
             # Get asset details - query correct collection based on sport
             sport_key = league.get("sportKey", "football")
             if sport_key == "football":
-                asset = await db.clubs.find_one({"id": asset_id})
+                asset = await db.clubs.find_one({"id": asset_id}, {"_id": 0})
             else:
                 # For cricket and other sports, use assets collection
-                asset = await db.assets.find_one({"id": asset_id})
+                asset = await db.assets.find_one({"id": asset_id}, {"_id": 0})
             
             if asset:
                 # Get name from appropriate field based on sport
@@ -1176,20 +1176,20 @@ async def get_league_summary(league_id: str, userId: str):
     if not FEATURE_MY_COMPETITIONS:
         raise HTTPException(status_code=404, detail="Feature not available")
     
-    league = await db.leagues.find_one({"id": league_id})
+    league = await db.leagues.find_one({"id": league_id}, {"_id": 0})
     if not league:
         raise HTTPException(status_code=404, detail="League not found")
     
     # Get commissioner details
-    commissioner = await db.users.find_one({"id": league["commissionerId"]})
+    commissioner = await db.users.find_one({"id": league["commissionerId"]}, {"_id": 0})
     
     # Get user's roster with enriched details (name and price)
-    participant = await db.league_participants.find_one({"leagueId": league_id, "userId": userId})
+    participant = await db.league_participants.find_one({"leagueId": league_id, "userId": userId}, {"_id": 0})
     asset_ids = participant.get("clubsWon", []) if participant else []
     
     # Enrich roster with asset names and prices
     user_roster = []
-    auction = await db.auctions.find_one({"leagueId": league_id})
+    auction = await db.auctions.find_one({"leagueId": league_id}, {"_id": 0})
     
     for asset_id in asset_ids:
         # Get the winning bid for this asset
@@ -1202,9 +1202,9 @@ async def get_league_summary(league_id: str, userId: str):
         # Get asset details
         sport_key = league.get("sportKey", "football")
         if sport_key == "football":
-            asset = await db.clubs.find_one({"id": asset_id})
+            asset = await db.clubs.find_one({"id": asset_id}, {"_id": 0})
         else:
-            asset = await db.assets.find_one({"id": asset_id, "sportKey": sport_key})
+            asset = await db.assets.find_one({"id": asset_id, "sportKey": sport_key}, {"_id": 0})
         
         if asset:
             user_roster.append({
@@ -1242,9 +1242,9 @@ async def get_league_summary(league_id: str, userId: str):
             # Get asset details
             sport_key = league.get("sportKey", "football")
             if sport_key == "football":
-                asset = await db.clubs.find_one({"id": asset_id})
+                asset = await db.clubs.find_one({"id": asset_id}, {"_id": 0})
             else:
-                asset = await db.assets.find_one({"id": asset_id, "sportKey": sport_key})
+                asset = await db.assets.find_one({"id": asset_id, "sportKey": sport_key}, {"_id": 0})
             
             if asset:
                 manager_roster.append({
@@ -1301,7 +1301,7 @@ async def get_league_standings(league_id: str):
         raise HTTPException(status_code=404, detail="Feature not available")
     
     # Get league
-    league = await db.leagues.find_one({"id": league_id})
+    league = await db.leagues.find_one({"id": league_id}, {"_id": 0})
     if not league:
         raise HTTPException(status_code=404, detail="League not found")
     
@@ -1309,7 +1309,7 @@ async def get_league_standings(league_id: str):
     participants = await db.league_participants.find({"leagueId": league_id}, {"_id": 0}).to_list(100)
     
     # Check if standings exist
-    standing = await db.standings.find_one({"leagueId": league_id})
+    standing = await db.standings.find_one({"leagueId": league_id}, {"_id": 0})
     
     if not standing:
         # Create zeroed standings with ALL current participants
@@ -1376,7 +1376,7 @@ async def get_league_standings(league_id: str):
 @api_router.get("/leagues/{league_id}/match-breakdown")
 async def get_match_breakdown(league_id: str):
     """Get match-by-match scoring breakdown for all managers"""
-    league = await db.leagues.find_one({"id": league_id})
+    league = await db.leagues.find_one({"id": league_id}, {"_id": 0})
     if not league:
         raise HTTPException(status_code=404, detail="League not found")
     
@@ -1402,11 +1402,11 @@ async def get_match_breakdown(league_id: str):
         if fixture.get("homeAssetId") and fixture.get("awayAssetId"):
             # Get asset names for match label
             if sport_key == "football":
-                home = await db.clubs.find_one({"id": fixture["homeAssetId"]})
-                away = await db.clubs.find_one({"id": fixture["awayAssetId"]})
+                home = await db.clubs.find_one({"id": fixture["homeAssetId"]}, {"_id": 0})
+                away = await db.clubs.find_one({"id": fixture["awayAssetId"]}, {"_id": 0})
             else:
-                home = await db.assets.find_one({"id": fixture["homeAssetId"]})
-                away = await db.assets.find_one({"id": fixture["awayAssetId"]})
+                home = await db.assets.find_one({"id": fixture["homeAssetId"]}, {"_id": 0})
+                away = await db.assets.find_one({"id": fixture["awayAssetId"]}, {"_id": 0})
             
             home_name = home.get("name", "Team") if home else "Team"
             away_name = away.get("name", "Team") if away else "Team"
@@ -1432,10 +1432,10 @@ async def get_match_breakdown(league_id: str):
         for asset_id in asset_ids:
             # Get asset name
             if sport_key == "football":
-                asset = await db.clubs.find_one({"id": asset_id})
+                asset = await db.clubs.find_one({"id": asset_id}, {"_id": 0})
                 asset_name = asset.get("clubName") or asset.get("name", "Unknown") if asset else "Unknown"
             else:
-                asset = await db.assets.find_one({"id": asset_id})
+                asset = await db.assets.find_one({"id": asset_id}, {"_id": 0})
                 asset_name = asset.get("playerName") or asset.get("name", "Unknown") if asset else "Unknown"
             
             # Get scores for this asset across all matches
@@ -1489,7 +1489,7 @@ async def import_fixtures_csv(league_id: str, file: UploadFile = File(...), comm
         raise HTTPException(status_code=404, detail="Feature not available")
     
     # Verify league exists and get commissioner
-    league = await db.leagues.find_one({"id": league_id})
+    league = await db.leagues.find_one({"id": league_id}, {"_id": 0})
     if not league:
         raise HTTPException(status_code=404, detail="League not found")
     
@@ -1501,7 +1501,7 @@ async def import_fixtures_csv(league_id: str, file: UploadFile = File(...), comm
         )
     
     # Prompt 6: Validation - refuse import when auction is not auction_complete
-    auction = await db.auctions.find_one({"leagueId": league_id})
+    auction = await db.auctions.find_one({"leagueId": league_id}, {"_id": 0})
     if auction and auction["status"] != "completed":
         raise HTTPException(
             status_code=400,
@@ -1577,8 +1577,8 @@ async def import_fixtures_csv(league_id: str, file: UploadFile = File(...), comm
             
             # Look up asset IDs
             if sport_key == "football":
-                home_asset = await db.clubs.find_one({"uefaId": home_external_id})
-                away_asset = await db.clubs.find_one({"uefaId": away_external_id}) if away_external_id else None
+                home_asset = await db.clubs.find_one({"uefaId": home_external_id}, {"_id": 0})
+                away_asset = await db.clubs.find_one({"uefaId": away_external_id}, {"_id": 0}) if away_external_id else None
             else:
                 # For cricket, look up by externalId or name
                 home_asset = await db.assets.find_one({
@@ -1662,7 +1662,7 @@ async def clear_all_fixtures(league_id: str, commissionerId: str = Query(...)):
         raise HTTPException(status_code=404, detail="Feature not available")
     
     # Verify league exists and commissioner
-    league = await db.leagues.find_one({"id": league_id})
+    league = await db.leagues.find_one({"id": league_id}, {"_id": 0})
     if not league:
         raise HTTPException(status_code=404, detail="League not found")
     
@@ -1687,12 +1687,12 @@ async def clear_all_fixtures(league_id: str, commissionerId: str = Query(...)):
 async def update_league_assets(league_id: str, asset_ids: List[str]):
     """Prompt 1: Update selected assets for league (commissioner only)"""
     # Verify league exists
-    league = await db.leagues.find_one({"id": league_id})
+    league = await db.leagues.find_one({"id": league_id}, {"_id": 0})
     if not league:
         raise HTTPException(status_code=404, detail="League not found")
     
     # Check if auction has started (block edits after start)
-    existing_auction = await db.auctions.find_one({"leagueId": league_id})
+    existing_auction = await db.auctions.find_one({"leagueId": league_id}, {"_id": 0})
     if existing_auction:
         raise HTTPException(status_code=400, detail="Cannot edit teams after auction has started")
     
@@ -1754,7 +1754,7 @@ async def update_league_assets(league_id: str, asset_ids: List[str]):
 async def get_available_assets_for_league(league_id: str):
     """Prompt E: Get all available assets that can be selected for a league"""
     # Get league to determine sport
-    league = await db.leagues.find_one({"id": league_id})
+    league = await db.leagues.find_one({"id": league_id}, {"_id": 0})
     if not league:
         raise HTTPException(status_code=404, detail="League not found")
     
@@ -1772,7 +1772,7 @@ async def get_available_assets_for_league(league_id: str):
 @api_router.delete("/leagues/{league_id}")
 async def delete_league(league_id: str, commissioner_id: str = None, user_id: str = None):
     """Delete a league and all associated data - only commissioner can do this"""
-    league = await db.leagues.find_one({"id": league_id})
+    league = await db.leagues.find_one({"id": league_id}, {"_id": 0})
     if not league:
         raise HTTPException(status_code=404, detail="League not found")
     
@@ -1784,7 +1784,7 @@ async def delete_league(league_id: str, commissioner_id: str = None, user_id: st
         raise HTTPException(status_code=403, detail="Only the commissioner can delete this league")
     
     # Check if auction is active
-    existing_auction = await db.auctions.find_one({"leagueId": league_id})
+    existing_auction = await db.auctions.find_one({"leagueId": league_id}, {"_id": 0})
     if existing_auction and existing_auction["status"] == "active":
         raise HTTPException(status_code=400, detail="Cannot delete league with active auction. Pause or complete the auction first.")
     
@@ -1829,7 +1829,7 @@ async def update_league_scoring_overrides(league_id: str, request: dict):
     """Update scoring overrides for a cricket league (commissioner only)"""
     
     # Verify league exists
-    league = await db.leagues.find_one({"id": league_id})
+    league = await db.leagues.find_one({"id": league_id}, {"_id": 0})
     if not league:
         raise HTTPException(status_code=404, detail="League not found")
     
@@ -1897,7 +1897,7 @@ async def update_league_scoring_overrides(league_id: str, request: dict):
         raise HTTPException(status_code=500, detail="Failed to update scoring overrides")
     
     # Return updated league
-    updated_league = await db.leagues.find_one({"id": league_id})
+    updated_league = await db.leagues.find_one({"id": league_id}, {"_id": 0})
     return League(**updated_league)
 
 # ===== SCORING ENDPOINTS =====
@@ -1937,7 +1937,7 @@ async def ingest_cricket_scoring(league_id: str, file: UploadFile = File(...)):
     CSV columns: matchId, playerExternalId, runs, wickets, catches, stumpings, runOuts
     """
     # Verify league exists and get league data
-    league = await db.leagues.find_one({"id": league_id})
+    league = await db.leagues.find_one({"id": league_id}, {"_id": 0})
     if not league:
         raise HTTPException(status_code=404, detail="League not found")
     
@@ -1952,7 +1952,7 @@ async def ingest_cricket_scoring(league_id: str, file: UploadFile = File(...)):
     scoring_schema = league.get("scoringOverrides")
     if not scoring_schema:
         # Get default schema from sport
-        sport = await db.sports.find_one({"key": "cricket"})
+        sport = await db.sports.find_one({"key": "cricket"}, {"_id": 0})
         if not sport:
             raise HTTPException(status_code=500, detail="Cricket sport configuration not found")
         scoring_schema = sport.get("scoringSchema")
@@ -2123,7 +2123,7 @@ async def ingest_cricket_scoring(league_id: str, file: UploadFile = File(...)):
                 player_leaderboard = await db.cricket_leaderboard.find_one({
                     "leagueId": league_id,
                     "playerExternalId": player_ext_id
-                })
+                }, {"_id": 0})
                 if player_leaderboard:
                     manager_points += player_leaderboard.get("totalPoints", 0)
                     manager_runs += player_leaderboard.get("totalRuns", 0)
@@ -2194,7 +2194,7 @@ async def get_cricket_leaderboard(league_id: str):
     Get cricket leaderboard for a league
     """
     # Verify league exists
-    league = await db.leagues.find_one({"id": league_id})
+    league = await db.leagues.find_one({"id": league_id}, {"_id": 0})
     if not league:
         raise HTTPException(status_code=404, detail="League not found")
     
@@ -2219,7 +2219,7 @@ async def get_cricket_leaderboard(league_id: str):
 @api_router.post("/leagues/{league_id}/auction/start")
 async def start_auction(league_id: str):
     # Verify league exists
-    league = await db.leagues.find_one({"id": league_id})
+    league = await db.leagues.find_one({"id": league_id}, {"_id": 0})
     if not league:
         raise HTTPException(status_code=404, detail="League not found")
     
@@ -2246,7 +2246,7 @@ async def start_auction(league_id: str):
         raise HTTPException(status_code=400, detail=f"No assets available for {sport_key} sport. Please seed {sport_key} assets first.")
     
     # Check if auction already exists
-    existing_auction = await db.auctions.find_one({"leagueId": league_id})
+    existing_auction = await db.auctions.find_one({"leagueId": league_id}, {"_id": 0})
     if existing_auction:
         return {"message": "Auction already exists", "auctionId": existing_auction["id"]}
     
@@ -2389,9 +2389,9 @@ async def start_auction(league_id: str):
             # Get first asset
             first_asset_id = asset_queue[0]
             if sport_key == "football":
-                first_asset = await db.clubs.find_one({"id": first_asset_id})
+                first_asset = await db.clubs.find_one({"id": first_asset_id}, {"_id": 0})
             else:
-                first_asset = await db.assets.find_one({"id": first_asset_id, "sportKey": sport_key})
+                first_asset = await db.assets.find_one({"id": first_asset_id, "sportKey": sport_key}, {"_id": 0})
             
             if not first_asset:
                 raise HTTPException(status_code=404, detail="First asset not found")
@@ -2467,12 +2467,12 @@ async def get_league_state(league_id: str):
     Prompt B: Lightweight endpoint to get league status and active auction
     Returns: {leagueId, status, activeAuctionId (if exists)}
     """
-    league = await db.leagues.find_one({"id": league_id})
+    league = await db.leagues.find_one({"id": league_id}, {"_id": 0})
     if not league:
         raise HTTPException(status_code=404, detail="League not found")
     
     # Check for active auction
-    auction = await db.auctions.find_one({"leagueId": league_id})
+    auction = await db.auctions.find_one({"leagueId": league_id}, {"_id": 0})
     
     return {
         "leagueId": league_id,
@@ -2496,7 +2496,7 @@ async def begin_auction(
         raise HTTPException(status_code=404, detail="Waiting room feature is not enabled")
     
     # Verify auction exists and is waiting
-    auction = await db.auctions.find_one({"id": auction_id})
+    auction = await db.auctions.find_one({"id": auction_id}, {"_id": 0})
     if not auction:
         raise HTTPException(status_code=404, detail="Auction not found")
     
@@ -2504,7 +2504,7 @@ async def begin_auction(
         raise HTTPException(status_code=400, detail=f"Auction is not in waiting state (current: {auction['status']})")
     
     # Verify commissioner
-    league = await db.leagues.find_one({"id": auction["leagueId"]})
+    league = await db.leagues.find_one({"id": auction["leagueId"]}, {"_id": 0})
     if not league:
         raise HTTPException(status_code=404, detail="League not found")
     
@@ -2539,9 +2539,9 @@ async def begin_auction(
     # Get first asset details
     first_asset_id = asset_queue[0]
     if sport_key == "football":
-        first_asset = await db.clubs.find_one({"id": first_asset_id})
+        first_asset = await db.clubs.find_one({"id": first_asset_id}, {"_id": 0})
     else:
-        first_asset = await db.assets.find_one({"id": first_asset_id, "sportKey": sport_key})
+        first_asset = await db.assets.find_one({"id": first_asset_id, "sportKey": sport_key}, {"_id": 0})
     
     if not first_asset:
         raise HTTPException(status_code=404, detail="First asset not found")
@@ -2611,7 +2611,7 @@ async def begin_auction(
 @api_router.get("/leagues/{league_id}/auction")
 async def get_league_auction(league_id: str):
     """Get the auction for a specific league"""
-    auction = await db.auctions.find_one({"leagueId": league_id})
+    auction = await db.auctions.find_one({"leagueId": league_id}, {"_id": 0})
     if not auction:
         raise HTTPException(status_code=404, detail="No auction found for this league")
     return {"auctionId": auction["id"], "status": auction["status"]}
@@ -2619,7 +2619,7 @@ async def get_league_auction(league_id: str):
 @api_router.get("/auction/{auction_id}/clubs")
 async def get_auction_clubs(auction_id: str):
     """Get all clubs in the auction with their status (upcoming/current/sold/unsold)"""
-    auction = await db.auctions.find_one({"id": auction_id})
+    auction = await db.auctions.find_one({"id": auction_id}, {"_id": 0})
     if not auction:
         raise HTTPException(status_code=404, detail="Auction not found")
     
@@ -2643,7 +2643,7 @@ async def get_auction_clubs(auction_id: str):
         }
     
     # Get league to determine sport
-    league = await db.leagues.find_one({"id": auction["leagueId"]})
+    league = await db.leagues.find_one({"id": auction["leagueId"]}, {"_id": 0})
     sport_key = league.get("sportKey", "football") if league else "football"
     
     # Fetch only clubs that are in the auction queue
@@ -2731,7 +2731,7 @@ async def get_auction_clubs(auction_id: str):
 
 @api_router.get("/auction/{auction_id}")
 async def get_auction(auction_id: str):
-    auction = await db.auctions.find_one({"id": auction_id})
+    auction = await db.auctions.find_one({"id": auction_id}, {"_id": 0})
     if not auction:
         raise HTTPException(status_code=404, detail="Auction not found")
     
@@ -2742,17 +2742,17 @@ async def get_auction(auction_id: str):
     current_asset = None
     if auction.get("currentClubId"):
         # First get the league to determine sport
-        league = await db.leagues.find_one({"id": auction["leagueId"]})
+        league = await db.leagues.find_one({"id": auction["leagueId"]}, {"_id": 0})
         sport_key = league.get("sportKey", "football") if league else "football"
         
         if sport_key == "football":
             # Get from clubs collection for football
-            asset = await db.clubs.find_one({"id": auction["currentClubId"]})
+            asset = await db.clubs.find_one({"id": auction["currentClubId"]}, {"_id": 0})
             if asset:
                 current_asset = Club(**asset)
         else:
             # Get from assets collection for other sports
-            asset = await db.assets.find_one({"id": auction["currentClubId"]})
+            asset = await db.assets.find_one({"id": auction["currentClubId"]}, {"_id": 0})
             if asset:
                 # Clean up MongoDB fields for JSON serialization
                 if "_id" in asset:
@@ -2771,7 +2771,7 @@ async def place_bid(auction_id: str, bid_input: BidCreate):
     start_time = time.time()
     
     # Verify auction exists and is active
-    auction = await db.auctions.find_one({"id": auction_id})
+    auction = await db.auctions.find_one({"id": auction_id}, {"_id": 0})
     if not auction:
         raise HTTPException(status_code=404, detail="Auction not found")
     
@@ -2779,12 +2779,12 @@ async def place_bid(auction_id: str, bid_input: BidCreate):
         raise HTTPException(status_code=400, detail="Auction is not active")
     
     # Get user details
-    user = await db.users.find_one({"id": bid_input.userId})
+    user = await db.users.find_one({"id": bid_input.userId}, {"_id": 0})
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     
     # Get league
-    league = await db.leagues.find_one({"id": auction["leagueId"]})
+    league = await db.leagues.find_one({"id": auction["leagueId"]}, {"_id": 0})
     if not league:
         raise HTTPException(status_code=404, detail="League not found")
     
@@ -2792,7 +2792,7 @@ async def place_bid(auction_id: str, bid_input: BidCreate):
     participant = await db.league_participants.find_one({
         "leagueId": auction["leagueId"],
         "userId": bid_input.userId
-    })
+    }, {"_id": 0})
     if not participant:
         raise HTTPException(status_code=403, detail="User is not a participant in this league")
     
@@ -2947,7 +2947,7 @@ async def place_bid(auction_id: str, bid_input: BidCreate):
                 logger.info(f"Anti-snipe triggered for lot {lot_id}: seq={timer_data['seq']}, new end={timer_data['endsAt']}")
     
     # DIAGNOSTIC: Check what completion status should be after this bid
-    league = await db.leagues.find_one({"id": auction["leagueId"]})
+    league = await db.leagues.find_one({"id": auction["leagueId"]}, {"_id": 0})
     participants = await db.league_participants.find({"leagueId": auction["leagueId"]}, {"_id": 0}).to_list(100)
     auction_state = {
         "lots_sold": sum(1 for p in participants for c in p.get("clubsWon", [])),
@@ -2967,16 +2967,16 @@ async def place_bid(auction_id: str, bid_input: BidCreate):
 @api_router.post("/auction/{auction_id}/start-lot/{club_id}")
 async def start_lot(auction_id: str, club_id: str):
     # Verify auction and club exist
-    auction = await db.auctions.find_one({"id": auction_id})
+    auction = await db.auctions.find_one({"id": auction_id}, {"_id": 0})
     if not auction:
         raise HTTPException(status_code=404, detail="Auction not found")
     
-    club = await db.clubs.find_one({"id": club_id})
+    club = await db.clubs.find_one({"id": club_id}, {"_id": 0})
     if not club:
         raise HTTPException(status_code=404, detail="Club not found")
     
     # DIAGNOSTIC: Check completion status before starting next lot
-    league = await db.leagues.find_one({"id": auction["leagueId"]})
+    league = await db.leagues.find_one({"id": auction["leagueId"]}, {"_id": 0})
     participants = await db.league_participants.find({"leagueId": auction["leagueId"]}, {"_id": 0}).to_list(100)
     auction_state = {
         "lots_sold": sum(1 for p in participants for c in p.get("clubsWon", [])),
@@ -3027,7 +3027,7 @@ async def start_lot(auction_id: str, club_id: str):
 async def complete_lot(auction_id: str):
     logger.info(f"🎬 COMPLETE_LOT START for auction {auction_id}")
     
-    auction = await db.auctions.find_one({"id": auction_id})
+    auction = await db.auctions.find_one({"id": auction_id}, {"_id": 0})
     if not auction:
         raise HTTPException(status_code=404, detail="Auction not found")
     
@@ -3060,7 +3060,7 @@ async def complete_lot(auction_id: str):
         participant = await db.league_participants.find_one({
             "leagueId": auction["leagueId"],
             "userId": winning_bid["userId"]
-        })
+        }, {"_id": 0})
         
         if participant:
             user_winning_clubs = participant.get("clubsWon", [])
@@ -3073,7 +3073,7 @@ async def complete_lot(auction_id: str):
             user_total_spent += winning_bid["amount"]
             
             # Calculate remaining budget
-            league = await db.leagues.find_one({"id": auction["leagueId"]})
+            league = await db.leagues.find_one({"id": auction["leagueId"]}, {"_id": 0})
             budget_remaining = league["budget"] - user_total_spent
             
             # Update participant
@@ -3113,13 +3113,13 @@ async def complete_lot(auction_id: str):
     
     # Get current club/player details for the event
     current_asset = None
-    league = await db.leagues.find_one({"id": auction["leagueId"]})
+    league = await db.leagues.find_one({"id": auction["leagueId"]}, {"_id": 0})
     sport_key = league.get("sportKey", "football") if league else "football"
     
     if sport_key == "football":
-        current_asset = await db.clubs.find_one({"id": current_club_id})
+        current_asset = await db.clubs.find_one({"id": current_club_id}, {"_id": 0})
     else:
-        current_asset = await db.assets.find_one({"id": current_club_id, "sportKey": sport_key})
+        current_asset = await db.assets.find_one({"id": current_club_id, "sportKey": sport_key}, {"_id": 0})
     
     asset_name = current_asset.get("name") if current_asset else "Unknown"
     
@@ -3151,7 +3151,7 @@ async def complete_lot(auction_id: str):
     )
     
     # Re-read auction status idempotently (single source of truth)
-    auction = await db.auctions.find_one({"id": auction_id})
+    auction = await db.auctions.find_one({"id": auction_id}, {"_id": 0})
     if not auction or auction.get("status") != "active":
         # Auction already completed by check_auction_completion
         logger.info(f"auction.completion_halted", extra={
@@ -3178,7 +3178,7 @@ async def complete_lot(auction_id: str):
 
 async def get_next_club_to_auction(auction_id: str) -> Optional[str]:
     """Get the next club to auction, considering queue and unsold clubs"""
-    auction = await db.auctions.find_one({"id": auction_id})
+    auction = await db.auctions.find_one({"id": auction_id}, {"_id": 0})
     if not auction:
         return None
     
@@ -3195,7 +3195,7 @@ async def get_next_club_to_auction(auction_id: str) -> Optional[str]:
     if unsold_clubs:
         # Check if any participants can still bid (budget + roster slots) - Prompt C
         participants = await db.league_participants.find({"leagueId": auction["leagueId"]}, {"_id": 0}).to_list(100)
-        league = await db.leagues.find_one({"id": auction["leagueId"]})
+        league = await db.leagues.find_one({"id": auction["leagueId"]}, {"_id": 0})
         minimum_budget = auction.get("minimumBudget", 1000000.0)
         max_slots = league.get("clubSlots", 3) if league else 3
         
@@ -3226,12 +3226,12 @@ async def get_next_club_to_auction(auction_id: str) -> Optional[str]:
 
 async def start_next_lot(auction_id: str, next_club_id: str):
     """Start the next lot with the given club"""
-    auction = await db.auctions.find_one({"id": auction_id})
+    auction = await db.auctions.find_one({"id": auction_id}, {"_id": 0})
     if not auction:
         return
     
     # Get league to determine sport
-    league = await db.leagues.find_one({"id": auction["leagueId"]})
+    league = await db.leagues.find_one({"id": auction["leagueId"]}, {"_id": 0})
     if not league:
         logger.error(f"League not found for auction {auction_id}")
         return
@@ -3240,9 +3240,9 @@ async def start_next_lot(auction_id: str, next_club_id: str):
     
     # Get club/asset details based on sport
     if sport_key == "football":
-        next_club = await db.clubs.find_one({"id": next_club_id})
+        next_club = await db.clubs.find_one({"id": next_club_id}, {"_id": 0})
     else:
-        next_club = await db.assets.find_one({"id": next_club_id, "sportKey": sport_key})
+        next_club = await db.assets.find_one({"id": next_club_id, "sportKey": sport_key}, {"_id": 0})
     
     if not next_club:
         logger.error(f"Club/Asset not found: {next_club_id} (sport: {sport_key})")
@@ -3298,7 +3298,7 @@ async def check_auction_completion(auction_id: str, final_club_id: str = None, f
     """Check if auction is complete and handle completion (idempotent)"""
     logger.info(f"🔍 check_auction_completion CALLED for {auction_id}")
     
-    auction = await db.auctions.find_one({"id": auction_id})
+    auction = await db.auctions.find_one({"id": auction_id}, {"_id": 0})
     if not auction:
         logger.warning(f"❌ check_auction_completion: Auction {auction_id} not found")
         return
@@ -3309,7 +3309,7 @@ async def check_auction_completion(auction_id: str, final_club_id: str = None, f
         return
     
     # Get league info for roster limits
-    league = await db.leagues.find_one({"id": auction["leagueId"]})
+    league = await db.leagues.find_one({"id": auction["leagueId"]}, {"_id": 0})
     if not league:
         logger.warning(f"❌ check_auction_completion: League not found for auction {auction_id}")
         return
@@ -3414,7 +3414,7 @@ async def check_auction_completion(auction_id: str, final_club_id: str = None, f
         }, room=f"auction:{auction_id}")
         
         # Emit league status changed event
-        league = await db.leagues.find_one({"id": auction["leagueId"]})
+        league = await db.leagues.find_one({"id": auction["leagueId"]}, {"_id": 0})
         if league:
             # Get room size for debugging
             room_sockets = sio.manager.rooms.get(f"league:{auction['leagueId']}", set())
@@ -3436,7 +3436,7 @@ async def check_auction_completion(auction_id: str, final_club_id: str = None, f
             }, room=f"league:{auction['leagueId']}")
             
             # Create initial standings if not exists
-            existing_standing = await db.standings.find_one({"leagueId": auction["leagueId"]})
+            existing_standing = await db.standings.find_one({"leagueId": auction["leagueId"]}, {"_id": 0})
             if not existing_standing:
                 table = []
                 for participant in participants:
@@ -3464,12 +3464,12 @@ async def check_auction_completion(auction_id: str, final_club_id: str = None, f
 @api_router.post("/auction/{auction_id}/pause")
 async def pause_auction(auction_id: str, commissioner_id: str = None):
     """Pause an active auction - only commissioner can do this"""
-    auction = await db.auctions.find_one({"id": auction_id})
+    auction = await db.auctions.find_one({"id": auction_id}, {"_id": 0})
     if not auction:
         raise HTTPException(status_code=404, detail="Auction not found")
     
     # Get league to verify commissioner
-    league = await db.leagues.find_one({"id": auction["leagueId"]})
+    league = await db.leagues.find_one({"id": auction["leagueId"]}, {"_id": 0})
     if not league:
         raise HTTPException(status_code=404, detail="League not found")
     
@@ -3515,12 +3515,12 @@ async def pause_auction(auction_id: str, commissioner_id: str = None):
 @api_router.post("/auction/{auction_id}/resume")
 async def resume_auction(auction_id: str, commissioner_id: str = None):
     """Resume a paused auction - only commissioner can do this"""
-    auction = await db.auctions.find_one({"id": auction_id})
+    auction = await db.auctions.find_one({"id": auction_id}, {"_id": 0})
     if not auction:
         raise HTTPException(status_code=404, detail="Auction not found")
     
     # Get league to verify commissioner
-    league = await db.leagues.find_one({"id": auction["leagueId"]})
+    league = await db.leagues.find_one({"id": auction["leagueId"]}, {"_id": 0})
     if not league:
         raise HTTPException(status_code=404, detail="League not found")
     
@@ -3568,12 +3568,12 @@ async def resume_auction(auction_id: str, commissioner_id: str = None):
 @api_router.delete("/auction/{auction_id}")
 async def delete_auction(auction_id: str, commissioner_id: str = None):
     """Delete an auction and all associated bids - only commissioner can do this"""
-    auction = await db.auctions.find_one({"id": auction_id})
+    auction = await db.auctions.find_one({"id": auction_id}, {"_id": 0})
     if not auction:
         raise HTTPException(status_code=404, detail="Auction not found")
     
     # Get league to verify commissioner
-    league = await db.leagues.find_one({"id": auction["leagueId"]})
+    league = await db.leagues.find_one({"id": auction["leagueId"]}, {"_id": 0})
     if not league:
         raise HTTPException(status_code=404, detail="League not found")
     
@@ -3653,7 +3653,7 @@ async def countdown_timer(auction_id: str, end_time: datetime, lot_id: str):
                 break
             
             # Check if auction still exists and is active
-            auction = await db.auctions.find_one({"id": auction_id})
+            auction = await db.auctions.find_one({"id": auction_id}, {"_id": 0})
             if not auction or auction["status"] != "active":
                 logger.info(f"Auction {auction_id} no longer active, stopping timer")
                 break
@@ -3786,20 +3786,20 @@ async def join_auction(sid, data):
     }))
     
     # Prompt D: Send auction_snapshot for late joiners (one-shot, read-only)
-    auction = await db.auctions.find_one({"id": auction_id})
+    auction = await db.auctions.find_one({"id": auction_id}, {"_id": 0})
     if auction:
         
         # Get league to determine sport
-        league = await db.leagues.find_one({"id": auction["leagueId"]})
+        league = await db.leagues.find_one({"id": auction["leagueId"]}, {"_id": 0})
         sport_key = league.get("sportKey", "football") if league else "football"
         
         # Get current club if exists
         current_club = None
         if auction.get("currentClubId"):
             if sport_key == "football":
-                club = await db.clubs.find_one({"id": auction["currentClubId"]})
+                club = await db.clubs.find_one({"id": auction["currentClubId"]}, {"_id": 0})
             else:
-                club = await db.assets.find_one({"id": auction["currentClubId"], "sportKey": sport_key})
+                club = await db.assets.find_one({"id": auction["currentClubId"], "sportKey": sport_key}, {"_id": 0})
             
             if club:
                 club.pop('_id', None)
