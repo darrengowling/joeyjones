@@ -3349,6 +3349,13 @@ async def check_auction_completion(auction_id: str, final_club_id: str = None, f
     # Auction should end if: no clubs remaining, no eligible bidders, or all managers are full
     should_complete = not clubs_remaining or not eligible_bidders or all_managers_full
     
+    # DEFENSIVE LOGGING: Track exact values for debugging
+    logger.info(f"🔍 COMPLETION_CHECK [Auction: {auction_id}]:")
+    logger.info(f"   currentLot={current_lot}, clubQueue_length={len(club_queue)}, unsold={len(unsold_clubs)}")
+    logger.info(f"   Logic: ({current_lot} <= {len(club_queue)}) = {current_lot <= len(club_queue)}")
+    logger.info(f"   clubs_remaining={clubs_remaining}, should_complete={should_complete}")
+    logger.info(f"   eligible_bidders={len(eligible_bidders)}, all_managers_full={all_managers_full}")
+    
     # Structured logging
     logger.info("auction.completion_check", extra={
         "auction_id": auction_id,
@@ -3357,7 +3364,9 @@ async def check_auction_completion(auction_id: str, final_club_id: str = None, f
         "all_managers_full": all_managers_full,
         "eligible_bidders": len(eligible_bidders),
         "clubs_remaining": clubs_remaining,
-        "should_complete": should_complete
+        "should_complete": should_complete,
+        "current_lot": current_lot,
+        "club_queue_length": len(club_queue)
     })
     
     if should_complete:
