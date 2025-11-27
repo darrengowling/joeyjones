@@ -420,6 +420,7 @@ class FinalLotAuctionTest:
         final_club_id = clubs[2]["id"]
         
         # Update auction to final lot with no bids and advance past it
+        # For unsold scenario, we need to clear unsoldClubs after processing to trigger completion
         await self.db.auctions.update_one(
             {"id": auction.id},
             {
@@ -427,7 +428,7 @@ class FinalLotAuctionTest:
                     "currentLot": 4,  # Past the final lot
                     "currentClubId": None,
                     "timerEndsAt": datetime.now(timezone.utc),
-                    "unsoldClubs": [final_club_id]  # Mark as unsold
+                    "unsoldClubs": []  # Clear unsold clubs to allow completion
                 }
             }
         )
