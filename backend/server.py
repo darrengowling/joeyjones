@@ -375,7 +375,7 @@ async def get_league_fixtures(league_id: str):
                 {"homeTeam": {"$in": team_names}},
                 {"awayTeam": {"$in": team_names}}
             ]
-        }).sort("matchDate", 1).to_list(length=None)
+        }, {"_id": 0}).sort("matchDate", 1).to_list(length=None)
         
         # Add flag to indicate if team is in this league
         for fixture in fixtures:
