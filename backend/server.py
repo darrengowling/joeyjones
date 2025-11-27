@@ -1360,62 +1360,6 @@ async def get_league_standings(league_id: str):
     
     return Standing(**standing).model_dump(mode='json')
 
-@api_router.get("/leagues/{league_id}/fixtures")
-async def get_league_fixtures(league_id: str, status: Optional[str] = None, page: int = 1, limit: int = 50):
-    """Get league fixtures with optional filtering - Prompt 6: Feature flag + Pagination"""
-    # Prompt 6: Feature flag check
-    if not FEATURE_MY_COMPETITIONS:
-        raise HTTPException(status_code=404, detail="Feature not available")
-    
-    query = {"leagueId": league_id}
-    if status:
-        query["status"] = status
-    
-    # Prompt 6: Pagination with page support
-    skip = (page - 1) * limit
-    fixtures = await db.fixtures.find(query).sort("startsAt", 1).skip(skip).limit(limit).to_list(limit)
-    
-    # Get league to determine sport
-    league = await db.leagues.find_one({"id": league_id})
-    sport_key = league.get("sportKey", "football") if league else "football"
-    
-    # Enrich fixtures with asset details
-    enriched_fixtures = []
-    for fixture in fixtures:
-        fixture_dict = Fixture(**fixture).model_dump(mode='json')
-        
-        # Get home asset details
-        if fixture.get("homeAssetId"):
-            if sport_key == "football":
-                home_asset = await db.clubs.find_one({"id": fixture["homeAssetId"]})
-            else:
-                home_asset = await db.assets.find_one({"id": fixture["homeAssetId"], "sportKey": sport_key})
-            
-            if home_asset:
-                fixture_dict["homeAsset"] = {
-                    "id": home_asset["id"],
-                    "name": home_asset.get("name"),
-                    "externalId": home_asset.get("externalId")
-                }
-        
-        # Get away asset details
-        if fixture.get("awayAssetId"):
-            if sport_key == "football":
-                away_asset = await db.clubs.find_one({"id": fixture["awayAssetId"]})
-            else:
-                away_asset = await db.assets.find_one({"id": fixture["awayAssetId"], "sportKey": sport_key})
-            
-            if away_asset:
-                fixture_dict["awayAsset"] = {
-                    "id": away_asset["id"],
-                    "name": away_asset.get("name"),
-                    "externalId": away_asset.get("externalId")
-                }
-        
-        enriched_fixtures.append(fixture_dict)
-    
-    return enriched_fixtures
-
 @api_router.get("/leagues/{league_id}/match-breakdown")
 async def get_match_breakdown(league_id: str):
     """Get match-by-match scoring breakdown for all managers"""
