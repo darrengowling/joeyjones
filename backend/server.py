@@ -2958,11 +2958,10 @@ async def place_bid(auction_id: str, bid_input: BidCreate):
     status = compute_auction_status(league, participants, auction_state)
     logger.info(f"🔍 AUCTION_STATUS after bid: {json.dumps(status)}")
     
-    # CRITICAL FIX: Check if auction should complete after this bid
-    # This handles the case where all rosters just became full
-    await check_auction_completion(auction_id)
+    # NOTE: Don't check completion here - it will be checked when the lot completes
+    # Checking here causes premature completion during the final lot's timer
     
-    return {"message": "Bid placed successfully", "bid": bid_obj}
+    return {"message": "Bid placed successfully", "bid_obj": bid_obj}
 
 @api_router.post("/auction/{auction_id}/start-lot/{club_id}")
 async def start_lot(auction_id: str, club_id: str):
