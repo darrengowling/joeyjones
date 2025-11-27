@@ -46,6 +46,8 @@ export default function LeagueDetail() {
     loadLeague();
     loadParticipants();
     loadStandings();
+    loadFixtures();
+    loadAssets();
   }, [leagueId]);
 
   // Set page title
@@ -56,9 +58,6 @@ export default function LeagueDetail() {
       document.title = "Competition Details | Sport X";
     }
   }, [league]);
-    loadFixtures();
-    loadAssets();
-  }, [leagueId]);
 
   // Socket event handlers - single useEffect with proper cleanup
   useEffect(() => {
