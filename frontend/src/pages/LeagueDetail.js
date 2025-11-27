@@ -280,16 +280,6 @@ export default function LeagueDetail() {
     try {
       await axios.post(`${API}/leagues/${leagueId}/score/recompute`);
       await loadStandings();
-  }, [leagueId]);
-
-  // Set page title
-  useEffect(() => {
-    if (league) {
-      document.title = `${league.name} - Competition | Sport X`;
-    } else {
-      document.title = "Competition Details | Sport X";
-    }
-  }, [league]);
       toast.success("Scores recomputed successfully!");
     } catch (e) {
       console.error("Error recomputing scores:", e);
