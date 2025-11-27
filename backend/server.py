@@ -3340,8 +3340,8 @@ async def check_auction_completion(auction_id: str, final_club_id: str = None, f
             all_managers_full = False
     
     # Check if there are more clubs to auction (either in queue or unsold to retry)
-    # NOTE: currentLot is 1-based, so use <= to include the current lot being processed
-    clubs_remaining = (current_lot <= len(club_queue)) or len(unsold_clubs) > 0
+    # NOTE: currentLot is 1-based. Use < to check if more lots exist AFTER current one
+    clubs_remaining = (current_lot < len(club_queue)) or len(unsold_clubs) > 0
     
     # Auction should end if: no clubs remaining, no eligible bidders, or all managers are full
     should_complete = not clubs_remaining or not eligible_bidders or all_managers_full
