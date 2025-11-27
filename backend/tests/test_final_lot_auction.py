@@ -414,13 +414,21 @@ class FinalLotAuctionTest:
         # Simulate lots 1 and 2
         await self.simulate_auction_lots(auction, clubs, user1, user2)
         
-        # Lot 3 (final): No bids placed
-        print("🎯 Testing final lot (lot 3) with no bids...")
+        # Lot 3 (final): No bids placed - simulate scenario where all managers are full
+        print("🎯 Testing final lot (lot 3) with no bids (all managers full)...")
         
         final_club_id = clubs[2]["id"]
         
-        # Update auction to final lot with no bids and advance past it
-        # For unsold scenario, we need to clear unsoldClubs after processing to trigger completion
+        # Make both managers have 3 clubs (full rosters) so auction should complete
+        # Give user2 one more club to fill their roster
+        await self.db.league_participants.update_one(
+            {"leagueId": league.id, "userId": user2.id},
+            {
+                "$push": {"clubsWon": "dummy-club-id"}  # Add a dummy club to fill roster
+            }
+        )
+        
+        # Update auction to final lot and advance past it
         await self.db.auctions.update_one(
             {"id": auction.id},
             {
@@ -428,7 +436,7 @@ class FinalLotAuctionTest:
                     "currentLot": 4,  # Past the final lot
                     "currentClubId": None,
                     "timerEndsAt": datetime.now(timezone.utc),
-                    "unsoldClubs": []  # Clear unsold clubs to allow completion
+                    "unsoldClubs": [final_club_id]  # Mark final club as unsold
                 }
             }
         )
