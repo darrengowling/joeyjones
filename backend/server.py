@@ -3148,7 +3148,9 @@ async def complete_lot(auction_id: str):
     }, room=f"auction:{auction_id}")
     
     # Check if there's a next club to auction
+    logger.info(f"🔍 BEFORE get_next_club: currentLot={auction.get('currentLot')}, queueLen={len(auction.get('clubQueue', []))}")
     next_club_id = await get_next_club_to_auction(auction_id)
+    logger.info(f"🔍 AFTER get_next_club: next_club_id={next_club_id}")
     
     logger.info(f"auction.next_lot_decision", extra={
         "auction_id": auction_id,
