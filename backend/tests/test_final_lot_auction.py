@@ -274,9 +274,6 @@ class FinalLotAuctionTest:
             }
         )
         
-        # Import and call the check_auction_completion function
-        from server import check_auction_completion
-        
         # Award final club to bidder (simulate timer expiry)
         await self.db.league_participants.update_one(
             {"leagueId": league.id, "userId": user2.id},
@@ -286,8 +283,10 @@ class FinalLotAuctionTest:
             }
         )
         
-        # Call the fixed function
-        await check_auction_completion(auction.id, final_club_id, bid.model_dump())
+        # Import and call the check_auction_completion function with proper db context
+        import server
+        server.db = self.db  # Set the db context
+        await server.check_auction_completion(auction.id, final_club_id, bid.model_dump())
         
         # Verify results
         updated_auction = await self.db.auctions.find_one({"id": auction.id})
