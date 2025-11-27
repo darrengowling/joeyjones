@@ -46,6 +46,13 @@ export default function CompetitionDashboard() {
     }
   }, [navigate]);
 
+  // Set page title
+  useEffect(() => {
+    if (summary && summary.league) {
+      document.title = `${summary.league.name} - Dashboard | Sport X`;
+    }
+  }, [summary]);
+
   useEffect(() => {
     if (user && leagueId) {
       loadTabData(activeTab);
