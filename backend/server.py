@@ -784,6 +784,8 @@ async def seed_clubs():
 # ===== LEAGUE ENDPOINTS =====
 @api_router.post("/leagues", response_model=League)
 async def create_league(input: LeagueCreate):
+    logger.info(f"🏆 CREATE_LEAGUE START: {input.name}")
+    
     # Prompt 4: Validate assets selection size
     from models import validate_assets_selection_size
     try:
@@ -794,10 +796,18 @@ async def create_league(input: LeagueCreate):
             logger
         )
     except ValueError as e:
+        logger.error(f"❌ League validation failed: {str(e)}")
         raise HTTPException(status_code=400, detail=str(e))
     
     league_obj = League(**input.model_dump())
-    await db.leagues.insert_one(league_obj.model_dump())
+    logger.info(f"   League object created: ID={league_obj.id}")
+    
+    try:
+        result = await db.leagues.insert_one(league_obj.model_dump())
+        logger.info(f"   ✅ Database insert successful: inserted_id={result.inserted_id}")
+    except Exception as e:
+        logger.error(f"   ❌ CRITICAL: Database insert failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to create league: {str(e)}")
     
     # Metrics: Track league creation
     metrics.increment_league_created(input.sportKey)
@@ -811,6 +821,7 @@ async def create_league(input: LeagueCreate):
         "mode": "selected" if assets_selected else "all"
     })
     
+    logger.info(f"✅ CREATE_LEAGUE COMPLETE: {league_obj.name}")
     return league_obj
 
 @api_router.get("/leagues", response_model=List[League])
