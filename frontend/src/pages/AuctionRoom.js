@@ -43,6 +43,7 @@ function AuctionRoom() {
   const [currentBid, setCurrentBid] = useState(null);
   const [currentBidder, setCurrentBidder] = useState(null);
   const [bidSequence, setBidSequence] = useState(0);
+  const [countdown, setCountdown] = useState(null); // For 3-second pause between lots
   const [timerSettings, setTimerSettings] = useState({ timerSeconds: 30, antiSnipeSeconds: 10 }); // Everton Bug Fix 3
 
   // Use shared socket room hook
