@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { formatCurrency } from "../utils/currency";
@@ -11,8 +11,10 @@ const API = `${BACKEND_URL}/api`;
 export default function CompetitionDashboard() {
   const { leagueId } = useParams();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [user, setUser] = useState(null);
-  const [activeTab, setActiveTab] = useState("summary");
+  // Read tab from URL parameter, default to "summary"
+  const [activeTab, setActiveTab] = useState(searchParams.get("tab") || "summary");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [uiHints, setUiHints] = useState({ assetLabel: "Team", assetPlural: "Teams" }); // Default
