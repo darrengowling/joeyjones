@@ -1,9 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const Help = () => {
   const navigate = useNavigate();
   const [openSection, setOpenSection] = useState('getting-started');
+
+  // Set page title
+  useEffect(() => {
+    document.title = 'Help Center | Sport X';
+  }, []);
 
   const toggleSection = (section) => {
     setOpenSection(openSection === section ? null : section);
