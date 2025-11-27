@@ -3045,11 +3045,18 @@ async def start_lot(auction_id: str, club_id: str):
 
 @api_router.post("/auction/{auction_id}/complete-lot")
 async def complete_lot(auction_id: str):
+    logger.info(f"🎬 COMPLETE_LOT START for auction {auction_id}")
+    
     auction = await db.auctions.find_one({"id": auction_id})
     if not auction:
         raise HTTPException(status_code=404, detail="Auction not found")
     
     current_club_id = auction.get("currentClubId")
+    current_lot = auction.get("currentLot", 0)
+    club_queue_length = len(auction.get("clubQueue", []))
+    
+    logger.info(f"   Lot {current_lot}/{club_queue_length}, Club: {current_club_id}")
+    
     if not current_club_id:
         raise HTTPException(status_code=400, detail="No current club to complete")
     
@@ -3060,6 +3067,8 @@ async def complete_lot(auction_id: str):
     }).sort("amount", -1).to_list(1)
     
     winning_bid = bids[0] if bids else None
+    
+    logger.info(f"   Bids found: {len(bids)}, Winning bid: {winning_bid['amount'] if winning_bid else 'None'}")
     
     # Remove MongoDB _id from winning bid
     if winning_bid:
@@ -3077,6 +3086,8 @@ async def complete_lot(auction_id: str):
             user_winning_clubs = participant.get("clubsWon", [])
             user_total_spent = participant.get("totalSpent", 0.0)
             
+            logger.info(f"   BEFORE: User {winning_bid['userId']} has {len(user_winning_clubs)} clubs, spent £{user_total_spent:,.0f}")
+            
             # Add this club and amount
             user_winning_clubs.append(current_club_id)
             user_total_spent += winning_bid["amount"]
@@ -3086,7 +3097,7 @@ async def complete_lot(auction_id: str):
             budget_remaining = league["budget"] - user_total_spent
             
             # Update participant
-            await db.league_participants.update_one(
+            update_result = await db.league_participants.update_one(
                 {"leagueId": auction["leagueId"], "userId": winning_bid["userId"]},
                 {"$set": {
                     "clubsWon": user_winning_clubs,
@@ -3095,7 +3106,13 @@ async def complete_lot(auction_id: str):
                 }}
             )
             
-        logger.info(f"Club sold - {current_club_id} to {winning_bid['userId']} for £{winning_bid['amount']:,}")
+            logger.info(f"   AFTER: User {winning_bid['userId']} now has {len(user_winning_clubs)} clubs, spent £{user_total_spent:,.0f}")
+            logger.info(f"   DB Update: modified_count={update_result.modified_count}")
+            
+        else:
+            logger.error(f"   ❌ CRITICAL: Participant NOT FOUND for user {winning_bid['userId']}")
+            
+        logger.info(f"✅ Club sold - {current_club_id} to {winning_bid['userId']} for £{winning_bid['amount']:,}")
     
     else:
         # CLUB UNSOLD - Add to unsold queue for re-offering later
