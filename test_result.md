@@ -1245,6 +1245,18 @@ agent_communication:
         agent: "main"
         comment: "Fixed start_next_lot() to check league's sportKey and query correct collection (db.clubs for football, db.assets for cricket). Also fixed join_auction Socket.IO handler with same issue."
 
+  - task: "Final Lot Auction Bug Fix"
+    implemented: true
+    working: true
+    file: "backend/server.py, backend/tests/test_final_lot_auction.py"
+    stuck_count: 0
+    priority: "critical"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "✅ FINAL LOT AUCTION BUG FIX TESTING COMPLETED: Created comprehensive test suite and verified the critical bug fix is working correctly. ✅ ROOT CAUSE FIXED: In check_auction_completion function at line 3347, changed condition from 'current_lot < len(club_queue)' to 'current_lot <= len(club_queue)' to properly handle final lot processing. The bug occurred when currentLot = 6 and len(club_queue) = 6, where 6 < 6 = False incorrectly indicated no clubs remaining. ✅ TEST RESULTS: All 3/3 test cases passed successfully. Test Case 1 (Single bidder final lot): Final bidder correctly receives team when timer expires, auction and league status set to 'completed'. Test Case 2 (Multiple bidders final lot): Highest bidder correctly wins final lot, proper auction completion. Test Case 3 (Logic verification): Confirmed OLD logic (current_lot < len) = False vs NEW logic (current_lot <= len) = True for the critical scenario. ✅ COMPREHENSIVE VALIDATION: Created test file /app/backend/tests/test_final_lot_auction.py with real Socket.IO timer mechanics, proper database state verification, automatic cleanup, and detailed logging. Tests simulate realistic auction scenarios with 2 participants and 3 teams. ✅ PRODUCTION READY: The fix ensures final lot auctions complete properly, preventing incomplete rosters and ensuring all valid bids are processed. Critical bug that affected user experience in 6-team auctions is now resolved."
+
   - task: "Comprehensive Backend Readiness Test for Pilot Report"
     implemented: true
     working: true
