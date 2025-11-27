@@ -315,7 +315,7 @@ async def get_fixtures(sport_key: str = "football", date: str = None):
 async def get_fixture_by_id(fixture_id: str):
     """Get detailed information for a specific fixture"""
     try:
-        fixture = await db.fixtures.find_one({"id": fixture_id})
+        fixture = await db.fixtures.find_one({"id": fixture_id}, {"_id": 0})
         
         if not fixture:
             raise HTTPException(status_code=404, detail="Fixture not found")
