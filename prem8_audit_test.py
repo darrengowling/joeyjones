@@ -326,20 +326,20 @@ class Prem8AuditTester:
                               "No ObjectId serialization issues")
             
             # Check auction data integrity
-            if "auction" in auction_data:
-                auction = auction_data["auction"]
-                required_fields = ["id", "leagueId", "status"]
-                missing_fields = [f for f in required_fields if f not in auction]
+            if "auctionId" in auction_data and "status" in auction_data:
+                # This is the correct format: {"auctionId": "...", "status": "..."}
+                required_fields = ["auctionId", "status"]
+                missing_fields = [f for f in required_fields if f not in auction_data]
                 
                 if missing_fields:
                     self.log_result("auction_data_integrity", result["status_code"], False,
                                   f"Auction missing fields: {missing_fields}")
                 else:
                     self.log_result("auction_data_integrity", result["status_code"], True,
-                                  f"Auction status: {auction.get('status')}", auction_data)
+                                  f"Auction status: {auction_data.get('status')}", auction_data)
             else:
                 self.log_result("auction_data_structure", result["status_code"], False,
-                              "No auction data in response")
+                              f"Unexpected auction data structure: {auction_data}")
         else:
             # Auction might not exist - this could be normal
             if result["status_code"] == 404:
