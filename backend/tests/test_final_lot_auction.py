@@ -410,9 +410,10 @@ class FinalLotAuctionTest:
             }
         )
         
-        # Import and call the check_auction_completion function
-        from server import check_auction_completion
-        await check_auction_completion(auction.id)
+        # Import and call the check_auction_completion function with proper db context
+        import server
+        server.db = self.db  # Set the db context
+        await server.check_auction_completion(auction.id)
         
         # Verify results
         updated_auction = await self.db.auctions.find_one({"id": auction.id})
