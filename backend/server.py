@@ -746,9 +746,21 @@ async def get_clubs(competition: str = None):
     query = {}
     if competition:
         if competition.upper() == "EPL":
-            query["competitionShort"] = "EPL"
+            # Include clubs with competitionShort="EPL" OR "English Premier League" in competitions array
+            query = {
+                "$or": [
+                    {"competitionShort": "EPL"},
+                    {"competitions": "English Premier League"}
+                ]
+            }
         elif competition.upper() == "UCL":
-            query["competitionShort"] = "UCL"
+            # Include clubs with competitionShort="UCL" OR "UEFA Champions League" in competitions array
+            query = {
+                "$or": [
+                    {"competitionShort": "UCL"},
+                    {"competitions": "UEFA Champions League"}
+                ]
+            }
     
     clubs = await db.clubs.find(query).to_list(100)
     return [Club(**club) for club in clubs]
