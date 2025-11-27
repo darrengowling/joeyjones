@@ -193,6 +193,31 @@ export default function CompetitionDashboard() {
     setActiveTab(tab);
   };
 
+  const handleUpdateScores = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.post(`${API}/fixtures/update-scores`);
+      
+      if (response.data.updated > 0) {
+        toast.success(`Updated ${response.data.updated} match results! Refreshing fixtures...`);
+        // Reload fixtures to show updated scores
+        await loadTabData("fixtures");
+      } else {
+        toast.info("No new match results available yet. Check again after matches complete.");
+      }
+      
+      // Show API usage info
+      if (response.data.api_requests_remaining !== undefined) {
+        console.log(`API requests remaining today: ${response.data.api_requests_remaining}/100`);
+      }
+    } catch (e) {
+      console.error("Error updating scores:", e);
+      toast.error("Failed to update scores. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const getSportEmoji = (sportKey) => {
     switch (sportKey) {
       case "football":
