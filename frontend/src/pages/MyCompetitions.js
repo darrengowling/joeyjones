@@ -301,7 +301,7 @@ export default function MyCompetitions() {
                     View Dashboard
                   </button>
                   <button
-                    onClick={() => navigate(`/competitions/${comp.leagueId}?tab=fixtures`)}
+                    onClick={() => navigate(`/app/competitions/${comp.leagueId}?tab=fixtures`)}
                     className="btn btn-secondary bg-gray-100 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-200 font-semibold"
                   >
                     Fixtures
