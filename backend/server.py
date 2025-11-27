@@ -3175,6 +3175,17 @@ async def complete_lot(auction_id: str):
     })
     
     if next_club_id:
+        # Three-second pause before next lot to prevent bid bleed and give thinking time
+        logger.info(f"⏸️  Starting 3-second pause before next lot")
+        
+        # Emit countdown to all clients
+        for countdown in [3, 2, 1]:
+            await sio.emit("next_team_countdown", {
+                "seconds": countdown,
+                "message": f"Next team in {countdown}..."
+            }, room=f"auction:{auction_id}")
+            await asyncio.sleep(1)
+        
         await start_next_lot(auction_id, next_club_id)
     else:
         # Also call completion here to handle "no more clubs" end case
