@@ -1373,7 +1373,7 @@ async def get_match_breakdown(league_id: str):
     fixtures = await db.fixtures.find({
         "leagueId": league_id,
         "status": "completed"
-    }).sort("startsAt", 1).to_list(100)
+    }, {"_id": 0}).sort("startsAt", 1).to_list(100)
     
     # Get all participants
     participants = await db.league_participants.find({"leagueId": league_id}).to_list(100)
