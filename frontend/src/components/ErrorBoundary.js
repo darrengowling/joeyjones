@@ -99,25 +99,25 @@ class ErrorBoundary extends React.Component {
               
               <div className="space-y-3">
                 <button
-                  onClick={this.handleReset}
+                  onClick={() => window.location.href = '/'}
                   className="w-full bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium"
                 >
-                  Reload Page
+                  Return to Home
                 </button>
                 
                 <button
-                  onClick={() => window.history.back()}
-                  className="w-full bg-gray-200 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-300 transition-colors font-medium"
+                  onClick={() => window.location.href = '/my-competitions'}
+                  className="w-full bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors font-medium"
                 >
-                  Go Back
+                  Go to My Competitions
                 </button>
                 
-                <a
-                  href="/"
-                  className="block w-full text-center text-blue-600 hover:text-blue-700 py-2"
+                <button
+                  onClick={this.handleReset}
+                  className="w-full bg-gray-200 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-300 transition-colors font-medium"
                 >
-                  Return to Home
-                </a>
+                  Reload This Page
+                </button>
               </div>
             </div>
           </div>
