@@ -67,6 +67,11 @@ function AuctionRoom() {
     }
   }, [auction?.status]);
 
+  // Set page title
+  useEffect(() => {
+    document.title = `Auction Room | Sport X`;
+  }, []);
+
   // Initial setup: load user and data
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
