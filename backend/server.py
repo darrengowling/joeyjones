@@ -1133,7 +1133,7 @@ async def get_my_competitions(userId: str):
             "leagueId": league["id"],
             "startsAt": {"$gte": datetime.now(timezone.utc)},
             "status": "scheduled"
-        }, sort=[("startsAt", 1)])
+        }, {"_id": 0}, sort=[("startsAt", 1)])
         
         next_fixture_at = next_fixture["startsAt"] if next_fixture else None
         
