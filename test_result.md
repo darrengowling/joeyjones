@@ -644,6 +644,18 @@ agent_communication:
         agent: "testing"
         comment: "INSTANT LOBBY UPDATES TESTING COMPLETED: Comprehensive testing of the instant lobby updates implementation performed successfully. ✅ API ENDPOINTS WORKING: GET /api/leagues/:id/members returns ordered member list with correct format (userId, displayName, joinedAt). POST /api/leagues/:id/join correctly adds members and handles duplicates/invalid tokens. Member list properly ordered by joinedAt timestamp. ✅ BACKEND EVENT EMISSIONS CONFIRMED: Backend logs show Socket.IO events being emitted correctly - 'Synced X members to league room: league:{id}' messages confirm member_joined and sync_members events are being sent to league rooms when users join. ✅ REAL-TIME FUNCTIONALITY: Backend is correctly emitting events to league rooms, Socket.IO server responding correctly (EIO=4, transport=polling working). ✅ EDGE CASES HANDLED: Duplicate joins prevented, invalid tokens rejected with 403, member ordering maintained. ⚠️ CLIENT VERSION COMPATIBILITY: Socket.IO client version compatibility issue prevents direct client testing, but backend event emission is confirmed working through server logs. All acceptance criteria met at backend level - instant lobby updates are production-ready."
 
+  - task: "Prem8 League Fixture Display Testing"
+    implemented: true
+    working: true
+    file: "LeagueDetail.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "PREM8 LEAGUE FIXTURE DISPLAY TESTING COMPLETED: Comprehensive testing of the prem8 league fixture display functionality performed as requested. RESULTS: 100% success rate across all test criteria - fixture display is working perfectly. ✅ ALL TEST REQUIREMENTS MET: Successfully navigated to prem8 league page (https://auctionpilot.preview.emergentagent.com/league/e479329d-3111-4000-b69c-880a667fe43d), found 'Match Fixtures' section with 'Upcoming Matches' subsection clearly visible, verified exactly 6 upcoming matches displayed for Nov 29-30 as expected, confirmed all fixture details showing correctly (team names, dates, times), identified teams in blue indicating league membership (Brentford, Manchester City, AFC Bournemouth, Aston Villa, Liverpool, Arsenal), no errors or crashes encountered. ✅ FIXTURE DETAILS VERIFIED: All 6 fixtures display proper format with home vs away teams, accurate dates (Sat 29 Nov, Sun 30 Nov), correct times (15:00, 14:00, 16:30), teams that are part of the league highlighted in blue as expected. ✅ UI/UX VALIDATION: Clean layout with proper spacing, responsive design, clear visual hierarchy, informative note explaining blue highlighting for league teams. ✅ TECHNICAL VALIDATION: Page loads without errors, fixtures section scrolls into view correctly, all interactive elements functional, proper data formatting and display. The prem8 league fixture display feature is production-ready and meets all specified requirements."
+
   - task: "SPORTS_CRICKET_ENABLED environment variable setup"
     implemented: true
     working: true
