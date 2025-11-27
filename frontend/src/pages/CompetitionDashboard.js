@@ -106,11 +106,12 @@ export default function CompetitionDashboard() {
         // Refetch fixtures
         axios.get(`${API}/leagues/${leagueId}/fixtures`)
         .then((response) => {
-          setFixtures(response.data);
+          setFixtures(response.data.fixtures || []);
           console.log(`✅ Fixtures refreshed (${data.countChanged} fixtures changed)`);
         })
         .catch((e) => {
           console.error("Error refreshing fixtures:", e);
+          setFixtures([]);
         });
       }
     };
