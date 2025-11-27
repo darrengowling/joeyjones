@@ -3197,10 +3197,14 @@ async def get_next_club_to_auction(auction_id: str) -> Optional[str]:
     unsold_clubs = auction.get("unsoldClubs", [])
     current_lot = auction.get("currentLot", 0)
     
+    logger.info(f"🔍 get_next_club_to_auction: currentLot={current_lot}, queueLen={len(club_queue)}, check={current_lot < len(club_queue)}")
+    
     # Check if we're still in the initial round
     if current_lot < len(club_queue):
         # Return next club in initial queue
-        return club_queue[current_lot]  # currentLot is 1-indexed, but we want next club
+        next_id = club_queue[current_lot]
+        logger.info(f"🔍 Returning next club from queue: {next_id}")
+        return next_id
     
     # Initial round complete - check for unsold clubs
     if unsold_clubs:
