@@ -232,6 +232,7 @@ export default function LeagueDetail() {
       setFixtures(response.data.fixtures || []);
     } catch (e) {
       console.error("Error loading fixtures:", e);
+      setFixtures([]); // Set empty array on error to prevent undefined
     } finally {
       setLoadingFixtures(false);
     }
