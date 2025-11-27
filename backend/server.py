@@ -2294,19 +2294,31 @@ async def start_auction(league_id: str):
         return {"message": "Auction already exists", "auctionId": existing_auction["id"]}
     
     # Create auction with league timer settings (Prompt D)
+    logger.info(f"🎬 START_AUCTION: Creating auction for league {league_id}")
+    
     auction_create = AuctionCreate(
         leagueId=league_id,
         bidTimer=league.get("timerSeconds", 30),
         antiSnipeSeconds=league.get("antiSnipeSeconds", 10)
     )
     auction_obj = Auction(**auction_create.model_dump())
-    await db.auctions.insert_one(auction_obj.model_dump())
+    
+    try:
+        result = await db.auctions.insert_one(auction_obj.model_dump())
+        logger.info(f"   ✅ Auction created: ID={auction_obj.id}, inserted_id={result.inserted_id}")
+    except Exception as e:
+        logger.error(f"   ❌ CRITICAL: Auction insert failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to create auction: {str(e)}")
     
     # Update league status
-    await db.leagues.update_one(
-        {"id": league_id},
-        {"$set": {"status": "active"}}
-    )
+    try:
+        await db.leagues.update_one(
+            {"id": league_id},
+            {"$set": {"status": "active"}}
+        )
+        logger.info(f"   ✅ League status updated to active")
+    except Exception as e:
+        logger.error(f"   ❌ Failed to update league status: {str(e)}")
     
     # Get assets based on feature flag and league selection
     import random
