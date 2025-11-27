@@ -743,6 +743,56 @@ export default function LeagueDetail() {
                     </div>
                   </div>
                   
+                  {/* Competition Filter for Football */}
+                  {league.sportKey === "football" && (
+                    <div className="mb-3">
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Filter by Competition</label>
+                      <select
+                        className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mb-2"
+                        onChange={async (e) => {
+                          const filter = e.target.value;
+                          try {
+                            let response;
+                            if (filter === "all") {
+                              response = await axios.get(`${API}/clubs`);
+                            } else {
+                              response = await axios.get(`${API}/clubs?competition=${filter}`);
+                            }
+                            setAvailableAssets(response.data);
+                            // Auto-select all teams in filtered view
+                            if (filter !== "all") {
+                              setSelectedAssetIds(response.data.map(t => t.id));
+                            }
+                          } catch (error) {
+                            console.error("Error filtering clubs:", error);
+                          }
+                        }}
+                      >
+                        <option value="all">All Teams (52)</option>
+                        <option value="EPL">Premier League Only (20)</option>
+                        <option value="UCL">Champions League Only (36)</option>
+                      </select>
+                    </div>
+                  )}
+                  
+                  {/* Quick Action Buttons */}
+                  <div className="mb-3 flex gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setSelectedAssetIds(availableAssets.map(a => a.id))}
+                      className="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-semibold"
+                    >
+                      Select All
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setSelectedAssetIds([])}
+                      className="px-3 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 text-sm font-semibold"
+                    >
+                      Clear All
+                    </button>
+                  </div>
+                  
                   <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3 max-h-96 overflow-y-auto">
                     {availableAssets.map((asset) => (
                       <label
