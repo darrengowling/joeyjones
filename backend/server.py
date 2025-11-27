@@ -3176,8 +3176,13 @@ async def complete_lot(auction_id: str):
         
         await start_next_lot(auction_id, next_club_id)
     else:
-        # Also call completion here to handle "no more clubs" end case
-        await check_auction_completion(auction_id)
+        # No more clubs - auction is complete
+        # Pass final club info to completion check
+        await check_auction_completion(
+            auction_id,
+            final_club_id=current_club_id,
+            final_winning_bid=winning_bid
+        )
 
 
 async def get_next_club_to_auction(auction_id: str) -> Optional[str]:
