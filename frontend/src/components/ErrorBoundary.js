@@ -106,7 +106,7 @@ class ErrorBoundary extends React.Component {
                 </button>
                 
                 <button
-                  onClick={() => window.location.href = '/my-competitions'}
+                  onClick={() => window.location.href = '/app/my-competitions'}
                   className="w-full bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors font-medium"
                 >
                   Go to My Competitions
