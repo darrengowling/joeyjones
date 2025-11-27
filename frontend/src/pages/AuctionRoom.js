@@ -351,6 +351,23 @@ function AuctionRoom() {
     };
   }, [auctionId, user, bidSequence, listenerCount]);
 
+  // Pre-fill bid amount when lot changes or current bid updates
+  useEffect(() => {
+    if (!currentClub) {
+      // No active lot, clear the input
+      setBidAmount("");
+      return;
+    }
+
+    // Calculate suggested bid: current bid + £1m, or £1m minimum if no bids
+    const INCREMENT = 1000000; // £1m
+    const suggestedBid = currentBid ? currentBid + INCREMENT : INCREMENT;
+    
+    // Convert to millions for display (e.g., 5 for £5m)
+    const bidInMillions = suggestedBid / 1000000;
+    setBidAmount(bidInMillions.toString());
+  }, [currentClub, currentBid]);
+
   const loadAuction = async () => {
     try {
       const response = await axios.get(`${API}/auction/${auctionId}`);
