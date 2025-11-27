@@ -3068,6 +3068,11 @@ async def complete_lot(auction_id: str):
             
             logger.info(f"   BEFORE: User {winning_bid['userId']} has {len(user_winning_clubs)} clubs, spent £{user_total_spent:,.0f}")
             
+            # Idempotency check: Don't add club if already awarded
+            if current_club_id in user_winning_clubs:
+                logger.info(f"   ⚠️ Club {current_club_id} already awarded to {winning_bid['userId']}, skipping duplicate")
+                return
+            
             # Add this club and amount
             user_winning_clubs.append(current_club_id)
             user_total_spent += winning_bid["amount"]
