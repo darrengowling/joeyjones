@@ -1,2 +1,2 @@
-export TEST_AUCTION_ID=bd703005-4179-4513-af6d-0e16755b795e
-export TEST_LEAGUE_ID=990b411c-8bf7-4ef3-b133-135c33eb45a5
+export TEST_AUCTION_ID=auctionpilot
+export TEST_LEAGUE_ID=auctionpilot

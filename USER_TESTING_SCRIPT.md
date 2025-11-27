@@ -22,7 +22,7 @@ This is a fantasy football app where you compete against friends by bidding on r
 ## PHASE 1: Sign Up & Navigation (5 min)
 
 ### Commissioner (Tester 1):
-1. **Go to:** https://auction-hardening.preview.emergentagent.com
+1. **Go to:** https://auctionpilot.preview.emergentagent.com
 2. **Click:** "Create Competition" or similar button
 3. **Enter your email** when prompted
 4. **Note:** You'll see a magic link or auto-login (auth is simplified for testing)
@@ -31,7 +31,7 @@ This is a fantasy football app where you compete against friends by bidding on r
 **❌ FLAG:** Any errors or confusion?
 
 ### Other Testers (2-4):
-1. **Go to:** https://auction-hardening.preview.emergentagent.com
+1. **Go to:** https://auctionpilot.preview.emergentagent.com
 2. **Click:** "Join Competition" or similar
 3. **Enter your email**
 

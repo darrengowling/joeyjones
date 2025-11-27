@@ -86,10 +86,10 @@ await retryAxiosRequest(
 **Monitoring**:
 ```bash
 # Check health
-curl https://auction-hardening.preview.emergentagent.com/api/health
+curl https://auctionpilot.preview.emergentagent.com/api/health
 
 # Continuous monitoring (every 30s)
-watch -n 30 curl -s https://auction-hardening.preview.emergentagent.com/api/health
+watch -n 30 curl -s https://auctionpilot.preview.emergentagent.com/api/health
 ```
 
 ### 4. React Error Boundary ✅
@@ -229,7 +229,7 @@ const DEFAULT_RETRY_CONFIG = {
 ### Health Check Monitoring
 
 **Setup External Monitoring** (UptimeRobot, Pingdom, etc.):
-1. Monitor: `https://auction-hardening.preview.emergentagent.com/api/health`
+1. Monitor: `https://auctionpilot.preview.emergentagent.com/api/health`
 2. Interval: 5 minutes
 3. Alert on: Non-200 status or timeout
 4. Notification: Email/SMS/Slack
@@ -237,7 +237,7 @@ const DEFAULT_RETRY_CONFIG = {
 **Example cURL Health Check**:
 ```bash
 #!/bin/bash
-HEALTH_URL="https://auction-hardening.preview.emergentagent.com/api/health"
+HEALTH_URL="https://auctionpilot.preview.emergentagent.com/api/health"
 
 response=$(curl -s -w "%{http_code}" -o /tmp/health.json "$HEALTH_URL")
 
@@ -294,11 +294,11 @@ With Sentry configured:
 
 ```bash
 # Should return 200 and healthy status
-curl -v https://auction-hardening.preview.emergentagent.com/api/health
+curl -v https://auctionpilot.preview.emergentagent.com/api/health
 
 # Stop MongoDB to test degraded state
 sudo supervisorctl stop mongodb
-curl -v https://auction-hardening.preview.emergentagent.com/api/health
+curl -v https://auctionpilot.preview.emergentagent.com/api/health
 # Should return 503 and degraded status
 
 # Restart MongoDB

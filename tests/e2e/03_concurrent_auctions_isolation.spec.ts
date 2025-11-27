@@ -6,7 +6,7 @@
 import { test, expect, chromium, Browser, BrowserContext, Page } from '@playwright/test';
 import { setUserSession } from './helpers/session';  // Prompt C
 
-const BASE_URL = 'https://auction-hardening.preview.emergentagent.com';
+const BASE_URL = 'https://auctionpilot.preview.emergentagent.com';
 
 test.describe('03 - Concurrent Auctions Isolation', () => {
   let browserA1: Browser;

@@ -11,8 +11,8 @@ import time
 from datetime import datetime, timezone
 
 # Configuration
-BASE_URL = "https://auction-hardening.preview.emergentagent.com/api"
-SOCKET_URL = "https://auction-hardening.preview.emergentagent.com"
+BASE_URL = "https://auctionpilot.preview.emergentagent.com/api"
+SOCKET_URL = "https://auctionpilot.preview.emergentagent.com"
 SOCKET_PATH = "/api/socket.io"
 
 def log(message: str, level: str = "INFO"):
