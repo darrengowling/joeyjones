@@ -300,7 +300,7 @@ async def get_fixtures(sport_key: str = "football", date: str = None):
                 "$lte": f"{date}T23:59:59Z"
             }
         
-        fixtures = await db.fixtures.find(query).to_list(length=None)
+        fixtures = await db.fixtures.find(query, {"_id": 0}).to_list(length=None)
         
         return {
             "fixtures": fixtures,
