@@ -68,6 +68,17 @@ load_dotenv(ROOT_DIR / '.env')
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+# Utility function to remove MongoDB _id from documents
+def remove_id(doc):
+    """Remove _id field from MongoDB document for JSON serialization"""
+    if doc is None:
+        return None
+    if isinstance(doc, list):
+        return [remove_id(item) for item in doc]
+    if isinstance(doc, dict):
+        return {k: remove_id(v) for k, v in doc.items() if k != '_id'}
+    return doc
+
 # Initialize Sentry for error tracking (Production Hardening Day 6)
 SENTRY_DSN = os.environ.get('SENTRY_DSN', '')
 SENTRY_ENVIRONMENT = os.environ.get('SENTRY_ENVIRONMENT', 'pilot')
