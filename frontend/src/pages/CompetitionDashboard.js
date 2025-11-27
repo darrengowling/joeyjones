@@ -243,7 +243,7 @@ export default function CompetitionDashboard() {
   const groupFixturesByDate = (fixturesList) => {
     const groups = {};
     fixturesList.forEach((fixture) => {
-      const date = formatDate(fixture.startsAt);
+      const date = formatDate(fixture.startsAt || fixture.matchDate);
       if (!groups[date]) {
         groups[date] = [];
       }
