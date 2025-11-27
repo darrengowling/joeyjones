@@ -516,15 +516,18 @@ export default function LeagueDetail() {
     <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 py-8">
       <div className="container-narrow mx-auto px-4">
         <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-8">
-          <button
-            onClick={() => navigate("/")}
-            className="btn btn-secondary text-blue-600 hover:underline mb-4"
-          >
-            ← Back to Home
-          </button>
+          {/* Breadcrumb Navigation */}
+          <div className="flex items-center gap-2 text-sm text-gray-600 mb-4">
+            <button onClick={() => navigate("/")} className="hover:text-blue-600">Home</button>
+            <span>›</span>
+            <button onClick={() => navigate("/app/my-competitions")} className="hover:text-blue-600">My Competitions</button>
+            <span>›</span>
+            <span className="text-gray-900 font-semibold">{league.name || "Competition"}</span>
+          </div>
 
           <div className="flex justify-between items-start mb-6">
             <div>
+              <div className="text-xs uppercase tracking-wide text-gray-500 mb-1">Competition Detail Page</div>
               <h1 className="h1 text-3xl font-bold text-gray-900 mb-2">{league.name}</h1>
               <div className="stack-md">
                 <div className="row-gap-md flex items-center">
