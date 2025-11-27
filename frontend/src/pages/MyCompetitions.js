@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+// Set page title
+useEffect(() => { document.title = "My Competitions | Sport X"; }, []);
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { formatCurrency } from "../utils/currency";

@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+// Set page title
+useEffect(() => { document.title = "Browse Teams | Sport X"; }, []);
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
