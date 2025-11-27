@@ -283,6 +283,17 @@ class FinalLotAuctionTest:
             }
         )
         
+        # Advance past the final lot to trigger completion (currentLot = 4, but only 3 clubs in queue)
+        await self.db.auctions.update_one(
+            {"id": auction.id},
+            {
+                "$set": {
+                    "currentLot": 4,  # Past the final lot
+                    "currentClubId": None
+                }
+            }
+        )
+        
         # Import and call the check_auction_completion function with proper db context
         import server
         server.db = self.db  # Set the db context
