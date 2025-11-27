@@ -368,11 +368,11 @@ async def get_league_fixtures(league_id: str):
         # Get team details
         if sport_key == "football":
             # For football, teams are in clubs collection
-            teams = await db.clubs.find({"id": {"$in": selected_asset_ids}}).to_list(length=None)
+            teams = await db.clubs.find({"id": {"$in": selected_asset_ids}}, {"_id": 0}).to_list(length=None)
             team_names = [team["name"] for team in teams]
         else:
             # For other sports, teams are in assets collection
-            teams = await db.assets.find({"id": {"$in": selected_asset_ids}}).to_list(length=None)
+            teams = await db.assets.find({"id": {"$in": selected_asset_ids}}, {"_id": 0}).to_list(length=None)
             team_names = [team["name"] for team in teams]
         
         if not team_names:
