@@ -351,7 +351,7 @@ function AuctionRoom() {
     };
   }, [auctionId, user, bidSequence, listenerCount]);
 
-  // Pre-fill bid amount when lot changes or current bid updates
+  // Pre-fill bid input with current bid amount
   useEffect(() => {
     if (!currentClub) {
       // No active lot, clear the input
@@ -359,13 +359,13 @@ function AuctionRoom() {
       return;
     }
 
-    // Calculate suggested bid: current bid + £1m, or £1m minimum if no bids
-    const INCREMENT = 1000000; // £1m
-    const suggestedBid = currentBid ? currentBid + INCREMENT : INCREMENT;
-    
-    // Convert to millions for display (e.g., 5 for £5m)
-    const bidInMillions = suggestedBid / 1000000;
-    setBidAmount(bidInMillions.toString());
+    if (currentBid && currentBid > 0) {
+      // Show current bid amount in millions (e.g., "5" for £5m)
+      setBidAmount((currentBid / 1000000).toString());
+    } else {
+      // No bids yet, keep input empty
+      setBidAmount("");
+    }
   }, [currentClub, currentBid]);
 
   const loadAuction = async () => {
