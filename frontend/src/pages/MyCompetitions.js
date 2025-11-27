@@ -1,6 +1,4 @@
 import { useState, useEffect } from "react";
-// Set page title
-useEffect(() => { document.title = "My Competitions | Sport X"; }, []);
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { formatCurrency } from "../utils/currency";
@@ -15,6 +13,11 @@ export default function MyCompetitions() {
   const [sports, setSports] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  // Set page title
+  useEffect(() => {
+    document.title = "My Competitions | Sport X";
+  }, []);
 
   useEffect(() => {
     // Get user from localStorage
