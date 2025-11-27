@@ -1,6 +1,4 @@
 import { useState, useEffect } from "react";
-// Set page title
-useEffect(() => { document.title = "Browse Teams | Sport X"; }, []);
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -15,6 +13,11 @@ export default function ClubsList() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedSport, setSelectedSport] = useState("football");
+
+  // Set page title
+  useEffect(() => {
+    document.title = "Browse Teams | Sport X";
+  }, []);
 
   useEffect(() => {
     loadSportsAndAssets();
