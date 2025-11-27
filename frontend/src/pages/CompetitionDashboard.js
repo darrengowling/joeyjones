@@ -645,6 +645,25 @@ export default function CompetitionDashboard() {
         {/* Commissioner CSV Upload Panel */}
         {isCommissioner && (
           <>
+            {/* Update Match Scores from API-Football */}
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-md font-bold text-gray-900 mb-1">Update Match Scores (Live)</h3>
+                  <p className="text-sm text-gray-600">
+                    Fetch latest scores from API-Football for Nov 29-30 matches
+                  </p>
+                </div>
+                <button
+                  onClick={handleUpdateScores}
+                  disabled={loading}
+                  className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed font-semibold"
+                >
+                  {loading ? "Updating..." : "Update Match Scores"}
+                </button>
+              </div>
+            </div>
+
             <div className="bg-white rounded-lg shadow p-6" data-testid="fixtures-upload">
               <h3 className="text-lg font-bold text-gray-900 mb-3">Import Fixtures (CSV)</h3>
               <p className="text-sm text-gray-600 mb-4">
