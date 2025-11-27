@@ -320,13 +320,18 @@ function AuctionRoom() {
     socket.on('auction_paused', onAuctionPaused);
     socket.on('auction_resumed', onAuctionResumed);
     socket.on('participants_changed', onParticipantsChanged); // Prompt A
-    socket.on('next_team_countdown', (data) => {
-      setCountdown(data.seconds);
-      // Clear countdown when it reaches 0
+    
+    // Handle countdown between lots
+    const onNextTeamCountdown = (data) => {
+      console.log('⏱️ Countdown:', data.seconds);
       if (data.seconds === 0) {
-        setTimeout(() => setCountdown(null), 500);
+        // Immediately clear overlay when countdown reaches 0
+        setCountdown(null);
+      } else {
+        setCountdown(data.seconds);
       }
-    });
+    };
+    socket.on('next_team_countdown', onNextTeamCountdown);
 
     // Cleanup function - remove all listeners
     return () => {
@@ -342,6 +347,7 @@ function AuctionRoom() {
       socket.off('auction_paused', onAuctionPaused);
       socket.off('auction_resumed', onAuctionResumed);
       socket.off('participants_changed', onParticipantsChanged); // Prompt A
+      socket.off('next_team_countdown', onNextTeamCountdown);
     };
   }, [auctionId, user, bidSequence, listenerCount]);
 
