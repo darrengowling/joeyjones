@@ -3147,25 +3147,7 @@ async def complete_lot(auction_id: str):
         **sold_data
     }, room=f"auction:{auction_id}")
     
-    # ALWAYS evaluate completion first (before considering next lot)
-    # Pass final club info to ensure frontend gets complete state
-    await check_auction_completion(
-        auction_id, 
-        final_club_id=current_club_id,
-        final_winning_bid=winning_bid
-    )
-    
-    # Re-read auction status idempotently (single source of truth)
-    auction = await db.auctions.find_one({"id": auction_id}, {"_id": 0})
-    if not auction or auction.get("status") != "active":
-        # Auction already completed by check_auction_completion
-        logger.info(f"auction.completion_halted", extra={
-            "auction_id": auction_id,
-            "status": auction.get("status") if auction else "not_found"
-        })
-        return  # Do NOT start another lot
-    
-    # Only now consider starting the next lot
+    # Check if there's a next club to auction
     next_club_id = await get_next_club_to_auction(auction_id)
     
     logger.info(f"auction.next_lot_decision", extra={
