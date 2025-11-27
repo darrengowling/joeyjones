@@ -824,7 +824,7 @@ function AuctionRoom() {
                   <h2 className="h2 text-2xl font-bold mb-4 text-gray-900">🔥 Current {uiHints.assetLabel} Ownership</h2>
                   
                   {/* Countdown Overlay Between Lots */}
-                  {countdown !== null && (
+                  {countdown !== null && countdown > 0 && (
                     <div className="fixed inset-0 bg-black bg-opacity-75 z-50 flex items-center justify-center">
                       <div className="bg-white rounded-lg p-12 text-center shadow-2xl">
                         <div className="text-7xl font-bold text-blue-600 mb-4">
