@@ -25,6 +25,11 @@ export default function CreateLeague() {
   });
   const [budgetDisplay, setBudgetDisplay] = useState("500"); // Display in millions
 
+  // Set page title
+  useEffect(() => {
+    document.title = "Create Competition | Sport X";
+  }, []);
+
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
     if (savedUser) {
