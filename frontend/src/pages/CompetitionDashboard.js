@@ -166,7 +166,7 @@ export default function CompetitionDashboard() {
         setStandings(response.data);
       } else if (tab === "fixtures") {
         const response = await axios.get(`${API}/leagues/${leagueId}/fixtures`);
-        setFixtures(response.data);
+        setFixtures(response.data.fixtures || []);
       } else if (tab === "breakdown") {
         const response = await axios.get(`${API}/leagues/${leagueId}/match-breakdown`);
         setMatchBreakdown(response.data);
