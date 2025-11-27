@@ -789,7 +789,7 @@ export default function CompetitionDashboard() {
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-4 flex-1">
                             <div className="text-sm text-gray-500 w-16">
-                              {formatTime(fixture.startsAt)}
+                              {formatTime(fixture.startsAt || fixture.matchDate)}
                             </div>
                             <div className="flex-1">
                               <div className="text-sm font-medium text-gray-900">
