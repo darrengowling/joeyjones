@@ -3186,6 +3186,12 @@ async def complete_lot(auction_id: str):
             }, room=f"auction:{auction_id}")
             await asyncio.sleep(1)
         
+        # Clear countdown overlay
+        await sio.emit("next_team_countdown", {
+            "seconds": 0,
+            "message": "Starting..."
+        }, room=f"auction:{auction_id}")
+        
         await start_next_lot(auction_id, next_club_id)
     else:
         # Also call completion here to handle "no more clubs" end case
