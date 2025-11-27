@@ -419,13 +419,13 @@ class FinalLotAuctionTest:
         
         final_club_id = clubs[2]["id"]
         
-        # Update auction to final lot with no bids
+        # Update auction to final lot with no bids and advance past it
         await self.db.auctions.update_one(
             {"id": auction.id},
             {
                 "$set": {
-                    "currentLot": 3,
-                    "currentClubId": final_club_id,
+                    "currentLot": 4,  # Past the final lot
+                    "currentClubId": None,
                     "timerEndsAt": datetime.now(timezone.utc),
                     "unsoldClubs": [final_club_id]  # Mark as unsold
                 }
