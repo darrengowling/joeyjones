@@ -320,6 +320,13 @@ function AuctionRoom() {
     socket.on('auction_paused', onAuctionPaused);
     socket.on('auction_resumed', onAuctionResumed);
     socket.on('participants_changed', onParticipantsChanged); // Prompt A
+    socket.on('next_team_countdown', (data) => {
+      setCountdown(data.seconds);
+      // Clear countdown when it reaches 0
+      if (data.seconds === 0) {
+        setTimeout(() => setCountdown(null), 500);
+      }
+    });
 
     // Cleanup function - remove all listeners
     return () => {
