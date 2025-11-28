@@ -1,0 +1,39 @@
+{
+  "newly_added": [
+    "VfB Stuttgart",
+    "RB Leipzig",
+    "Inter Milan",
+    "AC Milan",
+    "Juventus",
+    "Atalanta",
+    "Paris Saint-Germain",
+    "AS Monaco",
+    "Brest",
+    "Sporting CP",
+    "Benfica",
+    "FC Porto",
+    "PSV Eindhoven",
+    "Feyenoord",
+    "Club Brugge",
+    "Union Saint-Gilloise",
+    "Celtic",
+    "Rangers",
+    "Sturm Graz",
+    "Sparta Prague",
+    "Dinamo Zagreb",
+    "Young Boys",
+    "Red Star Belgrade",
+    "Shakhtar Donetsk",
+    "FC Copenhagen",
+    "Jagiellonia Bia\u0142ystok"
+  ],
+  "skipped": [
+    "Real Madrid",
+    "Barcelona",
+    "Atl\u00e9tico Madrid",
+    "Athletic Bilbao",
+    "Bayer Leverkusen",
+    "Bayern Munich"
+  ],
+  "final_count": 81
+}
