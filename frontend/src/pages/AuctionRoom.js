@@ -446,6 +446,23 @@ function AuctionRoom() {
     }
   };
 
+  const loadNextFixture = async (clubId) => {
+    try {
+      const response = await axios.get(`${API}/assets/${clubId}/next-fixture`);
+      if (response.data.fixture) {
+        setNextFixture(response.data.fixture);
+        console.log("📅 Next fixture loaded:", response.data.fixture);
+      } else {
+        setNextFixture(null);
+        console.log("📅 No upcoming fixtures for this team");
+      }
+    } catch (error) {
+      console.error("Error loading next fixture:", error);
+      setNextFixture(null); // Fail gracefully
+    }
+  };
+
+
   const placeBid = async () => {
     if (!user || !currentClub || !bidAmount) {
       toast.error("Please enter your strategic bid amount to claim ownership");
