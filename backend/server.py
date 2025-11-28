@@ -3121,6 +3121,11 @@ async def complete_lot(auction_id: str):
     
     if all_full:
         logger.info(f"🏁 All rosters full after lot complete - completing auction early")
+        # Clear current lot/club before completing
+        await db.auctions.update_one(
+            {"id": auction_id},
+            {"$set": {"currentClubId": None, "currentLot": auction.get("currentLot", 0)}}
+        )
         await check_auction_completion(auction_id)
         return  # Don't proceed to next lot
     
