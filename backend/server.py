@@ -2958,21 +2958,7 @@ async def place_bid(auction_id: str, bid_input: BidCreate):
     status = compute_auction_status(league, participants, auction_state)
     logger.info(f"🔍 AUCTION_STATUS after bid: {json.dumps(status)}")
     
-    # Check if all rosters are now full - if so, complete auction
-    # But ONLY if we're not on the final lot (to avoid premature completion)
-    auction_after_bid = await db.auctions.find_one({"id": auction_id}, {"_id": 0})
-    current_lot = auction_after_bid.get("currentLot", 0)
-    queue_length = len(auction_after_bid.get("clubQueue", []))
-    
-    # Only check completion if NOT on the final lot
-    if current_lot < queue_length:
-        # Check if all managers have full rosters
-        max_slots = league.get("clubSlots", 3)
-        all_full = all(len(p.get("clubsWon", [])) >= max_slots for p in participants)
-        
-        if all_full:
-            logger.info(f"🏁 All rosters full after bid - completing auction early")
-            await check_auction_completion(auction_id)
+    # Note: Roster fullness check moved to complete_lot (after clubs are awarded)
     
     return {"message": "Bid placed successfully", "bid_obj": bid_obj}
 
