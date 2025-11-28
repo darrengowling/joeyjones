@@ -459,9 +459,13 @@ async def get_asset_next_fixture(asset_id: str):
         opponent = fixture.get("awayTeam") if is_home else fixture.get("homeTeam")
         
         # Calculate time until match
-        match_date = fixture.get("matchDate")
+        # Handle both matchDate (string) and startsAt (datetime) fields
+        match_date = fixture.get("matchDate") or fixture.get("startsAt")
         if isinstance(match_date, str):
             match_date = datetime.fromisoformat(match_date.replace('Z', '+00:00'))
+        
+        if not match_date:
+            match_date = now  # Fallback if no date found
         
         time_diff = match_date - now
         days = time_diff.days
