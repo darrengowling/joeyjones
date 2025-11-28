@@ -401,6 +401,87 @@ async def get_league_fixtures(league_id: str):
         logger.error(f"Error fetching fixtures for league {league_id}: {str(e)}")
         raise HTTPException(status_code=500, detail="Error fetching fixtures")
 
+
+@api_router.get("/assets/{asset_id}/next-fixture")
+async def get_asset_next_fixture(asset_id: str):
+    """
+    Get the next upcoming fixture for a specific asset (team/player)
+    Returns the earliest scheduled fixture where this asset is playing
+    """
+    try:
+        # Get asset details to fetch team name
+        asset = await db.assets.find_one({"id": asset_id}, {"_id": 0})
+        if not asset:
+            raise HTTPException(status_code=404, detail="Asset not found")
+        
+        asset_name = asset.get("name")
+        if not asset_name:
+            return {"fixture": None, "message": "Asset name not found"}
+        
+        # Query for next fixture where this asset is playing
+        # Check both homeTeam/awayTeam (name-based) and homeTeamId/awayTeamId (id-based)
+        now = datetime.now(timezone.utc)
+        
+        fixture = await db.fixtures.find_one(
+            {
+                "$and": [
+                    {
+                        "$or": [
+                            {"homeTeam": asset_name},
+                            {"awayTeam": asset_name},
+                            {"homeTeamId": asset_id},
+                            {"awayTeamId": asset_id}
+                        ]
+                    },
+                    {"matchDate": {"$gte": now}},
+                    {"status": "scheduled"}
+                ]
+            },
+            {"_id": 0}
+        ).sort("matchDate", 1)
+        
+        if not fixture:
+            return {"fixture": None, "message": "No upcoming fixtures found"}
+        
+        # Determine opponent and home/away status
+        is_home = fixture.get("homeTeam") == asset_name or fixture.get("homeTeamId") == asset_id
+        opponent = fixture.get("awayTeam") if is_home else fixture.get("homeTeam")
+        
+        # Calculate time until match
+        match_date = fixture.get("matchDate")
+        if isinstance(match_date, str):
+            match_date = datetime.fromisoformat(match_date.replace('Z', '+00:00'))
+        
+        time_diff = match_date - now
+        days = time_diff.days
+        hours = time_diff.seconds // 3600
+        
+        if days > 0:
+            time_until = f"in {days}d" if days > 1 else "tomorrow"
+        elif hours > 0:
+            time_until = f"in {hours}h"
+        else:
+            time_until = "soon"
+        
+        return {
+            "fixture": {
+                "id": fixture.get("id"),
+                "opponent": opponent,
+                "isHome": is_home,
+                "venue": fixture.get("venue"),
+                "matchDate": match_date.isoformat() if match_date else None,
+                "competition": fixture.get("competition", "Match"),
+                "timeUntil": time_until,
+                "status": fixture.get("status")
+            }
+        }
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error fetching next fixture for asset {asset_id}: {str(e)}")
+        raise HTTPException(status_code=500, detail="Error fetching next fixture")
+
 # Add metrics endpoint to API router
 @api_router.get("/metrics")
 def get_metrics():
