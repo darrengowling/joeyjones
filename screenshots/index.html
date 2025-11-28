@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sport X - UI Screenshots</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #666;
+            margin-bottom: 40px;
+        }
+        .screenshot {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 40px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .screenshot h2 {
+            color: #444;
+            margin-top: 0;
+            font-size: 24px;
+        }
+        .screenshot img {
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        .metadata {
+            color: #666;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Sport X - UI Screenshots Collection</h1>
+    <p class="subtitle">Desktop views (1920px) - Captured: 2025-11-28</p>
+
+    <div class="screenshot">
+        <h2>1. My Competitions</h2>
+        <div class="metadata">Route: /app/my-competitions | Auth: Required</div>
+        <img src="01_my_competitions.png" alt="My Competitions page">
+    </div>
+
+    <div class="screenshot">
+        <h2>2. Competition Dashboard - Summary Tab</h2>
+        <div class="metadata">Route: /app/competitions/:id | Auth: Required</div>
+        <img src="02_dashboard_summary.png" alt="Dashboard Summary">
+    </div>
+
+    <div class="screenshot">
+        <h2>3. Competition Dashboard - League Table</h2>
+        <div class="metadata">Route: /app/competitions/:id | Auth: Required | Tab: League Table</div>
+        <img src="03_dashboard_league_table.png" alt="League Table">
+    </div>
+
+    <div class="screenshot">
+        <h2>4. Competition Dashboard - Fixtures</h2>
+        <div class="metadata">Route: /app/competitions/:id | Auth: Required | Tab: Fixtures</div>
+        <img src="04_dashboard_fixtures.png" alt="Fixtures">
+    </div>
+
+    <div class="screenshot">
+        <h2>5. Competition Dashboard - Match Breakdown</h2>
+        <div class="metadata">Route: /app/competitions/:id | Auth: Required | Tab: Match Breakdown</div>
+        <img src="05_dashboard_match_breakdown.png" alt="Match Breakdown">
+    </div>
+
+    <div class="screenshot">
+        <h2>6. Competition Detail (Non-Commissioner)</h2>
+        <div class="metadata">Route: /app/competition/:id | Auth: Required | Role: Participant</div>
+        <img src="06_competition_detail_non_commissioner.png" alt="Competition Detail">
+    </div>
+
+    <div class="screenshot">
+        <h2>7. Create Competition Modal</h2>
+        <div class="metadata">Route: /create-league | Auth: Required</div>
+        <img src="07_create_competition_modal.png" alt="Create Competition">
+    </div>
+
+    <div class="screenshot">
+        <h2>8. Competition Detail (Commissioner)</h2>
+        <div class="metadata">Route: /app/competition/:id | Auth: Required | Role: Commissioner</div>
+        <img src="08_competition_detail_commissioner.png" alt="Competition Detail Commissioner">
+    </div>
+
+    <div class="screenshot">
+        <h2>9. Team Selection Screen</h2>
+        <div class="metadata">Route: /create-league | Auth: Required | State: Team Selection</div>
+        <img src="09_team_selection.png" alt="Team Selection">
+    </div>
+
+    <div class="screenshot">
+        <h2>10. Auction Waiting Room</h2>
+        <div class="metadata">Route: /auction/:id | Auth: Required | Status: Waiting</div>
+        <img src="10_auction_waiting_room.png" alt="Auction Waiting Room">
+    </div>
+
+    <div class="screenshot">
+        <h2>11. Auction Live - With Fixture Card ⭐</h2>
+        <div class="metadata">Route: /auction/:id | Auth: Required | Status: Active | Feature: Next Fixture Card</div>
+        <img src="11_auction_live_fixture_card.png" alt="Auction Live with Fixture">
+    </div>
+
+    <div class="screenshot">
+        <h2>12. Auction Live - With Bid Placed</h2>
+        <div class="metadata">Route: /auction/:id | Auth: Required | Status: Active</div>
+        <img src="12_auction_live_with_bid.png" alt="Auction with Bid">
+    </div>
+
+    <div class="screenshot">
+        <h2>13. Auction - Between Lots Countdown</h2>
+        <div class="metadata">Route: /auction/:id | Auth: Required | Status: Active | State: Countdown</div>
+        <img src="13_auction_countdown.png" alt="Auction Countdown">
+    </div>
+
+    <div class="screenshot">
+        <h2>14. Auction Complete</h2>
+        <div class="metadata">Route: /auction/:id | Auth: Required | Status: Completed</div>
+        <img src="14_auction_complete.png" alt="Auction Complete">
+    </div>
+
+</body>
+</html>
