@@ -1,0 +1,1 @@
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"}],"uuid":"fc91518871f74e6f84044f94f27fd370","collectionName":"league_leaderboards","type":"collection"}
