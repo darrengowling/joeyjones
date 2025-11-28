@@ -369,6 +369,17 @@ function AuctionRoom() {
     }
   }, [currentClub, currentBid]);
 
+
+  // Load next fixture when current club changes
+  useEffect(() => {
+    if (currentClub && currentClub.id) {
+      loadNextFixture(currentClub.id);
+    } else {
+      setNextFixture(null);
+    }
+  }, [currentClub]);
+
+
   const loadAuction = async () => {
     try {
       const response = await axios.get(`${API}/auction/${auctionId}`);
