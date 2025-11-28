@@ -1,0 +1,378 @@
+{
+  "id_mapping": {
+    "4fce4c39-efb8-41fa-896f-911b62cb430d": "4fce4c39-efb8-41fa-896f-911b62cb430d",
+    "81a1df0e-9ae6-4129-af19-3572a9c8236b": "81a1df0e-9ae6-4129-af19-3572a9c8236b",
+    "a8d9ed71-584c-45e2-b347-54ff8a9b826b": "a8d9ed71-584c-45e2-b347-54ff8a9b826b",
+    "9c84eed4-74af-4301-b50d-4e662a26a021": "9c84eed4-74af-4301-b50d-4e662a26a021",
+    "a5d3d801-d5c7-46fa-b417-33a8efc52171": "6528fdd2-82df-4c4a-9146-a99d7ac709e1",
+    "41badd9c-ca1a-4593-9740-08a1b0da8e19": "d4f3eddc-c237-47ce-b543-9f9b9e8a3ec3",
+    "57fbc7a4-1df4-4dcc-ab34-21347db9da58": "365057be-7b7f-42c8-be08-624c8b00f9de",
+    "14ef23b2-3efa-4fcb-b492-e66f938b0859": "7a6e57e7-e01a-4ff9-8074-e359bbca16ef",
+    "7a2fe305-744e-4376-84b9-4438d50e68f0": "7a2fe305-744e-4376-84b9-4438d50e68f0",
+    "9a2ee2a5-749b-4d1a-a8a4-4fa073c497b3": "9a2ee2a5-749b-4d1a-a8a4-4fa073c497b3",
+    "b33e9177-3ea5-4c79-aff6-ab90d0dac68e": "b33e9177-3ea5-4c79-aff6-ab90d0dac68e",
+    "45e6d4c3-0d8c-4e48-bd4b-a9032e13dc0a": "45e6d4c3-0d8c-4e48-bd4b-a9032e13dc0a",
+    "b1b7f713-42cc-47ce-b289-da1c2d4c4558": "b1b7f713-42cc-47ce-b289-da1c2d4c4558",
+    "9a41d91a-b86a-4bdb-90b2-e803cc40a412": "9a41d91a-b86a-4bdb-90b2-e803cc40a412",
+    "f67fa988-4216-4974-a64a-d47d4d229e12": "f67fa988-4216-4974-a64a-d47d4d229e12",
+    "e5b1e6f3-ab82-41b9-817a-f190a438c216": "e5b1e6f3-ab82-41b9-817a-f190a438c216",
+    "147fe810-3141-4826-b85c-6f894cac7a84": "147fe810-3141-4826-b85c-6f894cac7a84",
+    "11c30925-d343-4013-8b0d-6c048ee01f21": "11c30925-d343-4013-8b0d-6c048ee01f21",
+    "4ff2f7e3-006f-463b-ba6f-9efbcea93e1f": "4ff2f7e3-006f-463b-ba6f-9efbcea93e1f",
+    "871ad0de-8dda-4271-a4ca-e59d429ec4d0": "871ad0de-8dda-4271-a4ca-e59d429ec4d0",
+    "4dea98b3-2385-42ae-8bb0-853810813406": "4dea98b3-2385-42ae-8bb0-853810813406",
+    "237e25d4-0066-43d9-a53f-afd0e1c96733": "237e25d4-0066-43d9-a53f-afd0e1c96733",
+    "87c0bf68-d461-46ae-975a-079ae2e60965": "87c0bf68-d461-46ae-975a-079ae2e60965",
+    "7f4eb673-98a1-4e21-bda2-ed705730204c": "7f4eb673-98a1-4e21-bda2-ed705730204c",
+    "b028a2fe-8e7a-4c54-8113-3c2b69744172": "b028a2fe-8e7a-4c54-8113-3c2b69744172",
+    "4f136843-04c5-4c30-89ee-1be11c98870e": "4f136843-04c5-4c30-89ee-1be11c98870e",
+    "e4855e03-4b09-4286-bf4b-4054ba4976c5": "e4855e03-4b09-4286-bf4b-4054ba4976c5",
+    "5a4e101d-cdfa-47cf-b61a-0c8887941c67": "5a4e101d-cdfa-47cf-b61a-0c8887941c67",
+    "cff931c2-1817-48fd-a264-d3a27247745a": "cff931c2-1817-48fd-a264-d3a27247745a",
+    "34a50ea1-d748-43e0-ac63-b155f9561bbd": "34a50ea1-d748-43e0-ac63-b155f9561bbd",
+    "bcc7d213-92ea-4f23-ad17-f428d5df1b9f": "bcc7d213-92ea-4f23-ad17-f428d5df1b9f",
+    "72684f2d-8221-4fa8-9508-fa45e495e48a": "72684f2d-8221-4fa8-9508-fa45e495e48a",
+    "7bb88d08-64e6-40a5-be6a-aa9f893c8cb3": "7bb88d08-64e6-40a5-be6a-aa9f893c8cb3",
+    "28d244a9-c6ad-4dbd-8e64-759b2658c627": "28d244a9-c6ad-4dbd-8e64-759b2658c627",
+    "83bcefa4-80c4-4d0b-a62e-b1d93f6e0126": "83bcefa4-80c4-4d0b-a62e-b1d93f6e0126",
+    "ac41874b-5de0-4155-862c-17e38c685018": "ac41874b-5de0-4155-862c-17e38c685018",
+    "021bb7c7-7092-4d55-9e3e-68a43786fce1": "294fae2c-b334-481e-bd45-78098291b614",
+    "d1bfdb34-eb7d-4a48-8b4e-c91db0729c3e": "e0580baf-d29b-48fe-8efe-de850d2b5fc6",
+    "3bce411a-6366-4f4e-9d65-914352b388cb": "55e55592-d62c-4a03-bd66-a2528a61020f",
+    "c223a66c-9ae3-49fd-93a4-39acfb971249": "7419e920-e0ae-43fa-814b-dd42efe9502f",
+    "5e76f063-af6e-4e2a-a65b-5c8d10b76e28": "dc887b5e-61fd-4704-84f9-ab41525e9dac",
+    "ca04216f-3a92-4485-aa47-5f28850e6494": "99e1dcd1-c42b-47ee-9f83-da95918608e5",
+    "45724ea1-a263-4c42-9cf8-c8c143cd802d": "6c74c6ce-68d2-4989-97cc-485d7201da46",
+    "fb84b22e-16c5-408f-a711-68539bf46649": "99863e12-f6dd-4784-9442-848ac32e9bc1",
+    "6e0b978d-0e87-4262-88fd-a34f1200bf98": "9732c9d5-bf90-4c58-95ef-2b8fe82902f2",
+    "677f742e-aca5-4f0b-80d2-874c52f0330c": "a724fd81-c494-4364-9e0c-a0b1105784cb",
+    "7e425fbe-3135-4080-ab25-e38eb98d15fb": "5fb4ed39-0be6-4bb4-90b0-db57ffaa4493",
+    "6eb4d3bc-d567-443d-a19d-102f9a8e0953": "6dc511b9-d3a8-4c34-9a57-77cfab200c02",
+    "e07d37a4-6a35-4f6a-a7cd-587ba2a0b66a": "f85e2be8-25a0-4f24-bcaf-8b4db1f67518",
+    "38814c60-25b6-43a2-9bc1-de1c0921586c": "9ebd74ec-6326-41b4-8fa4-f89b1232dfd5",
+    "01e0c5f5-40f3-4508-ad70-36dac86d575e": "fa3b9391-8a37-4b39-9da3-287a09708b8e",
+    "25339b2c-bb02-4f74-a537-867387e1d317": "3e310382-f3a3-4977-8b96-3b14ed7a3cd4"
+  },
+  "duplicates": [
+    {
+      "name": "Manchester City",
+      "club_id": "a5d3d801-d5c7-46fa-b417-33a8efc52171",
+      "asset_id": "6528fdd2-82df-4c4a-9146-a99d7ac709e1",
+      "competition": "UEFA Champions League"
+    },
+    {
+      "name": "Arsenal",
+      "club_id": "41badd9c-ca1a-4593-9740-08a1b0da8e19",
+      "asset_id": "d4f3eddc-c237-47ce-b543-9f9b9e8a3ec3",
+      "competition": "UEFA Champions League"
+    },
+    {
+      "name": "Liverpool",
+      "club_id": "57fbc7a4-1df4-4dcc-ab34-21347db9da58",
+      "asset_id": "365057be-7b7f-42c8-be08-624c8b00f9de",
+      "competition": "UEFA Champions League"
+    },
+    {
+      "name": "Aston Villa",
+      "club_id": "14ef23b2-3efa-4fcb-b492-e66f938b0859",
+      "asset_id": "7a6e57e7-e01a-4ff9-8074-e359bbca16ef",
+      "competition": "UEFA Champions League"
+    },
+    {
+      "name": "AFC Bournemouth",
+      "club_id": "021bb7c7-7092-4d55-9e3e-68a43786fce1",
+      "asset_id": "294fae2c-b334-481e-bd45-78098291b614",
+      "competition": "English Premier League"
+    },
+    {
+      "name": "Brentford",
+      "club_id": "d1bfdb34-eb7d-4a48-8b4e-c91db0729c3e",
+      "asset_id": "e0580baf-d29b-48fe-8efe-de850d2b5fc6",
+      "competition": "English Premier League"
+    },
+    {
+      "name": "Brighton & Hove Albion",
+      "club_id": "3bce411a-6366-4f4e-9d65-914352b388cb",
+      "asset_id": "55e55592-d62c-4a03-bd66-a2528a61020f",
+      "competition": "English Premier League"
+    },
+    {
+      "name": "Burnley",
+      "club_id": "c223a66c-9ae3-49fd-93a4-39acfb971249",
+      "asset_id": "7419e920-e0ae-43fa-814b-dd42efe9502f",
+      "competition": "English Premier League"
+    },
+    {
+      "name": "Chelsea",
+      "club_id": "5e76f063-af6e-4e2a-a65b-5c8d10b76e28",
+      "asset_id": "dc887b5e-61fd-4704-84f9-ab41525e9dac",
+      "competition": "English Premier League"
+    },
+    {
+      "name": "Crystal Palace",
+      "club_id": "ca04216f-3a92-4485-aa47-5f28850e6494",
+      "asset_id": "99e1dcd1-c42b-47ee-9f83-da95918608e5",
+      "competition": "English Premier League"
+    },
+    {
+      "name": "Everton",
+      "club_id": "45724ea1-a263-4c42-9cf8-c8c143cd802d",
+      "asset_id": "6c74c6ce-68d2-4989-97cc-485d7201da46",
+      "competition": "English Premier League"
+    },
+    {
+      "name": "Fulham",
+      "club_id": "fb84b22e-16c5-408f-a711-68539bf46649",
+      "asset_id": "99863e12-f6dd-4784-9442-848ac32e9bc1",
+      "competition": "English Premier League"
+    },
+    {
+      "name": "Leeds United",
+      "club_id": "6e0b978d-0e87-4262-88fd-a34f1200bf98",
+      "asset_id": "9732c9d5-bf90-4c58-95ef-2b8fe82902f2",
+      "competition": "English Premier League"
+    },
+    {
+      "name": "Manchester United",
+      "club_id": "677f742e-aca5-4f0b-80d2-874c52f0330c",
+      "asset_id": "a724fd81-c494-4364-9e0c-a0b1105784cb",
+      "competition": "English Premier League"
+    },
+    {
+      "name": "Newcastle United",
+      "club_id": "7e425fbe-3135-4080-ab25-e38eb98d15fb",
+      "asset_id": "5fb4ed39-0be6-4bb4-90b0-db57ffaa4493",
+      "competition": "English Premier League"
+    },
+    {
+      "name": "Nottingham Forest",
+      "club_id": "6eb4d3bc-d567-443d-a19d-102f9a8e0953",
+      "asset_id": "6dc511b9-d3a8-4c34-9a57-77cfab200c02",
+      "competition": "English Premier League"
+    },
+    {
+      "name": "Sunderland",
+      "club_id": "e07d37a4-6a35-4f6a-a7cd-587ba2a0b66a",
+      "asset_id": "f85e2be8-25a0-4f24-bcaf-8b4db1f67518",
+      "competition": "English Premier League"
+    },
+    {
+      "name": "Tottenham Hotspur",
+      "club_id": "38814c60-25b6-43a2-9bc1-de1c0921586c",
+      "asset_id": "9ebd74ec-6326-41b4-8fa4-f89b1232dfd5",
+      "competition": "English Premier League"
+    },
+    {
+      "name": "West Ham United",
+      "club_id": "01e0c5f5-40f3-4508-ad70-36dac86d575e",
+      "asset_id": "fa3b9391-8a37-4b39-9da3-287a09708b8e",
+      "competition": "English Premier League"
+    },
+    {
+      "name": "Wolverhampton Wanderers",
+      "club_id": "25339b2c-bb02-4f74-a537-867387e1d317",
+      "asset_id": "3e310382-f3a3-4977-8b96-3b14ed7a3cd4",
+      "competition": "English Premier League"
+    }
+  ],
+  "new_teams": [
+    {
+      "name": "Real Madrid",
+      "id": "4fce4c39-efb8-41fa-896f-911b62cb430d",
+      "competition": "UEFA Champions League",
+      "country": "Spain"
+    },
+    {
+      "name": "Barcelona",
+      "id": "81a1df0e-9ae6-4129-af19-3572a9c8236b",
+      "competition": "UEFA Champions League",
+      "country": "Spain"
+    },
+    {
+      "name": "Atl\u00e9tico Madrid",
+      "id": "a8d9ed71-584c-45e2-b347-54ff8a9b826b",
+      "competition": "UEFA Champions League",
+      "country": "Spain"
+    },
+    {
+      "name": "Athletic Bilbao",
+      "id": "9c84eed4-74af-4301-b50d-4e662a26a021",
+      "competition": "UEFA Champions League",
+      "country": "Spain"
+    },
+    {
+      "name": "Bayer Leverkusen",
+      "id": "7a2fe305-744e-4376-84b9-4438d50e68f0",
+      "competition": "UEFA Champions League",
+      "country": "Germany"
+    },
+    {
+      "name": "Bayern Munich",
+      "id": "9a2ee2a5-749b-4d1a-a8a4-4fa073c497b3",
+      "competition": "UEFA Champions League",
+      "country": "Germany"
+    },
+    {
+      "name": "VfB Stuttgart",
+      "id": "b33e9177-3ea5-4c79-aff6-ab90d0dac68e",
+      "competition": "UEFA Champions League",
+      "country": "Germany"
+    },
+    {
+      "name": "RB Leipzig",
+      "id": "45e6d4c3-0d8c-4e48-bd4b-a9032e13dc0a",
+      "competition": "UEFA Champions League",
+      "country": "Germany"
+    },
+    {
+      "name": "Inter Milan",
+      "id": "b1b7f713-42cc-47ce-b289-da1c2d4c4558",
+      "competition": "UEFA Champions League",
+      "country": "Italy"
+    },
+    {
+      "name": "AC Milan",
+      "id": "9a41d91a-b86a-4bdb-90b2-e803cc40a412",
+      "competition": "UEFA Champions League",
+      "country": "Italy"
+    },
+    {
+      "name": "Juventus",
+      "id": "f67fa988-4216-4974-a64a-d47d4d229e12",
+      "competition": "UEFA Champions League",
+      "country": "Italy"
+    },
+    {
+      "name": "Atalanta",
+      "id": "e5b1e6f3-ab82-41b9-817a-f190a438c216",
+      "competition": "UEFA Champions League",
+      "country": "Italy"
+    },
+    {
+      "name": "Paris Saint-Germain",
+      "id": "147fe810-3141-4826-b85c-6f894cac7a84",
+      "competition": "UEFA Champions League",
+      "country": "France"
+    },
+    {
+      "name": "AS Monaco",
+      "id": "11c30925-d343-4013-8b0d-6c048ee01f21",
+      "competition": "UEFA Champions League",
+      "country": "France"
+    },
+    {
+      "name": "Brest",
+      "id": "4ff2f7e3-006f-463b-ba6f-9efbcea93e1f",
+      "competition": "UEFA Champions League",
+      "country": "France"
+    },
+    {
+      "name": "Sporting CP",
+      "id": "871ad0de-8dda-4271-a4ca-e59d429ec4d0",
+      "competition": "UEFA Champions League",
+      "country": "Portugal"
+    },
+    {
+      "name": "Benfica",
+      "id": "4dea98b3-2385-42ae-8bb0-853810813406",
+      "competition": "UEFA Champions League",
+      "country": "Portugal"
+    },
+    {
+      "name": "FC Porto",
+      "id": "237e25d4-0066-43d9-a53f-afd0e1c96733",
+      "competition": "UEFA Champions League",
+      "country": "Portugal"
+    },
+    {
+      "name": "PSV Eindhoven",
+      "id": "87c0bf68-d461-46ae-975a-079ae2e60965",
+      "competition": "UEFA Champions League",
+      "country": "Netherlands"
+    },
+    {
+      "name": "Feyenoord",
+      "id": "7f4eb673-98a1-4e21-bda2-ed705730204c",
+      "competition": "UEFA Champions League",
+      "country": "Netherlands"
+    },
+    {
+      "name": "Club Brugge",
+      "id": "b028a2fe-8e7a-4c54-8113-3c2b69744172",
+      "competition": "UEFA Champions League",
+      "country": "Belgium"
+    },
+    {
+      "name": "Union Saint-Gilloise",
+      "id": "4f136843-04c5-4c30-89ee-1be11c98870e",
+      "competition": "UEFA Champions League",
+      "country": "Belgium"
+    },
+    {
+      "name": "Celtic",
+      "id": "e4855e03-4b09-4286-bf4b-4054ba4976c5",
+      "competition": "UEFA Champions League",
+      "country": "Scotland"
+    },
+    {
+      "name": "Rangers",
+      "id": "5a4e101d-cdfa-47cf-b61a-0c8887941c67",
+      "competition": "UEFA Champions League",
+      "country": "Scotland"
+    },
+    {
+      "name": "Sturm Graz",
+      "id": "cff931c2-1817-48fd-a264-d3a27247745a",
+      "competition": "UEFA Champions League",
+      "country": "Austria"
+    },
+    {
+      "name": "Sparta Prague",
+      "id": "34a50ea1-d748-43e0-ac63-b155f9561bbd",
+      "competition": "UEFA Champions League",
+      "country": "Czech Republic"
+    },
+    {
+      "name": "Dinamo Zagreb",
+      "id": "bcc7d213-92ea-4f23-ad17-f428d5df1b9f",
+      "competition": "UEFA Champions League",
+      "country": "Croatia"
+    },
+    {
+      "name": "Young Boys",
+      "id": "72684f2d-8221-4fa8-9508-fa45e495e48a",
+      "competition": "UEFA Champions League",
+      "country": "Switzerland"
+    },
+    {
+      "name": "Red Star Belgrade",
+      "id": "7bb88d08-64e6-40a5-be6a-aa9f893c8cb3",
+      "competition": "UEFA Champions League",
+      "country": "Serbia"
+    },
+    {
+      "name": "Shakhtar Donetsk",
+      "id": "28d244a9-c6ad-4dbd-8e64-759b2658c627",
+      "competition": "UEFA Champions League",
+      "country": "Ukraine"
+    },
+    {
+      "name": "FC Copenhagen",
+      "id": "83bcefa4-80c4-4d0b-a62e-b1d93f6e0126",
+      "competition": "UEFA Champions League",
+      "country": "Denmark"
+    },
+    {
+      "name": "Jagiellonia Bia\u0142ystok",
+      "id": "ac41874b-5de0-4155-862c-17e38c685018",
+      "competition": "UEFA Champions League",
+      "country": "Poland"
+    }
+  ],
+  "stats": {
+    "total_clubs": 52,
+    "total_assets": 50,
+    "duplicates": 20,
+    "new_teams": 32
+  }
+}
