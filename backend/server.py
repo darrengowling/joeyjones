@@ -846,26 +846,22 @@ async def get_clubs(competition: str = None):
     Get all football clubs, optionally filtered by competition
     competition: 'EPL', 'UCL', or None for all
     """
-    query = {}
+    query = {"sportKey": "football"}  # Only return football teams from assets
     if competition:
         if competition.upper() == "EPL":
             # Include clubs with competitionShort="EPL" OR "English Premier League" in competitions array
-            query = {
-                "$or": [
-                    {"competitionShort": "EPL"},
-                    {"competitions": "English Premier League"}
-                ]
-            }
+            query["$or"] = [
+                {"competitionShort": "EPL"},
+                {"competitions": "English Premier League"}
+            ]
         elif competition.upper() == "UCL":
             # Include clubs with competitionShort="UCL" OR "UEFA Champions League" in competitions array
-            query = {
-                "$or": [
-                    {"competitionShort": "UCL"},
-                    {"competitions": "UEFA Champions League"}
-                ]
-            }
+            query["$or"] = [
+                {"competitionShort": "UCL"},
+                {"competitions": "UEFA Champions League"}
+            ]
     
-    clubs = await db.clubs.find(query).to_list(100)
+    clubs = await db.assets.find(query, {"_id": 0}).to_list(100)
     return [Club(**club) for club in clubs]
 
 @api_router.post("/clubs/seed")
