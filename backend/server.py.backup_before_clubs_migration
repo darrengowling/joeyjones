@@ -826,7 +826,7 @@ async def get_league_assets(league_id: str, search: Optional[str] = None, page: 
     
     # For football, return all clubs (not paginated assets)
     if sport_key == "football":
-        clubs = await db.assets.find({}, {"_id": 0}).to_list(100)
+        clubs = await db.clubs.find({}, {"_id": 0}).to_list(100)
         clubs_as_models = [Club(**club) for club in clubs]
         # Format to match asset_service response structure
         return {
@@ -1197,7 +1197,7 @@ async def get_my_competitions(userId: str):
             # Get asset details - query correct collection based on sport
             sport_key = league.get("sportKey", "football")
             if sport_key == "football":
-                asset = await db.assets.find_one({"id": asset_id}, {"_id": 0})
+                asset = await db.clubs.find_one({"id": asset_id}, {"_id": 0})
             else:
                 # For cricket and other sports, use assets collection
                 asset = await db.assets.find_one({"id": asset_id}, {"_id": 0})
@@ -1288,7 +1288,7 @@ async def get_league_summary(league_id: str, userId: str):
         # Get asset details
         sport_key = league.get("sportKey", "football")
         if sport_key == "football":
-            asset = await db.assets.find_one({"id": asset_id}, {"_id": 0})
+            asset = await db.clubs.find_one({"id": asset_id}, {"_id": 0})
         else:
             asset = await db.assets.find_one({"id": asset_id, "sportKey": sport_key}, {"_id": 0})
         
@@ -1328,7 +1328,7 @@ async def get_league_summary(league_id: str, userId: str):
             # Get asset details
             sport_key = league.get("sportKey", "football")
             if sport_key == "football":
-                asset = await db.assets.find_one({"id": asset_id}, {"_id": 0})
+                asset = await db.clubs.find_one({"id": asset_id}, {"_id": 0})
             else:
                 asset = await db.assets.find_one({"id": asset_id, "sportKey": sport_key}, {"_id": 0})
             
@@ -1488,8 +1488,8 @@ async def get_match_breakdown(league_id: str):
         if fixture.get("homeAssetId") and fixture.get("awayAssetId"):
             # Get asset names for match label
             if sport_key == "football":
-                home = await db.assets.find_one({"id": fixture["homeAssetId"]}, {"_id": 0})
-                away = await db.assets.find_one({"id": fixture["awayAssetId"]}, {"_id": 0})
+                home = await db.clubs.find_one({"id": fixture["homeAssetId"]}, {"_id": 0})
+                away = await db.clubs.find_one({"id": fixture["awayAssetId"]}, {"_id": 0})
             else:
                 home = await db.assets.find_one({"id": fixture["homeAssetId"]}, {"_id": 0})
                 away = await db.assets.find_one({"id": fixture["awayAssetId"]}, {"_id": 0})
@@ -1518,7 +1518,7 @@ async def get_match_breakdown(league_id: str):
         for asset_id in asset_ids:
             # Get asset name
             if sport_key == "football":
-                asset = await db.assets.find_one({"id": asset_id}, {"_id": 0})
+                asset = await db.clubs.find_one({"id": asset_id}, {"_id": 0})
                 asset_name = asset.get("clubName") or asset.get("name", "Unknown") if asset else "Unknown"
             else:
                 asset = await db.assets.find_one({"id": asset_id}, {"_id": 0})
@@ -1663,8 +1663,8 @@ async def import_fixtures_csv(league_id: str, file: UploadFile = File(...), comm
             
             # Look up asset IDs
             if sport_key == "football":
-                home_asset = await db.assets.find_one({"uefaId": home_external_id}, {"_id": 0})
-                away_asset = await db.assets.find_one({"uefaId": away_external_id}, {"_id": 0}) if away_external_id else None
+                home_asset = await db.clubs.find_one({"uefaId": home_external_id}, {"_id": 0})
+                away_asset = await db.clubs.find_one({"uefaId": away_external_id}, {"_id": 0}) if away_external_id else None
             else:
                 # For cricket, look up by externalId or name
                 home_asset = await db.assets.find_one({
@@ -1809,7 +1809,7 @@ async def update_league_assets(league_id: str, asset_ids: List[str]):
     sport_key = league.get("sportKey", "football")
     if sport_key == "football":
         # Validate club IDs
-        valid_assets = await db.assets.find({"id": {"$in": cleaned_asset_ids}}).to_list(len(cleaned_asset_ids))
+        valid_assets = await db.clubs.find({"id": {"$in": cleaned_asset_ids}}).to_list(len(cleaned_asset_ids))
     else:
         # Validate other sport assets
         valid_assets = await db.assets.find({
@@ -1848,7 +1848,7 @@ async def get_available_assets_for_league(league_id: str):
     
     if sport_key == "football":
         # Get all clubs
-        assets = await db.assets.find({}, {"_id": 0}).to_list(100)
+        assets = await db.clubs.find({}, {"_id": 0}).to_list(100)
         return [{"id": asset["id"], "name": asset["name"], "country": asset.get("country")} for asset in assets]
     else:
         # Get assets for other sports
@@ -2313,7 +2313,7 @@ async def start_auction(league_id: str):
     sport_key = league.get("sportKey", "football")
     if sport_key == "football":
         # Check if clubs are seeded
-        club_count = await db.assets.count_documents({})
+        club_count = await db.clubs.count_documents({})
         if club_count == 0:
             # Auto-seed clubs if none exist
             from uefa_clubs import UEFA_CL_CLUBS
@@ -2373,7 +2373,7 @@ async def start_auction(league_id: str):
         # Use commissioner's selected assets (feature flag ON + assets selected)
         seed_mode = "selected"
         if sport_key == "football":
-            all_assets = await db.assets.find({"id": {"$in": assets_selected}}).to_list(100)
+            all_assets = await db.clubs.find({"id": {"$in": assets_selected}}).to_list(100)
         else:
             all_assets = await db.assets.find({
                 "id": {"$in": assets_selected}, 
@@ -2396,7 +2396,7 @@ async def start_auction(league_id: str):
     else:
         # Use all available assets for this sport (default behavior or feature flag OFF)
         if sport_key == "football":
-            all_assets = await db.assets.find({}, {"_id": 0}).to_list(100)
+            all_assets = await db.clubs.find({}, {"_id": 0}).to_list(100)
         else:
             all_assets = await db.assets.find({"sportKey": sport_key}, {"_id": 0}).to_list(100)
         
@@ -2475,7 +2475,7 @@ async def start_auction(league_id: str):
             # Get first asset
             first_asset_id = asset_queue[0]
             if sport_key == "football":
-                first_asset = await db.assets.find_one({"id": first_asset_id}, {"_id": 0})
+                first_asset = await db.clubs.find_one({"id": first_asset_id}, {"_id": 0})
             else:
                 first_asset = await db.assets.find_one({"id": first_asset_id, "sportKey": sport_key}, {"_id": 0})
             
@@ -2625,7 +2625,7 @@ async def begin_auction(
     # Get first asset details
     first_asset_id = asset_queue[0]
     if sport_key == "football":
-        first_asset = await db.assets.find_one({"id": first_asset_id}, {"_id": 0})
+        first_asset = await db.clubs.find_one({"id": first_asset_id}, {"_id": 0})
     else:
         first_asset = await db.assets.find_one({"id": first_asset_id, "sportKey": sport_key}, {"_id": 0})
     
@@ -2734,7 +2734,7 @@ async def get_auction_clubs(auction_id: str):
     
     # Fetch only clubs that are in the auction queue
     if sport_key == "football":
-        auction_clubs = await db.assets.find({"id": {"$in": club_queue}}).to_list(len(club_queue))
+        auction_clubs = await db.clubs.find({"id": {"$in": club_queue}}).to_list(len(club_queue))
     else:
         auction_clubs = await db.assets.find({
             "id": {"$in": club_queue},
@@ -2833,7 +2833,7 @@ async def get_auction(auction_id: str):
         
         if sport_key == "football":
             # Get from clubs collection for football
-            asset = await db.assets.find_one({"id": auction["currentClubId"]}, {"_id": 0})
+            asset = await db.clubs.find_one({"id": auction["currentClubId"]}, {"_id": 0})
             if asset:
                 current_asset = Club(**asset)
         else:
@@ -3055,7 +3055,7 @@ async def start_lot(auction_id: str, club_id: str):
     if not auction:
         raise HTTPException(status_code=404, detail="Auction not found")
     
-    club = await db.assets.find_one({"id": club_id}, {"_id": 0})
+    club = await db.clubs.find_one({"id": club_id}, {"_id": 0})
     if not club:
         raise HTTPException(status_code=404, detail="Club not found")
     
@@ -3221,7 +3221,7 @@ async def complete_lot(auction_id: str):
     sport_key = league.get("sportKey", "football") if league else "football"
     
     if sport_key == "football":
-        current_asset = await db.assets.find_one({"id": current_club_id}, {"_id": 0})
+        current_asset = await db.clubs.find_one({"id": current_club_id}, {"_id": 0})
     else:
         current_asset = await db.assets.find_one({"id": current_club_id, "sportKey": sport_key}, {"_id": 0})
     
@@ -3354,7 +3354,7 @@ async def start_next_lot(auction_id: str, next_club_id: str):
     
     # Get club/asset details based on sport
     if sport_key == "football":
-        next_club = await db.assets.find_one({"id": next_club_id}, {"_id": 0})
+        next_club = await db.clubs.find_one({"id": next_club_id}, {"_id": 0})
     else:
         next_club = await db.assets.find_one({"id": next_club_id, "sportKey": sport_key}, {"_id": 0})
     
@@ -3911,7 +3911,7 @@ async def join_auction(sid, data):
         current_club = None
         if auction.get("currentClubId"):
             if sport_key == "football":
-                club = await db.assets.find_one({"id": auction["currentClubId"]}, {"_id": 0})
+                club = await db.clubs.find_one({"id": auction["currentClubId"]}, {"_id": 0})
             else:
                 club = await db.assets.find_one({"id": auction["currentClubId"], "sportKey": sport_key}, {"_id": 0})
             
