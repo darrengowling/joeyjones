@@ -119,6 +119,7 @@ export default function CreateLeague() {
             ← Back to Home
           </button>
 
+          <div className="text-xs uppercase tracking-wide text-gray-500 mb-1">Create Competition</div>
           <h1 className="h1 text-3xl font-bold mb-6 text-gray-900">🏆 Create Your Competition</h1>
           <p className="subtle text-gray-600 mb-6">Build your peer-to-peer strategic arena where skill and tactics determine victory</p>
 
