@@ -106,6 +106,7 @@ export default function ClubsList() {
             ← Back to Home
           </button>
 
+          <div className="text-xs uppercase tracking-wide text-gray-500 mb-1">Browse Teams</div>
           <h1 className="h1 text-3xl font-bold mb-6 text-gray-900">
             {currentSport ? `${currentSport.name} ${currentSport.uiHints.assetPlural}` : 'Sports Assets'} - Available for Ownership
           </h1>
