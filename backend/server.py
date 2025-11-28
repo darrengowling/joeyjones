@@ -365,15 +365,9 @@ async def get_league_fixtures(league_id: str):
                 "message": "No teams selected for this league yet"
             }
         
-        # Get team details
-        if sport_key == "football":
-            # For football, teams are in clubs collection
-            teams = await db.clubs.find({"id": {"$in": selected_asset_ids}}, {"_id": 0}).to_list(length=None)
-            team_names = [team["name"] for team in teams]
-        else:
-            # For other sports, teams are in assets collection
-            teams = await db.assets.find({"id": {"$in": selected_asset_ids}}, {"_id": 0}).to_list(length=None)
-            team_names = [team["name"] for team in teams]
+        # Get team details from assets collection (post-migration all teams are in assets)
+        teams = await db.assets.find({"id": {"$in": selected_asset_ids}}, {"_id": 0}).to_list(length=None)
+        team_names = [team["name"] for team in teams]
         
         if not team_names:
             return {
