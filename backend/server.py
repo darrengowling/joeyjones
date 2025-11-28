@@ -422,7 +422,8 @@ async def get_asset_next_fixture(asset_id: str):
         # Check both homeTeam/awayTeam (name-based) and homeTeamId/awayTeamId (id-based)
         now = datetime.now(timezone.utc)
         
-        fixture = await db.fixtures.find_one(
+        # Use find() with sort and limit to get the earliest fixture
+        cursor = db.fixtures.find(
             {
                 "$and": [
                     {
@@ -438,7 +439,10 @@ async def get_asset_next_fixture(asset_id: str):
                 ]
             },
             {"_id": 0}
-        ).sort("matchDate", 1)
+        ).sort("matchDate", 1).limit(1)
+        
+        fixtures = await cursor.to_list(length=1)
+        fixture = fixtures[0] if fixtures else None
         
         if not fixture:
             return {"fixture": None, "message": "No upcoming fixtures found"}
