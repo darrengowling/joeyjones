@@ -9,7 +9,7 @@ import json
 import time
 from datetime import datetime
 
-BASE_URL = "https://leaguepilot.preview.emergentagent.com/api"
+BASE_URL = "https://biddingprep.preview.emergentagent.com/api"
 
 class FocusedBackendTester:
     def __init__(self):
