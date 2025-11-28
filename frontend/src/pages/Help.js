@@ -55,7 +55,10 @@ const Help = () => {
             </svg>
             Back to Home
           </button>
-          <h1 className="text-2xl font-bold text-gray-900">User Guide</h1>
+          <div>
+            <div className="text-xs uppercase tracking-wide text-gray-500 mb-1 text-center">Help Center</div>
+            <h1 className="text-2xl font-bold text-gray-900">User Guide</h1>
+          </div>
           <div className="w-24"></div> {/* Spacer for centering */}
         </div>
       </div>
