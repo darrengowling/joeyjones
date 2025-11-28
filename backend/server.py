@@ -3114,6 +3114,16 @@ async def complete_lot(auction_id: str):
     for p in participants:
         p.pop('_id', None)
     
+    # Check if all rosters are now full (after awarding this club)
+    league = await db.leagues.find_one({"id": auction["leagueId"]}, {"_id": 0})
+    max_slots = league.get("clubSlots", 3)
+    all_full = all(len(p.get("clubsWon", [])) >= max_slots for p in participants)
+    
+    if all_full:
+        logger.info(f"🏁 All rosters full after lot complete - completing auction early")
+        await check_auction_completion(auction_id)
+        return  # Don't proceed to next lot
+    
     # Get current club/player details for the event
     current_asset = None
     league = await db.leagues.find_one({"id": auction["leagueId"]}, {"_id": 0})
