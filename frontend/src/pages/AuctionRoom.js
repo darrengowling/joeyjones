@@ -743,6 +743,7 @@ function AuctionRoom() {
             <div className="flex justify-between items-center">
               <div>
                 <div className="stack-md">
+                  <div className="text-xs uppercase tracking-wide text-gray-500 mb-1">Auction Room</div>
                   <h1 className="h1 text-3xl font-bold text-gray-900">
                     {league ? league.name : "Strategic Competition Arena"}
                   </h1>

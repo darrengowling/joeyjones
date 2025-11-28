@@ -1005,12 +1005,15 @@ export default function CompetitionDashboard() {
       {/* Header */}
       <div className="bg-white shadow-md">
         <div className="container-narrow mx-auto px-4 py-4 flex justify-between items-center">
-          <button
-            onClick={() => navigate("/app/my-competitions")}
-            className="text-blue-600 hover:text-blue-800 font-semibold"
-          >
-            ← My Competitions
-          </button>
+          <div>
+            <button
+              onClick={() => navigate("/app/my-competitions")}
+              className="text-blue-600 hover:text-blue-800 font-semibold"
+            >
+              ← My Competitions
+            </button>
+            <div className="text-xs uppercase tracking-wide text-gray-500 mt-1">Competition Dashboard</div>
+          </div>
           {user && (
             <div className="flex items-center gap-4">
               <button
