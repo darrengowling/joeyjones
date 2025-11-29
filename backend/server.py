@@ -2396,7 +2396,7 @@ async def start_auction(league_id: str):
     else:
         # Use all available assets for this sport (default behavior or feature flag OFF)
         if sport_key == "football":
-            all_assets = await db.assets.find({}, {"_id": 0}).to_list(100)
+            all_assets = await db.assets.find({"sportKey": "football"}, {"_id": 0}).to_list(100)
         else:
             all_assets = await db.assets.find({"sportKey": sport_key}, {"_id": 0}).to_list(100)
         
