@@ -238,8 +238,8 @@ async def recompute_league_scores(db, league_id: str):
         logger.info(f"No clubs found for league {league_id}")
         return {"message": "No clubs to score yet"}
     
-    # Fetch clubs from database
-    clubs = await db.clubs.find({"id": {"$in": unique_club_ids}}).to_list(100)
+    # Fetch clubs from assets collection (football clubs have sportKey: "football")
+    clubs = await db.assets.find({"id": {"$in": unique_club_ids}, "sportKey": "football"}, {"_id": 0}).to_list(100)
     
     # Fetch Champions League match data
     matches = await fetch_openfootball_data()
