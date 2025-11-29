@@ -148,10 +148,10 @@ async def startup_db_client():
         await db.assets.create_index([("sportKey", 1), ("name", 1)])
         await db.assets.create_index([("sportKey", 1), ("externalId", 1)])
         
-        # Clubs indexes - for legacy football data
-        await db.clubs.create_index("leagueId")
-        await db.clubs.create_index([("leagueId", 1), ("owner", 1)])
-        await db.clubs.create_index("uefaId")
+        # Assets indexes - for all sports (football, cricket, etc.)
+        await db.assets.create_index("sportKey")
+        await db.assets.create_index([("sportKey", 1), ("name", 1)])
+        await db.assets.create_index("uefaId")
         
         # Auctions indexes
         await db.auctions.create_index("leagueId")
