@@ -52,22 +52,20 @@ class AssetService:
     
     async def _list_clubs(self, search: Optional[str], page: int, page_size: int, skip: int) -> Dict[str, Any]:
         """List football clubs with pagination and search"""
-        # Build query
-        query = {}
+        # Build query - always filter by football sportKey
+        query = {"sportKey": "football"}
         if search:
             # Case-insensitive search in name and country
-            query = {
-                "$or": [
-                    {"name": {"$regex": search, "$options": "i"}},
-                    {"country": {"$regex": search, "$options": "i"}}
-                ]
-            }
+            query["$or"] = [
+                {"name": {"$regex": search, "$options": "i"}},
+                {"country": {"$regex": search, "$options": "i"}}
+            ]
         
         # Get total count for pagination
-        total = await self.db.clubs.count_documents(query)
+        total = await self.db.assets.count_documents(query)
         
-        # Get clubs for current page
-        clubs_data = await self.db.clubs.find(query).skip(skip).limit(page_size).to_list(page_size)
+        # Get clubs for current page from assets collection
+        clubs_data = await self.db.assets.find(query, {"_id": 0}).skip(skip).limit(page_size).to_list(page_size)
         clubs = [Club(**club) for club in clubs_data]
         
         # Calculate pagination info
