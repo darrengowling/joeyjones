@@ -866,19 +866,19 @@ async def get_clubs(competition: str = None):
 
 @api_router.post("/clubs/seed")
 async def seed_clubs():
-    # Clear existing clubs
-    await db.clubs.delete_many({})
+    # Clear existing football clubs from assets collection
+    await db.assets.delete_many({"sportKey": "football"})
     
-    # Insert UEFA CL clubs
+    # Insert UEFA CL clubs into assets collection
     clubs = []
     for club_data in UEFA_CL_CLUBS:
         club = Club(**club_data)
         clubs.append(club.model_dump())
     
     if clubs:
-        await db.clubs.insert_many(clubs)
+        await db.assets.insert_many(clubs)
     
-    return {"message": f"Seeded {len(clubs)} UEFA Champions League clubs"}
+    return {"message": f"Seeded {len(clubs)} UEFA Champions League clubs into assets collection"}
 
 # ===== LEAGUE ENDPOINTS =====
 @api_router.post("/leagues", response_model=League)
