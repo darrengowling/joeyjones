@@ -2312,10 +2312,10 @@ async def start_auction(league_id: str):
     # Check if assets are available for this sport
     sport_key = league.get("sportKey", "football")
     if sport_key == "football":
-        # Check if clubs are seeded
-        club_count = await db.assets.count_documents({})
+        # Check if football clubs are seeded in assets collection
+        club_count = await db.assets.count_documents({"sportKey": "football"})
         if club_count == 0:
-            # Auto-seed clubs if none exist
+            # Auto-seed football clubs if none exist
             from uefa_clubs import UEFA_CL_CLUBS
             clubs_to_insert = []
             for club_data in UEFA_CL_CLUBS:
@@ -2323,8 +2323,8 @@ async def start_auction(league_id: str):
                 clubs_to_insert.append(club.model_dump())
             
             if clubs_to_insert:
-                await db.clubs.insert_many(clubs_to_insert)
-                logger.info(f"Auto-seeded {len(clubs_to_insert)} clubs for auction")
+                await db.assets.insert_many(clubs_to_insert)
+                logger.info(f"Auto-seeded {len(clubs_to_insert)} football clubs into assets collection")
     
     # Check if we have assets for this sport
     asset_count = await asset_service.count_assets(sport_key)
