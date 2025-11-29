@@ -1847,8 +1847,8 @@ async def get_available_assets_for_league(league_id: str):
     sport_key = league.get("sportKey", "football")
     
     if sport_key == "football":
-        # Get all clubs
-        assets = await db.assets.find({}, {"_id": 0}).to_list(100)
+        # Get all football clubs from clubs collection
+        assets = await db.clubs.find({}, {"_id": 0}).to_list(100)
         return [{"id": asset["id"], "name": asset["name"], "country": asset.get("country")} for asset in assets]
     else:
         # Get assets for other sports
