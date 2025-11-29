@@ -171,7 +171,7 @@ class AuctionUser(HttpUser):
     def view_my_competitions(self):
         """View user's competitions"""
         with self.client.get(
-            "/api/me/competitions",
+            f"/api/me/competitions?userId={self.user_id}",
             headers=self.get_headers(),
             catch_response=True,
             name="/api/me/competitions"
