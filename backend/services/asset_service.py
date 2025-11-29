@@ -137,12 +137,5 @@ class AssetService:
     
     async def count_assets(self, sport_key: str) -> int:
         """Count total assets for a specific sport"""
-        if sport_key == "football":
-            # Count clubs for football
-            return await self.db.clubs.count_documents({})
-        elif sport_key == "cricket":
-            # Count cricket assets
-            return await self.db.assets.count_documents({"sportKey": "cricket"})
-        else:
-            # For other sports, count from assets collection
-            return await self.db.assets.count_documents({"sportKey": sport_key})
+        # All sports now use the unified assets collection
+        return await self.db.assets.count_documents({"sportKey": sport_key})
