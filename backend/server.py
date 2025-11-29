@@ -824,9 +824,9 @@ async def get_league_assets(league_id: str, search: Optional[str] = None, page: 
     
     sport_key = league.get("sportKey", "football")  # Default to football for backward compatibility
     
-    # For football, return all clubs (not paginated assets)
+    # For football, return all clubs from assets collection
     if sport_key == "football":
-        clubs = await db.clubs.find({}, {"_id": 0}).to_list(100)
+        clubs = await db.assets.find({"sportKey": "football"}, {"_id": 0}).to_list(100)
         clubs_as_models = [Club(**club) for club in clubs]
         # Format to match asset_service response structure
         return {
