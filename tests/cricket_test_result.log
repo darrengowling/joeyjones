@@ -1,0 +1,69 @@
+
+Running 2 tests using 1 worker
+
+[1A[2K[1/2] [chromium] › e2e/cricket_smoke.spec.ts:17:7 › Cricket Smoke Test › Complete cricket workflow: Auth → Create League → Auction → Scoring
+[1A[2K[chromium] › e2e/cricket_smoke.spec.ts:17:7 › Cricket Smoke Test › Complete cricket workflow: Auth → Create League → Auction → Scoring
+🏏 Cricket smoke tests starting...
+
+[1A[2K🏏 Starting Cricket smoke test...
+
+[1A[2K🏏 Cricket smoke tests completed
+
+[1A[2K  1) [chromium] › e2e/cricket_smoke.spec.ts:17:7 › Cricket Smoke Test › Complete cricket workflow: Auth → Create League → Auction → Scoring 
+
+    TimeoutError: page.fill: Timeout 10000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('input[placeholder*="name"]')[22m
+
+
+      25 |     
+      26 |     await page.click('button:has-text("Sign In")');
+    > 27 |     await page.fill('input[placeholder*="name"]', testName);
+         |                ^
+      28 |     await page.fill('input[placeholder*="email"]', testEmail);
+      29 |     await page.click('button:has-text("Continue")');
+      30 |     await page.waitForSelector('text=Create Your Competition', { timeout: 10000 });
+        at /app/tests/e2e/cricket_smoke.spec.ts:27:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/cricket_smoke-Cricket-Smok-ee49e--League-→-Auction-→-Scoring-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/cricket_smoke-Cricket-Smok-ee49e--League-→-Auction-→-Scoring-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/cricket_smoke-Cricket-Smok-ee49e--League-→-Auction-→-Scoring-chromium/error-context.md
+
+
+[1A[2K[2/2] [chromium] › e2e/cricket_smoke.spec.ts:110:7 › Cricket Flag Verification › Cricket features should only be available when flag is enabled
+[1A[2K  2) [chromium] › e2e/cricket_smoke.spec.ts:110:7 › Cricket Flag Verification › Cricket features should only be available when flag is enabled 
+
+    TimeoutError: page.fill: Timeout 10000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('input[placeholder*="name"]')[22m
+
+
+      114 |     // Sign in first
+      115 |     await page.click('button:has-text("Sign In")');
+    > 116 |     await page.fill('input[placeholder*="name"]', 'Flag Tester');
+          |                ^
+      117 |     await page.fill('input[placeholder*="email"]', `flag.test.${Date.now()}@test.com`);
+      118 |     await page.click('button:has-text("Continue")');
+      119 |     
+        at /app/tests/e2e/cricket_smoke.spec.ts:116:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/cricket_smoke-Cricket-Flag-b3afd-ilable-when-flag-is-enabled-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/cricket_smoke-Cricket-Flag-b3afd-ilable-when-flag-is-enabled-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/cricket_smoke-Cricket-Flag-b3afd-ilable-when-flag-is-enabled-chromium/error-context.md
+
+
+[1A[2K  2 failed
+    [chromium] › e2e/cricket_smoke.spec.ts:17:7 › Cricket Smoke Test › Complete cricket workflow: Auth → Create League → Auction → Scoring 
+    [chromium] › e2e/cricket_smoke.spec.ts:110:7 › Cricket Flag Verification › Cricket features should only be available when flag is enabled 

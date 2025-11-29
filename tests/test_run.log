@@ -1,0 +1,403 @@
+
+Running 7 tests using 1 worker
+
+[1A[2K[1/7] [chromium] › e2e/01_waiting_room.spec.ts:44:7 › 01 - Waiting Room UX › Both users see waiting room and transition to active auction
+[1A[2K[chromium] › e2e/01_waiting_room.spec.ts:44:7 › 01 - Waiting Room UX › Both users see waiting room and transition to active auction
+
+========================================
+
+[1A[2KTest: Waiting Room UX
+
+[1A[2K========================================
+
+
+[1A[2K1️⃣ Creating users...
+
+[1A[2K   ✅ User A (Commissioner): WaitingE2E_CommissionerA_1761369827114
+
+[1A[2K   ✅ User B (Participant): WaitingE2E_ParticipantB_1761369827114
+
+[1A[2K
+2️⃣ Creating league...
+
+[1A[2K   ✅ League created: E2E Waiting Room 1761369827114
+
+[1A[2K
+3️⃣ User B joining league...
+
+[1A[2K   ✅ User B joined
+
+[1A[2K
+4️⃣ Signing in both users...
+
+[1A[2K   ✅ User A signed in
+
+[1A[2K   ✅ User B signed in
+
+[1A[2K
+5️⃣ Starting auction (waiting state)...
+
+[1A[2K   ✅ Auction created in waiting state
+
+[1A[2K   📋 Auction ID: 1bff3a97...
+
+[1A[2K
+6️⃣ Both users entering auction room...
+
+[1A[2K   ✅ User A entered auction room
+
+[1A[2K   ✅ User B entered auction room
+
+[1A[2K
+7️⃣ Verifying waiting room UI...
+
+[1A[2K   ✅ User A sees "Auction Waiting Room" header
+
+[1A[2K   ✅ User B sees "Auction Waiting Room" header
+
+[1A[2K  1) [chromium] › e2e/01_waiting_room.spec.ts:44:7 › 01 - Waiting Room UX › Both users see waiting room and transition to active auction 
+
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+
+    Expected: [32mtrue[39m
+    Received: [31mfalse[39m
+
+      154 |     // User A should see "Begin Auction" button
+      155 |     const beginButtonA = await pageA.locator('button:has-text("Begin Auction")').isVisible();
+    > 156 |     expect(beginButtonA).toBe(true);
+          |                          ^
+      157 |     console.log(`   ✅ User A sees "Begin Auction" button (commissioner)`);
+      158 |
+      159 |     // User B should see waiting message
+        at /app/tests/e2e/01_waiting_room.spec.ts:156:26
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/01_waiting_room-01---Waiti-2b331-ransition-to-active-auction-chromium/test-failed-2.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/01_waiting_room-01---Waiti-2b331-ransition-to-active-auction-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/01_waiting_room-01---Waiti-2b331-ransition-to-active-auction-chromium/error-context.md
+
+
+[1A[2K[2/7] [chromium] › e2e/02_non_commissioner_forbidden.spec.ts:44:7 › 02 - Non-Commissioner Authorization › Non-commissioner receives 403 when trying to begin auction
+[1A[2K[chromium] › e2e/02_non_commissioner_forbidden.spec.ts:44:7 › 02 - Non-Commissioner Authorization › Non-commissioner receives 403 when trying to begin auction
+
+========================================
+
+[1A[2KTest: Non-Commissioner Authorization
+
+[1A[2K========================================
+
+
+[1A[2K1️⃣ Creating users...
+
+[1A[2K   ✅ User A (Commissioner): AuthE2E_CommissionerA_1761369839814
+
+[1A[2K   ✅ User B (Participant): AuthE2E_ParticipantB_1761369839814
+
+[1A[2K
+2️⃣ Creating league...
+
+[1A[2K   ✅ League created: E2E Auth Test 1761369839814
+
+[1A[2K
+3️⃣ User B joining league...
+
+[1A[2K   ✅ User B joined
+
+[1A[2K
+4️⃣ Starting auction (waiting state)...
+
+[1A[2K   ✅ Auction created in waiting state
+
+[1A[2K   📋 Auction ID: 8130f210...
+
+[1A[2K
+5️⃣ User B attempting to begin auction (should fail)...
+
+[1A[2K   📊 Response status: 401
+
+[1A[2K   ❌ Unexpected error during API call: ExpectError: [2mexpect([22m[31mreceived[39m[2m).[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+
+Expected: [32m403[39m
+Received: [31m401[39m
+    at [90m/app/tests/[39me2e/02_non_commissioner_forbidden.spec.ts:126:22 {
+  matcherResult: {
+    actual: [33m401[39m,
+    expected: [33m403[39m,
+    message: [32m'\x1B[2mexpect(\x1B[22m\x1B[31mreceived\x1B[39m\x1B[2m).\x1B[22mtoBe\x1B[2m(\x1B[22m\x1B[32mexpected\x1B[39m\x1B[2m) // Object.is equality\x1B[22m\n'[39m +
+      [32m'\n'[39m +
+      [32m'Expected: \x1B[32m403\x1B[39m\n'[39m +
+      [32m'Received: \x1B[31m401\x1B[39m'[39m,
+    name: [32m'toBe'[39m,
+    pass: [33mfalse[39m
+  },
+  [[32mSymbol(step)[39m]: {
+    category: [32m'expect'[39m,
+    apiName: [32m'expect.toBe'[39m,
+    title: [32m'Expect "toBe"'[39m,
+    params: { expected: [33m403[39m },
+    infectParentStepsWithError: [90mundefined[39m,
+    stepId: [32m'expect@86'[39m,
+    group: [90mundefined[39m,
+    boxedStack: [90mundefined[39m,
+    location: {
+      file: [32m'/app/tests/e2e/02_non_commissioner_forbidden.spec.ts'[39m,
+      line: [33m126[39m,
+      column: [33m22[39m
+    },
+    steps: [],
+    attachmentIndices: [],
+    info: TestStepInfoImpl {
+      annotations: [],
+      _testInfo: [36m[TestInfoImpl][39m,
+      _stepId: [32m'expect@86'[39m,
+      _title: [32m'Expect "toBe"'[39m,
+      _parentStep: [90mundefined[39m,
+      skip: [36m[Function (anonymous)][39m
+    },
+    recoverFromStepError: [36m[AsyncFunction: recoverFromStepError][39m,
+    complete: [36m[Function: complete][39m,
+    endWallTime: [33m1761369839960[39m,
+    error: {
+      message: [32m'Error: \x1B[2mexpect(\x1B[22m\x1B[31mreceived\x1B[39m\x1B[2m).\x1B[22mtoBe\x1B[2m(\x1B[22m\x1B[32mexpected\x1B[39m\x1B[2m) // Object.is equality\x1B[22m\n'[39m +
+        [32m'\n'[39m +
+        [32m'Expected: \x1B[32m403\x1B[39m\n'[39m +
+        [32m'Received: \x1B[31m401\x1B[39m'[39m,
+      stack: [32m'Error: \x1B[2mexpect(\x1B[22m\x1B[31mreceived\x1B[39m\x1B[2m).\x1B[22mtoBe\x1B[2m(\x1B[22m\x1B[32mexpected\x1B[39m\x1B[2m) // Object.is equality\x1B[22m\n'[39m +
+        [32m'\n'[39m +
+        [32m'Expected: \x1B[32m403\x1B[39m\n'[39m +
+        [32m'Received: \x1B[31m401\x1B[39m\n'[39m +
+        [32m'    at /app/tests/e2e/02_non_commissioner_forbidden.spec.ts:126:22'[39m,
+      cause: [90mundefined[39m
+    }
+  }
+}
+
+[1A[2K  2) [chromium] › e2e/02_non_commissioner_forbidden.spec.ts:44:7 › 02 - Non-Commissioner Authorization › Non-commissioner receives 403 when trying to begin auction 
+
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+
+    Expected: [32m403[39m
+    Received: [31m401[39m
+
+      124 |       
+      125 |       // Verify we got 403 Forbidden
+    > 126 |       expect(status).toBe(403);
+          |                      ^
+      127 |       console.log(`   ✅ Correctly received 403 Forbidden`);
+      128 |       
+      129 |       // Try to parse error message
+        at /app/tests/e2e/02_non_commissioner_forbidden.spec.ts:126:22
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/02_non_commissioner_forbid-cb79b-hen-trying-to-begin-auction-chromium/test-failed-2.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/02_non_commissioner_forbid-cb79b-hen-trying-to-begin-auction-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+[1A[2K[3/7] [chromium] › e2e/03_concurrent_auctions_isolation.spec.ts:66:7 › 03 - Concurrent Auctions Isolation › Events in Auction A do not leak to Auction B
+[1A[2K[chromium] › e2e/03_concurrent_auctions_isolation.spec.ts:66:7 › 03 - Concurrent Auctions Isolation › Events in Auction A do not leak to Auction B
+
+========================================
+
+[1A[2KTest: Concurrent Auctions Isolation
+
+[1A[2K========================================
+
+
+[1A[2K1️⃣ Creating 4 users...
+
+[1A[2K   ✅ User 1: IsolationE2E_CommA_1761369841419
+
+[1A[2K   ✅ User 2: IsolationE2E_ParticipantA_1761369841419
+
+[1A[2K   ✅ User 3: IsolationE2E_CommB_1761369841419
+
+[1A[2K   ✅ User 4: IsolationE2E_ParticipantB_1761369841419
+
+[1A[2K
+2️⃣ Creating League A...
+
+[1A[2K   ✅ League A created: E2E Isolation League...
+
+[1A[2K
+3️⃣ Creating League B...
+
+[1A[2K   ✅ League B created: E2E Isolation League...
+
+[1A[2K
+4️⃣ Users joining leagues...
+
+[1A[2K   ✅ User A2 joined League A
+
+[1A[2K   ✅ User B2 joined League B
+
+[1A[2K
+5️⃣ Starting both auctions...
+
+[1A[2K   ✅ Auction A: edaf4667...
+
+[1A[2K   ✅ Auction B: bcab0943...
+
+[1A[2K
+6️⃣ Users entering auction rooms...
+
+[1A[2K   ✅ User A1 entered Auction A
+
+[1A[2K   ✅ User A2 entered Auction A
+
+[1A[2K   ✅ User B1 entered Auction B
+
+[1A[2K   ✅ User B2 entered Auction B
+
+[1A[2K
+7️⃣ Setting up event listeners...
+
+[1A[2K   ✅ Event listeners set up
+
+[1A[2K
+8️⃣ Commissioner A beginning Auction A...
+
+[1A[2K   ✅ Auction A started
+
+[1A[2K
+9️⃣ Checking event isolation...
+
+[1A[2K   📊 User A1 received lot_started: false
+
+[1A[2K   📊 User A2 received lot_started: false
+
+[1A[2K   📊 User B1 received lot_started: false
+
+[1A[2K   📊 User B2 received lot_started: false
+
+[1A[2K  3) [chromium] › e2e/03_concurrent_auctions_isolation.spec.ts:66:7 › 03 - Concurrent Auctions Isolation › Events in Auction A do not leak to Auction B 
+
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mnot[2m.[22mtoBeNull[2m()[22m
+
+    Received: [31mnull[39m
+
+      279 |
+      280 |     // Assertions: Users in Auction A should receive events, users in Auction B should NOT
+    > 281 |     expect(eventA1).not.toBeNull();
+          |                         ^
+      282 |     expect(eventA2).not.toBeNull();
+      283 |     expect(eventB1).toBeNull();
+      284 |     expect(eventB2).toBeNull();
+        at /app/tests/e2e/03_concurrent_auctions_isolation.spec.ts:281:25
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/03_concurrent_auctions_iso-1f2de--A-do-not-leak-to-Auction-B-chromium/test-failed-2.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/03_concurrent_auctions_iso-1f2de--A-do-not-leak-to-Auction-B-chromium/test-failed-4.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/03_concurrent_auctions_iso-1f2de--A-do-not-leak-to-Auction-B-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/03_concurrent_auctions_iso-1f2de--A-do-not-leak-to-Auction-B-chromium/test-failed-3.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/03_concurrent_auctions_iso-1f2de--A-do-not-leak-to-Auction-B-chromium/error-context.md
+
+
+[1A[2K[4/7] [chromium] › e2e/04_late_joiner.spec.ts:56:7 › 04 - Late Joiner Sync › Late joiner receives auction_snapshot and sees correct UI state
+[1A[2K[chromium] › e2e/04_late_joiner.spec.ts:56:7 › 04 - Late Joiner Sync › Late joiner receives auction_snapshot and sees correct UI state
+
+========================================
+
+[1A[2KTest: Late Joiner Sync
+
+[1A[2K========================================
+
+
+[1A[2K1️⃣ Creating 3 users...
+
+[1A[2K   ✅ User A (Commissioner): LateJoinerE2E_CommA_1761369853058
+
+[1A[2K   ✅ User B (Early Joiner): LateJoinerE2E_EarlyB_1761369853058
+
+[1A[2K   ✅ User C (Late Joiner): LateJoinerE2E_LateC_1761369853058
+
+[1A[2K
+2️⃣ Creating league...
+
+[1A[2K   ✅ League created: E2E Late Joiner Test 1761369853058
+
+[1A[2K
+3️⃣ Users B and C joining league...
+
+[1A[2K   ✅ User B joined
+
+[1A[2K   ✅ User C joined
+
+[1A[2K
+4️⃣ Starting auction (waiting state)...
+
+[1A[2K   ✅ Auction created in waiting state
+
+[1A[2K   📋 Auction ID: c40a21da...
+
+[1A[2K
+5️⃣ Early joiners entering auction room...
+
+[1A[2K   ✅ User A entered (early)
+
+[1A[2K   ✅ User B entered (early)
+
+[1A[2K
+6️⃣ Verifying early joiners see waiting room...
+
+[1A[2K  4) [chromium] › e2e/04_late_joiner.spec.ts:56:7 › 04 - Late Joiner Sync › Late joiner receives auction_snapshot and sees correct UI state 
+
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+
+    Expected: [32mtrue[39m
+    Received: [31mfalse[39m
+
+      156 |     
+      157 |     const waitingHeaderA = await pageA.locator('text=Auction Waiting Room').isVisible();
+    > 158 |     expect(waitingHeaderA).toBe(true);
+          |                            ^
+      159 |     console.log(`   ✅ User A sees waiting room`);
+      160 |
+      161 |     const waitingHeaderB = await pageB.locator('text=Auction Waiting Room').isVisible();
+        at /app/tests/e2e/04_late_joiner.spec.ts:158:28
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/04_late_joiner-04---Late-J-00252-t-and-sees-correct-UI-state-chromium/test-failed-3.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/04_late_joiner-04---Late-J-00252-t-and-sees-correct-UI-state-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/04_late_joiner-04---Late-J-00252-t-and-sees-correct-UI-state-chromium/test-failed-2.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/04_late_joiner-04---Late-J-00252-t-and-sees-correct-UI-state-chromium/error-context.md
+
+
+[1A[2K[5/7] [chromium] › e2e/cricket_smoke.spec.ts:9:7 › Cricket Smoke Test › Cricket API and Scoring Workflow
+[1A[2K[6/7] [chromium] › e2e/cricket_smoke.spec.ts:107:7 › Cricket Smoke Test › Cricket flag controls sport availability
+[1A[2K[7/7] [chromium] › e2e/cricket_smoke.spec.ts:121:7 › Football E2E Unaffected › Football functionality still works with cricket enabled
+[1A[2K  4 failed
+    [chromium] › e2e/01_waiting_room.spec.ts:44:7 › 01 - Waiting Room UX › Both users see waiting room and transition to active auction 
+    [chromium] › e2e/02_non_commissioner_forbidden.spec.ts:44:7 › 02 - Non-Commissioner Authorization › Non-commissioner receives 403 when trying to begin auction 
+    [chromium] › e2e/03_concurrent_auctions_isolation.spec.ts:66:7 › 03 - Concurrent Auctions Isolation › Events in Auction A do not leak to Auction B 
+    [chromium] › e2e/04_late_joiner.spec.ts:56:7 › 04 - Late Joiner Sync › Late joiner receives auction_snapshot and sees correct UI state 
+  3 skipped
+
+  Serving HTML report at http://localhost:36599. Press Ctrl+C to quit.

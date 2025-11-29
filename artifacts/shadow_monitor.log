@@ -1,0 +1,105 @@
+
+============================================================
+🏏 CRICKETDATA.ORG API SHADOW TESTER
+   NZ vs England ODI Series 2025
+============================================================
+
+============================================================
+🔌 TESTING API CONNECTIVITY
+============================================================
+
+🔍 API Request: v1/currentMatches
+   URL: https://api.cricapi.com/v1/currentMatches
+   Params: {'offset': 0, 'apikey': '82fec341-b050-4b1c-9a9d-72359c591820'}
+   ⏱️  Response time: 0.57s
+   📊 Status code: 200
+   ✅ Success!
+
+✅ API is accessible!
+
+============================================================
+📊 FETCHING MATCH SCORECARD: 3a938e14-39fb-45d3-87a5-8c1ccac08266
+============================================================
+
+🔍 API Request: v1/match_info
+   URL: https://api.cricapi.com/v1/match_info
+   Params: {'id': '3a938e14-39fb-45d3-87a5-8c1ccac08266', 'apikey': '82fec341-b050-4b1c-9a9d-72359c591820'}
+   ⏱️  Response time: 0.56s
+   📊 Status code: 200
+   ✅ Success!
+
+💾 Saved snapshot: /app/artifacts/api_scorecard_3a938e14-39fb-45d3-87a5-8c1ccac08266_20251026_011801.json
+
+============================================================
+🔬 SCORECARD ANALYSIS
+============================================================
+
+📌 Top-level keys: ['apikey', 'data', 'status', 'info']
+
+📌 Match data keys: ['id', 'name', 'matchType', 'status', 'venue', 'date', 'dateTimeGMT', 'teams', 'teamInfo', 'series_id', 'fantasyEnabled', 'bbbEnabled', 'hasSquad', 'matchStarted', 'matchEnded']
+
+============================================================
+🔴 STARTING LIVE MONITORING: 3a938e14-39fb-45d3-87a5-8c1ccac08266
+   Interval: 600 seconds (10 minutes)
+   Press Ctrl+C to stop
+============================================================
+
+
+============================================================
+📊 ITERATION 1 - 2025-10-26 01:18:01
+============================================================
+
+============================================================
+📊 FETCHING MATCH SCORECARD: 3a938e14-39fb-45d3-87a5-8c1ccac08266
+============================================================
+
+🔍 API Request: v1/match_info
+   URL: https://api.cricapi.com/v1/match_info
+   Params: {'id': '3a938e14-39fb-45d3-87a5-8c1ccac08266', 'apikey': '82fec341-b050-4b1c-9a9d-72359c591820'}
+   ⏱️  Response time: 0.57s
+   📊 Status code: 200
+   ✅ Success!
+
+💾 Saved snapshot: /app/artifacts/api_scorecard_3a938e14-39fb-45d3-87a5-8c1ccac08266_20251026_011801.json
+
+============================================================
+🔬 SCORECARD ANALYSIS
+============================================================
+
+📌 Top-level keys: ['apikey', 'data', 'status', 'info']
+
+📌 Match data keys: ['id', 'name', 'matchType', 'status', 'venue', 'date', 'dateTimeGMT', 'teams', 'teamInfo', 'series_id', 'fantasyEnabled', 'bbbEnabled', 'hasSquad', 'matchStarted', 'matchEnded']
+
+✅ Data fetched successfully
+
+⏰ Next update in 600 seconds...
+
+
+============================================================
+📊 ITERATION 2 - 2025-10-26 01:28:01
+============================================================
+
+============================================================
+📊 FETCHING MATCH SCORECARD: 3a938e14-39fb-45d3-87a5-8c1ccac08266
+============================================================
+
+🔍 API Request: v1/match_info
+   URL: https://api.cricapi.com/v1/match_info
+   Params: {'id': '3a938e14-39fb-45d3-87a5-8c1ccac08266', 'apikey': '82fec341-b050-4b1c-9a9d-72359c591820'}
+   ⏱️  Response time: 0.72s
+   📊 Status code: 200
+   ✅ Success!
+
+💾 Saved snapshot: /app/artifacts/api_scorecard_3a938e14-39fb-45d3-87a5-8c1ccac08266_20251026_012802.json
+
+============================================================
+🔬 SCORECARD ANALYSIS
+============================================================
+
+📌 Top-level keys: ['apikey', 'data', 'status', 'info']
+
+📌 Match data keys: ['id', 'name', 'matchType', 'status', 'venue', 'date', 'dateTimeGMT', 'teams', 'teamInfo', 'series_id', 'fantasyEnabled', 'bbbEnabled', 'hasSquad', 'matchStarted', 'matchEnded']
+
+✅ Data fetched successfully
+
+⏰ Next update in 600 seconds...

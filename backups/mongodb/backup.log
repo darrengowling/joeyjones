@@ -1,0 +1,20 @@
+[2025-11-22 23:49:02] ==========================================
+[2025-11-22 23:49:02] MongoDB Backup Started
+[2025-11-22 23:49:02] ==========================================
+[2025-11-22 23:49:02] Database: test_database
+[2025-11-22 23:49:02] Backup Directory: /app/backups/mongodb
+[2025-11-22 23:49:02] Retention: 7 days
+[2025-11-22 23:49:02] Creating backup: backup_test_database_20251122_234902
+[0;32m[2025-11-22 23:49:02] ✅ Database dump completed successfully[0m
+[2025-11-22 23:49:02] Backup size: 308K
+[2025-11-22 23:49:02] Compressing backup...
+[0;32m[2025-11-22 23:49:02] ✅ Backup compressed: /app/backups/mongodb/backup_test_database_20251122_234902.tar.gz[0m
+[2025-11-22 23:49:02] Compressed size: 48K
+[2025-11-22 23:49:02] Applying rotation policy (keeping last 7 days)...
+[0;32m[2025-11-22 23:49:02] ✅ Rotation completed. Current backup count: 1[0m
+[2025-11-22 23:49:02] Current backups:
+  backup_test_database_20251122_234902.tar.gz (46K)
+[2025-11-22 23:49:02] Total backup storage: 56K
+[2025-11-22 23:49:02] ==========================================
+[0;32m[2025-11-22 23:49:02] ✅ Backup completed successfully![0m
+[2025-11-22 23:49:02] ==========================================
