@@ -1757,6 +1757,181 @@ async def import_fixtures_csv(league_id: str, file: UploadFile = File(...), comm
         logger.error(f"Error importing fixtures: {e}")
         raise HTTPException(status_code=400, detail=f"Error processing CSV: {str(e)}")
 
+
+@api_router.post("/leagues/{league_id}/fixtures/import-from-api")
+async def import_fixtures_from_api(league_id: str, commissionerId: str = Query(...)):
+    """
+    Import fixtures from API-Football for the teams selected in this league
+    Commissioner only - automatically fetches upcoming fixtures for selected teams
+    """
+    if not FEATURE_MY_COMPETITIONS:
+        raise HTTPException(status_code=404, detail="Feature not available")
+    
+    # Verify league exists and get commissioner
+    league = await db.leagues.find_one({"id": league_id}, {"_id": 0})
+    if not league:
+        raise HTTPException(status_code=404, detail="League not found")
+    
+    # Permission check - commissioner only
+    if not commissionerId or league["commissionerId"] != commissionerId:
+        raise HTTPException(
+            status_code=403, 
+            detail="Only the league commissioner can import fixtures"
+        )
+    
+    # Validation - refuse import when auction is not completed
+    auction = await db.auctions.find_one({"leagueId": league_id}, {"_id": 0})
+    if auction and auction["status"] != "completed":
+        raise HTTPException(
+            status_code=400,
+            detail="Cannot import fixtures while auction is in progress. Please complete the auction first."
+        )
+    
+    # Only works for football
+    sport_key = league.get("sportKey", "football")
+    if sport_key != "football":
+        raise HTTPException(
+            status_code=400,
+            detail="Automatic fixture import is only supported for football competitions"
+        )
+    
+    # Get selected teams
+    selected_asset_ids = league.get("assetsSelected", [])
+    if not selected_asset_ids:
+        raise HTTPException(
+            status_code=400,
+            detail="No teams selected for this league. Please select teams first."
+        )
+    
+    try:
+        # Get team details to extract API-Football IDs
+        teams = await db.assets.find({"id": {"$in": selected_asset_ids}}, {"_id": 0}).to_list(100)
+        
+        # Extract external IDs (API-Football team IDs)
+        team_external_ids = []
+        team_lookup = {}  # Map external ID to team data
+        
+        for team in teams:
+            external_id = team.get("externalId")
+            if external_id and external_id.isdigit():
+                team_external_ids.append(int(external_id))
+                team_lookup[int(external_id)] = team
+        
+        if not team_external_ids:
+            raise HTTPException(
+                status_code=400,
+                detail="No valid team external IDs found. Teams must have numeric externalId values."
+            )
+        
+        logger.info(f"Fetching fixtures for {len(team_external_ids)} teams from API-Football")
+        
+        # Import the client
+        from sports_data_client import APIFootballClient
+        
+        client = APIFootballClient()
+        
+        # Fetch fixtures for these teams (EPL, next 60 days)
+        api_fixtures = await client.get_fixtures_by_teams(
+            team_ids=team_external_ids,
+            season=2025,
+            league_id=39  # English Premier League
+        )
+        
+        if not api_fixtures:
+            return {
+                "message": "No upcoming fixtures found for the selected teams",
+                "fixturesImported": 0,
+                "teamsChecked": len(team_external_ids)
+            }
+        
+        fixtures_imported = 0
+        fixtures_updated = 0
+        
+        for api_fixture in api_fixtures:
+            try:
+                # Extract fixture data
+                fixture_id = api_fixture["fixture"]["id"]
+                home_team_api_id = api_fixture["teams"]["home"]["id"]
+                away_team_api_id = api_fixture["teams"]["away"]["id"]
+                home_team_name = api_fixture["teams"]["home"]["name"]
+                away_team_name = api_fixture["teams"]["away"]["name"]
+                venue = api_fixture["fixture"]["venue"]["name"]
+                match_date = api_fixture["fixture"]["date"]
+                status = api_fixture["fixture"]["status"]["short"].lower()
+                
+                # Get internal team IDs
+                home_team = team_lookup.get(home_team_api_id)
+                away_team = team_lookup.get(away_team_api_id)
+                
+                if not home_team or not away_team:
+                    # Skip fixtures where we don't have both teams
+                    continue
+                
+                # Create/update fixture
+                fixture_doc = {
+                    "homeTeam": home_team_name,
+                    "awayTeam": away_team_name,
+                    "homeTeamId": home_team["id"],
+                    "awayTeamId": away_team["id"],
+                    "homeExternalId": str(home_team_api_id),
+                    "awayExternalId": str(away_team_api_id),
+                    "matchDate": match_date,
+                    "status": status,
+                    "venue": venue,
+                    "sportKey": "football",
+                    "source": "api-football",
+                    "apiFootballId": fixture_id,
+                    "updatedAt": datetime.now(timezone.utc).isoformat()
+                }
+                
+                # Check if fixture already exists (shared fixtures have no leagueId)
+                existing = await db.fixtures.find_one({
+                    "apiFootballId": fixture_id,
+                    "leagueId": {"$exists": False}
+                })
+                
+                if existing:
+                    # Update existing shared fixture
+                    await db.fixtures.update_one(
+                        {"id": existing["id"]},
+                        {"$set": fixture_doc}
+                    )
+                    fixtures_updated += 1
+                else:
+                    # Create new shared fixture (no leagueId)
+                    fixture_doc["id"] = str(uuid.uuid4())
+                    fixture_doc["goalsHome"] = None
+                    fixture_doc["goalsAway"] = None
+                    fixture_doc["winner"] = None
+                    fixture_doc["createdAt"] = datetime.now(timezone.utc).isoformat()
+                    
+                    await db.fixtures.insert_one(fixture_doc)
+                    fixtures_imported += 1
+                    
+            except Exception as e:
+                logger.error(f"Error processing fixture {api_fixture.get('fixture', {}).get('id')}: {e}")
+                continue
+        
+        # Emit socket event
+        await sio.emit('fixtures_updated', {
+            'leagueId': league_id,
+            'countChanged': fixtures_imported + fixtures_updated
+        }, room=f"league:{league_id}")
+        
+        return {
+            "message": f"Successfully imported {fixtures_imported} new fixtures and updated {fixtures_updated} existing fixtures",
+            "fixturesImported": fixtures_imported,
+            "fixturesUpdated": fixtures_updated,
+            "teamsChecked": len(team_external_ids),
+            "apiRequestsRemaining": client.get_requests_remaining()
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error importing fixtures from API: {e}")
+        raise HTTPException(status_code=500, detail=f"Error fetching fixtures: {str(e)}")
+
 @api_router.delete("/leagues/{league_id}/fixtures/clear")
 async def clear_all_fixtures(league_id: str, commissionerId: str = Query(...)):
     """Delete all fixtures from a league - Commissioner only"""
