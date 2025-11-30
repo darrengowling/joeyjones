@@ -1459,114 +1459,114 @@ async def get_league_standings(league_id: str):
     
     return Standing(**standing).model_dump(mode='json')
 
-@api_router.get("/leagues/{league_id}/match-breakdown")
-async def get_match_breakdown(league_id: str):
-    """Get match-by-match scoring breakdown for all managers"""
-    league = await db.leagues.find_one({"id": league_id}, {"_id": 0})
-    if not league:
-        raise HTTPException(status_code=404, detail="League not found")
-    
-    sport_key = league.get("sportKey", "football")
-    
-    # Get all fixtures for this league (completed only, ordered by date)
-    fixtures = await db.fixtures.find({
-        "leagueId": league_id,
-        "status": "completed"
-    }, {"_id": 0}).sort("startsAt", 1).to_list(100)
-    
-    # Get all participants
-    participants = await db.league_participants.find({"leagueId": league_id}, {"_id": 0}).to_list(100)
-    
-    # Get league stats (contains per-player/team per-match scoring)
-    league_stats = await db.league_stats.find({"leagueId": league_id}, {"_id": 0}).to_list(1000)
-    
-    # Build match names from fixtures
-    match_names = []
-    fixture_external_ids = []
-    for idx, fixture in enumerate(fixtures):
-        # Create match name from fixture data
-        if fixture.get("homeAssetId") and fixture.get("awayAssetId"):
-            # Get asset names for match label
-            if sport_key == "football":
-                home = await db.assets.find_one({"id": fixture["homeAssetId"]}, {"_id": 0})
-                away = await db.assets.find_one({"id": fixture["awayAssetId"]}, {"_id": 0})
-            else:
-                home = await db.assets.find_one({"id": fixture["homeAssetId"]}, {"_id": 0})
-                away = await db.assets.find_one({"id": fixture["awayAssetId"]}, {"_id": 0})
-            
-            home_name = home.get("name", "Team") if home else "Team"
-            away_name = away.get("name", "Team") if away else "Team"
-            match_name = f"Match {idx + 1}: {home_name[:10]} vs {away_name[:10]}"
-        else:
-            # International or generic fixture
-            match_name = f"Match {idx + 1}"
-        
-        match_names.append(match_name)
-        fixture_external_ids.append(fixture.get("externalMatchId", f"match-{idx+1}"))
-    
-    # Build manager breakdown
-    managers = []
-    for participant in participants:
-        user_id = participant["userId"]
-        user_name = participant.get("userName", participant.get("displayName", "Unknown"))
-        asset_ids = participant.get("clubsWon", [])
-        
-        # Get assets owned by this manager
-        assets = []
-        match_totals = {}
-        
-        for asset_id in asset_ids:
-            # Get asset name
-            if sport_key == "football":
-                asset = await db.assets.find_one({"id": asset_id}, {"_id": 0})
-                asset_name = asset.get("clubName") or asset.get("name", "Unknown") if asset else "Unknown"
-            else:
-                asset = await db.assets.find_one({"id": asset_id}, {"_id": 0})
-                asset_name = asset.get("playerName") or asset.get("name", "Unknown") if asset else "Unknown"
-            
-            # Get scores for this asset across all matches
-            match_scores = {}
-            for idx, ext_match_id in enumerate(fixture_external_ids):
-                # Find stat entry for this asset in this match
-                stat = next((s for s in league_stats 
-                           if s.get("playerExternalId") == asset.get("externalId") 
-                           and s.get("matchId") == ext_match_id), None)
-                
-                # Use 'points' field (not 'fantasyPoints')
-                score = stat.get("points", 0) if stat else 0
-                match_scores[f"match_{idx}"] = score
-                
-                # Add to manager's total for this match
-                if f"match_{idx}" not in match_totals:
-                    match_totals[f"match_{idx}"] = 0
-                match_totals[f"match_{idx}"] += score
-            
-            assets.append({
-                "assetId": asset_id,
-                "assetName": asset_name,
-                "matchScores": match_scores
-            })
-        
-        # Calculate overall total
-        overall_total = sum(match_totals.values())
-        
-        managers.append({
-            "userId": user_id,
-            "userName": user_name,
-            "assets": assets,
-            "matchTotals": match_totals,
-            "overallTotal": overall_total
-        })
-    
-    # Sort managers by overall total (descending)
-    managers.sort(key=lambda m: m["overallTotal"], reverse=True)
-    
-    return {
-        "managers": managers,
-        "matchNames": match_names,
-        "fixtureCount": len(fixtures)
-    }
-
+# @api_router.get("/leagues/{league_id}/match-breakdown")
+# async def get_match_breakdown(league_id: str):
+#     """Get match-by-match scoring breakdown for all managers"""
+#     league = await db.leagues.find_one({"id": league_id}, {"_id": 0})
+#     if not league:
+#         raise HTTPException(status_code=404, detail="League not found")
+#     
+#     sport_key = league.get("sportKey", "football")
+#     
+#     # Get all fixtures for this league (completed only, ordered by date)
+#     fixtures = await db.fixtures.find({
+#         "leagueId": league_id,
+#         "status": "completed"
+#     }, {"_id": 0}).sort("startsAt", 1).to_list(100)
+#     
+#     # Get all participants
+#     participants = await db.league_participants.find({"leagueId": league_id}, {"_id": 0}).to_list(100)
+#     
+#     # Get league stats (contains per-player/team per-match scoring)
+#     league_stats = await db.league_stats.find({"leagueId": league_id}, {"_id": 0}).to_list(1000)
+#     
+#     # Build match names from fixtures
+#     match_names = []
+#     fixture_external_ids = []
+#     for idx, fixture in enumerate(fixtures):
+#         # Create match name from fixture data
+#         if fixture.get("homeAssetId") and fixture.get("awayAssetId"):
+#             # Get asset names for match label
+#             if sport_key == "football":
+#                 home = await db.assets.find_one({"id": fixture["homeAssetId"]}, {"_id": 0})
+#                 away = await db.assets.find_one({"id": fixture["awayAssetId"]}, {"_id": 0})
+#             else:
+#                 home = await db.assets.find_one({"id": fixture["homeAssetId"]}, {"_id": 0})
+#                 away = await db.assets.find_one({"id": fixture["awayAssetId"]}, {"_id": 0})
+#             
+#             home_name = home.get("name", "Team") if home else "Team"
+#             away_name = away.get("name", "Team") if away else "Team"
+#             match_name = f"Match {idx + 1}: {home_name[:10]} vs {away_name[:10]}"
+#         else:
+#             # International or generic fixture
+#             match_name = f"Match {idx + 1}"
+#         
+#         match_names.append(match_name)
+#         fixture_external_ids.append(fixture.get("externalMatchId", f"match-{idx+1}"))
+#     
+#     # Build manager breakdown
+#     managers = []
+#     for participant in participants:
+#         user_id = participant["userId"]
+#         user_name = participant.get("userName", participant.get("displayName", "Unknown"))
+#         asset_ids = participant.get("clubsWon", [])
+#         
+#         # Get assets owned by this manager
+#         assets = []
+#         match_totals = {}
+#         
+#         for asset_id in asset_ids:
+#             # Get asset name
+#             if sport_key == "football":
+#                 asset = await db.assets.find_one({"id": asset_id}, {"_id": 0})
+#                 asset_name = asset.get("clubName") or asset.get("name", "Unknown") if asset else "Unknown"
+#             else:
+#                 asset = await db.assets.find_one({"id": asset_id}, {"_id": 0})
+#                 asset_name = asset.get("playerName") or asset.get("name", "Unknown") if asset else "Unknown"
+#             
+#             # Get scores for this asset across all matches
+#             match_scores = {}
+#             for idx, ext_match_id in enumerate(fixture_external_ids):
+#                 # Find stat entry for this asset in this match
+#                 stat = next((s for s in league_stats 
+#                            if s.get("playerExternalId") == asset.get("externalId") 
+#                            and s.get("matchId") == ext_match_id), None)
+#                 
+#                 # Use 'points' field (not 'fantasyPoints')
+#                 score = stat.get("points", 0) if stat else 0
+#                 match_scores[f"match_{idx}"] = score
+#                 
+#                 # Add to manager's total for this match
+#                 if f"match_{idx}" not in match_totals:
+#                     match_totals[f"match_{idx}"] = 0
+#                 match_totals[f"match_{idx}"] += score
+#             
+#             assets.append({
+#                 "assetId": asset_id,
+#                 "assetName": asset_name,
+#                 "matchScores": match_scores
+#             })
+#         
+#         # Calculate overall total
+#         overall_total = sum(match_totals.values())
+#         
+#         managers.append({
+#             "userId": user_id,
+#             "userName": user_name,
+#             "assets": assets,
+#             "matchTotals": match_totals,
+#             "overallTotal": overall_total
+#         })
+#     
+#     # Sort managers by overall total (descending)
+#     managers.sort(key=lambda m: m["overallTotal"], reverse=True)
+#     
+#     return {
+#         "managers": managers,
+#         "matchNames": match_names,
+#         "fixtureCount": len(fixtures)
+#     }
+# 
 @api_router.post("/leagues/{league_id}/fixtures/import-csv")
 async def import_fixtures_csv(league_id: str, file: UploadFile = File(...), commissionerId: str = None):
     """Import fixtures from CSV - Commissioner only - Prompt 6"""
