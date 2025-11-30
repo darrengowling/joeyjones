@@ -569,15 +569,18 @@ agent_communication:
 
   - task: "Create Competition flow - Football and Cricket support"
     implemented: true
-    working: "NA"
+    working: true
     file: "frontend/src/pages/CreateLeague.js"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
-        comment: "Fixed /api/clubs endpoint to support multiple sports. Previously hardcoded to only return football clubs, which blocked cricket competition creation. Need to test both football (regression) and cricket (new functionality) competition creation flows." /api/auction/{auction_id}/clubs tested successfully. Returns all 36 clubs with correct status information (current/upcoming/sold/unsold), lot numbers, winner information, and winning bid amounts. Proper sorting by status and lot number confirmed. Summary statistics (totalClubs, soldClubs, unsoldClubs, remainingClubs) working correctly. Tested with sold clubs after completing lots - winner and winning bid information properly included."
+        comment: "Fixed /api/clubs endpoint to support multiple sports. Previously hardcoded to only return football clubs, which blocked cricket competition creation. Need to test both football (regression) and cricket (new functionality) competition creation flows."
+      - working: true
+        agent: "testing"
+        comment: "✅ CREATE COMPETITION FLOW TESTING COMPLETED: Comprehensive testing of both football and cricket competition creation flows performed successfully. ✅ FOOTBALL REGRESSION TEST PASSED: 52 football teams loaded correctly (expected 52), Filter by Competition dropdown working perfectly (All Teams: 52, Premier League: 20, Champions League: 36 - all matching expected counts), team selection functionality operational, selection counter working (shows 'Selected: 33 / 36 teams'). ✅ CRICKET NEW FUNCTIONALITY PASSED: 30 cricket players loaded correctly (expected 30), NO Filter by Competition dropdown appears for cricket (expected behavior), search functionality working, player names visible (Harry Brook, Joe Root, Ben Duckett, Tom Banton, Sam Curran, etc.), player selection functional. ✅ /API/CLUBS ENDPOINT FIX VERIFIED: Both sports now supported correctly, hardcoded football-only limitation resolved. ✅ UI FUNCTIONALITY: Forms were NOT submitted as requested - only UI functionality verified. Both football (regression) and cricket (new functionality) competition creation flows are fully operational and ready for production use." /api/auction/{auction_id}/clubs tested successfully. Returns all 36 clubs with correct status information (current/upcoming/sold/unsold), lot numbers, winner information, and winning bid amounts. Proper sorting by status and lot number confirmed. Summary statistics (totalClubs, soldClubs, unsoldClubs, remainingClubs) working correctly. Tested with sold clubs after completing lots - winner and winning bid information properly included."
       - working: true
         agent: "testing"
         comment: "FRONTEND UI TESTING COMPLETED: Clubs list sidebar UI is working correctly. Found 'All Clubs in Auction' title, summary statistics grid with Total/Sold/Current/Remaining counters, proper layout and styling. Status indicator legend present (🔥 current, ⏳ upcoming, ✅ sold, ❌ unsold). Clubs container exists but no club entries displayed due to auction being in inactive state (404 errors from backend). UI structure and components are properly implemented and functional."
