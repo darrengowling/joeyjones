@@ -9,7 +9,7 @@ import time
 from datetime import datetime
 
 # Configuration
-BASE_URL = "https://biddingprep.preview.emergentagent.com/api"
+BASE_URL = "https://sports-auction-1.preview.emergentagent.com/api"
 
 class FocusedWaitingRoomTester:
     def __init__(self):

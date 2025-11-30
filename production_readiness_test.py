@@ -37,8 +37,8 @@ from datetime import datetime, timezone
 from typing import Dict, List, Optional, Tuple
 
 # Configuration
-BASE_URL = "https://biddingprep.preview.emergentagent.com/api"
-SOCKET_URL = "https://biddingprep.preview.emergentagent.com"
+BASE_URL = "https://sports-auction-1.preview.emergentagent.com/api"
+SOCKET_URL = "https://sports-auction-1.preview.emergentagent.com"
 SOCKET_PATH = "/api/socket.io"
 
 class ProductionReadinessTest:
