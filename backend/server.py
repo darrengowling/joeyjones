@@ -1995,21 +1995,22 @@ async def recompute_scores(league_id: str):
     Scoring rules: Win: 3 points, Draw: 1 point, Goal scored: 1 point
     """
     try:
-        # Check if league has completed fixtures
-        fixture_count = await db.fixtures.count_documents({
-            "leagueId": league_id,
-            "status": "ft",
-            "sportKey": "football"
-        })
+        # Get league to determine sport
+        league = await db.leagues.find_one({"id": league_id})
+        if not league:
+            raise HTTPException(status_code=404, detail="League not found")
         
-        if fixture_count > 0:
-            # Use fixture-based scoring
-            logger.info(f"Using fixture-based scoring for league {league_id} ({fixture_count} completed fixtures)")
+        sport_key = league.get("sportKey", "football")
+        
+        # Always use fixture-based scoring for football
+        # (Fixtures are shared across competitions, matched by team names)
+        if sport_key == "football":
+            logger.info(f"Using fixture-based scoring for league {league_id}")
             from scoring_service import calculate_points_from_fixtures
             result = await calculate_points_from_fixtures(db, league_id)
         else:
-            # Fall back to Champions League scoring
-            logger.info(f"Using Champions League scoring for league {league_id} (no fixtures)")
+            # Fall back to Champions League scoring for other sports
+            logger.info(f"Using Champions League scoring for league {league_id}")
             result = await recompute_league_scores(db, league_id)
         
         return result
