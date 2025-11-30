@@ -8,7 +8,7 @@ import time
 import threading
 
 # Configuration
-SOCKET_URL = "https://sports-auction-1.preview.emergentagent.com"
+SOCKET_URL = "https://competition-hub-6.preview.emergentagent.com"
 SOCKET_PATH = "/api/socket.io"
 
 def test_long_connection():

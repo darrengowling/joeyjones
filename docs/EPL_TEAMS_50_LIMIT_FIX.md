@@ -74,7 +74,7 @@ async def get_league_assets(league_id: str, search: Optional[str] = None, page: 
 
 **API Test:**
 ```bash
-curl "https://sports-auction-1.preview.emergentagent.com/api/leagues/{league_id}/assets"
+curl "https://competition-hub-6.preview.emergentagent.com/api/leagues/{league_id}/assets"
 ```
 
 **Results:**

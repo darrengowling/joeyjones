@@ -7,7 +7,7 @@ import requests
 import json
 import time
 
-BASE_URL = "https://sports-auction-1.preview.emergentagent.com/api"
+BASE_URL = "https://competition-hub-6.preview.emergentagent.com/api"
 
 def check_participant_state(session, league_id, user_id, step_name):
     result = session.get(f"{BASE_URL}/leagues/{league_id}/participants")

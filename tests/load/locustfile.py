@@ -22,7 +22,7 @@ from locust.exception import StopUser
 import socketio
 
 # Configuration
-BACKEND_URL = "https://sports-auction-1.preview.emergentagent.com"
+BACKEND_URL = "https://competition-hub-6.preview.emergentagent.com"
 API_BASE = f"{BACKEND_URL}/api"
 
 class AuctionUser(HttpUser):
