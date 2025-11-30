@@ -319,15 +319,22 @@ async def calculate_points_from_fixtures(db, league_id: str):
     # Fetch clubs from assets collection
     clubs = await db.assets.find({"id": {"$in": unique_club_ids}, "sportKey": "football"}, {"_id": 0}).to_list(100)
     
-    # Get completed fixtures for this league
+    # Get team names for this league
+    team_names = [club["name"] for club in clubs]
+    
+    # Get completed fixtures where any of these teams played
+    # Note: Fixtures are shared across competitions - we match by team names
     fixtures = await db.fixtures.find({
-        "leagueId": league_id,
         "status": "ft",
-        "sportKey": "football"
+        "sportKey": "football",
+        "$or": [
+            {"homeTeam": {"$in": team_names}},
+            {"awayTeam": {"$in": team_names}}
+        ]
     }, {"_id": 0}).to_list(1000)
     
     if not fixtures:
-        logger.info(f"No completed fixtures found for league {league_id}")
+        logger.info(f"No completed fixtures found for teams in league {league_id}")
         return {"message": "No completed fixtures to score from"}
     
     # Transform fixtures to Champions League format
