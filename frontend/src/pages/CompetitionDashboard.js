@@ -714,21 +714,29 @@ export default function CompetitionDashboard() {
             {/* Import Fixtures from API - NEW AUTOMATIC METHOD */}
             {summary && summary.sportKey === "football" && (
               <div className="bg-green-50 border-2 border-green-500 rounded-lg p-4 mb-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h3 className="text-md font-bold text-green-900 mb-1">⚡ Import Fixtures Automatically</h3>
-                    <p className="text-sm text-gray-700">
-                      Fetch upcoming fixtures from API-Football for your selected teams (next 60 days)
-                    </p>
-                  </div>
+                <h3 className="text-md font-bold text-green-900 mb-2">⚡ Import Fixtures from API-Football</h3>
+                <p className="text-sm text-gray-700 mb-3">
+                  Automatically fetch upcoming EPL fixtures for your selected teams
+                </p>
+                <div className="flex gap-3">
                   <button
-                    onClick={handleImportFixturesFromAPI}
+                    onClick={() => handleImportFixturesFromAPI(7)}
                     disabled={loading}
-                    className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed font-semibold"
+                    className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed font-semibold flex-1"
                   >
-                    {loading ? "Importing..." : "Import Fixtures"}
+                    {loading ? "Importing..." : "Next Matchday (7 days)"}
+                  </button>
+                  <button
+                    onClick={() => handleImportFixturesFromAPI(30)}
+                    disabled={loading}
+                    className="bg-green-700 text-white px-6 py-2 rounded-lg hover:bg-green-800 disabled:opacity-50 disabled:cursor-not-allowed font-semibold flex-1"
+                  >
+                    {loading ? "Importing..." : "Next 4 Matchdays (30 days)"}
                   </button>
                 </div>
+                <p className="text-xs text-gray-600 mt-2">
+                  💡 Import more fixtures later if your competition continues beyond this period
+                </p>
               </div>
             )}
 
