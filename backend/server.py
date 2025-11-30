@@ -840,14 +840,30 @@ async def get_league_assets(league_id: str, search: Optional[str] = None, page: 
     return await asset_service.list_assets(sport_key, search, page, pageSize)
 
 # ===== CLUB ENDPOINTS =====
-@api_router.get("/clubs", response_model=List[Club])
-async def get_clubs(competition: str = None):
+@api_router.get("/clubs")
+async def get_clubs(
+    sportKey: str = Query(default="football", description="Sport key: football, cricket, etc."),
+    competition: str = Query(default=None, description="Filter by competition (football only)")
+):
     """
-    Get all football clubs, optionally filtered by competition
-    competition: 'EPL', 'UCL', or None for all
+    Get all assets for a sport, optionally filtered by competition
+    
+    Args:
+        sportKey: Sport identifier (default: football). Options: football, cricket, etc.
+        competition: Filter by competition (football only). Options: 'EPL', 'UCL', or None for all
+    
+    Returns:
+        List of assets for the specified sport
+    
+    Examples:
+        /clubs - Returns all 52 football clubs (backward compatible)
+        /clubs?sportKey=football&competition=EPL - Returns 20 EPL clubs
+        /clubs?sportKey=cricket - Returns all cricket players
     """
-    query = {"sportKey": "football"}  # Only return football teams from assets
-    if competition:
+    query = {"sportKey": sportKey}
+    
+    # Competition filtering only applies to football
+    if sportKey == "football" and competition:
         if competition.upper() == "EPL":
             # Include clubs with competitionShort="EPL" OR "English Premier League" in competitions array
             query["$or"] = [
@@ -861,8 +877,8 @@ async def get_clubs(competition: str = None):
                 {"competitions": "UEFA Champions League"}
             ]
     
-    clubs = await db.assets.find(query, {"_id": 0}).to_list(100)
-    return [Club(**club) for club in clubs]
+    assets = await db.assets.find(query, {"_id": 0}).to_list(1000)
+    return assets
 
 @api_router.post("/clubs/seed")
 async def seed_clubs():
