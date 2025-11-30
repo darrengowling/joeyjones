@@ -191,12 +191,31 @@ export default function CompetitionDashboard() {
   const handleUpdateScores = async () => {
     setLoading(true);
     try {
+      // Step 1: Update fixtures from API-Football
       const response = await axios.post(`${API}/fixtures/update-scores`);
       
       if (response.data.updated > 0) {
-        toast.success(`Updated ${response.data.updated} match results! Refreshing fixtures...`);
-        // Reload fixtures to show updated scores
-        await loadTabData("fixtures");
+        toast.success(`Updated ${response.data.updated} match results! Calculating league points...`);
+        
+        // Step 2: Trigger score recompute automatically
+        try {
+          await axios.post(`${API}/leagues/${leagueId}/score/recompute`);
+          toast.success("League standings updated successfully!");
+        } catch (recomputeError) {
+          console.error("Error recomputing scores:", recomputeError);
+          toast.warning("Scores updated but league calculation failed. Please refresh the page.");
+        }
+        
+        // Step 3: Force reload fixtures and standings
+        setFixtures(null);
+        setStandings(null);
+        
+        const fixturesResponse = await axios.get(`${API}/leagues/${leagueId}/fixtures`);
+        setFixtures(fixturesResponse.data.fixtures || []);
+        
+        const standingsResponse = await axios.get(`${API}/leagues/${leagueId}/standings`);
+        setStandings(standingsResponse.data);
+        
       } else {
         toast.info("No new match results available yet. Check again after matches complete.");
       }
