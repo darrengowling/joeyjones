@@ -1759,10 +1759,17 @@ async def import_fixtures_csv(league_id: str, file: UploadFile = File(...), comm
 
 
 @api_router.post("/leagues/{league_id}/fixtures/import-from-api")
-async def import_fixtures_from_api(league_id: str, commissionerId: str = Query(...)):
+async def import_fixtures_from_api(
+    league_id: str, 
+    commissionerId: str = Query(...),
+    days: int = Query(default=7, description="Number of days ahead to fetch fixtures (7, 14, 30)")
+):
     """
     Import fixtures from API-Football for the teams selected in this league
     Commissioner only - automatically fetches upcoming fixtures for selected teams
+    
+    Args:
+        days: Number of days ahead to fetch (7=next week, 14=next 2 weeks, 30=next month)
     """
     if not FEATURE_MY_COMPETITIONS:
         raise HTTPException(status_code=404, detail="Feature not available")
