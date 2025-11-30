@@ -293,29 +293,6 @@ const Help = () => {
               </div>
             </div>
 
-            <div>
-              <h4 className="text-lg font-semibold text-gray-900 mb-3">Match-by-Match Breakdown</h4>
-              <p className="text-gray-700 mb-3">
-                Dive deep into individual team performance with detailed match statistics.
-              </p>
-              
-              <div className="bg-gray-50 rounded-lg p-4 mb-4">
-                <h5 className="font-semibold text-gray-900 mb-2">What You'll See:</h5>
-                <ul className="list-disc list-inside space-y-2 text-gray-700">
-                  <li><strong>Match Results:</strong> Win/loss/draw outcomes for each game</li>
-                  <li><strong>Points Scored:</strong> Total points earned per match</li>
-                  <li><strong>Opponents:</strong> Who your team played against</li>
-                  <li><strong>Match Dates:</strong> When games were played</li>
-                  <li><strong>Cumulative Points:</strong> Running total throughout the season</li>
-                </ul>
-              </div>
-
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <p className="text-blue-800 text-sm">
-                  <strong>💡 Strategy Insight:</strong> Use match breakdowns to analyze team performance patterns and inform your bidding strategy in future competitions!
-                </p>
-              </div>
-            </div>
 
             <div>
               <h4 className="text-lg font-semibold text-gray-900 mb-3">Finding Your Competitions</h4>
