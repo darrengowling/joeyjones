@@ -346,6 +346,33 @@ export default function CompetitionDashboard() {
     }
   };
 
+  const handleImportFixturesFromAPI = async () => {
+    if (!user) return;
+
+    setLoading(true);
+    
+    try {
+      const response = await axios.post(
+        `${API}/leagues/${leagueId}/fixtures/import-from-api?commissionerId=${user.id}`
+      );
+
+      toast.success(response.data.message || "Fixtures imported successfully!", {
+        duration: 5000
+      });
+      
+      // Refresh fixtures list
+      const fixturesResponse = await axios.get(`${API}/leagues/${leagueId}/fixtures`);
+      setFixtures(fixturesResponse.data);
+      
+    } catch (e) {
+      console.error("Error importing fixtures from API:", e);
+      toast.error(e.response?.data?.detail || "Failed to import fixtures from API. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
   const handleCSVUpload = async (event) => {
     const file = event.target.files[0];
     if (!file) return;
