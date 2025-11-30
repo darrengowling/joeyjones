@@ -23,7 +23,6 @@ export default function CompetitionDashboard() {
   const [summary, setSummary] = useState(null);
   const [standings, setStandings] = useState(null);
   const [fixtures, setFixtures] = useState(null);
-  const [matchBreakdown, setMatchBreakdown] = useState(null);
 
   // CSV upload state
   const [uploadingCSV, setUploadingCSV] = useState(false);
