@@ -887,16 +887,14 @@ export default function CompetitionDashboard() {
                             )}
                             <span
                               className={`text-xs px-3 py-1 rounded-full font-semibold ${
-                                fixture.status === "completed"
+                                fixture.status === "completed" || fixture.status === "ft" || fixture.status === "final"
                                   ? "bg-green-100 text-green-700"
                                   : fixture.status === "live"
                                   ? "bg-red-100 text-red-700"
-                                  : fixture.status === "final"
-                                  ? "bg-gray-100 text-gray-700"
                                   : "bg-yellow-100 text-yellow-700"
                               }`}
                             >
-                              {fixture.status === "completed" ? "✅ Completed" : fixture.status === "live" ? "🔴 Live" : fixture.status === "final" ? "✅ Final" : "⏳ Scheduled"}
+                              {fixture.status === "completed" || fixture.status === "ft" || fixture.status === "final" ? "✅ Finished" : fixture.status === "live" ? "🔴 Live" : "⏳ Scheduled"}
                             </span>
                           </div>
                         </div>
