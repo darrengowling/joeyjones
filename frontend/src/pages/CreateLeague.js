@@ -59,13 +59,9 @@ export default function CreateLeague() {
     if (FEATURE_ASSET_SELECTION) {
       const fetchAssets = async () => {
         try {
-          if (form.sportKey === "football") {
-            const response = await axios.get(`${API}/clubs`);
-            setAvailableAssets(response.data);
-          } else {
-            const response = await axios.get(`${API}/assets?sport=${form.sportKey}`);
-            setAvailableAssets(response.data);
-          }
+          // Use unified /clubs endpoint for all sports
+          const response = await axios.get(`${API}/clubs?sportKey=${form.sportKey}`);
+          setAvailableAssets(response.data);
         } catch (error) {
           console.error("Error fetching assets:", error);
         }
