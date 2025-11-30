@@ -684,6 +684,27 @@ export default function CompetitionDashboard() {
         {/* Commissioner CSV Upload Panel */}
         {isCommissioner && (
           <>
+            {/* Import Fixtures from API - NEW AUTOMATIC METHOD */}
+            {summary && summary.sportKey === "football" && (
+              <div className="bg-green-50 border-2 border-green-500 rounded-lg p-4 mb-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="text-md font-bold text-green-900 mb-1">⚡ Import Fixtures Automatically</h3>
+                    <p className="text-sm text-gray-700">
+                      Fetch upcoming fixtures from API-Football for your selected teams (next 60 days)
+                    </p>
+                  </div>
+                  <button
+                    onClick={handleImportFixturesFromAPI}
+                    disabled={loading}
+                    className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed font-semibold"
+                  >
+                    {loading ? "Importing..." : "Import Fixtures"}
+                  </button>
+                </div>
+              </div>
+            )}
+
             {/* Update Match Scores from API-Football */}
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
               <div className="flex items-center justify-between">
