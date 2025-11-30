@@ -346,19 +346,23 @@ export default function CompetitionDashboard() {
     }
   };
 
-  const handleImportFixturesFromAPI = async () => {
+  const handleImportFixturesFromAPI = async (days) => {
     if (!user) return;
 
     setLoading(true);
     
     try {
       const response = await axios.post(
-        `${API}/leagues/${leagueId}/fixtures/import-from-api?commissionerId=${user.id}`
+        `${API}/leagues/${leagueId}/fixtures/import-from-api?commissionerId=${user.id}&days=${days}`
       );
 
-      toast.success(response.data.message || "Fixtures imported successfully!", {
-        duration: 5000
-      });
+      const message = response.data.message || "Fixtures imported successfully!";
+      const apiRemaining = response.data.apiRequestsRemaining;
+      
+      toast.success(
+        `${message}\n\nAPI requests remaining today: ${apiRemaining}`,
+        { duration: 6000 }
+      );
       
       // Refresh fixtures list
       const fixturesResponse = await axios.get(`${API}/leagues/${leagueId}/fixtures`);
