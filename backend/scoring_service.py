@@ -292,6 +292,105 @@ async def recompute_league_scores(db, league_id: str):
     }
 
 
+async def calculate_points_from_fixtures(db, league_id: str):
+    """
+    Calculate league points from completed fixtures in the database
+    Uses the same scoring rules as Champions League (3-1-1)
+    """
+    # Get league
+    league = await db.leagues.find_one({"id": league_id})
+    if not league:
+        raise Exception(f"League {league_id} not found")
+    
+    # Get all participants (clubs won by managers)
+    participants = await db.league_participants.find({"leagueId": league_id}).to_list(100)
+    
+    # Get all unique clubs won by participants
+    all_club_ids = []
+    for participant in participants:
+        all_club_ids.extend(participant.get("clubsWon", []))
+    
+    unique_club_ids = list(set(all_club_ids))
+    
+    if not unique_club_ids:
+        logger.info(f"No clubs found for league {league_id}")
+        return {"message": "No clubs to score yet"}
+    
+    # Fetch clubs from assets collection
+    clubs = await db.assets.find({"id": {"$in": unique_club_ids}, "sportKey": "football"}, {"_id": 0}).to_list(100)
+    
+    # Get completed fixtures for this league
+    fixtures = await db.fixtures.find({
+        "leagueId": league_id,
+        "status": "ft",
+        "sportKey": "football"
+    }, {"_id": 0}).to_list(1000)
+    
+    if not fixtures:
+        logger.info(f"No completed fixtures found for league {league_id}")
+        return {"message": "No completed fixtures to score from"}
+    
+    # Transform fixtures to Champions League format
+    matches = []
+    for fixture in fixtures:
+        if fixture.get("goalsHome") is not None and fixture.get("goalsAway") is not None:
+            matches.append({
+                "team1": fixture["homeTeam"],
+                "team2": fixture["awayTeam"],
+                "score": {"ft": [fixture["goalsHome"], fixture["goalsAway"]]}
+            })
+    
+    logger.info(f"Processing {len(matches)} completed fixtures for {len(clubs)} clubs")
+    
+    # Calculate points for each club using existing logic
+    updated_count = 0
+    for club in clubs:
+        club_name = club["name"]
+        club_id = club["id"]
+        
+        # Use existing calculation function
+        stats = await calculate_club_points(matches, club_name)
+        
+        # Update or create LeaguePoints record
+        existing = await db.league_points.find_one({
+            "leagueId": league_id,
+            "clubId": club_id
+        })
+        
+        league_points_data = {
+            "leagueId": league_id,
+            "clubId": club_id,
+            "clubName": club_name,
+            "wins": stats["wins"],
+            "draws": stats["draws"],
+            "losses": stats["losses"],
+            "goalsScored": stats["goals_scored"],
+            "goalsConceded": stats["goals_conceded"],
+            "totalPoints": stats["total_points"],
+            "lastUpdated": datetime.utcnow(),
+        }
+        
+        if existing:
+            await db.league_points.update_one(
+                {"leagueId": league_id, "clubId": club_id},
+                {"$set": league_points_data}
+            )
+        else:
+            from models import LeaguePoints
+            league_points_obj = LeaguePoints(**league_points_data)
+            await db.league_points.insert_one(league_points_obj.model_dump())
+        
+        updated_count += 1
+        logger.info(f"Updated points for {club_name}: {stats['total_points']} points (W:{stats['wins']} D:{stats['draws']} L:{stats['losses']})")
+    
+    return {
+        "message": "Scores calculated from fixtures successfully",
+        "clubs_updated": updated_count,
+        "fixtures_processed": len(matches)
+    }
+
+
+
 async def get_league_standings(db, league_id: str):
     """
     Get current standings for a league sorted by total points
