@@ -975,7 +975,6 @@ export default function CompetitionDashboard() {
           {activeTab === "summary" && renderSummaryTab()}
           {activeTab === "table" && renderLeagueTableTab()}
           {activeTab === "fixtures" && renderFixturesTab()}
-          {activeTab === "breakdown" && renderMatchBreakdownTab()}
         </div>
       </div>
     </div>
