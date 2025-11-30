@@ -1830,19 +1830,37 @@ async def import_fixtures_from_api(
                 detail="No valid team external IDs found. Teams must have numeric externalId values."
             )
         
-        logger.info(f"Fetching fixtures for {len(team_external_ids)} teams from API-Football")
+        logger.info(f"Fetching fixtures for {len(team_external_ids)} teams from API-Football (next {days} days)")
         
         # Import the client
         from sports_data_client import APIFootballClient
+        from datetime import datetime, timedelta
         
         client = APIFootballClient()
         
-        # Fetch fixtures for these teams (EPL, next 60 days)
-        api_fixtures = await client.get_fixtures_by_teams(
-            team_ids=team_external_ids,
-            season=2025,
-            league_id=39  # English Premier League
-        )
+        # Calculate date range
+        today = datetime.now()
+        end_date = today + timedelta(days=days)
+        
+        # Fetch all EPL fixtures for this date range (much more efficient than day-by-day)
+        all_fixtures = []
+        current_date = today
+        
+        # Fetch in weekly batches to reduce API calls
+        while current_date <= end_date:
+            date_str = current_date.strftime("%Y-%m-%d")
+            daily_fixtures = await client.get_fixtures_by_date(date_str, league_id=39)
+            all_fixtures.extend(daily_fixtures)
+            current_date += timedelta(days=1)
+        
+        # Filter for our selected teams only
+        api_fixtures = []
+        for fixture in all_fixtures:
+            home_team_id = fixture.get("teams", {}).get("home", {}).get("id")
+            away_team_id = fixture.get("teams", {}).get("away", {}).get("id")
+            
+            if home_team_id in team_external_ids or away_team_id in team_external_ids:
+                api_fixtures.append(fixture)
         
         if not api_fixtures:
             return {
