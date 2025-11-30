@@ -1990,14 +1990,28 @@ async def update_league_scoring_overrides(league_id: str, request: dict):
 @api_router.post("/leagues/{league_id}/score/recompute")
 async def recompute_scores(league_id: str):
     """
-    Recompute scores for all clubs in a league based on Champions League results
-    Fetches data from OpenFootball and applies scoring rules:
-    - Win: 3 points
-    - Draw: 1 point
-    - Goal scored: 1 point
+    Recompute scores for all clubs in a league
+    Uses fixture-based scoring if fixtures exist, otherwise Champions League
+    Scoring rules: Win: 3 points, Draw: 1 point, Goal scored: 1 point
     """
     try:
-        result = await recompute_league_scores(db, league_id)
+        # Check if league has completed fixtures
+        fixture_count = await db.fixtures.count_documents({
+            "leagueId": league_id,
+            "status": "ft",
+            "sportKey": "football"
+        })
+        
+        if fixture_count > 0:
+            # Use fixture-based scoring
+            logger.info(f"Using fixture-based scoring for league {league_id} ({fixture_count} completed fixtures)")
+            from scoring_service import calculate_points_from_fixtures
+            result = await calculate_points_from_fixtures(db, league_id)
+        else:
+            # Fall back to Champions League scoring
+            logger.info(f"Using Champions League scoring for league {league_id} (no fixtures)")
+            result = await recompute_league_scores(db, league_id)
+        
         return result
     except Exception as e:
         logger.error(f"Error recomputing scores: {e}")
