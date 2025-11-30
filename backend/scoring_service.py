@@ -383,11 +383,73 @@ async def calculate_points_from_fixtures(db, league_id: str):
         updated_count += 1
         logger.info(f"Updated points for {club_name}: {stats['total_points']} points (W:{stats['wins']} D:{stats['draws']} L:{stats['losses']})")
     
+    # Update standings collection - aggregate club points per user
+    await update_standings_from_club_points(db, league_id)
+    
     return {
         "message": "Scores calculated from fixtures successfully",
         "clubs_updated": updated_count,
         "fixtures_processed": len(matches)
     }
+
+
+async def update_standings_from_club_points(db, league_id: str):
+    """
+    Update the standings collection by aggregating club points for each participant
+    """
+    # Get all participants
+    participants = await db.league_participants.find({"leagueId": league_id}, {"_id": 0}).to_list(100)
+    
+    # Build standings table
+    table = []
+    for participant in participants:
+        user_id = participant["userId"]
+        clubs_won = participant.get("clubsWon", [])
+        
+        # Get points for all clubs owned by this user
+        club_points = await db.league_points.find({
+            "leagueId": league_id,
+            "clubId": {"$in": clubs_won}
+        }, {"_id": 0}).to_list(100)
+        
+        # Aggregate totals
+        total_points = sum(cp.get("totalPoints", 0) for cp in club_points)
+        total_goals = sum(cp.get("goalsScored", 0) for cp in club_points)
+        total_wins = sum(cp.get("wins", 0) for cp in club_points)
+        
+        table.append({
+            "userId": user_id,
+            "displayName": participant["userName"],
+            "points": float(total_points),
+            "assetsOwned": clubs_won,
+            "tiebreakers": {
+                "goals": float(total_goals),
+                "wins": float(total_wins),
+                "runs": 0.0,
+                "wickets": 0.0
+            }
+        })
+    
+    # Sort by points descending
+    table.sort(key=lambda x: (-x["points"], -x["tiebreakers"]["goals"], -x["tiebreakers"]["wins"]))
+    
+    # Get league sport key
+    league = await db.leagues.find_one({"id": league_id}, {"_id": 0, "sportKey": 1})
+    sport_key = league.get("sportKey", "football") if league else "football"
+    
+    # Update or create standings
+    await db.standings.update_one(
+        {"leagueId": league_id},
+        {"$set": {
+            "leagueId": league_id,
+            "sportKey": sport_key,
+            "table": table,
+            "lastComputedAt": datetime.utcnow()
+        }},
+        upsert=True
+    )
+    
+    logger.info(f"Updated standings for league {league_id}: {len(table)} participants")
 
 
 
