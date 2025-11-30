@@ -861,7 +861,19 @@ export default function CompetitionDashboard() {
                             <div className="flex-1">
                               <div className="text-sm font-medium text-gray-900">
                                 {fixture.homeTeam && fixture.awayTeam
-                                  ? `${fixture.homeTeam} vs ${fixture.awayTeam}`
+                                  ? (
+                                    <div className="flex items-center gap-3">
+                                      <span>{fixture.homeTeam}</span>
+                                      {(fixture.status === "ft" || fixture.status === "completed" || fixture.status === "final") && fixture.goalsHome !== null && fixture.goalsAway !== null ? (
+                                        <span className="font-bold text-lg text-blue-600">
+                                          {fixture.goalsHome} - {fixture.goalsAway}
+                                        </span>
+                                      ) : (
+                                        <span className="text-gray-400">vs</span>
+                                      )}
+                                      <span>{fixture.awayTeam}</span>
+                                    </div>
+                                  )
                                   : fixture.homeAsset?.name || fixture.awayAsset?.name 
                                   ? `${fixture.homeAsset?.name || fixture.homeAssetId || "Team A"} vs ${fixture.awayAsset?.name || fixture.awayAssetId || "Team B"}`
                                   : fixture.round || fixture.externalMatchId || "Match"}
