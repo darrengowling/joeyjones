@@ -966,17 +966,6 @@ export default function CompetitionDashboard() {
               >
                 Fixtures
               </button>
-              <button
-                data-testid="tab-breakdown"
-                onClick={() => handleTabChange("breakdown")}
-                className={`py-4 px-6 text-sm font-semibold border-b-2 transition-colors ${
-                  activeTab === "breakdown"
-                    ? "border-blue-600 text-blue-600"
-                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                }`}
-              >
-                Match Breakdown
-              </button>
             </nav>
           </div>
         </div>
