@@ -99,15 +99,23 @@ class APIFootballClient:
         Fetch all fixtures for a specific date and league
         Date format: YYYY-MM-DD
         League ID 39 = English Premier League
+        
+        Note: Free tier doesn't support league+season filters for current season.
+        We fetch all fixtures for the date and filter client-side.
         """
         params = {
-            "league": league_id,
-            "date": date,
-            "season": 2025
+            "date": date
         }
         
         response = await self._make_request("fixtures", params)
-        return response.get("response", []) if response else []
+        all_fixtures = response.get("response", []) if response else []
+        
+        # Filter for requested league in Python
+        filtered = [f for f in all_fixtures if f.get("league", {}).get("id") == league_id]
+        
+        logger.info(f"Filtered {len(filtered)} fixtures for league {league_id} from {len(all_fixtures)} total")
+        
+        return filtered
     
     async def get_live_fixtures(self, league_id: int = 39) -> List[Dict]:
         """
