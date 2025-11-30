@@ -22,7 +22,7 @@ EPL_TEAMS = [
     {"name": "Manchester United", "api_football_id": 33, "city": "Manchester"},
     {"name": "Newcastle United", "api_football_id": 34, "city": "Newcastle"},  # Full official name
     {"name": "Nottingham Forest", "api_football_id": 65, "city": "Nottingham"},  # Updated official name
-    {"name": "Sunderland", "api_football_id": 71, "city": "Sunderland"},
+    {"name": "Sunderland", "api_football_id": 746, "city": "Sunderland"},  # Corrected: 746 not 71
     {"name": "Tottenham Hotspur", "api_football_id": 47, "city": "London"},  # Full official name
     {"name": "West Ham United", "api_football_id": 48, "city": "London"},  # Full official name
     {"name": "Wolverhampton Wanderers", "api_football_id": 39, "city": "Wolverhampton"}  # Full official name
