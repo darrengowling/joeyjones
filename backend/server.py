@@ -1910,13 +1910,30 @@ async def import_fixtures_from_api(
                 }
                 
                 # Check if fixture already exists (shared fixtures have no leagueId)
+                # Check by API ID first, then by teams + date
                 existing = await db.fixtures.find_one({
-                    "apiFootballId": fixture_id,
-                    "leagueId": {"$exists": False}
+                    "$and": [
+                        {"leagueId": {"$exists": False}},  # Only shared fixtures
+                        {
+                            "$or": [
+                                {"apiFootballId": fixture_id},  # Match by API ID
+                                {
+                                    "$and": [  # Or match by teams + date
+                                        {"homeExternalId": str(home_team_api_id)},
+                                        {"awayExternalId": str(away_team_api_id)},
+                                        {"matchDate": {"$regex": f"^{match_date[:10]}"}}  # Same day
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
                 })
                 
                 if existing:
-                    # Update existing shared fixture
+                    # Update existing shared fixture (add API ID if missing)
+                    if not existing.get("apiFootballId"):
+                        logger.info(f"Adding API Football ID to existing fixture: {existing['id']}")
+                    
                     await db.fixtures.update_one(
                         {"id": existing["id"]},
                         {"$set": fixture_doc}
