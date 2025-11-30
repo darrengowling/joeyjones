@@ -138,6 +138,60 @@ class APIFootballClient:
         self.request_count = 0
         logger.info("API request counter reset")
 
+    async def get_fixtures_by_teams(self, team_ids: List[int], season: int = 2025, league_id: int = 39) -> List[Dict]:
+        """
+        Fetch upcoming fixtures for specific teams
+        
+        Args:
+            team_ids: List of API-Football team IDs
+            season: Season year (default: 2025)
+            league_id: League ID (default: 39 for EPL)
+        
+        Returns:
+            List of fixture data dictionaries
+        
+        Note: Free tier limitation - we fetch by date range and filter client-side
+        """
+        from datetime import datetime, timedelta
+        
+        # Get fixtures for next 60 days
+        today = datetime.now()
+        end_date = today + timedelta(days=60)
+        
+        all_fixtures = []
+        current_date = today
+        
+        # Fetch fixtures day by day (free tier workaround)
+        while current_date <= end_date:
+            date_str = current_date.strftime("%Y-%m-%d")
+            
+            params = {"date": date_str}
+            response = await self._make_request("fixtures", params)
+            
+            if response and response.get("response"):
+                daily_fixtures = response["response"]
+                
+                # Filter for our league and teams
+                for fixture in daily_fixtures:
+                    fixture_league_id = fixture.get("league", {}).get("id")
+                    home_team_id = fixture.get("teams", {}).get("home", {}).get("id")
+                    away_team_id = fixture.get("teams", {}).get("away", {}).get("id")
+                    
+                    if (fixture_league_id == league_id and 
+                        (home_team_id in team_ids or away_team_id in team_ids)):
+                        all_fixtures.append(fixture)
+            
+            current_date += timedelta(days=1)
+            
+            # Rate limiting: don't exceed daily quota
+            if self.request_count >= self.daily_limit - 10:
+                logger.warning("Approaching API rate limit, stopping fixture fetch")
+                break
+        
+        logger.info(f"Found {len(all_fixtures)} fixtures for {len(team_ids)} teams over next 60 days")
+        return all_fixtures
+
+
 
 async def update_fixtures_from_api(db, fixture_ids: List[str] = None):
     """
