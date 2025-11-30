@@ -202,24 +202,30 @@ if self.request_count >= self.daily_limit - 10:
 
 ## Testing Results
 
-### Test Case 1: daz1 League
+### Test Case 1: 7-Day Import
 **Setup**:
 - League ID: `91168d3f-372f-4a2e-b206-39df10ab3652`
 - Selected Teams: Arsenal, Brentford, Chelsea, Fulham
 - Commissioner ID: `a87cd4ce-005d-4d1d-bb53-658c2d2b42bb`
+- Days Parameter: 7
 
 **Result**:
 ```json
 {
-  "message": "Successfully imported 1 new fixtures and updated 0 existing fixtures",
-  "fixturesImported": 1,
-  "fixturesUpdated": 0,
+  "message": "Successfully imported 0 new fixtures and updated 1 existing fixtures",
+  "fixturesImported": 0,
+  "fixturesUpdated": 1,
   "teamsChecked": 4,
-  "apiRequestsRemaining": 39
+  "apiRequestsRemaining": 92
 }
 ```
 
-**Fixture Created**:
+**API Efficiency**:
+- API Calls Used: **8 requests** (for 7 days)
+- Quota Remaining: 92/100
+- Efficiency: 8% of daily quota
+
+**Fixture Found**:
 ```
 Chelsea vs Arsenal
 Date: 2025-11-30T16:30:00+00:00
@@ -229,7 +235,7 @@ API ID: 1379091
 LeagueId: NONE (shared fixture ✅)
 ```
 
-✅ **Status**: Working correctly
+✅ **Status**: Working correctly with optimized API usage
 
 ## Comparison: Automatic vs CSV Import
 
