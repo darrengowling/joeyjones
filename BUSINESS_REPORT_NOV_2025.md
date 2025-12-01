@@ -188,11 +188,12 @@ The Sport X fantasy sports platform has undergone significant stabilization and 
    - **Testing**: 1 hour
    - **Total if switching**: 4-5 hours
 
-2. **Seed Ashes Cricket Players** ⏱️ 2-3 hours
-   - Current: 30 generic cricket players
+2. **Seed Ashes Cricket Players with Nationalities** ⏱️ 3-4 hours
+   - Current: 30 generic cricket players (no nationality labels)
    - Needed: Australian and English squad players (22 players minimum)
-   - Names, external IDs, team affiliations
-   - **Task**: Research squads, create seed script, run seeding
+   - **Must include**: Names, external IDs, team affiliations, **country/nationality**
+   - **UI requirement**: Display country flag/label for team selection clarity
+   - **Task**: Research squads, add nationality field to schema, create seed script, run seeding
 
 3. **Test Ashes Competition Creation** ⏱️ 1 hour
    - Create test competition with Ashes players
@@ -213,36 +214,50 @@ The Sport X fantasy sports platform has undergone significant stabilization and 
 
 #### P1 - SHOULD HAVE (High Value)
 
-5. **Commissioner Quick Start Guide** ⏱️ 1 hour
+5. **Cricket Scoring Rules Configuration** ⏱️ 4 hours
+   - Add scoring rules settings to competition creation modal
+   - Allow commissioner to customize: runs, wickets, catches, stumpings, run-outs points
+   - Default to current schema but allow override
+   - Store in league document, apply during score calculation
+   - **Business value**: Different tournaments have different scoring systems
+
+6. **Auction UI Improvements** ⏱️ 3 hours
+   - **Problem**: Too busy, scrolling required between player/timer/bid
+   - **Solution**: Sticky header with player + timer + bid input always visible
+   - Reduce vertical space, consolidate information
+   - Better visual hierarchy
+   - Test on mobile and desktop
+
+7. **Commissioner Quick Start Guide** ⏱️ 1 hour
    - In-app help text for commissioners
    - FAQ section updates
    - Video/screenshot tutorials (optional)
 
-6. **Error Message Improvements** ⏱️ 2 hours
+8. **Error Message Improvements** ⏱️ 2 hours
    - User-friendly error messages
    - Guidance on what to do when errors occur
    - API suspension fallback messaging
 
-7. **Mobile Responsiveness Check** ⏱️ 2 hours
+9. **Mobile Responsiveness Check** ⏱️ 2 hours
    - Test on mobile devices
    - Fix any layout issues
    - Ensure touch targets adequate
 
-**Estimated Total P1**: 5 hours
+**Estimated Total P1**: 12 hours
 
 ---
 
 #### P2 - NICE TO HAVE (Can Defer)
 
-8. **Sentry Error Monitoring** ⏱️ 2 hours
-   - Configure Sentry (DSN needed from user)
-   - Test error capture
-   - Set up alerts
+10. **Sentry Error Monitoring** ⏱️ 2 hours
+    - Configure Sentry (free tier: 5K errors/month)
+    - Test error capture
+    - Set up alerts
 
-9. **Competition Dashboard Polish** ⏱️ 3 hours
-   - Loading states
-   - Empty states
-   - Better visual feedback
+11. **Competition Dashboard Polish** ⏱️ 3 hours
+    - Loading states
+    - Empty states
+    - Better visual feedback
 
 **Estimated Total P2**: 5 hours
 
@@ -321,13 +336,13 @@ The Sport X fantasy sports platform has undergone significant stabilization and 
 
 | Phase | P0 (Must Have) | P1 (Should Have) | P2 (Nice to Have) | Total |
 |-------|----------------|-----------------|------------------|-------|
-| **User Testing (4-5 groups)** | 6-9 hours | 5 hours | 5 hours | 16-19 hours |
+| **User Testing (4-5 groups)** | 7-10 hours | 12 hours | 5 hours | 24-27 hours |
 | **Pilot Launch (150+ users)** | 10 hours | 14 hours | 9 hours | 33 hours |
-| **TOTAL REMAINING WORK** | **16-19 hours** | **19 hours** | **14 hours** | **49-52 hours** |
+| **TOTAL REMAINING WORK** | **17-20 hours** | **26 hours** | **14 hours** | **57-60 hours** |
 
 **Translation to Days** (assuming 8-hour workdays):
-- User Testing Ready: **2-3 days**
-- Pilot Ready: **6-7 days** (after user testing)
+- User Testing Ready: **3-4 days** (includes nationality, scoring rules, auction UI)
+- Pilot Ready: **7-8 days** (after user testing)
 
 ---
 
