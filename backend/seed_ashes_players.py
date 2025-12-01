@@ -162,7 +162,9 @@ async def seed_ashes_players():
     
     print()
     print("=" * 60)
-    print(f"✅ Successfully seeded {len(players_added)} Ashes players!")
+    print(f"✅ Successfully processed {len(players_added) + len(players_updated)} Ashes players!")
+    print(f"   - Added: {len(players_added)} new players")
+    print(f"   - Updated: {len(players_updated)} existing players")
     print(f"   - Australia: {len(AUSTRALIA_SQUAD)} players")
     print(f"   - England: {len(ENGLAND_SQUAD)} players")
     print()
