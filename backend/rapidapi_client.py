@@ -296,7 +296,35 @@ class RapidAPICricketClient:
                         "startDate": match_info.get("startDate")
                     })
         
-        logger.info(f"Found {len(matches)} cricket matches")
+        # Process upcoming matches (same structure)
+        if upcoming_response:
+            type_matches = upcoming_response.get("typeMatches", [])
+            for type_match in type_matches:
+                series_matches = type_match.get("seriesMatches", [])
+                for series in series_matches:
+                    series_match_list = series.get("seriesAdWrapper", {}).get("matches", [])
+                    for match in series_match_list:
+                        match_info = match.get("matchInfo", {})
+                        
+                        # Avoid duplicates
+                        match_id = match_info.get("matchId")
+                        if any(m.get("matchId") == match_id for m in matches):
+                            continue
+                        
+                        matches.append({
+                            "matchId": match_id,
+                            "seriesName": match_info.get("seriesName"),
+                            "matchDesc": match_info.get("matchDesc"),
+                            "matchFormat": match_info.get("matchFormat"),
+                            "team1": match_info.get("team1", {}).get("teamName"),
+                            "team2": match_info.get("team2", {}).get("teamName"),
+                            "status": match_info.get("status"),
+                            "state": match_info.get("state"),
+                            "venue": match_info.get("venueInfo", {}).get("ground"),
+                            "startDate": match_info.get("startDate")
+                        })
+        
+        logger.info(f"Found {len(matches)} cricket matches (recent + upcoming)")
         return matches
     
     async def get_match_scorecard(self, match_id: int) -> Optional[Dict]:
