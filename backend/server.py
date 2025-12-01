@@ -404,8 +404,36 @@ async def import_next_cricket_fixture(league_id: str):
         
         logger.info(f"Finding next Ashes fixture for league {league_id} created at {league_created_at}")
         
-        # Get recent matches from Cricbuzz
-        api_matches = await client.get_recent_matches()
+        # Get Ashes matches from series endpoint (has complete schedule)
+        series_data = await client._make_request("series/v1/9107")  # Ashes 2025-26 series ID
+        
+        if not series_data or "matchDetails" not in series_data:
+            return {
+                "status": "error",
+                "imported": 0,
+                "message": "Could not fetch Ashes series data from Cricbuzz",
+                "api_requests_remaining": client.get_requests_remaining()
+            }
+        
+        # Parse all matches from series
+        api_matches = []
+        for detail in series_data["matchDetails"]:
+            if "matchDetailsMap" in detail:
+                matches = detail["matchDetailsMap"].get("match", [])
+                for match in matches:
+                    match_info = match.get("matchInfo", {})
+                    api_matches.append({
+                        "matchId": match_info.get("matchId"),
+                        "seriesName": match_info.get("seriesName"),
+                        "matchDesc": match_info.get("matchDesc"),
+                        "matchFormat": match_info.get("matchFormat"),
+                        "team1": match_info.get("team1", {}).get("teamName"),
+                        "team2": match_info.get("team2", {}).get("teamName"),
+                        "status": match_info.get("status"),
+                        "state": match_info.get("state"),
+                        "venue": match_info.get("venueInfo", {}).get("ground"),
+                        "startDate": match_info.get("startDate")
+                    })
         
         # Filter for Ashes matches starting after league creation
         ashes_matches = []
