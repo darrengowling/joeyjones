@@ -467,6 +467,7 @@ async def import_cricket_fixtures_from_api(
     seriesName: Optional[str] = None,
     teams: Optional[List[str]] = None,
     days: int = 90,
+    limit: Optional[int] = None,
     preview: bool = False
 ):
     """
