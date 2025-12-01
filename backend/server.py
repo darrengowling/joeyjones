@@ -1950,20 +1950,28 @@ async def import_fixtures_from_api(
             try:
                 # Extract fixture data
                 fixture_id = api_fixture["fixture"]["id"]
-                home_team_api_id = api_fixture["teams"]["home"]["id"]
-                away_team_api_id = api_fixture["teams"]["away"]["id"]
+                home_team_fd_id = api_fixture["teams"]["home"]["id"]
+                away_team_fd_id = api_fixture["teams"]["away"]["id"]
                 home_team_name = api_fixture["teams"]["home"]["name"]
                 away_team_name = api_fixture["teams"]["away"]["name"]
                 venue = api_fixture["fixture"]["venue"]["name"]
                 match_date = api_fixture["fixture"]["date"]
-                status = api_fixture["fixture"]["status"]["short"].lower()
+                status = api_fixture["fixture"]["status"]["short"]
                 
-                # Get internal team IDs
-                home_team = team_lookup.get(home_team_api_id)
-                away_team = team_lookup.get(away_team_api_id)
+                # Find our internal team records by name matching
+                home_team = None
+                away_team = None
+                
+                for team in teams:
+                    team_name = team.get("name", "")
+                    if team_name in home_team_name or home_team_name in team_name:
+                        home_team = team
+                    if team_name in away_team_name or away_team_name in team_name:
+                        away_team = team
                 
                 if not home_team or not away_team:
                     # Skip fixtures where we don't have both teams
+                    logger.warning(f"Skipping fixture: {home_team_name} vs {away_team_name} - teams not in competition")
                     continue
                 
                 # Create/update fixture
@@ -1972,29 +1980,29 @@ async def import_fixtures_from_api(
                     "awayTeam": away_team_name,
                     "homeTeamId": home_team["id"],
                     "awayTeamId": away_team["id"],
-                    "homeExternalId": str(home_team_api_id),
-                    "awayExternalId": str(away_team_api_id),
+                    "homeExternalId": str(home_team_fd_id),
+                    "awayExternalId": str(away_team_fd_id),
                     "matchDate": match_date,
                     "status": status,
                     "venue": venue,
                     "sportKey": "football",
-                    "source": "api-football",
-                    "apiFootballId": fixture_id,
+                    "source": "football-data.org",
+                    "footballDataId": fixture_id,
                     "updatedAt": datetime.now(timezone.utc).isoformat()
                 }
                 
                 # Check if fixture already exists (shared fixtures have no leagueId)
-                # Check by API ID first, then by teams + date
+                # Check by Football-Data.org ID first, then by teams + date
                 existing = await db.fixtures.find_one({
                     "$and": [
                         {"leagueId": {"$exists": False}},  # Only shared fixtures
                         {
                             "$or": [
-                                {"apiFootballId": fixture_id},  # Match by API ID
+                                {"footballDataId": fixture_id},  # Match by Football-Data.org ID
                                 {
                                     "$and": [  # Or match by teams + date
-                                        {"homeExternalId": str(home_team_api_id)},
-                                        {"awayExternalId": str(away_team_api_id)},
+                                        {"homeTeam": home_team_name},
+                                        {"awayTeam": away_team_name},
                                         {"matchDate": {"$regex": f"^{match_date[:10]}"}}  # Same day
                                     ]
                                 }
