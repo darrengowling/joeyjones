@@ -58,27 +58,25 @@ class RapidAPIFootballClient:
             logger.error(f"RapidAPI request failed: {e}")
             return None
     
-    async def get_fixtures_by_date(self, date_str: str, league_id: int = 39) -> List[Dict]:
+    async def get_recent_fixtures(self, league_id: int = 39, page: int = 0) -> List[Dict]:
         """
-        Get fixtures for a specific date
+        Get recent fixtures (last 30 matches)
         
         Args:
-            date_str: Date in YYYY-MM-DD format
             league_id: League ID (39 = EPL)
+            page: Page number for pagination
         
         Returns:
             List of fixture dictionaries
         """
         # FootAPI uses tournament ID structure
         # EPL = tournament 17 (Premier League)
+        # Season 52186 = 2024-25
         tournament_id = 17 if league_id == 39 else league_id
+        season_id = 52186  # Current EPL season
         
-        params = {
-            "date": date_str,
-            "tournament": tournament_id
-        }
-        
-        response = await self._make_request("matches", params)
+        endpoint = f"tournament/{tournament_id}/season/{season_id}/matches/last/{page}"
+        response = await self._make_request(endpoint)
         
         if not response:
             return []
@@ -89,15 +87,24 @@ class RapidAPIFootballClient:
         
         for event in events:
             try:
+                # Convert timestamp to ISO format
+                start_timestamp = event.get("startTimestamp")
+                if start_timestamp:
+                    from datetime import datetime
+                    date_str = datetime.fromtimestamp(start_timestamp).isoformat()
+                else:
+                    date_str = None
+                
                 fixture = {
                     "fixture": {
                         "id": event.get("id"),
-                        "date": event.get("startTimestamp"),
+                        "date": date_str,
+                        "timestamp": start_timestamp,
                         "status": {
                             "short": self._map_status(event.get("status", {}).get("type"))
                         },
                         "venue": {
-                            "name": event.get("venue", {}).get("stadium", {}).get("name", "")
+                            "name": event.get("venue", {}).get("stadium", {}).get("name", "") if event.get("venue") else ""
                         }
                     },
                     "teams": {
@@ -124,8 +131,38 @@ class RapidAPIFootballClient:
                 logger.error(f"Error parsing fixture: {e}")
                 continue
         
-        logger.info(f"Found {len(fixtures)} fixtures for date {date_str}")
+        logger.info(f"Found {len(fixtures)} recent fixtures")
         return fixtures
+    
+    async def get_fixtures_by_date(self, date_str: str, league_id: int = 39) -> List[Dict]:
+        """
+        Get fixtures for a specific date (filters recent fixtures by date)
+        
+        Args:
+            date_str: Date in YYYY-MM-DD format  
+            league_id: League ID (39 = EPL)
+        
+        Returns:
+            List of fixture dictionaries
+        """
+        from datetime import datetime, timedelta
+        
+        # Get recent fixtures and filter by date
+        all_fixtures = await self.get_recent_fixtures(league_id)
+        
+        # Parse target date
+        target_date = datetime.strptime(date_str, "%Y-%m-%d").date()
+        
+        # Filter fixtures for the target date
+        filtered = []
+        for fixture in all_fixtures:
+            if fixture["fixture"]["date"]:
+                fixture_date = datetime.fromisoformat(fixture["fixture"]["date"]).date()
+                if fixture_date == target_date:
+                    filtered.append(fixture)
+        
+        logger.info(f"Found {len(filtered)} fixtures for date {date_str}")
+        return filtered
     
     def _map_status(self, status_type: str) -> str:
         """Map FootAPI status to standard format"""
