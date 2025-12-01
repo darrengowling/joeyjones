@@ -1177,14 +1177,16 @@ async def get_league_assets(league_id: str, search: Optional[str] = None, page: 
 @api_router.get("/clubs")
 async def get_clubs(
     sportKey: str = Query(default="football", description="Sport key: football, cricket, etc."),
-    competition: str = Query(default=None, description="Filter by competition (football only)")
+    competition: str = Query(default=None, description="Filter by competition")
 ):
     """
     Get all assets for a sport, optionally filtered by competition
     
     Args:
         sportKey: Sport identifier (default: football). Options: football, cricket, etc.
-        competition: Filter by competition (football only). Options: 'EPL', 'UCL', or None for all
+        competition: Filter by competition. 
+            - Football: 'EPL', 'UCL', or None for all
+            - Cricket: 'ASHES', 'NZ_ENG', or None for all
     
     Returns:
         List of assets for the specified sport
@@ -1192,11 +1194,12 @@ async def get_clubs(
     Examples:
         /clubs - Returns all 52 football clubs (backward compatible)
         /clubs?sportKey=football&competition=EPL - Returns 20 EPL clubs
-        /clubs?sportKey=cricket - Returns all cricket players
+        /clubs?sportKey=cricket - Returns all cricket players (53)
+        /clubs?sportKey=cricket&competition=ASHES - Returns only Ashes players (30)
     """
     query = {"sportKey": sportKey}
     
-    # Competition filtering only applies to football
+    # Competition filtering for football
     if sportKey == "football" and competition:
         if competition.upper() == "EPL":
             # Include clubs with competitionShort="EPL" OR "English Premier League" in competitions array
@@ -1210,6 +1213,15 @@ async def get_clubs(
                 {"competitionShort": "UCL"},
                 {"competitions": "UEFA Champions League"}
             ]
+    
+    # Competition filtering for cricket
+    if sportKey == "cricket" and competition:
+        if competition.upper() == "ASHES":
+            # Include players with nationality Australia or England
+            query["meta.nationality"] = {"$in": ["Australia", "England"]}
+        elif competition.upper() == "NZ_ENG":
+            # Include players with nationality New Zealand or England
+            query["meta.nationality"] = {"$in": ["New Zealand", "England"]}
     
     assets = await db.assets.find(query, {"_id": 0}).to_list(1000)
     return assets
