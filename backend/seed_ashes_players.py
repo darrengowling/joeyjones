@@ -95,8 +95,20 @@ async def seed_ashes_players():
         if player_data.get("vice_captain"):
             player["meta"]["vice_captain"] = True
         
-        result = await db.assets.insert_one(player)
-        players_added.append(player)
+        # Check if player already exists
+        existing = await db.assets.find_one({"sportKey": "cricket", "externalId": player["externalId"]})
+        
+        if existing:
+            # Update existing player with nationality
+            await db.assets.update_one(
+                {"_id": existing["_id"]},
+                {"$set": {"meta.nationality": player["meta"]["nationality"], "meta.team": player["meta"]["team"]}}
+            )
+            players_updated.append(player["name"])
+        else:
+            # Insert new player
+            result = await db.assets.insert_one(player)
+            players_added.append(player)
         
         role_emoji = "🏏" if "Batsman" in player_data["role"] else "🧤" if "Wicket" in player_data["role"] else "⚡" if "All-rounder" in player_data["role"] else "🎯"
         captain_mark = " (C)" if player_data.get("captain") else ""
@@ -129,8 +141,20 @@ async def seed_ashes_players():
         if player_data.get("vice_captain"):
             player["meta"]["vice_captain"] = True
         
-        result = await db.assets.insert_one(player)
-        players_added.append(player)
+        # Check if player already exists
+        existing = await db.assets.find_one({"sportKey": "cricket", "externalId": player["externalId"]})
+        
+        if existing:
+            # Update existing player with nationality
+            await db.assets.update_one(
+                {"_id": existing["_id"]},
+                {"$set": {"meta.nationality": player["meta"]["nationality"], "meta.team": player["meta"]["team"]}}
+            )
+            players_updated.append(player["name"])
+        else:
+            # Insert new player
+            result = await db.assets.insert_one(player)
+            players_added.append(player)
         
         role_emoji = "🏏" if "Batsman" in player_data["role"] else "🧤" if "Wicket" in player_data["role"] else "⚡" if "All-rounder" in player_data["role"] else "🎯"
         captain_mark = " (C)" if player_data.get("captain") else " (VC)" if player_data.get("vice_captain") else ""
