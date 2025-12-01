@@ -835,65 +835,33 @@ export default function CompetitionDashboard() {
               </div>
             )}
 
-            {/* Import Cricket Fixtures from API - NEW AUTOMATIC METHOD */}
+            {/* Import Cricket Fixtures from API - SIMPLE */}
             {summary && summary.sportKey === "cricket" && (
               <div className="bg-green-50 border-2 border-green-500 rounded-lg p-4 mb-4">
-                <h3 className="text-md font-bold text-green-900 mb-2">⚡ Import Fixtures from Cricbuzz</h3>
+                <h3 className="text-md font-bold text-green-900 mb-2">⚡ Import Ashes Fixtures</h3>
                 <p className="text-sm text-gray-700 mb-3">
-                  Automatically fetch upcoming cricket matches
+                  Automatically fetch upcoming Australia vs England Test matches
                 </p>
                 
-                {/* The Ashes Quick Import */}
-                <div className="mb-3">
-                  <p className="text-xs font-semibold text-gray-700 mb-2">Popular Series:</p>
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => handleImportCricketFixturesFromAPI("Ashes", ["Australia", "England"], 180)}
-                      disabled={loading}
-                      className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-semibold flex-1"
-                    >
-                      {loading ? "Importing..." : "🏴󠁧󠁢󠁥󠁮󠁧󠁿🇦🇺 The Ashes"}
-                    </button>
-                    <button
-                      onClick={() => handleImportCricketFixturesFromAPI("India", ["India"], 90)}
-                      disabled={loading}
-                      className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-semibold flex-1"
-                    >
-                      {loading ? "Importing..." : "🇮🇳 India Matches"}
-                    </button>
-                  </div>
-                </div>
-
-                {/* General Import Options */}
-                <div>
-                  <p className="text-xs font-semibold text-gray-700 mb-2">Time Range:</p>
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => handleImportCricketFixturesFromAPI(null, null, 30)}
-                      disabled={loading}
-                      className="bg-gray-600 text-white px-3 py-2 rounded-lg hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed text-xs font-semibold flex-1"
-                    >
-                      Next 30 Days
-                    </button>
-                    <button
-                      onClick={() => handleImportCricketFixturesFromAPI(null, null, 90)}
-                      disabled={loading}
-                      className="bg-gray-700 text-white px-3 py-2 rounded-lg hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed text-xs font-semibold flex-1"
-                    >
-                      Next 90 Days
-                    </button>
-                    <button
-                      onClick={() => handleImportCricketFixturesFromAPI(null, null, 180)}
-                      disabled={loading}
-                      className="bg-gray-800 text-white px-3 py-2 rounded-lg hover:bg-gray-900 disabled:opacity-50 disabled:cursor-not-allowed text-xs font-semibold flex-1"
-                    >
-                      Next 180 Days
-                    </button>
-                  </div>
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => handleImportCricketFixturesFromAPI("Ashes", ["Australia", "England"], 30, 1)}
+                    disabled={loading}
+                    className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-semibold flex-1"
+                  >
+                    {loading ? "Importing..." : "Import Next Fixture"}
+                  </button>
+                  <button
+                    onClick={() => handleImportCricketFixturesFromAPI("Ashes", ["Australia", "England"], 180, 5)}
+                    disabled={loading}
+                    className="bg-green-700 text-white px-4 py-2 rounded-lg hover:bg-green-800 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-semibold flex-1"
+                  >
+                    {loading ? "Importing..." : "Import All Ashes Fixtures"}
+                  </button>
                 </div>
 
                 <p className="text-xs text-gray-600 mt-3">
-                  💡 Series-specific imports (The Ashes) filter matches precisely. Time-based imports fetch all cricket matches in that period.
+                  💡 "Next Fixture" imports only the upcoming Test match. "All Fixtures" imports the complete 5-Test series.
                 </p>
               </div>
             )}
