@@ -269,11 +269,11 @@ class RapidAPICricketClient:
         recent_response = await self._make_request("matches/v1/recent")
         upcoming_response = await self._make_request("matches/v1/upcoming")
         
-        if not response:
-            return []
-        
         matches = []
-        type_matches = response.get("typeMatches", [])
+        
+        # Process recent matches
+        if recent_response:
+            type_matches = recent_response.get("typeMatches", [])
         
         for type_match in type_matches:
             series_matches = type_match.get("seriesMatches", [])
