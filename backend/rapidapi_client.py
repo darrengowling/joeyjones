@@ -257,17 +257,14 @@ class RapidAPICricketClient:
             logger.error(f"RapidAPI request failed: {e}")
             return None
     
-    async def get_matches(self, match_type: str = "international") -> List[Dict]:
+    async def get_recent_matches(self) -> List[Dict]:
         """
-        Get current matches
-        
-        Args:
-            match_type: Type of matches (international, league, domestic, women)
+        Get recent cricket matches
         
         Returns:
             List of match dictionaries
         """
-        response = await self._make_request(f"matches/v1/{match_type}")
+        response = await self._make_request("matches/v1/recent")
         
         if not response:
             return []
@@ -291,7 +288,9 @@ class RapidAPICricketClient:
                         "team1": match_info.get("team1", {}).get("teamName"),
                         "team2": match_info.get("team2", {}).get("teamName"),
                         "status": match_info.get("status"),
-                        "state": match_info.get("state")
+                        "state": match_info.get("state"),
+                        "venue": match_info.get("venueInfo", {}).get("ground"),
+                        "startDate": match_info.get("startDate")
                     })
         
         logger.info(f"Found {len(matches)} cricket matches")
