@@ -2012,9 +2012,9 @@ async def import_fixtures_from_api(
                 })
                 
                 if existing:
-                    # Update existing shared fixture (add API ID if missing)
-                    if not existing.get("apiFootballId"):
-                        logger.info(f"Adding API Football ID to existing fixture: {existing['id']}")
+                    # Update existing shared fixture (add Football-Data.org ID if missing)
+                    if not existing.get("footballDataId"):
+                        logger.info(f"Adding Football-Data.org ID to existing fixture: {existing['id']}")
                     
                     await db.fixtures.update_one(
                         {"id": existing["id"]},
