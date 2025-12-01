@@ -524,15 +524,16 @@ async def import_cricket_fixtures_from_api(
             
             # Filter by teams
             if teams and len(teams) > 0:
-                team1 = match.get("team1", "")
-                team2 = match.get("team2", "")
+                team1 = match.get("team1", "").strip()
+                team2 = match.get("team2", "").strip()
                 
-                # Check if both specified teams are in this match
+                # Check if ALL specified teams are in this match (exact match, not substring)
                 teams_lower = [t.lower() for t in teams]
                 match_teams_lower = [team1.lower(), team2.lower()]
                 
-                # For a match to be included, all specified teams should be present
-                if not all(any(team_filter in match_team for match_team in match_teams_lower) for team_filter in teams_lower):
+                # All specified teams must be in the match
+                # e.g., if teams = ["Australia", "England"], match must have both
+                if not all(team_filter in match_teams_lower for team_filter in teams_lower):
                     continue
             
             # Add to filtered list
