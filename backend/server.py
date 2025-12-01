@@ -13,6 +13,7 @@ from typing import List, Optional
 import socketio
 import asyncio
 import uuid
+from uuid import uuid4
 import csv
 import io
 from datetime import datetime, timedelta, timezone
