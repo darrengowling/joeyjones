@@ -908,12 +908,48 @@ function AuctionRoom() {
                     </div>
                   </div>
 
-                  {/* Club Info */}
+                  {/* Club/Player Info */}
                   <div className="app-card bg-gray-50 p-6 rounded-lg mb-6">
                     <div className="stack-md">
                       <h3 className="h1 text-3xl font-bold text-gray-900">{currentClub.name}</h3>
-                      <p className="h2 text-xl text-gray-600">{currentClub.country}</p>
-                      <p className="subtle text-sm text-gray-500">UEFA ID: {currentClub.uefaId}</p>
+                      
+                      {/* Football: Show country and UEFA ID */}
+                      {sport?.key === "football" && (
+                        <>
+                          <p className="h2 text-xl text-gray-600">{currentClub.country}</p>
+                          {currentClub.uefaId && (
+                            <p className="subtle text-sm text-gray-500">UEFA ID: {currentClub.uefaId}</p>
+                          )}
+                        </>
+                      )}
+                      
+                      {/* Cricket: Show nationality and role */}
+                      {sport?.key === "cricket" && currentClub.meta && (
+                        <>
+                          {currentClub.meta.nationality && (
+                            <p className="h2 text-xl text-gray-600">
+                              <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-base font-semibold">
+                                {currentClub.meta.nationality}
+                              </span>
+                            </p>
+                          )}
+                          {currentClub.meta.role && (
+                            <p className="text-lg text-gray-700">
+                              <span className="font-medium">Role:</span> {currentClub.meta.role}
+                            </p>
+                          )}
+                          {currentClub.meta.bowling && (
+                            <p className="text-sm text-gray-600">
+                              <span className="font-medium">Bowling:</span> {currentClub.meta.bowling}
+                            </p>
+                          )}
+                        </>
+                      )}
+                      
+                      {/* Fallback for other sports */}
+                      {sport?.key !== "football" && sport?.key !== "cricket" && currentClub.country && (
+                        <p className="h2 text-xl text-gray-600">{currentClub.country}</p>
+                      )}
                     </div>
                   </div>
 
