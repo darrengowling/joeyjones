@@ -367,6 +367,99 @@ async def update_fixture_scores(fixture_ids: List[str] = None):
         raise HTTPException(status_code=500, detail=f"Error updating scores: {str(e)}")
 
 
+@api_router.post("/cricket/update-scores")
+async def update_cricket_scores():
+    """
+    Manually trigger cricket score updates from Cricbuzz API
+    Updates all recent cricket fixtures
+    """
+    from rapidapi_client import RapidAPICricketClient
+    from datetime import datetime, timezone
+    
+    try:
+        client = RapidAPICricketClient()
+        
+        logger.info("Fetching recent cricket matches from Cricbuzz")
+        
+        # Get recent matches from Cricbuzz
+        api_matches = await client.get_recent_matches()
+        
+        logger.info(f"Found {len(api_matches)} cricket matches from API")
+        
+        updated_count = 0
+        errors = []
+        
+        for api_match in api_matches:
+            try:
+                match_id = api_match["matchId"]
+                team1_name = api_match["team1"]
+                team2_name = api_match["team2"]
+                status = api_match["status"]
+                state = api_match["state"]
+                
+                # Find corresponding fixture in our database
+                # Match by team names
+                fixture = await db.fixtures.find_one({
+                    "$or": [
+                        {
+                            "homeTeam": {"$regex": team1_name, "$options": "i"},
+                            "awayTeam": {"$regex": team2_name, "$options": "i"}
+                        },
+                        {
+                            "homeTeam": {"$regex": team2_name, "$options": "i"},
+                            "awayTeam": {"$regex": team1_name, "$options": "i"}
+                        }
+                    ],
+                    "sportKey": "cricket"
+                })
+                
+                if fixture:
+                    # Map Cricbuzz state to our status
+                    fixture_status = "completed" if state == "Complete" else "in_progress" if state == "In Progress" else "scheduled"
+                    
+                    # Update the fixture
+                    update_data = {
+                        "status": fixture_status,
+                        "cricbuzzMatchId": match_id,
+                        "matchResult": status,
+                        "updatedAt": datetime.now(timezone.utc).isoformat()
+                    }
+                    
+                    # For completed matches, get scorecard for detailed stats
+                    if state == "Complete":
+                        scorecard = await client.get_match_scorecard(match_id)
+                        if scorecard:
+                            update_data["scorecard"] = scorecard
+                    
+                    await db.fixtures.update_one(
+                        {"id": fixture["id"]},
+                        {"$set": update_data}
+                    )
+                    
+                    updated_count += 1
+                    logger.info(f"Updated: {team1_name} vs {team2_name} - {status}")
+                else:
+                    logger.info(f"Fixture not found in DB: {team1_name} vs {team2_name}")
+                    
+            except Exception as e:
+                logger.error(f"Error updating cricket fixture {match_id}: {e}")
+                errors.append(str(e))
+                continue
+        
+        return {
+            "status": "completed",
+            "updated": updated_count,
+            "total_from_api": len(api_matches),
+            "errors": errors,
+            "api_requests_remaining": client.get_requests_remaining(),
+            "timestamp": datetime.now(timezone.utc).isoformat()
+        }
+        
+    except Exception as e:
+        logger.error(f"Error updating cricket scores: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error updating cricket scores: {str(e)}")
+
+
 @api_router.get("/fixtures")
 async def get_fixtures(sport_key: str = "football", date: str = None):
     """
