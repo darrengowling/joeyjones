@@ -10,7 +10,7 @@ import time
 from datetime import datetime, timezone
 
 # Backend URL from frontend/.env
-BACKEND_URL = "https://competition-hub-6.preview.emergentagent.com/api"
+BACKEND_URL = "https://cricket-football-2.preview.emergentagent.com/api"
 
 # Prem8 League ID
 PREM8_LEAGUE_ID = "e479329d-3111-4000-b69c-880a667fe43d"

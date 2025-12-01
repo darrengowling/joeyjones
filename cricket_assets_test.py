@@ -23,7 +23,7 @@ backend_dir = Path(__file__).parent / "backend"
 load_dotenv(backend_dir / '.env')
 
 # Configuration
-BACKEND_URL = "https://competition-hub-6.preview.emergentagent.com/api"
+BACKEND_URL = "https://cricket-football-2.preview.emergentagent.com/api"
 MONGO_URL = os.environ.get('MONGO_URL', 'mongodb://localhost:27017')
 DB_NAME = os.environ.get('DB_NAME', 'test_database')
 

@@ -15,7 +15,7 @@ import os
 from typing import Dict, List, Any
 
 # Backend URL from frontend/.env
-BACKEND_URL = "https://competition-hub-6.preview.emergentagent.com/api"
+BACKEND_URL = "https://cricket-football-2.preview.emergentagent.com/api"
 
 # MongoDB connection
 MONGO_URL = "mongodb://localhost:27017"

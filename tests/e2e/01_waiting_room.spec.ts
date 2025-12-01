@@ -6,7 +6,7 @@
 import { test, expect, chromium, Browser, BrowserContext, Page } from '@playwright/test';
 import { setUserSession } from './helpers/session';  // Prompt C
 
-const BASE_URL = 'https://competition-hub-6.preview.emergentagent.com';
+const BASE_URL = 'https://cricket-football-2.preview.emergentagent.com';
 
 test.describe('01 - Waiting Room UX', () => {
   let browserA: Browser;

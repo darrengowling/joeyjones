@@ -21,7 +21,7 @@ Comprehensive rate limiting load tests were conducted to prevent API abuse while
 ## Test Environment
 
 ### Configuration
-- **Base URL:** `https://competition-hub-6.preview.emergentagent.com/api`
+- **Base URL:** `https://cricket-football-2.preview.emergentagent.com/api`
 - **Redis:** localhost:6379 (running)
 - **Backend:** FastAPI with FastAPILimiter + aioredis
 - **Load Test Tool:** Custom Python + aiohttp

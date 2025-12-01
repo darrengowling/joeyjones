@@ -8,7 +8,7 @@ export default defineConfig({
   workers: 1, // Single worker for auction tests to avoid conflicts
   reporter: 'html',
   use: {
-    baseURL: 'https://competition-hub-6.preview.emergentagent.com',
+    baseURL: 'https://cricket-football-2.preview.emergentagent.com',
     trace: 'on-first-retry',
     video: 'retain-on-failure',
     screenshot: 'only-on-failure',
