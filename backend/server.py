@@ -522,18 +522,17 @@ async def import_cricket_fixtures_from_api(
                 if seriesName.lower() not in series_name_match.lower():
                     continue
             
-            # Filter by teams (exact match)
+            # Filter by teams (exact match only, not substring)
             if teams and len(teams) > 0:
                 team1 = match.get("team1", "").strip()
                 team2 = match.get("team2", "").strip()
                 
-                # Exact match: all specified teams must be present
+                # Exact match: specified teams must exactly match (case-insensitive)
                 teams_set = set(t.lower() for t in teams)
                 match_teams_set = {team1.lower(), team2.lower()}
                 
-                # Check if specified teams are exactly in the match
-                # e.g., ["australia", "england"] should match {"england", "australia"} but not {"prime ministers xi", "england xi"}
-                if not teams_set.issubset(match_teams_set):
+                # Check if sets are equal (both teams specified, both teams in match)
+                if teams_set != match_teams_set:
                     continue
             
             # Add to filtered list
