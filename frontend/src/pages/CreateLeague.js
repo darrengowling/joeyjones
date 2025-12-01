@@ -397,7 +397,21 @@ export default function CreateLeague() {
                               }}
                               className="w-4 h-4"
                             />
-                            <span>{asset.name}</span>
+                            <div className="flex-1">
+                              <span className="font-medium">{asset.name}</span>
+                              {/* Display nationality for cricket players */}
+                              {form.sportKey === "cricket" && asset.meta?.nationality && (
+                                <span className="ml-2 text-xs text-gray-600 bg-gray-200 px-2 py-0.5 rounded">
+                                  {asset.meta.nationality}
+                                </span>
+                              )}
+                              {/* Display role for cricket players */}
+                              {form.sportKey === "cricket" && asset.meta?.role && (
+                                <span className="ml-1 text-xs text-gray-500">
+                                  ({asset.meta.role})
+                                </span>
+                              )}
+                            </div>
                           </label>
                         ))}
                     </div>
