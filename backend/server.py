@@ -464,11 +464,11 @@ async def update_cricket_scores():
 @api_router.post("/leagues/{league_id}/fixtures/import-from-cricket-api")
 async def import_cricket_fixtures_from_api(
     league_id: str,
-    seriesName: Optional[str] = None,
-    teams: Optional[List[str]] = None,
-    days: int = 90,
-    limit: Optional[int] = None,
-    preview: bool = False
+    seriesName: Optional[str] = Query(default=None),
+    teams: Optional[List[str]] = Query(default=None),
+    days: int = Query(default=90),
+    limit: Optional[int] = Query(default=None),
+    preview: bool = Query(default=False)
 ):
     """
     Import cricket fixtures from Cricbuzz API
