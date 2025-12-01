@@ -368,6 +368,138 @@ async def update_fixture_scores(fixture_ids: List[str] = None):
         raise HTTPException(status_code=500, detail=f"Error updating scores: {str(e)}")
 
 
+@api_router.post("/leagues/{league_id}/fixtures/import-next-cricket-fixture")
+async def import_next_cricket_fixture(league_id: str):
+    """
+    Import the next upcoming Ashes fixture after league creation date
+    Simple workflow: one fixture at a time
+    """
+    from rapidapi_client import RapidAPICricketClient
+    from datetime import datetime, timezone
+    
+    try:
+        # Get league details
+        league = await db.leagues.find_one({"id": league_id}, {"_id": 0})
+        if not league:
+            raise HTTPException(status_code=404, detail="League not found")
+        
+        if league["sportKey"] != "cricket":
+            raise HTTPException(status_code=400, detail="This endpoint is for cricket leagues only")
+        
+        # Get league creation date
+        league_created_at_str = league.get("createdAt")
+        if isinstance(league_created_at_str, str):
+            league_created_at = datetime.fromisoformat(league_created_at_str.replace('Z', '+00:00'))
+        else:
+            league_created_at = league_created_at_str
+        
+        client = RapidAPICricketClient()
+        
+        logger.info(f"Finding next Ashes fixture for league {league_id} created at {league_created_at}")
+        
+        # Get recent matches from Cricbuzz
+        api_matches = await client.get_recent_matches()
+        
+        # Filter for Ashes matches starting after league creation
+        ashes_matches = []
+        for match in api_matches:
+            # Must be Ashes series
+            if "Ashes" not in match.get("seriesName", ""):
+                continue
+            
+            # Must be Australia vs England (exact match)
+            team1 = match.get("team1", "").strip().lower()
+            team2 = match.get("team2", "").strip().lower()
+            teams_set = {team1, team2}
+            
+            if teams_set != {"australia", "england"}:
+                continue
+            
+            # Parse match date
+            start_timestamp = match.get("startDate")
+            if not start_timestamp:
+                continue
+            
+            try:
+                match_date = datetime.fromtimestamp(int(start_timestamp) / 1000, tz=timezone.utc)
+            except:
+                continue
+            
+            # Must start after league creation
+            if match_date <= league_created_at:
+                logger.info(f"Skipping past match: {match['team1']} vs {match['team2']} on {match_date}")
+                continue
+            
+            # Check if already imported
+            existing = await db.fixtures.find_one({
+                "leagueId": league_id,
+                "cricbuzzMatchId": match["matchId"]
+            })
+            
+            if existing:
+                logger.info(f"Match already imported: {match['matchId']}")
+                continue
+            
+            ashes_matches.append({
+                "match": match,
+                "date": match_date
+            })
+        
+        if not ashes_matches:
+            return {
+                "status": "no_matches",
+                "imported": 0,
+                "skipped": 0,
+                "message": "No upcoming Ashes fixtures found after league creation date",
+                "api_requests_remaining": client.get_requests_remaining()
+            }
+        
+        # Sort by date and get the next one
+        ashes_matches.sort(key=lambda x: x["date"])
+        next_match = ashes_matches[0]["match"]
+        next_match_date = ashes_matches[0]["date"]
+        
+        logger.info(f"Importing next fixture: {next_match['team1']} vs {next_match['team2']} on {next_match_date}")
+        
+        # Create fixture
+        fixture = {
+            "id": str(uuid4()),
+            "leagueId": league_id,
+            "sportKey": "cricket",
+            "externalMatchId": next_match["matchId"],
+            "cricbuzzMatchId": next_match["matchId"],
+            "homeTeam": next_match["team1"],
+            "awayTeam": next_match["team2"],
+            "homeAssetId": None,
+            "awayAssetId": None,
+            "startsAt": next_match_date,
+            "venue": next_match.get("venue", {}).get("name") if isinstance(next_match.get("venue"), dict) else None,
+            "round": next_match.get("seriesName"),
+            "status": "scheduled",
+            "source": "cricbuzz-api",
+            "createdAt": datetime.now(timezone.utc),
+            "updatedAt": datetime.now(timezone.utc)
+        }
+        
+        await db.fixtures.insert_one(fixture)
+        
+        # Remove _id for response
+        del fixture["_id"]
+        
+        return {
+            "status": "success",
+            "imported": 1,
+            "skipped": 0,
+            "fixture": fixture,
+            "api_requests_remaining": client.get_requests_remaining(),
+            "timestamp": datetime.now(timezone.utc).isoformat()
+        }
+        
+    except Exception as e:
+        logger.error(f"Error importing next cricket fixture: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error importing fixture: {str(e)}")
+
+
 @api_router.post("/cricket/update-scores")
 async def update_cricket_scores():
     """
