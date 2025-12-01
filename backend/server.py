@@ -278,21 +278,90 @@ async def health_check():
 @api_router.post("/fixtures/update-scores")
 async def update_fixture_scores(fixture_ids: List[str] = None):
     """
-    Manually trigger fixture score updates from API-FOOTBALL
-    If fixture_ids provided, update only those fixtures
-    Otherwise, update all EPL fixtures for Nov 29-30, 2025
+    Manually trigger fixture score updates from Football-Data.org
+    Updates all recent EPL fixtures (last 7 days)
     """
-    from sports_data_client import update_fixtures_from_api
+    from football_data_client import FootballDataClient
+    from datetime import datetime, timedelta, timezone
     
     try:
-        result = await update_fixtures_from_api(db, fixture_ids)
+        client = FootballDataClient()
+        
+        # Get fixtures from last 7 days
+        end_date = datetime.now()
+        start_date = end_date - timedelta(days=7)
+        
+        date_from = start_date.strftime("%Y-%m-%d")
+        date_to = end_date.strftime("%Y-%m-%d")
+        
+        logger.info(f"Fetching EPL matches from {date_from} to {date_to}")
+        
+        # Get matches from Football-Data.org
+        api_matches = await client.get_matches_by_date(date_from, date_to, "PL")
+        
+        logger.info(f"Found {len(api_matches)} matches from API")
+        
+        updated_count = 0
+        errors = []
+        
+        for api_match in api_matches:
+            try:
+                fixture_id = api_match["fixture"]["id"]
+                home_name = api_match["teams"]["home"]["name"]
+                away_name = api_match["teams"]["away"]["name"]
+                status = api_match["fixture"]["status"]["short"]
+                goals_home = api_match["goals"]["home"]
+                goals_away = api_match["goals"]["away"]
+                
+                # Find corresponding fixture in our database
+                # Match by team names and approximate date
+                fixture = await db.fixtures.find_one({
+                    "homeTeam": {"$regex": home_name.split()[0], "$options": "i"},  # Match first word
+                    "awayTeam": {"$regex": away_name.split()[0], "$options": "i"},
+                    "sportKey": "football"
+                })
+                
+                if fixture:
+                    # Update the fixture
+                    update_data = {
+                        "status": status,
+                        "goalsHome": goals_home,
+                        "goalsAway": goals_away,
+                        "updatedAt": datetime.now(timezone.utc).isoformat()
+                    }
+                    
+                    if goals_home is not None and goals_away is not None:
+                        if goals_home > goals_away:
+                            update_data["winner"] = "home"
+                        elif goals_away > goals_home:
+                            update_data["winner"] = "away"
+                        else:
+                            update_data["winner"] = "draw"
+                    
+                    await db.fixtures.update_one(
+                        {"id": fixture["id"]},
+                        {"$set": update_data}
+                    )
+                    
+                    updated_count += 1
+                    logger.info(f"Updated: {home_name} vs {away_name} - {goals_home}:{goals_away}")
+                else:
+                    logger.warning(f"Fixture not found in DB: {home_name} vs {away_name}")
+                    
+            except Exception as e:
+                logger.error(f"Error updating fixture {fixture_id}: {e}")
+                errors.append(str(e))
+                continue
+        
         return {
             "status": "completed",
-            "updated": result["updated"],
-            "errors": result.get("errors", []),
-            "api_requests_remaining": result.get("requests_remaining", 0),
+            "updated": updated_count,
+            "total_from_api": len(api_matches),
+            "errors": errors,
+            "api_requests_remaining": client.get_requests_remaining(),
             "timestamp": datetime.now(timezone.utc).isoformat()
         }
+        
     except Exception as e:
         logger.error(f"Error updating fixture scores: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Error updating scores: {str(e)}")
