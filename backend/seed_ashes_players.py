@@ -131,8 +131,8 @@ async def seed_ashes_players():
                 "bowling": player_data["bowling"],
                 "team": "England",
             },
-            "createdAt": datetime.now(timezone.utc),
-            "updatedAt": datetime.now(timezone.utc)
+            "createdAt": datetime.now(timezone.utc).isoformat(),
+            "updatedAt": datetime.now(timezone.utc).isoformat()
         }
         
         # Add captain/vice-captain flag if present
