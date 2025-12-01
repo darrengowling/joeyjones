@@ -489,6 +489,7 @@ async def import_cricket_fixtures_from_api(
         client = RapidAPICricketClient()
         
         logger.info(f"Fetching cricket matches from Cricbuzz for league {league_id}")
+        logger.info(f"Filters: seriesName={seriesName}, teams={teams}, days={days}")
         
         # Get recent matches from Cricbuzz
         api_matches = await client.get_recent_matches()
