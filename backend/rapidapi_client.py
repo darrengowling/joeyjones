@@ -71,9 +71,9 @@ class RapidAPIFootballClient:
         """
         # FootAPI uses tournament ID structure
         # EPL = tournament 17 (Premier League)
-        # Season 52186 = 2024-25
+        # Season 61627 = 2024-25
         tournament_id = 17 if league_id == 39 else league_id
-        season_id = 52186  # Current EPL season
+        season_id = 61627  # Current EPL season 2024-25
         
         endpoint = f"tournament/{tournament_id}/season/{season_id}/matches/last/{page}"
         response = await self._make_request(endpoint)
