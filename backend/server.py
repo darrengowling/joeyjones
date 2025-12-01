@@ -390,8 +390,15 @@ async def import_next_cricket_fixture(league_id: str):
         league_created_at_str = league.get("createdAt")
         if isinstance(league_created_at_str, str):
             league_created_at = datetime.fromisoformat(league_created_at_str.replace('Z', '+00:00'))
+        elif isinstance(league_created_at_str, datetime):
+            # Make sure it's timezone-aware
+            if league_created_at_str.tzinfo is None:
+                league_created_at = league_created_at_str.replace(tzinfo=timezone.utc)
+            else:
+                league_created_at = league_created_at_str
         else:
-            league_created_at = league_created_at_str
+            # Fallback to now if no creation date
+            league_created_at = datetime.now(timezone.utc)
         
         client = RapidAPICricketClient()
         
