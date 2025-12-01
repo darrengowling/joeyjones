@@ -706,78 +706,15 @@ async def get_league_fixtures(league_id: str):
                 "message": "No teams selected for this league yet"
             }
         
-        # Get asset details from assets collection
-        assets = await db.assets.find({"id": {"$in": selected_asset_ids}}, {"_id": 0}).to_list(length=None)
-        
-        if not assets:
-            return {
-                "fixtures": [],
-                "message": "No assets found for this league"
-            }
-        
-        # For football: match by team names
-        # For cricket: match by fixtures belonging to this league OR by team nationality
-        if sport_key == "football":
-            team_names = [asset["name"] for asset in assets]
-            
-            # Get fixtures where any of the league's teams are playing
-            fixtures = await db.fixtures.find({
-                "sportKey": sport_key,
-                "$or": [
-                    {"homeTeam": {"$in": team_names}},
-                    {"awayTeam": {"$in": team_names}}
-                ]
-            }, {"_id": 0}).sort("matchDate", 1).to_list(length=None)
-        else:
-            # For cricket and other player-based sports:
-            # Return fixtures that belong to this league (imported specifically for it)
-            # OR matches involving teams of the players' nationalities
-            
-            # Get unique nationalities from selected players
-            nationalities = set()
-            for asset in assets:
-                nationality = asset.get("meta", {}).get("nationality")
-                if nationality:
-                    nationalities.add(nationality)
-            
-            # Build query: fixtures for this league OR matches involving player nationalities
-            query = {
-                "sportKey": sport_key,
-                "$or": [
-                    {"leagueId": league_id}  # Fixtures imported for this league
-                ]
-            }
-            
-            # If we have nationalities, also include matches with those teams
-            if nationalities:
-                nationality_list = list(nationalities)
-                query["$or"].append({
-                    "$or": [
-                        {"homeTeam": {"$in": nationality_list}},
-                        {"awayTeam": {"$in": nationality_list}}
-                    ]
-                })
-            
-            fixtures = await db.fixtures.find(query, {"_id": 0}).sort("startsAt", 1).to_list(length=None)
-        
-        # Add flag to indicate if team/player is in this league
-        if sport_key == "football":
-            team_names_list = team_names
-            for fixture in fixtures:
-                fixture["homeTeamInLeague"] = fixture["homeTeam"] in team_names
-                fixture["awayTeamInLeague"] = fixture["awayTeam"] in team_names
-        else:
-            # For cricket, use player names
-            player_names = [asset["name"] for asset in assets]
-            team_names_list = list(nationalities) if nationalities else []
-            for fixture in fixtures:
-                fixture["homeTeamInLeague"] = fixture.get("homeTeam") in team_names_list
-                fixture["awayTeamInLeague"] = fixture.get("awayTeam") in team_names_list
+        # Simple approach: Get fixtures that belong to this league (leagueId)
+        # This works for both football and cricket
+        fixtures = await db.fixtures.find({
+            "leagueId": league_id
+        }, {"_id": 0}).sort([("startsAt", 1), ("matchDate", 1)]).to_list(length=None)
         
         return {
             "fixtures": fixtures,
-            "total": len(fixtures),
-            "leagueTeams": team_names_list
+            "total": len(fixtures)
         }
     
     except HTTPException:
