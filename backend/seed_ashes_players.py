@@ -107,7 +107,7 @@ async def seed_ashes_players():
             players_updated.append(player["name"])
         else:
             # Insert new player
-            result = await db.assets.insert_one(player)
+            await db.assets.insert_one(player)
             players_added.append(player)
         
         role_emoji = "🏏" if "Batsman" in player_data["role"] else "🧤" if "Wicket" in player_data["role"] else "⚡" if "All-rounder" in player_data["role"] else "🎯"
@@ -153,7 +153,7 @@ async def seed_ashes_players():
             players_updated.append(player["name"])
         else:
             # Insert new player
-            result = await db.assets.insert_one(player)
+            await db.assets.insert_one(player)
             players_added.append(player)
         
         role_emoji = "🏏" if "Batsman" in player_data["role"] else "🧤" if "Wicket" in player_data["role"] else "⚡" if "All-rounder" in player_data["role"] else "🎯"
