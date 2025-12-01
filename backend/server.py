@@ -3267,6 +3267,11 @@ async def begin_auction(
         asset_data = first_asset.copy()
         if "_id" in asset_data:
             del asset_data["_id"]
+        # Convert datetime objects to ISO strings for JSON serialization
+        if "createdAt" in asset_data and isinstance(asset_data["createdAt"], datetime):
+            asset_data["createdAt"] = asset_data["createdAt"].isoformat()
+        if "updatedAt" in asset_data and isinstance(asset_data["updatedAt"], datetime):
+            asset_data["updatedAt"] = asset_data["updatedAt"].isoformat()
     
     # Emit lot start to auction room
     await sio.emit('lot_started', {
