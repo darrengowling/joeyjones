@@ -836,33 +836,24 @@ export default function CompetitionDashboard() {
               </div>
             )}
 
-            {/* Import Cricket Fixtures from API - SIMPLE */}
+            {/* Import Next Cricket Fixture */}
             {summary && summary.sportKey === "cricket" && (
               <div className="bg-green-50 border-2 border-green-500 rounded-lg p-4 mb-4">
-                <h3 className="text-md font-bold text-green-900 mb-2">⚡ Import Ashes Fixtures</h3>
+                <h3 className="text-md font-bold text-green-900 mb-2">⚡ Import Next Ashes Fixture</h3>
                 <p className="text-sm text-gray-700 mb-3">
-                  Automatically fetch upcoming Australia vs England Test matches
+                  Import the next upcoming Australia vs England Test match
                 </p>
                 
-                <div className="flex gap-3">
-                  <button
-                    onClick={() => handleImportCricketFixturesFromAPI("Ashes", ["Australia", "England"], 30, 1)}
-                    disabled={loading}
-                    className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-semibold flex-1"
-                  >
-                    {loading ? "Importing..." : "Import Next Fixture"}
-                  </button>
-                  <button
-                    onClick={() => handleImportCricketFixturesFromAPI("Ashes", ["Australia", "England"], 180, 5)}
-                    disabled={loading}
-                    className="bg-green-700 text-white px-4 py-2 rounded-lg hover:bg-green-800 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-semibold flex-1"
-                  >
-                    {loading ? "Importing..." : "Import All Ashes Fixtures"}
-                  </button>
-                </div>
+                <button
+                  onClick={handleImportNextCricketFixture}
+                  disabled={loading}
+                  className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-semibold w-full"
+                >
+                  {loading ? "Importing..." : "Import Next Fixture"}
+                </button>
 
                 <p className="text-xs text-gray-600 mt-3">
-                  💡 "Next Fixture" imports only the upcoming Test match. "All Fixtures" imports the complete 5-Test series.
+                  💡 Imports only the next Test match that starts after this league was created. Import one fixture at a time as each match completes.
                 </p>
               </div>
             )}
