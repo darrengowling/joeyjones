@@ -68,6 +68,7 @@ async def seed_ashes_players():
     print(f"🗑️  Cleared {deleted.deleted_count} existing Ashes players\n")
     
     players_added = []
+    players_updated = []
     
     # Seed Australia squad
     print("🇦🇺 AUSTRALIA SQUAD")
