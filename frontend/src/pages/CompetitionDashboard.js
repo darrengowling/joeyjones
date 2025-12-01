@@ -263,32 +263,24 @@ export default function CompetitionDashboard() {
     }
   };
 
-  const handleImportCricketFixturesFromAPI = async (seriesName, teams, days, limit = null) => {
+  const handleImportNextCricketFixture = async () => {
     setLoading(true);
     try {
-      const params = new URLSearchParams();
-      if (seriesName) params.append('seriesName', seriesName);
-      if (teams && teams.length > 0) {
-        teams.forEach(team => params.append('teams', team));
-      }
-      params.append('days', days);
-      if (limit) params.append('limit', limit);
-      params.append('preview', 'false');
-
       const response = await axios.post(
-        `${API}/leagues/${leagueId}/fixtures/import-from-cricket-api?${params.toString()}`
+        `${API}/leagues/${leagueId}/fixtures/import-next-cricket-fixture`
       );
 
-      if (response.data.imported > 0) {
-        toast.success(`Imported ${response.data.imported} cricket fixture${response.data.imported > 1 ? 's' : ''}! ${response.data.skipped > 0 ? `(${response.data.skipped} already exist)` : ''}`);
+      if (response.data.imported === 1) {
+        const fixture = response.data.fixture;
+        toast.success(`Imported: ${fixture.homeTeam} vs ${fixture.awayTeam} on ${new Date(fixture.startsAt).toLocaleDateString()}`);
         
         // Reload fixtures
         const fixturesResponse = await axios.get(`${API}/leagues/${leagueId}/fixtures`);
         setFixtures(fixturesResponse.data.fixtures || []);
-      } else if (response.data.skipped > 0) {
-        toast.info(`${response.data.skipped} fixtures already exist. No new fixtures imported.`);
+      } else if (response.data.skipped === 1) {
+        toast.info(`Next fixture already imported.`);
       } else {
-        toast.warning(`No fixtures found. The next Ashes Test may not be scheduled yet.`);
+        toast.warning(`No upcoming Ashes fixtures found. All Tests may be complete or not yet scheduled.`);
       }
 
       // Log API usage
@@ -296,8 +288,8 @@ export default function CompetitionDashboard() {
         console.log(`Cricbuzz API requests remaining: ${response.data.api_requests_remaining}/100`);
       }
     } catch (e) {
-      console.error("Error importing cricket fixtures:", e);
-      toast.error("Failed to import fixtures. Please try again.");
+      console.error("Error importing next cricket fixture:", e);
+      toast.error("Failed to import fixture. Please try again.");
     } finally {
       setLoading(false);
     }
