@@ -232,6 +232,37 @@ export default function CompetitionDashboard() {
     }
   };
 
+  const handleUpdateCricketScores = async () => {
+    setLoading(true);
+    try {
+      // Step 1: Update cricket fixtures from Cricbuzz API
+      const response = await axios.post(`${API}/cricket/update-scores`);
+      
+      if (response.data.updated > 0) {
+        toast.success(`Updated ${response.data.updated} cricket match results!`);
+        
+        // Step 2: Force reload fixtures
+        setFixtures(null);
+        
+        const fixturesResponse = await axios.get(`${API}/leagues/${leagueId}/fixtures`);
+        setFixtures(fixturesResponse.data.fixtures || []);
+        
+      } else {
+        toast.info(`No cricket fixtures updated. ${response.data.total_from_api} matches found from API.`);
+      }
+      
+      // Show API usage info
+      if (response.data.api_requests_remaining !== undefined) {
+        console.log(`Cricbuzz API requests remaining: ${response.data.api_requests_remaining}/100`);
+      }
+    } catch (e) {
+      console.error("Error updating cricket scores:", e);
+      toast.error("Failed to update cricket scores. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const getSportEmoji = (sportKey) => {
     switch (sportKey) {
       case "football":
