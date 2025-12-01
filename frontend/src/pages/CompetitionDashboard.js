@@ -263,7 +263,7 @@ export default function CompetitionDashboard() {
     }
   };
 
-  const handleImportCricketFixturesFromAPI = async (seriesName, teams, days) => {
+  const handleImportCricketFixturesFromAPI = async (seriesName, teams, days, limit = null) => {
     setLoading(true);
     try {
       const params = new URLSearchParams();
@@ -272,6 +272,7 @@ export default function CompetitionDashboard() {
         teams.forEach(team => params.append('teams', team));
       }
       params.append('days', days);
+      if (limit) params.append('limit', limit);
       params.append('preview', 'false');
 
       const response = await axios.post(
@@ -279,7 +280,7 @@ export default function CompetitionDashboard() {
       );
 
       if (response.data.imported > 0) {
-        toast.success(`Imported ${response.data.imported} cricket fixtures! ${response.data.skipped > 0 ? `(${response.data.skipped} skipped as duplicates)` : ''}`);
+        toast.success(`Imported ${response.data.imported} cricket fixture${response.data.imported > 1 ? 's' : ''}! ${response.data.skipped > 0 ? `(${response.data.skipped} already exist)` : ''}`);
         
         // Reload fixtures
         const fixturesResponse = await axios.get(`${API}/leagues/${leagueId}/fixtures`);
@@ -287,7 +288,7 @@ export default function CompetitionDashboard() {
       } else if (response.data.skipped > 0) {
         toast.info(`${response.data.skipped} fixtures already exist. No new fixtures imported.`);
       } else {
-        toast.warning(`No fixtures found matching your criteria. Try adjusting the series name or date range.`);
+        toast.warning(`No fixtures found. The next Ashes Test may not be scheduled yet.`);
       }
 
       // Log API usage
