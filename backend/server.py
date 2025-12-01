@@ -551,6 +551,11 @@ async def import_cricket_fixtures_from_api(
         
         logger.info(f"Filtered to {len(filtered_matches)} matches based on criteria")
         
+        # Apply limit if specified
+        if limit and limit > 0:
+            filtered_matches = filtered_matches[:limit]
+            logger.info(f"Limited to {len(filtered_matches)} matches")
+        
         # If preview mode, return matches without importing
         if preview:
             return {
