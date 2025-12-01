@@ -753,15 +753,24 @@ async def get_league_fixtures(league_id: str):
             
             fixtures = await db.fixtures.find(query, {"_id": 0}).sort("startsAt", 1).to_list(length=None)
         
-        # Add flag to indicate if team is in this league
-        for fixture in fixtures:
-            fixture["homeTeamInLeague"] = fixture["homeTeam"] in team_names
-            fixture["awayTeamInLeague"] = fixture["awayTeam"] in team_names
+        # Add flag to indicate if team/player is in this league
+        if sport_key == "football":
+            team_names_list = team_names
+            for fixture in fixtures:
+                fixture["homeTeamInLeague"] = fixture["homeTeam"] in team_names
+                fixture["awayTeamInLeague"] = fixture["awayTeam"] in team_names
+        else:
+            # For cricket, use player names
+            player_names = [asset["name"] for asset in assets]
+            team_names_list = list(nationalities) if nationalities else []
+            for fixture in fixtures:
+                fixture["homeTeamInLeague"] = fixture.get("homeTeam") in team_names_list
+                fixture["awayTeamInLeague"] = fixture.get("awayTeam") in team_names_list
         
         return {
             "fixtures": fixtures,
             "total": len(fixtures),
-            "leagueTeams": team_names
+            "leagueTeams": team_names_list
         }
     
     except HTTPException:
