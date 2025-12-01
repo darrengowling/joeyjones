@@ -263,6 +263,45 @@ export default function CompetitionDashboard() {
     }
   };
 
+  const handleImportCricketFixturesFromAPI = async (seriesName, teams, days) => {
+    setLoading(true);
+    try {
+      const params = new URLSearchParams();
+      if (seriesName) params.append('seriesName', seriesName);
+      if (teams && teams.length > 0) {
+        teams.forEach(team => params.append('teams', team));
+      }
+      params.append('days', days);
+      params.append('preview', 'false');
+
+      const response = await axios.post(
+        `${API}/leagues/${leagueId}/fixtures/import-from-cricket-api?${params.toString()}`
+      );
+
+      if (response.data.imported > 0) {
+        toast.success(`Imported ${response.data.imported} cricket fixtures! ${response.data.skipped > 0 ? `(${response.data.skipped} skipped as duplicates)` : ''}`);
+        
+        // Reload fixtures
+        const fixturesResponse = await axios.get(`${API}/leagues/${leagueId}/fixtures`);
+        setFixtures(fixturesResponse.data.fixtures || []);
+      } else if (response.data.skipped > 0) {
+        toast.info(`${response.data.skipped} fixtures already exist. No new fixtures imported.`);
+      } else {
+        toast.warning(`No fixtures found matching your criteria. Try adjusting the series name or date range.`);
+      }
+
+      // Log API usage
+      if (response.data.api_requests_remaining !== undefined) {
+        console.log(`Cricbuzz API requests remaining: ${response.data.api_requests_remaining}/100`);
+      }
+    } catch (e) {
+      console.error("Error importing cricket fixtures:", e);
+      toast.error("Failed to import fixtures. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const getSportEmoji = (sportKey) => {
     switch (sportKey) {
       case "football":
