@@ -1899,36 +1899,41 @@ async def import_fixtures_from_api(
                 detail="No valid team external IDs found. Teams must have numeric externalId values."
             )
         
-        logger.info(f"Fetching fixtures for {len(team_external_ids)} teams from API-Football (next {days} days)")
+        logger.info(f"Fetching fixtures for {len(team_external_ids)} teams from Football-Data.org (next {days} days)")
         
         # Import the client
-        from sports_data_client import APIFootballClient
+        from football_data_client import FootballDataClient
         from datetime import datetime, timedelta
         
-        client = APIFootballClient()
+        client = FootballDataClient()
         
         # Calculate date range
         today = datetime.now()
         end_date = today + timedelta(days=days)
         
-        # Fetch all EPL fixtures for this date range (much more efficient than day-by-day)
-        all_fixtures = []
-        current_date = today
+        date_from = today.strftime("%Y-%m-%d")
+        date_to = end_date.strftime("%Y-%m-%d")
         
-        # Fetch in weekly batches to reduce API calls
-        while current_date <= end_date:
-            date_str = current_date.strftime("%Y-%m-%d")
-            daily_fixtures = await client.get_fixtures_by_date(date_str, league_id=39)
-            all_fixtures.extend(daily_fixtures)
-            current_date += timedelta(days=1)
+        # Fetch all EPL fixtures for this date range (single API call)
+        logger.info(f"Fetching EPL matches from {date_from} to {date_to}")
+        all_fixtures = await client.get_matches_by_date(date_from, date_to, "PL")
+        
+        logger.info(f"Found {len(all_fixtures)} total EPL fixtures")
         
         # Filter for our selected teams only
+        # Match by team name since Football-Data.org uses different IDs
+        team_names = [team.get("name") for team in teams]
+        
         api_fixtures = []
         for fixture in all_fixtures:
-            home_team_id = fixture.get("teams", {}).get("home", {}).get("id")
-            away_team_id = fixture.get("teams", {}).get("away", {}).get("id")
+            home_name = fixture.get("teams", {}).get("home", {}).get("name", "")
+            away_name = fixture.get("teams", {}).get("away", {}).get("name", "")
             
-            if home_team_id in team_external_ids or away_team_id in team_external_ids:
+            # Check if either team matches any of our selected teams
+            home_match = any(team_name in home_name or home_name in team_name for team_name in team_names)
+            away_match = any(team_name in away_name or away_name in team_name for team_name in team_names)
+            
+            if home_match or away_match:
                 api_fixtures.append(fixture)
         
         if not api_fixtures:
