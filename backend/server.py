@@ -460,6 +460,177 @@ async def update_cricket_scores():
         raise HTTPException(status_code=500, detail=f"Error updating cricket scores: {str(e)}")
 
 
+@api_router.post("/leagues/{league_id}/fixtures/import-from-cricket-api")
+async def import_cricket_fixtures_from_api(
+    league_id: str,
+    seriesName: Optional[str] = None,
+    teams: Optional[List[str]] = None,
+    days: int = 90,
+    preview: bool = False
+):
+    """
+    Import cricket fixtures from Cricbuzz API
+    Filters by series name and/or teams
+    Similar to football fixture import but for cricket
+    """
+    from rapidapi_client import RapidAPICricketClient
+    from datetime import datetime, timezone, timedelta
+    
+    try:
+        # Verify league exists
+        league = await db.leagues.find_one({"id": league_id}, {"_id": 0})
+        if not league:
+            raise HTTPException(status_code=404, detail="League not found")
+        
+        if league["sportKey"] != "cricket":
+            raise HTTPException(status_code=400, detail="This endpoint is for cricket leagues only")
+        
+        client = RapidAPICricketClient()
+        
+        logger.info(f"Fetching cricket matches from Cricbuzz for league {league_id}")
+        
+        # Get recent matches from Cricbuzz
+        api_matches = await client.get_recent_matches()
+        
+        logger.info(f"Found {len(api_matches)} total cricket matches from API")
+        
+        # Filter matches
+        filtered_matches = []
+        now = datetime.now(timezone.utc)
+        cutoff_date = now + timedelta(days=days)
+        
+        for match in api_matches:
+            # Parse match date
+            start_timestamp = match.get("startDate")
+            if start_timestamp:
+                try:
+                    # Cricbuzz returns timestamp in milliseconds
+                    match_date = datetime.fromtimestamp(int(start_timestamp) / 1000, tz=timezone.utc)
+                except:
+                    continue
+            else:
+                continue
+            
+            # Filter by date range
+            if match_date > cutoff_date:
+                continue
+            
+            # Filter by series name (case-insensitive partial match)
+            if seriesName:
+                series_name_match = match.get("seriesName", "")
+                if seriesName.lower() not in series_name_match.lower():
+                    continue
+            
+            # Filter by teams
+            if teams and len(teams) > 0:
+                team1 = match.get("team1", "")
+                team2 = match.get("team2", "")
+                
+                # Check if both specified teams are in this match
+                teams_lower = [t.lower() for t in teams]
+                match_teams_lower = [team1.lower(), team2.lower()]
+                
+                # For a match to be included, all specified teams should be present
+                if not all(any(team_filter in match_team for match_team in match_teams_lower) for team_filter in teams_lower):
+                    continue
+            
+            # Add to filtered list
+            filtered_matches.append({
+                "matchId": match.get("matchId"),
+                "team1": match.get("team1"),
+                "team2": match.get("team2"),
+                "seriesName": match.get("seriesName"),
+                "matchFormat": match.get("matchFormat"),
+                "venue": match.get("venue", {}).get("name") if isinstance(match.get("venue"), dict) else None,
+                "startDate": match_date.isoformat(),
+                "state": match.get("state")
+            })
+        
+        logger.info(f"Filtered to {len(filtered_matches)} matches based on criteria")
+        
+        # If preview mode, return matches without importing
+        if preview:
+            return {
+                "preview": True,
+                "matches": filtered_matches,
+                "count": len(filtered_matches),
+                "api_requests_remaining": client.get_requests_remaining()
+            }
+        
+        # Import fixtures
+        imported_count = 0
+        skipped_count = 0
+        
+        for match in filtered_matches:
+            try:
+                match_id = match["matchId"]
+                team1 = match["team1"]
+                team2 = match["team2"]
+                series_name = match["seriesName"]
+                venue = match["venue"]
+                start_date_str = match["startDate"]
+                
+                # Parse start date
+                start_date = datetime.fromisoformat(start_date_str)
+                
+                # Check if fixture already exists
+                existing = await db.fixtures.find_one({
+                    "leagueId": league_id,
+                    "cricbuzzMatchId": match_id
+                })
+                
+                if existing:
+                    skipped_count += 1
+                    logger.info(f"Fixture already exists: {team1} vs {team2}")
+                    continue
+                
+                # Create fixture
+                fixture = {
+                    "id": str(uuid4()),
+                    "leagueId": league_id,
+                    "sportKey": "cricket",
+                    "externalMatchId": match_id,
+                    "cricbuzzMatchId": match_id,
+                    "homeTeam": team1,
+                    "awayTeam": team2,
+                    "homeAssetId": None,  # International matches don't use asset IDs
+                    "awayAssetId": None,
+                    "startsAt": start_date,
+                    "venue": venue,
+                    "round": series_name,
+                    "status": "scheduled",
+                    "source": "cricbuzz-api",
+                    "createdAt": datetime.now(timezone.utc),
+                    "updatedAt": datetime.now(timezone.utc)
+                }
+                
+                await db.fixtures.insert_one(fixture)
+                imported_count += 1
+                logger.info(f"Imported: {team1} vs {team2} - {series_name}")
+                
+            except Exception as e:
+                logger.error(f"Error importing fixture {match.get('matchId')}: {e}")
+                continue
+        
+        return {
+            "status": "completed",
+            "imported": imported_count,
+            "skipped": skipped_count,
+            "total_filtered": len(filtered_matches),
+            "filters_applied": {
+                "seriesName": seriesName,
+                "teams": teams,
+                "days": days
+            },
+            "api_requests_remaining": client.get_requests_remaining(),
+            "timestamp": datetime.now(timezone.utc).isoformat()
+        }
+        
+    except Exception as e:
+        logger.error(f"Error importing cricket fixtures: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error importing fixtures: {str(e)}")
+
+
 @api_router.get("/fixtures")
 async def get_fixtures(sport_key: str = "football", date: str = None):
     """
