@@ -4005,13 +4005,7 @@ async def start_next_lot(auction_id: str, next_club_id: str):
         lot_data['club'] = Club(**next_club).model_dump()
     else:
         # For cricket and other sports, send raw asset data
-        club_data = next_club.copy()
-        # Convert datetime objects to ISO strings for JSON serialization
-        if "createdAt" in club_data and isinstance(club_data["createdAt"], datetime):
-            club_data["createdAt"] = club_data["createdAt"].isoformat()
-        if "updatedAt" in club_data and isinstance(club_data["updatedAt"], datetime):
-            club_data["updatedAt"] = club_data["updatedAt"].isoformat()
-        lot_data['club'] = club_data
+        lot_data['club'] = next_club
     
     await sio.emit('lot_started', lot_data, room=f"auction:{auction_id}")
     
