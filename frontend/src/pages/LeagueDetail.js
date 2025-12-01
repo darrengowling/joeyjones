@@ -787,6 +787,38 @@ export default function LeagueDetail() {
                       </select>
                     </div>
                   )}
+
+                  {/* Competition Filter for Cricket */}
+                  {league.sportKey === "cricket" && (
+                    <div className="mb-3">
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Filter by Series</label>
+                      <select
+                        className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 mb-2"
+                        onChange={async (e) => {
+                          const filter = e.target.value;
+                          try {
+                            let response;
+                            if (filter === "all") {
+                              response = await axios.get(`${API}/clubs?sportKey=cricket`);
+                            } else {
+                              response = await axios.get(`${API}/clubs?sportKey=cricket&competition=${filter}`);
+                            }
+                            setAvailableAssets(response.data);
+                            // Auto-select all players in filtered view
+                            if (filter !== "all") {
+                              setSelectedAssetIds(response.data.map(p => p.id));
+                            }
+                          } catch (error) {
+                            console.error("Error filtering players:", error);
+                          }
+                        }}
+                      >
+                        <option value="all">All Players (53)</option>
+                        <option value="ASHES">🏴󠁧󠁢󠁥󠁮󠁧󠁿🇦🇺 The Ashes 2025/26 (30)</option>
+                        <option value="NZ_ENG">🇳🇿🏴 NZ vs England ODI (23)</option>
+                      </select>
+                    </div>
+                  )}
                   
                   {/* Quick Action Buttons */}
                   <div className="mb-3 flex gap-2">
