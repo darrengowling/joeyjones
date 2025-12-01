@@ -104,7 +104,7 @@ async def seed_ashes_players():
     print()
     
     # Seed England squad
-    print("🏴󠁧󠁢󠁥󠁮󠁧󠁿 ENGLAND SQUAD")
+    print("🏴 ENGLAND SQUAD")
     print("-" * 60)
     for player_data in ENGLAND_SQUAD:
         player = {
