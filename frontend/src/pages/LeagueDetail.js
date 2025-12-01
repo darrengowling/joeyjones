@@ -854,10 +854,24 @@ export default function LeagueDetail() {
                           onChange={() => handleAssetToggle(asset.id)}
                           className="mr-3"
                         />
-                        <div>
+                        <div className="flex-1">
                           <div className="font-medium text-gray-900">{asset.name}</div>
+                          {/* Football: Show country */}
                           {asset.country && (
                             <div className="text-sm text-gray-600">{asset.country}</div>
+                          )}
+                          {/* Cricket: Show nationality and role */}
+                          {league.sportKey === "cricket" && asset.meta?.nationality && (
+                            <div className="text-xs text-gray-600 mt-1">
+                              <span className="bg-gray-200 px-2 py-0.5 rounded mr-1">
+                                {asset.meta.nationality}
+                              </span>
+                              {asset.meta.role && (
+                                <span className="text-gray-500">
+                                  {asset.meta.role}
+                                </span>
+                              )}
+                            </div>
                           )}
                           {asset.meta && asset.meta.franchise && (
                             <div className="text-sm text-purple-600">{asset.meta.franchise}</div>
