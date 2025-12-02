@@ -11,8 +11,8 @@ import time
 from datetime import datetime, timezone
 
 # Configuration
-BASE_URL = "https://cricket-football-2.preview.emergentagent.com/api"
-SOCKET_URL = "https://cricket-football-2.preview.emergentagent.com"
+BASE_URL = "https://bat-and-ball-18.preview.emergentagent.com/api"
+SOCKET_URL = "https://bat-and-ball-18.preview.emergentagent.com"
 SOCKET_PATH = "/api/socket.io"
 
 def log(message: str, level: str = "INFO"):

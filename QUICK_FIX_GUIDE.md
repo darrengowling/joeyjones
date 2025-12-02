@@ -15,7 +15,7 @@ Waiting room shows "Participants in Room (1)" instead of "(2)"
 1. **Check participants endpoint**:
 ```bash
 # Test the endpoint manually
-curl -X GET "https://cricket-football-2.preview.emergentagent.com/api/leagues/{league_id}/participants"
+curl -X GET "https://bat-and-ball-18.preview.emergentagent.com/api/leagues/{league_id}/participants"
 ```
 
 2. **Check database**:

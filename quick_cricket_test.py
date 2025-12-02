@@ -61,7 +61,7 @@ def test_current_state():
     
     # Test API connectivity
     try:
-        response = requests.get("https://cricket-football-2.preview.emergentagent.com/api/", timeout=10)
+        response = requests.get("https://bat-and-ball-18.preview.emergentagent.com/api/", timeout=10)
         if response.status_code == 200:
             log("✅ API connectivity working")
         else:

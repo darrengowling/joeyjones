@@ -68,7 +68,7 @@ socket = io(BACKEND_URL, {
 ### Test Page Updated
 **File**: `/app/frontend/public/socketio-test.html`
 - Updated to use `/api/socket.io` path
-- Access at: `https://cricket-football-2.preview.emergentagent.com/socketio-test.html`
+- Access at: `https://bat-and-ball-18.preview.emergentagent.com/socketio-test.html`
 
 ## Verification
 
@@ -180,7 +180,7 @@ socket = io(BACKEND_URL, {
 ### Kubernetes Ingress Routing
 
 ```
-Request: https://cricket-football-2.preview.emergentagent.com/api/socket.io
+Request: https://bat-and-ball-18.preview.emergentagent.com/api/socket.io
          ↓
 Ingress: Matches /api/* rule
          ↓

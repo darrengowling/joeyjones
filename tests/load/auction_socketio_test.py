@@ -23,7 +23,7 @@ import socketio
 from socketio.exceptions import ConnectionError, TimeoutError
 
 # Configuration
-BACKEND_URL = "https://cricket-football-2.preview.emergentagent.com"
+BACKEND_URL = "https://bat-and-ball-18.preview.emergentagent.com"
 API_BASE = f"{BACKEND_URL}/api"
 SOCKET_PATH = "/api/socket.io"
 
