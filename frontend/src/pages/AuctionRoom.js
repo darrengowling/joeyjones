@@ -768,18 +768,18 @@ function AuctionRoom() {
           )}
 
           {/* Auction Header */}
-          <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
+          <div className="bg-white rounded-lg shadow-lg p-4 mb-4">
             <div className="flex justify-between items-center">
               <div>
                 <div className="stack-md">
                   <div className="text-xs uppercase tracking-wide text-gray-500 mb-1">Auction Room</div>
-                  <h1 className="h1 text-3xl font-bold text-gray-900">
+                  <h1 className="h1 text-2xl font-bold text-gray-900">
                     {league ? league.name : "Strategic Competition Arena"}
                   </h1>
-                  <p className="subtle text-gray-600">
+                  <p className="subtle text-gray-600 text-sm">
                     Lot #{auction?.currentLot || 0} • Status: {auction?.status || "Unknown"}
                     {auction?.status === "paused" && (
-                      <span className="chip ml-2 px-2 py-1 bg-yellow-100 text-yellow-800 text-sm rounded">⏸️ PAUSED</span>
+                      <span className="chip ml-2 px-2 py-1 bg-yellow-100 text-yellow-800 text-xs rounded">⏸️ PAUSED</span>
                     )}
                   </p>
                 </div>
