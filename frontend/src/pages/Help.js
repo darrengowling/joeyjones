@@ -140,7 +140,7 @@ const Help = () => {
             <div>
               <h4 className="text-lg font-semibold text-gray-900 mb-3">Creating a Competition</h4>
               <p className="text-gray-700 mb-3">
-                As a league admin, you control the competition setup and manage the auction process.
+                As a commissioner, you control the competition setup and manage the auction process.
               </p>
               
               <div className="bg-gray-50 rounded-lg p-4 mb-4">
