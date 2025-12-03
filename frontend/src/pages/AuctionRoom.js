@@ -953,43 +953,10 @@ function AuctionRoom() {
                     </div>
                   </div>
 
-                  {/* Next Fixture Display */}
+                  {/* Next Fixture Display - Compact */}
                   {nextFixture && (
-                    <div className="app-card bg-blue-50 border border-blue-200 p-4 rounded-lg mb-6">
-                      <div className="flex items-start gap-3">
-                        <span className="text-2xl">📅</span>
-                        <div className="flex-1">
-                          <div className="text-sm font-semibold text-blue-900 mb-2">Next Fixture</div>
-                          <div className="space-y-1">
-                            <div className="text-base font-bold text-gray-900">
-                              vs {nextFixture.opponent} <span className="text-sm font-normal text-gray-600">({nextFixture.isHome ? 'Home' : 'Away'})</span>
-                            </div>
-                            {nextFixture.venue && (
-                              <div className="text-sm text-gray-700">
-                                <span className="mr-1">📍</span>{nextFixture.venue}
-                              </div>
-                            )}
-                            {nextFixture.matchDate && (
-                              <div className="text-sm text-gray-700">
-                                <span className="mr-1">⏰</span>
-                                {new Date(nextFixture.matchDate).toLocaleDateString('en-GB', { 
-                                  weekday: 'short', 
-                                  day: 'numeric', 
-                                  month: 'short',
-                                  hour: '2-digit',
-                                  minute: '2-digit'
-                                })}
-                                <span className="ml-2 text-blue-600 font-medium">({nextFixture.timeUntil})</span>
-                              </div>
-                            )}
-                            {nextFixture.competition && (
-                              <div className="text-xs text-blue-800 bg-blue-100 inline-block px-2 py-1 rounded mt-1">
-                                🏆 {nextFixture.competition}
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      </div>
+                    <div className="text-sm text-gray-600 mb-4">
+                      Next match: {nextFixture.opponent} ({nextFixture.isHome ? 'H' : 'A'})
                     </div>
                   )}
 
