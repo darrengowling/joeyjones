@@ -208,7 +208,7 @@ const Help = () => {
             <div>
               <h4 className="text-lg font-semibold text-gray-900 mb-3">Joining a Competition</h4>
               <p className="text-gray-700 mb-3">
-                To join a competition, you'll need an invite token from the league admin.
+                To join a competition, you'll need an invite token from the commissioner.
               </p>
               
               <div className="bg-gray-50 rounded-lg p-4 mb-4">
