@@ -92,6 +92,9 @@ const Help = () => {
             <button onClick={() => toggleSection('dashboards')} className="text-left px-4 py-2 bg-orange-50 hover:bg-orange-100 rounded-lg text-orange-700 font-medium transition-colors">
               📊 Viewing Results
             </button>
+            <button onClick={() => toggleSection('scoring')} className="text-left px-4 py-2 bg-indigo-50 hover:bg-indigo-100 rounded-lg text-indigo-700 font-medium transition-colors">
+              🎯 Scoring Systems
+            </button>
           </div>
         </div>
 
