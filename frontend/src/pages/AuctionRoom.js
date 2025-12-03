@@ -987,7 +987,7 @@ function AuctionRoom() {
                   
                   {/* Fallback: Show no bids message */}
                   {!currentBid && (
-                    <div className="app-card bg-blue-50 border border-blue-200 p-4 rounded-lg mb-6">
+                    <div className="app-card bg-blue-50 border border-blue-200 p-4 rounded-lg mb-4">
                       <div className="subtle text-sm text-gray-600">💰 No bids yet</div>
                       <div className="text-lg text-gray-600">Be the first to claim ownership!</div>
                     </div>
