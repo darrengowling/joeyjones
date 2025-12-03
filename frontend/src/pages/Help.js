@@ -84,7 +84,7 @@ const Help = () => {
               🚀 Getting Started
             </button>
             <button onClick={() => toggleSection('admin-create')} className="text-left px-4 py-2 bg-purple-50 hover:bg-purple-100 rounded-lg text-purple-700 font-medium transition-colors">
-              👑 For League Admins
+              👑 For Commissioners
             </button>
             <button onClick={() => toggleSection('user-join')} className="text-left px-4 py-2 bg-green-50 hover:bg-green-100 rounded-lg text-green-700 font-medium transition-colors">
               👥 For Players
