@@ -309,6 +309,95 @@ const Help = () => {
           </div>
         </Section>
 
+        {/* Scoring Systems */}
+        <Section id="scoring" title="Scoring Systems" icon="🎯">
+          <div className="space-y-6">
+            <div>
+              <h4 className="text-lg font-semibold text-gray-900 mb-3">How Points Are Calculated</h4>
+              <p className="text-gray-700 mb-4">
+                Your teams or players earn points based on their real-world performance. The scoring system varies by sport.
+              </p>
+            </div>
+
+            <div>
+              <h4 className="text-lg font-semibold text-gray-900 mb-3">🏏 Cricket Scoring</h4>
+              <p className="text-gray-700 mb-3">
+                In cricket competitions, points are awarded <strong>per player, per match</strong> based on individual performance:
+              </p>
+              
+              <div className="bg-gray-50 rounded-lg p-4 mb-4">
+                <h5 className="font-semibold text-gray-900 mb-3">Cricket Points Table:</h5>
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center py-2 border-b border-gray-200">
+                    <span className="text-gray-700 font-medium">Run scored</span>
+                    <span className="text-blue-600 font-bold">1 point</span>
+                  </div>
+                  <div className="flex justify-between items-center py-2 border-b border-gray-200">
+                    <span className="text-gray-700 font-medium">Wicket taken</span>
+                    <span className="text-blue-600 font-bold">20 points</span>
+                  </div>
+                  <div className="flex justify-between items-center py-2 border-b border-gray-200">
+                    <span className="text-gray-700 font-medium">Catch</span>
+                    <span className="text-blue-600 font-bold">10 points</span>
+                  </div>
+                  <div className="flex justify-between items-center py-2 border-b border-gray-200">
+                    <span className="text-gray-700 font-medium">Stumping</span>
+                    <span className="text-blue-600 font-bold">25 points</span>
+                  </div>
+                  <div className="flex justify-between items-center py-2">
+                    <span className="text-gray-700 font-medium">Run out</span>
+                    <span className="text-blue-600 font-bold">20 points</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <p className="text-blue-800 text-sm">
+                  <strong>💡 Example:</strong> If your player scores 50 runs, takes 2 wickets, and makes 1 catch, they earn: (50 × 1) + (2 × 20) + (1 × 10) = <strong>100 points</strong>
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <h4 className="text-lg font-semibold text-gray-900 mb-3">⚽ Football Scoring</h4>
+              <p className="text-gray-700 mb-3">
+                In football competitions, points are awarded <strong>per team, per match</strong> based on match results and goals:
+              </p>
+              
+              <div className="bg-gray-50 rounded-lg p-4 mb-4">
+                <h5 className="font-semibold text-gray-900 mb-3">Football Points Table:</h5>
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center py-2 border-b border-gray-200">
+                    <span className="text-gray-700 font-medium">Match win</span>
+                    <span className="text-green-600 font-bold">3 points</span>
+                  </div>
+                  <div className="flex justify-between items-center py-2 border-b border-gray-200">
+                    <span className="text-gray-700 font-medium">Match draw</span>
+                    <span className="text-green-600 font-bold">1 point</span>
+                  </div>
+                  <div className="flex justify-between items-center py-2">
+                    <span className="text-gray-700 font-medium">Goal scored</span>
+                    <span className="text-green-600 font-bold">1 point</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                <p className="text-green-800 text-sm">
+                  <strong>💡 Example:</strong> If your team wins 3-1, they earn: (1 × 3 for win) + (3 × 1 for goals) = <strong>6 points</strong>
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <h4 className="text-lg font-semibold text-gray-900 mb-3">Total Manager Score</h4>
+              <p className="text-gray-700">
+                Your total competition score is the <strong>sum of all points</strong> earned by your teams or players across all matches. The manager with the highest total score wins the competition!
+              </p>
+            </div>
+          </div>
+        </Section>
+
         {/* FAQ / Troubleshooting */}
         <Section id="faq" title="FAQ & Troubleshooting" icon="❓">
           <div className="space-y-4">
