@@ -909,7 +909,7 @@ function AuctionRoom() {
                   </div>
 
                   {/* Club/Player Info */}
-                  <div className="app-card bg-gray-50 p-6 rounded-lg mb-6">
+                  <div className="app-card bg-gray-50 p-4 rounded-lg mb-4">
                     <div className="stack-md">
                       <h3 className="h1 text-3xl font-bold text-gray-900">{currentClub.name}</h3>
                       
