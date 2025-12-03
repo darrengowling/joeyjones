@@ -134,8 +134,8 @@ const Help = () => {
           </div>
         </Section>
 
-        {/* For League Admins */}
-        <Section id="admin-create" title="For League Admins" icon="👑">
+        {/* For Commissioners */}
+        <Section id="admin-create" title="For Commissioners" icon="👑">
           <div className="space-y-6">
             <div>
               <h4 className="text-lg font-semibold text-gray-900 mb-3">Creating a Competition</h4>
