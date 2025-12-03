@@ -202,6 +202,54 @@ const Help = () => {
                 </p>
               </div>
             </div>
+
+            <div>
+              <h4 className="text-lg font-semibold text-gray-900 mb-3">Managing Fixtures & Results</h4>
+              <p className="text-gray-700 mb-3">
+                After the auction, commissioners are responsible for importing fixtures and uploading match results to calculate points.
+              </p>
+
+              <div className="bg-gray-50 rounded-lg p-4 mb-4">
+                <h5 className="font-semibold text-gray-900 mb-2">Importing Fixtures:</h5>
+                <ol className="list-decimal list-inside space-y-2 text-gray-700">
+                  <li>Navigate to your competition dashboard from "My Competitions"</li>
+                  <li>Click the <strong>"Fixtures"</strong> tab</li>
+                  <li>Look for the <strong>"Import Fixtures"</strong> or <strong>"Import Next Fixture"</strong> button</li>
+                  <li><strong>Football:</strong> Imports upcoming matches from the selected league automatically</li>
+                  <li><strong>Cricket:</strong> Imports the next scheduled match for the series</li>
+                  <li>Imported fixtures will appear in the fixtures list with match dates and teams</li>
+                </ol>
+              </div>
+
+              <div className="bg-gray-50 rounded-lg p-4 mb-4">
+                <h5 className="font-semibold text-gray-900 mb-2">Uploading Match Results:</h5>
+                <ol className="list-decimal list-inside space-y-2 text-gray-700">
+                  <li>After a real match concludes, go to the <strong>"Fixtures"</strong> tab</li>
+                  <li>Find the completed match in the fixtures list</li>
+                  <li>Click <strong>"Upload Scores"</strong> for that fixture</li>
+                  <li>Upload a CSV file with player/team performance data</li>
+                  <li>The system will automatically calculate points based on scoring rules</li>
+                  <li>Standings will update immediately to reflect new points</li>
+                </ol>
+              </div>
+
+              <div className="bg-purple-50 border border-purple-200 rounded-lg p-4 mb-4">
+                <p className="text-purple-800 text-sm mb-2">
+                  <strong>📋 CSV Format Requirements:</strong>
+                </p>
+                <ul className="text-purple-700 text-sm space-y-1 list-disc list-inside">
+                  <li><strong>Cricket:</strong> Columns should include player names/IDs and stats (runs, wickets, catches, stumpings, run outs)</li>
+                  <li><strong>Football:</strong> Columns should include team names/IDs and match results (goals, wins, draws)</li>
+                  <li>Click "View sample scoring CSV format" on the upload page for exact structure</li>
+                </ul>
+              </div>
+
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                <p className="text-yellow-800 text-sm">
+                  <strong>⚠️ Important:</strong> Only commissioners can import fixtures and upload results. Make sure to upload scores promptly after matches conclude so participants can track their standings in real-time!
+                </p>
+              </div>
+            </div>
           </div>
         </Section>
 
