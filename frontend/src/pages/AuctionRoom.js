@@ -962,7 +962,7 @@ function AuctionRoom() {
 
                   {/* Current Bid Panel (Prompt G: Enhanced with bidder info) */}
                   {currentBid > 0 && currentBidder && (
-                    <div className="app-card bg-green-50 border border-green-200 p-4 rounded-lg mb-6">
+                    <div className="app-card bg-green-50 border border-green-200 p-4 rounded-lg mb-4">
                       <div className="flex items-center justify-between">
                         <div>
                           <div className="subtle text-sm text-gray-600">💰 Current Bid</div>
