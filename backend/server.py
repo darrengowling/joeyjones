@@ -2383,6 +2383,8 @@ async def import_fixtures_from_api(
             if home_match or away_match:
                 api_fixtures.append(fixture)
         
+        logger.info(f"Matched {len(api_fixtures)} fixtures for selected teams")
+        
         if not api_fixtures:
             return {
                 "message": "No upcoming fixtures found for the selected teams",
