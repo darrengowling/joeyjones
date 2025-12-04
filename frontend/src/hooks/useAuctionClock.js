@@ -77,6 +77,7 @@ export function useAuctionClock(socket, lotId, auctionStatus) {
         socket.off("tick", onTick);
         socket.off("anti_snipe", onAnti);
         socket.off("sold", onSold);
+        socket.off("auction_resumed", onResumed);
         if (rafRef.current) cancelAnimationFrame(rafRef.current);
       };
     } else {
