@@ -931,7 +931,7 @@ async def get_asset_next_fixture(asset_id: str):
                             {"startsAt": {"$gte": now}}
                         ]
                     },
-                    {"status": "scheduled"}
+                    {"status": {"$in": ["scheduled", "ns", "NS", "SCHEDULED"]}}
                 ]
             },
             {"_id": 0}
