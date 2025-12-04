@@ -407,7 +407,8 @@ export default function LeagueDetail() {
       navigate(`/auction/${response.data.auctionId}`);
     } catch (e) {
       console.error("Error starting auction:", e);
-      toast.error("Error starting auction");
+      const errorMsg = e.response?.data?.detail || "Unable to start auction. Make sure you have at least 2 participants and teams selected.";
+      toast.error(errorMsg);
     } finally {
       setStartingAuction(false);
     }
