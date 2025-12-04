@@ -2135,7 +2135,7 @@ async def import_fixtures_csv(league_id: str, file: UploadFile = File(...), comm
     if not commissionerId or league["commissionerId"] != commissionerId:
         raise HTTPException(
             status_code=403, 
-            detail="Only the league commissioner can import fixtures"
+            detail="Only the league commissioner can import fixtures. Contact the commissioner if you need fixtures imported."
         )
     
     # Prompt 6: Validation - refuse import when auction is active
