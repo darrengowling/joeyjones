@@ -232,7 +232,7 @@ export default function CompetitionDashboard() {
       console.error("Error updating scores:", e);
       toast.error("Failed to update scores. Please try again.");
     } finally {
-      setLoading(false);
+      setUpdatingScores(false);
     }
   };
 
