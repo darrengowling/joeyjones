@@ -65,6 +65,65 @@ export default function MyCompetitions() {
     }
   };
 
+  const toggleSelectLeague = (leagueId) => {
+    const newSelected = new Set(selectedLeagues);
+    if (newSelected.has(leagueId)) {
+      newSelected.delete(leagueId);
+    } else {
+      newSelected.add(leagueId);
+    }
+    setSelectedLeagues(newSelected);
+  };
+
+  const toggleSelectAll = () => {
+    // Only allow selection of leagues user is commissioner of and not active
+    const selectableLeagues = competitions.filter(comp => 
+      comp.isCommissioner && comp.status !== "active"
+    );
+    
+    if (selectedLeagues.size === selectableLeagues.length) {
+      setSelectedLeagues(new Set());
+    } else {
+      setSelectedLeagues(new Set(selectableLeagues.map(c => c.leagueId)));
+    }
+  };
+
+  const handleBulkDelete = async () => {
+    if (selectedLeagues.size === 0) return;
+    
+    setDeleting(true);
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.post(
+        `${API}/leagues/bulk-delete`,
+        { leagueIds: Array.from(selectedLeagues) },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      
+      console.log("Bulk delete response:", response.data);
+      
+      // Show results
+      const { results } = response.data;
+      if (results.totalDeleted > 0) {
+        alert(`✅ Successfully deleted ${results.totalDeleted} league(s)`);
+      }
+      if (results.totalFailed > 0) {
+        const failedReasons = results.failed.map(f => `- ${f.leagueName || f.leagueId}: ${f.reason}`).join('\n');
+        alert(`⚠️ Failed to delete ${results.totalFailed} league(s):\n${failedReasons}`);
+      }
+      
+      // Reload competitions
+      setSelectedLeagues(new Set());
+      setShowDeleteModal(false);
+      loadCompetitions(user.id);
+    } catch (e) {
+      console.error("Error deleting leagues:", e);
+      alert("Failed to delete leagues. Please try again.");
+    } finally {
+      setDeleting(false);
+    }
+  };
+
   const getStatusChipStyle = (status) => {
     switch (status) {
       case "auction_live":
