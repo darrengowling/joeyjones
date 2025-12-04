@@ -51,6 +51,7 @@ export default function LeagueDetail() {
     loadStandings();
     loadFixtures();
     loadAssets();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [leagueId]);
 
   // Set page title
