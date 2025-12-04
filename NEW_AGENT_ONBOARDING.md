@@ -105,6 +105,7 @@ Answer these questions:
 - ✅ Test your changes before declaring them complete
 - ✅ Propose your plan and get approval BEFORE implementing
 - ✅ Consider "what could break?" for every change
+- ✅ **Investigate all warnings and errors immediately** - Check logs, verify compilation, fix issues before proceeding
 
 ---
 
