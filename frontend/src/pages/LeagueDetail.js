@@ -342,28 +342,44 @@ export default function LeagueDetail() {
   };
 
   const handleImportFootballFixtures = async () => {
+    if (!user) {
+      toast.error("Please sign in first");
+      return;
+    }
+    
     setImportingFixtures(true);
     try {
-      const response = await axios.post(`${API}/leagues/${leagueId}/fixtures/import-from-api`, { days: 7 });
+      const response = await axios.post(
+        `${API}/leagues/${leagueId}/fixtures/import-from-api?commissionerId=${user.id}&days=7`
+      );
       setFixturesImported(true);
       toast.success(`✅ Imported ${response.data.fixturesImported || 0} fixtures successfully`);
     } catch (error) {
       console.error("Error importing fixtures:", error);
-      toast.error("❌ Failed to import fixtures. You can try again later from the Competition Dashboard.");
+      const errorMsg = error.response?.data?.detail || "Failed to import fixtures";
+      toast.error(`❌ ${errorMsg}`);
     } finally {
       setImportingFixtures(false);
     }
   };
 
   const handleImportCricketFixture = async () => {
+    if (!user) {
+      toast.error("Please sign in first");
+      return;
+    }
+    
     setImportingFixtures(true);
     try {
-      await axios.post(`${API}/leagues/${leagueId}/fixtures/import-next-cricket-fixture`);
+      await axios.post(
+        `${API}/leagues/${leagueId}/fixtures/import-next-cricket-fixture?commissionerId=${user.id}`
+      );
       setFixturesImported(true);
       toast.success(`✅ Imported next cricket fixture successfully`);
     } catch (error) {
       console.error("Error importing fixture:", error);
-      toast.error("❌ Failed to import fixture. You can try again later from the Competition Dashboard.");
+      const errorMsg = error.response?.data?.detail || "Failed to import fixture";
+      toast.error(`❌ ${errorMsg}`);
     } finally {
       setImportingFixtures(false);
     }
