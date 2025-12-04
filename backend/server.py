@@ -4802,7 +4802,7 @@ async def join_auction(sid, data):
     try:
         session = await sio.get_session(sid)
         user_id = session.get('userId') if session else None
-    except:
+    except Exception:
         user_id = None
     
     room_name = f"auction:{auction_id}"
