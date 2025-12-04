@@ -574,6 +574,27 @@ export default function LeagueDetail() {
             <span className="text-gray-900 font-semibold">{league.name || "Competition"}</span>
           </div>
 
+          {/* Active Auction Alert */}
+          {league.status === "active" && league.activeAuctionId && (
+            <div className="bg-red-50 border-2 border-red-300 rounded-lg p-4 mb-6 animate-pulse">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl">🔴</span>
+                  <div>
+                    <h3 className="font-bold text-red-800">Auction is Live!</h3>
+                    <p className="text-sm text-red-700">Don't miss out - join the bidding now</p>
+                  </div>
+                </div>
+                <button
+                  onClick={goToAuction}
+                  className="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 font-semibold shadow-lg"
+                >
+                  Join Auction Now →
+                </button>
+              </div>
+            </div>
+          )}
+
           <div className="flex justify-between items-start mb-6">
             <div>
               <div className="text-xs uppercase tracking-wide text-gray-500 mb-1">Competition Detail Page</div>
