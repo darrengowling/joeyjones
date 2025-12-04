@@ -353,7 +353,8 @@ export default function LeagueDetail() {
         `${API}/leagues/${leagueId}/fixtures/import-from-api?commissionerId=${user.id}&days=7`
       );
       setFixturesImported(true);
-      toast.success(`✅ Imported ${response.data.fixturesImported || 0} fixtures successfully`);
+      const totalFixtures = (response.data.fixturesImported || 0) + (response.data.fixturesUpdated || 0);
+      toast.success(`✅ Imported ${totalFixtures} fixtures successfully (${response.data.fixturesImported || 0} new, ${response.data.fixturesUpdated || 0} updated)`);
     } catch (error) {
       console.error("Error importing fixtures:", error);
       const errorMsg = error.response?.data?.detail || "Failed to import fixtures";
