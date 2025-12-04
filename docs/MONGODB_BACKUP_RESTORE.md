@@ -118,7 +118,7 @@ sudo supervisorctl stop backend
 sudo supervisorctl start backend
 
 # 4. Verify application is working
-curl https://leaguemaster-6.preview.emergentagent.com/api/sports
+curl https://prelaunch-fix.preview.emergentagent.com/api/sports
 ```
 
 ### Selective Restore (Specific Backup)

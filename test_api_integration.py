@@ -7,7 +7,7 @@ import requests
 import json
 import sys
 
-BACKEND_URL = "https://leaguemaster-6.preview.emergentagent.com/api"
+BACKEND_URL = "https://prelaunch-fix.preview.emergentagent.com/api"
 
 def test_league_creation_with_assets():
     """Test creating a league with assetsSelected via API"""

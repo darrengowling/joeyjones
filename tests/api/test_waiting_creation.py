@@ -9,7 +9,7 @@ import httpx
 import asyncio
 import uuid
 
-BASE_URL = "https://leaguemaster-6.preview.emergentagent.com/api"
+BASE_URL = "https://prelaunch-fix.preview.emergentagent.com/api"
 
 @pytest.mark.asyncio
 async def test_waiting_room_creation():

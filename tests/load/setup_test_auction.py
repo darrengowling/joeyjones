@@ -6,7 +6,7 @@ import requests
 import sys
 import time
 
-BACKEND_URL = "https://leaguemaster-6.preview.emergentagent.com"
+BACKEND_URL = "https://prelaunch-fix.preview.emergentagent.com"
 API = f"{BACKEND_URL}/api"
 
 def create_test_user():

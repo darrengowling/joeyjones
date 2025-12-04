@@ -12,7 +12,7 @@ from datetime import datetime, timezone
 from typing import Dict, List, Optional
 
 # Configuration
-BASE_URL = "https://leaguemaster-6.preview.emergentagent.com/api"
+BASE_URL = "https://prelaunch-fix.preview.emergentagent.com/api"
 
 class ServiceLayerTester:
     def __init__(self):

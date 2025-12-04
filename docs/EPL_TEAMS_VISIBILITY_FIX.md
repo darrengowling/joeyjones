@@ -96,7 +96,7 @@ Added all 20 EPL teams to the `clubs` collection:
 
 **Endpoint Test:**
 ```bash
-curl https://leaguemaster-6.preview.emergentagent.com/api/clubs
+curl https://prelaunch-fix.preview.emergentagent.com/api/clubs
 ```
 
 **Results:**

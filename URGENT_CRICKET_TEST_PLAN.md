@@ -69,7 +69,7 @@ cd /app/scripts
 
 4. Check leaderboard:
 ```bash
-curl "https://leaguemaster-6.preview.emergentagent.com/api/scoring/LEAGUE_ID/leaderboard" | jq
+curl "https://prelaunch-fix.preview.emergentagent.com/api/scoring/LEAGUE_ID/leaderboard" | jq
 ```
 
 5. Verify points:
@@ -110,7 +110,7 @@ curl "https://leaguemaster-6.preview.emergentagent.com/api/scoring/LEAGUE_ID/lea
 **User 2:** 69459fb4-fdb0-4057-85f7-d47008be40cb
 
 **Auction URLs:**
-- League: https://leaguemaster-6.preview.emergentagent.com/leagues/00039867-9555-4990-a5f5-f068f8afbcce
+- League: https://prelaunch-fix.preview.emergentagent.com/leagues/00039867-9555-4990-a5f5-f068f8afbcce
 - Start Auction: POST /api/leagues/00039867-9555-4990-a5f5-f068f8afbcce/start-auction
 - Get Auction: GET /api/leagues/00039867-9555-4990-a5f5-f068f8afbcce/auction
 
