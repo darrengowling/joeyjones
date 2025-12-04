@@ -457,7 +457,7 @@ async def import_next_cricket_fixture(league_id: str):
             
             try:
                 match_date = datetime.fromtimestamp(int(start_timestamp) / 1000, tz=timezone.utc)
-            except:
+            except (ValueError, TypeError, OSError):
                 continue
             
             # Must start after league creation
