@@ -863,9 +863,9 @@ function AuctionRoom() {
             </div>
           </div>
 
-          <div className="grid lg:grid-cols-3 gap-6">
+          <div className="grid lg:grid-cols-3 gap-4">
             {/* Current Lot */}
-            <div className="lg:col-span-2 bg-white rounded-lg shadow-lg p-6 app-card">
+            <div className="lg:col-span-2 bg-white rounded-lg shadow-lg p-4 app-card">
               {currentClub ? (
                 <div>
                   <h2 className="h2 text-2xl font-bold mb-4 text-gray-900">🔥 Current {uiHints.assetLabel} Ownership</h2>
