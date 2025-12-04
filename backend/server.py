@@ -2425,8 +2425,8 @@ async def import_fixtures_from_api(
                 fixture_doc = {
                     "homeTeam": home_team_name,
                     "awayTeam": away_team_name,
-                    "homeTeamId": home_team["id"],
-                    "awayTeamId": away_team["id"],
+                    "homeTeamId": home_team["id"] if home_team else None,
+                    "awayTeamId": away_team["id"] if away_team else None,
                     "homeExternalId": str(home_team_fd_id),
                     "awayExternalId": str(away_team_fd_id),
                     "matchDate": match_date,
