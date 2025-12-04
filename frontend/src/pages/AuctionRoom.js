@@ -909,14 +909,27 @@ function AuctionRoom() {
                             const mm = String(Math.floor(s / 60)).padStart(2, "0");
                             const ss = String(s % 60).padStart(2, "0");
                             const warn = (remainingMs ?? 0) < 10000;
+                            const isPaused = auction?.status === 'paused';
                             return (
-                              <span data-testid="auction-timer" className={warn ? 'text-red-400' : 'text-white'}>
+                              <span 
+                                data-testid="auction-timer" 
+                                className={
+                                  isPaused 
+                                    ? 'text-yellow-400' 
+                                    : warn 
+                                      ? 'text-red-400' 
+                                      : 'text-white'
+                                }
+                              >
                                 {mm}:{ss}
+                                {isPaused && ' ⏸️'}
                               </span>
                             );
                           })()}
                         </div>
-                        <div className="text-xs text-gray-300">Time Left</div>
+                        <div className="text-xs text-gray-300">
+                          {auction?.status === 'paused' ? 'PAUSED' : 'Time Left'}
+                        </div>
                       </div>
                     </div>
                     
