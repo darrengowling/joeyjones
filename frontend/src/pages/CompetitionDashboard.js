@@ -480,7 +480,7 @@ export default function CompetitionDashboard() {
       event.target.value = "";
     } catch (e) {
       console.error("Error uploading CSV:", e);
-      setUploadError(e.response?.data?.detail || "Failed to upload CSV. Please check the format.");
+      setUploadError(e.response?.data?.detail || "Failed to upload CSV. Check the file format matches the template (columns: matchId, playerName, runs, wickets, etc.).");
     } finally {
       setUploadingCSV(false);
     }
