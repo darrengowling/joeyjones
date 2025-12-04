@@ -231,7 +231,8 @@ export default function CompetitionDashboard() {
       }
     } catch (e) {
       console.error("Error updating scores:", e);
-      toast.error("Failed to update scores. Please try again.");
+      const errorMsg = e.response?.data?.detail || "Failed to update scores. Check that fixtures have completed and try again in a few minutes. API rate limits may apply.";
+      toast.error(errorMsg);
     } finally {
       setUpdatingScores(false);
     }
