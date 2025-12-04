@@ -586,7 +586,7 @@ export default function LeagueDetail() {
                   <span className="text-2xl">🔴</span>
                   <div>
                     <h3 className="font-bold text-red-800">Auction is Live!</h3>
-                    <p className="text-sm text-red-700">Don't miss out - join the bidding now</p>
+                    <p className="text-sm text-red-700">Don&apos;t miss out - join the bidding now</p>
                   </div>
                 </div>
                 <button
