@@ -51,7 +51,7 @@ function AuctionRoom() {
   const { socket, connected, ready, listenerCount } = useSocketRoom('auction', auctionId, { user });
 
   // Use the new auction clock hook with socket from useSocketRoom
-  const { remainingMs } = useAuctionClock(socket, currentLotId);
+  const { remainingMs } = useAuctionClock(socket, currentLotId, auction?.status);
 
   // Prompt E: Polling fallback for waiting room (top-level hook, conditional inside)
   useEffect(() => {
