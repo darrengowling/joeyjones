@@ -676,7 +676,7 @@ async def import_cricket_fixtures_from_api(
                 try:
                     # Cricbuzz returns timestamp in milliseconds
                     match_date = datetime.fromtimestamp(int(start_timestamp) / 1000, tz=timezone.utc)
-                except:
+                except (ValueError, TypeError, OSError):
                     continue
             else:
                 continue
