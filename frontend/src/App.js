@@ -785,7 +785,7 @@ const Home = () => {
       {/* Header */}
       <div className="bg-white shadow-md app-header">
         <div className="container-narrow mx-auto px-4 py-4 flex justify-between items-center">
-          <span data-testid="nav-brand" className="h2 text-lg md:text-2xl">Friends of PIFA</span>
+          <span data-testid="nav-brand" className="h2 text-lg md:text-2xl">Sport X</span>
           {user ? (
             <div className="flex items-center gap-2 md:gap-4">
               {/* Desktop view - show all items */}
