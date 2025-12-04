@@ -202,15 +202,25 @@ const Home = () => {
 
   const loadLeagues = async () => {
     try {
-      const response = await axios.get(`${API}/leagues`);
-      const leaguesWithParticipants = await Promise.all(
-        response.data.map(async (league) => {
-          const participantsResponse = await axios.get(`${API}/leagues/${league.id}/participants`);
-          // Backend returns { count: X, participants: [...] }
-          return { ...league, participantCount: participantsResponse.data.count || 0 };
-        })
-      );
-      setLeagues(leaguesWithParticipants);
+      // If user is logged in, show only their leagues
+      if (user) {
+        const response = await axios.get(`${API}/me/competitions`, {
+          params: { userId: user.id }
+        });
+        // Map the response to match the expected format
+        const leaguesWithParticipants = response.data.map(comp => ({
+          id: comp.leagueId,
+          name: comp.name,
+          sportKey: comp.sportKey,
+          status: comp.status,
+          commissionerId: comp.isCommissioner ? user.id : null,
+          participantCount: comp.managersCount || 0
+        }));
+        setLeagues(leaguesWithParticipants);
+      } else {
+        // If not logged in, show no leagues (they need to log in first)
+        setLeagues([]);
+      }
     } catch (e) {
       console.error("Error loading leagues:", e);
     }
