@@ -3632,8 +3632,6 @@ async def get_auction_clubs(auction_id: str):
     club_queue = auction.get("clubQueue", [])
     unsold_clubs = auction.get("unsoldClubs", [])
     current_club_id = auction.get("currentClubId")
-    current_lot = auction.get("currentLot", 0)
-    
     # Prompt 3: Only get clubs that are in the auction queue
     # This respects assetsSelected - if 9 clubs selected, only those 9 are in queue
     if not club_queue:
