@@ -915,7 +915,7 @@ const Home = () => {
       {/* Main Content */}
       <div className="container-narrow mx-auto px-4 py-8">
         <div className="bg-white rounded-lg shadow-lg p-8">
-          <h2 className="h1 text-3xl font-bold mb-6 text-gray-900">Welcome to Friends of PIFA</h2>
+          <h2 className="h1 text-3xl font-bold mb-6 text-gray-900">Welcome to Sport X</h2>
           <p className="h2 text-lg font-semibold text-blue-900 mb-2">Sports Gaming with Friends. No Gambling. All Strategy.</p>
           <p className="subtle text-gray-600 mb-8">
             Bid for exclusive ownership of players and teams who score your points. Experience the thrill of sports through strategic competition and community.
