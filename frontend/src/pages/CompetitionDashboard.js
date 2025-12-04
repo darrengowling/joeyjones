@@ -60,6 +60,7 @@ export default function CompetitionDashboard() {
     if (user && leagueId) {
       loadTabData(activeTab);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, leagueId, activeTab]);
 
   // Prompt 4: Socket.IO real-time updates for league events
