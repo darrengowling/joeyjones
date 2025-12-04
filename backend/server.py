@@ -2482,7 +2482,8 @@ async def import_fixtures_from_api(
                     fixtures_imported += 1
                     
             except Exception as e:
-                logger.error(f"Error processing fixture {api_fixture.get('fixture', {}).get('id')}: {e}")
+                fixture_id = api_fixture.get('fixture', {}).get('id', 'unknown')
+                logger.error(f"Error processing fixture {fixture_id}: {str(e)}", exc_info=True)
                 continue
         
         # Emit socket event
