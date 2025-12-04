@@ -265,7 +265,7 @@ const Home = () => {
         toast.success("Magic link generated! Enter the token below.");
       } catch (error) {
         console.error("Magic link generation error:", error);
-        const errorMessage = error.response?.data?.detail || error.message || "Failed to generate magic link. Please try again.";
+        const errorMessage = error.response?.data?.detail || error.message || "Unable to send magic link. Check your email address and internet connection, then try again.";
         setAuthError(errorMessage);
       } finally {
         setAuthLoading(false);
