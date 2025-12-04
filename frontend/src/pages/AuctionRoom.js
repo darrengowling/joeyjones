@@ -828,32 +828,32 @@ function AuctionRoom() {
             </div>
           </div>
 
-          {/* Participant Budgets */}
-          <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
-            <h2 className="text-xl font-bold mb-4 text-gray-900">Manager Budgets</h2>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {/* Participant Budgets - Horizontal Scroll */}
+          <div className="bg-white rounded-lg shadow-lg p-3 mb-4">
+            <h2 className="text-lg font-bold mb-2 text-gray-900">Manager Budgets</h2>
+            <div className="flex gap-3 overflow-x-auto pb-2" style={{scrollbarWidth: 'thin'}}>
               {participants.map((p) => {
                 const isCurrentUser = user && p.userId === user.id;
                 return (
                   <div
                     key={p.id}
-                    className={`p-4 rounded-lg border-2 ${
+                    className={`flex-shrink-0 w-40 p-3 rounded-lg border-2 ${
                       isCurrentUser
                         ? "bg-blue-50 border-blue-500"
                         : "bg-gray-50 border-gray-200"
                     }`}
                   >
-                    <div className="font-semibold text-gray-900 text-sm mb-1">
+                    <div className="font-semibold text-gray-900 text-xs mb-1 truncate">
                       {p.userName} {isCurrentUser && "(You)"}
                     </div>
-                    <div className="stack-md">
-                      <div className="chip text-2xl font-bold text-green-600">
+                    <div className="space-y-1">
+                      <div className="text-lg font-bold text-green-600">
                         {formatCurrency(p.budgetRemaining)}
                       </div>
-                      <div className="subtle text-xs text-gray-500">
+                      <div className="text-xs text-gray-500">
                         Spent: {formatCurrency(p.totalSpent)}
                       </div>
-                      <div className="subtle text-xs text-gray-500">
+                      <div className="text-xs text-gray-500">
                         🏆 Clubs: {p.clubsWon.length}
                       </div>
                     </div>
