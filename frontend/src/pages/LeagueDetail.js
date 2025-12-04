@@ -584,54 +584,49 @@ export default function LeagueDetail() {
 
             {/* Optional: Import Fixtures Before Auction */}
             {league.status === "pending" && isCommissioner && league.assetsSelected && league.assetsSelected.length > 0 && (
-              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border-l-4 border-blue-500 rounded-lg p-4 mb-4 shadow-sm">
-                <div className="flex items-start gap-3">
-                  <div className="flex-shrink-0 w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white text-xl">
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
+                <div className="flex items-center gap-3">
+                  <div className="flex-shrink-0 text-2xl">
                     📅
                   </div>
-                  <div className="flex-1">
-                    <h3 className="font-bold text-gray-900 mb-1">
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-semibold text-gray-900 text-sm mb-1">
                       Import Fixtures (Optional)
                     </h3>
-                    <p className="text-sm text-gray-700 mb-3 leading-relaxed">
-                      <strong>After selecting your teams,</strong> you can import upcoming fixtures so managers see opponents during the auction. This helps strategic bidding decisions.
+                    <p className="text-xs text-gray-600 mb-2">
+                      <strong>After selecting your teams,</strong> import fixtures so managers see opponents during bidding.
                     </p>
                     
                     {importingFixtures ? (
-                      <div className="flex items-center gap-2 text-sm text-blue-700 bg-blue-100 px-3 py-2 rounded-lg">
-                        <div className="animate-spin rounded-full h-4 w-4 border-2 border-blue-700 border-t-transparent"></div>
-                        <span>Importing fixtures...</span>
+                      <div className="flex items-center gap-2 text-xs text-blue-700">
+                        <div className="animate-spin rounded-full h-3 w-3 border-2 border-blue-700 border-t-transparent"></div>
+                        <span>Importing...</span>
                       </div>
                     ) : fixturesImported ? (
-                      <div className="flex items-center gap-2 text-sm text-green-700 bg-green-100 px-3 py-2 rounded-lg">
-                        <span className="text-lg">✅</span>
-                        <span className="font-medium">Fixtures imported successfully</span>
+                      <div className="text-xs text-green-700 font-medium">
+                        ✅ Fixtures imported
                       </div>
                     ) : (
-                      <>
-                        <div className="flex gap-2 mb-2">
-                          {league.sportKey === 'football' && (
-                            <button 
-                              onClick={handleImportFootballFixtures}
-                              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-semibold shadow-sm transition-colors"
-                            >
-                              Import Fixtures
-                            </button>
-                          )}
-                          
-                          {league.sportKey === 'cricket' && (
-                            <button 
-                              onClick={handleImportCricketFixture}
-                              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-semibold shadow-sm transition-colors"
-                            >
-                              Import Next Match
-                            </button>
-                          )}
-                        </div>
-                        <p className="text-xs text-gray-500">
-                          Or skip and import later from Competition Dashboard
-                        </p>
-                      </>
+                      <div className="flex items-center gap-2">
+                        {league.sportKey === 'football' && (
+                          <button 
+                            onClick={handleImportFootballFixtures}
+                            className="px-3 py-1.5 bg-blue-600 text-white rounded text-xs font-medium hover:bg-blue-700"
+                          >
+                            Import Fixtures
+                          </button>
+                        )}
+                        
+                        {league.sportKey === 'cricket' && (
+                          <button 
+                            onClick={handleImportCricketFixture}
+                            className="px-3 py-1.5 bg-blue-600 text-white rounded text-xs font-medium hover:bg-blue-700"
+                          >
+                            Import Next Match
+                          </button>
+                        )}
+                        <span className="text-xs text-gray-500">or skip for now</span>
+                      </div>
                     )}
                   </div>
                 </div>
