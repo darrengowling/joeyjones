@@ -1277,7 +1277,7 @@ export default function LeagueDetail() {
                               </div>
                             </div>
                             <div className="text-sm text-gray-500 ml-4">
-                              {new Date(fixture.matchDate).toLocaleDateString('en-GB', { 
+                              {new Date(fixture.matchDate || fixture.startsAt).toLocaleDateString('en-GB', { 
                                 weekday: 'short', 
                                 day: 'numeric', 
                                 month: 'short',
