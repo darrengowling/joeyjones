@@ -3872,7 +3872,7 @@ async def place_bid(auction_id: str, bid_input: BidCreate):
     }
     
     # Use atomic increment to avoid race conditions in rapid bidding
-    update_result = await db.auctions.update_one(
+    await db.auctions.update_one(
         {"id": auction_id},
         {
             "$set": {
