@@ -2416,9 +2416,9 @@ async def import_fixtures_from_api(
                     if team_name in away_team_name or away_team_name in team_name:
                         away_team = team
                 
-                if not home_team or not away_team:
-                    # Skip fixtures where we don't have both teams
-                    logger.warning(f"Skipping fixture: {home_team_name} vs {away_team_name} - teams not in competition")
+                # We need at least ONE of our teams in the fixture
+                if not home_team and not away_team:
+                    logger.warning(f"Skipping fixture: {home_team_name} vs {away_team_name} - no selected teams playing")
                     continue
                 
                 # Create/update fixture
