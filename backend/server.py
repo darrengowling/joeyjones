@@ -873,11 +873,31 @@ async def get_league_fixtures(league_id: str):
                 "message": "No teams selected for this league yet"
             }
         
-        # Simple approach: Get fixtures that belong to this league (leagueId)
-        # This works for both football and cricket
+        # Get team/player names for this league
+        assets = await db.assets.find({"id": {"$in": selected_asset_ids}}, {"_id": 0, "name": 1}).to_list(100)
+        asset_names = [asset.get("name") for asset in assets]
+        
+        # Get fixtures for this league:
+        # 1. Fixtures explicitly linked to this league (leagueId)
+        # 2. Shared fixtures (no leagueId) where selected teams are playing
         fixtures = await db.fixtures.find({
-            "leagueId": league_id
-        }, {"_id": 0}).sort([("startsAt", 1), ("matchDate", 1)]).to_list(length=None)
+            "$or": [
+                {"leagueId": league_id},  # League-specific fixtures
+                {
+                    "$and": [
+                        {"leagueId": {"$exists": False}},  # Shared fixtures
+                        {
+                            "$or": [
+                                {"homeTeam": {"$in": asset_names}},
+                                {"awayTeam": {"$in": asset_names}},
+                                {"homeTeamId": {"$in": selected_asset_ids}},
+                                {"awayTeamId": {"$in": selected_asset_ids}}
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }, {"_id": 0}).sort([("matchDate", 1), ("startsAt", 1)]).to_list(length=None)
         
         return {
             "fixtures": fixtures,
