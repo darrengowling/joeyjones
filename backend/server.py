@@ -861,8 +861,6 @@ async def get_league_fixtures(league_id: str):
         if not league:
             raise HTTPException(status_code=404, detail="League not found")
         
-        sport_key = league.get("sportKey", "football")
-        
         # Get teams selected for this league
         selected_asset_ids = league.get("assetsSelected", [])
         
