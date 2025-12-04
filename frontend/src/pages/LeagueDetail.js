@@ -31,6 +31,7 @@ export default function LeagueDetail() {
   const [loadingAssetSelection, setLoadingAssetSelection] = useState(false);
   const [importingFixtures, setImportingFixtures] = useState(false);
   const [fixturesImported, setFixturesImported] = useState(false);
+  const [startingAuction, setStartingAuction] = useState(false);
   // Fixtures state
   const [fixtures, setFixtures] = useState([]);
   const [loadingFixtures, setLoadingFixtures] = useState(false);
