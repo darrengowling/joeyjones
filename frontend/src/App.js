@@ -424,7 +424,8 @@ const Home = () => {
     } catch (e) {
       console.error("Error joining league:", e);
       // Show the backend error message which includes helpful details
-      toast.error(e.response?.data?.detail || "Error joining league");
+      const errorMsg = e.response?.data?.detail || "Unable to join league. Check your invite code (8 characters) or ask the commissioner to resend it.";
+      toast.error(errorMsg);
     } finally {
       setJoiningLeague(false);
     }
