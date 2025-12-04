@@ -726,12 +726,20 @@ function AuctionRoom() {
     <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 py-8">
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
-          <button
-            onClick={() => navigate("/")}
-            className="btn btn-secondary text-white hover:underline mb-4"
-          >
-            ← Back to Home
-          </button>
+          {/* Breadcrumb Navigation */}
+          <div className="flex items-center gap-2 text-sm text-white mb-4">
+            <button onClick={() => navigate("/")} className="hover:underline">Home</button>
+            <span>›</span>
+            <button onClick={() => navigate("/app/my-competitions")} className="hover:underline">My Competitions</button>
+            <span>›</span>
+            {league && (
+              <>
+                <button onClick={() => navigate(`/league/${league.id}`)} className="hover:underline">{league.name}</button>
+                <span>›</span>
+              </>
+            )}
+            <span className="font-semibold">Auction Room</span>
+          </div>
 
           {/* Prompt G: Top strip with league info and progress */}
           {league && auction && (
