@@ -67,7 +67,7 @@ const Help = () => {
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         {/* Introduction */}
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
-          <h2 className="text-2xl font-bold text-blue-900 mb-3">Welcome to Friends of PIFA!</h2>
+          <h2 className="text-2xl font-bold text-blue-900 mb-3">Welcome to Sport X!</h2>
           <p className="text-blue-800 mb-2">
             Sports Gaming with Friends. No Gambling. All Strategy.
           </p>
