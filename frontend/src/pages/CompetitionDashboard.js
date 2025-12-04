@@ -28,6 +28,10 @@ export default function CompetitionDashboard() {
   const [uploadingCSV, setUploadingCSV] = useState(false);
   const [uploadError, setUploadError] = useState("");
   const [uploadSuccess, setUploadSuccess] = useState("");
+  
+  // Loading states for specific actions
+  const [updatingScores, setUpdatingScores] = useState(false);
+  const [importingFixture, setImportingFixture] = useState(false);
 
   useEffect(() => {
     // Get user from localStorage
