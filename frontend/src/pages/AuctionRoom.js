@@ -980,11 +980,28 @@ function AuctionRoom() {
 
                   {/* Bid Input with Quick Buttons */}
                   <div>
-                    <div className="flex gap-4 mb-2">
+                    {/* Quick Bid Buttons */}
+                    <div className="flex gap-2 mb-2 overflow-x-auto pb-2">
+                      {[5, 10, 20, 50].map((amount) => (
+                        <button
+                          key={amount}
+                          onClick={() => {
+                            const newBid = (currentBid || 0) + amount;
+                            setBidAmount(newBid);
+                          }}
+                          disabled={!ready}
+                          className="flex-shrink-0 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-lg text-sm font-medium border border-gray-300 disabled:opacity-50"
+                        >
+                          +{amount}m
+                        </button>
+                      ))}
+                    </div>
+                    
+                    <div className="flex gap-2 mb-2">
                       <input
                         type="number"
-                        placeholder="e.g., 5m, £10m, 23m"
-                        className="flex-1 px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg"
+                        placeholder="Enter bid amount"
+                        className="flex-1 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-base"
                         value={bidAmount}
                         onChange={(e) => setBidAmount(e.target.value)}
                         disabled={!ready}
@@ -993,7 +1010,7 @@ function AuctionRoom() {
                       <button
                         onClick={placeBid}
                         disabled={!ready || participants.find((p) => p.userId === user?.id)?.clubsWon?.length >= (league?.clubSlots || 3)}
-                        className={`btn btn-primary px-8 py-3 rounded-lg font-semibold text-lg ${
+                        className={`px-6 py-2 rounded-lg font-semibold text-base ${
                           !ready || participants.find((p) => p.userId === user?.id)?.clubsWon?.length >= (league?.clubSlots || 3) 
                             ? 'bg-gray-400 cursor-not-allowed' 
                             : 'bg-blue-600 text-white hover:bg-blue-700'
@@ -1011,7 +1028,7 @@ function AuctionRoom() {
                           ? "Loading..." 
                           : participants.find((p) => p.userId === user?.id)?.clubsWon?.length >= (league?.clubSlots || 3) 
                             ? "Roster Full" 
-                            : "Claim Ownership"
+                            : "Place Bid"
                         }
                       </button>
                     </div>
