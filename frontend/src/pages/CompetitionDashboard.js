@@ -295,7 +295,7 @@ export default function CompetitionDashboard() {
       console.error("Error importing next cricket fixture:", e);
       toast.error("Failed to import fixture. Please try again.");
     } finally {
-      setLoading(false);
+      setImportingFixture(false);
     }
   };
 
