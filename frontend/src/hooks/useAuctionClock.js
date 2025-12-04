@@ -86,7 +86,7 @@ export function useAuctionClock(socket, lotId, auctionStatus) {
         if (rafRef.current) cancelAnimationFrame(rafRef.current);
       };
     }
-  }, [socket, lotId, endsAt, auctionStatus, onSync, onTick, onAnti, onSold]);
+  }, [socket, lotId, endsAt, auctionStatus, onSync, onTick, onAnti, onSold, onResumed]);
 
   return { remainingMs };
 }
