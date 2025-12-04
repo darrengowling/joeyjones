@@ -293,19 +293,29 @@ export default function MyCompetitions() {
                 )}
 
                 {/* Action Buttons */}
-                <div className="flex gap-3">
+                <div className="flex gap-3 flex-wrap">
+                  {comp.status === "auction_live" && comp.activeAuctionId && (
+                    <button
+                      data-testid="comp-auction-btn"
+                      onClick={() => navigate(`/auction/${comp.activeAuctionId}`)}
+                      className="btn btn-primary bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 font-semibold flex-1 animate-pulse"
+                    >
+                      🔴 Join Auction Now
+                    </button>
+                  )}
+                  <button
+                    data-testid="comp-detail-btn"
+                    onClick={() => navigate(`/league/${comp.leagueId}`)}
+                    className="btn btn-secondary bg-gray-100 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-200 font-semibold"
+                  >
+                    League Detail
+                  </button>
                   <button
                     data-testid="comp-view-btn"
                     onClick={() => navigate(`/competitions/${comp.leagueId}`)}
                     className="btn btn-primary bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 font-semibold flex-1"
                   >
                     View Dashboard
-                  </button>
-                  <button
-                    onClick={() => navigate(`/app/competitions/${comp.leagueId}?tab=fixtures`)}
-                    className="btn btn-secondary bg-gray-100 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-200 font-semibold"
-                  >
-                    Fixtures
                   </button>
                 </div>
               </div>
