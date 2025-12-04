@@ -582,6 +582,56 @@ export default function LeagueDetail() {
               </div>
             </div>
 
+            {/* Optional: Import Fixtures Before Auction */}
+            {league.status === "pending" && isCommissioner && (
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                <div className="flex items-start gap-3">
+                  <span className="text-2xl">💡</span>
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-gray-900 mb-2">
+                      Import Fixtures Before Auction (Optional)
+                    </h3>
+                    <p className="text-sm text-gray-600 mb-3">
+                      Import fixtures now so managers can see upcoming opponents during bidding. 
+                      This helps strategic decisions—for example, avoiding teams facing tough matches.
+                    </p>
+                    
+                    {importingFixtures ? (
+                      <div className="text-sm text-blue-600">Importing fixtures...</div>
+                    ) : fixturesImported ? (
+                      <div className="text-sm text-green-600 flex items-center gap-2">
+                        <span>✅</span> Fixtures imported successfully
+                      </div>
+                    ) : (
+                      <div className="flex gap-3">
+                        {league.sportKey === 'football' && (
+                          <button 
+                            onClick={handleImportFootballFixtures}
+                            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium"
+                          >
+                            Import Football Fixtures
+                          </button>
+                        )}
+                        
+                        {league.sportKey === 'cricket' && (
+                          <button 
+                            onClick={handleImportCricketFixture}
+                            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium"
+                          >
+                            Import Next Cricket Match
+                          </button>
+                        )}
+                      </div>
+                    )}
+                    
+                    <p className="text-xs text-gray-500 mt-3">
+                      You can skip this and import fixtures later from the Competition Dashboard after the auction.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
             <div className="flex gap-3">
               {league.status === "pending" && isCommissioner && (
                 <div>
