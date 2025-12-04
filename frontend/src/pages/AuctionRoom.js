@@ -1097,8 +1097,8 @@ function AuctionRoom() {
             </div>
 
             {/* Clubs Overview */}
-            <div className="app-card bg-white rounded-lg shadow-lg p-6">
-              <h3 className="h2 text-xl font-bold mb-4 text-gray-900">🏆 {uiHints.assetPlural} Available for Ownership</h3>
+            <div className="app-card bg-white rounded-lg shadow-lg p-4">
+              <h3 className="h2 text-lg font-bold mb-3 text-gray-900">🏆 {uiHints.assetPlural} Available</h3>
               
               {/* Summary Stats */}
               <div className="stack-md">
