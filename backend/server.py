@@ -1527,7 +1527,7 @@ async def get_league_by_token(invite_token: str):
             "searchedToken": invite_token,
             "normalizedToken": normalized_token,
             "totalLeagues": len(all_leagues),
-            "availableTokens": [l.get("inviteToken") for l in all_leagues[:10]]
+            "availableTokens": [league.get("inviteToken") for league in all_leagues[:10]]
         }
     
     return {
