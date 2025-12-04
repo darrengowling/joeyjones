@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 
-export function useAuctionClock(socket, lotId) {
+export function useAuctionClock(socket, lotId, auctionStatus) {
   const [remainingMs, setRemainingMs] = useState(null);
   const [endsAt, setEndsAt] = useState(null);
   const seqRef = useRef(0);
