@@ -1470,7 +1470,7 @@ export default function LeagueDetail() {
                 🎮 Auction is Live!
               </p>
               <p className="text-green-700 text-sm mt-1">
-                Click "Go to Auction" to join the bidding and compete for {uiHints.assetPlural.toLowerCase()}.
+                Click &quot;Go to Auction&quot; to join the bidding and compete for {uiHints.assetPlural.toLowerCase()}.
               </p>
             </div>
           )}
