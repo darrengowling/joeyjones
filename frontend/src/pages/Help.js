@@ -181,6 +181,26 @@ const Help = () => {
             </div>
 
             <div>
+              <h4 className="text-lg font-semibold text-gray-900 mb-3">Pre-Auction Setup (Optional)</h4>
+              
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                <h5 className="font-semibold text-gray-900 mb-2">📅 Import Fixtures Before Auction</h5>
+                <p className="text-gray-700 mb-2">
+                  <strong>New Feature!</strong> You can now import upcoming fixtures <em>before</em> starting the auction to help managers make strategic bidding decisions.
+                </p>
+                <ol className="list-decimal list-inside space-y-2 text-gray-700">
+                  <li>After selecting your teams, look for the <strong>"Import Fixtures (Optional)"</strong> section on the league detail page</li>
+                  <li>Click <strong>"Import Fixtures"</strong> button</li>
+                  <li>The system will fetch upcoming matches for your selected teams (next 7 days)</li>
+                  <li>During the auction, each team will show their next fixture, helping managers bid strategically</li>
+                </ol>
+                <p className="text-blue-700 text-sm mt-2">
+                  <strong>💡 Why?</strong> Managers can see which teams have favorable upcoming matches and bid accordingly!
+                </p>
+              </div>
+            </div>
+
+            <div>
               <h4 className="text-lg font-semibold text-gray-900 mb-3">Running the Auction</h4>
               
               <div className="bg-gray-50 rounded-lg p-4 mb-4">
@@ -188,6 +208,7 @@ const Help = () => {
                 <ol className="list-decimal list-inside space-y-2 text-gray-700">
                   <li>Wait for all managers to join using the invite token</li>
                   <li>Navigate to your competition page from "My Competitions"</li>
+                  <li><strong>(Optional)</strong> Import fixtures before starting if you haven't already</li>
                   <li>Click <strong>"Start Auction"</strong> when ready</li>
                   <li>The first team will be nominated for bidding automatically</li>
                   <li>Managers place bids in real-time until timer expires</li>
