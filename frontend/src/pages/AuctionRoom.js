@@ -887,31 +887,12 @@ function AuctionRoom() {
                     </div>
                   )}
 
-                  {/* Timer - WHITE ON BLACK for maximum visibility */}
-                  <div className="bg-black text-white p-6 rounded-lg mb-6 text-center shadow-lg border-2 border-white">
-                    <div className="text-5xl font-bold">
-                      {(() => {
-                        const s = Math.ceil((remainingMs ?? 0) / 1000);
-                        const mm = String(Math.floor(s / 60)).padStart(2, "0");
-                        const ss = String(s % 60).padStart(2, "0");
-                        const warn = (remainingMs ?? 0) < 10000;
-                        return (
-                          <span data-testid="auction-timer" className={warn ? 'text-red-400' : 'text-white'}>
-                            {mm}:{ss}
-                          </span>
-                        );
-                      })()}
-                    </div>
-                    <div className="text-sm mt-2 text-white">Time Remaining</div>
-                    <div className="text-xs mt-1 text-gray-300">
-                      {timerSettings.timerSeconds}s per team | Extends by {timerSettings.antiSnipeSeconds}s on late bids
-                    </div>
-                  </div>
-
-                  {/* Club/Player Info */}
-                  <div className="app-card bg-gray-50 p-4 rounded-lg mb-4">
-                    <div className="stack-md">
-                      <h3 className="h1 text-3xl font-bold text-gray-900">{currentClub.name}</h3>
+                  {/* Compact Timer + Team Info */}
+                  <div className="bg-black text-white p-4 rounded-lg mb-4 shadow-lg border-2 border-white">
+                    <div className="flex items-center justify-between gap-4">
+                      {/* Team Name */}
+                      <div className="flex-1 min-w-0">
+                        <h3 className="text-2xl font-bold text-white truncate">{currentClub.name}</h3>
                       
                       {/* Football: Show country and UEFA ID */}
                       {sport?.key === "football" && (
