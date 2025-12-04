@@ -237,7 +237,7 @@ export default function CompetitionDashboard() {
   };
 
   const handleUpdateCricketScores = async () => {
-    setLoading(true);
+    setUpdatingScores(true);
     try {
       // Step 1: Update cricket fixtures from Cricbuzz API
       const response = await axios.post(`${API}/cricket/update-scores`);
