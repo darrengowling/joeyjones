@@ -978,47 +978,7 @@ function AuctionRoom() {
                     )}
                   </div>
 
-                  {/* Next Fixture Display - Compact */}
-                  {nextFixture && (
-                    <div className="text-sm text-gray-600 mb-4">
-                      Next match: {nextFixture.opponent} ({nextFixture.isHome ? 'H' : 'A'})
-                    </div>
-                  )}
-
-                  {/* Current Bid Panel (Prompt G: Enhanced with bidder info) */}
-                  {currentBid > 0 && currentBidder && (
-                    <div className="app-card bg-green-50 border border-green-200 p-4 rounded-lg mb-4">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <div className="subtle text-sm text-gray-600">💰 Current Bid</div>
-                          <div className="text-3xl font-bold text-green-600">{formatCurrency(currentBid)}</div>
-                        </div>
-                        <div className="text-right">
-                          <div className="flex items-center space-x-2">
-                            <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
-                              {currentBidder.displayName.charAt(0).toUpperCase()}
-                            </div>
-                            <div>
-                              <div className="text-sm font-medium text-gray-900">
-                                {currentBidder.displayName}
-                              </div>
-                              <div className="text-xs text-gray-500">Leading bidder</div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                  
-                  {/* Fallback: Show no bids message */}
-                  {!currentBid && (
-                    <div className="app-card bg-blue-50 border border-blue-200 p-4 rounded-lg mb-4">
-                      <div className="subtle text-sm text-gray-600">💰 No bids yet</div>
-                      <div className="text-lg text-gray-600">Be the first to claim ownership!</div>
-                    </div>
-                  )}
-
-                  {/* Bid Input */}
+                  {/* Bid Input with Quick Buttons */}
                   <div>
                     <div className="flex gap-4 mb-2">
                       <input
