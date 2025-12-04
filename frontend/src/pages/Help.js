@@ -107,7 +107,7 @@ const Help = () => {
             <div>
               <h4 className="text-lg font-semibold text-gray-900 mb-3">Account Setup & Sign In</h4>
               <p className="text-gray-700 mb-3">
-                Friends of PIFA uses a secure <strong>magic link authentication</strong> system. No passwords required!
+                Sport X uses a secure <strong>magic link authentication</strong> system. No passwords required!
               </p>
               
               <div className="bg-gray-50 rounded-lg p-4 mb-4">
