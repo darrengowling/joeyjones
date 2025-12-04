@@ -268,7 +268,7 @@ export default function CompetitionDashboard() {
   };
 
   const handleImportNextCricketFixture = async () => {
-    setLoading(true);
+    setImportingFixture(true);
     try {
       const response = await axios.post(
         `${API}/leagues/${leagueId}/fixtures/import-next-cricket-fixture`
