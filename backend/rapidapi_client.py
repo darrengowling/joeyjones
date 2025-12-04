@@ -259,14 +259,15 @@ class RapidAPICricketClient:
     
     async def get_recent_matches(self) -> List[Dict]:
         """
-        Get recent AND upcoming cricket matches
-        Combines both recent and upcoming to get full picture
+        Get recent, live, AND upcoming cricket matches
+        Combines all three sources to get complete picture
         
         Returns:
             List of match dictionaries
         """
-        # Get both recent and upcoming matches
+        # Get recent, live, and upcoming matches
         recent_response = await self._make_request("matches/v1/recent")
+        live_response = await self._make_request("matches/v1/live")
         upcoming_response = await self._make_request("matches/v1/upcoming")
         
         matches = []
