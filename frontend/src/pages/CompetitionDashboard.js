@@ -193,7 +193,7 @@ export default function CompetitionDashboard() {
   };
 
   const handleUpdateScores = async () => {
-    setLoading(true);
+    setUpdatingScores(true);
     try {
       // Step 1: Update fixtures from API-Football
       const response = await axios.post(`${API}/fixtures/update-scores`);
