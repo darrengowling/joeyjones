@@ -330,6 +330,7 @@ export default function LeagueDetail() {
       toast.success(`Team selection updated! ${selectedAssetIds.length} teams selected for auction.`);
       setEditingAssets(false);
       await loadLeague(); // Reload league data
+      await loadAssets(); // Reload assets to show selected teams
     } catch (e) {
       console.error("Error saving asset selection:", e);
       toast.error(e.response?.data?.detail || "Error saving team selection");
