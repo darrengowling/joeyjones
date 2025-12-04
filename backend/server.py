@@ -3521,7 +3521,7 @@ async def begin_auction(
             "userId": user_id,
             "commissionerId": league["commissionerId"]
         })
-        raise HTTPException(status_code=403, detail="Only the commissioner can start the auction")
+        raise HTTPException(status_code=403, detail="Only the league commissioner can start the auction. Ask the commissioner to start it.")
     
     # Prompt G: Log begin_auction call
     auction_room_size = len(sio.manager.rooms.get(f"auction:{auction_id}", {}).get("/", set()))
