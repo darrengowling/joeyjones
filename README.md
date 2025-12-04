@@ -97,7 +97,7 @@ Create `/app/backend/.env` file:
 ```bash
 # Database Configuration
 MONGO_URL="mongodb://localhost:27017"
-DB_NAME="fantasy_sports_db"
+DB_NAME="test_database"
 
 # CORS Configuration
 CORS_ORIGINS="http://localhost:3000"
