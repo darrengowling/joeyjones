@@ -583,7 +583,7 @@ async def update_cricket_scores():
                 
                 if fixture:
                     # Map Cricbuzz state to our status
-                    fixture_status = "completed" if state == "Complete" else "in_progress" if state == "In Progress" else "scheduled"
+                    fixture_status = "completed" if state == "Complete" else "in_progress" if state in ["In Progress", "Stumps"] else "scheduled"
                     
                     # Update the fixture
                     update_data = {
@@ -593,8 +593,8 @@ async def update_cricket_scores():
                         "updatedAt": datetime.now(timezone.utc).isoformat()
                     }
                     
-                    # For completed matches, get scorecard for detailed stats
-                    if state == "Complete":
+                    # For completed matches or stumps (end of day), get scorecard for detailed stats
+                    if state in ["Complete", "Stumps", "In Progress"]:
                         scorecard = await client.get_match_scorecard(match_id)
                         if scorecard:
                             update_data["scorecard"] = scorecard
