@@ -59,7 +59,10 @@ export default function MyCompetitions() {
       setCompetitions(response.data);
     } catch (e) {
       console.error("Error loading competitions:", e);
-      setError("Failed to load your competitions. Please try again.");
+      const errorMsg = e.message === "Network Error" 
+        ? "Connection lost. Check your internet and refresh the page."
+        : "Failed to load your competitions. Please refresh the page.";
+      setError(errorMsg);
     } finally {
       setLoading(false);
     }
