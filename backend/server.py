@@ -2322,9 +2322,9 @@ async def import_fixtures_from_api(
             detail="Only the league commissioner can import fixtures"
         )
     
-    # Validation - refuse import when auction is not completed
+    # Validation - refuse import when auction is active
     auction = await db.auctions.find_one({"leagueId": league_id}, {"_id": 0})
-    if auction and auction["status"] != "completed":
+    if auction and auction["status"] not in ["completed", "auction_complete"]:
         raise HTTPException(
             status_code=400,
             detail="Cannot import fixtures while auction is in progress. Please complete the auction first."
