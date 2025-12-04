@@ -473,6 +473,70 @@ const Help = () => {
           </div>
         </Section>
 
+        {/* Navigation */}
+        <Section id="navigation" title="Navigation & Finding Pages" icon="🧭">
+          <div className="space-y-6">
+            <div>
+              <h4 className="text-lg font-semibold text-gray-900 mb-3">Navigating the Platform</h4>
+              <p className="text-gray-700 mb-4">
+                We've made it easy to move between different areas of the platform. Here's how to find what you need:
+              </p>
+
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                <h5 className="font-semibold text-gray-900 mb-2">📍 My Competitions Hub</h5>
+                <p className="text-gray-700 mb-2">
+                  Your central dashboard to access all your leagues:
+                </p>
+                <ul className="list-disc list-inside space-y-1 text-gray-700 ml-4">
+                  <li><strong>League Detail:</strong> Click to view league setup, participants, and invitation token</li>
+                  <li><strong>View Dashboard:</strong> Access standings, fixtures, and scores</li>
+                  <li><strong>🔴 Join Auction Now:</strong> When auction is live, this red button pulses - click to enter the auction room</li>
+                </ul>
+              </div>
+
+              <div className="bg-purple-50 border border-purple-200 rounded-lg p-4 mb-4">
+                <h5 className="font-semibold text-gray-900 mb-2">🏠 Returning to Active Auctions</h5>
+                <p className="text-gray-700 mb-2">
+                  <strong>Don't miss your auction!</strong> If you navigate away from an auction room:
+                </p>
+                <ol className="list-decimal list-inside space-y-1 text-gray-700 ml-4">
+                  <li>Go to <strong>"My Competitions"</strong> from the top menu</li>
+                  <li>Look for the competition with <strong className="text-red-600">🔴 Auction Live</strong> status</li>
+                  <li>Click the pulsing <strong className="bg-red-600 text-white px-2 py-1 rounded text-xs">Join Auction Now</strong> button</li>
+                  <li>You'll be taken directly back to the auction room</li>
+                </ol>
+              </div>
+
+              <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
+                <h5 className="font-semibold text-gray-900 mb-2">🧭 Breadcrumb Navigation</h5>
+                <p className="text-gray-700 mb-2">
+                  In the auction room, you'll see breadcrumbs at the top:
+                </p>
+                <p className="font-mono text-sm text-gray-600 bg-white p-2 rounded border border-gray-300 mb-2">
+                  Home › My Competitions › League Name › Auction Room
+                </p>
+                <p className="text-gray-700 text-sm">
+                  Click any part of the path to navigate back to that page quickly.
+                </p>
+              </div>
+
+              <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
+                <h5 className="font-semibold text-gray-900 mb-2">⚠️ League Detail Page Alert</h5>
+                <p className="text-gray-700 mb-2">
+                  When an auction is live and you're on the league detail page, you'll see a prominent red alert banner at the top:
+                </p>
+                <div className="bg-red-50 border-2 border-red-300 rounded p-3 my-2">
+                  <p className="text-red-800 font-bold">🔴 Auction is Live!</p>
+                  <p className="text-red-700 text-sm">Don't miss out - join the bidding now</p>
+                </div>
+                <p className="text-gray-700 text-sm">
+                  Click the <strong>"Join Auction Now →"</strong> button to enter immediately.
+                </p>
+              </div>
+            </div>
+          </div>
+        </Section>
+
         {/* FAQ / Troubleshooting */}
         <Section id="faq" title="FAQ & Troubleshooting" icon="❓">
           <div className="space-y-4">
