@@ -30,6 +30,15 @@ export function useAuctionClock(socket, lotId, auctionStatus) {
     setRemainingMs(0); 
   }, []);
 
+  const onResumed = useCallback((data) => {
+    // When auction resumes, immediately update endsAt with new timer
+    if (data.newEndTime) {
+      const newEndsAt = new Date(data.newEndTime).getTime();
+      setEndsAt(newEndsAt);
+      seqRef.current++; // Increment to prevent old timer events from overriding
+    }
+  }, []);
+
   useEffect(() => {
     if (socket) {
       // Remove existing listeners before adding new ones (prevent duplicates)
