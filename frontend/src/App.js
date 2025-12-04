@@ -175,6 +175,7 @@ const Home = () => {
     } else {
       setLeagues([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   const loadUserCompetitions = async (userId) => {
