@@ -956,7 +956,7 @@ export default function CompetitionDashboard() {
                 <p className="text-xs font-semibold text-blue-900 mb-1">📋 Important: Match ID Must Match Exactly</p>
                 <p className="text-xs text-blue-800">
                   Use the <span className="font-mono font-semibold">Match ID</span> shown below each fixture in your CSV. 
-                  The fixture will automatically be marked as "Completed" after upload.
+                  The fixture will automatically be marked as &quot;Completed&quot; after upload.
                 </p>
               </div>
               
