@@ -598,6 +598,19 @@ async def update_cricket_scores():
                         scorecard = await client.get_match_scorecard(match_id)
                         if scorecard:
                             update_data["scorecard"] = scorecard
+                            
+                            # Process scorecard and calculate fantasy points
+                            try:
+                                await process_cricket_scorecard(
+                                    db=db,
+                                    fixture_id=fixture["id"],
+                                    league_id=fixture["leagueId"],
+                                    match_id=str(match_id),
+                                    scorecard=scorecard
+                                )
+                                logger.info(f"Processed scorecard for {team1_name} vs {team2_name}")
+                            except Exception as score_error:
+                                logger.error(f"Error processing scorecard: {score_error}")
                     
                     await db.fixtures.update_one(
                         {"id": fixture["id"]},
