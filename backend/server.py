@@ -4922,7 +4922,7 @@ async def leave_auction(sid, data):
         logger.info(f"Client {sid} left auction:{auction_id}")
 
 @sio.event
-async def join_league(sid, data):
+async def join_league_room(sid, data):
     """
     Prompt D: Join a league room - used by Lobby/LeagueDetail pages
     Returns ack with {ok:true, room, roomSize}
