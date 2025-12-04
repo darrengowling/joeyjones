@@ -360,8 +360,8 @@ export default function LeagueDetail() {
       toast.success(`✅ Imported ${totalFixtures} fixtures successfully (${response.data.fixturesImported || 0} new, ${response.data.fixturesUpdated || 0} updated)`);
     } catch (error) {
       console.error("Error importing fixtures:", error);
-      const errorMsg = error.response?.data?.detail || "Failed to import fixtures";
-      toast.error(`❌ ${errorMsg}`);
+      const errorMsg = error.response?.data?.detail || "Failed to import fixtures. This might be due to API rate limits or no upcoming matches for your selected teams. Try again in a few minutes.";
+      toast.error(errorMsg);
     } finally {
       setImportingFixtures(false);
     }
