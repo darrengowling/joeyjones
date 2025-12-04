@@ -1331,8 +1331,8 @@ export default function LeagueDetail() {
                     </p>
                     {isCommissioner && (
                       <p className="text-sm text-blue-800">
-                        <strong>Commissioner:</strong> After matches complete (Nov 29-30), click <strong>"Update Match Scores"</strong> above to fetch latest results. 
-                        Then click <strong>"Recompute Scores"</strong> in the Standings section to update league rankings.
+                        <strong>Commissioner:</strong> After matches complete (Nov 29-30), click <strong>&quot;Update Match Scores&quot;</strong> above to fetch latest results. 
+                        Then click <strong>&quot;Recompute Scores&quot;</strong> in the Standings section to update league rankings.
                       </p>
                     )}
                   </div>
