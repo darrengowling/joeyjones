@@ -46,12 +46,14 @@ export function useAuctionClock(socket, lotId, auctionStatus) {
       socket.off("tick", onTick);
       socket.off("anti_snipe", onAnti);
       socket.off("sold", onSold);
+      socket.off("auction_resumed", onResumed);
 
       // Add listeners
       socket.on("sync_state", onSync);
       socket.on("tick", onTick);
       socket.on("anti_snipe", onAnti);
       socket.on("sold", onSold);
+      socket.on("auction_resumed", onResumed);
 
       function loop() {
         // Freeze timer when auction is paused
