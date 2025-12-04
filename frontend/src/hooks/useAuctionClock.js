@@ -45,6 +45,12 @@ export function useAuctionClock(socket, lotId, auctionStatus) {
       socket.on("sold", onSold);
 
       function loop() {
+        // Freeze timer when auction is paused
+        if (auctionStatus === 'paused') {
+          rafRef.current = window.requestAnimationFrame(loop);
+          return;
+        }
+        
         if (endsAt) {
           const clientNow = Date.now();
           const serverAlignedNow = clientNow + skewRef.current;
