@@ -2491,6 +2491,8 @@ async def import_fixtures_from_api(
             'countChanged': fixtures_imported + fixtures_updated
         }, room=f"league:{league_id}")
         
+        logger.info(f"Fixture import complete: {fixtures_imported} new, {fixtures_updated} updated")
+        
         return {
             "message": f"Successfully imported {fixtures_imported} new fixtures and updated {fixtures_updated} existing fixtures",
             "fixturesImported": fixtures_imported,
