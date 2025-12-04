@@ -887,51 +887,95 @@ function AuctionRoom() {
                     </div>
                   )}
 
-                  {/* Compact Timer + Team Info */}
-                  <div className="bg-black text-white p-4 rounded-lg mb-4 shadow-lg border-2 border-white">
-                    <div className="flex items-center justify-between gap-4">
+                  {/* Compact Timer + Team + Current Bid */}
+                  <div className="bg-black text-white p-4 rounded-lg mb-3 shadow-lg">
+                    <div className="flex items-center justify-between gap-4 mb-3">
                       {/* Team Name */}
                       <div className="flex-1 min-w-0">
                         <h3 className="text-2xl font-bold text-white truncate">{currentClub.name}</h3>
+                        {/* Next Fixture - Inline */}
+                        {nextFixture && (
+                          <div className="text-xs text-gray-300 mt-1">
+                            Next: {nextFixture.opponent} ({nextFixture.isHome ? 'H' : 'A'})
+                          </div>
+                        )}
+                      </div>
                       
-                      {/* Football: Show country and UEFA ID */}
-                      {sport?.key === "football" && (
-                        <>
-                          <p className="h2 text-xl text-gray-600">{currentClub.country}</p>
-                          {currentClub.uefaId && (
-                            <p className="subtle text-sm text-gray-500">UEFA ID: {currentClub.uefaId}</p>
-                          )}
-                        </>
-                      )}
-                      
-                      {/* Cricket: Show nationality and role */}
-                      {sport?.key === "cricket" && currentClub.meta && (
-                        <>
-                          {currentClub.meta.nationality && (
-                            <p className="h2 text-xl text-gray-600">
-                              <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-base font-semibold">
-                                {currentClub.meta.nationality}
+                      {/* Timer */}
+                      <div className="text-center">
+                        <div className="text-4xl font-bold">
+                          {(() => {
+                            const s = Math.ceil((remainingMs ?? 0) / 1000);
+                            const mm = String(Math.floor(s / 60)).padStart(2, "0");
+                            const ss = String(s % 60).padStart(2, "0");
+                            const warn = (remainingMs ?? 0) < 10000;
+                            return (
+                              <span data-testid="auction-timer" className={warn ? 'text-red-400' : 'text-white'}>
+                                {mm}:{ss}
                               </span>
-                            </p>
-                          )}
-                          {currentClub.meta.role && (
-                            <p className="text-lg text-gray-700">
-                              <span className="font-medium">Role:</span> {currentClub.meta.role}
-                            </p>
-                          )}
-                          {currentClub.meta.bowling && (
-                            <p className="text-sm text-gray-600">
-                              <span className="font-medium">Bowling:</span> {currentClub.meta.bowling}
-                            </p>
-                          )}
-                        </>
-                      )}
-                      
-                      {/* Fallback for other sports */}
-                      {sport?.key !== "football" && sport?.key !== "cricket" && currentClub.country && (
-                        <p className="h2 text-xl text-gray-600">{currentClub.country}</p>
+                            );
+                          })()}
+                        </div>
+                        <div className="text-xs text-gray-300">Time Left</div>
+                      </div>
+                    </div>
+                    
+                    {/* Current Bid or No Bids */}
+                    <div className="border-t border-gray-600 pt-3">
+                      {currentBid > 0 && currentBidder ? (
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <div className="text-xs text-gray-300">Current Bid</div>
+                            <div className="text-2xl font-bold text-green-400">{formatCurrency(currentBid)}</div>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                              {currentBidder.displayName.charAt(0).toUpperCase()}
+                            </div>
+                            <div className="text-sm text-gray-200">{currentBidder.displayName}</div>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="text-center">
+                          <div className="text-sm text-gray-300">💰 No bids yet - Be the first!</div>
+                        </div>
                       )}
                     </div>
+                  </div>
+                  
+                  {/* Team Metadata */}
+                  <div className="bg-gray-50 p-3 rounded-lg mb-3">
+                    {/* Football: Show country and UEFA ID */}
+                    {sport?.key === "football" && (
+                      <div className="flex items-center gap-3 text-sm">
+                        <span className="text-gray-700">{currentClub.country}</span>
+                        {currentClub.uefaId && (
+                          <span className="text-gray-500">UEFA ID: {currentClub.uefaId}</span>
+                        )}
+                      </div>
+                    )}
+                    
+                    {/* Cricket: Show nationality and role */}
+                    {sport?.key === "cricket" && currentClub.meta && (
+                      <div className="flex flex-wrap items-center gap-2 text-sm">
+                        {currentClub.meta.nationality && (
+                          <span className="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-semibold">
+                            {currentClub.meta.nationality}
+                          </span>
+                        )}
+                        {currentClub.meta.role && (
+                          <span className="text-gray-700">Role: {currentClub.meta.role}</span>
+                        )}
+                        {currentClub.meta.bowling && (
+                          <span className="text-gray-600">Bowling: {currentClub.meta.bowling}</span>
+                        )}
+                      </div>
+                    )}
+                    
+                    {/* Fallback for other sports */}
+                    {sport?.key !== "football" && sport?.key !== "cricket" && currentClub.country && (
+                      <div className="text-sm text-gray-700">{currentClub.country}</div>
+                    )}
                   </div>
 
                   {/* Next Fixture Display - Compact */}
