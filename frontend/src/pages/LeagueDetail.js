@@ -398,6 +398,7 @@ export default function LeagueDetail() {
       return;
     }
 
+    setStartingAuction(true);
     try {
       const response = await axios.post(`${API}/leagues/${leagueId}/auction/start`);
       toast.success("Auction started!");
@@ -405,6 +406,8 @@ export default function LeagueDetail() {
     } catch (e) {
       console.error("Error starting auction:", e);
       toast.error("Error starting auction");
+    } finally {
+      setStartingAuction(false);
     }
   };
 
