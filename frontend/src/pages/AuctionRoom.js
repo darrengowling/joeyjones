@@ -862,7 +862,7 @@ function AuctionRoom() {
                         Spent: {formatCurrency(p.totalSpent)}
                       </div>
                       <div className="text-xs text-gray-500">
-                        🏆 Clubs: {p.clubsWon.length}
+                        🏆 {uiHints.assetPlural}: {p.clubsWon.length}
                       </div>
                     </div>
                   </div>
