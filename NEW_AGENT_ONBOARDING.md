@@ -97,6 +97,7 @@ Answer these questions:
 - ❌ Touch auction logic, socket connections, scoring, or authentication without deep understanding
 - ❌ Make changes within 24 hours of deployment without user approval
 - ❌ Assume previous documentation is accurate - verify in the actual code
+- ❌ **IGNORE WARNINGS OR ERRORS** - Always investigate compilation warnings, syntax errors, and linting issues immediately. Never assume they "recovered" or are harmless
 
 ### ALWAYS:
 - ✅ Read the actual code to understand workflows
