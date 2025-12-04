@@ -306,7 +306,7 @@ const Home = () => {
         toast.success("Successfully signed in!");
       } catch (error) {
         console.error("Token verification error:", error);
-        const errorMessage = error.response?.data?.detail || error.message || "Invalid or expired token. Please try again.";
+        const errorMessage = error.response?.data?.detail || error.message || "Invalid or expired magic link token. Request a new link and try again within 15 minutes.";
         setAuthError(errorMessage);
       } finally {
         setAuthLoading(false);
