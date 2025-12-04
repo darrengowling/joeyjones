@@ -157,6 +157,7 @@ export default function LeagueDetail() {
       socket.off('league_status_changed', onLeagueStatusChanged);
       clearInterval(pollInterval);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [leagueId, user, listenerCount]);
 
   const loadLeague = async () => {
