@@ -3280,7 +3280,7 @@ async def start_auction(league_id: str):
             {"id": league_id},
             {"$set": {"status": "active"}}
         )
-        logger.info(f"   ✅ League status updated to active")
+        logger.info("   ✅ League status updated to active")
     except Exception as e:
         logger.error(f"   ❌ Failed to update league status: {str(e)}")
     
@@ -4123,7 +4123,7 @@ async def complete_lot(auction_id: str):
     all_full = all(len(p.get("clubsWon", [])) >= max_slots for p in participants)
     
     if all_full:
-        logger.info(f"🏁 All rosters full after lot complete - completing auction early")
+        logger.info("🏁 All rosters full after lot complete - completing auction early")
         # Clear current lot/club before completing
         await db.auctions.update_one(
             {"id": auction_id},
@@ -4168,7 +4168,7 @@ async def complete_lot(auction_id: str):
     next_club_id = await get_next_club_to_auction(auction_id)
     logger.info(f"🔍 AFTER get_next_club: next_club_id={next_club_id}")
     
-    logger.info(f"auction.next_lot_decision", extra={
+    logger.info("auction.next_lot_decision", extra={
         "auction_id": auction_id,
         "will_start_next": bool(next_club_id and auction.get('status') == 'active'),
         "next_club_id": next_club_id if next_club_id else None
@@ -4176,7 +4176,7 @@ async def complete_lot(auction_id: str):
     
     if next_club_id:
         # Three-second pause before next lot to prevent bid bleed and give thinking time
-        logger.info(f"⏸️  Starting 3-second pause before next lot")
+        logger.info("⏸️  Starting 3-second pause before next lot")
         
         # Emit countdown to all clients
         for countdown in [3, 2, 1]:
