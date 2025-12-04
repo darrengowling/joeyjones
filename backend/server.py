@@ -1934,7 +1934,7 @@ async def get_league_summary(league_id: str, userId: str):
     }
 
 @api_router.get("/leagues/{league_id}/standings")
-async def get_league_standings(league_id: str):
+async def get_league_standings_endpoint(league_id: str):
     """Get current league standings - Prompt 6: Feature flag protected"""
     # Prompt 6: Feature flag check
     if not FEATURE_MY_COMPETITIONS:
