@@ -1797,6 +1797,8 @@ async def get_my_competitions(userId: str):
             "name": league["name"],
             "sportKey": league["sportKey"],
             "status": status,
+            "isCommissioner": league.get("commissionerId") == userId,
+            "activeAuctionId": auction.get("id") if auction else None,
             "assetsOwned": assets_owned,
             "managersCount": manager_count,
             "timerSeconds": league.get("timerSeconds", 30),
