@@ -209,16 +209,26 @@ const Home = () => {
         const response = await axios.get(`${API}/me/competitions`, {
           params: { userId: user.id }
         });
-        // Map the response to match the expected format
-        const leaguesWithParticipants = response.data.map(comp => ({
-          id: comp.leagueId,
-          name: comp.name,
-          sportKey: comp.sportKey,
-          status: comp.status,
-          commissionerId: comp.isCommissioner ? user.id : null,
-          participantCount: comp.managersCount || 0
-        }));
-        setLeagues(leaguesWithParticipants);
+        
+        // Get full details for each league
+        const leaguesWithDetails = await Promise.all(
+          response.data.map(async (comp) => {
+            try {
+              const leagueResponse = await axios.get(`${API}/leagues/${comp.leagueId}`);
+              const participantsResponse = await axios.get(`${API}/leagues/${comp.leagueId}/participants`);
+              return {
+                ...leagueResponse.data,
+                participantCount: participantsResponse.data.count || 0
+              };
+            } catch (err) {
+              console.error(`Error loading league ${comp.leagueId}:`, err);
+              return null;
+            }
+          })
+        );
+        
+        // Filter out any failed requests
+        setLeagues(leaguesWithDetails.filter(league => league !== null));
       } else {
         // If not logged in, show no leagues (they need to log in first)
         setLeagues([]);
