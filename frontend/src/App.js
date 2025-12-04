@@ -503,7 +503,7 @@ const Home = () => {
                       maxLength="100"
                     />
                     <p className="text-sm text-gray-500 mt-2">
-                      We'll send you a magic link to sign in securely
+                      We&apos;ll send you a magic link to sign in securely
                     </p>
                   </div>
                   <button
