@@ -153,7 +153,6 @@ const Home = () => {
   const [showCompetitionsCTA, setShowCompetitionsCTA] = useState(false);
 
   useEffect(() => {
-    loadLeagues();
     loadSports();
     
     // Load user from localStorage
@@ -168,10 +167,13 @@ const Home = () => {
     }
   }, []);
 
-  // Load user competitions when user changes
+  // Load leagues and user competitions when user changes
   useEffect(() => {
     if (user) {
+      loadLeagues();
       loadUserCompetitions(user.id);
+    } else {
+      setLeagues([]);
     }
   }, [user]);
 
