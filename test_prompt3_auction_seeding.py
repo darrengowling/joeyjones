@@ -8,7 +8,7 @@ import json
 import sys
 import time
 
-BACKEND_URL = "https://bat-and-ball-18.preview.emergentagent.com/api"
+BACKEND_URL = "https://leaguemaster-6.preview.emergentagent.com/api"
 
 def create_test_user(email_suffix):
     """Helper to create a test user"""

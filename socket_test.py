@@ -11,8 +11,8 @@ import time
 from datetime import datetime
 
 # Configuration
-BASE_URL = "https://bat-and-ball-18.preview.emergentagent.com/api"
-SOCKET_URL = "https://bat-and-ball-18.preview.emergentagent.com"
+BASE_URL = "https://leaguemaster-6.preview.emergentagent.com/api"
+SOCKET_URL = "https://leaguemaster-6.preview.emergentagent.com"
 SOCKET_PATH = "/api/socket.io"
 
 def test_socket_events():

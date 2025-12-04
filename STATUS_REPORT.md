@@ -699,7 +699,7 @@ app.add_middleware(
 ```
 
 **Configuration:**
-- **Allowed Origins:** `https://bat-and-ball-18.preview.emergentagent.com`
+- **Allowed Origins:** `https://leaguemaster-6.preview.emergentagent.com`
 - **Allowed Methods:** GET, POST, PUT, DELETE, OPTIONS (no wildcards)
 - **Allowed Headers:** Authorization, Content-Type, Accept (no wildcards)
 - **Credentials:** Enabled

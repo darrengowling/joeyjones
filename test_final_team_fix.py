@@ -7,7 +7,7 @@ import requests
 import json
 import time
 
-BACKEND_URL = "https://bat-and-ball-18.preview.emergentagent.com/api"
+BACKEND_URL = "https://leaguemaster-6.preview.emergentagent.com/api"
 
 def test_auction_complete_event_structure():
     """Verify the auction_complete event now includes finalClubId and finalWinningBid"""
