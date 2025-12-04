@@ -2697,6 +2697,125 @@ async def delete_league(league_id: str, commissioner_id: str = None, user_id: st
         "deletedData": delete_results
     }
 
+@api_router.post("/leagues/bulk-delete")
+async def bulk_delete_leagues(request: dict, user: dict = Depends(get_current_user)):
+    """
+    Bulk delete multiple leagues - only commissioner can delete their own leagues
+    
+    Request body: { "leagueIds": ["id1", "id2", ...] }
+    """
+    league_ids = request.get("leagueIds", [])
+    
+    if not league_ids:
+        raise HTTPException(status_code=400, detail="No league IDs provided")
+    
+    if len(league_ids) > 50:
+        raise HTTPException(status_code=400, detail="Cannot delete more than 50 leagues at once")
+    
+    results = {
+        "deleted": [],
+        "failed": [],
+        "totalDeleted": 0,
+        "totalFailed": 0
+    }
+    
+    for league_id in league_ids:
+        try:
+            # Get league
+            league = await db.leagues.find_one({"id": league_id}, {"_id": 0})
+            
+            if not league:
+                results["failed"].append({
+                    "leagueId": league_id,
+                    "reason": "League not found"
+                })
+                continue
+            
+            # Verify commissioner
+            if league["commissionerId"] != user["id"]:
+                results["failed"].append({
+                    "leagueId": league_id,
+                    "leagueName": league.get("name", "Unknown"),
+                    "reason": "Unauthorized - only commissioner can delete"
+                })
+                continue
+            
+            # Check if auction is active
+            existing_auction = await db.auctions.find_one({"leagueId": league_id}, {"_id": 0})
+            if existing_auction and existing_auction["status"] in ["active", "in_progress"]:
+                results["failed"].append({
+                    "leagueId": league_id,
+                    "leagueName": league.get("name", "Unknown"),
+                    "reason": "Cannot delete league with active auction"
+                })
+                continue
+            
+            # Cascade delete
+            delete_counts = {}
+            
+            # 1. Get auction IDs for this league
+            auctions = await db.auctions.find({"leagueId": league_id}, {"_id": 0, "id": 1}).to_list(10)
+            auction_ids = [a["id"] for a in auctions]
+            
+            # 2. Delete bids associated with these auctions
+            if auction_ids:
+                bid_result = await db.bids.delete_many({"auctionId": {"$in": auction_ids}})
+                delete_counts["bids"] = bid_result.deleted_count
+            
+            # 3. Delete auctions
+            auction_result = await db.auctions.delete_many({"leagueId": league_id})
+            delete_counts["auctions"] = auction_result.deleted_count
+            
+            # 4. Delete league participants
+            participant_result = await db.league_participants.delete_many({"leagueId": league_id})
+            delete_counts["participants"] = participant_result.deleted_count
+            
+            # 5. Delete standings
+            standings_result = await db.standings.delete_many({"leagueId": league_id})
+            delete_counts["standings"] = standings_result.deleted_count
+            
+            # 6. Delete league-specific fixtures (not shared ones)
+            fixtures_result = await db.fixtures.delete_many({"leagueId": league_id})
+            delete_counts["fixtures"] = fixtures_result.deleted_count
+            
+            # 7. Delete league points
+            points_result = await db.league_points.delete_many({"leagueId": league_id})
+            delete_counts["points"] = points_result.deleted_count
+            
+            # 8. Delete the league itself
+            league_result = await db.leagues.delete_one({"id": league_id})
+            delete_counts["league"] = league_result.deleted_count
+            
+            # Cancel any active timers
+            for auction_id in auction_ids:
+                if auction_id in active_timers:
+                    active_timers[auction_id].cancel()
+                    del active_timers[auction_id]
+            
+            results["deleted"].append({
+                "leagueId": league_id,
+                "leagueName": league.get("name", "Unknown"),
+                "deletedCounts": delete_counts
+            })
+            results["totalDeleted"] += 1
+            
+            logger.info(f"Bulk deleted league {league_id}: {delete_counts}")
+            
+        except Exception as e:
+            logger.error(f"Error deleting league {league_id}: {str(e)}")
+            results["failed"].append({
+                "leagueId": league_id,
+                "reason": f"Error: {str(e)}"
+            })
+            results["totalFailed"] += 1
+    
+    results["totalFailed"] = len(results["failed"])
+    
+    return {
+        "message": f"Bulk delete completed: {results['totalDeleted']} deleted, {results['totalFailed']} failed",
+        "results": results
+    }
+
 @api_router.put("/leagues/{league_id}/scoring-overrides")
 async def update_league_scoring_overrides(league_id: str, request: dict):
     """Update scoring overrides for a cricket league (commissioner only)"""
