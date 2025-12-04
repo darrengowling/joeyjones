@@ -3287,12 +3287,10 @@ async def start_auction(league_id: str):
     # Get assets based on feature flag and league selection
     import random
     assets_selected = league.get("assetsSelected", [])
-    seed_mode = "all"  # Default mode
     
     # Feature flag: Only use assetsSelected if FEATURE_ASSET_SELECTION is enabled
     if FEATURE_ASSET_SELECTION and assets_selected and len(assets_selected) > 0:
         # Use commissioner's selected assets (feature flag ON + assets selected)
-        seed_mode = "selected"
         if sport_key == "football":
             all_assets = await db.assets.find({"id": {"$in": assets_selected}}).to_list(100)
         else:
