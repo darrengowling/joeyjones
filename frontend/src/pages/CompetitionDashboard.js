@@ -295,7 +295,8 @@ export default function CompetitionDashboard() {
       }
     } catch (e) {
       console.error("Error importing next cricket fixture:", e);
-      toast.error("Failed to import fixture. Please try again.");
+      const errorMsg = e.response?.data?.detail || "Failed to import fixture. No upcoming matches found or API rate limit reached. Try again later.";
+      toast.error(errorMsg);
     } finally {
       setImportingFixture(false);
     }
