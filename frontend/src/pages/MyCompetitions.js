@@ -253,7 +253,7 @@ export default function MyCompetitions() {
           <div className="bg-white rounded-lg shadow-lg p-12 text-center">
             <div className="text-6xl mb-4">🏆</div>
             <h2 className="h2 text-2xl font-bold mb-4 text-gray-900">
-              You're not in any competitions yet
+              You&apos;re not in any competitions yet
             </h2>
             <p className="text-gray-600 mb-8">
               Create your own competition or join an existing one with an invite code.
