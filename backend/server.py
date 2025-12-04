@@ -535,6 +535,223 @@ async def import_next_cricket_fixture(league_id: str):
         raise HTTPException(status_code=500, detail=f"Error importing fixture: {str(e)}")
 
 
+
+async def process_cricket_scorecard(db, fixture_id: str, league_id: str, match_id: str, scorecard: dict):
+    """
+    Process cricket scorecard and calculate fantasy points for each player
+    
+    Args:
+        db: Database connection
+        fixture_id: Fixture ID
+        league_id: League ID
+        match_id: External match ID from Cricbuzz
+        scorecard: Scorecard data from Cricbuzz API
+    """
+    from services.scoring.cricket import get_cricket_points
+    
+    # Get league to fetch scoring schema
+    league = await db.leagues.find_one({"id": league_id})
+    if not league:
+        logger.error(f"League {league_id} not found for scorecard processing")
+        return
+    
+    scoring_schema = league.get("scoringSchema", {
+        "rules": {
+            "run": 1,
+            "wicket": 25,
+            "catch": 8,
+            "stumping": 12,
+            "runOut": 6
+        },
+        "milestones": {
+            "halfCentury": {"enabled": True, "threshold": 50, "points": 8},
+            "century": {"enabled": True, "threshold": 100, "points": 16},
+            "fiveWicketHaul": {"enabled": True, "threshold": 5, "points": 16}
+        }
+    })
+    
+    # Get all players (assets) in this league
+    league_assets = league.get("assetsSelected", [])
+    
+    # Get asset details to match by player name
+    assets = await db.assets.find({"id": {"$in": league_assets}}, {"_id": 0}).to_list(1000)
+    asset_map = {asset["name"].lower(): asset["id"] for asset in assets}
+    
+    players_processed = 0
+    
+    # Process scorecard data
+    for innings in scorecard.get("scorecard", []):
+        # Process batsmen
+        for batsman in innings.get("batsman", []):
+            player_name = batsman.get("name", "").strip()
+            if not player_name:
+                continue
+            
+            # Try to match player to asset
+            player_name_lower = player_name.lower()
+            asset_id = None
+            
+            # Exact match first
+            if player_name_lower in asset_map:
+                asset_id = asset_map[player_name_lower]
+            else:
+                # Try partial match (e.g., "Joe Root" matches "Root")
+                for asset_name, aid in asset_map.items():
+                    if player_name_lower in asset_name or asset_name in player_name_lower:
+                        asset_id = aid
+                        break
+            
+            if not asset_id:
+                continue  # Player not in this league
+            
+            # Extract batting performance
+            runs = int(batsman.get("runs", 0))
+            
+            # Calculate batting points
+            performance_data = {
+                "runs": runs,
+                "wickets": 0,
+                "catches": 0,
+                "stumpings": 0,
+                "runOuts": 0
+            }
+            
+            batting_points = get_cricket_points(performance_data, scoring_schema)
+            
+            # Save/update in league_stats
+            await db.league_stats.update_one(
+                {
+                    "leagueId": league_id,
+                    "matchId": match_id,
+                    "playerExternalId": asset_id,
+                    "role": "batting"
+                },
+                {
+                    "$set": {
+                        "leagueId": league_id,
+                        "matchId": match_id,
+                        "playerExternalId": asset_id,
+                        "playerName": player_name,
+                        "role": "batting",
+                        "points": batting_points,
+                        "performance": performance_data,
+                        "updatedAt": datetime.now(timezone.utc)
+                    }
+                },
+                upsert=True
+            )
+            
+            players_processed += 1
+            logger.info(f"Processed {player_name}: {runs} runs = {batting_points} points")
+        
+        # Process bowlers
+        for bowler in innings.get("bowler", []):
+            player_name = bowler.get("name", "").strip()
+            if not player_name:
+                continue
+            
+            # Try to match player to asset
+            player_name_lower = player_name.lower()
+            asset_id = None
+            
+            if player_name_lower in asset_map:
+                asset_id = asset_map[player_name_lower]
+            else:
+                for asset_name, aid in asset_map.items():
+                    if player_name_lower in asset_name or asset_name in player_name_lower:
+                        asset_id = aid
+                        break
+            
+            if not asset_id:
+                continue
+            
+            # Extract bowling performance
+            wickets = int(bowler.get("wickets", 0))
+            
+            performance_data = {
+                "runs": 0,
+                "wickets": wickets,
+                "catches": 0,
+                "stumpings": 0,
+                "runOuts": 0
+            }
+            
+            bowling_points = get_cricket_points(performance_data, scoring_schema)
+            
+            # Save/update in league_stats
+            await db.league_stats.update_one(
+                {
+                    "leagueId": league_id,
+                    "matchId": match_id,
+                    "playerExternalId": asset_id,
+                    "role": "bowling"
+                },
+                {
+                    "$set": {
+                        "leagueId": league_id,
+                        "matchId": match_id,
+                        "playerExternalId": asset_id,
+                        "playerName": player_name,
+                        "role": "bowling",
+                        "points": bowling_points,
+                        "performance": performance_data,
+                        "updatedAt": datetime.now(timezone.utc)
+                    }
+                },
+                upsert=True
+            )
+            
+            players_processed += 1
+            logger.info(f"Processed {player_name}: {wickets} wickets = {bowling_points} points")
+    
+    # Update standings after processing all players
+    if players_processed > 0:
+        await update_cricket_standings(db, league_id)
+    
+    logger.info(f"Processed {players_processed} player performances for match {match_id}")
+
+
+async def update_cricket_standings(db, league_id: str):
+    """
+    Update league standings based on player stats
+    """
+    # Get all participants
+    participants = await db.league_participants.find({"leagueId": league_id}).to_list(1000)
+    
+    for participant in participants:
+        manager_id = participant["userId"]
+        assets_won = participant.get("clubsWon", [])  # Player IDs
+        
+        # Calculate total points for this manager
+        total_points = 0
+        
+        for asset_id in assets_won:
+            # Sum points from all matches for this player
+            stats = await db.league_stats.find({
+                "leagueId": league_id,
+                "playerExternalId": asset_id
+            }).to_list(1000)
+            
+            for stat in stats:
+                total_points += stat.get("points", 0)
+        
+        # Update standings
+        await db.standings.update_one(
+            {"leagueId": league_id, "managerId": manager_id},
+            {
+                "$set": {
+                    "leagueId": league_id,
+                    "managerId": manager_id,
+                    "totalPoints": total_points,
+                    "updatedAt": datetime.now(timezone.utc)
+                }
+            },
+            upsert=True
+        )
+    
+    logger.info(f"Updated standings for league {league_id}")
+
+
 @api_router.post("/cricket/update-scores")
 async def update_cricket_scores():
     """
