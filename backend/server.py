@@ -1305,27 +1305,42 @@ async def get_assets(sportKey: str, search: Optional[str] = None, page: int = 1,
 
 @api_router.get("/leagues/{league_id}/assets")
 async def get_league_assets(league_id: str, search: Optional[str] = None, page: int = 1, pageSize: int = 100):
-    """Get assets for a specific league based on its sportKey"""
-    # Get league to determine sportKey
+    """Get assets for a specific league - returns SELECTED assets if they exist, otherwise all available"""
+    # Get league to determine sportKey and selected assets
     league = await db.leagues.find_one({"id": league_id}, {"_id": 0})
     if not league:
         raise HTTPException(status_code=404, detail="League not found")
     
-    sport_key = league.get("sportKey", "football")  # Default to football for backward compatibility
+    sport_key = league.get("sportKey", "football")
+    selected_asset_ids = league.get("assetsSelected", [])
     
-    # For football, return all clubs from assets collection
-    if sport_key == "football":
-        clubs = await db.assets.find({"sportKey": "football"}, {"_id": 0}).to_list(100)
-        clubs_as_models = [Club(**club) for club in clubs]
-        # Format to match asset_service response structure
+    # If assets have been selected, return only those
+    if selected_asset_ids and len(selected_asset_ids) > 0:
+        assets = await db.assets.find(
+            {"id": {"$in": selected_asset_ids}},
+            {"_id": 0}
+        ).to_list(len(selected_asset_ids))
+        
+        # Return selected assets without Pydantic validation (avoid type errors)
         return {
-            "assets": [{"id": c.id, "name": c.name, "uefaId": c.uefaId, "country": c.country, "logo": c.logo} for c in clubs_as_models],
-            "total": len(clubs_as_models),
+            "assets": assets,
+            "total": len(assets),
             "page": 1,
-            "pageSize": len(clubs_as_models)
+            "pageSize": len(assets)
         }
     
-    # For other sports, use asset_service with increased page size
+    # Otherwise, return all assets for selection (no assets selected yet)
+    if sport_key == "football":
+        clubs = await db.assets.find({"sportKey": "football"}, {"_id": 0}).to_list(100)
+        # Return without Pydantic validation to avoid apiFootballId type errors
+        return {
+            "assets": clubs,
+            "total": len(clubs),
+            "page": 1,
+            "pageSize": len(clubs)
+        }
+    
+    # For other sports, use asset_service
     return await asset_service.list_assets(sport_key, search, page, pageSize)
 
 # ===== CLUB ENDPOINTS =====
