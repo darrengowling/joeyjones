@@ -2319,7 +2319,7 @@ async def import_fixtures_from_api(
     if not commissionerId or league["commissionerId"] != commissionerId:
         raise HTTPException(
             status_code=403, 
-            detail="Only the league commissioner can import fixtures"
+            detail="Only the league commissioner can import fixtures. Contact the commissioner if you need fixtures imported."
         )
     
     # Validation - refuse import when auction is active
