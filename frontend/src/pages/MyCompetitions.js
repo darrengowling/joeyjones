@@ -310,6 +310,16 @@ export default function MyCompetitions() {
               >
                 <div className="flex justify-between items-start mb-4">
                   <div className="flex items-center gap-3">
+                    {/* Checkbox for commissioner's non-active leagues */}
+                    {comp.isCommissioner && comp.status !== "active" && (
+                      <input
+                        type="checkbox"
+                        checked={selectedLeagues.has(comp.leagueId)}
+                        onChange={() => toggleSelectLeague(comp.leagueId)}
+                        className="w-5 h-5 text-blue-600 rounded"
+                        onClick={(e) => e.stopPropagation()}
+                      />
+                    )}
                     <span className="text-3xl">{getSportEmoji(comp.sportKey)}</span>
                     <div>
                       <h2 className="h2 text-xl font-bold text-gray-900">{comp.name}</h2>
