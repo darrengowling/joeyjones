@@ -2138,9 +2138,9 @@ async def import_fixtures_csv(league_id: str, file: UploadFile = File(...), comm
             detail="Only the league commissioner can import fixtures"
         )
     
-    # Prompt 6: Validation - refuse import when auction is not auction_complete
+    # Prompt 6: Validation - refuse import when auction is active
     auction = await db.auctions.find_one({"leagueId": league_id}, {"_id": 0})
-    if auction and auction["status"] != "completed":
+    if auction and auction["status"] not in ["completed", "auction_complete"]:
         raise HTTPException(
             status_code=400,
             detail="Cannot import fixtures while auction is in progress. Please complete the auction first."
