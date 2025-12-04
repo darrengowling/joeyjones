@@ -341,6 +341,34 @@ export default function LeagueDetail() {
     }
   };
 
+  const handleImportFootballFixtures = async () => {
+    setImportingFixtures(true);
+    try {
+      const response = await axios.post(`${API}/leagues/${leagueId}/fixtures/import-from-api`, { days: 7 });
+      setFixturesImported(true);
+      toast.success(`✅ Imported ${response.data.fixturesImported || 0} fixtures successfully`);
+    } catch (error) {
+      console.error("Error importing fixtures:", error);
+      toast.error("❌ Failed to import fixtures. You can try again later from the Competition Dashboard.");
+    } finally {
+      setImportingFixtures(false);
+    }
+  };
+
+  const handleImportCricketFixture = async () => {
+    setImportingFixtures(true);
+    try {
+      await axios.post(`${API}/leagues/${leagueId}/fixtures/import-next-cricket-fixture`);
+      setFixturesImported(true);
+      toast.success(`✅ Imported next cricket fixture successfully`);
+    } catch (error) {
+      console.error("Error importing fixture:", error);
+      toast.error("❌ Failed to import fixture. You can try again later from the Competition Dashboard.");
+    } finally {
+      setImportingFixtures(false);
+    }
+  };
+
   const startAuction = async () => {
     if (!user) {
       toast.error("Please sign in first");
