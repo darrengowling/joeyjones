@@ -147,7 +147,7 @@ export default function MyCompetitions() {
             onClick={() => navigate("/")}
             className="h2 text-blue-600 hover:text-blue-800 cursor-pointer"
           >
-            ← Friends of PIFA
+            ← Sport X
           </button>
           {user && (
             <div className="flex items-center gap-4">
