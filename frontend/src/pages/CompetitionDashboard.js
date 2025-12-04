@@ -263,7 +263,7 @@ export default function CompetitionDashboard() {
       console.error("Error updating cricket scores:", e);
       toast.error("Failed to update cricket scores. Please try again.");
     } finally {
-      setLoading(false);
+      setUpdatingScores(false);
     }
   };
 
