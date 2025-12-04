@@ -375,8 +375,8 @@ const Home = () => {
       navigate(`/league/${response.data.id}`);
     } catch (e) {
       console.error("Error creating league:", e);
-      const errorMessage = e.response?.data?.detail || e.message || "Unknown error creating league";
-      toast.error(`Error creating league: ${errorMessage}`);
+      const errorMessage = e.response?.data?.detail || e.message || "Unable to create competition. Check your internet connection and try again.";
+      toast.error(errorMessage);
     } finally {
       setCreatingLeague(false);
     }
