@@ -231,18 +231,30 @@ const Help = () => {
               </p>
 
               <div className="bg-gray-50 rounded-lg p-4 mb-4">
-                <h5 className="font-semibold text-gray-900 mb-2">Step 1: Import Fixtures</h5>
+                <h5 className="font-semibold text-gray-900 mb-2">Import Fixtures (Multiple Options)</h5>
+                <p className="text-gray-700 mb-2">You can import fixtures at different stages:</p>
+                <ul className="list-disc list-inside space-y-2 text-gray-700 ml-4">
+                  <li><strong>Before Auction:</strong> On the league detail page (helps managers see upcoming matches during bidding)</li>
+                  <li><strong>After Auction:</strong> On the Competition Dashboard → Fixtures tab (for ongoing management)</li>
+                </ul>
+                <p className="text-gray-600 text-sm mt-2">
+                  <strong>Note:</strong> Fixtures imported before the auction will automatically appear on the Dashboard after the auction completes.
+                </p>
+              </div>
+
+              <div className="bg-gray-50 rounded-lg p-4 mb-4">
+                <h5 className="font-semibold text-gray-900 mb-2">How Fixture Import Works:</h5>
                 <ol className="list-decimal list-inside space-y-2 text-gray-700">
-                  <li>Navigate to your competition dashboard from "My Competitions"</li>
-                  <li>Click the <strong>"Fixtures"</strong> tab</li>
-                  <li>Click the <strong>"Import Fixtures"</strong> or <strong>"Import Next Fixture"</strong> button</li>
+                  <li>Navigate to Competition Dashboard → <strong>"Fixtures"</strong> tab</li>
+                  <li>Click <strong>"Import Fixtures"</strong> (Football) or <strong>"Import Next Fixture"</strong> (Cricket)</li>
                   <li>The system automatically fetches upcoming matches from live sports data APIs</li>
-                  <li>Imported fixtures appear instantly with match dates and teams</li>
+                  <li>You'll see a confirmation message showing how many fixtures were imported/updated</li>
+                  <li>Imported fixtures appear with match dates, venues, and competing teams</li>
                 </ol>
               </div>
 
               <div className="bg-gray-50 rounded-lg p-4 mb-4">
-                <h5 className="font-semibold text-gray-900 mb-2">Step 2: Update Scores (Automatic)</h5>
+                <h5 className="font-semibold text-gray-900 mb-2">Update Scores (Automatic)</h5>
                 <ol className="list-decimal list-inside space-y-2 text-gray-700">
                   <li>After a real match concludes, go to the <strong>"Fixtures"</strong> tab</li>
                   <li>Find the completed match in the fixtures list</li>
