@@ -13,6 +13,9 @@ export default function MyCompetitions() {
   const [sports, setSports] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [selectedLeagues, setSelectedLeagues] = useState(new Set());
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   // Set page title
   useEffect(() => {
