@@ -1271,10 +1271,11 @@ async def get_league_fixtures(league_id: str):
 
 
 @api_router.get("/assets/{asset_id}/next-fixture")
-async def get_asset_next_fixture(asset_id: str):
+async def get_asset_next_fixture(asset_id: str, leagueId: str = None):
     """
     Get the next upcoming fixture for a specific asset (team/player)
     Returns the earliest scheduled fixture where this asset is playing
+    Optionally filtered by league's competition if leagueId is provided
     """
     try:
         # Get asset details to fetch team name
@@ -1286,33 +1287,40 @@ async def get_asset_next_fixture(asset_id: str):
         if not asset_name:
             return {"fixture": None, "message": "Asset name not found"}
         
-        # Query for next fixture where this asset is playing
-        # Check both homeTeam/awayTeam (name-based) and homeTeamId/awayTeamId (id-based)
+        # Build query conditions
         now = datetime.now(timezone.utc)
         now_str = now.isoformat()
+        
+        query_conditions = [
+            {
+                "$or": [
+                    {"homeTeam": asset_name},
+                    {"awayTeam": asset_name},
+                    {"homeTeamId": asset_id},
+                    {"awayTeamId": asset_id}
+                ]
+            },
+            {
+                "$or": [
+                    {"matchDate": {"$gte": now_str}},
+                    {"startsAt": {"$gte": now}}
+                ]
+            },
+            {"status": {"$in": ["scheduled", "ns", "NS", "SCHEDULED"]}}
+        ]
+        
+        # If leagueId provided, filter by that league's competition
+        if leagueId:
+            league = await db.leagues.find_one({"id": leagueId}, {"_id": 0, "competitionCode": 1})
+            if league:
+                competition_code = league.get("competitionCode")
+                if competition_code:
+                    query_conditions.append({"competition": competition_code})
         
         # Use find() with sort and limit to get the earliest fixture
         # Handle both matchDate (string) and startsAt (datetime) fields
         cursor = db.fixtures.find(
-            {
-                "$and": [
-                    {
-                        "$or": [
-                            {"homeTeam": asset_name},
-                            {"awayTeam": asset_name},
-                            {"homeTeamId": asset_id},
-                            {"awayTeamId": asset_id}
-                        ]
-                    },
-                    {
-                        "$or": [
-                            {"matchDate": {"$gte": now_str}},
-                            {"startsAt": {"$gte": now}}
-                        ]
-                    },
-                    {"status": {"$in": ["scheduled", "ns", "NS", "SCHEDULED"]}}
-                ]
-            },
+            {"$and": query_conditions},
             {"_id": 0}
         ).sort([("matchDate", 1), ("startsAt", 1)]).limit(1)
         
