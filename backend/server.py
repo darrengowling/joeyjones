@@ -2623,8 +2623,21 @@ async def import_fixtures_csv(league_id: str, file: UploadFile = File(...), comm
             
             # Look up asset IDs
             if sport_key == "football":
-                home_asset = await db.assets.find_one({"uefaId": home_external_id}, {"_id": 0})
-                away_asset = await db.assets.find_one({"uefaId": away_external_id}, {"_id": 0}) if away_external_id else None
+                # Look up by uefaId (for PL/CL) or externalId (for AFCON)
+                home_asset = await db.assets.find_one({
+                    "sportKey": "football",
+                    "$or": [
+                        {"uefaId": home_external_id},
+                        {"externalId": home_external_id}
+                    ]
+                }, {"_id": 0})
+                away_asset = await db.assets.find_one({
+                    "sportKey": "football",
+                    "$or": [
+                        {"uefaId": away_external_id},
+                        {"externalId": away_external_id}
+                    ]
+                }, {"_id": 0}) if away_external_id else None
             else:
                 # For cricket, look up by externalId or name
                 home_asset = await db.assets.find_one({
