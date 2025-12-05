@@ -558,15 +558,15 @@ async def process_cricket_scorecard(db, fixture_id: str, league_id: str, match_i
     scoring_schema = league.get("scoringSchema", {
         "rules": {
             "run": 1,
-            "wicket": 25,
+            "wicket": 20,
             "catch": 10,
-            "stumping": 12,
-            "runOut": 6
+            "stumping": 25,
+            "runOut": 20
         },
         "milestones": {
-            "halfCentury": {"enabled": True, "threshold": 50, "points": 8},
-            "century": {"enabled": True, "threshold": 100, "points": 16},
-            "fiveWicketHaul": {"enabled": True, "threshold": 5, "points": 16}
+            "halfCentury": {"enabled": False, "threshold": 50, "points": 0},
+            "century": {"enabled": False, "threshold": 100, "points": 0},
+            "fiveWicketHaul": {"enabled": False, "threshold": 5, "points": 0}
         }
     })
     
