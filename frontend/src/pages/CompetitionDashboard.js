@@ -891,6 +891,31 @@ export default function CompetitionDashboard() {
 
             <div className="bg-white rounded-lg shadow p-6" data-testid="fixtures-upload">
               <h3 className="text-lg font-bold text-gray-900 mb-3">Import Fixtures (CSV)</h3>
+              
+              {/* AFCON Template Download Section */}
+              {summary?.competitionCode === 'AFCON' && (
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                  <h4 className="text-sm font-semibold text-blue-900 mb-2">📋 Step-by-Step Guide:</h4>
+                  <ol className="text-sm text-gray-700 space-y-1 mb-3 list-decimal list-inside">
+                    <li>Download the template below (includes all AFCON 2025 group stage fixtures)</li>
+                    <li>Open in Excel, Google Sheets, or any spreadsheet app</li>
+                    <li>Fill in the <strong>goalsHome</strong> and <strong>goalsAway</strong> columns with match scores</li>
+                    <li>Save the file (keep as CSV format)</li>
+                    <li>Upload it using the button below</li>
+                  </ol>
+                  <a
+                    href="/templates/afcon_2025_group_stage_fixtures.csv"
+                    download="afcon_2025_fixtures.csv"
+                    className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 font-semibold text-sm"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    Download AFCON Fixtures Template
+                  </a>
+                </div>
+              )}
+              
               <p className="text-sm text-gray-600 mb-4">
                 {summary?.sportKey === 'football' ? (
                   <>
