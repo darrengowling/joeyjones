@@ -632,6 +632,7 @@ const Home = () => {
                   >
                     <option value="PL">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League</option>
                     <option value="CL">🏆 Champions League</option>
+                    <option value="AFCON">🌍 AFCON</option>
                   </select>
                   <p className="text-sm text-gray-500 mt-2">
                     Select which competition to run
