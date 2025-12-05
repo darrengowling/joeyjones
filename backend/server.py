@@ -2583,7 +2583,12 @@ async def import_fixtures_csv(league_id: str, file: UploadFile = File(...), comm
                         winner = "away"
                     else:
                         winner = "draw"
+                    
+                    # Auto-mark as completed when scores are provided
+                    status_val = "completed"
+                    logger.info(f"✅ Match {external_match_id}: Scores {goals_home}-{goals_away}, Winner: {winner}, Status: {status_val}")
                 except ValueError:
+                    logger.warning(f"⚠️ Invalid score format for {external_match_id}: '{goals_home_str}'-'{goals_away_str}'")
                     pass  # Invalid scores, leave as None
             
             # For international matches (no home/away specified), create fixture with nulls
