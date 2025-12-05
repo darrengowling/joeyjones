@@ -619,6 +619,25 @@ const Home = () => {
                 </p>
               </div>
 
+              {/* Competition Selector (Football Only) */}
+              {leagueForm.sportKey === "football" && (
+                <div className="mb-6">
+                  <label className="block text-gray-700 mb-2 font-semibold">Competition</label>
+                  <select
+                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    value={leagueForm.competitionCode || "PL"}
+                    onChange={(e) => setLeagueForm({ ...leagueForm, competitionCode: e.target.value })}
+                    data-testid="create-competition-select"
+                  >
+                    <option value="PL">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League</option>
+                    <option value="CL">🏆 Champions League</option>
+                  </select>
+                  <p className="text-sm text-gray-500 mt-2">
+                    Select which competition to run
+                  </p>
+                </div>
+              )}
+
               <div className="mb-6">
                 <label className="block text-gray-700 mb-2 font-semibold">
                   Budget per Manager
