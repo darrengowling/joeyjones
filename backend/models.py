@@ -154,10 +154,15 @@ class Fixture(BaseModel):
     externalMatchId: Optional[str] = None
     homeAssetId: Optional[str] = None  # clubId or playerId depending on sport (None for international matches)
     awayAssetId: Optional[str] = None  # null for cricket or BYE fixtures
+    homeTeam: Optional[str] = None  # Team name for display
+    awayTeam: Optional[str] = None  # Team name for display
     startsAt: datetime
     venue: Optional[str] = None
     round: Optional[str] = None
-    status: str = "scheduled"  # scheduled|live|final
+    status: str = "scheduled"  # scheduled|live|final|completed
+    goalsHome: Optional[int] = None  # For football - home team goals
+    goalsAway: Optional[int] = None  # For football - away team goals
+    winner: Optional[str] = None  # "home"|"away"|"draw"
     source: str = "manual"  # csv|provider|manual
     createdAt: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     updatedAt: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
