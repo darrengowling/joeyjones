@@ -193,6 +193,7 @@ class LeagueCreate(BaseModel):
     maxManagers: int = 8
     clubSlots: int = 3
     sportKey: str = "football"  # Default to football
+    competitionCode: Optional[str] = "PL"  # Competition code for football (PL, CL, etc.)
     # Prompt D: Timer configuration in league creation
     timerSeconds: int = 30  # Default 30s
     antiSnipeSeconds: int = 10  # Default 10s
