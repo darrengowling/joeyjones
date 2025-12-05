@@ -38,7 +38,7 @@ Add support for AFCON 2025/26 competition with 24 qualified teams using manual C
 - Sudan
 
 ### Group F
-- Côte d'Ivoire (Ivory Coast)
+- Ivory Coast
 - Cameroon
 - Gabon
 - Mozambique
