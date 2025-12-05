@@ -2661,7 +2661,7 @@ async def import_fixtures_csv(league_id: str, file: UploadFile = File(...), comm
                 }) if away_external_id else None
             
             if not home_asset:
-                logger.warning(f"Home asset not found: {home_external_id}")
+                logger.warning(f"⚠️ Home asset not found: {home_external_id}")
                 continue
                 
             home_asset_id = home_asset["id"]
@@ -2688,26 +2688,35 @@ async def import_fixtures_csv(league_id: str, file: UploadFile = File(...), comm
                 source="csv"
             )
             
+            logger.info(f"📝 Creating fixture {external_match_id}: {home_team_name} vs {away_team_name} | Status: {status_val} | Scores: {goals_home}-{goals_away} | Winner: {winner}")
+            
             # Upsert fixture
+            fixture_doc = fixture.model_dump()
             if external_match_id:
                 # Update by external match ID
-                await db.fixtures.update_one(
-                    {"leagueId": league_id, "externalMatchId": external_match_id},
-                    {"$set": fixture.model_dump()},
+                query = {"leagueId": league_id, "externalMatchId": external_match_id}
+                logger.info(f"💾 Upserting fixture with query: {query}")
+                result = await db.fixtures.update_one(
+                    query,
+                    {"$set": fixture_doc},
                     upsert=True
                 )
+                logger.info(f"✅ Upsert result: matched={result.matched_count}, modified={result.modified_count}, upserted_id={result.upserted_id}")
             else:
                 # Update by home/away/time combination
-                await db.fixtures.update_one(
-                    {
-                        "leagueId": league_id,
-                        "homeAssetId": home_asset_id,
-                        "awayAssetId": away_asset_id,
-                        "startsAt": starts_at
-                    },
-                    {"$set": fixture.model_dump()},
+                query = {
+                    "leagueId": league_id,
+                    "homeAssetId": home_asset_id,
+                    "awayAssetId": away_asset_id,
+                    "startsAt": starts_at
+                }
+                logger.info(f"💾 Upserting fixture with query: {query}")
+                result = await db.fixtures.update_one(
+                    query,
+                    {"$set": fixture_doc},
                     upsert=True
                 )
+                logger.info(f"✅ Upsert result: matched={result.matched_count}, modified={result.modified_count}, upserted_id={result.upserted_id}")
             
             fixtures_imported += 1
         
