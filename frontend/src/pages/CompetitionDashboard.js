@@ -955,12 +955,13 @@ export default function CompetitionDashboard() {
               </div>
             </div>
 
-            {/* Score Upload Panel */}
-            <div className="bg-green-50 border-2 border-green-200 rounded-lg shadow p-6" data-testid="score-upload">
-              <h3 className="text-lg font-bold text-green-900 mb-3">📊 Upload Match Scores (CSV)</h3>
-              <p className="text-sm text-gray-700 mb-2">
-                Upload match results after a game is complete. Required columns: matchId, playerExternalId, runs, wickets, catches, stumpings, runOuts
-              </p>
+            {/* Score Upload Panel - Cricket Only */}
+            {summary?.sportKey === 'cricket' && (
+              <div className="bg-green-50 border-2 border-green-200 rounded-lg shadow p-6" data-testid="score-upload">
+                <h3 className="text-lg font-bold text-green-900 mb-3">📊 Upload Match Scores (CSV)</h3>
+                <p className="text-sm text-gray-700 mb-2">
+                  Upload match results after a game is complete. Required columns: matchId, playerExternalId, runs, wickets, catches, stumpings, runOuts
+                </p>
               
               {/* Important Note about Match IDs */}
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
