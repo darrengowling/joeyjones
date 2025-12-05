@@ -142,13 +142,13 @@ GET /api/scoring/{leagueId}/leaderboard
 
 **Check Players Loaded:**
 ```bash
-curl "https://prelaunch-fix.preview.emergentagent.com/api/assets?sportKey=cricket" | jq '.pagination.total'
+curl "https://cricket-fantasy-app-2.preview.emergentagent.com/api/assets?sportKey=cricket" | jq '.pagination.total'
 # Should return: 30
 ```
 
 **Check Scoring Rules:**
 ```bash
-curl "https://prelaunch-fix.preview.emergentagent.com/api/sports/cricket" | jq '.scoringSchema'
+curl "https://cricket-fantasy-app-2.preview.emergentagent.com/api/sports/cricket" | jq '.scoringSchema'
 # Verify: run=1, wicket=20, catch=10, stumping=10, runOut=10, milestones={}
 ```
 

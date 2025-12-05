@@ -24,7 +24,7 @@ import time
 import uuid
 
 # Get backend URL from environment
-BACKEND_URL = os.getenv('REACT_APP_BACKEND_URL', 'https://prelaunch-fix.preview.emergentagent.com')
+BACKEND_URL = os.getenv('REACT_APP_BACKEND_URL', 'https://cricket-fantasy-app-2.preview.emergentagent.com')
 API_BASE = f"{BACKEND_URL}/api"
 SOCKET_URL = f"{BACKEND_URL}/api/socket.io"
 

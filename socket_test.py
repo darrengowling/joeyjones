@@ -11,8 +11,8 @@ import time
 from datetime import datetime
 
 # Configuration
-BASE_URL = "https://prelaunch-fix.preview.emergentagent.com/api"
-SOCKET_URL = "https://prelaunch-fix.preview.emergentagent.com"
+BASE_URL = "https://cricket-fantasy-app-2.preview.emergentagent.com/api"
+SOCKET_URL = "https://cricket-fantasy-app-2.preview.emergentagent.com"
 SOCKET_PATH = "/api/socket.io"
 
 def test_socket_events():

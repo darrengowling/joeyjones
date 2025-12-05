@@ -8,7 +8,7 @@ export default defineConfig({
   workers: 1, // Single worker for auction tests to avoid conflicts
   reporter: 'html',
   use: {
-    baseURL: 'https://prelaunch-fix.preview.emergentagent.com',
+    baseURL: 'https://cricket-fantasy-app-2.preview.emergentagent.com',
     trace: 'on-first-retry',
     video: 'retain-on-failure',
     screenshot: 'only-on-failure',

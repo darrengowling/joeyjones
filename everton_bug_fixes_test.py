@@ -16,8 +16,8 @@ from datetime import datetime, timezone
 from typing import Dict, List, Optional
 
 # Configuration
-BASE_URL = "https://prelaunch-fix.preview.emergentagent.com/api"
-SOCKET_URL = "https://prelaunch-fix.preview.emergentagent.com"
+BASE_URL = "https://cricket-fantasy-app-2.preview.emergentagent.com/api"
+SOCKET_URL = "https://cricket-fantasy-app-2.preview.emergentagent.com"
 SOCKET_PATH = "/api/socket.io"
 
 class EvertonBugFixesTester:

@@ -8,7 +8,7 @@ import json
 import sys
 import time
 
-BACKEND_URL = "https://prelaunch-fix.preview.emergentagent.com/api"
+BACKEND_URL = "https://cricket-fantasy-app-2.preview.emergentagent.com/api"
 
 def create_test_user(email_suffix):
     """Helper to create a test user"""
