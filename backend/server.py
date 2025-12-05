@@ -747,6 +747,60 @@ async def process_cricket_scorecard(db, fixture_id: str, league_id: str, match_i
             players_processed += 1
             logger.info(f"Processed {player_name}: {wickets} wickets = {bowling_points} points")
     
+    # Process fielding contributions (catches, stumpings, run-outs)
+    for fielder_name, fielding_data in fielding_stats.items():
+        # Try to match fielder to asset
+        fielder_name_lower = fielder_name.lower()
+        asset_id = None
+        
+        if fielder_name_lower in asset_map:
+            asset_id = asset_map[fielder_name_lower]
+        else:
+            for asset_name, aid in asset_map.items():
+                if fielder_name_lower in asset_name or asset_name in fielder_name_lower:
+                    asset_id = aid
+                    break
+        
+        if not asset_id:
+            continue
+        
+        # Calculate fielding points
+        performance_data = {
+            "runs": 0,
+            "wickets": 0,
+            "catches": fielding_data["catches"],
+            "stumpings": fielding_data["stumpings"],
+            "runOuts": fielding_data["runOuts"]
+        }
+        
+        fielding_points = get_cricket_points(performance_data, scoring_schema)
+        
+        # Save/update in league_stats
+        await db.league_stats.update_one(
+            {
+                "leagueId": league_id,
+                "matchId": match_id,
+                "playerExternalId": asset_id,
+                "role": "fielding"
+            },
+            {
+                "$set": {
+                    "leagueId": league_id,
+                    "matchId": match_id,
+                    "playerExternalId": asset_id,
+                    "playerName": fielder_name,
+                    "role": "fielding",
+                    "points": fielding_points,
+                    "performance": performance_data,
+                    "updatedAt": datetime.now(timezone.utc)
+                }
+            },
+            upsert=True
+        )
+        
+        players_processed += 1
+        logger.info(f"Processed {fielder_name}: {fielding_data['catches']} catches, {fielding_data['stumpings']} stumpings, {fielding_data['runOuts']} run-outs = {fielding_points} points")
+    
     # Update standings after processing all players
     if players_processed > 0:
         await update_cricket_standings(db, league_id)
