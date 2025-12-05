@@ -579,6 +579,49 @@ async def process_cricket_scorecard(db, fixture_id: str, league_id: str, match_i
     
     players_processed = 0
     
+    # Track fielding contributions (catches, stumpings, run-outs) across all innings
+    fielding_stats = {}  # playerName -> {catches: X, stumpings: Y, runOuts: Z}
+    
+    # First pass: Extract fielding stats from dismissals
+    for innings in scorecard.get("scorecard", []):
+        for batsman in innings.get("batsman", []):
+            outdec = batsman.get("outdec", "")
+            
+            # Parse dismissal to find fielders
+            # Format: "c FielderName b BowlerName" or "st KeeperName b BowlerName" or "run out (FielderName)"
+            if outdec and outdec != "batting" and outdec != "not out":
+                # Catch: "c FielderName b BowlerName"
+                if outdec.startswith("c "):
+                    parts = outdec.split(" b ")
+                    if len(parts) == 2:
+                        fielder_name = parts[0].replace("c ", "").strip()
+                        if fielder_name not in fielding_stats:
+                            fielding_stats[fielder_name] = {"catches": 0, "stumpings": 0, "runOuts": 0}
+                        fielding_stats[fielder_name]["catches"] += 1
+                
+                # Stumping: "st KeeperName b BowlerName"
+                elif outdec.startswith("st "):
+                    parts = outdec.split(" b ")
+                    if len(parts) == 2:
+                        keeper_name = parts[0].replace("st ", "").strip()
+                        if keeper_name not in fielding_stats:
+                            fielding_stats[keeper_name] = {"catches": 0, "stumpings": 0, "runOuts": 0}
+                        fielding_stats[keeper_name]["stumpings"] += 1
+                
+                # Run out: "run out (FielderName)" or "run out (FielderName/FielderName2)"
+                elif "run out" in outdec.lower():
+                    # Extract fielder names from parentheses
+                    import re
+                    match = re.search(r'\(([^)]+)\)', outdec)
+                    if match:
+                        fielders = match.group(1).split("/")
+                        for fielder in fielders:
+                            fielder_name = fielder.strip()
+                            if fielder_name and fielder_name not in ["sub", "Sub"]:
+                                if fielder_name not in fielding_stats:
+                                    fielding_stats[fielder_name] = {"catches": 0, "stumpings": 0, "runOuts": 0}
+                                fielding_stats[fielder_name]["runOuts"] += 1
+    
     # Process scorecard data
     for innings in scorecard.get("scorecard", []):
         # Process batsmen
