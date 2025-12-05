@@ -327,13 +327,13 @@ Verify existing CSV upload button in league detail page works for AFCON leagues.
 
 ---
 
-## 12. Questions for User
+## 12. User Requirements - CONFIRMED ✅
 
-1. Should AFCON teams have logos, or is null acceptable?
-2. Do you need CSV templates pre-populated with actual AFCON 2025 fixtures, or just blank templates?
-3. Should commissioners be able to update scores via UI manually, or CSV only?
-4. Any specific naming preferences for teams (e.g., "Côte d'Ivoire" vs "Ivory Coast")?
-5. Should we support multiple AFCON competitions (if future years are needed)?
+1. **Logos:** Not needed - set to null
+2. **CSV Templates:** Pre-populate with group stage fixtures (36 matches)
+3. **Score Updates:** Both CSV upload AND manual UI entry
+4. **Team Naming:** Use English names (e.g., "Ivory Coast" not "Côte d'Ivoire")
+5. **Multi-year Support:** Not needed - single 4-week tournament (Dec 21, 2025 - Jan 18, 2026)
 
 ---
 
