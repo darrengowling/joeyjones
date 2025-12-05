@@ -714,16 +714,23 @@ async def process_cricket_scorecard(db, fixture_id: str, league_id: str, match_i
 async def update_cricket_standings(db, league_id: str):
     """
     Update league standings based on player stats
+    Updates the standings document with table array (used by UI)
     """
     # Get all participants
     participants = await db.league_participants.find({"leagueId": league_id}).to_list(1000)
     
+    # Build table array with updated points
+    table = []
+    
     for participant in participants:
         manager_id = participant["userId"]
+        manager_name = participant.get("userName", "Unknown")
         assets_won = participant.get("clubsWon", [])  # Player IDs
         
         # Calculate total points for this manager
         total_points = 0
+        total_runs = 0
+        total_wickets = 0
         
         for asset_id in assets_won:
             # Sum points from all matches for this player
@@ -734,22 +741,39 @@ async def update_cricket_standings(db, league_id: str):
             
             for stat in stats:
                 total_points += stat.get("points", 0)
+                perf = stat.get("performance", {})
+                total_runs += perf.get("runs", 0)
+                total_wickets += perf.get("wickets", 0)
         
-        # Update standings
-        await db.standings.update_one(
-            {"leagueId": league_id, "managerId": manager_id},
-            {
-                "$set": {
-                    "leagueId": league_id,
-                    "managerId": manager_id,
-                    "totalPoints": total_points,
-                    "updatedAt": datetime.now(timezone.utc)
-                }
-            },
-            upsert=True
-        )
+        table.append({
+            "userId": manager_id,
+            "displayName": manager_name,
+            "points": total_points,
+            "assetsOwned": assets_won,
+            "tiebreakers": {
+                "goals": 0,
+                "wins": 0,
+                "runs": total_runs,
+                "wickets": total_wickets
+            }
+        })
     
-    logger.info(f"Updated standings for league {league_id}")
+    # Sort by points descending
+    table.sort(key=lambda x: x["points"], reverse=True)
+    
+    # Update the standings document
+    await db.standings.update_one(
+        {"leagueId": league_id},
+        {
+            "$set": {
+                "table": table,
+                "lastComputedAt": datetime.now(timezone.utc)
+            }
+        },
+        upsert=True
+    )
+    
+    logger.info(f"Updated standings for league {league_id}: {len(table)} managers")
 
 
 @api_router.post("/cricket/update-scores")
