@@ -1236,26 +1236,10 @@ async def get_league_fixtures(league_id: str):
         assets = await db.assets.find({"id": {"$in": selected_asset_ids}}, {"_id": 0, "name": 1}).to_list(100)
         asset_names = [asset.get("name") for asset in assets]
         
-        # Get fixtures for this league:
-        # 1. Fixtures explicitly linked to this league (leagueId)
-        # 2. Shared fixtures (no leagueId) where selected teams are playing
+        # Get fixtures for this league (league-specific only)
+        # Fixtures are now always assigned to leagues, so only return fixtures with matching leagueId
         fixtures = await db.fixtures.find({
-            "$or": [
-                {"leagueId": league_id},  # League-specific fixtures
-                {
-                    "$and": [
-                        {"leagueId": {"$exists": False}},  # Shared fixtures
-                        {
-                            "$or": [
-                                {"homeTeam": {"$in": asset_names}},
-                                {"awayTeam": {"$in": asset_names}},
-                                {"homeTeamId": {"$in": selected_asset_ids}},
-                                {"awayTeamId": {"$in": selected_asset_ids}}
-                            ]
-                        }
-                    ]
-                }
-            ]
+            "leagueId": league_id
         }, {"_id": 0}).sort([("matchDate", 1), ("startsAt", 1)]).to_list(length=None)
         
         return {
