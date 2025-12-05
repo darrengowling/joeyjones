@@ -436,7 +436,7 @@ export default function CompetitionDashboard() {
       
       // Refresh fixtures list
       const fixturesResponse = await axios.get(`${API}/leagues/${leagueId}/fixtures`);
-      setFixtures(fixturesResponse.data);
+      setFixtures(fixturesResponse.data.fixtures || []);
       
     } catch (e) {
       console.error("Error importing fixtures from API:", e);
