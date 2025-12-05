@@ -2664,7 +2664,7 @@ async def import_fixtures_csv(league_id: str, file: UploadFile = File(...), comm
             away_asset_id = away_asset["id"] if away_asset else None
             away_team_name = away_asset.get("name", "Unknown") if away_asset else "TBD"
             
-            # Create fixture
+            # Create fixture (with optional scores)
             fixture = Fixture(
                 leagueId=league_id,
                 sportKey=sport_key,
@@ -2676,7 +2676,10 @@ async def import_fixtures_csv(league_id: str, file: UploadFile = File(...), comm
                 startsAt=starts_at,
                 venue=venue,
                 round=round_val,
-                status="scheduled",
+                status=status_val,
+                goalsHome=goals_home,
+                goalsAway=goals_away,
+                winner=winner,
                 source="csv"
             )
             
