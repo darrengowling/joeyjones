@@ -23,13 +23,16 @@ Open the downloaded file in one of these programs:
 ### Step 3: Fill in the Scores
 The file already contains all 36 AFCON group stage fixtures. You just need to add scores:
 
-**Columns to fill in:**
-- `goalsHome` - Goals scored by the home team
-- `goalsAway` - Goals scored by the away team
+**What you'll see in the file:**
+- `homeTeam` - Home team name (e.g., "Morocco")
+- `awayTeam` - Away team name (e.g., "Comoros")
+- `goalsHome` - **YOU FILL THIS** - Goals scored by home team
+- `goalsAway` - **YOU FILL THIS** - Goals scored by away team
 
 **Example:**
 ```
-Morocco vs Comoros → Morocco scored 1, Comoros scored 2
+Row shows: Morocco, Comoros
+Morocco scored 1, Comoros scored 2
 Fill in: goalsHome = 1, goalsAway = 2
 ```
 
