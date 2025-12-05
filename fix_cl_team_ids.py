@@ -130,8 +130,9 @@ def fix_team_ids():
     db = client[DB_NAME]
     
     # Get all CL teams with incorrect IDs
+    # Use competitionShort for reliable querying
     cl_teams = list(db.assets.find(
-        {'sportKey': 'football', 'competitions': 'UEFA Champions League'},
+        {'sportKey': 'football', 'competitionShort': 'UCL'},
         {'_id': 0, 'id': 1, 'name': 1, 'externalId': 1}
     ))
     
