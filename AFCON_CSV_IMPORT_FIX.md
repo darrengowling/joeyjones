@@ -93,8 +93,17 @@ startsAt,homeAssetExternalId,awayAssetExternalId,venue,round,externalMatchId,goa
 - `/app/frontend/src/pages/CompetitionDashboard.js` - CSV upload UI
 - `/app/public/templates/afcon_2025_group_stage_fixtures.csv` - Template file
 
+## Additional Bug Fixed
+**Frontend State Management Bug in CompetitionDashboard.js:**
+
+After the CSV upload succeeded, the frontend was calling `setFixtures(fixturesResponse.data)` instead of `setFixtures(fixturesResponse.data.fixtures)`, causing the fixtures state to be set to the entire response object `{fixtures: [...], total: 36}` instead of just the array.
+
+This caused rendering errors in the fixtures display component, resulting in the generic error page being shown to the user even though the backend upload succeeded.
+
+**Fixed in:** `/app/frontend/src/pages/CompetitionDashboard.js` (lines 439 and 477)
+
 ## Date Fixed
 December 5, 2025
 
 ## Tested By
-Backend curl testing + Frontend UI verification
+Backend curl testing + Frontend UI verification (both test league and user's actual league)
