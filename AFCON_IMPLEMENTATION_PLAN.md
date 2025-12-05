@@ -387,18 +387,20 @@ Verify existing CSV upload button in league detail page works for AFCON leagues.
 **Backend:**
 - Add AFCON teams script: 30 mins
 - Extend CSV import for scores: 45 mins
+- Add manual score update endpoint: 30 mins
 - Testing: 30 mins
 
 **Frontend:**
 - Add competition dropdown option: 15 mins
 - Update filter dropdowns: 15 mins
+- Add manual score entry UI: 45 mins
 - Testing: 30 mins
 
 **Documentation:**
 - User guide: 30 mins
-- CSV templates: 15 mins
+- CSV templates with group fixtures: 45 mins
 
-**Total: ~3.5 hours**
+**Total: ~4.5 hours**
 
 ---
 
