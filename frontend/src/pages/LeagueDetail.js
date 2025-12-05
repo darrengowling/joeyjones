@@ -917,6 +917,7 @@ export default function LeagueDetail() {
                         <option value="all">All Teams ({availableAssets.length})</option>
                         <option value="EPL">Premier League Only (20)</option>
                         <option value="UCL">Champions League Only (36)</option>
+                        <option value="AFCON">AFCON Only (24)</option>
                       </select>
                     </div>
                   )}
