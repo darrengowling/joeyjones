@@ -474,7 +474,7 @@ export default function CompetitionDashboard() {
       
       // Refresh fixtures list
       const fixturesResponse = await axios.get(`${API}/leagues/${leagueId}/fixtures`);
-      setFixtures(fixturesResponse.data);
+      setFixtures(fixturesResponse.data.fixtures || []);
       
       // Clear file input
       event.target.value = "";
