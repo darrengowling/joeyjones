@@ -1775,6 +1775,12 @@ async def get_clubs(
                 {"competitionShort": "UCL"},
                 {"competitions": "UEFA Champions League"}
             ]
+        elif competition.upper() == "AFCON":
+            # Include clubs with competitionShort="AFCON" OR "Africa Cup of Nations" in competitions array
+            query["$or"] = [
+                {"competitionShort": "AFCON"},
+                {"competitions": "Africa Cup of Nations"}
+            ]
     
     # Competition filtering for cricket
     if sportKey == "cricket" and competition:
