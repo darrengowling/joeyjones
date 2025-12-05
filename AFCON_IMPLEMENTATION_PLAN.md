@@ -317,10 +317,18 @@ Verify existing CSV upload button in league detail page works for AFCON leagues.
 2. Upload CSV via commissioner account
 3. Verify fixtures display in league detail page
 
-### Phase 4: CSV Score Update
+### Phase 4: Score Updates (Both Methods)
+
+**Method A: CSV Score Update**
 1. Create CSV with same fixtures but with scores
 2. Upload CSV to update scores
 3. Verify scores display correctly
+4. Verify winner calculation works
+
+**Method B: Manual UI Score Update**
+1. Click edit on a fixture as commissioner
+2. Enter scores (e.g., 2-1)
+3. Save and verify immediate UI update
 4. Verify winner calculation works
 
 ### Phase 5: Auction & Next Fixture
