@@ -135,6 +135,7 @@ class League(BaseModel):
     maxManagers: int
     clubSlots: int
     sportKey: str = "football"  # Default to football for backward compatibility
+    competitionCode: Optional[str] = "PL"  # Competition code for football (PL, CL, etc.)
     status: str = "pending"  # pending, active, completed
     inviteToken: str = Field(default_factory=lambda: str(uuid.uuid4())[:8])  # Short token
     createdAt: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
