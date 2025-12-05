@@ -118,13 +118,16 @@ startsAt,homeAssetExternalId,awayAssetExternalId,venue,round,externalMatchId
 - Verify fixtures display correctly
 
 ### Step 4: Manual Score Updates
-**Option A: Use existing CSV upload for scores**
+**CONFIRMED APPROACH: Both CSV and Manual UI Entry**
+
+**Method 1: CSV Upload (Bulk Updates)**
 - Extend CSV import to include score columns (goalsHome, goalsAway, status)
+- Useful for commissioners who want to update multiple matches at once
 
-**Option B: Manual entry via UI**
-- Commissioners can manually update fixture scores in the league detail page
-
-**Recommendation:** Option A - extend CSV to support score updates
+**Method 2: Manual UI Entry (Individual Updates)**
+- Add inline editing in fixtures table on league detail page
+- Allow commissioners to click and edit scores directly
+- Useful for quick updates after individual matches
 
 ---
 
