@@ -88,11 +88,16 @@ CL_TEAM_MAPPINGS = {
     
     # Additional teams for complete coverage
     "FC Porto": "503",
-    "Rangers": "57",
+    "Rangers": "1903",  # NOTE: Different from Benfica, verify
     "Union Saint-Gilloise": "677",
     "Shakhtar Donetsk": "726",
     "FC Copenhagen": "1041",
-    "Jagiellonia Białystok": "6686",  # Best guess, verify if needed
+    "Jagiellonia Białystok": "6686",
+    "Borussia Dortmund": "4",
+    "Lille": "521",
+    "Bologna": "103",
+    "Slovan Bratislava": "1919",
+    "Aston Villa": "66",
 }
 
 async def fetch_cl_teams_from_api():
