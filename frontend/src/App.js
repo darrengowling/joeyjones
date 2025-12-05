@@ -140,6 +140,7 @@ const Home = () => {
   const [leagueForm, setLeagueForm] = useState({
     name: "",
     sportKey: "football", // Default to football
+    competitionCode: "PL", // Default to Premier League
     budget: 500000000, // £500m default budget
     minManagers: 2,
     maxManagers: 8,
