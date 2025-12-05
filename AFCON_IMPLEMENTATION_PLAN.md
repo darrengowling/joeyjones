@@ -191,6 +191,63 @@ fixture_doc["status"] = status
 
 Since AFCON uses CSV only, no API changes needed here.
 
+### C. Add Manual Score Update Endpoint
+**File:** `/app/backend/server.py`
+**New Endpoint:** `PATCH /api/fixtures/{fixture_id}/score`
+
+**Purpose:** Allow commissioners to manually update fixture scores via UI
+
+**Request Body:**
+```json
+{
+  "goalsHome": 2,
+  "goalsAway": 1,
+  "status": "completed"
+}
+```
+
+**Logic:**
+1. Verify league exists and user is commissioner
+2. Update fixture with scores
+3. Calculate winner (home/away/draw)
+4. Return updated fixture
+
+**Implementation:**
+```python
+@api_router.patch("/fixtures/{fixture_id}/score")
+async def update_fixture_score(
+    fixture_id: str, 
+    goalsHome: int, 
+    goalsAway: int,
+    status: str,
+    commissionerId: str
+):
+    # Get fixture and league
+    fixture = await db.fixtures.find_one({"id": fixture_id})
+    league = await db.leagues.find_one({"id": fixture["leagueId"]})
+    
+    # Verify commissioner
+    if league["commissionerId"] != commissionerId:
+        raise HTTPException(403, "Only commissioner can update scores")
+    
+    # Calculate winner
+    winner = "home" if goalsHome > goalsAway else ("away" if goalsAway > goalsHome else "draw")
+    
+    # Update fixture
+    await db.fixtures.update_one(
+        {"id": fixture_id},
+        {"$set": {
+            "goalsHome": goalsHome,
+            "goalsAway": goalsAway,
+            "status": status,
+            "winner": winner,
+            "updatedAt": datetime.now(timezone.utc).isoformat()
+        }}
+    )
+    
+    return {"success": True}
+```
+
 ---
 
 ## 6. Frontend Changes Required
