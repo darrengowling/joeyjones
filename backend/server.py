@@ -2821,6 +2821,8 @@ async def import_fixtures_from_api(
                     "sportKey": "football",
                     "source": "football-data.org",
                     "footballDataId": fixture_id,
+                    "competition": competition_code,  # Add competition code (PL, CL, etc.)
+                    "leagueId": league_id,  # Associate fixture with this league
                     "updatedAt": datetime.now(timezone.utc).isoformat()
                 }
                 
