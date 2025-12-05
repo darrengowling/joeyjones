@@ -322,14 +322,23 @@ async def update_fixture_scores(fixture_ids: List[str] = None):
                 status = api_match["fixture"]["status"]["short"]
                 goals_home = api_match["goals"]["home"]
                 goals_away = api_match["goals"]["away"]
+                competition = api_match.get("_competition", "PL")
                 
-                # Find corresponding fixture in our database
-                # Match by team names and approximate date
-                fixture = await db.fixtures.find_one({
-                    "homeTeam": {"$regex": home_name.split()[0], "$options": "i"},  # Match first word
-                    "awayTeam": {"$regex": away_name.split()[0], "$options": "i"},
-                    "sportKey": "football"
-                })
+                # Find ALL corresponding fixtures in our database for this competition
+                # Match by team names, competition, and footballDataId
+                fixtures = await db.fixtures.find({
+                    "$or": [
+                        {"footballDataId": fixture_id},  # Match by Football-Data.org ID (most accurate)
+                        {
+                            "$and": [
+                                {"homeTeam": {"$regex": home_name.split()[0], "$options": "i"}},
+                                {"awayTeam": {"$regex": away_name.split()[0], "$options": "i"}},
+                                {"competition": competition},  # Must match competition
+                                {"sportKey": "football"}
+                            ]
+                        }
+                    ]
+                }).to_list(1000)
                 
                 if fixture:
                     # Update the fixture
