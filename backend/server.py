@@ -3035,10 +3035,6 @@ async def update_fixture_score_manual(
         }
     }
 
-
-        "fixturesDeleted": result.deleted_count
-    }
-
 @api_router.put("/leagues/{league_id}/assets")
 async def update_league_assets(league_id: str, asset_ids: List[str]):
     """Prompt 1: Update selected assets for league (commissioner only)"""
