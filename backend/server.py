@@ -2546,6 +2546,11 @@ async def import_fixtures_csv(league_id: str, file: UploadFile = File(...), comm
             round_val = row.get('round', '').strip() or None
             external_match_id = row.get('externalMatchId', '').strip() or None
             
+            # Parse score data (optional - for updating existing fixtures)
+            goals_home_str = row.get('goalsHome', '').strip()
+            goals_away_str = row.get('goalsAway', '').strip()
+            status_val = row.get('status', '').strip() or 'scheduled'
+            
             if not starts_at_str:
                 continue  # Skip rows without start time
             
