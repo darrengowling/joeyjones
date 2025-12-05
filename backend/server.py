@@ -2960,6 +2960,81 @@ async def clear_all_fixtures(league_id: str, commissionerId: str = Query(...)):
     
     return {
         "message": f"Successfully deleted {result.deleted_count} fixtures",
+
+@api_router.patch("/fixtures/{fixture_id}/score")
+async def update_fixture_score_manual(
+    fixture_id: str,
+    goalsHome: int,
+    goalsAway: int,
+    status: str,
+    commissionerId: str = Query(...)
+):
+    """
+    Manually update fixture score - Commissioner only
+    Used for AFCON and other competitions without API support
+    """
+    if not FEATURE_MY_COMPETITIONS:
+        raise HTTPException(status_code=404, detail="Feature not available")
+    
+    # Get fixture
+    fixture = await db.fixtures.find_one({"id": fixture_id}, {"_id": 0})
+    if not fixture:
+        raise HTTPException(status_code=404, detail="Fixture not found")
+    
+    # Get league to verify commissioner
+    league = await db.leagues.find_one({"id": fixture["leagueId"]}, {"_id": 0})
+    if not league:
+        raise HTTPException(status_code=404, detail="League not found")
+    
+    if league["commissionerId"] != commissionerId:
+        raise HTTPException(
+            status_code=403,
+            detail="Only the league commissioner can update fixture scores"
+        )
+    
+    # Calculate winner
+    winner = None
+    if goalsHome > goalsAway:
+        winner = "home"
+    elif goalsAway > goalsHome:
+        winner = "away"
+    else:
+        winner = "draw"
+    
+    # Update fixture
+    await db.fixtures.update_one(
+        {"id": fixture_id},
+        {"$set": {
+            "goalsHome": goalsHome,
+            "goalsAway": goalsAway,
+            "status": status,
+            "winner": winner,
+            "updatedAt": datetime.now(timezone.utc).isoformat()
+        }}
+    )
+    
+    # Emit update event
+    await sio.emit('fixtures_updated', {
+        'leagueId': fixture["leagueId"],
+        'fixtureId': fixture_id,
+        'goalsHome': goalsHome,
+        'goalsAway': goalsAway
+    }, room=f"league:{fixture['leagueId']}")
+    
+    logger.info(f"Score updated manually: {fixture.get('homeTeam')} {goalsHome}-{goalsAway} {fixture.get('awayTeam')}")
+    
+    return {
+        "success": True,
+        "fixture": {
+            "id": fixture_id,
+            "goalsHome": goalsHome,
+            "goalsAway": goalsAway,
+            "winner": winner,
+            "status": status
+        }
+    }
+
+
         "fixturesDeleted": result.deleted_count
     }
 
