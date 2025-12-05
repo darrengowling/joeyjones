@@ -75,6 +75,7 @@ CL_TEAM_MAPPINGS = {
     
     # Serbian team
     "Crvena Zvezda": "7283",
+    "Red Star Belgrade": "7283",
     
     # Croatian team
     "Dinamo Zagreb": "1723",
@@ -84,6 +85,14 @@ CL_TEAM_MAPPINGS = {
     
     # Slovakian team
     "Slovan Bratislava": "1919",
+    
+    # Additional teams for complete coverage
+    "FC Porto": "503",
+    "Rangers": "57",
+    "Union Saint-Gilloise": "677",
+    "Shakhtar Donetsk": "726",
+    "FC Copenhagen": "1041",
+    "Jagiellonia Białystok": "6686",  # Best guess, verify if needed
 }
 
 async def fetch_cl_teams_from_api():
