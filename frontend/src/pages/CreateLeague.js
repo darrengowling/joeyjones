@@ -310,7 +310,7 @@ export default function CreateLeague() {
                             }
                           }}
                         >
-                          <option value="all">All Teams (52)</option>
+                          <option value="all">All Teams ({availableAssets.length})</option>
                           <option value="EPL">Premier League Only (20)</option>
                           <option value="UCL">Champions League Only (36)</option>
                         </select>
