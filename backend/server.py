@@ -2847,7 +2847,7 @@ async def import_fixtures_from_api(
                 })
                 
                 if existing:
-                    # Update existing shared fixture (add Football-Data.org ID if missing)
+                    # Update existing fixture (add Football-Data.org ID if missing)
                     if not existing.get("footballDataId"):
                         logger.info(f"Adding Football-Data.org ID to existing fixture: {existing['id']}")
                     
@@ -2857,7 +2857,7 @@ async def import_fixtures_from_api(
                     )
                     fixtures_updated += 1
                 else:
-                    # Create new shared fixture (no leagueId)
+                    # Create new league-specific fixture
                     fixture_doc["id"] = str(uuid.uuid4())
                     fixture_doc["goalsHome"] = None
                     fixture_doc["goalsAway"] = None
