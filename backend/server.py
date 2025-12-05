@@ -2560,6 +2560,26 @@ async def import_fixtures_csv(league_id: str, file: UploadFile = File(...), comm
             except ValueError:
                 continue  # Skip invalid dates
             
+            # Parse scores if provided
+            goals_home = None
+            goals_away = None
+            winner = None
+            
+            if goals_home_str and goals_away_str:
+                try:
+                    goals_home = int(goals_home_str)
+                    goals_away = int(goals_away_str)
+                    
+                    # Calculate winner
+                    if goals_home > goals_away:
+                        winner = "home"
+                    elif goals_away > goals_home:
+                        winner = "away"
+                    else:
+                        winner = "draw"
+                except ValueError:
+                    pass  # Invalid scores, leave as None
+            
             # For international matches (no home/away specified), create fixture with nulls
             if not home_external_id and not away_external_id:
                 fixture = Fixture(
@@ -2571,7 +2591,10 @@ async def import_fixtures_csv(league_id: str, file: UploadFile = File(...), comm
                     startsAt=starts_at,
                     venue=venue,
                     round=round_val,
-                    status="scheduled",
+                    status=status_val,
+                    goalsHome=goals_home,
+                    goalsAway=goals_away,
+                    winner=winner,
                     source="csv"
                 )
                 
