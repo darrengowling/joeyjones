@@ -559,7 +559,7 @@ async def process_cricket_scorecard(db, fixture_id: str, league_id: str, match_i
         "rules": {
             "run": 1,
             "wicket": 25,
-            "catch": 8,
+            "catch": 10,
             "stumping": 12,
             "runOut": 6
         },
