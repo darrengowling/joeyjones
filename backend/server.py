@@ -806,16 +806,16 @@ async def update_cricket_scores():
                 status = api_match["status"]
                 state = api_match["state"]
                 
-                # Find corresponding fixture in our database
+                # Find ALL corresponding fixtures in our database
                 # Match by cricbuzzMatchId first (most accurate), fallback to team names
-                fixture = await db.fixtures.find_one({
+                fixtures = await db.fixtures.find({
                     "cricbuzzMatchId": match_id,
                     "sportKey": "cricket"
-                })
+                }).to_list(1000)
                 
-                if not fixture:
+                if not fixtures:
                     # Fallback: Match by team names if cricbuzzMatchId not set
-                    fixture = await db.fixtures.find_one({
+                    fixtures = await db.fixtures.find({
                         "$or": [
                             {
                                 "homeTeam": {"$regex": team1_name, "$options": "i"},
@@ -828,9 +828,10 @@ async def update_cricket_scores():
                         ],
                         "sportKey": "cricket",
                         "cricbuzzMatchId": {"$exists": False}
-                    })
+                    }).to_list(1000)
                 
-                if fixture:
+                # Process ALL fixtures that match this API match
+                for fixture in fixtures:
                     # Map Cricbuzz state to our status
                     fixture_status = "completed" if state == "Complete" else "in_progress" if state in ["In Progress", "Stumps"] else "scheduled"
                     
