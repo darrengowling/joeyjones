@@ -459,7 +459,13 @@ function AuctionRoom() {
 
   const loadNextFixture = async (clubId) => {
     try {
-      const response = await axios.get(`${API}/assets/${clubId}/next-fixture?leagueId=${auctionId}`);
+      // Use league ID from auction to filter fixtures by competition
+      const leagueId = auction?.leagueId || league?.id;
+      const url = leagueId 
+        ? `${API}/assets/${clubId}/next-fixture?leagueId=${leagueId}`
+        : `${API}/assets/${clubId}/next-fixture`;
+      
+      const response = await axios.get(url);
       if (response.data.fixture) {
         setNextFixture(response.data.fixture);
         console.log("📅 Next fixture loaded:", response.data.fixture);
