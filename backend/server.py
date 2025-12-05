@@ -2959,7 +2959,8 @@ async def clear_all_fixtures(league_id: str, commissionerId: str = Query(...)):
     }, room=f"league:{league_id}")
     
     return {
-        "message": f"Successfully deleted {result.deleted_count} fixtures",
+        "message": f"Successfully deleted {result.deleted_count} fixtures"
+    }
 
 @api_router.patch("/fixtures/{fixture_id}/score")
 async def update_fixture_score_manual(
