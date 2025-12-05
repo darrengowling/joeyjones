@@ -116,7 +116,7 @@ If you encounter issues:
 
 ## Quick Reference
 
-**File Location:** `/public/templates/afcon_2025_group_stage_fixtures.csv`
+**File Location:** `/public/templates/afcon_2025_fixtures_with_names.csv`
 
 **Required Columns (already in template):**
 - startsAt, homeAssetExternalId, awayAssetExternalId, venue, round, externalMatchId
