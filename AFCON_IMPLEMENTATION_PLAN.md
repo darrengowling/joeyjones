@@ -266,7 +266,7 @@ Verify existing CSV upload button in league detail page works for AFCON leagues.
 
 ### Issue 2: Team Name Variations
 **Problem:** "Côte d'Ivoire" vs "Ivory Coast"
-**Solution:** Use official AFCON names consistently
+**Solution:** ✅ CONFIRMED - Use English names (e.g., "Ivory Coast", "DR Congo")
 
 ### Issue 3: CSV Score Updates vs Fixture Creation
 **Problem:** Need to differentiate between new fixtures and score updates
