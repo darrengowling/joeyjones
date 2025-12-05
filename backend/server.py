@@ -1747,7 +1747,7 @@ async def get_clubs(
     Args:
         sportKey: Sport identifier (default: football). Options: football, cricket, etc.
         competition: Filter by competition. 
-            - Football: 'EPL', 'UCL', or None for all
+            - Football: 'EPL', 'UCL', 'AFCON', or None for all
             - Cricket: 'ASHES', 'NZ_ENG', or None for all
     
     Returns:
