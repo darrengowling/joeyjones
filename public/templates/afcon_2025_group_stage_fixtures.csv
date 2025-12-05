@@ -1,0 +1,37 @@
+startsAt,homeAssetExternalId,awayAssetExternalId,venue,round,externalMatchId,goalsHome,goalsAway,status
+2025-12-21T19:00:00Z,AFCON_001,AFCON_004,Prince Moulay Abdellah Stadium,Group A MD1,AFCON_M001,,,scheduled
+2025-12-21T19:00:00Z,AFCON_002,AFCON_003,Mohammed V Stadium,Group A MD1,AFCON_M002,,,scheduled
+2025-12-22T17:00:00Z,AFCON_005,AFCON_006,Adrar Stadium,Group B MD1,AFCON_M003,,,scheduled
+2025-12-22T20:00:00Z,AFCON_007,AFCON_008,Fez Stadium,Group B MD1,AFCON_M004,,,scheduled
+2025-12-23T12:00:00Z,AFCON_009,AFCON_012,Fez Stadium,Group C MD1,AFCON_M005,,,scheduled
+2025-12-23T15:00:00Z,AFCON_010,AFCON_011,Mohammed V Stadium,Group C MD1,AFCON_M006,,,scheduled
+2025-12-24T12:00:00Z,AFCON_013,AFCON_014,Adrar Stadium,Group D MD1,AFCON_M007,,,scheduled
+2025-12-24T15:00:00Z,AFCON_015,AFCON_016,Marrakesh Stadium,Group D MD1,AFCON_M008,,,scheduled
+2025-12-24T14:30:00Z,AFCON_017,AFCON_020,Mohammed V Stadium,Group E MD1,AFCON_M009,,,scheduled
+2025-12-24T17:00:00Z,AFCON_018,AFCON_019,Prince Moulay Abdellah Stadium,Group E MD1,AFCON_M010,,,scheduled
+2025-12-23T17:00:00Z,AFCON_021,AFCON_024,Marrakesh Stadium,Group F MD1,AFCON_M011,,,scheduled
+2025-12-23T19:30:00Z,AFCON_022,AFCON_023,Adrar Stadium,Group F MD1,AFCON_M012,,,scheduled
+2025-12-26T12:00:00Z,AFCON_001,AFCON_002,Prince Moulay Abdellah Stadium,Group A MD2,AFCON_M013,,,scheduled
+2025-12-26T14:30:00Z,AFCON_003,AFCON_004,Mohammed V Stadium,Group A MD2,AFCON_M014,,,scheduled
+2025-12-26T17:00:00Z,AFCON_005,AFCON_007,Adrar Stadium,Group B MD2,AFCON_M015,,,scheduled
+2025-12-26T19:30:00Z,AFCON_006,AFCON_008,Fez Stadium,Group B MD2,AFCON_M016,,,scheduled
+2025-12-27T12:00:00Z,AFCON_009,AFCON_010,Fez Stadium,Group C MD2,AFCON_M017,,,scheduled
+2025-12-27T14:30:00Z,AFCON_011,AFCON_012,Prince Moulay Abdellah Stadium,Group C MD2,AFCON_M018,,,scheduled
+2025-12-27T17:00:00Z,AFCON_013,AFCON_015,Marrakesh Stadium,Group D MD2,AFCON_M019,,,scheduled
+2025-12-27T19:30:00Z,AFCON_014,AFCON_016,Adrar Stadium,Group D MD2,AFCON_M020,,,scheduled
+2025-12-28T12:00:00Z,AFCON_017,AFCON_018,Mohammed V Stadium,Group E MD2,AFCON_M021,,,scheduled
+2025-12-28T14:30:00Z,AFCON_019,AFCON_020,Prince Moulay Abdellah Stadium,Group E MD2,AFCON_M022,,,scheduled
+2025-12-28T17:00:00Z,AFCON_021,AFCON_022,Marrakesh Stadium,Group F MD2,AFCON_M023,,,scheduled
+2025-12-28T19:30:00Z,AFCON_023,AFCON_024,Adrar Stadium,Group F MD2,AFCON_M024,,,scheduled
+2025-12-29T17:30:00Z,AFCON_003,AFCON_001,Prince Moulay Abdellah Stadium,Group A MD3,AFCON_M025,,,scheduled
+2025-12-29T17:30:00Z,AFCON_004,AFCON_002,Mohammed V Stadium,Group A MD3,AFCON_M026,,,scheduled
+2025-12-29T20:00:00Z,AFCON_008,AFCON_005,Adrar Stadium,Group B MD3,AFCON_M027,,,scheduled
+2025-12-29T20:00:00Z,AFCON_007,AFCON_006,Fez Stadium,Group B MD3,AFCON_M028,,,scheduled
+2025-12-30T17:30:00Z,AFCON_012,AFCON_009,Fez Stadium,Group C MD3,AFCON_M029,,,scheduled
+2025-12-30T17:30:00Z,AFCON_011,AFCON_010,Mohammed V Stadium,Group C MD3,AFCON_M030,,,scheduled
+2025-12-30T20:00:00Z,AFCON_016,AFCON_013,Marrakesh Stadium,Group D MD3,AFCON_M031,,,scheduled
+2025-12-30T20:00:00Z,AFCON_015,AFCON_014,Adrar Stadium,Group D MD3,AFCON_M032,,,scheduled
+2025-12-31T17:30:00Z,AFCON_020,AFCON_017,Prince Moulay Abdellah Stadium,Group E MD3,AFCON_M033,,,scheduled
+2025-12-31T17:30:00Z,AFCON_019,AFCON_018,Mohammed V Stadium,Group E MD3,AFCON_M034,,,scheduled
+2025-12-31T20:00:00Z,AFCON_024,AFCON_021,Marrakesh Stadium,Group F MD3,AFCON_M035,,,scheduled
+2025-12-31T20:00:00Z,AFCON_023,AFCON_022,Adrar Stadium,Group F MD3,AFCON_M036,,,scheduled
