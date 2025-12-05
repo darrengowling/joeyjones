@@ -2749,7 +2749,7 @@ async def import_fixtures_from_api(
         logger.info(f"Fetching {competition_code} matches from {date_from} to {date_to}")
         all_fixtures = await client.get_matches_by_date(date_from, date_to, competition_code)
         
-        logger.info(f"Found {len(all_fixtures)} total EPL fixtures")
+        logger.info(f"Found {len(all_fixtures)} total {competition_code} fixtures")
         
         # Filter for our selected teams only
         # Match by team name since Football-Data.org uses different IDs
