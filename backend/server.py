@@ -340,12 +340,14 @@ async def update_fixture_scores(fixture_ids: List[str] = None):
                     ]
                 }).to_list(1000)
                 
-                if fixture:
+                # Process ALL fixtures that match (same match across multiple leagues)
+                for fixture in fixtures:
                     # Update the fixture
                     update_data = {
                         "status": status,
                         "goalsHome": goals_home,
                         "goalsAway": goals_away,
+                        "footballDataId": fixture_id,  # Ensure Football-Data.org ID is set
                         "updatedAt": datetime.now(timezone.utc).isoformat()
                     }
                     
@@ -363,9 +365,10 @@ async def update_fixture_scores(fixture_ids: List[str] = None):
                     )
                     
                     updated_count += 1
-                    logger.info(f"Updated: {home_name} vs {away_name} - {goals_home}:{goals_away}")
-                else:
-                    logger.warning(f"Fixture not found in DB: {home_name} vs {away_name}")
+                    logger.info(f"Updated: {home_name} vs {away_name} ({competition}) [League: {fixture['leagueId']}] - {goals_home}:{goals_away}")
+                
+                if not fixtures:
+                    logger.info(f"Fixture not found in DB: {home_name} vs {away_name} ({competition})")
                     
             except Exception as e:
                 logger.error(f"Error updating fixture {fixture_id}: {e}")
