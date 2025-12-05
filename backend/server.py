@@ -2742,9 +2742,12 @@ async def import_fixtures_from_api(
         date_from = today.strftime("%Y-%m-%d")
         date_to = end_date.strftime("%Y-%m-%d")
         
-        # Fetch all EPL fixtures for this date range (single API call)
-        logger.info(f"Fetching EPL matches from {date_from} to {date_to}")
-        all_fixtures = await client.get_matches_by_date(date_from, date_to, "PL")
+        # Get competition code from league (defaults to Premier League)
+        competition_code = league.get("competitionCode", "PL")
+        
+        # Fetch fixtures for this competition
+        logger.info(f"Fetching {competition_code} matches from {date_from} to {date_to}")
+        all_fixtures = await client.get_matches_by_date(date_from, date_to, competition_code)
         
         logger.info(f"Found {len(all_fixtures)} total EPL fixtures")
         
