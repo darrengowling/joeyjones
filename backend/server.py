@@ -280,7 +280,7 @@ async def health_check():
 async def update_fixture_scores(fixture_ids: List[str] = None):
     """
     Manually trigger fixture score updates from Football-Data.org
-    Updates all recent EPL fixtures (last 7 days)
+    Updates all recent football fixtures (PL and CL) from last 7 days
     """
     from football_data_client import FootballDataClient
     from datetime import datetime, timedelta, timezone
@@ -295,10 +295,19 @@ async def update_fixture_scores(fixture_ids: List[str] = None):
         date_from = start_date.strftime("%Y-%m-%d")
         date_to = end_date.strftime("%Y-%m-%d")
         
-        logger.info(f"Fetching EPL matches from {date_from} to {date_to}")
+        logger.info(f"Fetching football matches from {date_from} to {date_to}")
         
-        # Get matches from Football-Data.org
-        api_matches = await client.get_matches_by_date(date_from, date_to, "PL")
+        # Get matches from both PL and CL
+        all_api_matches = []
+        for competition in ["PL", "CL"]:
+            matches = await client.get_matches_by_date(date_from, date_to, competition)
+            # Add competition tag to each match for later identification
+            for match in matches:
+                match["_competition"] = competition
+            all_api_matches.extend(matches)
+            logger.info(f"Found {len(matches)} {competition} matches")
+        
+        api_matches = all_api_matches
         
         logger.info(f"Found {len(api_matches)} matches from API")
         
