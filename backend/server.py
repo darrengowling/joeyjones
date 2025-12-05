@@ -2826,11 +2826,11 @@ async def import_fixtures_from_api(
                     "updatedAt": datetime.now(timezone.utc).isoformat()
                 }
                 
-                # Check if fixture already exists (shared fixtures have no leagueId)
+                # Check if fixture already exists for this league
                 # Check by Football-Data.org ID first, then by teams + date
                 existing = await db.fixtures.find_one({
                     "$and": [
-                        {"leagueId": {"$exists": False}},  # Only shared fixtures
+                        {"leagueId": league_id},  # Fixtures are league-specific
                         {
                             "$or": [
                                 {"footballDataId": fixture_id},  # Match by Football-Data.org ID
