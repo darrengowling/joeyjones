@@ -1023,6 +1023,7 @@ export default function CompetitionDashboard() {
                 </a>
               </div>
             </div>
+            )}
           </>
         )}
 
