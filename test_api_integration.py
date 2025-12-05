@@ -7,7 +7,7 @@ import requests
 import json
 import sys
 
-BACKEND_URL = "https://cricket-fantasy-app-2.preview.emergentagent.com/api"
+BACKEND_URL = "https://sport-predictor-9.preview.emergentagent.com/api"
 
 def test_league_creation_with_assets():
     """Test creating a league with assetsSelected via API"""

@@ -133,7 +133,7 @@ expect(commBeginResponse.status()).toBe(200);
 
 **Test 1: Missing Header (401)**
 ```bash
-curl -X POST "https://cricket-fantasy-app-2.preview.emergentagent.com/api/auction/{auction_id}/begin" \
+curl -X POST "https://sport-predictor-9.preview.emergentagent.com/api/auction/{auction_id}/begin" \
   -v
 
 # Expected: 401 Unauthorized
@@ -142,7 +142,7 @@ curl -X POST "https://cricket-fantasy-app-2.preview.emergentagent.com/api/auctio
 
 **Test 2: Non-Commissioner (403)**
 ```bash
-curl -X POST "https://cricket-fantasy-app-2.preview.emergentagent.com/api/auction/{auction_id}/begin" \
+curl -X POST "https://sport-predictor-9.preview.emergentagent.com/api/auction/{auction_id}/begin" \
   -H "X-User-ID: non_commissioner_user_id" \
   -v
 
@@ -152,7 +152,7 @@ curl -X POST "https://cricket-fantasy-app-2.preview.emergentagent.com/api/auctio
 
 **Test 3: Commissioner (200)**
 ```bash
-curl -X POST "https://cricket-fantasy-app-2.preview.emergentagent.com/api/auction/{auction_id}/begin" \
+curl -X POST "https://sport-predictor-9.preview.emergentagent.com/api/auction/{auction_id}/begin" \
   -H "X-User-ID: commissioner_user_id" \
   -v
 

@@ -592,7 +592,7 @@ All features listed in the comprehensive assessment as "working" have been valid
 ## Test Environment Details
 
 **Test Date:** January 26, 2025  
-**Backend URL:** https://cricket-fantasy-app-2.preview.emergentagent.com/api  
+**Backend URL:** https://sport-predictor-9.preview.emergentagent.com/api  
 **Test Duration:** ~10 minutes  
 **Test Coverage:** 22 backend API tests + frontend UI validation  
 **Success Rate:** 100% (22/22 backend tests passed)

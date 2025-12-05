@@ -13,7 +13,7 @@ This guide covers load testing the most critical path in the system: real-time a
 **1. Create a Test Auction**:
 ```bash
 # Go to your app
-https://cricket-fantasy-app-2.preview.emergentagent.com
+https://sport-predictor-9.preview.emergentagent.com
 
 # Steps:
 1. Sign in

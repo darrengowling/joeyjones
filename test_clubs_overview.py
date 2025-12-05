@@ -6,7 +6,7 @@ Test the new clubs overview functionality
 import asyncio
 import aiohttp
 
-BASE_URL = "https://cricket-fantasy-app-2.preview.emergentagent.com/api"
+BASE_URL = "https://sport-predictor-9.preview.emergentagent.com/api"
 
 async def test_clubs_overview():
     """Test the clubs overview endpoint"""
