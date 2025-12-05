@@ -892,7 +892,15 @@ export default function CompetitionDashboard() {
             <div className="bg-white rounded-lg shadow p-6" data-testid="fixtures-upload">
               <h3 className="text-lg font-bold text-gray-900 mb-3">Import Fixtures (CSV)</h3>
               <p className="text-sm text-gray-600 mb-4">
-                Upload a CSV file to schedule fixtures. Required columns: startsAt, homeAssetExternalId, awayAssetExternalId, venue, round, externalMatchId
+                {summary?.sportKey === 'football' ? (
+                  <>
+                    Upload a CSV file to create fixtures and update scores. Required columns: startsAt, homeAssetExternalId, awayAssetExternalId, venue, round, externalMatchId.
+                    <br />
+                    <strong className="text-blue-600">Optional columns for scores:</strong> goalsHome, goalsAway (leave empty for scheduled matches, fill in to mark as completed with scores).
+                  </>
+                ) : (
+                  'Upload a CSV file to schedule fixtures. Required columns: startsAt, homeAssetExternalId, awayAssetExternalId, venue, round, externalMatchId'
+                )}
               </p>
               
               <div className="mb-4">
