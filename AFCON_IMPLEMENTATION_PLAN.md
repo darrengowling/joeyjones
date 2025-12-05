@@ -283,6 +283,21 @@ async def update_fixture_score(
 ### C. CSV Upload UI (Already Exists)
 Verify existing CSV upload button in league detail page works for AFCON leagues.
 
+### D. Manual Score Entry UI
+**File:** `/app/frontend/src/pages/LeagueDetail.js`
+
+**Add to fixtures table:**
+1. **Edit button** for each fixture (commissioner only)
+2. **Inline editing form** when clicked:
+   - Input for home goals
+   - Input for away goals
+   - Dropdown for status (scheduled/in_progress/completed)
+   - Save/Cancel buttons
+3. **Call new PATCH endpoint** on save
+4. **Update UI** with new scores
+
+**UI Location:** In the fixtures table, add an "Actions" column for commissioners
+
 ---
 
 ## 7. Testing Plan
