@@ -8,8 +8,10 @@ As an AFCON commissioner, you'll need to upload match scores using a CSV file. T
 ## Step-by-Step Instructions
 
 ### Step 1: Download the Template
-1. Download the AFCON fixtures template: [afcon_2025_group_stage_fixtures.csv](/templates/afcon_2025_group_stage_fixtures.csv)
+1. Download the AFCON fixtures template: [afcon_2025_fixtures_with_names.csv](/templates/afcon_2025_fixtures_with_names.csv)
 2. Save it to your computer
+
+**Note:** This file includes team names (Morocco, Egypt, etc.) to make it easy to identify matches!
 
 ### Step 2: Open the File
 Open the downloaded file in one of these programs:
