@@ -146,17 +146,9 @@ def fix_team_ids():
         print("✅ All CL teams already have correct numeric externalIds!")
         return
     
-    # Try to fetch from API first
-    print("\nAttempting to fetch team IDs from Football-Data.org API...")
-    api_mappings = asyncio.run(fetch_cl_teams_from_api())
-    
-    # Use API mappings if available, otherwise fallback to hardcoded
-    if api_mappings:
-        mappings = api_mappings
-        print("Using API-fetched team IDs")
-    else:
-        mappings = CL_TEAM_MAPPINGS
-        print("Using hardcoded team ID mappings (API unavailable)")
+    # Use hardcoded mappings (API names don't match DB names)
+    mappings = CL_TEAM_MAPPINGS
+    print("\nUsing verified team ID mappings from Football-Data.org")
     
     # Update each team
     print("\nUpdating team externalIds:")
