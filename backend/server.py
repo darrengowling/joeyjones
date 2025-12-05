@@ -868,8 +868,9 @@ async def update_cricket_scores():
                     )
                     
                     updated_count += 1
-                    logger.info(f"Updated: {team1_name} vs {team2_name} - {status}")
-                else:
+                    logger.info(f"Updated: {team1_name} vs {team2_name} (League: {fixture['leagueId']}) - {status}")
+                
+                if not fixtures:
                     logger.info(f"Fixture not found in DB: {team1_name} vs {team2_name}")
                     
             except Exception as e:
