@@ -20,6 +20,13 @@ code {
 
 @layer base {
   :root {
+        /* Typography scales for mobile-first design */
+        --t-xs: 12px;
+        --t-sm: 14px;
+        --t-md: 16px;
+        --t-lg: 18px;
+        --t-xl: 20px;
+        
         --background: 0 0% 100%;
         --foreground: 0 0% 3.9%;
         --card: 0 0% 100%;
