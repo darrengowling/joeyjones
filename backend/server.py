@@ -5063,6 +5063,89 @@ async def pause_auction(auction_id: str, commissioner_id: str = None):
     return {"message": "Auction paused successfully", "remainingTime": remaining_time}
 
 
+@api_router.post("/leagues/{league_id}/auction/reset")
+async def reset_auction(league_id: str, commissioner_id: str = Query(...)):
+    """
+    Reset auction to allow commissioner to start fresh.
+    Clears all bids, resets participant budgets, and deletes auction.
+    Only works for paused or completed auctions.
+    """
+    # Verify league exists and get commissioner
+    league = await db.leagues.find_one({"id": league_id}, {"_id": 0})
+    if not league:
+        raise HTTPException(status_code=404, detail="League not found")
+    
+    # Verify commissioner permissions
+    if not commissioner_id or league["commissionerId"] != commissioner_id:
+        raise HTTPException(
+            status_code=403,
+            detail="Only the league commissioner can reset the auction"
+        )
+    
+    # Get auction
+    auction = await db.auctions.find_one({"leagueId": league_id}, {"_id": 0})
+    if not auction:
+        raise HTTPException(status_code=404, detail="No auction found for this league")
+    
+    # Verify auction is paused or completed (cannot reset active auction)
+    if auction["status"] not in ["paused", "completed"]:
+        raise HTTPException(
+            status_code=400,
+            detail="Can only reset paused or completed auctions. Please pause the auction first."
+        )
+    
+    auction_id = auction["id"]
+    
+    try:
+        # 1. Delete all bids for this auction
+        bids_result = await db.bids.delete_many({"auctionId": auction_id})
+        logger.info(f"Deleted {bids_result.deleted_count} bids for auction {auction_id}")
+        
+        # 2. Reset all participants
+        participants = await db.league_participants.find({"leagueId": league_id}, {"_id": 0}).to_list(100)
+        for participant in participants:
+            await db.league_participants.update_one(
+                {"leagueId": league_id, "userId": participant["userId"]},
+                {"$set": {
+                    "clubsWon": [],
+                    "budgetRemaining": league.get("budget", 500000000),
+                    "totalSpent": 0
+                }}
+            )
+        logger.info(f"Reset {len(participants)} participants")
+        
+        # 3. Delete league_points for this league
+        points_result = await db.league_points.delete_many({"leagueId": league_id})
+        logger.info(f"Deleted {points_result.deleted_count} league_points records")
+        
+        # 4. Delete standings for this league
+        standings_result = await db.standings.delete_many({"leagueId": league_id})
+        logger.info(f"Deleted {standings_result.deleted_count} standings records")
+        
+        # 5. Delete the auction
+        await db.auctions.delete_one({"id": auction_id})
+        logger.info(f"Deleted auction {auction_id}")
+        
+        # 6. Reset league status to draft
+        await db.leagues.update_one(
+            {"id": league_id},
+            {"$set": {"status": "draft"}}
+        )
+        logger.info(f"Reset league {league_id} status to draft")
+        
+        return {
+            "message": "Auction reset successfully",
+            "bidsDeleted": bids_result.deleted_count,
+            "participantsReset": len(participants)
+        }
+        
+    except Exception as e:
+        logger.error(f"Error resetting auction: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to reset auction: {str(e)}")
+
+
+
+
 @api_router.post("/auction/{auction_id}/resume")
 async def resume_auction(auction_id: str, commissioner_id: str = None):
     """Resume a paused auction - only commissioner can do this"""
