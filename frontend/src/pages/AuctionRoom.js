@@ -427,6 +427,12 @@ function AuctionRoom() {
       setParticipants(participantsResponse.data.participants || []);
     } catch (e) {
       console.error("Error loading auction:", e);
+      
+      // If auction no longer exists (404 - likely reset by commissioner), clear auction state
+      if (e.response && e.response.status === 404) {
+        console.log("⚠️ Auction not found - likely reset by commissioner");
+        setAuction(null); // This will trigger the reset message screen
+      }
     } finally {
       setLoading(false);
     }
