@@ -227,7 +227,7 @@ export default function CompetitionDashboard() {
       
       // Show API usage info
       if (response.data.api_requests_remaining !== undefined) {
-        console.log(`API requests remaining today: ${response.data.api_requests_remaining}/100`);
+        console.log(`API requests remaining this minute: ${response.data.api_requests_remaining}/10`);
       }
     } catch (e) {
       console.error("Error updating scores:", e);
