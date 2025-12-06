@@ -277,6 +277,129 @@ const Help = () => {
           </div>
         </Section>
 
+        {/* New Features & Updates */}
+        <Section id="updates" title="Recent Updates & New Features" icon="✨">
+          <div className="space-y-6">
+            <div className="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-lg p-4 mb-4">
+              <h4 className="text-lg font-semibold text-gray-900 mb-2">🎉 Latest Enhancements</h4>
+              <p className="text-gray-700 text-sm mb-3">
+                We've added several new features and improvements to enhance your competition experience!
+              </p>
+            </div>
+
+            <div>
+              <h4 className="text-lg font-semibold text-gray-900 mb-3">🔄 Auction Reset Feature (New!)</h4>
+              <p className="text-gray-700 mb-3">
+                Commissioners can now reset an auction and start fresh without recreating the entire league or re-inviting participants.
+              </p>
+              
+              <div className="bg-gray-50 rounded-lg p-4 mb-4">
+                <h5 className="font-semibold text-gray-900 mb-2">How It Works:</h5>
+                <ol className="list-decimal list-inside space-y-2 text-gray-700">
+                  <li><strong>Pause the auction:</strong> Click the ⏸️ Pause button in the Auction Room</li>
+                  <li><strong>Reset auction:</strong> Click the 🔄 Reset button (appears when paused or completed)</li>
+                  <li><strong>Confirm reset:</strong> Review what will be reset and confirm the action</li>
+                  <li><strong>Automatic cleanup:</strong> All bids are cleared, participant budgets reset, rosters cleared</li>
+                  <li><strong>Start fresh:</strong> Return to Competition Detail Page and click "Begin Strategic Competition" to start a new auction</li>
+                </ol>
+              </div>
+
+              <div className="bg-purple-50 border border-purple-200 rounded-lg p-4 mb-4">
+                <p className="text-purple-800 text-sm mb-2">
+                  <strong>💡 What Gets Reset:</strong>
+                </p>
+                <ul className="text-purple-700 text-sm space-y-1 list-disc list-inside">
+                  <li>All auction bids and history</li>
+                  <li>Participant budgets (restored to full amount)</li>
+                  <li>Participant rosters (clubs won are cleared)</li>
+                  <li>League status (returned to pending)</li>
+                </ul>
+              </div>
+
+              <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
+                <p className="text-green-800 text-sm mb-2">
+                  <strong>✅ What's Preserved:</strong>
+                </p>
+                <ul className="text-green-700 text-sm space-y-1 list-disc list-inside">
+                  <li>All participants remain in the league (no re-inviting needed!)</li>
+                  <li>League configuration (budget, slots, timer settings)</li>
+                  <li>Selected teams for the auction</li>
+                  <li>Imported fixtures (if any)</li>
+                </ul>
+              </div>
+
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <p className="text-blue-800 text-sm">
+                  <strong>🎯 For Participants:</strong> If you're in the auction room when the commissioner resets, you'll automatically see a message within 3 seconds with a button to return to the competition page. Just wait there for the commissioner to restart the auction!
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <h4 className="text-lg font-semibold text-gray-900 mb-3">📊 API Rate Limit Display</h4>
+              <p className="text-gray-700 mb-3">
+                We now show accurate API request limits when importing fixtures for Premier League and Champions League competitions.
+              </p>
+              
+              <div className="bg-gray-50 rounded-lg p-4 mb-4">
+                <h5 className="font-semibold text-gray-900 mb-2">What You'll See:</h5>
+                <ul className="list-disc list-inside space-y-2 text-gray-700">
+                  <li><strong>Request counter:</strong> After importing fixtures, you'll see "API requests remaining this minute: X/10"</li>
+                  <li><strong>Rate limit:</strong> Football-Data.org API allows 10 requests per minute on the free tier</li>
+                  <li><strong>Resets automatically:</strong> The counter resets every 60 seconds</li>
+                </ul>
+              </div>
+
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                <p className="text-yellow-800 text-sm">
+                  <strong>💡 Tip:</strong> If you hit the rate limit, simply wait a minute before importing more fixtures. This ensures smooth operation for all commissioners.
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <h4 className="text-lg font-semibold text-gray-900 mb-3">🌍 AFCON Competition Improvements</h4>
+              <p className="text-gray-700 mb-3">
+                AFCON (Africa Cup of Nations) competitions now have a streamlined CSV-only workflow for fixture and score management.
+              </p>
+              
+              <div className="bg-gray-50 rounded-lg p-4 mb-4">
+                <h5 className="font-semibold text-gray-900 mb-2">What Changed:</h5>
+                <ul className="list-disc list-inside space-y-2 text-gray-700">
+                  <li><strong>Simplified interface:</strong> The "Import Fixtures" button is hidden for AFCON leagues on the Competition Detail Page</li>
+                  <li><strong>CSV-only workflow:</strong> AFCON uses manual CSV uploads for both fixtures and scores (as the primary data API doesn't cover this tournament)</li>
+                  <li><strong>Clear instructions:</strong> All fixture/score management happens via the Competition Dashboard → Fixtures tab using CSV templates</li>
+                </ul>
+              </div>
+
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <p className="text-blue-800 text-sm">
+                  <strong>📝 For AFCON Commissioners:</strong> Download the CSV template from the Fixtures tab, fill in your fixture data or match scores, and upload. The system will process everything automatically!
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <h4 className="text-lg font-semibold text-gray-900 mb-3">⚽ Team Name Fixes</h4>
+              <p className="text-gray-700 mb-3">
+                We've corrected team names to ensure reliable fixture imports across all football competitions.
+              </p>
+              
+              <div className="bg-gray-50 rounded-lg p-4">
+                <h5 className="font-semibold text-gray-900 mb-2">Updated Teams:</h5>
+                <ul className="list-disc list-inside space-y-1 text-gray-700">
+                  <li><strong>Manchester City FC:</strong> Previously "Man City" - now matches API naming</li>
+                  <li><strong>Borussia Dortmund:</strong> Previously "B Dortmund" - now matches Champions League data</li>
+                  <li><strong>Sport Lisboa e Benfica:</strong> Corrected external ID and full official name</li>
+                </ul>
+                <p className="text-gray-600 text-sm mt-2">
+                  <em>These updates ensure fixtures import correctly for all selected teams without errors.</em>
+                </p>
+              </div>
+            </div>
+          </div>
+        </Section>
+
         {/* For Players */}
         <Section id="user-join" title="For Players" icon="👥">
           <div className="space-y-6">
