@@ -865,7 +865,12 @@ function AuctionRoom() {
               </div>
             </div>
           )}
+        </div>
+      </div>
 
+      {/* Content Section - Scrollable */}
+      <div className="flex-1 overflow-y-auto px-4 pb-4">
+        <div className="max-w-6xl mx-auto">
           {/* Auction Header */}
           <div className="bg-white rounded-lg shadow-lg p-4 mb-4">
             <div className="flex justify-between items-center">
