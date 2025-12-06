@@ -2585,8 +2585,8 @@ async def import_fixtures_csv(league_id: str, file: UploadFile = File(...), comm
                     else:
                         winner = "draw"
                     
-                    # Auto-mark as completed when scores are provided
-                    status_val = "completed"
+                    # Auto-mark as full-time when scores are provided (use "ft" for scoring service compatibility)
+                    status_val = "ft"
                     logger.info(f"✅ Match {external_match_id}: Scores {goals_home}-{goals_away}, Winner: {winner}, Status: {status_val}")
                 except ValueError:
                     logger.warning(f"⚠️ Invalid score format for {external_match_id}: '{goals_home_str}'-'{goals_away_str}'")
