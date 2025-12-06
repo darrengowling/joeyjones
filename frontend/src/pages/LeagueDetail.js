@@ -627,8 +627,8 @@ export default function LeagueDetail() {
               </div>
             </div>
 
-            {/* Optional: Import Fixtures Before Auction */}
-            {league.status === "pending" && isCommissioner && league.assetsSelected && league.assetsSelected.length > 0 && (
+            {/* Optional: Import Fixtures Before Auction (not for AFCON - CSV only) */}
+            {league.status === "pending" && isCommissioner && league.assetsSelected && league.assetsSelected.length > 0 && league.competitionCode !== 'AFCON' && (
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
                 <div className="flex items-center gap-3">
                   <div className="flex-shrink-0 text-2xl">
