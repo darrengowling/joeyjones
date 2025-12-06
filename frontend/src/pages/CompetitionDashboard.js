@@ -430,7 +430,7 @@ export default function CompetitionDashboard() {
       const apiRemaining = response.data.apiRequestsRemaining;
       
       toast.success(
-        `${message}\n\nAPI requests remaining today: ${apiRemaining}`,
+        `${message}\n\nAPI requests remaining this minute: ${apiRemaining}/10`,
         { duration: 6000 }
       );
       
