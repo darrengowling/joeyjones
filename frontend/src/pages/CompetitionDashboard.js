@@ -904,8 +904,8 @@ export default function CompetitionDashboard() {
                     <li>Upload it using the button below</li>
                   </ol>
                   <a
-                    href="/templates/afcon_2025_group_stage_fixtures.csv"
-                    download="afcon_2025_fixtures.csv"
+                    href="/templates/afcon_2025_fixtures_with_names.csv"
+                    download="afcon_2025_fixtures_with_names.csv"
                     className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 font-semibold text-sm"
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
