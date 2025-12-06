@@ -1316,6 +1316,7 @@ function AuctionRoom() {
               </div>
             </div>
           </div>
+          </div>
         </div>
       </div>
     </div>
