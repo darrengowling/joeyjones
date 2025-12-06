@@ -1004,67 +1004,12 @@ export default function CompetitionDashboard() {
                           disabled:opacity-50"
                       />
                     </label>
-              
-              {/* Important Note about Match IDs */}
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
-                <p className="text-xs font-semibold text-blue-900 mb-1">📋 Important: Match ID Must Match Exactly</p>
-                <p className="text-xs text-blue-800">
-                  Use the <span className="font-mono font-semibold">Match ID</span> shown below each fixture in your CSV. 
-                  The fixture will automatically be marked as &quot;Completed&quot; after upload.
-                </p>
-              </div>
-              
-              <div className="mb-4">
-                <label className="block">
-                  <span className="sr-only">Choose Scores CSV file</span>
-                  <input
-                    type="file"
-                    accept=".csv"
-                    onChange={handleScoreUpload}
-                    disabled={uploadingCSV}
-                    className="block w-full text-sm text-gray-700
-                      file:mr-4 file:py-2 file:px-4
-                      file:rounded-lg file:border-0
-                      file:text-sm file:font-semibold
-                      file:bg-green-100 file:text-green-800
-                      hover:file:bg-green-200
-                      disabled:opacity-50"
-                  />
-                </label>
-              </div>
 
-              {uploadingCSV && (
-                <div className="text-sm text-green-700">Uploading scores...</div>
-              )}
-              
-              {uploadSuccess && (
-                <div className="text-sm text-green-800 bg-green-100 border border-green-300 rounded p-3 font-semibold">
-                  {uploadSuccess}
-                </div>
-              )}
-              
-              {uploadError && (
-                <div className="text-sm text-red-700 bg-red-50 border border-red-200 rounded p-3">
-                  {uploadError}
-                </div>
-              )}
+                  </div>
 
-              <div className="mt-4 text-sm text-gray-600">
-                <a
-                  href="#"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    toast("Sample Scoring CSV format:\nmatchId,playerExternalId,runs,wickets,catches,stumpings,runOuts\nnz-eng-odi-1-2025,harry-brook,67,0,1,0,0\nnz-eng-odi-1-2025,matt-henry,0,2,0,0,0", {
-                      duration: 6000,
-                      style: { maxWidth: '600px' }
-                    });
-                  }}
-                  className="text-green-700 hover:underline font-medium"
-                >
-                  View sample scoring CSV format
-                </a>
+                  <p className="text-xs text-gray-500 mt-3 text-center">💡 Import one fixture at a time as matches complete</p>
+                </div>
               </div>
-            </div>
             )}
           </>
         )}
