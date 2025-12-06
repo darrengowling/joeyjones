@@ -115,7 +115,7 @@ setParticipants(response.data.participants || []);
 ### API Test:
 ```bash
 # Test the new API format
-curl -X GET "https://restart-auction.preview.emergentagent.com/api/leagues/{league_id}/participants"
+curl -X GET "https://draft-kings-mobile.preview.emergentagent.com/api/leagues/{league_id}/participants"
 
 # Expected response:
 {

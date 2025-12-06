@@ -14,7 +14,7 @@
 
 import { test, expect } from '@playwright/test';
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'https://restart-auction.preview.emergentagent.com';
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'https://draft-kings-mobile.preview.emergentagent.com';
 
 test.describe('Auction Subset Selection (FEATURE_ASSET_SELECTION=true)', () => {
   

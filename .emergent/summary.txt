@@ -1,50 +1,49 @@
 <analysis>**original_problem_statement:**
-The user's primary goal is to finalize the application for a pilot deployment. This involves fixing a critical bug preventing the use of multiple football competitions (specifically, making Champions League work alongside the Premier League) and then adding support for a new tournament, the Africa Cup of Nations (AFCON), which is a hard blocker for the pilot user group. The user has also requested minor UI tidy-ups.
-
-The core requirements are:
-1.  **Fix Champions League (CL) Fixture Imports:** This was already completed in a previous session.
-2.  **Implement AFCON Support:** Add the 24 national teams for the 2025/26 AFCON tournament. Since the primary data API does not cover AFCON, this functionality must rely on manual CSV uploads for both creating fixtures and updating scores.
-3.  **UI/Data Cleanup:** Address user confusion and improve UI/UX where needed, particularly for commissioner-facing features.
-4.  **New Feature Request:** Investigate and potentially implement a feature to allow commissioners to restart an auction.
+The user's initial goal was to finalize the application for a pilot deployment. This started with investigating an auction restart feature. However, the scope expanded significantly to include:
+1.  **Fix Critical Bugs:**
+    *   Resolve recurring fixture import failures for football teams with name mismatches (e.g., Man City vs. Manchester City FC).
+    *   Correct the inaccurate API rate-limit tracking and display.
+    *   Fix UI bugs where inappropriate controls were shown for certain competition types (e.g., an API import button for CSV-based AFCON leagues).
+2.  **Implement Auction Reset Feature:** Create a safe and intuitive way for a commissioner to reset a completed or in-progress auction without affecting league participants, allowing a fresh auction to be started.
+3.  **Complete Mobile UX Overhaul:** A full mobile audit was requested due to poor user experience on mobile devices. The user provided a series of structured prompts (A-H) to guide a comprehensive refactor of the mobile UI, focusing on responsiveness, typography, layout, input safety, and touch targets. The final step is to perform E2E visual checks.
+4.  **Update User Documentation:** Document the new features and improved flows in the application's help section.
 
 **User's preferred language**: English
 
 **what currently exists?**
-The application is stable. The PL and CL functionalities are verified and working as expected. The critical bugs related to AFCON CSV imports have been fully resolved. This included fixing silent backend failures where scores weren't saving, correcting misleading frontend errors, and ensuring points calculation and league table updates work correctly.
-
-A series of cascading bugs caused by inconsistent data structures were also fixed by standardizing the AFCON team data to match the PL/CL structure.
-
-The user-facing commissioner tools on the Fixtures tab have been significantly simplified with a context-aware UI that shows relevant controls for the specific competition (API buttons for PL/CL, CSV download/upload for AFCON). A user-friendly CSV template with human-readable team names is now available for download.
-
-The agent has completed a full system audit and created onboarding documentation for future agents.
+The application is functionally stable across all competition types (PL, CL, AFCON, Cricket) after several critical data and UI bugs were resolved. The Auction Reset feature has been fully implemented, including a robust backend endpoint and a well-defined UX flow for all participants. A comprehensive mobile UX overhaul has been performed across the application according to the user's detailed specifications (Prompts A-G), addressing layout, typography, inputs, and touch targets. The codebase now includes a foundational responsive CSS file and updated components. The user guide in the  page has been updated to reflect recent changes.
 
 **Last working item**:
--   **Last item agent was working**: Investigating the feasibility of a new feature requested by the user: an auction restart button. The goal is to allow a commissioner to clear an in-progress or completed auction and start over without creating an entirely new league. The agent was examining the backend code related to auction completion ( in ) and how participant data () and league status are updated to assess the complexity and risks.
+-   **Last item agent was working**: The agent was about to begin Prompt H from the user's mobile UX overhaul plan. This involves manually conducting mobile End-to-End (E2E) regression tests for critical user flows on specific mobile viewports, as the user explicitly forbade the use of the automated testing agent due to its poor performance.
 -   **Status**: NOT STARTED
 -   **Agent Testing Done**: N
--   **Which testing method agent to use?**: both. This new feature will require a new backend endpoint (e.g., ) and a new button/handler in the frontend. Both backend and frontend testing agents should be used after implementation.
+-   **Which testing method agent to use?**: **DO NOT USE THE TESTING AGENT.** The user has explicitly banned its use. The next agent must manually perform the E2E tests using the  tool to capture and verify the UI at the specified mobile viewports (iPhone 13: 390x844, Pixel 7: 360x800) as per the user's prompt.
 -   **User Testing Done**: N
 
 **All Pending/In progress Issue list**:
-There are no pending high-priority issues. The main P0 blocker from the start of the session has been resolved and verified.
+-   **Issue 1: Manually Perform Mobile E2E & Visual Checks (Prompt H) (P0)**
+    -   **Description**: This is the final confidence gate before deployment. The agent needs to manually execute the E2E test plan defined by the user in chat message #713.
+    -   **Attempted fixes**: The previous agent attempted to use the , which failed and was rejected by the user.
+    -   **Next debug checklist**:
+        1.  Re-read the user's Prompt H in chat message #713 for the exact test cases.
+        2.  Use the  tool with device emulation for iPhone 13 (390×844) and Pixel 7 (360×800).
+        3.  Manually step through each flow: Login, Create League, Enter Auction Room, Bid input, and Toast visibility.
+        4.  Capture full-page screenshots for each step and save them to  or a similar new directory like .
+        5.  Confirm that all UI elements are visible, correctly laid out, and that no CTAs are obscured, especially when the on-screen keyboard would appear.
+    -   **Why fix this issue and what will be achieved with the fix?**: This will validate that the extensive mobile UX refactoring (Phases A-G) was successful and did not introduce regressions. It is the final required step before the user considers the application ready for pilot deployment.
+    -   **Status**: NOT STARTED
+    -   **Is recurring issue?**: N
+    -   **Should Test frontend/backend/both after fix?**: frontend
+    -   **Blocked on other issue**: None.
 
 **In progress Task List**:
--   **Task 1: Plan and Propose Auction Restart Feature (P1)**
-    -   **Where to resume**: Continue the investigation from the last step. Formulate a detailed plan for the new feature. This plan should outline:
-        1.  The new API endpoint signature (e.g., ).
-        2.  The backend logic required to reset the auction state. This includes clearing  from all participants, resetting participant budgets, clearing the  collection for that league, and setting the league  back to pre-auction or similar.
-        3.  The frontend changes: adding a Restart Auction button (e.g., on the  page for the commissioner) and its corresponding API call.
-        4.  Present this plan to the user for approval before implementation.
-    -   **What will be achieved with this?**: A clear, user-approved plan for a valuable new feature that improves the user experience for commissioners during testing.
-    -   **Status**: NOT STARTED
-    -   **Should Test frontend/backend/both after fix?**: both
-    -   **Blocked on something**: User approval of the proposed plan.
+There are no other tasks in progress. The focus is entirely on the pending Mobile E2E tests.
 
 **Upcoming and Future Tasks**
 *   **Upcoming Tasks:**
-    *   **P1: Implement Manual Score Entry UI:** As per the , create a UI on the fixtures page that allows a commissioner to manually enter or edit scores for a match. This will use the already-created  endpoint.
-    *   **P1: Implement Auction Room Mobile UI Quick Wins:** Implement the UI/CSS changes proposed in  to improve the mobile experience in the  page.
+    *   **P1: Implement Manual Score Entry UI:** As per the original handoff, create a UI on the fixtures page for commissioners to manually enter scores. The backend endpoint  already exists.
 *   **Future Tasks:**
+    *   **Refactor Fixture Import Logic:** The user requested to remember the idea of refactoring the fixture import logic to use the  from the API directly instead of relying on fragile name matching.
     *   User-Configurable Scoring Rules.
     *   Full Auction UI Redesign.
     *   Refactor  into modular FastAPI routers.
@@ -52,97 +51,101 @@ There are no pending high-priority issues. The main P0 blocker from the start of
     *   Implement Redis for caching and rate limiting.
 
 **Completed work in this session**
--   **AFCON CSV Score Import (FIXED):**
-    -   Resolved silent backend failure by adding missing score fields (, , ) to the  Pydantic model in .
-    -   Corrected CSV import logic in  to use  (full-time) instead of completed to align with the scoring service.
--   **AFCON Frontend Bugs (FIXED):**
-    -   Fixed a React state bug in  that caused an error page after CSV upload.
-    -   Added an automatic points recalculation trigger in the frontend after a successful football CSV upload.
--   **Data Structure & Cascading Bugs (FIXED):**
-    -   Standardized the data structure of all 24 AFCON teams in the  collection to match PL/CL teams (adding ,  fields), which resolved multiple downstream bugs related to team selection and auction creation.
-    -   Made the  field optional in the  Pydantic model () to accommodate non-UEFA teams like those in AFCON.
--   **Commissioner UI/UX (IMPROVED):**
-    -   Redesigned the Fixtures tab UI in  into a clean, simplified, context-aware interface, hiding irrelevant options based on the league's sport/competition.
-    -   Created a user-friendly AFCON CSV template () with human-readable team names.
-    -   Fixed a broken download link for the template by creating a dedicated backend endpoint () to serve the file correctly.
--   **System Documentation (CREATED):**
-    -   Conducted a full system audit and produced .
-    -   Created a detailed onboarding prompt for future agents: .
+-   **Auction Reset Feature (DONE):**
+    -   Created a new backend endpoint  to safely delete auction data and reset participant budgets/rosters.
+    -   Added a Reset Auction button to the  page for commissioners.
+    -   Implemented a non-socket-based UX flow where non-commissioner participants are automatically shown a Reset message and redirected, improving on the initial manual refresh clunkiness.
+-   **Critical Bug Fixes (DONE):**
+    -   **Fixture Imports:** Fixed import failures for Man City and B Dortmund by correcting their names in the  collection. Corrected the  for Benfica.
+    -   **API Rate Limiting:** Fixed the client in  to correctly read the  header from the API, providing accurate rate limit feedback to the user.
+    -   **Conditional UI:** Fixed the  page to correctly hide the API Import Fixtures button and its entire containing section for AFCON leagues.
+-   **Mobile UX Overhaul (Phases A-G) (DONE):**
+    -   **Phase A:** Conducted a full mobile audit and documented issues with screenshots.
+    -   **Phase B:** Established a responsive CSS foundation (, viewport meta, Tailwind breakpoints).
+    -   **Phase C:** Fixed text bleed issues with CSS variables for typography and truncation classes.
+    -   **Phase D:** Fixed layout overflow and scroll traps, primarily by refactoring  to use a single scroll container.
+    -   **Phase E:** Hardened mobile inputs to prevent iOS keyboard zoom and ensure CTAs remain visible.
+    -   **Phase F:** Improved touch ergonomics by ensuring 44x44px tap targets and adding accessibility labels.
+    -   **Phase G:** Performed a targeted polish of the  mobile layout.
+-   **Documentation (DONE):**
+    -   Updated the user guide in  with information about the new Auction Reset feature and other flow improvements.
 
 **Earlier issues found/mentioned but not fixed**
--   The UX gap where AFCON commissioners cannot upload fixtures *before* an auction (unlike PL/CL) was identified. The user decided this was acceptable for the pilot and deprioritized a fix.
+-   None. All issues raised by the user during this session were addressed.
 
 **Known issue recurrence from previous fork**
--   The recurring AFCON CSV score update fails silently issue has been resolved. The root causes were identified as a missing Pydantic model field and an incorrect status value (completed vs ft).
+-   The issue of fixture import failures due to name mismatches is a recurring *pattern*. While the specific cases of Man City and B Dortmund are fixed, the underlying reliance on name matching instead of a more robust  match remains a future refactoring task.
 
 **Code Architecture**
 
 
 **Key Technical Concepts**
--   **Pydantic Model Validation:** Understood that Pydantic silently drops fields not defined in the model, which was the root cause of the main bug.
--   **Data Consistency:** The session highlighted the critical importance of maintaining a consistent data structure within a single database collection (). Inconsistent structures led to multiple, hard-to-trace cascading failures.
--   **Separation of Concerns:** Realized that fixture score updates and points calculation are two separate processes, linked by the  endpoint.
--   **Static File Serving:** Learned that serving static files from the  directory can be intercepted by the frontend router, and the reliable solution is to create a dedicated backend endpoint to serve the file.
--   **Schema Discovery:** Understood the importance of correctly identifying the source of truth for data (e.g., points are in , not ).
+-   **Debugging UI Race Conditions:** Investigated why UI elements were not updating as expected, tracing issues to incorrect state values ( vs. ) and conditional rendering logic that needed to be more comprehensive.
+-   **Polling as a Socket.io Alternative:** Implemented a simple  with  to periodically poll for auction status when paused, providing automatic updates to users without touching the complex socket layer.
+-   **Systematic Mobile Refactoring:** Followed a structured, multi-phase approach (A-H) provided by the user to safely refactor the mobile UX without introducing regressions.
+-   **CSS for Mobile Safety:** Applied techniques like  to prevent iOS keyboard zoom,  units for better viewport handling,  to avoid keyboard overlap, and  on overlays.
+-   **CSS Layout for Single-Scroll:** Refactored a complex component () to use a  parent with a  child, creating a robust single-scrolling container.
 
 **key DB schema**
--   **assets:** All football teams now have a consistent structure with  (e.g., AFCON, PL) and  (e.g., [Africa Cup of Nations]) fields.
--   **fixtures:**  field for completed matches is now consistently set to . Contains score fields.
--   **league_points:** This collection is the source of truth for calculated points for each club in a league. It is updated by the scoring recomputation endpoint.
+-   **assets**: No schema changes. Data was updated for , , and  to correct names and external IDs.
+-   **leagues**: The  field is now critical for the reset flow, being changed from  to  by the reset endpoint to ensure the Start Auction button reappears correctly.
 
 **All files of reference**
--   : Contains all backend logic, including the fixed CSV import and new template-serving endpoint.
--   : Defines the Pydantic models; was a key part of the initial bug fix.
--   : Contains the new, simplified commissioner UI.
--   : The new, user-friendly CSV template.
--   : The new, comprehensive prompt for future agents to use.
--   : The detailed system audit document.
+-   : Core file for the auction reset feature and mobile polish.
+-   : Location of the Start Auction button and the hidden AFCON button.
+-   : Contains the logic for the auction reset endpoint.
+-   : Contains the create league modal, which was heavily modified for mobile input safety.
+-   : New file containing all foundational CSS for the mobile overhaul.
+-   : The output of the mobile audit, detailing all issues found.
 
 **Critical Info for New Agent**
--   **READ THE ONBOARDING DOCS:** Before starting, read  and . This was a key output of the last session to prevent repeated mistakes.
--   **Verify, Don't Assume:** The previous agent caused several issues by making assumptions and implementing fixes without user confirmation. Always confirm your understanding and proposed plan with the user before writing any code.
--   **Know the DB Schema:** Points are stored in the  collection, not . The  collection now has a consistent data structure; maintain it.
--   **Auction Restart is the Next Task:** The user has requested a feature to restart an auction. Your first task is to investigate this and present a clear plan to the user for approval. Do not start implementation without approval.
+-   **DO NOT USE THE TESTING AGENT.** The user was extremely dissatisfied with its performance and has explicitly forbidden its use. All testing must be done manually or with other tools like .
+-   **Follow the User's Prompts Meticulously:** The user provided a very structured, multi-phase plan (A-H) for the mobile refactor. The next task is the final step, Prompt H. Adhere to it exactly.
+-   **Verify Navigation and Terminology:** The previous agent was repeatedly corrected on application flow and page naming. Before making assumptions, verify navigation paths in  and component displays to ensure alignment with the user's understanding.
+-   **Prioritize Safety:** The user has repeatedly emphasized not breaking existing logic, especially for sockets and timers. All recent changes have been CSS/className based where possible. Continue this cautious approach.
 
 **documents created in this job**
--   /app/AFCON_CSV_IMPORT_FIX.md
--   /app/AFCON_COMMISSIONER_GUIDE.md
--   /app/AFCON_TEAM_LOOKUP.md
--   /app/UI_SIMPLIFICATION_MOCKUP.md
--   /app/SYSTEM_ARCHITECTURE_AUDIT.md
--   /app/AGENT_ONBOARDING_PROMPT.md
+-   /app/AUCTION_RESET_FEATURE.md
+-   /app/docs/mobile_audit.md
+-   /app/MOBILE_UX_AUDIT_DEPLOYMENT.md
+-   /app/MOBILE_AUDIT_REVISED.md
+-   /app/docs/mobile_foundation_complete.md
+-   /app/docs/typography_truncation_complete.md
+-   /app/docs/layout_containment_complete.md
+-   /app/docs/mobile_input_keyboard_safety_complete.md
+-   /app/docs/tap_targets_performance_complete.md
+-   /app/docs/mobile_polish_auction_room_complete.md
 
 **Last 10 User Messages and any pending user messages**
-1.  **User:** Approved the UI mockup for the fixtures tab. (Status: **Completed**)
-2.  **User:** Requested a new feature: a way to restart an auction without creating a new league, and asked about feasibility. (Status: **In Progress**)
-3.  **Agent:** Began investigating the auction restart feature. (Status: **In Progress**)
-4.  **User:** Told the agent to read the new onboarding prompt it created. (Status: **Actioned**)
-5.  **User:** Frustrated that the testing agent was saying they weren't logged in. (Status: **Actioned**)
-6.  **User:** Confirmed the simplified UI looks much better and will test later. (Status: **Completed**)
-7.  **User:** Repeated the request for an auction restart feature, asking about difficulty and risk. (Status: **In Progress**)
-8.  **Agent:** Started investigating the auction restart feature in the code. (Status: **In Progress**)
-9.  **User:** Asked the agent to conduct a full system audit and create a new onboarding prompt to prevent future issues. (Status: **Completed**)
-10. **User:** Asked if the agent *actually* understands the system now after the audit. (Status: **Completed**)
+1.  **User**: Asks for a full mobile UX audit and plan due to numerous issues. (Status: **Completed**)
+2.  **User**: Corrects the agent about the location of timer settings (in a modal, not ). (Status: **Actioned**)
+3.  **User**: Provides Prompt A for a non-destructive mobile audit with screenshots. (Status: **Completed**)
+4.  **User**: Provides Prompt B to build a base responsive CSS foundation. (Status: **Completed**)
+5.  **User**: Provides Prompt C to fix typography and text truncation. (Status: **Completed**)
+6.  **User**: Provides Prompt D to fix layout containment and scrolling. (Status: **Completed**)
+7.  **User**: Provides Prompt E to harden mobile inputs for keyboard safety. (Status: **Completed**)
+8.  **User**: Provides Prompt F to improve tap targets and performance. (Status: **Completed**)
+9.  **User**: Provides Prompt G for a targeted polish of the Auction Room mobile view. (Status: **Completed**)
+10. **User**: Provides Prompt H for mobile E2E tests, but then forcefully stops the agent from using the , calling it fatally flawed and demanding manual execution. (Status: **Pending/Next Action**)
 
 **Project Health Check:**
--   **Broken**: None. All major known issues have been resolved.
+-   **Broken**: None. Core features are working.
 -   **Mocked**: N/A.
 
 **3rd Party Integrations**
--   **Football-Data.org** — requires User API Key. Used for football fixture imports (PL and CL only).
--   **Cricbuzz (via RapidAPI)** — requires User API Key. Used for cricket fixture and score updates.
+-   **Football-Data.org** — requires User API Key. Used for PL and CL fixture imports. Rate limit tracking is now accurate.
+-   **Cricbuzz (via RapidAPI)** — requires User API Key. Used for cricket fixtures and scores.
 
 **Testing status**
--   **Testing agent used after significant changes**: YES (but failed due to a red herring session issue).
+-   **Testing agent used after significant changes**: YES, but it failed catastrophically, leading to a permanent ban from the user. **DO NOT USE AGAIN.**
 -   **Troubleshoot agent used after agent stuck in loop**: NO
--   **Test files created**: None.
--   **Known regressions**: Multiple regressions were introduced during the session due to inconsistent data structures, but they have all been identified and fixed.
+-   **Test files created**: The testing agent created  but the user deemed it and its proposed changes invalid.
+-   **Known regressions**: None known. The mobile overhaul was done systematically to avoid them, but the pending E2E tests are meant to confirm this.
 
 **Credentials to test flow:**
 -   **User:** 
 -   **Password:** (Magic link based, no password)
 
 **What agent forgot to execute**
--   The agent initially forgot to account for inconsistent data structures when re-populating the database, which caused a cascade of bugs.
--   The agent repeatedly misdiagnosed issues by looking in the wrong database collections ( instead of ) or making assumptions without verification. It has since learned from these mistakes and created documentation to prevent recurrence.
--   The final task of investigating the Auction Restart feature was started but not completed.</analysis>
+-   The agent initially forgot the correct location of the create competition modal settings, requiring user correction.
+-   The final user-mandated task, Prompt H (manual mobile E2E testing), has not been started.</analysis>

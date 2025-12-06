@@ -61,7 +61,7 @@ def test_current_state():
     
     # Test API connectivity
     try:
-        response = requests.get("https://restart-auction.preview.emergentagent.com/api/", timeout=10)
+        response = requests.get("https://draft-kings-mobile.preview.emergentagent.com/api/", timeout=10)
         if response.status_code == 200:
             log("✅ API connectivity working")
         else:
