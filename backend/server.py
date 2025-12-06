@@ -2297,6 +2297,7 @@ async def get_league_summary(league_id: str, userId: str):
         "leagueId": league_id,
         "name": league["name"],
         "sportKey": league["sportKey"],
+        "competitionCode": league.get("competitionCode"),
         "status": status,
         "commissioner": {
             "id": league["commissionerId"],
