@@ -1123,7 +1123,7 @@ function AuctionRoom() {
                             setBidAmount(newBid);
                           }}
                           disabled={!ready}
-                          className="flex-shrink-0 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-lg text-sm font-medium border border-gray-300 disabled:opacity-50"
+                          className="flex-shrink-0 px-4 py-3 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-lg text-sm font-medium border border-gray-300 disabled:opacity-50"
                         >
                           +{amount}m
                         </button>
