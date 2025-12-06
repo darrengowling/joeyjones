@@ -733,7 +733,9 @@ const Home = () => {
                 </label>
                 <input
                   type="number"
-                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-[16px]"
                   value={leagueForm.clubSlots}
                   onChange={(e) => setLeagueForm({ ...leagueForm, clubSlots: Number(e.target.value) })}
                   min="1"
