@@ -562,6 +562,37 @@ function AuctionRoom() {
     }
   };
 
+
+  const resetAuction = async () => {
+    if (!window.confirm(
+      `Reset this auction? This will:\n` +
+      `• Clear all bids and auction history\n` +
+      `• Reset all participant budgets and rosters\n` +
+      `• Allow you to start a fresh auction\n\n` +
+      `Participants will remain in the league. This action cannot be undone.`
+    )) {
+      return;
+    }
+
+    try {
+      const result = await axios.post(
+        `${API}/leagues/${league?.id}/auction/reset?commissioner_id=${user?.id}`
+      );
+      console.log("Auction reset:", result.data);
+      toast.success("Auction reset successfully! Redirecting to league setup...");
+      
+      // Redirect to Competition Detail Page to start fresh
+      setTimeout(() => {
+        navigate(`/league/${league?.id}`);
+      }, 1500);
+    } catch (e) {
+      console.error("Error resetting auction:", e);
+      const errorMsg = e.response?.data?.detail || "Failed to reset auction. Please try again.";
+      toast.error(errorMsg);
+    }
+  };
+
+
   const deleteAuction = async () => {
     if (!window.confirm(
       `Are you sure you want to delete this auction? This will:\n` +
