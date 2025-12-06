@@ -653,6 +653,14 @@ export default function LeagueDetail() {
                       </div>
                     ) : (
                       <div className="flex items-center gap-2">
+                        {(() => {
+                          console.log('🔍 Import button check:', {
+                            sportKey: league.sportKey,
+                            competitionCode: league.competitionCode,
+                            shouldShow: league.sportKey === 'football' && league.competitionCode !== 'AFCON'
+                          });
+                          return null;
+                        })()}
                         {league.sportKey === 'football' && league.competitionCode !== 'AFCON' && (
                           <button 
                             onClick={handleImportFootballFixtures}
