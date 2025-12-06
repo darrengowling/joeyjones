@@ -1137,6 +1137,8 @@ export default function App() {
             maxWidth: '90vw',
             wordBreak: 'break-word',
             overflowWrap: 'anywhere',
+            minHeight: '44px',
+            padding: '12px 16px',
           },
           success: {
             iconTheme: {
