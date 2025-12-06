@@ -5,7 +5,7 @@
 - iPhone 13 (390×844)
 - Pixel 7 (360×800)  
 **Testing Method**: Manual screenshot tool (NOT testing agent as per user directive)  
-**Screenshots Location**: `/app/frontend/public/mobile_e2e_tests/`  
+**Screenshots Location**: Embedded in test execution output (screenshot tool)  
 **Status**: ✅ COMPLETED
 
 ---
