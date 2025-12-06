@@ -347,12 +347,12 @@ export default function MyCompetitions() {
                       {comp.assetsOwned.slice(0, 4).map((asset, idx) => (
                         <div
                           key={idx}
-                          className="flex items-center justify-between p-2 bg-blue-50 rounded-lg border border-blue-200"
+                          className="flex items-center justify-between p-2 bg-blue-50 rounded-lg border border-blue-200 gap-2"
                         >
-                          <span className="text-sm font-semibold text-blue-900">
+                          <span className="text-[var(--t-sm)] sm:text-[var(--t-md)] font-semibold text-blue-900 truncate break-any">
                             {asset.name || `${getUiHints(comp.sportKey).assetLabel} ${idx + 1}`}
                           </span>
-                          <span className="text-sm text-blue-700 font-bold">
+                          <span className="text-[var(--t-sm)] sm:text-[var(--t-md)] text-blue-700 font-bold whitespace-nowrap">
                             {formatCurrency(asset.price)}
                           </span>
                         </div>
