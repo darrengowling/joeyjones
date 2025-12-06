@@ -1130,13 +1130,13 @@ function AuctionRoom() {
                       ))}
                     </div>
                     
-                    <div className="flex gap-2 mb-2">
+                    <div className="flex flex-col sm:flex-row gap-2 mb-2">
                       <input
                         type="number"
                         inputMode="numeric"
                         pattern="[0-9]*"
                         placeholder="Enter bid amount"
-                        className="flex-1 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-[16px]"
+                        className="w-full sm:flex-1 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-[16px]"
                         value={bidAmount}
                         onChange={(e) => setBidAmount(e.target.value)}
                         disabled={!ready}
@@ -1145,7 +1145,7 @@ function AuctionRoom() {
                       <button
                         onClick={placeBid}
                         disabled={!ready || participants.find((p) => p.userId === user?.id)?.clubsWon?.length >= (league?.clubSlots || 3)}
-                        className={`px-6 py-2 rounded-lg font-semibold text-base ${
+                        className={`w-full sm:w-auto px-6 py-3 sm:py-2 rounded-lg font-semibold text-base ${
                           !ready || participants.find((p) => p.userId === user?.id)?.clubsWon?.length >= (league?.clubSlots || 3) 
                             ? 'bg-gray-400 cursor-not-allowed' 
                             : 'bg-blue-600 text-white hover:bg-blue-700'
