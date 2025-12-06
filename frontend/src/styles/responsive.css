@@ -43,3 +43,18 @@
   padding-top: env(safe-area-inset-top);
   padding-bottom: env(safe-area-inset-bottom);
 }
+
+/* Mobile input & keyboard safety */
+input, textarea, select {
+  /* Prevent iOS zoom on focus - min 16px font size */
+  font-size: max(16px, 1em);
+  
+  /* Ensure input scrolls into view above keyboard */
+  scroll-margin-bottom: 96px;
+}
+
+/* Input base styles - prevent zoom without breaking responsive design */
+.input-safe {
+  font-size: 16px;
+  scroll-margin-bottom: 96px;
+}
