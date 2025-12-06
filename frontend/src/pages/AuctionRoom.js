@@ -631,22 +631,14 @@ function AuctionRoom() {
           <div className="text-6xl mb-4">🔄</div>
           <h2 className="text-2xl font-bold text-gray-900 mb-4">Auction Has Been Reset</h2>
           <p className="text-gray-600 mb-6">
-            The commissioner has reset this auction. Return to your competitions page to join the new auction when it starts.
+            The commissioner has reset this auction. Please wait on the competition page for the commissioner to restart the auction.
           </p>
-          <div className="flex flex-col gap-3">
-            <button
-              onClick={() => navigate('/my-competitions')}
-              className="px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition"
-            >
-              My Competitions
-            </button>
-            <button
-              onClick={() => navigate(-1)}
-              className="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg font-semibold hover:bg-gray-300 transition"
-            >
-              Go Back
-            </button>
-          </div>
+          <button
+            onClick={() => navigate(-1)}
+            className="px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition"
+          >
+            Return to Competition Page
+          </button>
         </div>
       </div>
     );
