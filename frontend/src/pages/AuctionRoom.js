@@ -1136,7 +1136,7 @@ function AuctionRoom() {
                         inputMode="numeric"
                         pattern="[0-9]*"
                         placeholder="Enter bid amount"
-                        className="w-full sm:flex-1 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-[16px]"
+                        className="w-full sm:flex-1 px-3 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-[16px]"
                         value={bidAmount}
                         onChange={(e) => setBidAmount(e.target.value)}
                         disabled={!ready}
