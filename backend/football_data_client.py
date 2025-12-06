@@ -270,5 +270,8 @@ class FootballDataClient:
         return matches
     
     def get_requests_remaining(self) -> int:
-        """Get remaining API requests for current minute"""
+        """Get remaining API requests for current minute from actual API response"""
+        if self.requests_remaining is not None:
+            return self.requests_remaining
+        # Fallback if no API call has been made yet
         return max(0, self.rate_limit - self.request_count)
