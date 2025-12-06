@@ -2836,13 +2836,6 @@ async def import_fixtures_from_api(
         # Match by team name since Football-Data.org uses different IDs
         team_names = [team.get("name") for team in teams]
         
-        # Safety check: must have team names to filter
-        if not team_names:
-            raise HTTPException(
-                status_code=400,
-                detail="No valid team names found for filtering. Please ensure teams are properly configured."
-            )
-        
         api_fixtures = []
         for fixture in all_fixtures:
             home_name = fixture.get("teams", {}).get("home", {}).get("name", "")
