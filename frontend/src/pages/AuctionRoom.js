@@ -951,7 +951,7 @@ function AuctionRoom() {
                         : "bg-gray-50 border-gray-200"
                     }`}
                   >
-                    <div className="font-semibold text-gray-900 text-xs mb-1 truncate">
+                    <div className="font-semibold text-gray-900 text-[var(--t-xs)] sm:text-[var(--t-sm)] mb-1 truncate break-any">
                       {p.userName} {isCurrentUser && "(You)"}
                     </div>
                     <div className="space-y-1">
