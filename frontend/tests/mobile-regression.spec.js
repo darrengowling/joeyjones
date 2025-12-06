@@ -398,7 +398,6 @@ Object.entries(DEVICES).forEach(([deviceKey, deviceConfig]) => {
         // Take screenshot
         await page.screenshot({
           path: `${SCREENSHOT_DIR}/mobile-toast-${deviceKey}.png`,
-          quality: 40,
           fullPage: false
         });
         
