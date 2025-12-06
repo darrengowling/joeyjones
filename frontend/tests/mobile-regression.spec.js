@@ -278,7 +278,6 @@ Object.entries(DEVICES).forEach(([deviceKey, deviceConfig]) => {
         // Take failure screenshot
         await page.screenshot({
           path: `${SCREENSHOT_DIR}/mobile-auction-entry-${deviceKey}-FAILED.png`,
-          quality: 40,
           fullPage: false
         });
         
