@@ -5579,6 +5579,17 @@ app.add_middleware(
 # Include the router in the main app
 app.include_router(api_router)
 
+# Serve AFCON template file
+@app.get("/api/templates/afcon_2025_fixtures_with_names.csv")
+async def get_afcon_template():
+    """Serve the AFCON fixtures template with team names"""
+    file_path = "/app/public/templates/afcon_2025_fixtures_with_names.csv"
+    return FileResponse(
+        path=file_path,
+        media_type="text/csv",
+        filename="afcon_2025_fixtures_with_names.csv"
+    )
+
 # Mount Socket.IO - restore original working configuration
 # Note: Using 'api/socket.io' to match Kubernetes ingress routing rules
 socket_app = socketio.ASGIApp(
