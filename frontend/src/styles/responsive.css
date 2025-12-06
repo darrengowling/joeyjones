@@ -1,0 +1,45 @@
+/**
+ * Mobile Responsive Foundation
+ * Non-breaking CSS utilities for mobile optimization
+ * Added: December 6, 2025
+ */
+
+/* Container with consistent mobile padding */
+.container {
+  max-width: 100%;
+  padding-inline: 12px;
+}
+
+/* Text wrapping utilities for long content */
+.break-any {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* Safe area helpers for notched devices */
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.pt-safe {
+  padding-top: env(safe-area-inset-top);
+}
+
+.pl-safe {
+  padding-left: env(safe-area-inset-left);
+}
+
+.pr-safe {
+  padding-right: env(safe-area-inset-right);
+}
+
+/* Additional mobile-friendly utilities */
+.px-safe {
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+.py-safe {
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+}
