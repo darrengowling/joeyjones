@@ -655,7 +655,7 @@ const Home = () => {
                       setLeagueForm({ ...leagueForm, budget: newMillions * 1000000 });
                       setBudgetDisplay(newMillions.toString());
                     }}
-                    className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg font-bold text-xl"
+                    className="px-4 py-3 bg-gray-200 hover:bg-gray-300 rounded-lg font-bold text-xl"
                   >
                     −
                   </button>
