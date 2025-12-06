@@ -893,6 +893,7 @@ export default function CompetitionDashboard() {
               <h3 className="text-lg font-bold text-gray-900 mb-3">Import Fixtures (CSV)</h3>
               
               {/* AFCON Template Download Section */}
+              {console.log('CompetitionCode:', summary?.competitionCode, 'Match:', summary?.competitionCode === 'AFCON')}
               {summary?.competitionCode === 'AFCON' && (
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
                   <h4 className="text-sm font-semibold text-blue-900 mb-2">📋 Step-by-Step Guide:</h4>
