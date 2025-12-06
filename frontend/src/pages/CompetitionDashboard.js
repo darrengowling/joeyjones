@@ -563,17 +563,17 @@ export default function CompetitionDashboard() {
               {summary.yourRoster.map((asset, idx) => (
                 <div
                   key={idx}
-                  className="flex items-center justify-between p-2 bg-blue-50 rounded-lg border border-blue-200"
+                  className="flex items-center justify-between p-2 bg-blue-50 rounded-lg border border-blue-200 gap-2"
                 >
-                  <div className="flex items-center gap-2">
-                    <span className="w-6 h-6 bg-blue-200 rounded-full flex items-center justify-center text-xs font-bold">
+                  <div className="flex items-center gap-2 min-w-0 flex-1">
+                    <span className="w-6 h-6 bg-blue-200 rounded-full flex items-center justify-center flex-shrink-0 text-[var(--t-xs)] font-bold">
                       {idx + 1}
                     </span>
-                    <span className="text-sm font-semibold text-blue-900">
+                    <span className="text-[var(--t-sm)] sm:text-[var(--t-md)] font-semibold text-blue-900 truncate break-any">
                       {asset.name || `${uiHints.assetLabel} ${idx + 1}`}
                     </span>
                   </div>
-                  <span className="text-sm text-blue-700 font-bold">
+                  <span className="text-[var(--t-sm)] sm:text-[var(--t-md)] text-blue-700 font-bold whitespace-nowrap flex-shrink-0">
                     {formatCurrency(asset.price)}
                   </span>
                 </div>
