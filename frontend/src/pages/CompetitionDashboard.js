@@ -904,7 +904,7 @@ export default function CompetitionDashboard() {
                     <li>Upload it using the button below</li>
                   </ol>
                   <a
-                    href="/templates/afcon_2025_fixtures_with_names.csv"
+                    href={`${API}/templates/afcon_2025_fixtures_with_names.csv`}
                     download="afcon_2025_fixtures_with_names.csv"
                     className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 font-semibold text-sm"
                   >
