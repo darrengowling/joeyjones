@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "@/index.css";
 import "./styles/brand.css";
+import "./styles/responsive.css";
 import App from "@/App";
 import * as Sentry from "@sentry/react";
 import ErrorBoundary from "./components/ErrorBoundary";
