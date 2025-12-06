@@ -1123,6 +1123,11 @@ export default function App() {
     <BrowserRouter>
       <Toaster 
         position="top-right"
+        containerStyle={{
+          top: '16px',
+          right: '16px',
+          bottom: 'calc(64px + env(safe-area-inset-bottom))',
+        }}
         toastOptions={{
           duration: 3000,
           style: {
