@@ -58,3 +58,33 @@ input, textarea, select {
   font-size: 16px;
   scroll-margin-bottom: 96px;
 }
+
+/* Touch target optimization - minimum 44×44px */
+.tap-target {
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Ensure all buttons meet minimum tap target */
+button, a, [role="button"] {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+/* Performance optimization - reduce shadow blur on mobile */
+@media (max-width: 768px) {
+  .shadow-lg {
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1) !important;
+  }
+  
+  .shadow-xl {
+    box-shadow: 0 8px 10px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1) !important;
+  }
+  
+  .shadow-2xl {
+    box-shadow: 0 12px 15px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1) !important;
+  }
+}
