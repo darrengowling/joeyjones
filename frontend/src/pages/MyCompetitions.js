@@ -324,9 +324,9 @@ export default function MyCompetitions() {
                       />
                     )}
                     <span className="text-3xl">{getSportEmoji(comp.sportKey)}</span>
-                    <div>
-                      <h2 className="h2 text-xl font-bold text-gray-900">{comp.name}</h2>
-                      <p className="text-sm text-gray-500 capitalize">{comp.sportKey}</p>
+                    <div className="min-w-0 flex-1">
+                      <h2 className="h2 text-[var(--t-lg)] sm:text-[var(--t-xl)] font-bold text-gray-900 truncate">{comp.name}</h2>
+                      <p className="text-[var(--t-sm)] sm:text-[var(--t-md)] text-gray-500 capitalize">{comp.sportKey}</p>
                     </div>
                   </div>
                   <span
