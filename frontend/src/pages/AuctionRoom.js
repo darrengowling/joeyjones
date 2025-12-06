@@ -380,6 +380,32 @@ function AuctionRoom() {
   }, [currentClub]);
 
 
+  // Poll for auction existence when paused (to detect reset without refresh)
+  useEffect(() => {
+    if (!auction || auction.status !== 'paused') {
+      return; // Only poll when paused
+    }
+
+    const checkAuctionExists = async () => {
+      try {
+        await axios.get(`${API}/auction/${auctionId}`);
+        // Auction still exists, do nothing
+      } catch (e) {
+        if (e.response && e.response.status === 404) {
+          console.log("⚠️ Auction deleted while paused - showing reset message");
+          setAuction(null); // Trigger reset message screen
+        }
+      }
+    };
+
+    // Check every 3 seconds while paused
+    const pollInterval = setInterval(checkAuctionExists, 3000);
+
+    return () => clearInterval(pollInterval);
+  }, [auction?.status, auctionId]);
+
+
+
   const loadAuction = async () => {
     try {
       const response = await axios.get(`${API}/auction/${auctionId}`);
