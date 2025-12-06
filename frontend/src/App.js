@@ -585,7 +585,8 @@ const Home = () => {
               <h2 className="text-2xl font-bold text-gray-900">Create Your Competition</h2>
               <button
                 onClick={() => setShowCreateLeagueDialog(false)}
-                className="btn btn-secondary text-gray-500 hover:text-gray-700"
+                className="btn btn-secondary text-gray-500 hover:text-gray-700 min-w-[44px] min-h-[44px]"
+                aria-label="Close dialog"
               >
                 ✕
               </button>
