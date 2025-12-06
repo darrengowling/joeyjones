@@ -872,21 +872,27 @@ function AuctionRoom() {
       <div className="flex-1 overflow-y-auto px-4 pb-4">
         <div className="max-w-6xl mx-auto">
           {/* Auction Header */}
-          <div className="bg-white rounded-lg shadow-lg p-4 mb-4">
-            <div className="flex justify-between items-center">
-              <div>
-                <div className="stack-md">
-                  <div className="text-xs uppercase tracking-wide text-gray-500 mb-1">Auction Room</div>
-                  <h1 className="h1 text-2xl font-bold text-gray-900">
+          <div className="bg-white rounded-lg shadow-lg p-3 sm:p-4 mb-4">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
+              <div className="min-w-0 flex-1">
+                <div className="flex flex-wrap items-center gap-2 max-w-full">
+                  <h1 className="text-lg sm:text-2xl font-bold text-gray-900 truncate min-w-0 flex-shrink">
                     {league ? league.name : "Strategic Competition Arena"}
                   </h1>
-                  <p className="subtle text-gray-600 text-sm">
-                    Lot #{auction?.currentLot || 0} • Status: {auction?.status || "Unknown"}
-                    {auction?.status === "paused" && (
-                      <span className="chip ml-2 px-2 py-1 bg-yellow-100 text-yellow-800 text-xs rounded">⏸️ PAUSED</span>
-                    )}
-                  </p>
+                  {league?.sportKey && (
+                    <span className="px-2 py-0.5 bg-blue-100 text-blue-800 text-xs rounded whitespace-nowrap flex-shrink-0 capitalize">
+                      {league.sportKey}
+                    </span>
+                  )}
+                  {auction?.status === "paused" && (
+                    <span className="px-2 py-0.5 bg-yellow-100 text-yellow-800 text-xs rounded whitespace-nowrap flex-shrink-0">
+                      ⏸️ PAUSED
+                    </span>
+                  )}
                 </div>
+                <p className="text-xs sm:text-sm text-gray-600 mt-1">
+                  Lot #{auction?.currentLot || 0}
+                </p>
               </div>
               
               {/* Commissioner Controls */}
