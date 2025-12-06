@@ -223,7 +223,6 @@ Object.entries(DEVICES).forEach(([deviceKey, deviceConfig]) => {
         // Take screenshot
         await page.screenshot({
           path: `${SCREENSHOT_DIR}/mobile-create-form-${deviceKey}.png`,
-          quality: 40,
           fullPage: false
         });
         
