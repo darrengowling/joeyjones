@@ -496,8 +496,9 @@ const Home = () => {
                     <label className="block text-gray-700 mb-2 font-medium">Email Address</label>
                     <input
                       type="email"
+                      inputMode="email"
                       placeholder="your.email@example.com"
-                      className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
+                      className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 text-[16px]"
                       value={userForm.email}
                       onChange={(e) => setUserForm({ ...userForm, email: e.target.value })}
                       data-testid="user-email-input"
