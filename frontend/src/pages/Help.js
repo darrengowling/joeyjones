@@ -69,7 +69,7 @@ const Help = () => {
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
           <h2 className="text-2xl font-bold text-blue-900 mb-3">Welcome to Sport X!</h2>
           <p className="text-blue-800 mb-2">
-            Sports Gaming with Friends. No Gambling. All Strategy.
+            Sports Gaming with Friends. No Gambling. All Game.
           </p>
           <p className="text-blue-700">
             Bid for exclusive ownership of players and teams who score your points. Experience the thrill of sports through strategic competition and community.
