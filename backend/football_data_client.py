@@ -30,6 +30,7 @@ class FootballDataClient:
         
         self.request_count = 0
         self.rate_limit = 10  # 10 requests per minute (free tier)
+        self.requests_remaining = None  # Track from API response headers
         
         # Competition IDs
         self.competitions = {
