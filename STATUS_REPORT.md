@@ -699,7 +699,7 @@ app.add_middleware(
 ```
 
 **Configuration:**
-- **Allowed Origins:** `https://sport-predictor-9.preview.emergentagent.com`
+- **Allowed Origins:** `https://restart-auction.preview.emergentagent.com`
 - **Allowed Methods:** GET, POST, PUT, DELETE, OPTIONS (no wildcards)
 - **Allowed Headers:** Authorization, Content-Type, Accept (no wildcards)
 - **Credentials:** Enabled

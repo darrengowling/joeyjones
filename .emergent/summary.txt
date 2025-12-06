@@ -1,166 +1,148 @@
 <analysis>**original_problem_statement:**
-The user's initial problem was to perform pre-deployment readiness checks, fix user-reported bugs, and implement minor UI improvements. During the session, this evolved into a major effort to test and fix the application's core functionality, particularly for cricket competitions, and to add new, business-critical features required by a pilot user group before deployment.
+The user's primary goal is to finalize the application for a pilot deployment. This involves fixing a critical bug preventing the use of multiple football competitions (specifically, making Champions League work alongside the Premier League) and then adding support for a new tournament, the Africa Cup of Nations (AFCON), which is a hard blocker for the pilot user group. The user has also requested minor UI tidy-ups.
 
-The main goals that emerged during this session are:
-1.  **Fix all bugs found during pre-deployment testing.** This included a critical flaw in cricket score updates.
-2.  **Implement end-to-end cricket fantasy scoring.** The application was missing the logic to process scorecards, calculate points, and update standings.
-3.  **Add support for multiple football competitions (Champions League).** This was a hard blocker for a pilot user group.
-4.  **Add support for the AFCON tournament.** This is also a requirement from the pilot group.
-5.  Generate professional status reports for a team meeting to get approval for deployment.
+The core requirements are:
+1.  **Fix Champions League (CL) Fixture Imports:** This was already completed in a previous session.
+2.  **Implement AFCON Support:** Add the 24 national teams for the 2025/26 AFCON tournament. Since the primary data API does not cover AFCON, this functionality must rely on manual CSV uploads for both creating fixtures and updating scores.
+3.  **UI/Data Cleanup:** Address user confusion and improve UI/UX where needed, particularly for commissioner-facing features.
+4.  **New Feature Request:** Investigate and potentially implement a feature to allow commissioners to restart an auction.
 
 **User's preferred language**: English
 
 **what currently exists?**
-The application is in a stable but feature-incomplete state for the upcoming deployment.
+The application is stable. The PL and CL functionalities are verified and working as expected. The critical bugs related to AFCON CSV imports have been fully resolved. This included fixing silent backend failures where scores weren't saving, correcting misleading frontend errors, and ensuring points calculation and league table updates work correctly.
 
--   **Cricket Functionality:** A major enhancement was completed to implement end-to-end fantasy scoring. The system can now fetch live cricket matches (including in-progress ones), parse detailed scorecards for batting, bowling, and fielding (catches), calculate player points based on a hardcoded schema, and update the league standings in real-time. All user-reported cricket bugs have been fixed.
--   **Football Functionality:** Support for multiple football competitions has been partially implemented. The database schema and backend/frontend have been modified to support a  (e.g., PL, CL), allowing different tournaments to be created. However, a bug is preventing this from working correctly.
--   **Documentation:** Numerous status reports, testing guides, and planning documents have been created to support the deployment decision.
+A series of cascading bugs caused by inconsistent data structures were also fixed by standardizing the AFCON team data to match the PL/CL structure.
+
+The user-facing commissioner tools on the Fixtures tab have been significantly simplified with a context-aware UI that shows relevant controls for the specific competition (API buttons for PL/CL, CSV download/upload for AFCON). A user-friendly CSV template with human-readable team names is now available for download.
+
+The agent has completed a full system audit and created onboarding documentation for future agents.
 
 **Last working item**:
--   **Last item agent was working**: Fixing a bug where creating a Champions League competition still resulted in importing Premier League fixtures. The agent correctly identified two root causes:
-    1.  The  was not being saved to the database because the Pydantic models ( and ) in  were missing the field.
-    2.  Some non-Premier League teams in the database have incorrect, non-numeric s.
-    The agent was in the process of fixing the first root cause by modifying the Pydantic models.
--   **Status**: IN PROGRESS
+-   **Last item agent was working**: Investigating the feasibility of a new feature requested by the user: an auction restart button. The goal is to allow a commissioner to clear an in-progress or completed auction and start over without creating an entirely new league. The agent was examining the backend code related to auction completion ( in ) and how participant data () and league status are updated to assess the complexity and risks.
+-   **Status**: NOT STARTED
 -   **Agent Testing Done**: N
--   **Which testing method agent to use?**: Manual testing. The agent should first complete the code fix, restart the services, and then guide the user to create a new Champions League competition to verify that the  is correctly saved and the right fixtures are imported.
--   **User Testing Done**: Y (User found the bug)
+-   **Which testing method agent to use?**: both. This new feature will require a new backend endpoint (e.g., ) and a new button/handler in the frontend. Both backend and frontend testing agents should be used after implementation.
+-   **User Testing Done**: N
 
 **All Pending/In progress Issue list**:
--   **Issue 1: Incorrect s for Champions League teams (P0)**
-    -   **Description:** Many of the 32 non-Premier League teams intended for Champions League competitions have incorrect (e.g., JUV, RM) or missing s in the database. This will prevent fixture imports for those teams even after the  bug is fixed.
-    -   **Next debug checklist:** After fixing the  issue, the agent must run a script to update the  collection in the database, setting the correct numeric  for all 36 Champions League teams identified from the Football-Data.org API. Care must be taken to handle the unique index constraint on  + .
-    -   **Why fix this issue and what will be achieved with the fix?**: This is a deployment blocker. Fixing it will make the Champions League feature fully functional.
-    -   **Status**: NOT STARTED
-    -   **Is recurring issue?**: N
-    -   **Should Test frontend/backend/both after fix?**: backend
-    -   **Blocked on other issue**: Blocked on completing the Champions League Multi-Competition Support task.
+There are no pending high-priority issues. The main P0 blocker from the start of the session has been resolved and verified.
 
 **In progress Task List**:
--   **Task 1: Complete Champions League Multi-Competition Support (P0)**
-    -   **Where to resume**:
-        1.  Open .
-        2.  Add  to the  Pydantic model (it has already been added to ).
-        3.  Restart the backend server.
-        4.  Verify the fix by asking the user to create a new Champions League competition and then checking the database to confirm  is saved for the new league.
-    -   **What will be achieved with this?**: This will fix the immediate bug preventing the creation of functional Champions League competitions.
-    -   **Status**: IN PROGRESS
+-   **Task 1: Plan and Propose Auction Restart Feature (P1)**
+    -   **Where to resume**: Continue the investigation from the last step. Formulate a detailed plan for the new feature. This plan should outline:
+        1.  The new API endpoint signature (e.g., ).
+        2.  The backend logic required to reset the auction state. This includes clearing  from all participants, resetting participant budgets, clearing the  collection for that league, and setting the league  back to pre-auction or similar.
+        3.  The frontend changes: adding a Restart Auction button (e.g., on the  page for the commissioner) and its corresponding API call.
+        4.  Present this plan to the user for approval before implementation.
+    -   **What will be achieved with this?**: A clear, user-approved plan for a valuable new feature that improves the user experience for commissioners during testing.
+    -   **Status**: NOT STARTED
     -   **Should Test frontend/backend/both after fix?**: both
-    -   **Blocked on something**: No.
+    -   **Blocked on something**: User approval of the proposed plan.
 
 **Upcoming and Future Tasks**
 *   **Upcoming Tasks:**
-    *   **P0: Implement AFCON Support:** Add the 24 AFCON teams to the database. Since the primary API does not support AFCON, this will likely require enabling manual CSV uploads for fixtures and scores for leagues with the AFCON . Add AFCON as an option in the league creation dropdown.
+    *   **P1: Implement Manual Score Entry UI:** As per the , create a UI on the fixtures page that allows a commissioner to manually enter or edit scores for a match. This will use the already-created  endpoint.
     *   **P1: Implement Auction Room Mobile UI Quick Wins:** Implement the UI/CSS changes proposed in  to improve the mobile experience in the  page.
 *   **Future Tasks:**
-    *   **User-Configurable Scoring Rules:** Implement a UI during league creation to allow users to enable/disable bonus point milestones (e.g., century, five-wicket haul). Documented in .
-    *   **Full Auction UI Redesign:** A more comprehensive mobile redesign for the auction room.
-    *   **Team Selection UX Improvement:** Add auto-saving or clearer UI hints to ensure users save their team selections before attempting to import fixtures.
-    *   **Refactor :** Break the monolithic file into modular FastAPI routers.
-    *   **Configure Sentry** and set up automated database backups.
-    *   **Implement Redis** for caching and rate limiting.
+    *   User-Configurable Scoring Rules.
+    *   Full Auction UI Redesign.
+    *   Refactor  into modular FastAPI routers.
+    *   Configure Sentry and set up automated database backups.
+    *   Implement Redis for caching and rate limiting.
 
 **Completed work in this session**
--   **End-to-End Cricket Scoring Feature (FINISHED):**
-    -   Fixed the API client to fetch **live** and **in-progress** (Stumps) matches, not just recent/upcoming ones.
-    -   Implemented logic to parse complex Cricbuzz scorecards for batting, bowling, and fielding (catches) statistics.
-    -   Implemented the full fantasy point calculation pipeline, saving player stats and updating league standings in real-time.
-    -   Fixed the database update logic to correctly handle multiple leagues having fixtures for the same real-world match.
-    -   Corrected the hardcoded scoring rules to match user's requirements (e.g., Wicket: 20 pts, Catch: 10 pts, bonuses disabled).
--   **Pre-Deployment Bug Fixes (FINISHED):**
-    -   Removed a misleading teams in blue note on the  page.
-    -   Fixed an Invalid Date display bug for cricket fixtures.
-    -   Fixed incorrect Clubs terminology in the auction room for cricket leagues.
--   **Documentation and Reporting (FINISHED):**
-    -   Created comprehensive user testing guides and checklists.
-    -   Generated professional deployment readiness reports and executive summaries for the user's team meeting.
+-   **AFCON CSV Score Import (FIXED):**
+    -   Resolved silent backend failure by adding missing score fields (, , ) to the  Pydantic model in .
+    -   Corrected CSV import logic in  to use  (full-time) instead of completed to align with the scoring service.
+-   **AFCON Frontend Bugs (FIXED):**
+    -   Fixed a React state bug in  that caused an error page after CSV upload.
+    -   Added an automatic points recalculation trigger in the frontend after a successful football CSV upload.
+-   **Data Structure & Cascading Bugs (FIXED):**
+    -   Standardized the data structure of all 24 AFCON teams in the  collection to match PL/CL teams (adding ,  fields), which resolved multiple downstream bugs related to team selection and auction creation.
+    -   Made the  field optional in the  Pydantic model () to accommodate non-UEFA teams like those in AFCON.
+-   **Commissioner UI/UX (IMPROVED):**
+    -   Redesigned the Fixtures tab UI in  into a clean, simplified, context-aware interface, hiding irrelevant options based on the league's sport/competition.
+    -   Created a user-friendly AFCON CSV template () with human-readable team names.
+    -   Fixed a broken download link for the template by creating a dedicated backend endpoint () to serve the file correctly.
+-   **System Documentation (CREATED):**
+    -   Conducted a full system audit and produced .
+    -   Created a detailed onboarding prompt for future agents: .
 
 **Earlier issues found/mentioned but not fixed**
--   A harmless MongoDB index warning on backend startup.
--   A Sentry DSN warning on backend startup (Sentry is not yet configured).
+-   The UX gap where AFCON commissioners cannot upload fixtures *before* an auction (unlike PL/CL) was identified. The user decided this was acceptable for the pilot and deprioritized a fix.
 
 **Known issue recurrence from previous fork**
--   The agent made one change without explicit user approval early in the session but was corrected by the user and has since followed the ask-first protocol.
+-   The recurring AFCON CSV score update fails silently issue has been resolved. The root causes were identified as a missing Pydantic model field and an incorrect status value (completed vs ft).
 
 **Code Architecture**
 
 
 **Key Technical Concepts**
--   **Dynamic Competition Support:** The architecture was shifted from a hardcoded Premier League system to a dynamic one using a  field, enabling support for multiple football tournaments.
--   **End-to-End Fantasy Scoring:** A complete data pipeline was built for cricket, involving API data fetching, complex JSON parsing (scorecards), application of a scoring schema, and updating multiple database collections (, ) in a single transaction.
--   **Pydantic Model Desynchronization:** A bug where a frontend feature failed was traced back to the backend  model not having the required field to accept the data.
+-   **Pydantic Model Validation:** Understood that Pydantic silently drops fields not defined in the model, which was the root cause of the main bug.
+-   **Data Consistency:** The session highlighted the critical importance of maintaining a consistent data structure within a single database collection (). Inconsistent structures led to multiple, hard-to-trace cascading failures.
+-   **Separation of Concerns:** Realized that fixture score updates and points calculation are two separate processes, linked by the  endpoint.
+-   **Static File Serving:** Learned that serving static files from the  directory can be intercepted by the frontend router, and the reliable solution is to create a dedicated backend endpoint to serve the file.
+-   **Schema Discovery:** Understood the importance of correctly identifying the source of truth for data (e.g., points are in , not ).
 
 **key DB schema**
--   **leagues:** Added  to store the tournament type (e.g., PL, CL).
--   **player_match_stats:** (New) Stores calculated fantasy points for each player in a specific match. .
--   **standings:** (New/Modified Structure) Stores the aggregated leaderboard for a league. .
-
-**changes in tech stack**
--   None.
+-   **assets:** All football teams now have a consistent structure with  (e.g., AFCON, PL) and  (e.g., [Africa Cup of Nations]) fields.
+-   **fixtures:**  field for completed matches is now consistently set to . Contains score fields.
+-   **league_points:** This collection is the source of truth for calculated points for each club in a league. It is updated by the scoring recomputation endpoint.
 
 **All files of reference**
--   : Core logic for cricket scoring and multi-competition support.
--   : Pydantic models for database objects. Currently being modified.
--   : Contains the league creation modal UI.
--   : Contains user's future requests.
-
-**Areas that need refactoring**:
--   The new cricket scoring logic (over 150 lines) was added directly to . It should be extracted into its own service file in  to improve modularity.
-
-**key api endpoints**
--   : Significantly enhanced to perform full fantasy point calculation and update standings.
--   : The request body and underlying model have been changed to include .
--   : Backend logic updated to use the league's  to fetch fixtures from the correct tournament.
+-   : Contains all backend logic, including the fixed CSV import and new template-serving endpoint.
+-   : Defines the Pydantic models; was a key part of the initial bug fix.
+-   : Contains the new, simplified commissioner UI.
+-   : The new, user-friendly CSV template.
+-   : The new, comprehensive prompt for future agents to use.
+-   : The detailed system audit document.
 
 **Critical Info for New Agent**
--   **Deployment is the top priority.** The user can delay by 24 hours, but all fixes for the pilot group (Champions League, AFCON) are considered blockers.
--   **Get user approval before ANY implementation.** The user has been very clear about this. Present options with pros and cons and wait for their decision.
--   The immediate task is to finish the  bug fix (Task 1). After that, you must address the incorrect s for Champions League teams (Issue 1) before the feature can be considered complete.
--   The cricket scoring feature is new and complex. Be cautious when making changes that could affect it.
+-   **READ THE ONBOARDING DOCS:** Before starting, read  and . This was a key output of the last session to prevent repeated mistakes.
+-   **Verify, Don't Assume:** The previous agent caused several issues by making assumptions and implementing fixes without user confirmation. Always confirm your understanding and proposed plan with the user before writing any code.
+-   **Know the DB Schema:** Points are stored in the  collection, not . The  collection now has a consistent data structure; maintain it.
+-   **Auction Restart is the Next Task:** The user has requested a feature to restart an auction. Your first task is to investigate this and present a clear plan to the user for approval. Do not start implementation without approval.
 
 **documents created in this job**
--   /app/PRE_DEPLOYMENT_USER_TESTING_GUIDE.md
--   /app/QUICK_TESTING_CHECKLIST.md
--   /app/USER_FLOW_DIAGRAMS.md
--   /app/CRICKET_TESTING_FIXES.md
--   /app/PRE_DEPLOYMENT_STRATEGIC_ANALYSIS.md
--   /app/DEPLOYMENT_READINESS_REPORT_FINAL.md
--   /app/DEPLOYMENT_EXECUTIVE_SUMMARY.md
--   /app/POST_DEPLOYMENT_ENHANCEMENTS.md
--   /app/CHAMPIONS_LEAGUE_IMPLEMENTATION_PLAN.md
--   /app/CHAMPIONS_LEAGUE_COMPLETED.md
--   /app/TESTING_FEEDBACK_ACTIONS.md
+-   /app/AFCON_CSV_IMPORT_FIX.md
+-   /app/AFCON_COMMISSIONER_GUIDE.md
+-   /app/AFCON_TEAM_LOOKUP.md
+-   /app/UI_SIMPLIFICATION_MOCKUP.md
+-   /app/SYSTEM_ARCHITECTURE_AUDIT.md
+-   /app/AGENT_ONBOARDING_PROMPT.md
 
 **Last 10 User Messages and any pending user messages**
-1.  **User:** Requests support for Champions League and AFCON competitions. (Status: **In Progress**)
-2.  **User:** Clarifies requirements for CL (36 teams) and AFCON, and confirms deployment can be delayed. (Status: **In Progress**)
-3.  **User:** Proposes a fallback for AFCON (manual CSV) and raises a concern about teams having different IDs for PL vs. CL. (Status: **Actioned**, agent confirmed IDs are the same).
-4.  **User:** Approves the agent's plan to implement multi-competition support using a . (Status: **In Progress**)
-5.  **User:** Reports a bug after the initial implementation: creating a CL competition still imports PL fixtures. (Status: **In Progress**, this is the current active issue).
-6.  **User:** Clarifies a UI workflow detail about needing to save team selections. (Status: **Acknowledged**).
-7.  **User:** Repeats the need for CL and AFCON support for the test group. (Status: **In Progress**).
-8.  **User:** Re-confirms CL requirements and timeline flexibility. (Status: **In Progress**).
-9.  **User:** Repeats concern about different team IDs. (Status: **Actioned**).
-10. **User:** Approves starting Phase 1 for CL support. (Status: **In Progress**).
+1.  **User:** Approved the UI mockup for the fixtures tab. (Status: **Completed**)
+2.  **User:** Requested a new feature: a way to restart an auction without creating a new league, and asked about feasibility. (Status: **In Progress**)
+3.  **Agent:** Began investigating the auction restart feature. (Status: **In Progress**)
+4.  **User:** Told the agent to read the new onboarding prompt it created. (Status: **Actioned**)
+5.  **User:** Frustrated that the testing agent was saying they weren't logged in. (Status: **Actioned**)
+6.  **User:** Confirmed the simplified UI looks much better and will test later. (Status: **Completed**)
+7.  **User:** Repeated the request for an auction restart feature, asking about difficulty and risk. (Status: **In Progress**)
+8.  **Agent:** Started investigating the auction restart feature in the code. (Status: **In Progress**)
+9.  **User:** Asked the agent to conduct a full system audit and create a new onboarding prompt to prevent future issues. (Status: **Completed**)
+10. **User:** Asked if the agent *actually* understands the system now after the audit. (Status: **Completed**)
 
 **Project Health Check:**
--   **Broken**: The newly added Champions League feature is non-functional due to a bug preventing the correct competition type from being saved.
--   **Mocked**: None.
+-   **Broken**: None. All major known issues have been resolved.
+-   **Mocked**: N/A.
 
 **3rd Party Integrations**
--   **Football-Data.org** — requires User API Key. Used for football fixture imports.
+-   **Football-Data.org** — requires User API Key. Used for football fixture imports (PL and CL only).
 -   **Cricbuzz (via RapidAPI)** — requires User API Key. Used for cricket fixture and score updates.
 
 **Testing status**
--   **Testing agent used after significant changes**: NO
+-   **Testing agent used after significant changes**: YES (but failed due to a red herring session issue).
 -   **Troubleshoot agent used after agent stuck in loop**: NO
--   **Test files created**: None
--   **Known regressions**: None confirmed, but the ongoing work on multi-competition support carries a risk of regressing existing Premier League functionality.
+-   **Test files created**: None.
+-   **Known regressions**: Multiple regressions were introduced during the session due to inconsistent data structures, but they have all been identified and fixed.
 
 **Credentials to test flow:**
 -   **User:** 
 -   **Password:** (Magic link based, no password)
 
 **What agent forgot to execute**
--   When adding the  field to the  model in , the agent forgot to also add it to the main  model in the same file. This is part of the bug that is currently being fixed.</analysis>
+-   The agent initially forgot to account for inconsistent data structures when re-populating the database, which caused a cascade of bugs.
+-   The agent repeatedly misdiagnosed issues by looking in the wrong database collections ( instead of ) or making assumptions without verification. It has since learned from these mistakes and created documentation to prevent recurrence.
+-   The final task of investigating the Auction Restart feature was started but not completed.</analysis>

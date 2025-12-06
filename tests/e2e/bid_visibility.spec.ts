@@ -13,7 +13,7 @@ import { test, expect, Page } from '@playwright/test';
  * - All users converge on identical final state
  */
 
-const BASE_URL = process.env.REACT_APP_BACKEND_URL || 'https://sport-predictor-9.preview.emergentagent.com';
+const BASE_URL = process.env.REACT_APP_BACKEND_URL || 'https://restart-auction.preview.emergentagent.com';
 
 test.describe('Bid Visibility - Real-time Synchronization', () => {
   let bidder1Page: Page;
