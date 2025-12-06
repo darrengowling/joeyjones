@@ -1,0 +1,153 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - generic [ref=e3]:
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - heading "Create Your Competition" [level=2] [ref=e7]
+        - button "Close dialog" [ref=e8] [cursor=pointer]: ✕
+      - generic [ref=e9]:
+        - generic [ref=e10]:
+          - generic [ref=e11]: League Name
+          - textbox [ref=e12]
+        - generic [ref=e13]:
+          - generic [ref=e14]: Sport
+          - combobox [ref=e15]:
+            - option "⚽ Football" [selected]
+            - option "🏏 Cricket"
+          - paragraph [ref=e16]: Choose the sport for your competition
+        - generic [ref=e17]:
+          - generic [ref=e18]: Competition
+          - combobox [ref=e19]:
+            - option "🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League" [selected]
+            - option "🏆 Champions League"
+            - option "🌍 AFCON"
+          - paragraph [ref=e20]: Select which competition to run
+        - generic [ref=e21]:
+          - generic [ref=e22]: Budget per Manager
+          - generic [ref=e23]:
+            - button "−" [ref=e24] [cursor=pointer]
+            - generic [ref=e25]:
+              - textbox [ref=e26]: "500"
+              - generic [ref=e27]: m
+            - button "+" [ref=e28] [cursor=pointer]
+          - paragraph [ref=e29]: "Current: £500m (adjust in £10m increments)"
+        - generic [ref=e30]:
+          - generic [ref=e31]:
+            - generic [ref=e32]: Min Managers
+            - spinbutton [ref=e33]: "2"
+          - generic [ref=e34]:
+            - generic [ref=e35]: Max Managers
+            - spinbutton [ref=e36]: "8"
+        - generic [ref=e37]:
+          - generic [ref=e38]: Clubs per Manager (1-10)
+          - spinbutton [ref=e39]: "3"
+        - generic [ref=e40]:
+          - generic [ref=e41]:
+            - generic [ref=e42]: Bidding Timer (seconds)
+            - spinbutton [ref=e43]: "30"
+            - paragraph [ref=e44]: 15-120 seconds
+          - generic [ref=e45]:
+            - generic [ref=e46]: Anti-Snipe (seconds)
+            - spinbutton [ref=e47]: "10"
+            - paragraph [ref=e48]: 0-30 seconds, must be less than timer
+        - button "Create Competition" [ref=e49] [cursor=pointer]
+    - generic [ref=e51]:
+      - generic [ref=e52]: Sport X
+      - generic [ref=e54]:
+        - strong [ref=e56]: mobile.test
+        - button "My Comps" [ref=e57] [cursor=pointer]
+        - button "Help" [ref=e58] [cursor=pointer]
+        - button "Logout" [ref=e59] [cursor=pointer]
+    - generic [ref=e61]:
+      - generic [ref=e62]:
+        - generic [ref=e63]: 🏆
+        - generic [ref=e64]: "Jump back in: Check your competitions!"
+      - button "View My Competitions" [ref=e65] [cursor=pointer]
+    - generic [ref=e67]:
+      - heading "Welcome to Sport X" [level=2] [ref=e68]
+      - paragraph [ref=e69]: Sports Gaming with Friends. No Gambling. All Strategy.
+      - paragraph [ref=e70]: Bid for exclusive ownership of players and teams who score your points. Experience the thrill of sports through strategic competition and community.
+      - generic [ref=e71]:
+        - button "Create Your Competition" [active] [ref=e72] [cursor=pointer]
+        - button "Join the Competition" [ref=e73] [cursor=pointer]
+        - button "Explore Available Teams" [ref=e74] [cursor=pointer]
+      - generic [ref=e75]:
+        - generic [ref=e76]:
+          - heading "Active Leagues" [level=3] [ref=e77]
+          - paragraph [ref=e78]: 3 competitions
+        - generic [ref=e80]:
+          - generic [ref=e81] [cursor=pointer]:
+            - generic [ref=e82]:
+              - generic [ref=e83]:
+                - generic [ref=e84]: ⚽
+                - generic [ref=e85]: Football
+              - generic [ref=e86]: Commissioner
+            - heading "Mobile Bid Test iPhone 13 1765051951589" [level=4] [ref=e87]
+            - generic [ref=e88]:
+              - generic [ref=e89]:
+                - generic [ref=e90]: "Budget:"
+                - generic [ref=e91]: £500M
+              - generic [ref=e92]:
+                - generic [ref=e93]: "Managers:"
+                - generic [ref=e94]: 1/8
+              - generic [ref=e95]:
+                - generic [ref=e96]: "Slots:"
+                - generic [ref=e97]: "3"
+            - paragraph [ref=e99]:
+              - text: "Token:"
+              - code [ref=e100]: 4a701b7d
+            - button "🗑️ Delete League" [ref=e102]
+          - generic [ref=e103] [cursor=pointer]:
+            - generic [ref=e104]:
+              - generic [ref=e105]:
+                - generic [ref=e106]: ⚽
+                - generic [ref=e107]: Football
+              - generic [ref=e108]: Commissioner
+            - heading "Mobile Test iPhone 13 1765051951691" [level=4] [ref=e109]
+            - generic [ref=e110]:
+              - generic [ref=e111]:
+                - generic [ref=e112]: "Budget:"
+                - generic [ref=e113]: £500M
+              - generic [ref=e114]:
+                - generic [ref=e115]: "Managers:"
+                - generic [ref=e116]: 1/8
+              - generic [ref=e117]:
+                - generic [ref=e118]: "Slots:"
+                - generic [ref=e119]: "3"
+            - paragraph [ref=e121]:
+              - text: "Token:"
+              - code [ref=e122]: fa360b4b
+            - button "🗑️ Delete League" [ref=e124]
+          - generic [ref=e125] [cursor=pointer]:
+            - generic [ref=e126]:
+              - generic [ref=e127]:
+                - generic [ref=e128]: ⚽
+                - generic [ref=e129]: Football
+              - generic [ref=e130]: Commissioner
+            - heading "Toast Test iPhone 13 1765051957046" [level=4] [ref=e131]
+            - generic [ref=e132]:
+              - generic [ref=e133]:
+                - generic [ref=e134]: "Budget:"
+                - generic [ref=e135]: £500M
+              - generic [ref=e136]:
+                - generic [ref=e137]: "Managers:"
+                - generic [ref=e138]: 1/8
+              - generic [ref=e139]:
+                - generic [ref=e140]: "Slots:"
+                - generic [ref=e141]: "3"
+            - paragraph [ref=e143]:
+              - text: "Token:"
+              - code [ref=e144]: "69301364"
+            - button "🗑️ Delete League" [ref=e146]
+          - generic [ref=e147] [cursor=pointer]:
+            - generic [ref=e148]: +
+            - heading "Create New Competition" [level=4] [ref=e149]
+            - paragraph [ref=e150]: Start your own strategic arena
+  - link "Made with Emergent" [ref=e151] [cursor=pointer]:
+    - /url: https://app.emergent.sh/?utm_source=emergent-badge
+    - generic [ref=e152]:
+      - img [ref=e153]
+      - paragraph [ref=e154]: Made with Emergent
+```

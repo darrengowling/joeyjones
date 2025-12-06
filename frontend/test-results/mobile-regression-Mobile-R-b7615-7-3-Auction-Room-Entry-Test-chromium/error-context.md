@@ -1,0 +1,336 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e5]:
+    - generic [ref=e6]:
+      - button "Home" [ref=e7] [cursor=pointer]
+      - generic [ref=e8]: ›
+      - button "My Competitions" [ref=e9] [cursor=pointer]
+      - generic [ref=e10]: ›
+      - generic [ref=e11]: Mobile Test Pixel 7 1765051981487
+    - generic [ref=e12]:
+      - generic [ref=e13]:
+        - generic [ref=e14]: Competition Detail Page
+        - heading "Mobile Test Pixel 7 1765051981487" [level=1] [ref=e15]
+        - generic [ref=e16]:
+          - generic [ref=e17]:
+            - generic [ref=e18]: pending
+            - generic [ref=e19]: 1/8 managers
+          - generic [ref=e20]:
+            - text: "Invite Token:"
+            - code [ref=e21]: 23a89c9b
+      - generic [ref=e22]:
+        - generic [ref=e23]:
+          - button "Begin Strategic Competition" [disabled] [ref=e24]
+          - paragraph [ref=e25]: Need 1 more strategic competitors to begin
+        - button "Delete League" [ref=e26] [cursor=pointer]
+    - generic [ref=e27]:
+      - heading "League Participants" [level=3] [ref=e28]
+      - generic [ref=e31]: mobile.testCommissioner
+    - generic [ref=e32]:
+      - heading "Available Clubs in Competition" [level=3] [ref=e33]
+      - paragraph [ref=e34]: 74 clubs available for auction in this competition.
+      - generic [ref=e35]:
+        - generic [ref=e36]:
+          - heading "Chelsea" [level=4] [ref=e37]
+          - paragraph [ref=e38]: England
+          - paragraph [ref=e39]: "UEFA ID: EPL_49"
+        - generic [ref=e40]:
+          - heading "Nottingham Forest" [level=4] [ref=e41]
+          - paragraph [ref=e42]: England
+          - paragraph [ref=e43]: "UEFA ID: EPL_65"
+        - generic [ref=e44]:
+          - heading "Wolverhampton Wanderers" [level=4] [ref=e45]
+          - paragraph [ref=e46]: England
+          - paragraph [ref=e47]: "UEFA ID: EPL_39"
+        - generic [ref=e48]:
+          - heading "Ajax" [level=4] [ref=e49]
+          - paragraph [ref=e50]: "UEFA ID: AJA"
+        - generic [ref=e51]:
+          - heading "Arsenal" [level=4] [ref=e52]
+          - paragraph [ref=e53]: England
+          - paragraph [ref=e54]: "UEFA ID: ARS"
+        - generic [ref=e55]:
+          - heading "Atalanta" [level=4] [ref=e56]
+          - paragraph [ref=e57]: "UEFA ID: ATA"
+        - generic [ref=e58]:
+          - heading "Athletic Club" [level=4] [ref=e59]
+          - paragraph [ref=e60]: "UEFA ID: ATH"
+        - generic [ref=e61]:
+          - heading "Atlético de Madrid" [level=4] [ref=e62]
+          - paragraph [ref=e63]: "UEFA ID: ATL"
+        - generic [ref=e64]:
+          - heading "Borussia Dortmund" [level=4] [ref=e65]
+          - paragraph [ref=e66]: "UEFA ID: BDO"
+        - generic [ref=e67]:
+          - heading "Barcelona" [level=4] [ref=e68]
+          - paragraph [ref=e69]: "UEFA ID: BAR"
+        - generic [ref=e70]:
+          - heading "Bayern München" [level=4] [ref=e71]
+          - paragraph [ref=e72]: "UEFA ID: BAY"
+        - generic [ref=e73]:
+          - heading "Sport Lisboa e Benfica" [level=4] [ref=e74]
+          - paragraph [ref=e75]: "UEFA ID: BEN"
+        - generic [ref=e76]:
+          - heading "Bodø/Glimt" [level=4] [ref=e77]
+          - paragraph [ref=e78]: "UEFA ID: BOD"
+        - generic [ref=e79]:
+          - heading "Club Brugge" [level=4] [ref=e80]
+          - paragraph [ref=e81]: "UEFA ID: CLU"
+        - generic [ref=e82]:
+          - heading "Copenhagen" [level=4] [ref=e83]
+          - paragraph [ref=e84]: "UEFA ID: COP"
+        - generic [ref=e85]:
+          - heading "Frankfurt" [level=4] [ref=e86]
+          - paragraph [ref=e87]: "UEFA ID: FRA"
+        - generic [ref=e88]:
+          - heading "Galatasaray" [level=4] [ref=e89]
+          - paragraph [ref=e90]: "UEFA ID: GAL"
+        - generic [ref=e91]:
+          - heading "Inter" [level=4] [ref=e92]
+          - paragraph [ref=e93]: "UEFA ID: INT"
+        - generic [ref=e94]:
+          - heading "Juventus" [level=4] [ref=e95]
+          - paragraph [ref=e96]: "UEFA ID: JUV"
+        - generic [ref=e97]:
+          - heading "Kairat Almaty" [level=4] [ref=e98]
+          - paragraph [ref=e99]: "UEFA ID: KAI"
+        - generic [ref=e100]:
+          - heading "Leverkusen" [level=4] [ref=e101]
+          - paragraph [ref=e102]: "UEFA ID: LEV"
+        - generic [ref=e103]:
+          - heading "Liverpool" [level=4] [ref=e104]
+          - paragraph [ref=e105]: England
+          - paragraph [ref=e106]: "UEFA ID: LIV"
+        - generic [ref=e107]:
+          - heading "Marseille" [level=4] [ref=e108]
+          - paragraph [ref=e109]: "UEFA ID: MAR"
+        - generic [ref=e110]:
+          - heading "Monaco" [level=4] [ref=e111]
+          - paragraph [ref=e112]: "UEFA ID: MON"
+        - generic [ref=e113]:
+          - heading "Napoli" [level=4] [ref=e114]
+          - paragraph [ref=e115]: "UEFA ID: NAP"
+        - generic [ref=e116]:
+          - heading "Newcastle" [level=4] [ref=e117]
+          - paragraph [ref=e118]: England
+          - paragraph [ref=e119]: "UEFA ID: NEW"
+        - generic [ref=e120]:
+          - heading "Olympiacos" [level=4] [ref=e121]
+          - paragraph [ref=e122]: "UEFA ID: OLY"
+        - generic [ref=e123]:
+          - heading "Paris" [level=4] [ref=e124]
+          - paragraph [ref=e125]: "UEFA ID: PAR"
+        - generic [ref=e126]:
+          - heading "PSV" [level=4] [ref=e127]
+          - paragraph [ref=e128]: "UEFA ID: PSV"
+        - generic [ref=e129]:
+          - heading "Qarabağ" [level=4] [ref=e130]
+          - paragraph [ref=e131]: "UEFA ID: QAR"
+        - generic [ref=e132]:
+          - heading "Real Madrid" [level=4] [ref=e133]
+          - paragraph [ref=e134]: "UEFA ID: REA"
+        - generic [ref=e135]:
+          - heading "Slavia Praha" [level=4] [ref=e136]
+          - paragraph [ref=e137]: "UEFA ID: SLA"
+        - generic [ref=e138]:
+          - heading "Sporting CP" [level=4] [ref=e139]
+          - paragraph [ref=e140]: "UEFA ID: SCP"
+        - generic [ref=e141]:
+          - heading "Tottenham" [level=4] [ref=e142]
+          - paragraph [ref=e143]: England
+          - paragraph [ref=e144]: "UEFA ID: TOT"
+        - generic [ref=e145]:
+          - heading "Union SG" [level=4] [ref=e146]
+          - paragraph [ref=e147]: "UEFA ID: USG"
+        - generic [ref=e148]:
+          - heading "Villarreal" [level=4] [ref=e149]
+          - paragraph [ref=e150]: "UEFA ID: VIL"
+        - generic [ref=e151]:
+          - heading "Pafos" [level=4] [ref=e152]
+          - paragraph [ref=e153]: "UEFA ID: PAF"
+        - generic [ref=e154]:
+          - heading "Manchester City FC" [level=4] [ref=e155]
+          - paragraph [ref=e156]: England
+          - paragraph [ref=e157]: "UEFA ID: MAN"
+        - generic [ref=e158]:
+          - heading "Brentford" [level=4] [ref=e159]
+          - paragraph [ref=e160]: England
+          - paragraph [ref=e161]: "UEFA ID: BRE"
+        - generic [ref=e162]:
+          - heading "Brighton & Hove Albion" [level=4] [ref=e163]
+          - paragraph [ref=e164]: England
+          - paragraph [ref=e165]: "UEFA ID: BRI"
+        - generic [ref=e166]:
+          - heading "Crystal Palace" [level=4] [ref=e167]
+          - paragraph [ref=e168]: England
+          - paragraph [ref=e169]: "UEFA ID: CRY"
+        - generic [ref=e170]:
+          - heading "Everton" [level=4] [ref=e171]
+          - paragraph [ref=e172]: England
+          - paragraph [ref=e173]: "UEFA ID: EVE"
+        - generic [ref=e174]:
+          - heading "West Ham United" [level=4] [ref=e175]
+          - paragraph [ref=e176]: England
+          - paragraph [ref=e177]: "UEFA ID: WES"
+        - generic [ref=e178]:
+          - heading "Aston Villa" [level=4] [ref=e179]
+          - paragraph [ref=e180]: England
+          - paragraph [ref=e181]: "UEFA ID: AVL"
+        - generic [ref=e182]:
+          - heading "Manchester United" [level=4] [ref=e183]
+          - paragraph [ref=e184]: England
+          - paragraph [ref=e185]: "UEFA ID: MUN"
+        - generic [ref=e186]:
+          - heading "Fulham" [level=4] [ref=e187]
+          - paragraph [ref=e188]: England
+          - paragraph [ref=e189]: "UEFA ID: FUL"
+        - generic [ref=e190]:
+          - heading "Burnley" [level=4] [ref=e191]
+          - paragraph [ref=e192]: England
+          - paragraph [ref=e193]: "UEFA ID: BUR"
+        - generic [ref=e194]:
+          - heading "Leeds United" [level=4] [ref=e195]
+          - paragraph [ref=e196]: England
+          - paragraph [ref=e197]: "UEFA ID: LEE"
+        - generic [ref=e198]:
+          - heading "Sunderland" [level=4] [ref=e199]
+          - paragraph [ref=e200]: England
+          - paragraph [ref=e201]: "UEFA ID: SUN"
+        - generic [ref=e202]:
+          - heading "Bournemouth" [level=4] [ref=e203]
+          - paragraph [ref=e204]: England
+          - paragraph [ref=e205]: "UEFA ID: BOU"
+        - generic [ref=e206]:
+          - heading "Morocco" [level=4] [ref=e207]
+          - paragraph [ref=e208]: Morocco
+        - generic [ref=e209]:
+          - heading "Mali" [level=4] [ref=e210]
+          - paragraph [ref=e211]: Mali
+        - generic [ref=e212]:
+          - heading "Zambia" [level=4] [ref=e213]
+          - paragraph [ref=e214]: Zambia
+        - generic [ref=e215]:
+          - heading "Comoros" [level=4] [ref=e216]
+          - paragraph [ref=e217]: Comoros
+        - generic [ref=e218]:
+          - heading "Egypt" [level=4] [ref=e219]
+          - paragraph [ref=e220]: Egypt
+        - generic [ref=e221]:
+          - heading "South Africa" [level=4] [ref=e222]
+          - paragraph [ref=e223]: South Africa
+        - generic [ref=e224]:
+          - heading "Angola" [level=4] [ref=e225]
+          - paragraph [ref=e226]: Angola
+        - generic [ref=e227]:
+          - heading "Zimbabwe" [level=4] [ref=e228]
+          - paragraph [ref=e229]: Zimbabwe
+        - generic [ref=e230]:
+          - heading "Nigeria" [level=4] [ref=e231]
+          - paragraph [ref=e232]: Nigeria
+        - generic [ref=e233]:
+          - heading "Tunisia" [level=4] [ref=e234]
+          - paragraph [ref=e235]: Tunisia
+        - generic [ref=e236]:
+          - heading "Uganda" [level=4] [ref=e237]
+          - paragraph [ref=e238]: Uganda
+        - generic [ref=e239]:
+          - heading "Tanzania" [level=4] [ref=e240]
+          - paragraph [ref=e241]: Tanzania
+        - generic [ref=e242]:
+          - heading "Senegal" [level=4] [ref=e243]
+          - paragraph [ref=e244]: Senegal
+        - generic [ref=e245]:
+          - heading "DR Congo" [level=4] [ref=e246]
+          - paragraph [ref=e247]: Democratic Republic of Congo
+        - generic [ref=e248]:
+          - heading "Benin" [level=4] [ref=e249]
+          - paragraph [ref=e250]: Benin
+        - generic [ref=e251]:
+          - heading "Botswana" [level=4] [ref=e252]
+          - paragraph [ref=e253]: Botswana
+        - generic [ref=e254]:
+          - heading "Algeria" [level=4] [ref=e255]
+          - paragraph [ref=e256]: Algeria
+        - generic [ref=e257]:
+          - heading "Burkina Faso" [level=4] [ref=e258]
+          - paragraph [ref=e259]: Burkina Faso
+        - generic [ref=e260]:
+          - heading "Equatorial Guinea" [level=4] [ref=e261]
+          - paragraph [ref=e262]: Equatorial Guinea
+        - generic [ref=e263]:
+          - heading "Sudan" [level=4] [ref=e264]
+          - paragraph [ref=e265]: Sudan
+        - generic [ref=e266]:
+          - heading "Ivory Coast" [level=4] [ref=e267]
+          - paragraph [ref=e268]: Ivory Coast
+        - generic [ref=e269]:
+          - heading "Gabon" [level=4] [ref=e270]
+          - paragraph [ref=e271]: Gabon
+        - generic [ref=e272]:
+          - heading "Mozambique" [level=4] [ref=e273]
+          - paragraph [ref=e274]: Mozambique
+        - generic [ref=e275]:
+          - heading "Kenya" [level=4] [ref=e276]
+          - paragraph [ref=e277]: Kenya
+    - generic [ref=e278]:
+      - generic [ref=e279]:
+        - heading "League Settings" [level=3] [ref=e280]
+        - generic [ref=e281]:
+          - generic [ref=e282]:
+            - generic [ref=e283]: "Budget per Manager:"
+            - generic [ref=e284]: £500m
+          - generic [ref=e285]:
+            - generic [ref=e286]: "Min Managers:"
+            - generic [ref=e287]: "2"
+          - generic [ref=e288]:
+            - generic [ref=e289]: "Max Managers:"
+            - generic [ref=e290]: "8"
+          - generic [ref=e291]:
+            - generic [ref=e292]: "Club Slots:"
+            - generic [ref=e293]: "3"
+      - generic [ref=e294]:
+        - heading "Auction Info" [level=3] [ref=e295]
+        - generic [ref=e296]:
+          - generic [ref=e297]:
+            - generic [ref=e298]: "Bid Timer:"
+            - generic [ref=e299]: 30 seconds
+          - generic [ref=e300]:
+            - generic [ref=e301]: "Anti-Snipe:"
+            - generic [ref=e302]: 10 seconds
+          - generic [ref=e303]: "* Timer extends by 10 seconds if bid placed in last 10 seconds"
+    - generic [ref=e304]:
+      - generic [ref=e305]:
+        - generic [ref=e306]:
+          - heading "Manage Clubs" [level=3] [ref=e307]
+          - paragraph [ref=e308]: Choose which clubs will be available in your auction
+        - button "Select Clubs" [ref=e309] [cursor=pointer]
+      - generic [ref=e311]: All available clubs will be included in the auction
+    - generic [ref=e312]:
+      - heading "How It Works" [level=3] [ref=e313]
+      - list [ref=e314]:
+        - listitem [ref=e315]:
+          - generic [ref=e316]: •
+          - text: The commissioner starts the auction and selects clubs to bid on
+        - listitem [ref=e317]:
+          - generic [ref=e318]: •
+          - text: Each club is auctioned for 30 seconds
+        - listitem [ref=e319]:
+          - generic [ref=e320]: •
+          - text: If a bid is placed in the last 10 seconds, the timer extends by 10 seconds
+        - listitem [ref=e321]:
+          - generic [ref=e322]: •
+          - text: The highest bidder wins the club when the timer expires
+        - listitem [ref=e323]:
+          - generic [ref=e324]: •
+          - text: Each manager can bid up to their budget across multiple clubs
+    - generic [ref=e325]:
+      - paragraph [ref=e326]: 🎯 You are the commissioner of this league
+      - paragraph [ref=e327]: You can start the auction when ready
+  - link "Made with Emergent" [ref=e328] [cursor=pointer]:
+    - /url: https://app.emergent.sh/?utm_source=emergent-badge
+    - generic [ref=e329]:
+      - img [ref=e330]
+      - paragraph [ref=e331]: Made with Emergent
+```
