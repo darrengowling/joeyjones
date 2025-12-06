@@ -957,23 +957,23 @@ function AuctionRoom() {
                 return (
                   <div
                     key={p.id}
-                    className={`flex-shrink-0 w-40 p-3 rounded-lg border-2 ${
+                    className={`flex-shrink-0 w-32 sm:w-40 py-2 px-2.5 sm:p-3 rounded-lg border-2 ${
                       isCurrentUser
                         ? "bg-blue-50 border-blue-500"
                         : "bg-gray-50 border-gray-200"
                     }`}
                   >
-                    <div className="font-semibold text-gray-900 text-[var(--t-xs)] sm:text-[var(--t-sm)] mb-1 truncate break-any">
+                    <div className="font-semibold text-gray-900 text-[10px] sm:text-[var(--t-xs)] mb-1 truncate break-any line-clamp-2">
                       {p.userName} {isCurrentUser && "(You)"}
                     </div>
-                    <div className="space-y-1">
-                      <div className="text-lg font-bold text-green-600">
+                    <div className="space-y-0.5 sm:space-y-1">
+                      <div className="text-sm sm:text-lg font-bold text-green-600 truncate">
                         {formatCurrency(p.budgetRemaining)}
                       </div>
-                      <div className="text-xs text-gray-500">
+                      <div className="text-[10px] sm:text-xs text-gray-500 truncate">
                         Spent: {formatCurrency(p.totalSpent)}
                       </div>
-                      <div className="text-xs text-gray-500">
+                      <div className="text-[10px] sm:text-xs text-gray-500 whitespace-nowrap">
                         🏆 {uiHints.assetPlural}: {p.clubsWon.length}
                       </div>
                     </div>
