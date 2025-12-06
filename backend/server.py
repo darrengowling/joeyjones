@@ -5126,12 +5126,12 @@ async def reset_auction(league_id: str, commissioner_id: str = Query(...)):
         await db.auctions.delete_one({"id": auction_id})
         logger.info(f"Deleted auction {auction_id}")
         
-        # 6. Reset league status to draft
+        # 6. Reset league status to pending (ready for new auction)
         await db.leagues.update_one(
             {"id": league_id},
-            {"$set": {"status": "draft"}}
+            {"$set": {"status": "pending"}}
         )
-        logger.info(f"Reset league {league_id} status to draft")
+        logger.info(f"Reset league {league_id} status to pending")
         
         return {
             "message": "Auction reset successfully",
