@@ -117,7 +117,7 @@ class Sport(BaseModel):
 class Club(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     name: str
-    uefaId: str
+    uefaId: Optional[str] = None
     country: str
     logo: Optional[str] = None
     competition: Optional[str] = None  # e.g., "English Premier League", "UEFA Champions League"
