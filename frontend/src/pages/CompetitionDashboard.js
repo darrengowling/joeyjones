@@ -472,9 +472,22 @@ export default function CompetitionDashboard() {
 
       setUploadSuccess(response.data.message || "Fixtures imported successfully!");
       
-      // Refresh fixtures list
+      // Trigger score recompute automatically (for fixtures with scores)
+      try {
+        await axios.post(`${API}/leagues/${leagueId}/score/recompute`);
+        toast.success("League standings updated!");
+      } catch (recomputeError) {
+        console.warn("Score recompute skipped or failed:", recomputeError);
+      }
+      
+      // Refresh fixtures list and standings
       const fixturesResponse = await axios.get(`${API}/leagues/${leagueId}/fixtures`);
       setFixtures(fixturesResponse.data.fixtures || []);
+      
+      // Reload standings
+      setStandings(null);
+      const standingsResponse = await axios.get(`${API}/leagues/${leagueId}/summary?userId=${user.id}`);
+      setSummary(standingsResponse.data);
       
       // Clear file input
       event.target.value = "";
