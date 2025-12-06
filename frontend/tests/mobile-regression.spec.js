@@ -174,7 +174,6 @@ Object.entries(DEVICES).forEach(([deviceKey, deviceConfig]) => {
         // Take failure screenshot
         await page.screenshot({
           path: `${SCREENSHOT_DIR}/mobile-login-${deviceKey}-FAILED.png`,
-          quality: 40,
           fullPage: false
         });
         
