@@ -1116,6 +1116,10 @@ export default function App() {
           style: {
             background: '#363636',
             color: '#fff',
+            fontSize: 'var(--t-sm)',
+            maxWidth: '90vw',
+            wordBreak: 'break-word',
+            overflowWrap: 'anywhere',
           },
           success: {
             iconTheme: {
