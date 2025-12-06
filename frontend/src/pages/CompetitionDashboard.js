@@ -795,211 +795,215 @@ export default function CompetitionDashboard() {
 
     return (
       <div className="space-y-6">
-        {/* Commissioner CSV Upload Panel */}
+        {/* Commissioner Fixtures & Scores Management - SIMPLIFIED */}
         {isCommissioner && (
           <>
-            {/* Import Fixtures from API - NEW AUTOMATIC METHOD */}
-            {summary && summary.sportKey === "football" && (
-              <div className="bg-green-50 border-2 border-green-500 rounded-lg p-4 mb-4">
-                <h3 className="text-md font-bold text-green-900 mb-2">⚡ Import Fixtures from API-Football</h3>
-                <p className="text-sm text-gray-700 mb-3">
-                  Automatically fetch upcoming EPL fixtures for your selected teams
-                </p>
-                <div className="flex gap-3">
-                  <button
-                    onClick={() => handleImportFixturesFromAPI(7)}
-                    disabled={loading}
-                    className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed font-semibold flex-1"
-                  >
-                    {loading ? "Importing..." : "Next Matchday (7 days)"}
-                  </button>
-                  <button
-                    onClick={() => handleImportFixturesFromAPI(30)}
-                    disabled={loading}
-                    className="bg-green-700 text-white px-6 py-2 rounded-lg hover:bg-green-800 disabled:opacity-50 disabled:cursor-not-allowed font-semibold flex-1"
-                  >
-                    {loading ? "Importing..." : "Next 4 Matchdays (30 days)"}
-                  </button>
-                </div>
-                <p className="text-xs text-gray-600 mt-2">
-                  💡 Import more fixtures later if your competition continues beyond this period
-                </p>
-              </div>
-            )}
-
-            {/* Update Match Scores - Show appropriate button based on sport */}
-            {summary && summary.sportKey === "football" && (
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h3 className="text-md font-bold text-gray-900 mb-1">⚽ Update Football Scores (Live)</h3>
-                    <p className="text-sm text-gray-600">
-                      Fetch latest scores from Football-Data.org for recent matches
-                    </p>
-                  </div>
-                  <button
-                    onClick={handleUpdateScores}
-                    disabled={updatingScores}
-                    className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed font-semibold flex items-center gap-2"
-                  >
-                    {updatingScores && (
-                      <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                    )}
-                    {updatingScores ? "Updating..." : "Update Football Scores"}
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {/* Import Next Cricket Fixture */}
-            {summary && summary.sportKey === "cricket" && (
-              <div className="bg-green-50 border-2 border-green-500 rounded-lg p-4 mb-4">
-                <h3 className="text-md font-bold text-green-900 mb-2">⚡ Import Next Ashes Fixture</h3>
-                <p className="text-sm text-gray-700 mb-3">
-                  Import the next upcoming Australia vs England Test match
-                </p>
+            {/* PL/CL: API-based Fixtures & Scores */}
+            {summary && summary.sportKey === "football" && summary.competitionCode !== 'AFCON' && (
+              <div className="bg-white rounded-lg shadow-md p-6">
+                <h3 className="text-xl font-bold text-gray-900 mb-6">📊 Manage Fixtures & Scores</h3>
                 
-                <button
-                  onClick={handleImportNextCricketFixture}
-                  disabled={importingFixture}
-                  className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-semibold w-full flex items-center justify-center gap-2"
-                >
-                  {importingFixture && (
-                    <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                  )}
-                  {importingFixture ? "Importing..." : "Import Next Fixture"}
-                </button>
-
-                <p className="text-xs text-gray-600 mt-3">
-                  💡 Imports only the next Test match that starts after this league was created. Import one fixture at a time as each match completes.
-                </p>
-              </div>
-            )}
-
-            {summary && summary.sportKey === "cricket" && (
-              <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h3 className="text-md font-bold text-gray-900 mb-1">🏏 Update Cricket Scores (Live)</h3>
-                    <p className="text-sm text-gray-600">
-                      Fetch latest scores from Cricbuzz API for recent matches
-                    </p>
+                {/* Import Fixtures Section */}
+                <div className="mb-6">
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="h-px bg-gray-300 flex-1"></div>
+                    <h4 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">Import Fixtures</h4>
+                    <div className="h-px bg-gray-300 flex-1"></div>
                   </div>
-                  <button
-                    onClick={handleUpdateCricketScores}
-                    disabled={loading}
-                    className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed font-semibold"
-                  >
-                    {loading ? "Updating..." : "Update Cricket Scores"}
-                  </button>
+                  <p className="text-sm text-gray-600 mb-3">Fetch upcoming matches from Football-Data.org</p>
+                  <div className="flex gap-3">
+                    <button
+                      onClick={() => handleImportFixturesFromAPI(7)}
+                      disabled={loading}
+                      className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed font-semibold flex-1"
+                    >
+                      {loading ? "Importing..." : "Import Next 7 Days"}
+                    </button>
+                    <button
+                      onClick={() => handleImportFixturesFromAPI(30)}
+                      disabled={loading}
+                      className="bg-blue-700 text-white px-6 py-2 rounded-lg hover:bg-blue-800 disabled:opacity-50 disabled:cursor-not-allowed font-semibold flex-1"
+                    >
+                      {loading ? "Importing..." : "Import Next 30 Days"}
+                    </button>
+                  </div>
+                </div>
+
+                {/* Update Scores Section */}
+                <div>
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="h-px bg-gray-300 flex-1"></div>
+                    <h4 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">Update Scores</h4>
+                    <div className="h-px bg-gray-300 flex-1"></div>
+                  </div>
+                  <p className="text-sm text-gray-600 mb-3">Get latest results for completed matches</p>
+                  <div className="text-center">
+                    <button
+                      onClick={handleUpdateScores}
+                      disabled={updatingScores}
+                      className="bg-green-600 text-white px-8 py-2 rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed font-semibold inline-flex items-center gap-2"
+                    >
+                      {updatingScores && (
+                        <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                      )}
+                      {updatingScores ? "Updating..." : "Update All Scores"}
+                    </button>
+                  </div>
+                  <p className="text-xs text-gray-500 mt-3 text-center">💡 Scores update automatically from the API</p>
                 </div>
               </div>
             )}
 
-            <div className="bg-white rounded-lg shadow p-6" data-testid="fixtures-upload">
-              <h3 className="text-lg font-bold text-gray-900 mb-3">Import Fixtures (CSV)</h3>
-              
-              {/* AFCON Template Download Section */}
-              {summary?.competitionCode === 'AFCON' && (
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
-                  <h4 className="text-sm font-semibold text-blue-900 mb-2">📋 Step-by-Step Guide:</h4>
-                  <ol className="text-sm text-gray-700 space-y-1 mb-3 list-decimal list-inside">
-                    <li>Download the template below (includes all AFCON 2025 group stage fixtures)</li>
-                    <li>Open in Excel, Google Sheets, or any spreadsheet app</li>
-                    <li>Fill in the <strong>goalsHome</strong> and <strong>goalsAway</strong> columns with match scores</li>
-                    <li>Save the file (keep as CSV format)</li>
-                    <li>Upload it using the button below</li>
-                  </ol>
-                  <a
-                    href={`${API}/templates/afcon_2025_fixtures_with_names.csv`}
-                    download="afcon_2025_fixtures_with_names.csv"
-                    className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 font-semibold text-sm"
-                  >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                    </svg>
-                    Download AFCON Fixtures Template
-                  </a>
+            {/* AFCON: CSV-based Fixtures & Scores */}
+            {summary && summary.competitionCode === 'AFCON' && (
+              <div className="bg-white rounded-lg shadow-md p-6">
+                <h3 className="text-xl font-bold text-gray-900 mb-6">📊 Manage Fixtures & Scores (CSV)</h3>
+                
+                {/* Step 1: Download Template */}
+                <div className="mb-6">
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="h-px bg-gray-300 flex-1"></div>
+                    <h4 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">Step 1: Download Template</h4>
+                    <div className="h-px bg-gray-300 flex-1"></div>
+                  </div>
+                  <p className="text-sm text-gray-600 mb-3">Get pre-filled fixture list with all matches</p>
+                  <div className="text-center">
+                    <a
+                      href={`${API}/templates/afcon_2025_fixtures_with_names.csv`}
+                      download="afcon_2025_fixtures_with_names.csv"
+                      className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 font-semibold"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                      Download AFCON Fixtures Template
+                    </a>
+                  </div>
                 </div>
-              )}
-              
-              <p className="text-sm text-gray-600 mb-4">
-                {summary?.sportKey === 'football' ? (
-                  <>
-                    Upload a CSV file to create fixtures and update scores. Required columns: startsAt, homeAssetExternalId, awayAssetExternalId, venue, round, externalMatchId.
-                    <br />
-                    <strong className="text-blue-600">Optional columns for scores:</strong> goalsHome, goalsAway (leave empty for scheduled matches, fill in to mark as completed with scores).
-                  </>
-                ) : (
-                  'Upload a CSV file to schedule fixtures. Required columns: startsAt, homeAssetExternalId, awayAssetExternalId, venue, round, externalMatchId'
-                )}
-              </p>
-              
-              <div className="mb-4">
-                <label className="block">
-                  <span className="sr-only">Choose CSV file</span>
-                  <input
-                    type="file"
-                    accept=".csv"
-                    onChange={handleCSVUpload}
-                    disabled={uploadingCSV}
-                    className="block w-full text-sm text-gray-500
-                      file:mr-4 file:py-2 file:px-4
-                      file:rounded-lg file:border-0
-                      file:text-sm file:font-semibold
-                      file:bg-blue-50 file:text-blue-700
-                      hover:file:bg-blue-100
-                      disabled:opacity-50"
-                  />
-                </label>
+
+                {/* Step 2: Add Scores & Upload */}
+                <div>
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="h-px bg-gray-300 flex-1"></div>
+                    <h4 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">Step 2: Add Scores & Upload</h4>
+                    <div className="h-px bg-gray-300 flex-1"></div>
+                  </div>
+                  <p className="text-sm text-gray-600 mb-3">Fill in goalsHome/goalsAway in Excel, then upload</p>
+                  
+                  <div className="mb-3">
+                    <label className="block">
+                      <span className="sr-only">Choose CSV file</span>
+                      <input
+                        type="file"
+                        accept=".csv"
+                        onChange={handleCSVUpload}
+                        disabled={uploadingCSV}
+                        className="block w-full text-sm text-gray-500
+                          file:mr-4 file:py-2 file:px-4
+                          file:rounded-lg file:border-0
+                          file:text-sm file:font-semibold
+                          file:bg-blue-50 file:text-blue-700
+                          hover:file:bg-blue-100
+                          disabled:opacity-50"
+                      />
+                    </label>
+                  </div>
+
+                  {uploadingCSV && (
+                    <div className="text-sm text-blue-600 text-center">Uploading...</div>
+                  )}
+                  
+                  {uploadSuccess && (
+                    <div className="text-sm text-green-600 bg-green-50 border border-green-200 rounded p-3">
+                      {uploadSuccess}
+                    </div>
+                  )}
+                  
+                  {uploadError && (
+                    <div className="text-sm text-red-600 bg-red-50 border border-red-200 rounded p-3">
+                      {uploadError}
+                    </div>
+                  )}
+
+                  <p className="text-xs text-gray-500 mt-3 text-center">💡 Re-upload same file after each matchday</p>
+                </div>
               </div>
+            )}
 
-              {uploadingCSV && (
-                <div className="text-sm text-blue-600">Uploading...</div>
-              )}
-              
-              {uploadSuccess && (
-                <div className="text-sm text-green-600 bg-green-50 border border-green-200 rounded p-3">
-                  {uploadSuccess}
+            {/* Cricket: Hybrid Fixtures & Scores */}
+            {summary && summary.sportKey === "cricket" && (
+              <div className="bg-white rounded-lg shadow-md p-6">
+                <h3 className="text-xl font-bold text-gray-900 mb-6">📊 Manage Fixtures & Scores</h3>
+                
+                {/* Import Next Fixture Section */}
+                <div className="mb-6">
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="h-px bg-gray-300 flex-1"></div>
+                    <h4 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">Import Next Fixture</h4>
+                    <div className="h-px bg-gray-300 flex-1"></div>
+                  </div>
+                  <p className="text-sm text-gray-600 mb-3">Add next Australia vs England Test match</p>
+                  <div className="text-center">
+                    <button
+                      onClick={handleImportNextCricketFixture}
+                      disabled={importingFixture}
+                      className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed font-semibold inline-flex items-center gap-2"
+                    >
+                      {importingFixture && (
+                        <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                      )}
+                      {importingFixture ? "Importing..." : "Import Next Ashes Fixture"}
+                    </button>
+                  </div>
                 </div>
-              )}
-              
-              {uploadError && (
-                <div className="text-sm text-red-600 bg-red-50 border border-red-200 rounded p-3">
-                  {uploadError}
-                </div>
-              )}
 
-              <div className="mt-4 text-sm text-gray-500">
-                <a
-                  href="#"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    toast("Sample CSV format:\nstartsAt,homeAssetExternalId,awayAssetExternalId,venue,round,externalMatchId\n2025-01-15T19:00:00Z,MCI,LIV,Etihad Stadium,1,match001", {
-                      duration: 6000,
-                      style: { maxWidth: '600px' }
-                    });
-                  }}
-                  className="text-blue-600 hover:underline"
-                >
-                  View sample CSV format
-                </a>
-              </div>
-            </div>
+                {/* Update Player Scores Section */}
+                <div>
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="h-px bg-gray-300 flex-1"></div>
+                    <h4 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">Update Player Scores</h4>
+                    <div className="h-px bg-gray-300 flex-1"></div>
+                  </div>
+                  
+                  {/* Option 1: API */}
+                  <div className="mb-4">
+                    <p className="text-sm font-medium text-gray-700 mb-2">Option 1: Automatic (API)</p>
+                    <div className="text-center">
+                      <button
+                        onClick={handleUpdateCricketScores}
+                        disabled={loading}
+                        className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed font-semibold"
+                      >
+                        {loading ? "Updating..." : "Fetch Latest from Cricbuzz"}
+                      </button>
+                    </div>
+                  </div>
 
-            {/* Score Upload Panel - Cricket Only */}
-            {summary?.sportKey === 'cricket' && (
-              <div className="bg-green-50 border-2 border-green-200 rounded-lg shadow p-6" data-testid="score-upload">
-                <h3 className="text-lg font-bold text-green-900 mb-3">📊 Upload Match Scores (CSV)</h3>
-                <p className="text-sm text-gray-700 mb-2">
-                  Upload match results after a game is complete. Required columns: matchId, playerExternalId, runs, wickets, catches, stumpings, runOuts
-                </p>
+                  {/* Option 2: CSV */}
+                  <div>
+                    <p className="text-sm font-medium text-gray-700 mb-2">Option 2: Manual (CSV)</p>
+                    <label className="block">
+                      <span className="sr-only">Choose Scores CSV file</span>
+                      <input
+                        type="file"
+                        accept=".csv"
+                        onChange={handleScoreUpload}
+                        disabled={uploadingCSV}
+                        className="block w-full text-sm text-gray-700
+                          file:mr-4 file:py-2 file:px-4
+                          file:rounded-lg file:border-0
+                          file:text-sm file:font-semibold
+                          file:bg-green-100 file:text-green-800
+                          hover:file:bg-green-200
+                          disabled:opacity-50"
+                      />
+                    </label>
               
               {/* Important Note about Match IDs */}
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
