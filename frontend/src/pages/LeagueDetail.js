@@ -653,7 +653,7 @@ export default function LeagueDetail() {
                       </div>
                     ) : (
                       <div className="flex items-center gap-2">
-                        {league.sportKey === 'football' && (
+                        {league.sportKey === 'football' && league.competitionCode !== 'AFCON' && (
                           <button 
                             onClick={handleImportFootballFixtures}
                             className="px-3 py-1.5 bg-blue-600 text-white rounded text-xs font-medium hover:bg-blue-700"
