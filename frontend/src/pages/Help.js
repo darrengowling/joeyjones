@@ -83,6 +83,9 @@ const Help = () => {
             <button onClick={() => toggleSection('getting-started')} className="text-left px-4 py-2 bg-blue-50 hover:bg-blue-100 rounded-lg text-blue-700 font-medium transition-colors">
               🚀 Getting Started
             </button>
+            <button onClick={() => toggleSection('updates')} className="text-left px-4 py-2 bg-gradient-to-r from-blue-50 to-purple-50 hover:from-blue-100 hover:to-purple-100 rounded-lg text-purple-700 font-medium transition-colors border border-purple-200">
+              ✨ Recent Updates & New Features
+            </button>
             <button onClick={() => toggleSection('admin-create')} className="text-left px-4 py-2 bg-purple-50 hover:bg-purple-100 rounded-lg text-purple-700 font-medium transition-colors">
               👑 For Commissioners
             </button>
