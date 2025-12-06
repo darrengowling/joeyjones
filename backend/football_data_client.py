@@ -54,6 +54,15 @@ class FootballDataClient:
                 response = await client.get(url, headers=self.headers, params=params or {})
                 self.request_count += 1
                 
+                # Read rate limit from response headers
+                requests_available = response.headers.get('x-requests-available-minute')
+                if requests_available:
+                    try:
+                        self.requests_remaining = int(requests_available)
+                        logger.info(f"Football-Data.org API requests remaining: {self.requests_remaining}/minute")
+                    except ValueError:
+                        pass
+                
                 logger.info(f"Football-Data.org request to {endpoint}: {response.status_code}")
                 
                 if response.status_code == 200:
