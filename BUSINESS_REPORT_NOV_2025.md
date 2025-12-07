@@ -466,7 +466,7 @@ The Sport X fantasy sports platform has undergone significant stabilization and 
 - Hot reload enabled (no restart needed for code changes)
 
 **URLs:**
-- Preview: `https://draft-kings-mobile.preview.emergentagent.com`
+- Preview: `https://prod-auction-fix.preview.emergentagent.com`
 - Frontend on port 3000, backend on port 8001 via Kubernetes ingress
 
 **Stability:**

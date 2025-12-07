@@ -6,7 +6,7 @@
 import { test, expect, chromium, Browser, BrowserContext, Page } from '@playwright/test';
 import { setUserSession } from './helpers/session';  // Prompt C
 
-const BASE_URL = 'https://draft-kings-mobile.preview.emergentagent.com';
+const BASE_URL = 'https://prod-auction-fix.preview.emergentagent.com';
 
 test.describe('04 - Late Joiner Sync', () => {
   let browserA: Browser;
