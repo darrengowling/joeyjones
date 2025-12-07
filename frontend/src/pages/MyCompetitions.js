@@ -311,7 +311,7 @@ export default function MyCompetitions() {
                 data-testid={`comp-card-${comp.leagueId}`}
                 className="bg-white rounded-lg shadow-lg p-4 hover:shadow-xl transition-shadow"
               >
-                <div className="flex justify-between items-start mb-4 gap-2">
+                <div className="flex flex-col gap-2 mb-4">
                   <div className="flex items-center gap-3 min-w-0 flex-1">
                     {/* Checkbox for commissioner's non-active leagues */}
                     {comp.isCommissioner && comp.status !== "active" && (
