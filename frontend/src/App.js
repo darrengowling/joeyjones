@@ -739,8 +739,20 @@ const Home = () => {
                   className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-[16px]"
                   value={leagueForm.clubSlots}
                   onChange={(e) => {
-                    const val = e.target.value === '' ? '' : parseInt(e.target.value, 10);
-                    setLeagueForm({ ...leagueForm, clubSlots: val === '' ? 1 : val });
+                    const val = e.target.value;
+                    if (val === '') {
+                      setLeagueForm({ ...leagueForm, clubSlots: '' });
+                    } else {
+                      const numVal = parseInt(val, 10);
+                      if (!isNaN(numVal)) {
+                        setLeagueForm({ ...leagueForm, clubSlots: numVal });
+                      }
+                    }
+                  }}
+                  onBlur={(e) => {
+                    if (e.target.value === '' || parseInt(e.target.value, 10) < 1) {
+                      setLeagueForm({ ...leagueForm, clubSlots: 1 });
+                    }
                   }}
                   min="1"
                   max="10"
