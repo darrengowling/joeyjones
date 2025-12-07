@@ -872,16 +872,16 @@ export default function CompetitionDashboard() {
                     <div className="h-px bg-gray-300 flex-1"></div>
                   </div>
                   <p className="text-sm text-gray-600 mb-3">Get pre-filled fixture list with all matches</p>
-                  <div className="text-center">
+                  <div className="flex justify-center">
                     <a
                       href={`${API}/templates/afcon_2025_fixtures_with_names.csv`}
                       download="afcon_2025_fixtures_with_names.csv"
-                      className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 font-semibold"
+                      className="flex items-center justify-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 font-semibold text-sm w-full max-w-sm"
                     >
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                       </svg>
-                      Download AFCON Fixtures Template
+                      <span className="truncate">Download AFCON Fixtures Template</span>
                     </a>
                   </div>
                 </div>
