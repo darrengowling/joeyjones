@@ -1030,13 +1030,13 @@ export default function CompetitionDashboard() {
             <div className="space-y-6">
               {Object.entries(groupedFixtures).map(([date, dateFixtures]) => (
                 <div key={date} className="bg-white rounded-lg shadow overflow-hidden">
-                  <div className="bg-gray-50 px-6 py-3 border-b border-gray-200">
+                  <div className="bg-gray-50 px-4 py-3 border-b border-gray-200">
                     <h3 className="font-bold text-gray-900">{date}</h3>
                   </div>
                   <div className="divide-y divide-gray-200">
                     {dateFixtures.map((fixture) => (
                       <div key={fixture.id} className="p-4 hover:bg-gray-50">
-                        <div className="flex items-center justify-between">
+                        <div className="flex flex-col gap-2">
                           <div className="flex items-center gap-4 flex-1">
                             <div className="text-sm text-gray-500 w-16">
                               {formatTime(fixture.startsAt || fixture.matchDate)}
