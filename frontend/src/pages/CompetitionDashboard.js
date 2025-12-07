@@ -1037,11 +1037,11 @@ export default function CompetitionDashboard() {
                     {dateFixtures.map((fixture) => (
                       <div key={fixture.id} className="p-4 hover:bg-gray-50">
                         <div className="flex flex-col gap-2">
-                          <div className="flex items-center gap-4 flex-1">
-                            <div className="text-sm text-gray-500 w-16">
+                          <div className="flex items-center justify-between gap-2 w-full">
+                            <div className="text-sm text-gray-500 flex-shrink-0">
                               {formatTime(fixture.startsAt || fixture.matchDate)}
                             </div>
-                            <div className="flex-1">
+                            <div className="flex items-center gap-2 flex-shrink-0">
                               <div className="text-sm font-medium text-gray-900">
                                 {fixture.homeTeam && fixture.awayTeam
                                   ? (
