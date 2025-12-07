@@ -22,7 +22,7 @@ export const getSocket = () => {
   if (!socket) {
     socket = io(BACKEND_URL, {
       path: "/api/socket.io",
-      transports: ["websocket", "polling"],
+      transports: ["polling", "websocket"], // Start with polling for production compatibility
       reconnection: true,
       reconnectionAttempts: 10, // Increased from 5
       reconnectionDelay: 1000,
