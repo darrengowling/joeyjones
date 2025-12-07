@@ -349,10 +349,10 @@ export default function MyCompetitions() {
                           key={idx}
                           className="flex items-center justify-between p-2 bg-blue-50 rounded-lg border border-blue-200 gap-2"
                         >
-                          <span className="text-[var(--t-sm)] sm:text-[var(--t-md)] font-semibold text-blue-900 truncate break-any">
+                          <span className="text-[var(--t-sm)] font-semibold text-blue-900 truncate break-any">
                             {asset.name || `${getUiHints(comp.sportKey).assetLabel} ${idx + 1}`}
                           </span>
-                          <span className="text-[var(--t-sm)] sm:text-[var(--t-md)] text-blue-700 font-bold whitespace-nowrap">
+                          <span className="text-[var(--t-sm)] text-blue-700 font-bold whitespace-nowrap">
                             {formatCurrency(asset.price)}
                           </span>
                         </div>
