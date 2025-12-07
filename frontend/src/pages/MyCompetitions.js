@@ -394,7 +394,7 @@ export default function MyCompetitions() {
                 )}
 
                 {/* Action Buttons */}
-                <div className="flex gap-3 flex-wrap">
+                <div className="flex flex-col gap-3">
                   {comp.status === "auction_live" && comp.activeAuctionId && (
                     <button
                       data-testid="comp-auction-btn"
