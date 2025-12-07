@@ -20,9 +20,13 @@ if REDIS_URL and REDIS_URL.strip():
 else:
     logger.info("📝 Socket.IO using in-memory manager (single replica)")
 
+# Configure CORS origins - use wildcard for production compatibility
+cors_origins = "*"
+logger.info(f"🌐 Socket.IO CORS configured: {cors_origins}")
+
 sio = socketio.AsyncServer(
     async_mode="asgi",
-    cors_allowed_origins=[FRONTEND_ORIGIN] if FRONTEND_ORIGIN != "*" else "*",
+    cors_allowed_origins=cors_origins,
     ping_interval=20,
     ping_timeout=25,
     client_manager=mgr,            # enables pub/sub fanout across pods
