@@ -803,8 +803,20 @@ const Home = () => {
                     className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-[16px]"
                     value={leagueForm.antiSnipeSeconds}
                     onChange={(e) => {
-                      const val = e.target.value === '' ? '' : parseInt(e.target.value, 10);
-                      setLeagueForm({ ...leagueForm, antiSnipeSeconds: val === '' ? 0 : val });
+                      const val = e.target.value;
+                      if (val === '') {
+                        setLeagueForm({ ...leagueForm, antiSnipeSeconds: '' });
+                      } else {
+                        const numVal = parseInt(val, 10);
+                        if (!isNaN(numVal)) {
+                          setLeagueForm({ ...leagueForm, antiSnipeSeconds: numVal });
+                        }
+                      }
+                    }}
+                    onBlur={(e) => {
+                      if (e.target.value === '' || parseInt(e.target.value, 10) < 0) {
+                        setLeagueForm({ ...leagueForm, antiSnipeSeconds: 0 });
+                      }
                     }}
                     min="0"
                     max="30"
