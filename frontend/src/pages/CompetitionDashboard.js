@@ -516,14 +516,16 @@ export default function CompetitionDashboard() {
     return (
       <div className="space-y-6">
         {/* League Info */}
-        <div className="bg-white rounded-lg shadow p-6">
-          <div className="flex items-center gap-4 mb-4">
-            <span className="text-4xl">{getSportEmoji(summary.sportKey)}</span>
-            <div className="flex-1 min-w-0">
-              <h2 className="text-[var(--t-xl)] sm:text-2xl font-bold text-gray-900 truncate">{summary.name}</h2>
-              <p className="text-[var(--t-sm)] sm:text-[var(--t-md)] text-gray-500 capitalize">{summary.sportKey}</p>
+        <div className="bg-white rounded-lg shadow p-4">
+          <div className="flex flex-col gap-3 mb-4">
+            <div className="flex items-center gap-3">
+              <span className="text-4xl flex-shrink-0">{getSportEmoji(summary.sportKey)}</span>
+              <div className="flex-1 min-w-0">
+                <h2 className="text-[var(--t-lg)] font-bold text-gray-900 truncate">{summary.name}</h2>
+                <p className="text-[var(--t-sm)] text-gray-500 capitalize">{summary.sportKey}</p>
+              </div>
             </div>
-            <span className={`px-4 py-2 rounded-full text-sm font-semibold border ${getStatusChipStyle(summary.status)}`}>
+            <span className={`px-3 py-1 rounded-full text-xs font-semibold border w-fit ${getStatusChipStyle(summary.status)}`}>
               {getStatusLabel(summary.status)}
             </span>
           </div>
