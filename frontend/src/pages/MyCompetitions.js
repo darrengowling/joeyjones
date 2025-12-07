@@ -232,7 +232,7 @@ export default function MyCompetitions() {
       </div>
 
       {/* Main Content */}
-      <div className="container-narrow mx-auto px-4 py-8" data-testid="my-competitions-page">
+      <div className="container-narrow mx-auto px-2 py-8" data-testid="my-competitions-page">
         <div className="text-xs uppercase tracking-wide text-gray-500 mb-1">My Competitions</div>
         <h1 className="h1 text-3xl font-bold mb-6 text-gray-900">My Competitions</h1>
 
