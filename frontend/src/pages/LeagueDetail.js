@@ -571,7 +571,7 @@ export default function LeagueDetail() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 py-8">
       <div className="container-narrow mx-auto px-4">
-        <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-8">
+        <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-4 sm:p-8">
           {/* Breadcrumb Navigation */}
           <div className="flex items-center gap-2 text-sm text-gray-600 mb-4">
             <button onClick={() => navigate("/")} className="hover:text-blue-600">Home</button>
