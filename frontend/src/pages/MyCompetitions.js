@@ -399,7 +399,7 @@ export default function MyCompetitions() {
                     <button
                       data-testid="comp-auction-btn"
                       onClick={() => navigate(`/auction/${comp.activeAuctionId}`)}
-                      className="btn btn-primary bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 font-semibold flex-1 animate-pulse"
+                      className="btn btn-primary bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 font-semibold flex-1 animate-pulse"
                     >
                       🔴 Join Auction Now
                     </button>
