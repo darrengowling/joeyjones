@@ -291,7 +291,33 @@ const Help = () => {
             </div>
 
             <div>
-              <h4 className="text-lg font-semibold text-gray-900 mb-3">🔄 Auction Reset Feature (New!)</h4>
+              <h4 className="text-lg font-semibold text-gray-900 mb-3">🎮 Commissioner Auction Controls</h4>
+              <p className="text-gray-700 mb-3">
+                As a commissioner, you have special controls during live auctions to manage the auction flow:
+              </p>
+              
+              <div className="bg-gray-50 rounded-lg p-4 mb-4">
+                <h5 className="font-semibold text-gray-900 mb-2">Available Controls:</h5>
+                <ul className="space-y-3 text-gray-700">
+                  <li>
+                    <strong>⏸️ Pause:</strong> Temporarily pause the auction (timer stops, no bidding allowed). Use this if you need a break or to resolve an issue.
+                  </li>
+                  <li>
+                    <strong>▶️ Resume:</strong> Resume a paused auction (timer continues, bidding resumes).
+                  </li>
+                  <li>
+                    <strong>Complete Lot:</strong> Manually advance to the next team/player. The current lot is awarded to the highest bidder and the next team starts immediately.
+                    <div className="mt-1 text-sm text-amber-700 bg-amber-50 border border-amber-200 rounded px-3 py-2">
+                      ⚠️ <strong>When to use:</strong> Only use this if the timer appears stuck or frozen. The auction normally advances automatically when the timer expires - you don't need to click this button in normal operation.
+                    </div>
+                  </li>
+                  <li>
+                    <strong>🗑️ Delete Auction:</strong> Permanently delete the auction and all associated data. This returns the league to ready state but cannot be undone.
+                  </li>
+                </ul>
+              </div>
+
+              <h4 className="text-lg font-semibold text-gray-900 mb-3 mt-6">🔄 Auction Reset Feature (New!)</h4>
               <p className="text-gray-700 mb-3">
                 Commissioners can now reset an auction and start fresh without recreating the entire league or re-inviting participants.
               </p>
