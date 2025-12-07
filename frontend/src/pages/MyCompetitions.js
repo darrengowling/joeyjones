@@ -407,14 +407,14 @@ export default function MyCompetitions() {
                   <button
                     data-testid="comp-detail-btn"
                     onClick={() => navigate(`/league/${comp.leagueId}`)}
-                    className="btn btn-secondary bg-gray-100 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-200 font-semibold"
+                    className="btn btn-secondary bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 font-semibold"
                   >
                     League Detail
                   </button>
                   <button
                     data-testid="comp-view-btn"
                     onClick={() => navigate(`/competitions/${comp.leagueId}`)}
-                    className="btn btn-primary bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 font-semibold flex-1"
+                    className="btn btn-primary bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 font-semibold flex-1"
                   >
                     View Dashboard
                   </button>
