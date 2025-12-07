@@ -759,7 +759,10 @@ const Home = () => {
                     pattern="[0-9]*"
                     className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-[16px]"
                     value={leagueForm.timerSeconds}
-                    onChange={(e) => setLeagueForm({ ...leagueForm, timerSeconds: Number(e.target.value) })}
+                    onChange={(e) => {
+                      const val = e.target.value === '' ? '' : parseInt(e.target.value, 10);
+                      setLeagueForm({ ...leagueForm, timerSeconds: val === '' ? 15 : val });
+                    }}
                     min="15"
                     max="120"
                     required
