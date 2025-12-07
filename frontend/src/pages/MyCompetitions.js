@@ -311,19 +311,19 @@ export default function MyCompetitions() {
                 data-testid={`comp-card-${comp.leagueId}`}
                 className="bg-white rounded-lg shadow-lg p-4 hover:shadow-xl transition-shadow"
               >
-                <div className="flex justify-between items-start mb-4">
-                  <div className="flex items-center gap-3">
+                <div className="flex justify-between items-start mb-4 gap-2">
+                  <div className="flex items-center gap-3 min-w-0 flex-1">
                     {/* Checkbox for commissioner's non-active leagues */}
                     {comp.isCommissioner && comp.status !== "active" && (
                       <input
                         type="checkbox"
                         checked={selectedLeagues.has(comp.leagueId)}
                         onChange={() => toggleSelectLeague(comp.leagueId)}
-                        className="w-5 h-5 text-blue-600 rounded"
+                        className="w-5 h-5 text-blue-600 rounded flex-shrink-0"
                         onClick={(e) => e.stopPropagation()}
                       />
                     )}
-                    <span className="text-3xl">{getSportEmoji(comp.sportKey)}</span>
+                    <span className="text-3xl flex-shrink-0">{getSportEmoji(comp.sportKey)}</span>
                     <div className="min-w-0 flex-1">
                       <h2 className="h2 text-[var(--t-lg)] font-bold text-gray-900 truncate">{comp.name}</h2>
                       <p className="text-[var(--t-sm)] text-gray-500 capitalize">{comp.sportKey}</p>
@@ -331,7 +331,7 @@ export default function MyCompetitions() {
                   </div>
                   <span
                     data-testid="comp-status"
-                    className={`px-3 py-1 rounded-full text-sm font-semibold border ${getStatusChipStyle(comp.status)}`}
+                    className={`px-2 py-1 rounded-full text-xs font-semibold border whitespace-nowrap flex-shrink-0 ${getStatusChipStyle(comp.status)}`}
                   >
                     {getStatusLabel(comp.status)}
                   </span>
