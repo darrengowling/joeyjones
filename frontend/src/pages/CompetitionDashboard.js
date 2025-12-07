@@ -861,7 +861,7 @@ export default function CompetitionDashboard() {
 
             {/* AFCON: CSV-based Fixtures & Scores */}
             {summary && summary.competitionCode === 'AFCON' && (
-              <div className="bg-white rounded-lg shadow-md p-6">
+              <div className="bg-white rounded-lg shadow-md p-4">
                 <h3 className="text-xl font-bold text-gray-900 mb-6">📊 Manage Fixtures & Scores (CSV)</h3>
                 
                 {/* Step 1: Download Template */}
