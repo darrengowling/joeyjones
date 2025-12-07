@@ -686,7 +686,7 @@ export default function LeagueDetail() {
               </div>
             )}
 
-            <div className="flex gap-3">
+            <div className="flex flex-col sm:flex-row gap-3">
               {league.status === "pending" && isCommissioner && (
                 <div>
                   <button
