@@ -309,7 +309,7 @@ export default function MyCompetitions() {
                 <div
                 key={comp.leagueId}
                 data-testid={`comp-card-${comp.leagueId}`}
-                className="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow"
+                className="bg-white rounded-lg shadow-lg p-4 hover:shadow-xl transition-shadow"
               >
                 <div className="flex justify-between items-start mb-4">
                   <div className="flex items-center gap-3">
