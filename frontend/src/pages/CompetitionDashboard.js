@@ -1072,26 +1072,25 @@ export default function CompetitionDashboard() {
                                   Match ID: <span className="font-semibold text-blue-600">{fixture.externalMatchId}</span>
                                 </div>
                               )}
+                              {fixture.round && (
+                                <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded whitespace-nowrap">
+                                  R{fixture.round}
+                                </span>
+                              )}
+                              <span
+                                className={`text-xs px-2 py-1 rounded-full font-semibold whitespace-nowrap ${
+                                  fixture.status === "completed" || fixture.status === "ft" || fixture.status === "final"
+                                    ? "bg-green-100 text-green-700"
+                                    : fixture.status === "live"
+                                    ? "bg-red-100 text-red-700"
+                                    : "bg-yellow-100 text-yellow-700"
+                                }`}
+                              >
+                                {fixture.status === "completed" || fixture.status === "ft" || fixture.status === "final" ? "✅" : fixture.status === "live" ? "🔴" : "⏳"}
+                              </span>
                             </div>
                           </div>
-                          <div className="flex items-center gap-3">
-                            {fixture.round && (
-                              <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
-                                Round {fixture.round}
-                              </span>
-                            )}
-                            <span
-                              className={`text-xs px-3 py-1 rounded-full font-semibold ${
-                                fixture.status === "completed" || fixture.status === "ft" || fixture.status === "final"
-                                  ? "bg-green-100 text-green-700"
-                                  : fixture.status === "live"
-                                  ? "bg-red-100 text-red-700"
-                                  : "bg-yellow-100 text-yellow-700"
-                              }`}
-                            >
-                              {fixture.status === "completed" || fixture.status === "ft" || fixture.status === "final" ? "✅ Finished" : fixture.status === "live" ? "🔴 Live" : "⏳ Scheduled"}
-                            </span>
-                          </div>
+                          <div className="w-full">
                         </div>
                       </div>
                     ))}
