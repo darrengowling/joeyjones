@@ -1035,62 +1035,58 @@ export default function CompetitionDashboard() {
                   </div>
                   <div className="divide-y divide-gray-200">
                     {dateFixtures.map((fixture) => (
-                      <div key={fixture.id} className="p-4 hover:bg-gray-50">
+                      <div key={fixture.id} className="p-3 hover:bg-gray-50">
                         <div className="flex flex-col gap-2">
-                          <div className="flex items-center justify-between gap-2 w-full">
-                            <div className="text-sm text-gray-500 flex-shrink-0">
+                          <div className="flex items-center gap-2">
+                            <div className="text-xs text-gray-500 flex-shrink-0">
                               {formatTime(fixture.startsAt || fixture.matchDate)}
                             </div>
-                            <div className="flex items-center gap-2 flex-shrink-0">
-                              <div className="text-sm font-medium text-gray-900">
-                                {fixture.homeTeam && fixture.awayTeam
-                                  ? (
-                                    <div className="flex items-center gap-3">
-                                      <span>{fixture.homeTeam}</span>
-                                      {(fixture.status === "ft" || fixture.status === "completed" || fixture.status === "final") && fixture.goalsHome !== null && fixture.goalsAway !== null ? (
-                                        <span className="font-bold text-lg text-blue-600">
-                                          {fixture.goalsHome} - {fixture.goalsAway}
-                                        </span>
-                                      ) : (
-                                        <span className="text-gray-400">vs</span>
-                                      )}
-                                      <span>{fixture.awayTeam}</span>
-                                    </div>
-                                  )
-                                  : fixture.homeAsset?.name || fixture.awayAsset?.name 
-                                  ? `${fixture.homeAsset?.name || fixture.homeAssetId || "Team A"} vs ${fixture.awayAsset?.name || fixture.awayAssetId || "Team B"}`
-                                  : fixture.round || fixture.externalMatchId || "Match"}
-                              </div>
-                              {fixture.venue && (
-                                <div className="text-xs text-gray-500 mt-1">
-                                  📍 {fixture.venue}
-                                </div>
-                              )}
-                              {/* Display Match ID for CSV reference */}
-                              {fixture.externalMatchId && (
-                                <div className="text-xs text-gray-600 mt-1 font-mono bg-gray-100 px-2 py-1 rounded inline-block">
-                                  Match ID: <span className="font-semibold text-blue-600">{fixture.externalMatchId}</span>
-                                </div>
-                              )}
-                              {fixture.round && (
-                                <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded whitespace-nowrap">
-                                  R{fixture.round}
-                                </span>
-                              )}
-                              <span
-                                className={`text-xs px-2 py-1 rounded-full font-semibold whitespace-nowrap ${
-                                  fixture.status === "completed" || fixture.status === "ft" || fixture.status === "final"
-                                    ? "bg-green-100 text-green-700"
-                                    : fixture.status === "live"
-                                    ? "bg-red-100 text-red-700"
-                                    : "bg-yellow-100 text-yellow-700"
-                                }`}
-                              >
-                                {fixture.status === "completed" || fixture.status === "ft" || fixture.status === "final" ? "✅" : fixture.status === "live" ? "🔴" : "⏳"}
+                            {fixture.round && (
+                              <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded whitespace-nowrap">
+                                R{fixture.round}
                               </span>
-                            </div>
+                            )}
+                            <span
+                              className={`text-xs px-2 py-1 rounded-full font-semibold whitespace-nowrap ml-auto ${
+                                fixture.status === "completed" || fixture.status === "ft" || fixture.status === "final"
+                                  ? "bg-green-100 text-green-700"
+                                  : fixture.status === "live"
+                                  ? "bg-red-100 text-red-700"
+                                  : "bg-yellow-100 text-yellow-700"
+                              }`}
+                            >
+                              {fixture.status === "completed" || fixture.status === "ft" || fixture.status === "final" ? "✅" : fixture.status === "live" ? "🔴" : "⏳"}
+                            </span>
                           </div>
-                          <div className="w-full">
+                          <div className="text-sm font-medium text-gray-900">
+                            {fixture.homeTeam && fixture.awayTeam
+                              ? (
+                                <div className="flex items-center gap-2 flex-wrap">
+                                  <span className="truncate">{fixture.homeTeam}</span>
+                                  {(fixture.status === "ft" || fixture.status === "completed" || fixture.status === "final") && fixture.goalsHome !== null && fixture.goalsAway !== null ? (
+                                    <span className="font-bold text-base text-blue-600 flex-shrink-0">
+                                      {fixture.goalsHome} - {fixture.goalsAway}
+                                    </span>
+                                  ) : (
+                                    <span className="text-gray-400 flex-shrink-0">vs</span>
+                                  )}
+                                  <span className="truncate">{fixture.awayTeam}</span>
+                                </div>
+                              )
+                              : fixture.homeAsset?.name || fixture.awayAsset?.name 
+                              ? `${fixture.homeAsset?.name || fixture.homeAssetId || "Team A"} vs ${fixture.awayAsset?.name || fixture.awayAssetId || "Team B"}`
+                              : fixture.round || fixture.externalMatchId || "Match"}
+                          </div>
+                          {fixture.venue && (
+                            <div className="text-xs text-gray-500">
+                              📍 {fixture.venue}
+                            </div>
+                          )}
+                          {fixture.externalMatchId && (
+                            <div className="text-xs text-gray-600 font-mono bg-gray-100 px-2 py-1 rounded inline-block w-fit">
+                              ID: <span className="font-semibold text-blue-600">{fixture.externalMatchId}</span>
+                            </div>
+                          )}
                         </div>
                       </div>
                     ))}
