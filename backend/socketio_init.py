@@ -27,12 +27,12 @@ logger.info(f"🌐 Socket.IO CORS configured: {cors_origins}")
 sio = socketio.AsyncServer(
     async_mode="asgi",
     cors_allowed_origins=cors_origins,
-    ping_interval=20,
-    ping_timeout=25,
+    ping_interval=25,              # Increased from 20 to handle proxy delays
+    ping_timeout=60,               # Increased from 25 to 60 for nginx/proxy compatibility
     client_manager=mgr,            # enables pub/sub fanout across pods
     json=None,                     # default
-    logger=False,                  # Disable verbose Socket.IO logging
-    engineio_logger=False,         # Disable verbose EngineIO logging (heartbeats)
+    logger=True,                   # Enable Socket.IO logging for debugging
+    engineio_logger=True,          # Enable EngineIO logging to track connections
     allow_upgrades=True,
     namespaces=None,
     always_connect=True
