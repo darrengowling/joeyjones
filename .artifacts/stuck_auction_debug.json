@@ -1,0 +1,292 @@
+{
+  "metadata": {
+    "sessionStart": "2025-12-08T18:49:10.003Z",
+    "reportGenerated": "2025-12-08T18:50:27.397Z",
+    "auctionId": "f27b4c31-9755-4d71-a9d6-81868ef34162",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36 Edg/142.0.0.0",
+    "screenSize": "1280x720",
+    "connection": {
+      "effectiveType": "4g",
+      "downlink": 4.25,
+      "rtt": 250
+    }
+  },
+  "statistics": {
+    "totalAttempts": 1,
+    "totalSent": 1,
+    "totalSuccesses": 1,
+    "totalErrors": 0,
+    "rateLimited": 0,
+    "successRate": "100.0%",
+    "networkSuccessRate": "100.0%"
+  },
+  "errorSummary": {},
+  "events": [
+    {
+      "timestamp": "2025-12-08T18:49:10.211Z",
+      "timestampMs": 1765219750211,
+      "event": "auction_start",
+      "auctionId": "f27b4c31-9755-4d71-a9d6-81868ef34162",
+      "status": "waiting",
+      "currentLot": 0,
+      "existingBids": 0
+    },
+    {
+      "timestamp": "2025-12-08T18:49:12.462Z",
+      "timestampMs": 1765219752462,
+      "event": "auction_start",
+      "auctionId": "f27b4c31-9755-4d71-a9d6-81868ef34162",
+      "status": "waiting",
+      "currentLot": 0,
+      "existingBids": 0
+    },
+    {
+      "timestamp": "2025-12-08T18:49:14.811Z",
+      "timestampMs": 1765219754811,
+      "event": "auction_start",
+      "auctionId": "f27b4c31-9755-4d71-a9d6-81868ef34162",
+      "status": "waiting",
+      "currentLot": 0,
+      "existingBids": 0
+    },
+    {
+      "timestamp": "2025-12-08T18:49:16.820Z",
+      "timestampMs": 1765219756820,
+      "event": "auction_start",
+      "auctionId": "f27b4c31-9755-4d71-a9d6-81868ef34162",
+      "status": "waiting",
+      "currentLot": 0,
+      "existingBids": 0
+    },
+    {
+      "timestamp": "2025-12-08T18:49:18.860Z",
+      "timestampMs": 1765219758860,
+      "event": "auction_start",
+      "auctionId": "f27b4c31-9755-4d71-a9d6-81868ef34162",
+      "status": "waiting",
+      "currentLot": 0,
+      "existingBids": 0
+    },
+    {
+      "timestamp": "2025-12-08T18:49:20.860Z",
+      "timestampMs": 1765219760860,
+      "event": "auction_start",
+      "auctionId": "f27b4c31-9755-4d71-a9d6-81868ef34162",
+      "status": "waiting",
+      "currentLot": 0,
+      "existingBids": 0
+    },
+    {
+      "timestamp": "2025-12-08T18:49:22.441Z",
+      "timestampMs": 1765219762441,
+      "event": "auction_start",
+      "auctionId": "f27b4c31-9755-4d71-a9d6-81868ef34162",
+      "status": "waiting",
+      "currentLot": 0,
+      "existingBids": 0
+    },
+    {
+      "timestamp": "2025-12-08T18:49:24.431Z",
+      "timestampMs": 1765219764431,
+      "event": "auction_start",
+      "auctionId": "f27b4c31-9755-4d71-a9d6-81868ef34162",
+      "status": "active",
+      "currentLot": 1,
+      "existingBids": 0
+    },
+    {
+      "timestamp": "2025-12-08T18:49:52.327Z",
+      "timestampMs": 1765219792328,
+      "event": "bid:attempt",
+      "auctionId": "f27b4c31-9755-4d71-a9d6-81868ef34162",
+      "clubId": "6dc511b9-d3a8-4c34-9a57-77cfab200c02",
+      "clubName": "Nottingham Forest",
+      "amount": 2000000,
+      "amountFormatted": "£2m",
+      "userBudget": 500000000,
+      "highestBid": 0,
+      "existingBidsCount": 0
+    },
+    {
+      "timestamp": "2025-12-08T18:49:52.328Z",
+      "timestampMs": 1765219792328,
+      "event": "bid:sent",
+      "auctionId": "f27b4c31-9755-4d71-a9d6-81868ef34162",
+      "clubId": "6dc511b9-d3a8-4c34-9a57-77cfab200c02",
+      "amount": 2000000
+    },
+    {
+      "timestamp": "2025-12-08T18:49:52.861Z",
+      "timestampMs": 1765219792861,
+      "event": "bid:success",
+      "auctionId": "f27b4c31-9755-4d71-a9d6-81868ef34162",
+      "clubId": "6dc511b9-d3a8-4c34-9a57-77cfab200c02",
+      "amount": 2000000,
+      "durationMs": 533,
+      "response": {
+        "message": "Bid placed successfully",
+        "bid_obj": {
+          "id": "a0618d28-491b-4156-80d6-15459c908ced",
+          "auctionId": "f27b4c31-9755-4d71-a9d6-81868ef34162",
+          "userId": "a87cd4ce-005d-4d1d-bb53-658c2d2b42bb",
+          "clubId": "6dc511b9-d3a8-4c34-9a57-77cfab200c02",
+          "amount": 2000000,
+          "timestamp": "2025-12-08T18:49:53.503014Z",
+          "userName": "daz1",
+          "userEmail": "darren.gowling@gmail.com"
+        }
+      }
+    },
+    {
+      "timestamp": "2025-12-08T18:49:53.061Z",
+      "timestampMs": 1765219793061,
+      "event": "auction_start",
+      "auctionId": "f27b4c31-9755-4d71-a9d6-81868ef34162",
+      "status": "active",
+      "currentLot": 1,
+      "existingBids": 1
+    },
+    {
+      "timestamp": "2025-12-08T18:50:27.397Z",
+      "timestampMs": 1765219827397,
+      "event": "auction_complete",
+      "auctionId": "f27b4c31-9755-4d71-a9d6-81868ef34162",
+      "finalStatus": "active",
+      "totalBids": 1
+    }
+  ],
+  "allLogs": [
+    {
+      "timestamp": "2025-12-08T18:49:10.211Z",
+      "timestampMs": 1765219750211,
+      "event": "auction_start",
+      "auctionId": "f27b4c31-9755-4d71-a9d6-81868ef34162",
+      "status": "waiting",
+      "currentLot": 0,
+      "existingBids": 0
+    },
+    {
+      "timestamp": "2025-12-08T18:49:12.462Z",
+      "timestampMs": 1765219752462,
+      "event": "auction_start",
+      "auctionId": "f27b4c31-9755-4d71-a9d6-81868ef34162",
+      "status": "waiting",
+      "currentLot": 0,
+      "existingBids": 0
+    },
+    {
+      "timestamp": "2025-12-08T18:49:14.811Z",
+      "timestampMs": 1765219754811,
+      "event": "auction_start",
+      "auctionId": "f27b4c31-9755-4d71-a9d6-81868ef34162",
+      "status": "waiting",
+      "currentLot": 0,
+      "existingBids": 0
+    },
+    {
+      "timestamp": "2025-12-08T18:49:16.820Z",
+      "timestampMs": 1765219756820,
+      "event": "auction_start",
+      "auctionId": "f27b4c31-9755-4d71-a9d6-81868ef34162",
+      "status": "waiting",
+      "currentLot": 0,
+      "existingBids": 0
+    },
+    {
+      "timestamp": "2025-12-08T18:49:18.860Z",
+      "timestampMs": 1765219758860,
+      "event": "auction_start",
+      "auctionId": "f27b4c31-9755-4d71-a9d6-81868ef34162",
+      "status": "waiting",
+      "currentLot": 0,
+      "existingBids": 0
+    },
+    {
+      "timestamp": "2025-12-08T18:49:20.860Z",
+      "timestampMs": 1765219760860,
+      "event": "auction_start",
+      "auctionId": "f27b4c31-9755-4d71-a9d6-81868ef34162",
+      "status": "waiting",
+      "currentLot": 0,
+      "existingBids": 0
+    },
+    {
+      "timestamp": "2025-12-08T18:49:22.441Z",
+      "timestampMs": 1765219762441,
+      "event": "auction_start",
+      "auctionId": "f27b4c31-9755-4d71-a9d6-81868ef34162",
+      "status": "waiting",
+      "currentLot": 0,
+      "existingBids": 0
+    },
+    {
+      "timestamp": "2025-12-08T18:49:24.431Z",
+      "timestampMs": 1765219764431,
+      "event": "auction_start",
+      "auctionId": "f27b4c31-9755-4d71-a9d6-81868ef34162",
+      "status": "active",
+      "currentLot": 1,
+      "existingBids": 0
+    },
+    {
+      "timestamp": "2025-12-08T18:49:52.327Z",
+      "timestampMs": 1765219792328,
+      "event": "bid:attempt",
+      "auctionId": "f27b4c31-9755-4d71-a9d6-81868ef34162",
+      "clubId": "6dc511b9-d3a8-4c34-9a57-77cfab200c02",
+      "clubName": "Nottingham Forest",
+      "amount": 2000000,
+      "amountFormatted": "£2m",
+      "userBudget": 500000000,
+      "highestBid": 0,
+      "existingBidsCount": 0
+    },
+    {
+      "timestamp": "2025-12-08T18:49:52.328Z",
+      "timestampMs": 1765219792328,
+      "event": "bid:sent",
+      "auctionId": "f27b4c31-9755-4d71-a9d6-81868ef34162",
+      "clubId": "6dc511b9-d3a8-4c34-9a57-77cfab200c02",
+      "amount": 2000000
+    },
+    {
+      "timestamp": "2025-12-08T18:49:52.861Z",
+      "timestampMs": 1765219792861,
+      "event": "bid:success",
+      "auctionId": "f27b4c31-9755-4d71-a9d6-81868ef34162",
+      "clubId": "6dc511b9-d3a8-4c34-9a57-77cfab200c02",
+      "amount": 2000000,
+      "durationMs": 533,
+      "response": {
+        "message": "Bid placed successfully",
+        "bid_obj": {
+          "id": "a0618d28-491b-4156-80d6-15459c908ced",
+          "auctionId": "f27b4c31-9755-4d71-a9d6-81868ef34162",
+          "userId": "a87cd4ce-005d-4d1d-bb53-658c2d2b42bb",
+          "clubId": "6dc511b9-d3a8-4c34-9a57-77cfab200c02",
+          "amount": 2000000,
+          "timestamp": "2025-12-08T18:49:53.503014Z",
+          "userName": "daz1",
+          "userEmail": "darren.gowling@gmail.com"
+        }
+      }
+    },
+    {
+      "timestamp": "2025-12-08T18:49:53.061Z",
+      "timestampMs": 1765219793061,
+      "event": "auction_start",
+      "auctionId": "f27b4c31-9755-4d71-a9d6-81868ef34162",
+      "status": "active",
+      "currentLot": 1,
+      "existingBids": 1
+    },
+    {
+      "timestamp": "2025-12-08T18:50:27.397Z",
+      "timestampMs": 1765219827397,
+      "event": "auction_complete",
+      "auctionId": "f27b4c31-9755-4d71-a9d6-81868ef34162",
+      "finalStatus": "active",
+      "totalBids": 1
+    }
+  ]
+}
