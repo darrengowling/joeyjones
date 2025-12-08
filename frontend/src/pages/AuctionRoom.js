@@ -46,6 +46,7 @@ function AuctionRoom() {
   const [countdown, setCountdown] = useState(null); // For 3-second pause between lots
   const [timerSettings, setTimerSettings] = useState({ timerSeconds: 30, antiSnipeSeconds: 10 }); // Everton Bug Fix 3
   const [nextFixture, setNextFixture] = useState(null); // Next fixture for current club
+  const [isSubmittingBid, setIsSubmittingBid] = useState(false); // Prevent double-submission
 
   // Use shared socket room hook
   const { socket, connected, ready, listenerCount } = useSocketRoom('auction', auctionId, { user });
