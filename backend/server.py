@@ -4315,7 +4315,7 @@ async def place_bid(auction_id: str, bid_input: BidCreate):
         raise HTTPException(status_code=404, detail="Auction not found")
     
     if auction["status"] != "active":
-        raise HTTPException(status_code=400, detail="Auction is not active")
+        raise HTTPException(status_code=400, detail=f"Auction is not active (status: {auction['status']})")
     
     # Get user details
     user = await db.users.find_one({"id": bid_input.userId}, {"_id": 0})
