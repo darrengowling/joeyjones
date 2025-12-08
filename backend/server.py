@@ -2011,13 +2011,8 @@ async def join_league(league_id: str, participant_input: LeagueParticipantCreate
     # Metrics: Track participant joining
     metrics.increment_participant_joined()
     
-    # Get current room size (Redis-compatible)
-    try:
-        room_sockets = sio.manager.rooms.get(f"league:{league_id}", {}).get("/", set()) if hasattr(sio.manager, 'rooms') else set()
-        room_size = len(room_sockets)
-    except (AttributeError, TypeError):
-        # With Redis, room info not available locally - estimate from DB
-        room_size = await db.league_participants.count_documents({"leagueId": league_id})
+    # Get current room size (Redis-compatible - may return 0 with Redis)
+    room_size = get_room_size(f"league:{league_id}")
     
     # JSON log for debugging
     logger.info(json.dumps({
