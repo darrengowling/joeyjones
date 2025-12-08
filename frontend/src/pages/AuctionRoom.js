@@ -543,7 +543,7 @@ function AuctionRoom() {
     const highestBid = currentBids.length > 0 ? Math.max(...currentBids.map((b) => b.amount)) : 0;
 
     // Detailed logging for diagnostics
-    console.log("🔵 bid:attempt", {
+    const attemptData = {
       auctionId,
       clubId: currentClub.id,
       clubName: currentClub.name,
@@ -553,18 +553,24 @@ function AuctionRoom() {
       highestBid,
       existingBidsCount: currentBids.length,
       timestamp: new Date().toISOString()
-    });
+    };
+    
+    console.log("🔵 bid:attempt", attemptData);
+    debugLogger.log('bid:attempt', attemptData);
 
     // Prevent double-submission
     if (isSubmittingBid) {
       console.log("⚠️ bid:blocked (already submitting)");
+      debugLogger.log('bid:blocked', { reason: 'double_submission' });
       return;
     }
 
     setIsSubmittingBid(true);
+    const startTime = performance.now();
 
     try {
       console.log("📤 bid:sent", { auctionId, clubId: currentClub.id, amount });
+      debugLogger.log('bid:sent', { clubId: currentClub.id, amount });
       
       const response = await axios.post(`${API}/auction/${auctionId}/bid`, {
         userId: user.id,
@@ -574,10 +580,19 @@ function AuctionRoom() {
         timeout: 10000 // 10 second timeout
       });
       
+      const duration = performance.now() - startTime;
+      
       console.log("✅ bid:success", { 
         auctionId, 
         clubId: currentClub.id, 
         amount,
+        response: response.data 
+      });
+      
+      debugLogger.log('bid:success', { 
+        clubId: currentClub.id, 
+        amount,
+        durationMs: Math.round(duration),
         response: response.data 
       });
       
