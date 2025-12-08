@@ -1212,6 +1212,7 @@ export default function App() {
           <Route path="/help" element={<Help />} />
         </Routes>
       </Suspense>
+      <DebugFooter />
     </BrowserRouter>
   );
 }
