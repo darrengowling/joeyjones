@@ -1,0 +1,18 @@
+=== AUCTION & BID FUNCTIONALITY TEST ===
+
+Creating test user: ce68f35a-2f7a-4eb9-a7db-cf3e646d89fe
+{"id":"feb2b957-0918-4ee5-931d-d5bf57845672","name":"Auction Test User","email":"auctiontest17291@test.com","createdAt":"2025-12-08T04:48:55.071891Z"}
+Creating test league...
+League ID: 3a0f80cb-9ae4-4987-8497-df31b08e6a6c
+
+Joining league...
+Manager ID: ERROR
+
+Starting auction...
+{"auctionId":"4d532625-484a-4c18-a262-4c58773a7a53","status":"waiting"}
+Auction ID: 4d532625-484a-4c18-a262-4c58773a7a53
+
+Placing bid (CRITICAL TEST)...
+{"detail":"Auction is not active (status: waiting)"}
+HTTP Status: 400
+
