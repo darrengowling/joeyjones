@@ -6,6 +6,7 @@ import { useAuctionClock } from "../hooks/useAuctionClock";
 import { useSocketRoom } from "../hooks/useSocketRoom";
 import { formatCurrency, parseCurrencyInput, isValidCurrencyInput } from "../utils/currency";
 import { debounceSocketEvent } from "../utils/performance";
+import { debugLogger } from "../utils/debugLogger";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
