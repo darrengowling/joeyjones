@@ -520,7 +520,7 @@ function AuctionRoom() {
 
     // Parse £m input (e.g., "5m", "£5m", "5")
     if (!isValidCurrencyInput(bidAmount)) {
-      toast.error("Please enter a valid bid amount (e.g., 5m, £10m, 23m)");
+      alert("Please enter a valid bid amount (e.g., 5m, £10m, 23m)");
       return;
     }
     
@@ -529,7 +529,7 @@ function AuctionRoom() {
     // Check user's budget
     const userParticipant = participants.find((p) => p.userId === user.id);
     if (userParticipant && amount > userParticipant.budgetRemaining) {
-      toast.error(`Strategic budget exceeded. You have ${formatCurrency(userParticipant.budgetRemaining)} remaining for team ownership`);
+      alert(`Strategic budget exceeded. You have ${formatCurrency(userParticipant.budgetRemaining)} remaining for team ownership`);
       return;
     }
 
@@ -538,45 +538,21 @@ function AuctionRoom() {
     if (currentBids.length > 0) {
       const highestBid = Math.max(...currentBids.map((b) => b.amount));
       if (amount <= highestBid) {
-        toast.error(`Strategic bid must exceed current leading bid: ${formatCurrency(highestBid)}`);
+        alert(`Strategic bid must exceed current leading bid: ${formatCurrency(highestBid)}`);
         return;
       }
     }
 
     try {
-      console.log(`📤 Placing bid: £${amount/1000000}m on ${currentClub.name}`);
-      
-      const response = await axios.post(`${API}/auction/${auctionId}/bid`, {
+      await axios.post(`${API}/auction/${auctionId}/bid`, {
         userId: user.id,
         clubId: currentClub.id,
         amount,
-      }, {
-        timeout: 10000 // 10 second timeout
       });
-      
-      console.log("✅ Bid placed successfully:", response.data);
-      toast.success(`Bid placed: £${amount/1000000}m`);
       setBidAmount("");
     } catch (e) {
-      console.error("❌ Error placing bid:", e);
-      
-      // Detailed error handling
-      if (e.code === 'ECONNABORTED' || e.message.includes('timeout')) {
-        toast.error("Bid request timed out. Please try again.");
-      } else if (e.response) {
-        // Server responded with error
-        const errorMsg = e.response?.data?.detail || `Error: ${e.response.status}`;
-        toast.error(errorMsg);
-        console.error("Server error:", e.response.status, e.response.data);
-      } else if (e.request) {
-        // Request made but no response
-        toast.error("No response from server. Check your connection.");
-        console.error("No response received:", e.request);
-      } else {
-        // Something else went wrong
-        toast.error("Failed to place bid. Please try again.");
-        console.error("Bid error:", e.message);
-      }
+      console.error("Error placing bid:", e);
+      alert(e.response?.data?.detail || "Error placing bid");
     }
   };
 
