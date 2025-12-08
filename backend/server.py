@@ -4508,6 +4508,25 @@ async def place_bid(auction_id: str, bid_input: BidCreate):
     
     return {"message": "Bid placed successfully", "bid_obj": bid_obj}
 
+@api_router.options("/auction/{auction_id}/bid")
+async def bid_preflight(auction_id: str):
+    """
+    Explicit OPTIONS handler for bid endpoint to handle CORS preflight requests.
+    Logs preflight requests for diagnostics.
+    """
+    logger.info(json.dumps({
+        "evt": "cors:preflight",
+        "path": f"/auction/{auction_id}/bid",
+        "method": "OPTIONS",
+        "timestamp": datetime.now(timezone.utc).isoformat()
+    }))
+    
+    return {
+        "message": "Preflight OK",
+        "allowed_methods": ["POST", "OPTIONS"],
+        "allowed_headers": ["Authorization", "Content-Type", "Accept", "x-user-id"]
+    }
+
 @api_router.post("/auction/{auction_id}/start-lot/{club_id}")
 async def start_lot(auction_id: str, club_id: str):
     # Verify auction and club exist
