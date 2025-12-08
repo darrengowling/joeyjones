@@ -600,15 +600,20 @@ function AuctionRoom() {
       setBidAmount("");
       
     } catch (e) {
-      console.error("❌ bid:error", {
+      const duration = performance.now() - startTime;
+      const errorData = {
         auctionId,
         clubId: currentClub.id,
         amount,
         error: e.message,
         response: e.response?.data,
         status: e.response?.status,
-        code: e.code
-      });
+        code: e.code,
+        durationMs: Math.round(duration)
+      };
+      
+      console.error("❌ bid:error", errorData);
+      debugLogger.log('bid:error', errorData);
       
       // Detailed error handling
       if (e.code === 'ECONNABORTED' || e.message.includes('timeout')) {
@@ -617,6 +622,11 @@ function AuctionRoom() {
         // Rate limit exceeded
         console.warn("⚠️ evt=bid:rate_limited", {
           auctionId,
+          clubId: currentClub.id,
+          amount,
+          retryAfter: e.response?.headers?.['retry-after']
+        });
+        debugLogger.log('bid:rate_limited', {
           clubId: currentClub.id,
           amount,
           retryAfter: e.response?.headers?.['retry-after']
