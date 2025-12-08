@@ -5687,10 +5687,29 @@ async def debug_room_membership(scope: str, room_id: str):
         "environment": env
     }
 
+# Custom middleware to log CORS preflight requests
+@app.middleware("http")
+async def log_preflight_requests(request, call_next):
+    if request.method == "OPTIONS":
+        # Log all OPTIONS requests for CORS preflight diagnostics
+        logger.info(json.dumps({
+            "evt": "cors:preflight",
+            "path": request.url.path,
+            "method": "OPTIONS",
+            "origin": request.headers.get("origin", "unknown"),
+            "timestamp": datetime.now(timezone.utc).isoformat()
+        }))
+    
+    response = await call_next(request)
+    return response
+
 # Add CORS middleware to main app with production-ready configuration
 # Get CORS origins from environment, default to localhost for dev
 cors_origins_str = os.environ.get('CORS_ORIGINS', 'http://localhost:3000')
 cors_origins = [origin.strip() for origin in cors_origins_str.split(',') if origin.strip()]
+
+# Log CORS configuration on startup
+logger.info(f"🌐 CORS Origins configured: {cors_origins}")
 
 app.add_middleware(
     CORSMiddleware,
