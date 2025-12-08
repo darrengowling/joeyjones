@@ -16,6 +16,9 @@ const MyCompetitions = lazy(() => import("./pages/MyCompetitions"));
 const CompetitionDashboard = lazy(() => import("./pages/CompetitionDashboard"));
 const Help = lazy(() => import("./pages/Help"));
 
+// Debug footer for quick sanity checks
+import DebugFooter from "./components/DebugFooter";
+
 // Loading component for lazy-loaded routes
 const PageLoader = () => (
   <div className="min-h-screen flex items-center justify-center bg-gray-50">
