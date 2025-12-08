@@ -27,9 +27,7 @@ export const getSocket = () => {
       reconnectionAttempts: 10, // Increased from 5
       reconnectionDelay: 1000,
       reconnectionDelayMax: 5000,
-      timeout: 30000,            // Increased from 20s to 30s for proxy delays
-      forceNew: false,           // Reuse existing connection
-      multiplex: true,           // Share single connection for multiple namespaces
+      timeout: 20000,
     });
 
     // Connection established
