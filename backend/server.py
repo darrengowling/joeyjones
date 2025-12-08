@@ -4296,6 +4296,16 @@ async def get_auction(auction_id: str):
 
 @api_router.post("/auction/{auction_id}/bid")
 async def place_bid(auction_id: str, bid_input: BidCreate):
+    # Structured log at entry point for observability
+    logger.info(json.dumps({
+        "evt": "bid:incoming",
+        "auctionId": auction_id,
+        "userId": bid_input.userId,
+        "clubId": bid_input.clubId,
+        "amount": bid_input.amount,
+        "timestamp": datetime.now(timezone.utc).isoformat()
+    }))
+    
     # Metrics: Track bid processing time
     start_time = time.time()
     
