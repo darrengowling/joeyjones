@@ -1038,6 +1038,27 @@ function AuctionRoom() {
                   </button>
                 </div>
               )}
+              
+              {/* Debug Tools - Available for all users */}
+              <div className="mt-4">
+                <button
+                  onClick={() => {
+                    debugLogger.log('auction_complete', {
+                      finalStatus: auction?.status,
+                      totalBids: bids.length
+                    });
+                    debugLogger.downloadReport();
+                    toast.success("Debug report downloaded!");
+                  }}
+                  className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm"
+                  title="Download debug report with all bid logs for troubleshooting"
+                >
+                  📊 Download Debug Report
+                </button>
+                <span className="ml-2 text-xs text-gray-600">
+                  Stats: {debugLogger.getStats().totalAttempts} attempts, {debugLogger.getStats().totalSuccesses} successes
+                </span>
+              </div>
             </div>
           </div>
 
