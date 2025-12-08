@@ -4444,7 +4444,7 @@ async def place_bid(auction_id: str, bid_input: BidCreate):
     new_bid_sequence = updated_auction.get("bidSequence", 1)
     
     # Get room size for debugging
-    room_sockets = sio.manager.rooms.get(f"auction:{auction_id}", set())
+    room_sockets = {} if not hasattr(sio.manager, "rooms") else sio.manager.rooms.get(f"auction:{auction_id}", {}).get("/", set())
     room_size = len(room_sockets)
     
     # JSON log for debugging
@@ -5021,7 +5021,7 @@ async def check_auction_completion(auction_id: str, final_club_id: str = None, f
         league = await db.leagues.find_one({"id": auction["leagueId"]}, {"_id": 0})
         if league:
             # Get room size for debugging
-            room_sockets = sio.manager.rooms.get(f"league:{auction['leagueId']}", set())
+            room_sockets = {} if not hasattr(sio.manager, "rooms") else sio.manager.rooms.get(f"league:{auction['leagueId']}", {}).get("/", set())
             room_size = len(room_sockets)
             
             # JSON log for debugging
@@ -5459,7 +5459,7 @@ async def join_auction(sid, data):
     await sio.enter_room(sid, room_name)
     
     # Get room size after join
-    room_sockets = sio.manager.rooms.get(f"auction:{auction_id}", set())
+    room_sockets = {} if not hasattr(sio.manager, "rooms") else sio.manager.rooms.get(f"auction:{auction_id}", {}).get("/", set())
     room_size = len(room_sockets)
     
     # JSON log for debugging
@@ -5592,7 +5592,7 @@ async def join_league_room(sid, data):
     await sio.enter_room(sid, room_name)
     
     # Get room size after join
-    room_sockets = sio.manager.rooms.get(f"league:{league_id}", set())
+    room_sockets = {} if not hasattr(sio.manager, "rooms") else sio.manager.rooms.get(f"league:{league_id}", {}).get("/", set())
     room_size = len(room_sockets)
     
     # JSON log for debugging
@@ -5669,7 +5669,7 @@ async def debug_room_membership(scope: str, room_id: str):
     room_name = f"{scope}:{room_id}"
     
     # Get all sockets in the room
-    room_sockets = sio.manager.rooms.get(room_name, set())
+    room_sockets = {} if not hasattr(sio.manager, "rooms") else sio.manager.rooms.get(room_name, {}).get("/", set())
     socket_ids = list(room_sockets)
     
     # Try to get user info for each socket (if session data is available)
