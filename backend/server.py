@@ -123,6 +123,7 @@ async def startup_db_client():
     db = client[DB_NAME]
     
     # Create indexes for My Competitions collections - Prompt 1
+    # Note: Index creation is idempotent and safe to run on every startup
     try:
         # Fixtures indexes
         await db.fixtures.create_index([("leagueId", 1), ("startsAt", 1)])
@@ -172,7 +173,12 @@ async def startup_db_client():
         
         logger.info("✅ Production database indexes created/verified")
     except Exception as e:
-        logger.warning(f"⚠️ Index creation warning: {e}")
+        # Index conflicts (code 85) are expected when indexes already exist with different names
+        # This is safe to ignore - existing indexes will continue to work
+        if "IndexOptionsConflict" in str(e) or "code': 85" in str(e):
+            logger.info("📝 Database indexes already exist (using existing configuration)")
+        else:
+            logger.warning(f"⚠️ Index creation warning: {e}")
     
     # Initialize services after database connection
     sport_service = SportService(db)
