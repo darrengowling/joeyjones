@@ -310,6 +310,16 @@ class SocketIOAuctionTester:
                 self.log(f"🔄 User 1 received sync_state")
                 self.socket_events.append({"event": "sync_state", "user": "user1", "data": data, "timestamp": time.time()})
             
+            @self.socket_client.event
+            def auction_snapshot(data):
+                self.log(f"📸 User 1 received auction_snapshot: status={data.get('status')}")
+                self.socket_events.append({"event": "auction_snapshot", "user": "user1", "data": data, "timestamp": time.time()})
+            
+            @self.socket_client.event
+            def lot_started(data):
+                self.log(f"🎬 User 1 received lot_started: {data.get('club', {}).get('name')}")
+                self.socket_events.append({"event": "lot_started", "user": "user1", "data": data, "timestamp": time.time()})
+            
             # Setup User 2 Socket Client
             self.socket_client_2 = socketio.Client(logger=False, engineio_logger=False)
             
