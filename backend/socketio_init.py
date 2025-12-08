@@ -10,6 +10,8 @@ REDIS_URL = os.getenv("REDIS_URL", "").strip()  # e.g. redis://:PASSWORD@host:63
 
 # Use AsyncRedisManager if REDIS_URL set; else in-memory manager
 mgr = None
+redis_enabled = False
+
 if REDIS_URL:
     try:
         # python-socketio's AsyncRedisManager doesn't support rediss:// scheme directly
@@ -26,13 +28,24 @@ if REDIS_URL:
             redis_url = f"redis://{redis_url}"
         
         logger.info(f"🔧 Initializing Redis manager: {redis_url[:30]}...")
+        
+        # IMPORTANT: AsyncRedisManager creation succeeds even if Redis is unreachable
+        # Connection failures only appear when trying to publish messages
+        # This is why we see "Cannot publish to redis" errors in production
         mgr = socketio.AsyncRedisManager(redis_url)
-        logger.info(f"✅ Socket.IO Redis pub/sub enabled for multi-pod scaling")
+        redis_enabled = True
+        
+        logger.info(f"✅ Socket.IO Redis manager created (connection will be verified on first publish)")
+        logger.info(f"⚠️  If you see 'Cannot publish to redis' errors, Redis is unreachable")
+        logger.info(f"⚠️  Check: 1) Redis URL is correct, 2) Network/firewall allows connection, 3) Redis credentials are valid")
     except Exception as e:
         logger.error(f"❌ Redis manager initialization failed, falling back to in-memory: {e}")
+        logger.error(f"   Redis URL attempted: {redis_url[:50]}...")
         mgr = None
+        redis_enabled = False
 else:
     logger.info("📝 Socket.IO using in-memory manager (single replica only)")
+    logger.info("💡 To enable multi-pod scaling, set REDIS_URL environment variable")
 
 # Configure CORS origins - use wildcard for production compatibility
 cors_origins = "*"
