@@ -65,4 +65,15 @@ sio = socketio.AsyncServer(
     always_connect=True
 )
 
-logger.info(f"🚀 Socket.IO server initialized with {'Redis adapter (multi-pod)' if mgr else 'in-memory (single-pod)'} mode")
+if redis_enabled and mgr:
+    logger.info(f"🚀 Socket.IO server initialized with Redis adapter (multi-pod mode)")
+    logger.warning(f"⚠️  Redis adapter created but actual connectivity will be tested on first message")
+    logger.warning(f"⚠️  If deployment logs show 'Cannot publish to redis' errors:")
+    logger.warning(f"   1. Verify Redis instance is running and accessible")
+    logger.warning(f"   2. Check REDIS_URL format: redis://[user]:[password]@host:port")
+    logger.warning(f"   3. Verify network/firewall allows connection from pods")
+    logger.warning(f"   4. Test Redis connection: redis-cli -u $REDIS_URL ping")
+    logger.warning(f"⚠️  Application will continue with degraded Socket.IO (events won't broadcast across pods)")
+else:
+    logger.info(f"🚀 Socket.IO server initialized with in-memory manager (single-pod mode)")
+    logger.info(f"💡 For production multi-pod deployments, configure REDIS_URL")
