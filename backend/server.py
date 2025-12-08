@@ -201,6 +201,24 @@ logger.info(f"Waiting Room feature enabled: {FEATURE_WAITING_ROOM}")
 
 # Socket.IO server imported from socketio_init.py (with Redis scaling support)
 
+# Helper function for Redis-compatible room size retrieval
+def get_room_size(room_name: str) -> int:
+    """
+    Get room size in a way compatible with both in-memory and Redis managers.
+    With Redis, room membership is distributed so we can't query it locally.
+    Returns 0 with Redis (room size unknown), or actual size with in-memory manager.
+    """
+    try:
+        if hasattr(sio.manager, 'rooms'):
+            # In-memory manager: rooms is a dict
+            room_sockets = sio.manager.rooms.get(room_name, {}).get("/", set())
+            return len(room_sockets)
+        else:
+            # Redis manager: room info not available locally
+            return 0
+    except (AttributeError, TypeError):
+        return 0
+
 # Production hardening configuration
 ENABLE_RATE_LIMITING = os.getenv("ENABLE_RATE_LIMITING", "true").lower() == "true"
 REDIS_URL = os.getenv("REDIS_URL")
