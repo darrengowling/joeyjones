@@ -588,6 +588,16 @@ function AuctionRoom() {
       // Detailed error handling
       if (e.code === 'ECONNABORTED' || e.message.includes('timeout')) {
         toast.error("Bid request timed out. Please try again.");
+      } else if (e.response?.status === 429) {
+        // Rate limit exceeded
+        console.warn("⚠️ evt=bid:rate_limited", {
+          auctionId,
+          clubId: currentClub.id,
+          amount,
+          retryAfter: e.response?.headers?.['retry-after']
+        });
+        const errorMsg = e.response?.data?.detail || "Rate limit exceeded. Please wait a moment and try again.";
+        toast.error(errorMsg, { duration: 5000 });
       } else if (e.response) {
         // Server responded with error - show backend message
         const errorMsg = e.response?.data?.detail || `Server error: ${e.response.status}`;
