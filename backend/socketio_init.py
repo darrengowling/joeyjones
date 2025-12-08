@@ -12,8 +12,21 @@ REDIS_URL = os.getenv("REDIS_URL", "").strip()  # e.g. redis://:PASSWORD@host:63
 mgr = None
 if REDIS_URL:
     try:
-        logger.info(f"🔧 Initializing Redis manager: {REDIS_URL[:30]}...")
-        mgr = socketio.AsyncRedisManager(REDIS_URL)
+        # python-socketio's AsyncRedisManager doesn't support rediss:// scheme directly
+        # Convert rediss:// to redis:// for compatibility (TLS is handled at connection level)
+        redis_url = REDIS_URL
+        if redis_url.startswith("rediss://"):
+            logger.info(f"🔧 Converting rediss:// to redis:// for AsyncRedisManager compatibility")
+            redis_url = redis_url.replace("rediss://", "redis://", 1)
+        
+        # Check if URL has valid scheme
+        if not redis_url.startswith("redis://"):
+            # URL might be missing scheme entirely (e.g., "rediss-12232.c338...")
+            logger.warning(f"⚠️ Redis URL missing scheme, adding redis:// prefix")
+            redis_url = f"redis://{redis_url}"
+        
+        logger.info(f"🔧 Initializing Redis manager: {redis_url[:30]}...")
+        mgr = socketio.AsyncRedisManager(redis_url)
         logger.info(f"✅ Socket.IO Redis pub/sub enabled for multi-pod scaling")
     except Exception as e:
         logger.error(f"❌ Redis manager initialization failed, falling back to in-memory: {e}")
