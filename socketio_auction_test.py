@@ -190,7 +190,7 @@ class SocketIOAuctionTester:
             return False
     
     def start_auction(self) -> bool:
-        """Start the auction"""
+        """Start the auction (creates in waiting state)"""
         self.log("=== Starting Auction ===")
         
         if "league_id" not in self.test_data:
@@ -204,7 +204,8 @@ class SocketIOAuctionTester:
                 return False
             
             self.test_data["auction_id"] = result["auctionId"]
-            self.log(f"✅ Started auction: {result['auctionId']}")
+            auction_status = result.get("status", "unknown")
+            self.log(f"✅ Created auction: {result['auctionId']} (status: {auction_status})")
             
             # Get auction details
             result = self.test_api_endpoint("GET", f"/auction/{self.test_data['auction_id']}")
@@ -212,9 +213,53 @@ class SocketIOAuctionTester:
                 self.log(f"❌ Failed to get auction details: {result}")
                 return False
             
+            auction_data = result.get("auction", {})
+            current_status = auction_data.get("status", "unknown")
+            self.log(f"✅ Auction status: {current_status}")
+            
+            # If auction is in waiting state, we'll begin it later after Socket.IO setup
+            if current_status == "waiting":
+                self.log("✅ Auction created in waiting state (will begin after Socket.IO setup)")
+                return True
+            
+            # If auction is already active, get current club
+            current_club = result.get("currentClub")
+            if current_club:
+                self.test_data["current_club"] = current_club
+                self.log(f"✅ Current club: {current_club.get('name')}")
+            
+            return True
+            
+        except Exception as e:
+            self.log(f"❌ Error starting auction: {str(e)}")
+            return False
+    
+    def begin_auction(self) -> bool:
+        """Begin the auction from waiting state"""
+        self.log("=== Beginning Auction ===")
+        
+        if "auction_id" not in self.test_data:
+            self.log("❌ No auction available to begin")
+            return False
+        
+        try:
+            # Begin the auction (moves from waiting to active)
+            result = self.test_api_endpoint("POST", f"/auction/{self.test_data['auction_id']}/begin")
+            if "error" in result:
+                self.log(f"❌ Begin auction failed: {result}")
+                return False
+            
+            self.log("✅ Auction begun successfully")
+            
+            # Get updated auction details
+            result = self.test_api_endpoint("GET", f"/auction/{self.test_data['auction_id']}")
+            if "error" in result:
+                self.log(f"❌ Failed to get auction details after begin: {result}")
+                return False
+            
             current_club = result.get("currentClub")
             if not current_club:
-                self.log("❌ No current club in auction")
+                self.log("❌ No current club in auction after begin")
                 return False
             
             self.test_data["current_club"] = current_club
@@ -223,7 +268,7 @@ class SocketIOAuctionTester:
             return True
             
         except Exception as e:
-            self.log(f"❌ Error starting auction: {str(e)}")
+            self.log(f"❌ Error beginning auction: {str(e)}")
             return False
     
     def setup_socket_clients(self) -> bool:
