@@ -4386,6 +4386,13 @@ async def place_bid(auction_id: str, bid_input: BidCreate):
     if not current_club_id:
         raise HTTPException(status_code=400, detail="No club currently on the block. Please wait for commissioner to start a lot.")
     
+    # Verify bid is for the current club
+    if bid_input.clubId != current_club_id:
+        raise HTTPException(
+            status_code=400, 
+            detail=f"This club is not currently up for auction. Current club: {current_club_id}"
+        )
+    
     # Create bid
     bid_obj = Bid(
         auctionId=auction_id,
