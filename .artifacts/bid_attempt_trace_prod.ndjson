@@ -1,6 +1,5 @@
-=== Bid Probe Timing (5 attempts) ===
-{"ts":"","method":"POST","url":"https://draft-kings-mobile.emergent.host/api/auction/probe-1/bid","status":404,"ttfb_ms":0.023922,"total_ms":0.056522,"size":30}
-{"ts":"","method":"POST","url":"https://draft-kings-mobile.emergent.host/api/auction/probe-2/bid","status":404,"ttfb_ms":0.024429,"total_ms":0.056302,"size":30}
-{"ts":"","method":"POST","url":"https://draft-kings-mobile.emergent.host/api/auction/probe-3/bid","status":404,"ttfb_ms":0.024698,"total_ms":0.054313,"size":30}
-{"ts":"","method":"POST","url":"https://draft-kings-mobile.emergent.host/api/auction/probe-4/bid","status":404,"ttfb_ms":0.024220,"total_ms":0.044026,"size":30}
-{"ts":"","method":"POST","url":"https://draft-kings-mobile.emergent.host/api/auction/probe-5/bid","status":404,"ttfb_ms":0.025298,"total_ms":0.057837,"size":30}
+{"attempt":1,"ts":"2025-12-08T04:34:07.134Z","method":"POST","status":404,"total_ms":0.066602,"elapsed_ms":81}
+{"attempt":2,"ts":"2025-12-08T04:34:07.408Z","method":"POST","status":404,"total_ms":0.045788,"elapsed_ms":61}
+{"attempt":3,"ts":"2025-12-08T04:34:07.692Z","method":"POST","status":404,"total_ms":0.055829,"elapsed_ms":70}
+{"attempt":4,"ts":"2025-12-08T04:34:07.978Z","method":"POST","status":404,"total_ms":0.058199,"elapsed_ms":72}
+{"attempt":5,"ts":"2025-12-08T04:34:08.269Z","method":"POST","status":404,"total_ms":0.059109,"elapsed_ms":75}
