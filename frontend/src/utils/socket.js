@@ -6,7 +6,7 @@
 import io from "socket.io-client";
 import toast from "react-hot-toast";
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "";
 
 // Single global socket instance
 let socket = null;
@@ -22,10 +22,11 @@ export const getSocket = () => {
   if (!socket) {
     socket = io(BACKEND_URL, {
       path: "/api/socket.io",
-      transports: ["polling", "websocket"], // Start with polling for production compatibility
+      transports: ["websocket", "polling"], // Prefer WebSocket, fallback to polling
+      withCredentials: true, // Enable cookies for session affinity
       reconnection: true,
-      reconnectionAttempts: 10, // Increased from 5
-      reconnectionDelay: 1000,
+      reconnectionAttempts: 10,
+      reconnectionDelay: 500, // Faster initial reconnection
       reconnectionDelayMax: 5000,
       timeout: 20000,
     });
