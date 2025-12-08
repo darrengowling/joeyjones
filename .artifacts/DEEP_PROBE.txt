@@ -1,0 +1,20 @@
+=== DEEP ENVIRONMENT PROBE ===
+
+=== FRONTEND BUILD CONFIGURATION ===
+--- Downloading Production main.js to check backend URL ---
+https://draft-kings-mobile.emergent.host
+https://draft-kings-mobile.emergent.host
+https://draft-kings-mobile.emergent.host
+
+=== LEAGUE CREATION TEST ===
+--- Creating test user:  ---
+{"id":"b25a1bd7-0720-49ed-acb2-50cbba94cb92","name":"Test User 1765169314","email":"test1765169314@test.com","createdAt":"2025-12-08T04:48:34.242686Z"}
+Created User ID: b25a1bd7-0720-49ed-acb2-50cbba94cb92
+
+--- Creating test league in PRODUCTION ---
+{"id":"56ff024f-a440-48f0-80a6-0fcd7b89ff12","name":"Test League 1765169314","commissionerId":"b25a1bd7-0720-49ed-acb2-50cbba94cb92","budget":100.0,"minManagers":2,"maxManagers":10,"clubSlots":5,"sportKey":"football","competitionCode":"PL","status":"pending","inviteToken":"78e23e90","createdAt":"2025-12-08T04:48:34.358400Z","scoringOverrides":null,"timerSeconds":30,"antiSnipeSeconds":10,"assetsSelected":null}
+HTTP Status: 200
+
+--- Creating test league in PREVIEW ---
+{"id":"a9726c03-d742-4f42-8cca-5effa128fa62","name":"Test League 1765169314","commissionerId":"b25a1bd7-0720-49ed-acb2-50cbba94cb92","budget":100.0,"minManagers":2,"maxManagers":10,"clubSlots":5,"sportKey":"football","competitionCode":"PL","status":"pending","inviteToken":"88260071","createdAt":"2025-12-08T04:48:34.459583Z","scoringOverrides":null,"timerSeconds":30,"antiSnipeSeconds":10,"assetsSelected":null}
+HTTP Status: 200
