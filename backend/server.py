@@ -1413,13 +1413,24 @@ async def metrics_middleware(request: Request, call_next):
 # Rate limiting exception handler
 @app.exception_handler(429)
 async def rate_limit_handler(request: Request, exc):
-    """Handle rate limiting responses"""
+    """Handle rate limiting responses with clear error message"""
     endpoint = request.url.path
     metrics.increment_rate_limited(endpoint)
-    return Response(
+    
+    # Log rate limit event for diagnostics
+    logger.warning(json.dumps({
+        "evt": "rate_limit_triggered",
+        "path": endpoint,
+        "timestamp": datetime.now(timezone.utc).isoformat()
+    }))
+    
+    return JSONResponse(
         status_code=429,
-        content='{"error": "rate_limited", "hint": "Please retry later"}',
-        headers={"Content-Type": "application/json"}
+        content={"detail": "Rate limit exceeded. Please wait a moment and try again."},
+        headers={
+            "Content-Type": "application/json",
+            "Retry-After": "5"  # Suggest retry after 5 seconds
+        }
     )
 
 # Store active timers and sequence numbers
