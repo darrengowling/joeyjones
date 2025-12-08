@@ -1,0 +1,9 @@
+{
+  "note": "Production environment variables are managed by Emergent platform",
+  "inferred_from_user_reports": {
+    "REACT_APP_BACKEND_URL": "https://draft-kings-mobile.emergent.host",
+    "FRONTEND_ORIGIN": "https://draft-kings-mobile.emergent.host",
+    "CORS_ORIGINS": "*",
+    "ENABLE_RATE_LIMITING": "false"
+  }
+}
