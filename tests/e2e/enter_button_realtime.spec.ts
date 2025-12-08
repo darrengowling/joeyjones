@@ -12,7 +12,7 @@ import { test, expect, Page } from '@playwright/test';
  * - Button appears instantly on all client UIs
  */
 
-const BASE_URL = process.env.REACT_APP_BACKEND_URL || 'https://prod-auction-fix.preview.emergentagent.com';
+const BASE_URL = process.env.REACT_APP_BACKEND_URL || 'https://bid-fixer.preview.emergentagent.com';
 
 test.describe('Enter Auction Room Button - Real-time Appearance', () => {
   let commissionerPage: Page;

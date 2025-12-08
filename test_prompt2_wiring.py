@@ -8,7 +8,7 @@ import json
 import sys
 import time
 
-BACKEND_URL = "https://prod-auction-fix.preview.emergentagent.com/api"
+BACKEND_URL = "https://bid-fixer.preview.emergentagent.com/api"
 
 def test_create_with_assets():
     """Test POST /api/leagues saves and returns assetsSelected"""
