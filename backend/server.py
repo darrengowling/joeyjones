@@ -3923,7 +3923,7 @@ async def start_auction(league_id: str):
             }, room=f"league:{league_id}")
             
             # Prompt G: Log league status change event
-            league_room_size = len(sio.manager.rooms.get(f"league:{league_id}", {}).get("/", set()))
+            league_room_size = get_room_size(f"league:{league_id}")
             logger.info("league_status_changed.emitted", extra={
                 "leagueId": league_id,
                 "auctionId": auction_obj.id,
