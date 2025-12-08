@@ -5698,6 +5698,66 @@ async def debug_room_membership(scope: str, room_id: str):
         "environment": env
     }
 
+# Debug endpoint to retrieve recent bid logs
+@api_router.get("/debug/bid-logs/{auction_id}")
+async def get_bid_logs(auction_id: str):
+    """
+    Retrieve bid-related logs for a specific auction from backend.
+    Returns structured logs for correlation with frontend debug reports.
+    
+    Note: This reads from in-memory log buffer, not persistent storage.
+    """
+    import subprocess
+    
+    try:
+        # Read last 1000 lines from backend error log (where INFO logs go)
+        result = subprocess.run(
+            ['tail', '-n', '1000', '/var/log/supervisor/backend.err.log'],
+            capture_output=True,
+            text=True,
+            timeout=5
+        )
+        
+        if result.returncode != 0:
+            raise HTTPException(status_code=500, detail="Failed to read logs")
+        
+        log_lines = result.stdout.split('\n')
+        
+        # Filter for auction-specific logs
+        relevant_logs = []
+        for line in log_lines:
+            # Look for JSON logs containing the auction ID
+            if auction_id in line and ('bid:' in line or 'evt' in line):
+                try:
+                    # Try to parse as JSON
+                    if '{' in line and '}' in line:
+                        json_start = line.index('{')
+                        json_str = line[json_start:]
+                        log_data = json.loads(json_str)
+                        relevant_logs.append(log_data)
+                except:
+                    # Not JSON, keep as raw string
+                    relevant_logs.append({"raw": line})
+        
+        # Also get bid records from database
+        bids = await db.bids.find(
+            {"auctionId": auction_id},
+            {"_id": 0}
+        ).sort("createdAt", 1).to_list(1000)
+        
+        return {
+            "auctionId": auction_id,
+            "backendLogs": relevant_logs,
+            "databaseBids": bids,
+            "logCount": len(relevant_logs),
+            "bidCount": len(bids),
+            "timestamp": datetime.now(timezone.utc).isoformat()
+        }
+        
+    except Exception as e:
+        logger.error(f"Error retrieving bid logs: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
 # Custom middleware to log CORS preflight requests
 @app.middleware("http")
 async def log_preflight_requests(request, call_next):
