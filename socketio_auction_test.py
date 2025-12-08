@@ -763,7 +763,7 @@ def main():
     print(f"\nOverall: {passed}/{total} tests passed")
     
     # Critical analysis
-    critical_tests = ["place_bid_and_monitor", "setup_socket_clients", "join_auction_rooms"]
+    critical_tests = ["place_bid_and_monitor", "setup_socket_clients", "join_auction_rooms", "begin_auction"]
     critical_passed = sum(1 for test in critical_tests if results.get(test, False))
     
     print(f"\nCritical Socket.IO Tests: {critical_passed}/{len(critical_tests)} passed")
