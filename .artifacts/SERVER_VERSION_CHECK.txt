@@ -1,0 +1,23 @@
+=== SERVER VERSION & BUILD COMPARISON ===
+
+=== Testing Bid Endpoint Error Handling ===
+--- Checking existing auctions ---
+Found 1 auctions
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+TypeError: unhashable type: 'slice'
+
+Active auction found: 
+--- Testing bid on active auction:  ---
+{"detail":"Method Not Allowed"}
+HTTP Status: 405
+
+=== Backend Code Comparison ===
+Local server.py last modified:
+-rw-r--r-- 1 root root 228K Dec  8 03:38 /app/backend/server.py
+
+Local server.py line count:
+5800 /app/backend/server.py
+
+Checking for buggy 'bid_input.clubId' pattern in local code:
+Pattern NOT FOUND (GOOD - Bug is fixed locally)
