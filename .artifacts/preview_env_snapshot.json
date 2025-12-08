@@ -1,0 +1,22 @@
+REACT_APP_BACKEND_URL=https://prod-auction-fix.preview.emergentagent.com
+WDS_SOCKET_PORT=443
+REACT_APP_FEATURE_MY_COMPETITIONS=true
+REACT_APP_FEATURE_ASSET_SELECTION=true
+# Sentry Configuration (optional - set for error tracking)
+DB_NAME="test_database"
+CORS_ORIGINS="*"
+SPORTS_CRICKET_ENABLED=true
+# Pilot deployment configuration (no Redis, single replica)
+REDIS_URL=
+ENABLE_RATE_LIMITING=false
+ENABLE_METRICS=true
+JWT_SECRET=dev-secret-change-in-production
+FRONTEND_ORIGIN="https://draft-kings-mobile.emergent.host"
+FEATURE_MY_COMPETITIONS=true
+FEATURE_ASSET_SELECTION=true
+FEATURE_WAITING_ROOM=true
+ENV="production"
+# Sentry Configuration (optional - set for error tracking)
+SENTRY_DSN=
+SENTRY_ENVIRONMENT=pilot
+SENTRY_TRACES_SAMPLE_RATE=0.1
