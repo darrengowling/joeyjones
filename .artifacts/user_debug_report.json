@@ -1,0 +1,274 @@
+{
+  "metadata": {
+    "sessionStart": "2025-12-08T04:58:15.846Z",
+    "reportGenerated": "2025-12-08T04:58:56.277Z",
+    "auctionId": "3d3d32a3-223e-48d5-a2da-bda58dd6f3c9",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36 Edg/142.0.0.0",
+    "screenSize": "1280x720",
+    "connection": {
+      "effectiveType": "4g",
+      "downlink": 5.55,
+      "rtt": 200
+    }
+  },
+  "statistics": {
+    "totalAttempts": 1,
+    "totalSent": 1,
+    "totalSuccesses": 1,
+    "totalErrors": 0,
+    "rateLimited": 0,
+    "successRate": "100.0%",
+    "networkSuccessRate": "100.0%"
+  },
+  "errorSummary": {},
+  "events": [
+    {
+      "timestamp": "2025-12-08T04:58:16.053Z",
+      "timestampMs": 1765169896053,
+      "event": "auction_start",
+      "auctionId": "3d3d32a3-223e-48d5-a2da-bda58dd6f3c9",
+      "status": "waiting",
+      "currentLot": 0,
+      "existingBids": 0
+    },
+    {
+      "timestamp": "2025-12-08T04:58:18.253Z",
+      "timestampMs": 1765169898253,
+      "event": "auction_start",
+      "auctionId": "3d3d32a3-223e-48d5-a2da-bda58dd6f3c9",
+      "status": "waiting",
+      "currentLot": 0,
+      "existingBids": 0
+    },
+    {
+      "timestamp": "2025-12-08T04:58:20.813Z",
+      "timestampMs": 1765169900813,
+      "event": "auction_start",
+      "auctionId": "3d3d32a3-223e-48d5-a2da-bda58dd6f3c9",
+      "status": "waiting",
+      "currentLot": 0,
+      "existingBids": 0
+    },
+    {
+      "timestamp": "2025-12-08T04:58:22.857Z",
+      "timestampMs": 1765169902857,
+      "event": "auction_start",
+      "auctionId": "3d3d32a3-223e-48d5-a2da-bda58dd6f3c9",
+      "status": "waiting",
+      "currentLot": 0,
+      "existingBids": 0
+    },
+    {
+      "timestamp": "2025-12-08T04:58:24.854Z",
+      "timestampMs": 1765169904854,
+      "event": "auction_start",
+      "auctionId": "3d3d32a3-223e-48d5-a2da-bda58dd6f3c9",
+      "status": "waiting",
+      "currentLot": 0,
+      "existingBids": 0
+    },
+    {
+      "timestamp": "2025-12-08T04:58:26.647Z",
+      "timestampMs": 1765169906647,
+      "event": "auction_start",
+      "auctionId": "3d3d32a3-223e-48d5-a2da-bda58dd6f3c9",
+      "status": "waiting",
+      "currentLot": 0,
+      "existingBids": 0
+    },
+    {
+      "timestamp": "2025-12-08T04:58:28.285Z",
+      "timestampMs": 1765169908285,
+      "event": "auction_start",
+      "auctionId": "3d3d32a3-223e-48d5-a2da-bda58dd6f3c9",
+      "status": "waiting",
+      "currentLot": 0,
+      "existingBids": 0
+    },
+    {
+      "timestamp": "2025-12-08T04:58:28.654Z",
+      "timestampMs": 1765169908654,
+      "event": "auction_start",
+      "auctionId": "3d3d32a3-223e-48d5-a2da-bda58dd6f3c9",
+      "status": "active",
+      "currentLot": 1,
+      "existingBids": 0
+    },
+    {
+      "timestamp": "2025-12-08T04:58:39.598Z",
+      "timestampMs": 1765169919599,
+      "event": "bid:attempt",
+      "auctionId": "3d3d32a3-223e-48d5-a2da-bda58dd6f3c9",
+      "clubId": "ae7297c7-7270-4fd5-bfff-15a6fcfb0b18",
+      "clubName": "Brighton & Hove Albion",
+      "amount": 5000000,
+      "amountFormatted": "£5m",
+      "userBudget": 500000000,
+      "highestBid": 0,
+      "existingBidsCount": 0
+    },
+    {
+      "timestamp": "2025-12-08T04:58:39.599Z",
+      "timestampMs": 1765169919599,
+      "event": "bid:sent",
+      "auctionId": "3d3d32a3-223e-48d5-a2da-bda58dd6f3c9",
+      "clubId": "ae7297c7-7270-4fd5-bfff-15a6fcfb0b18",
+      "amount": 5000000
+    },
+    {
+      "timestamp": "2025-12-08T04:58:39.906Z",
+      "timestampMs": 1765169919906,
+      "event": "bid:success",
+      "auctionId": "3d3d32a3-223e-48d5-a2da-bda58dd6f3c9",
+      "clubId": "ae7297c7-7270-4fd5-bfff-15a6fcfb0b18",
+      "amount": 5000000,
+      "durationMs": 307,
+      "response": {
+        "message": "Bid placed successfully",
+        "bid_obj": {
+          "id": "8026446a-0038-4bb2-a546-0d922b871458",
+          "auctionId": "3d3d32a3-223e-48d5-a2da-bda58dd6f3c9",
+          "userId": "a87cd4ce-005d-4d1d-bb53-658c2d2b42bb",
+          "clubId": "ae7297c7-7270-4fd5-bfff-15a6fcfb0b18",
+          "amount": 5000000,
+          "timestamp": "2025-12-08T04:58:39.915795Z",
+          "userName": "daz1",
+          "userEmail": "darren.gowling@gmail.com"
+        }
+      }
+    },
+    {
+      "timestamp": "2025-12-08T04:58:56.277Z",
+      "timestampMs": 1765169936277,
+      "event": "auction_complete",
+      "auctionId": "3d3d32a3-223e-48d5-a2da-bda58dd6f3c9",
+      "finalStatus": "active",
+      "totalBids": 0
+    }
+  ],
+  "allLogs": [
+    {
+      "timestamp": "2025-12-08T04:58:16.053Z",
+      "timestampMs": 1765169896053,
+      "event": "auction_start",
+      "auctionId": "3d3d32a3-223e-48d5-a2da-bda58dd6f3c9",
+      "status": "waiting",
+      "currentLot": 0,
+      "existingBids": 0
+    },
+    {
+      "timestamp": "2025-12-08T04:58:18.253Z",
+      "timestampMs": 1765169898253,
+      "event": "auction_start",
+      "auctionId": "3d3d32a3-223e-48d5-a2da-bda58dd6f3c9",
+      "status": "waiting",
+      "currentLot": 0,
+      "existingBids": 0
+    },
+    {
+      "timestamp": "2025-12-08T04:58:20.813Z",
+      "timestampMs": 1765169900813,
+      "event": "auction_start",
+      "auctionId": "3d3d32a3-223e-48d5-a2da-bda58dd6f3c9",
+      "status": "waiting",
+      "currentLot": 0,
+      "existingBids": 0
+    },
+    {
+      "timestamp": "2025-12-08T04:58:22.857Z",
+      "timestampMs": 1765169902857,
+      "event": "auction_start",
+      "auctionId": "3d3d32a3-223e-48d5-a2da-bda58dd6f3c9",
+      "status": "waiting",
+      "currentLot": 0,
+      "existingBids": 0
+    },
+    {
+      "timestamp": "2025-12-08T04:58:24.854Z",
+      "timestampMs": 1765169904854,
+      "event": "auction_start",
+      "auctionId": "3d3d32a3-223e-48d5-a2da-bda58dd6f3c9",
+      "status": "waiting",
+      "currentLot": 0,
+      "existingBids": 0
+    },
+    {
+      "timestamp": "2025-12-08T04:58:26.647Z",
+      "timestampMs": 1765169906647,
+      "event": "auction_start",
+      "auctionId": "3d3d32a3-223e-48d5-a2da-bda58dd6f3c9",
+      "status": "waiting",
+      "currentLot": 0,
+      "existingBids": 0
+    },
+    {
+      "timestamp": "2025-12-08T04:58:28.285Z",
+      "timestampMs": 1765169908285,
+      "event": "auction_start",
+      "auctionId": "3d3d32a3-223e-48d5-a2da-bda58dd6f3c9",
+      "status": "waiting",
+      "currentLot": 0,
+      "existingBids": 0
+    },
+    {
+      "timestamp": "2025-12-08T04:58:28.654Z",
+      "timestampMs": 1765169908654,
+      "event": "auction_start",
+      "auctionId": "3d3d32a3-223e-48d5-a2da-bda58dd6f3c9",
+      "status": "active",
+      "currentLot": 1,
+      "existingBids": 0
+    },
+    {
+      "timestamp": "2025-12-08T04:58:39.598Z",
+      "timestampMs": 1765169919599,
+      "event": "bid:attempt",
+      "auctionId": "3d3d32a3-223e-48d5-a2da-bda58dd6f3c9",
+      "clubId": "ae7297c7-7270-4fd5-bfff-15a6fcfb0b18",
+      "clubName": "Brighton & Hove Albion",
+      "amount": 5000000,
+      "amountFormatted": "£5m",
+      "userBudget": 500000000,
+      "highestBid": 0,
+      "existingBidsCount": 0
+    },
+    {
+      "timestamp": "2025-12-08T04:58:39.599Z",
+      "timestampMs": 1765169919599,
+      "event": "bid:sent",
+      "auctionId": "3d3d32a3-223e-48d5-a2da-bda58dd6f3c9",
+      "clubId": "ae7297c7-7270-4fd5-bfff-15a6fcfb0b18",
+      "amount": 5000000
+    },
+    {
+      "timestamp": "2025-12-08T04:58:39.906Z",
+      "timestampMs": 1765169919906,
+      "event": "bid:success",
+      "auctionId": "3d3d32a3-223e-48d5-a2da-bda58dd6f3c9",
+      "clubId": "ae7297c7-7270-4fd5-bfff-15a6fcfb0b18",
+      "amount": 5000000,
+      "durationMs": 307,
+      "response": {
+        "message": "Bid placed successfully",
+        "bid_obj": {
+          "id": "8026446a-0038-4bb2-a546-0d922b871458",
+          "auctionId": "3d3d32a3-223e-48d5-a2da-bda58dd6f3c9",
+          "userId": "a87cd4ce-005d-4d1d-bb53-658c2d2b42bb",
+          "clubId": "ae7297c7-7270-4fd5-bfff-15a6fcfb0b18",
+          "amount": 5000000,
+          "timestamp": "2025-12-08T04:58:39.915795Z",
+          "userName": "daz1",
+          "userEmail": "darren.gowling@gmail.com"
+        }
+      }
+    },
+    {
+      "timestamp": "2025-12-08T04:58:56.277Z",
+      "timestampMs": 1765169936277,
+      "event": "auction_complete",
+      "auctionId": "3d3d32a3-223e-48d5-a2da-bda58dd6f3c9",
+      "finalStatus": "active",
+      "totalBids": 0
+    }
+  ]
+}
