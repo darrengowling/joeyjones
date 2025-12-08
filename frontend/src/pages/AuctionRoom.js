@@ -1040,59 +1040,32 @@ function AuctionRoom() {
               )}
               
               {/* Debug Tools - Available for all users */}
-              <div className="mt-4">
-                <button
-                  onClick={async () => {
-                    try {
-                      debugLogger.log('auction_complete', {
-                        finalStatus: auction?.status,
-                        totalBids: bids.length
-                      });
-                      
-                      // Fetch backend logs
-                      toast.loading("Generating debug report...");
+              {auction && (
+                <div className="mt-4">
+                  <button
+                    onClick={() => {
                       try {
-                        const backendLogs = await axios.get(`${API}/debug/bid-logs/${auctionId}`);
-                        
-                        // Merge frontend and backend logs
-                        const report = debugLogger.generateReport();
-                        report.backendData = backendLogs.data;
-                        
-                        // Download combined report
-                        const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
-                        const url = URL.createObjectURL(blob);
-                        const a = document.createElement('a');
-                        a.href = url;
-                        a.download = `auction-debug-${auctionId}-${Date.now()}.json`;
-                        document.body.appendChild(a);
-                        a.click();
-                        document.body.removeChild(a);
-                        URL.revokeObjectURL(url);
-                        
-                        toast.dismiss();
-                        toast.success("Debug report downloaded with backend logs!");
-                      } catch (e) {
-                        toast.dismiss();
-                        console.error("Failed to fetch backend logs:", e);
-                        // Download frontend-only report as fallback
+                        debugLogger.log('auction_complete', {
+                          finalStatus: auction?.status,
+                          totalBids: bids.length
+                        });
                         debugLogger.downloadReport();
-                        toast.success("Debug report downloaded (frontend only)");
+                        toast.success("Debug report downloaded!");
+                      } catch (e) {
+                        console.error("Debug report error:", e);
+                        toast.error("Failed to download report");
                       }
-                    } catch (e) {
-                      toast.dismiss();
-                      toast.error("Failed to generate report");
-                      console.error("Debug report error:", e);
-                    }
-                  }}
-                  className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm"
-                  title="Download debug report with all bid logs for troubleshooting"
-                >
-                  📊 Download Debug Report
-                </button>
-                <span className="ml-2 text-xs text-gray-600">
-                  Stats: {debugLogger.getStats().totalAttempts} attempts, {debugLogger.getStats().totalSuccesses} successes
-                </span>
-              </div>
+                    }}
+                    className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm"
+                    title="Download debug report with all bid logs for troubleshooting"
+                  >
+                    📊 Download Debug Report
+                  </button>
+                  <span className="ml-2 text-xs text-gray-600">
+                    Stats: {debugLogger.getStats().totalAttempts} attempts, {debugLogger.getStats().totalSuccesses} successes
+                  </span>
+                </div>
+              )}
             </div>
           </div>
 
