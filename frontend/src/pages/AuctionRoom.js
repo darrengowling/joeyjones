@@ -1042,13 +1042,47 @@ function AuctionRoom() {
               {/* Debug Tools - Available for all users */}
               <div className="mt-4">
                 <button
-                  onClick={() => {
-                    debugLogger.log('auction_complete', {
-                      finalStatus: auction?.status,
-                      totalBids: bids.length
-                    });
-                    debugLogger.downloadReport();
-                    toast.success("Debug report downloaded!");
+                  onClick={async () => {
+                    try {
+                      debugLogger.log('auction_complete', {
+                        finalStatus: auction?.status,
+                        totalBids: bids.length
+                      });
+                      
+                      // Fetch backend logs
+                      toast.loading("Generating debug report...");
+                      try {
+                        const backendLogs = await axios.get(`${API}/debug/bid-logs/${auctionId}`);
+                        
+                        // Merge frontend and backend logs
+                        const report = debugLogger.generateReport();
+                        report.backendData = backendLogs.data;
+                        
+                        // Download combined report
+                        const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = `auction-debug-${auctionId}-${Date.now()}.json`;
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(url);
+                        
+                        toast.dismiss();
+                        toast.success("Debug report downloaded with backend logs!");
+                      } catch (e) {
+                        toast.dismiss();
+                        console.error("Failed to fetch backend logs:", e);
+                        // Download frontend-only report as fallback
+                        debugLogger.downloadReport();
+                        toast.success("Debug report downloaded (frontend only)");
+                      }
+                    } catch (e) {
+                      toast.dismiss();
+                      toast.error("Failed to generate report");
+                      console.error("Debug report error:", e);
+                    }
                   }}
                   className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm"
                   title="Download debug report with all bid logs for troubleshooting"
