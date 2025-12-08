@@ -521,39 +521,86 @@ function AuctionRoom() {
 
     // Parse £m input (e.g., "5m", "£5m", "5")
     if (!isValidCurrencyInput(bidAmount)) {
-      alert("Please enter a valid bid amount (e.g., 5m, £10m, 23m)");
+      toast.error("Please enter a valid bid amount (e.g., 5m, £10m, 23m)");
       return;
     }
     
     const amount = parseCurrencyInput(bidAmount);
-
-    // Check user's budget
+    
+    // Get current state for logging (not validation)
     const userParticipant = participants.find((p) => p.userId === user.id);
-    if (userParticipant && amount > userParticipant.budgetRemaining) {
-      alert(`Strategic budget exceeded. You have ${formatCurrency(userParticipant.budgetRemaining)} remaining for team ownership`);
+    const currentBids = bids.filter((b) => b.clubId === currentClub.id);
+    const highestBid = currentBids.length > 0 ? Math.max(...currentBids.map((b) => b.amount)) : 0;
+
+    // Detailed logging for diagnostics
+    console.log("🔵 bid:attempt", {
+      auctionId,
+      clubId: currentClub.id,
+      clubName: currentClub.name,
+      amount,
+      amountFormatted: formatCurrency(amount),
+      userBudget: userParticipant?.budgetRemaining,
+      highestBid,
+      existingBidsCount: currentBids.length,
+      timestamp: new Date().toISOString()
+    });
+
+    // Prevent double-submission
+    if (isSubmittingBid) {
+      console.log("⚠️ bid:blocked (already submitting)");
       return;
     }
 
-    // Check if higher than current highest bid
-    const currentBids = bids.filter((b) => b.clubId === currentClub.id);
-    if (currentBids.length > 0) {
-      const highestBid = Math.max(...currentBids.map((b) => b.amount));
-      if (amount <= highestBid) {
-        alert(`Strategic bid must exceed current leading bid: ${formatCurrency(highestBid)}`);
-        return;
-      }
-    }
+    setIsSubmittingBid(true);
 
     try {
-      await axios.post(`${API}/auction/${auctionId}/bid`, {
+      console.log("📤 bid:sent", { auctionId, clubId: currentClub.id, amount });
+      
+      const response = await axios.post(`${API}/auction/${auctionId}/bid`, {
         userId: user.id,
         clubId: currentClub.id,
         amount,
+      }, {
+        timeout: 10000 // 10 second timeout
       });
+      
+      console.log("✅ bid:success", { 
+        auctionId, 
+        clubId: currentClub.id, 
+        amount,
+        response: response.data 
+      });
+      
+      toast.success(`Bid placed: ${formatCurrency(amount)}`);
       setBidAmount("");
+      
     } catch (e) {
-      console.error("Error placing bid:", e);
-      alert(e.response?.data?.detail || "Error placing bid");
+      console.error("❌ bid:error", {
+        auctionId,
+        clubId: currentClub.id,
+        amount,
+        error: e.message,
+        response: e.response?.data,
+        status: e.response?.status,
+        code: e.code
+      });
+      
+      // Detailed error handling
+      if (e.code === 'ECONNABORTED' || e.message.includes('timeout')) {
+        toast.error("Bid request timed out. Please try again.");
+      } else if (e.response) {
+        // Server responded with error - show backend message
+        const errorMsg = e.response?.data?.detail || `Server error: ${e.response.status}`;
+        toast.error(errorMsg);
+      } else if (e.request) {
+        // Request made but no response
+        toast.error("No response from server. Check your connection.");
+      } else {
+        // Something else went wrong
+        toast.error("Failed to place bid. Please try again.");
+      }
+    } finally {
+      setIsSubmittingBid(false);
     }
   };
 
