@@ -413,6 +413,15 @@ function AuctionRoom() {
       const response = await axios.get(`${API}/auction/${auctionId}`);
       console.log("Auction data loaded:", response.data);
       console.log("Bids from API:", response.data.bids);
+      
+      // Initialize debug logger with auction ID
+      debugLogger.setAuctionId(auctionId);
+      debugLogger.log('auction_start', {
+        status: response.data.auction.status,
+        currentLot: response.data.auction.currentLot,
+        existingBids: response.data.bids.length
+      });
+      
       setAuction(response.data.auction);
       setBids(response.data.bids);
       if (response.data.currentClub) {
