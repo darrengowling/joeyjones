@@ -4309,7 +4309,7 @@ async def get_auction(auction_id: str):
 async def place_bid(auction_id: str, bid_input: BidCreate):
     # Simple log at entry point for observability
     try:
-        logger.info(f"bid:incoming auctionId={auction_id} userId={bid_input.userId} clubId={bid_input.clubId} amount={bid_input.amount}")
+        logger.info(f"bid:incoming auctionId={auction_id} userId={bid_input.userId} amount={bid_input.amount}")
     except Exception as e:
         logger.error(f"Logging error: {e}")
     
