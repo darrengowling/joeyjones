@@ -1,0 +1,188 @@
+{
+  "metadata": {
+    "sessionStart": "2025-12-08T14:09:37.446Z",
+    "reportGenerated": "2025-12-08T14:10:34.509Z",
+    "auctionId": "2ab446af-6008-409f-9a77-290edcb37123",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36 Edg/142.0.0.0",
+    "screenSize": "1280x720",
+    "connection": {
+      "effectiveType": "4g",
+      "downlink": 8.05,
+      "rtt": 300
+    }
+  },
+  "statistics": {
+    "totalAttempts": 0,
+    "totalSent": 0,
+    "totalSuccesses": 0,
+    "totalErrors": 0,
+    "rateLimited": 0,
+    "successRate": "0%",
+    "networkSuccessRate": "0%"
+  },
+  "errorSummary": {},
+  "events": [
+    {
+      "timestamp": "2025-12-08T14:09:37.724Z",
+      "timestampMs": 1765202977724,
+      "event": "auction_start",
+      "auctionId": "2ab446af-6008-409f-9a77-290edcb37123",
+      "status": "waiting",
+      "currentLot": 0,
+      "existingBids": 0
+    },
+    {
+      "timestamp": "2025-12-08T14:09:39.884Z",
+      "timestampMs": 1765202979884,
+      "event": "auction_start",
+      "auctionId": "2ab446af-6008-409f-9a77-290edcb37123",
+      "status": "waiting",
+      "currentLot": 0,
+      "existingBids": 0
+    },
+    {
+      "timestamp": "2025-12-08T14:09:42.831Z",
+      "timestampMs": 1765202982831,
+      "event": "auction_start",
+      "auctionId": "2ab446af-6008-409f-9a77-290edcb37123",
+      "status": "waiting",
+      "currentLot": 0,
+      "existingBids": 0
+    },
+    {
+      "timestamp": "2025-12-08T14:09:44.829Z",
+      "timestampMs": 1765202984829,
+      "event": "auction_start",
+      "auctionId": "2ab446af-6008-409f-9a77-290edcb37123",
+      "status": "waiting",
+      "currentLot": 0,
+      "existingBids": 0
+    },
+    {
+      "timestamp": "2025-12-08T14:09:46.825Z",
+      "timestampMs": 1765202986825,
+      "event": "auction_start",
+      "auctionId": "2ab446af-6008-409f-9a77-290edcb37123",
+      "status": "waiting",
+      "currentLot": 0,
+      "existingBids": 0
+    },
+    {
+      "timestamp": "2025-12-08T14:09:48.834Z",
+      "timestampMs": 1765202988834,
+      "event": "auction_start",
+      "auctionId": "2ab446af-6008-409f-9a77-290edcb37123",
+      "status": "waiting",
+      "currentLot": 0,
+      "existingBids": 0
+    },
+    {
+      "timestamp": "2025-12-08T14:09:49.904Z",
+      "timestampMs": 1765202989904,
+      "event": "auction_start",
+      "auctionId": "2ab446af-6008-409f-9a77-290edcb37123",
+      "status": "waiting",
+      "currentLot": 0,
+      "existingBids": 0
+    },
+    {
+      "timestamp": "2025-12-08T14:09:51.894Z",
+      "timestampMs": 1765202991894,
+      "event": "auction_start",
+      "auctionId": "2ab446af-6008-409f-9a77-290edcb37123",
+      "status": "active",
+      "currentLot": 1,
+      "existingBids": 0
+    },
+    {
+      "timestamp": "2025-12-08T14:10:34.508Z",
+      "timestampMs": 1765203034509,
+      "event": "auction_complete",
+      "auctionId": "2ab446af-6008-409f-9a77-290edcb37123",
+      "finalStatus": "active",
+      "totalBids": 0
+    }
+  ],
+  "allLogs": [
+    {
+      "timestamp": "2025-12-08T14:09:37.724Z",
+      "timestampMs": 1765202977724,
+      "event": "auction_start",
+      "auctionId": "2ab446af-6008-409f-9a77-290edcb37123",
+      "status": "waiting",
+      "currentLot": 0,
+      "existingBids": 0
+    },
+    {
+      "timestamp": "2025-12-08T14:09:39.884Z",
+      "timestampMs": 1765202979884,
+      "event": "auction_start",
+      "auctionId": "2ab446af-6008-409f-9a77-290edcb37123",
+      "status": "waiting",
+      "currentLot": 0,
+      "existingBids": 0
+    },
+    {
+      "timestamp": "2025-12-08T14:09:42.831Z",
+      "timestampMs": 1765202982831,
+      "event": "auction_start",
+      "auctionId": "2ab446af-6008-409f-9a77-290edcb37123",
+      "status": "waiting",
+      "currentLot": 0,
+      "existingBids": 0
+    },
+    {
+      "timestamp": "2025-12-08T14:09:44.829Z",
+      "timestampMs": 1765202984829,
+      "event": "auction_start",
+      "auctionId": "2ab446af-6008-409f-9a77-290edcb37123",
+      "status": "waiting",
+      "currentLot": 0,
+      "existingBids": 0
+    },
+    {
+      "timestamp": "2025-12-08T14:09:46.825Z",
+      "timestampMs": 1765202986825,
+      "event": "auction_start",
+      "auctionId": "2ab446af-6008-409f-9a77-290edcb37123",
+      "status": "waiting",
+      "currentLot": 0,
+      "existingBids": 0
+    },
+    {
+      "timestamp": "2025-12-08T14:09:48.834Z",
+      "timestampMs": 1765202988834,
+      "event": "auction_start",
+      "auctionId": "2ab446af-6008-409f-9a77-290edcb37123",
+      "status": "waiting",
+      "currentLot": 0,
+      "existingBids": 0
+    },
+    {
+      "timestamp": "2025-12-08T14:09:49.904Z",
+      "timestampMs": 1765202989904,
+      "event": "auction_start",
+      "auctionId": "2ab446af-6008-409f-9a77-290edcb37123",
+      "status": "waiting",
+      "currentLot": 0,
+      "existingBids": 0
+    },
+    {
+      "timestamp": "2025-12-08T14:09:51.894Z",
+      "timestampMs": 1765202991894,
+      "event": "auction_start",
+      "auctionId": "2ab446af-6008-409f-9a77-290edcb37123",
+      "status": "active",
+      "currentLot": 1,
+      "existingBids": 0
+    },
+    {
+      "timestamp": "2025-12-08T14:10:34.508Z",
+      "timestampMs": 1765203034509,
+      "event": "auction_complete",
+      "auctionId": "2ab446af-6008-409f-9a77-290edcb37123",
+      "finalStatus": "active",
+      "totalBids": 0
+    }
+  ]
+}
