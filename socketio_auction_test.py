@@ -698,6 +698,7 @@ class SocketIOAuctionTester:
             ("start_auction", self.start_auction),
             ("setup_socket_clients", self.setup_socket_clients),
             ("join_auction_rooms", self.join_auction_rooms),
+            ("begin_auction", self.begin_auction),
             ("place_bid_and_monitor", self.place_bid_and_monitor_events),
             ("test_connection_stability", self.test_connection_stability),
         ]
