@@ -282,11 +282,26 @@ async def health_check():
     try:
         # Check database connectivity
         await db.command("ping")
-        return {
+        
+        # Import Redis status
+        from socketio_init import redis_enabled, mgr
+        
+        health_status = {
             "status": "healthy",
             "database": "connected",
-            "timestamp": datetime.now(timezone.utc).isoformat()
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "socketio": {
+                "mode": "redis" if redis_enabled and mgr else "in-memory",
+                "redis_configured": redis_enabled,
+                "multi_pod_ready": redis_enabled and mgr is not None
+            }
         }
+        
+        # Add warning if Redis is configured but might not be working
+        if redis_enabled and mgr:
+            health_status["socketio"]["warning"] = "Redis adapter created. Check logs for 'Cannot publish to redis' if Socket.IO not working."
+        
+        return health_status
     except Exception as e:
         logger.error(f"Health check failed: {str(e)}")
         return JSONResponse(
