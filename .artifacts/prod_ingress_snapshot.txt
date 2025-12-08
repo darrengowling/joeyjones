@@ -1,0 +1,21 @@
+=== Ingress Snapshot ===
+HTTP/2 405 
+allow: GET
+content-length: 31
+content-type: application/json
+date: Mon, 08 Dec 2025 04:33:53 GMT
+server: nginx/1.26.3
+via: 1.1 google
+alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+
+HTTP/2 200 
+accept-ranges: bytes
+content-length: 3591
+content-type: text/html
+date: Mon, 08 Dec 2025 04:33:54 GMT
+etag: "69364f17-e07"
+last-modified: Mon, 08 Dec 2025 04:07:51 GMT
+server: nginx/1.26.3
+via: 1.1 google
+alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+

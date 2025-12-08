@@ -1,0 +1,2 @@
+=== Socket.IO Handshake ===
+0{"sid":"evT5bGHonQjiFQReAAAs","upgrades":["websocket"],"pingTimeout":25000,"pingInterval":20000,"maxPayload":1000000}
