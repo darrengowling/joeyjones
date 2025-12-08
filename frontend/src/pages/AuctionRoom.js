@@ -1192,9 +1192,9 @@ function AuctionRoom() {
                       />
                       <button
                         onClick={placeBid}
-                        disabled={!ready || participants.find((p) => p.userId === user?.id)?.clubsWon?.length >= (league?.clubSlots || 3)}
+                        disabled={!ready || isSubmittingBid || participants.find((p) => p.userId === user?.id)?.clubsWon?.length >= (league?.clubSlots || 3)}
                         className={`w-full sm:w-auto px-6 py-3 sm:py-2 rounded-lg font-semibold text-base ${
-                          !ready || participants.find((p) => p.userId === user?.id)?.clubsWon?.length >= (league?.clubSlots || 3) 
+                          !ready || isSubmittingBid || participants.find((p) => p.userId === user?.id)?.clubsWon?.length >= (league?.clubSlots || 3) 
                             ? 'bg-gray-400 cursor-not-allowed' 
                             : 'bg-blue-600 text-white hover:bg-blue-700'
                         }`}
@@ -1202,6 +1202,8 @@ function AuctionRoom() {
                         title={
                           !ready 
                             ? "Loading auction state..." 
+                            : isSubmittingBid
+                              ? "Placing bid..."
                             : participants.find((p) => p.userId === user?.id)?.clubsWon?.length >= (league?.clubSlots || 3) 
                               ? "Roster full" 
                               : ""
@@ -1209,6 +1211,8 @@ function AuctionRoom() {
                       >
                         {!ready 
                           ? "Loading..." 
+                          : isSubmittingBid
+                            ? "Placing..."
                           : participants.find((p) => p.userId === user?.id)?.clubsWon?.length >= (league?.clubSlots || 3) 
                             ? "Roster Full" 
                             : "Place Bid"
