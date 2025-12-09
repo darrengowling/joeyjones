@@ -404,7 +404,8 @@ async def update_fixture_scores(fixture_ids: List[str] = None):
                     )
                     
                     updated_count += 1
-                    logger.info(f"Updated: {home_name} vs {away_name} ({competition}) [League: {fixture['leagueId']}] - {goals_home}:{goals_away}")
+                    league_id_str = fixture.get('leagueId', 'unknown')
+                    logger.info(f"Updated: {home_name} vs {away_name} ({competition}) [League: {league_id_str}] - {goals_home}:{goals_away}")
                 
                 if not fixtures:
                     logger.info(f"Fixture not found in DB: {home_name} vs {away_name} ({competition})")
