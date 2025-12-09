@@ -5468,6 +5468,7 @@ async def join_auction(sid, data):
     
     # Get user ID from data (passed by frontend)
     user_id = data.get('userId')
+    logger.info(f"🔍 join_auction received - auctionId: {auction_id}, userId: {user_id}, data: {data}")
     
     room_name = f"auction:{auction_id}"
     await sio.enter_room(sid, room_name)
