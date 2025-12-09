@@ -805,7 +805,9 @@ function AuctionRoom() {
                   ⏳ Auction Waiting Room
                 </h1>
                 <p className="text-gray-600">
-                  Waiting for commissioner to begin the auction
+                  {isCommissioner 
+                    ? "Waiting for users to enter waiting room"
+                    : "Waiting for other participants and commissioner to start"}
                 </p>
               </div>
 
@@ -837,7 +839,9 @@ function AuctionRoom() {
                     ))}
                   {(!auction?.usersInWaitingRoom || auction.usersInWaitingRoom.length === 0) && (
                     <div className="text-center text-gray-500 py-4 w-full">
-                      Waiting for participants to click "Enter Auction"...
+                      {isCommissioner 
+                        ? "Waiting for participants to click 'Enter Auction'..."
+                        : "Waiting for other participants..."}
                     </div>
                   )}
                 </div>
