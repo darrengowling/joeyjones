@@ -357,6 +357,7 @@ function AuctionRoom() {
       socket.off('auction_paused', onAuctionPaused);
       socket.off('auction_resumed', onAuctionResumed);
       socket.off('participants_changed', onParticipantsChanged); // Prompt A
+      socket.off('waiting_room_updated', onWaitingRoomUpdated);
       socket.off('next_team_countdown', onNextTeamCountdown);
     };
   }, [auctionId, user, bidSequence, listenerCount]);
