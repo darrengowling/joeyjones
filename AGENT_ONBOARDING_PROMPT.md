@@ -50,6 +50,15 @@ When user reports an issue or you think you found one:
 ❌ **Looking for points in `league_participants.points`**  
 ✅ **Points are in `league_points` collection**
 
+❌ **Looking for football clubs in a `clubs` collection**  
+✅ **ALL clubs/players are in `assets` collection (filter by sportKey)**
+
+❌ **Searching for teams with wrong competition name (e.g., "Premier League" instead of "English Premier League")**  
+✅ **Use exact competition names: "UEFA Champions League", "English Premier League", "Africa Cup of Nations"**
+
+❌ **Assuming team names in database match API exactly**  
+✅ **Team names MUST match API exactly for scoring to work (fixture import uses fuzzy matching, scoring uses exact matching)**
+
 ❌ **Assuming fixture status should be "completed"**  
 ✅ **Scoring service requires status "ft" (full-time)**
 
