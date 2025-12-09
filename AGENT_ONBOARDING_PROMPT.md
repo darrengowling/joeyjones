@@ -129,9 +129,16 @@ If user says:
 - Leagues: `leagues` collection  
 - Participants: `league_participants` collection (has `clubsWon` array after auction)
 
-**Teams/Players:**
-- All teams/players: `assets` collection
+**Teams/Players (CRITICAL - READ THIS):**
+- ⭐ **ALL teams/players: `assets` collection** ← THIS IS THE ONLY PLACE
+- Football clubs (CL/PL): `assets` collection with `sportKey: "football"`
+- Cricket players (AFCON): `assets` collection with `sportKey: "cricket"`
+- Competition field: `competitions` (e.g., "UEFA Champions League", "English Premier League", "Africa Cup of Nations")
 - Fields: `id`, `name`, `sportKey`, `competitionShort`, `competitions`, `externalId`
+- **DO NOT** look for clubs in `clubs`, `teams`, or any other collection
+- **DO NOT** assume there's a separate `clubs` collection
+- **ALWAYS** use: `db.assets.find({'sportKey': 'football'})` for football clubs
+- **ALWAYS** use: `db.assets.find({'sportKey': 'cricket'})` for cricket players
 
 **Fixtures/Matches:**
 - All fixtures: `fixtures` collection
