@@ -322,9 +322,9 @@ async def calculate_points_from_fixtures(db, league_id: str):
     # Get team names for this league
     team_names = [club["name"] for club in clubs]
     
-    # Get completed fixtures where any of these teams played
-    # Note: Fixtures are shared across competitions - we match by team names
+    # Get completed fixtures for THIS league only
     fixtures = await db.fixtures.find({
+        "leagueId": league_id,
         "status": "ft",
         "sportKey": "football",
         "$or": [
