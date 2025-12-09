@@ -5,7 +5,7 @@
 
 import { test, expect, chromium, Browser, BrowserContext, Page } from '@playwright/test';
 
-const BASE_URL = 'https://bid-fixer.preview.emergentagent.com';
+const BASE_URL = 'https://livebid-2.preview.emergentagent.com';
 
 test.describe('02 - Non-Commissioner Authorization', () => {
   let browserA: Browser;

@@ -699,7 +699,7 @@ app.add_middleware(
 ```
 
 **Configuration:**
-- **Allowed Origins:** `https://bid-fixer.preview.emergentagent.com`
+- **Allowed Origins:** `https://livebid-2.preview.emergentagent.com`
 - **Allowed Methods:** GET, POST, PUT, DELETE, OPTIONS (no wildcards)
 - **Allowed Headers:** Authorization, Content-Type, Accept (no wildcards)
 - **Credentials:** Enabled

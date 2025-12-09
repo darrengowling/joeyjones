@@ -115,7 +115,7 @@ setParticipants(response.data.participants || []);
 ### API Test:
 ```bash
 # Test the new API format
-curl -X GET "https://bid-fixer.preview.emergentagent.com/api/leagues/{league_id}/participants"
+curl -X GET "https://livebid-2.preview.emergentagent.com/api/leagues/{league_id}/participants"
 
 # Expected response:
 {

@@ -142,13 +142,13 @@ GET /api/scoring/{leagueId}/leaderboard
 
 **Check Players Loaded:**
 ```bash
-curl "https://bid-fixer.preview.emergentagent.com/api/assets?sportKey=cricket" | jq '.pagination.total'
+curl "https://livebid-2.preview.emergentagent.com/api/assets?sportKey=cricket" | jq '.pagination.total'
 # Should return: 30
 ```
 
 **Check Scoring Rules:**
 ```bash
-curl "https://bid-fixer.preview.emergentagent.com/api/sports/cricket" | jq '.scoringSchema'
+curl "https://livebid-2.preview.emergentagent.com/api/sports/cricket" | jq '.scoringSchema'
 # Verify: run=1, wicket=20, catch=10, stumping=10, runOut=10, milestones={}
 ```
 

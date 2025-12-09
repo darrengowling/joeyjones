@@ -9,7 +9,7 @@ PRODUCTION:
 
 PREVIEW:
   - Main JS: bundle.js (development build)
-  - Backend URL configured: https://bid-fixer.preview.emergentagent.com
+  - Backend URL configured: https://livebid-2.preview.emergentagent.com
 
 === BACKEND SERVER ANALYSIS ===
 

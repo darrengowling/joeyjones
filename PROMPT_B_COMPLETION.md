@@ -79,7 +79,7 @@ async def get_league_state(league_id: str):
 
 ### Test 1: Create Auction
 ```bash
-curl -X POST "https://bid-fixer.preview.emergentagent.com/api/leagues/6a491e99-8e75-46c1-8fd4-f3bd527a4850/auction/start"
+curl -X POST "https://livebid-2.preview.emergentagent.com/api/leagues/6a491e99-8e75-46c1-8fd4-f3bd527a4850/auction/start"
 ```
 
 **Response:**
@@ -94,7 +94,7 @@ curl -X POST "https://bid-fixer.preview.emergentagent.com/api/leagues/6a491e99-8
 
 ### Test 2: Verify Auction State
 ```bash
-curl "https://bid-fixer.preview.emergentagent.com/api/auction/7eb6866d-2fc9-4483-8d77-34ed1e765370"
+curl "https://livebid-2.preview.emergentagent.com/api/auction/7eb6866d-2fc9-4483-8d77-34ed1e765370"
 ```
 
 **Response:**
@@ -132,7 +132,7 @@ INFO:server:Created auction 7eb6866d-2fc9-4483-8d77-34ed1e765370 in waiting stat
 
 ### Test 4: League State Endpoint
 ```bash
-curl "https://bid-fixer.preview.emergentagent.com/api/leagues/6a491e99-8e75-46c1-8fd4-f3bd527a4850/state"
+curl "https://livebid-2.preview.emergentagent.com/api/leagues/6a491e99-8e75-46c1-8fd4-f3bd527a4850/state"
 ```
 
 **Response:**

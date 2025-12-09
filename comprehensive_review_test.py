@@ -12,8 +12,8 @@ import csv
 import io
 from datetime import datetime
 
-BASE_URL = "https://bid-fixer.preview.emergentagent.com/api"
-SOCKET_URL = "https://bid-fixer.preview.emergentagent.com"
+BASE_URL = "https://livebid-2.preview.emergentagent.com/api"
+SOCKET_URL = "https://livebid-2.preview.emergentagent.com"
 SOCKET_PATH = "/api/socket.io"
 
 class ComprehensiveReviewTester:

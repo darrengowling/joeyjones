@@ -6,7 +6,7 @@ Simple cricket scoring test to debug the issue
 import requests
 import json
 
-BASE_URL = "https://bid-fixer.preview.emergentagent.com/api"
+BASE_URL = "https://livebid-2.preview.emergentagent.com/api"
 
 def simple_test():
     # Create test user and cricket league
