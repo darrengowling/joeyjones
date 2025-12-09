@@ -125,15 +125,6 @@ export default function LeagueDetail() {
             status: 'active',
             activeAuctionId: data.auctionId
           }));
-          
-          // Auto-redirect all users to auction waiting room
-          if (data.auctionId) {
-            console.log('🚀 Auto-redirecting to auction waiting room:', data.auctionId);
-            toast.success('Auction started! Joining waiting room...', { duration: 2000 });
-            setTimeout(() => {
-              navigate(`/auction/${data.auctionId}`);
-            }, 500); // Small delay to show toast
-          }
         } else if (data.status === 'auction_complete') {
           console.log('✅ Auction completed - updating league data');
           setLeague(prev => ({
