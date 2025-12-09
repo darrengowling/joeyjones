@@ -812,27 +812,34 @@ function AuctionRoom() {
               {/* Participants List */}
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
                 <h3 className="font-bold text-gray-900 mb-3">
-                  Participants in Room ({participantCount})
+                  Participants Ready ({auction?.usersInWaitingRoom?.length || 0})
                 </h3>
                 <div className="flex flex-wrap gap-2">
-                  {participants.map(p => (
-                    <div
-                      key={p.userId}
-                      className="flex items-center gap-2 bg-white px-3 py-2 rounded-full border border-gray-300"
-                    >
-                      <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
-                        {p.userName?.charAt(0).toUpperCase() || '?'}
-                      </div>
-                      <span className="text-sm font-medium text-gray-900">
-                        {p.userName}
-                      </span>
-                      {p.userId === user.id && (
-                        <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">
-                          You
+                  {participants
+                    .filter(p => auction?.usersInWaitingRoom?.includes(p.userId))
+                    .map(p => (
+                      <div
+                        key={p.userId}
+                        className="flex items-center gap-2 bg-white px-3 py-2 rounded-full border border-gray-300"
+                      >
+                        <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
+                          {p.userName?.charAt(0).toUpperCase() || '?'}
+                        </div>
+                        <span className="text-sm font-medium text-gray-900">
+                          {p.userName}
                         </span>
-                      )}
+                        {p.userId === user.id && (
+                          <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">
+                            You
+                          </span>
+                        )}
+                      </div>
+                    ))}
+                  {(!auction?.usersInWaitingRoom || auction.usersInWaitingRoom.length === 0) && (
+                    <div className="text-center text-gray-500 py-4 w-full">
+                      Waiting for participants to click "Enter Auction"...
                     </div>
-                  ))}
+                  )}
                 </div>
               </div>
 
