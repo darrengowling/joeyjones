@@ -324,6 +324,13 @@ function AuctionRoom() {
     socket.on('auction_resumed', onAuctionResumed);
     socket.on('participants_changed', onParticipantsChanged); // Prompt A
     
+    // Handle waiting room updates
+    const onWaitingRoomUpdated = (data) => {
+      console.log('🚪 Waiting room updated:', data.usersInWaitingRoom);
+      setAuction(prev => ({ ...prev, usersInWaitingRoom: data.usersInWaitingRoom }));
+    };
+    socket.on('waiting_room_updated', onWaitingRoomUpdated);
+    
     // Handle countdown between lots
     const onNextTeamCountdown = (data) => {
       console.log('⏱️ Countdown:', data.seconds);
