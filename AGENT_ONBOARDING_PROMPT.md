@@ -8,6 +8,32 @@
 
 You are working on a **production fantasy sports auction platform** with real users and live data. This system is **complex and fully functional**. Your role is to assist with enhancements, fixes, and testing - NOT to "rescue" a broken system.
 
+### ⚠️ CRITICAL: WHERE TEAMS AND PLAYERS ARE STORED
+
+**THERE IS NO `clubs` COLLECTION. THERE IS NO `teams` COLLECTION.**
+
+All football clubs AND cricket players are stored in: **`assets` collection**
+
+```javascript
+// Football clubs (Champions League, Premier League)
+db.assets.find({ sportKey: "football" })
+
+// Cricket players (AFCON)
+db.assets.find({ sportKey: "cricket" })
+
+// Specific competition
+db.assets.find({ competitions: "UEFA Champions League" })
+db.assets.find({ competitions: "English Premier League" })
+db.assets.find({ competitions: "Africa Cup of Nations" })
+```
+
+**Competition names (exact spelling required):**
+- "UEFA Champions League" (NOT "CL", NOT "Champions League")
+- "English Premier League" (NOT "PL", NOT "Premier League")
+- "Africa Cup of Nations" (NOT "AFCON")
+
+If you look anywhere else for teams/players, you will get wrong results and waste time.
+
 ### CRITICAL RULES - READ CAREFULLY
 
 #### 1. ASSUME THE SYSTEM WORKS
