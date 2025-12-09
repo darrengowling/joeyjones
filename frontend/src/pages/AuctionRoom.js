@@ -1240,8 +1240,10 @@ function AuctionRoom() {
                         <button
                           key={amount}
                           onClick={() => {
-                            const newBid = (currentBid || 0) + amount;
-                            setBidAmount(newBid);
+                            // Add to the current input value (in millions), not the auction's currentBid
+                            const currentInputValue = parseFloat(bidAmount) || 0;
+                            const newBid = currentInputValue + amount;
+                            setBidAmount(newBid.toString());
                           }}
                           disabled={!ready}
                           className="flex-shrink-0 px-4 py-3 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-lg text-sm font-medium border border-gray-300 disabled:opacity-50"
