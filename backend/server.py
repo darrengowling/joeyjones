@@ -4126,13 +4126,16 @@ async def begin_auction(
     
     await db.auctions.update_one(
         {"id": auction_id},
-        {"$set": {
-            "status": "active",
-            "currentClubId": first_asset_id,
-            "currentLot": 1,
-            "timerEndsAt": timer_end,
-            "currentLotId": lot_id
-        }}
+        {
+            "$set": {
+                "status": "active",
+                "currentClubId": first_asset_id,
+                "currentLot": 1,
+                "timerEndsAt": timer_end,
+                "currentLotId": lot_id
+            },
+            "$unset": {"usersInWaitingRoom": ""}  # Clear waiting room tracking when auction begins
+        }
     )
     
     # Create timer event
