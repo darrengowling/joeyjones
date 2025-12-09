@@ -266,6 +266,7 @@ class Auction(BaseModel):
     currentBid: Optional[float] = None  # Current highest bid amount
     currentBidder: Optional[Dict[str, Any]] = None  # Current bidder info {userId, displayName}
     bidSequence: int = 0  # Monotonic sequence number for bid updates
+    usersInWaitingRoom: Optional[List[str]] = []  # Track users who have clicked "Enter Auction"
     createdAt: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 class AuctionCreate(BaseModel):
