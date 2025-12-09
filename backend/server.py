@@ -5483,6 +5483,14 @@ async def join_auction(sid, data):
             {"$addToSet": {"usersInWaitingRoom": user_id}}
         )
         logger.info(f"✅ Added user {user_id} to waiting room tracking for auction {auction_id}")
+        
+        # Broadcast updated waiting room list to all clients in the auction room
+        updated_auction = await db.auctions.find_one({"id": auction_id}, {"_id": 0})
+        if updated_auction:
+            await sio.emit('waiting_room_updated', {
+                'usersInWaitingRoom': updated_auction.get('usersInWaitingRoom', [])
+            }, room=room_name)
+            logger.info(f"📢 Broadcast waiting room update: {len(updated_auction.get('usersInWaitingRoom', []))} users")
     
     # Get room size after join
     room_sockets = {} if not hasattr(sio.manager, "rooms") else sio.manager.rooms.get(f"auction:{auction_id}", {}).get("/", set())
