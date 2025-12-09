@@ -5466,12 +5466,8 @@ async def join_auction(sid, data):
     if not auction_id:
         return {'ok': False, 'error': 'auctionId required'}
     
-    # Get user ID from session if available
-    try:
-        session = await sio.get_session(sid)
-        user_id = session.get('userId') if session else None
-    except Exception:
-        user_id = None
+    # Get user ID from data (passed by frontend)
+    user_id = data.get('userId')
     
     room_name = f"auction:{auction_id}"
     await sio.enter_room(sid, room_name)
