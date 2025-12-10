@@ -5859,9 +5859,13 @@ app.add_middleware(
 # Include routers
 app.include_router(api_router)
 
-# Migration endpoint for manual verification/execution
-from migration_endpoint import migration_router
-app.include_router(migration_router, prefix="/api")
+# Migration API endpoints - for manual verification/execution in production
+try:
+    from migration_api import migration_api
+    app.include_router(migration_api, prefix="/api")
+    logger.info("✅ Migration API endpoints registered at /api/admin/migration/*")
+except Exception as e:
+    logger.error(f"❌ Failed to register migration API: {e}")
 
 # Serve AFCON template file
 @app.get("/api/templates/afcon_2025_fixtures_with_names.csv")
