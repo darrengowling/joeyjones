@@ -180,7 +180,7 @@
 - Frontend: React (hot reload enabled)
 - Backend: FastAPI (Python)
 - Database: MongoDB (local)
-- Preview URL: https://livebid-2.preview.emergentagent.com
+- Preview URL: https://prod-stable-soccer.preview.emergentagent.com
 
 **Key Endpoints:**
 - `/api/leagues` - Create/list leagues

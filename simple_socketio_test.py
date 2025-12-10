@@ -10,7 +10,7 @@ import time
 import os
 
 # Get backend URL from environment
-BACKEND_URL = os.getenv('REACT_APP_BACKEND_URL', 'https://livebid-2.preview.emergentagent.com')
+BACKEND_URL = os.getenv('REACT_APP_BACKEND_URL', 'https://prod-stable-soccer.preview.emergentagent.com')
 SOCKET_URL = f"{BACKEND_URL}/api/socket.io"
 
 def test_socketio_connection():

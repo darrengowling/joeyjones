@@ -6,7 +6,7 @@ Debug script to check specific cricket scoring configuration issues
 import requests
 import json
 
-BASE_URL = "https://livebid-2.preview.emergentagent.com/api"
+BASE_URL = "https://prod-stable-soccer.preview.emergentagent.com/api"
 
 def test_validation_errors():
     # Create test user and cricket league

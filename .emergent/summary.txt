@@ -1,187 +1,223 @@
 <analysis>**original_problem_statement:**
-The user's primary goal was to stabilize a live production application for a pilot test. The application, which was working in a preview environment, was experiencing critical failures in its core auction functionality post-deployment (frozen timers, connection lost messages, 520/500 errors). The root cause was a fundamental architectural difference where the multi-pod production environment required Redis for Socket.IO event broadcasting, while the single-pod preview environment did not. After a lengthy investigation and several fixes, this core issue has been resolved. The focus has now shifted to fixing remaining bugs and UX issues before the pilot.
+The user's primary goal is to stabilize a live production application for a pilot test. The application was experiencing critical failures due to differences between the single-pod preview environment and the multi-pod production environment (which required Redis for Socket.IO). After resolving the infrastructure issues, the focus shifted to fixing bugs.
+
+A series of fixes were implemented and verified in the preview environment, including correcting Champions League (CL) club names, fixing a waiting room UI bug, and resolving a critical scoring logic flaw. However, upon deployment, it was discovered that database changes made in the preview environment did not migrate to the separate production database. This has left the production application in a state where core scoring functionality is broken because it relies on team names that were updated in preview but remain unchanged in production.
 
 PRODUCT REQUIREMENTS:
-- The production auction functionality must be stable for multi-user pilot testing.
-- Bids must be reliably registered and broadcast to all participants in real-time.
-- The timer must be synchronized and display correctly for all users.
-- The application should provide clear feedback and an intuitive user experience.
-- Core features like fixture imports must be reliable.
+- The production application must be stable for pilot testing.
+- Fixture imports and score updates must be reliable for all leagues (CL and PL).
+- League points must be calculated and displayed correctly based on match results.
+- The auction waiting room must provide accurate, real-time participant counts.
 
 **User's preferred language**: English
 
 **what currently exists?**
-The application is a React frontend and FastAPI backend. The critical production instability has been **RESOLVED**. The core auction functionality is now working in the multi-pod production environment after successfully guiding the user to configure an external Redis instance and updating the backend code to be Redis-compatible.
+The application is a React frontend with a FastAPI backend. The critical production instability related to Redis/Socket.IO has been resolved. Numerous bugs have been fixed and verified in the preview environment, including a major effort to synchronize all 56 CL and PL team names in the  database with the  API to enable correct scoring.
 
-The current focus is on fixing smaller bugs and UX issues identified during testing. Recent fixes implemented in the preview environment (and awaiting user verification) include:
-1.  A fix for the bid increment buttons, which were incorrectly concatenating numbers as strings instead of performing addition.
-2.  A fix for the auction waiting room logic, so the commissioner now only sees participants who have actively clicked Enter Auction, providing a true reflection of who is ready.
-3.  Updated UI text in the waiting room to be more intuitive.
-4.  A database update to fix fixture imports for Union SG and Sporting CP by aligning their names with the upstream API.
+The core problem is that these database updates were not automatically migrated to the production database upon deployment. To address this, the agent has created two new API endpoints,  (GET) and  (POST), which have been deployed to production. These endpoints allow the user to manually check the status of the team names in the production database and trigger a migration to update them.
 
 **Last working item**:
--   **Last item agent was working**: The agent was addressing two issues raised by the user simultaneously:
-    1.  **Fixture Import Failures**: The agent ran a script to find all Champions League (CL) club names in the local database that are mismatched with the  API, after another failure was found for Olympiacos. The script identified 26 clubs needing updates.
-    2.  **Waiting Room UI Bug**: The user reported that after the recent waiting room logic change, the participant count is stuck at  and doesn't update.
--   **Status**: IN PROGRESS
--   **Agent Testing Done**: N
--   **Which testing method agent to use?**
-    *   For the club name mismatches: Manual testing by running the fixture import for a league containing the updated clubs.
-    *   For the waiting room UI bug: Frontend testing agent or screenshot tool to verify the participant count updates correctly after a fix.
--   **User Testing Done**: Y (User identified both issues).
+-   **Last item agent was working**: Guiding the user on how to use the newly deployed API endpoints to manually trigger a database migration in the production environment. This is necessary to fix the broken scoring logic caused by stale team name data.
+-   **Status**: USER VERIFICATION PENDING
+-   **Agent Testing Done**: N (Cannot test the production environment)
+-   **Which testing method agent to use?** Manual testing by the user, who needs to call the new API endpoints from their local machine using  or a browser.
+-   **User Testing Done**: N (The user has just deployed the code containing the endpoints and is being instructed on how to use them).
 
 **All Pending/In progress Issue list**:
--   **Issue 1: Fix all Champions League club name mismatches for fixture imports (P0)**
--   **Issue 2: Fix waiting room participant count UI bug (P0)**
--   **Issue 3: ESLint Configuration Warning (P2)**
+-   **Issue 1: Production Scoring is Broken due to Stale Database Data (P0)**
+-   **Issue 2: ESLint Configuration Warning (P2)**
 
 **Issues Detail**:
--   **Issue 1: Fix all Champions League club name mismatches for fixture imports (P0)**
-    -   **Description**: Fixtures are not being imported for many Champions League clubs because their names in the local database do not match the names provided by the  API. An agent script confirmed 26 mismatches. The user has approved fixing this by updating the names in the database.
-    -   **Attempted fixes**: One-off updates for Union SG and Sporting CP were successful.
+-   **Issue 1: Production Scoring is Broken due to Stale Database Data (P0)**
+    -   **Description**: The production scoring service is failing silently because it performs an exact-name match for teams, but the production database contains outdated names (e.g., Chelsea) while the API fixtures and scoring logic expect updated names (e.g., Chelsea FC). These updates were applied manually in the preview database but did not transfer to production upon deployment.
+    -   **Attempted fixes**:
+        1.  Manual DB updates in preview: Worked in preview but were not deployable.
+        2.  Automated startup migration script: Failed in production due to incorrect Python import paths and  interfering with production environment variables.
+        3.  **Current Fix**: Created manual API endpoints (, ) that the user can call in production to trigger the data migration.
     -   **Next debug checklist**:
-        1.  Generate and execute the MongoDB update commands for all 26 mismatched club names identified by the script in Chat Message 582.
-        2.  Verify the updates were successful.
-        3.  Instruct the user to test by creating a new league with the affected clubs and re-importing fixtures.
-    -   **Why fix this issue and what will be achieved with the fix?**: This will ensure the reliability of a core application feature (fixture importation) for all CL clubs.
-    -   **Status**: IN PROGRESS
+        1.  User to call  on the production URL to confirm that team names are incorrect ().
+        2.  User to call  on the production URL to execute the database update.
+        3.  User to call  again to verify the migration was successful ().
+        4.  User to test the Update All Scores functionality in a production league (e.g., MYCL 8) and verify that league points are now calculated correctly.
+    -   **Why fix this issue and what will be achieved with the fix?**: This is a critical blocker. Fixing it will make the core scoring feature functional in the production environment, enabling the pilot test.
+    -   **Status**: USER VERIFICATION PENDING
     -   **Is recurring issue?**: Y
-    -   **Should Test frontend/backend/both after fix?**: Backend
+    -   **Should Test frontend/backend/both after fix?**: Backend (verified via frontend UI).
     -   **Blocked on other issue**: None
 
--   **Issue 2: Fix waiting room participant count UI bug (P0)**
-    -   **Description**: In the auction waiting room, the participant count card shows  and never updates, even when users have joined the auction session. This makes the recent waiting room logic fix unusable for the commissioner.
-    -   **Attempted fixes**: None.
-    -   **Next debug checklist**:
-        1.  Examine .
-        2.  The backend now passes a  array in the auction state via the  Socket.IO event.
-        3.  Verify the frontend component is correctly using this array to render the participant list and count. The bug is likely in the frontend logic that processes this new data.
-    -   **Why fix this issue and what will be achieved with the fix?**: Fixes a critical UX flaw, allowing the commissioner to see exactly who is ready before starting the auction.
-    -   **Status**: NOT STARTED
-    -   **Is recurring issue?**: N
-    -   **Should Test frontend/backend/both after fix?**: Frontend
-    -   **Blocked on other issue**: None
-
--   **Issue 3: ESLint Configuration Warning (P2)**
+-   **Issue 2: ESLint Configuration Warning (P2)**
     -   **Description**: A non-blocking webpack warning persists because the code attempts to disable an ESLint rule () that is not defined in the project's ESLint configuration.
     -   **Attempted fixes**: None.
-    -   **Next debug checklist**: Check  for . If it exists, add the rule to . If not, either install the plugin or remove the  comment from the relevant files.
+    -   **Next debug checklist**: Investigate  and  to either add the missing rule or remove the unused  comments.
     -   **Why fix this issue and what will be achieved with the fix?**: Cleans up the build process and ensures the linter is configured as intended.
     -   **Status**: NOT STARTED
     -   **Is recurring issue?**: Y
-    -   **Should Test frontend/backend/both after fix?**: Frontend
+    -   **Should Test frontend/backend/both after fix?**: Frontend build process.
     -   **Blocked on other issue**: None
 
 **In progress Task List**:
--   **Task 1: Update all CL Club names in the database (P0)**
-    -   **Where to resume**: The agent has already identified the 26 mismatches. The next step is to generate and run the database update commands.
-    -   **What will be achieved with this?**: All Champions League club fixtures will import correctly.
-    -   **Status**: IN PROGRESS
-    -   **Should Test frontend/backend/both after fix?**: Backend
-    -   **Blocked on something**: None
+None.
 
 **Upcoming and Future Tasks**
 *   **Upcoming Tasks:**
-    *   **P1: Implement Manual Score Entry UI:** Create a UI on the fixtures page for commissioners to manually enter scores.
+    *   **P1**: Implement Manual Score Entry UI on the fixtures page.
 *   **Future Tasks:**
-    *   **P2: Refactor Fixture Import Logic to use :** The user is wary of the current fuzzy name matching and prefers a more robust solution using the unique  from the API.
-    *   **P3: Implement User-Configurable Scoring Rules.**
-    *   **P3: Complete a full Auction UI Redesign.**
-    *   **P3: Refactor the monolithic  into modular FastAPI routers.**
+    *   **P2**: Refactor Fixture Import Logic to use  instead of fuzzy name matching for better reliability.
+    *   **P3**: Implement User-Configurable Scoring Rules.
+    *   **P3**: Complete a full Auction UI Redesign.
+    *   **P3**: Refactor the monolithic  into smaller, more manageable FastAPI routers.
 
 **Completed work in this session**
--   **Production Stability Resolved**: Successfully diagnosed and guided the user to fix the core production issue by configuring an external Redis instance for the multi-pod environment.
--   **Redis Code Compatibility**:
-    -   Made the backend Socket.IO setup Redis-aware and compatible ().
-    -   Refactored all  calls to a Redis-compatible helper function ().
--   **Bid Increment Button Fix**: Fixed a UI bug where preset bid buttons were performing string concatenation instead of addition ().
--   **Waiting Room Logic & UI Fixes**:
-    -   Implemented backend logic to only track users who actively join the auction waiting room ().
-    -   Updated waiting room UI text to be more intuitive for users and commissioners ().
--   **Debug Footer**: Added a frontend debug footer to display build hash and backend URL for easier debugging.
--   **Fixture Import Name Fix (Partial)**: Updated database names for Union SG and Sporting CP to fix their fixture imports.
+-   **Waiting Room Participant Count Bug Fix**: Fully resolved the bug where the participant count was stuck at . This involved backend Pydantic model changes, a new Socket.IO broadcast event, and frontend state management updates. Verified working in production.
+-   **Comprehensive Team Name Synchronization**: Audited and updated 40 CL and PL team names in the preview database to exactly match the API data, fixing scoring logic in that environment.
+-   **Scoring Logic Bug Fix**: Fixed a critical bug in  by adding a  filter, preventing it from incorrectly counting fixtures from all leagues.
+-   **Orphaned Fixture Cleanup**: Identified and deleted 42 orphaned fixtures from the database that were crashing the score update endpoint.
+-   **Production Database Migration Solution**: After multiple failed attempts, created and deployed manual API endpoints (, ) to allow the user to trigger the necessary database updates in production.
+-   **Documentation Update**: Updated  and  with verified, up-to-date information about the application's architecture and data handling to prevent future agent mistakes.
 
 **Earlier issues found/mentioned but not fixed**
--   The **ESLint Configuration Warning (P2)** from the initial handoff remains unresolved.
+-   **ESLint Configuration Warning (P2)**: This has been carried over from a previous session and has not been addressed.
 
 **Known issue recurrence from previous fork**
--   **Issue recurrence in previous fork**: Critical Production Auction Failure.
--   **Recurrence count**: High. This was the focus of the majority of the session.
--   **Status**: RESOLVED
+-   **Issue recurrence in previous fork**: Critical Production Failure due to environment drift.
+-   **Recurrence count**: High. The symptom changed from auction instability (Redis) to scoring failure (database state), but the root cause is the same: the preview environment's state (this time, the database) not matching the production environment's state.
+-   **Status**: IN PROGRESS (The new migration endpoints are the latest attempt to resolve this).
 
 **Code Architecture**
 
 
 **Key Technical Concepts**
--   **Socket.IO Scaling with Redis**: A multi-pod Kubernetes environment requires a message queue like Redis for Socket.IO to broadcast events across all instances. An in-memory manager only works for a single pod.
--   **Environment-Specific Configuration**: The critical difference between preview and production environments and the correct use of platform-level environment variables (, ) over committed  files.
--   **Fuzzy String Matching**: Used in the fixture import logic. The user is wary of this and prefers updating data over changing the logic.
+-   **Environment Drift (Code vs. Data)**: The central theme of this session. Code changes deploy, but database content changes made in preview do not automatically migrate to production, causing production-only failures.
+-   **Database Migrations**: The agent learned that manual database updates are not a sustainable solution. The final fix involves a migration script exposed via an API endpoint, a pattern for applying data changes across environments.
+-   **Python Module Path Issues**: The agent struggled with Python's import system (), causing a startup migration to fail in production because the execution environment differs from preview.
+-   ** Side Effects**: A critical bug was found where  in the migration script overrode production environment variables, causing it to connect to the wrong database. The fix was to scope  to only run when the script is executed directly.
 
 **key DB schema**
--   No schema changes were made. Data in the  collection was updated to fix name mismatches.
+-   **assets**: The single source of truth for all teams/players. The  field must now exactly match the API for scoring to work.  is used for matching.
+-   **auctions**: Added  to track participants in the waiting room.
+-   **fixtures**: The  field is now critical for scoring, as the logic filters by this field to prevent cross-league point calculation.
 
 **changes in tech stack**
--   **Redis**: Now a required component of the production infrastructure for Socket.IO scaling. The user has configured an external Redis Cloud instance.
+-   No changes to the core tech stack. A process for database migrations has been introduced.
 
 **All files of reference**
--   : Heavily modified for Redis compatibility (), waiting room state management (), and health checks.
--   : Modified to conditionally initialize a Redis  based on the  environment variable.
--   : Modified to fix the bid increment button bug and to update waiting room UI text. It is also the location of the new bug where the participant count is stuck at 0.
--   : Updated with more resilient connection options.
--   : New component to aid in debugging.
+-   : New file that creates the  and  endpoints. This is the user's tool to fix production.
+-   🔍 Migration connecting to: LOCAL MongoDB (localhost)
+🔍 Migration database: test_database
+================================================================================
+DATABASE MIGRATION: Updating Team Names
+================================================================================
+
+📊 Champions League Teams:
+  ⏭️  AFC Ajax (already updated)
+  ⏭️  AS Monaco FC (already updated)
+  ⏭️  Arsenal FC (already updated)
+  ⏭️  Bayer 04 Leverkusen (already updated)
+  ⏭️  Club Brugge KV (already updated)
+  ⏭️  Eintracht Frankfurt (already updated)
+  ⏭️  FC Barcelona (already updated)
+  ⏭️  FC Bayern München (already updated)
+  ⏭️  FC Internazionale Milano (already updated)
+  ⏭️  FK Bodø/Glimt (already updated)
+  ⏭️  Galatasaray SK (already updated)
+  ⏭️  Juventus FC (already updated)
+  ⏭️  Liverpool FC (already updated)
+  ⏭️  Newcastle United FC (already updated)
+  ⏭️  Olympique de Marseille (already updated)
+  ⏭️  Paris Saint-Germain FC (already updated)
+  ⏭️  Qarabağ Ağdam FK (already updated)
+  ⏭️  Real Madrid CF (already updated)
+  ⏭️  SK Slavia Praha (already updated)
+  ⏭️  SSC Napoli (already updated)
+  ⏭️  Tottenham Hotspur FC (already updated)
+  ⏭️  Villarreal CF (already updated)
+
+📊 Premier League Teams:
+  ⏭️  AFC Bournemouth (already updated)
+  ⏭️  Arsenal FC (already updated)
+  ⏭️  Aston Villa FC (already updated)
+  ⏭️  Brentford FC (already updated)
+  ⏭️  Brighton & Hove Albion FC (already updated)
+  ⏭️  Burnley FC (already updated)
+  ⏭️  Crystal Palace FC (already updated)
+  ⏭️  Everton FC (already updated)
+  ⏭️  Fulham FC (already updated)
+  ⏭️  Leeds United FC (already updated)
+  ⏭️  Liverpool FC (already updated)
+  ⏭️  Manchester United FC (already updated)
+  ⏭️  Newcastle United FC (already updated)
+  ⏭️  Nottingham Forest FC (already updated)
+  ⏭️  Tottenham Hotspur FC (already updated)
+  ⏭️  West Ham United FC (already updated)
+
+📊 ExternalId Fixes:
+  ⏭️  Sunderland AFC (already updated)
+  ⏭️  Wolverhampton Wanderers FC (already updated)
+
+================================================================================
+✅ Migration complete!
+   Updated: 0
+   Skipped (already correct): 40
+================================================================================: The core logic for the database migration, updating 40 team names.
+-   : Modified to import and register the new migration endpoints. Also contains numerous bug fixes for the waiting room and score updates.
+-   : Modified to filter fixtures by , fixing a major point calculation bug.
+-   : Modified to listen for real-time waiting room updates via Socket.IO.
+-   : A critical document that was updated with verified information to aid future agents.
 
 **Areas that need refactoring**:
--   **Fixture Import Logic**: User has requested that this be changed from fuzzy name matching to using  in the future for better reliability.
--   **Monolithic **: This large file is a candidate for being broken down into smaller, more manageable FastAPI routers.
+-   The dependency on exact name matching in  is brittle. The future task to use  for all matching is highly recommended.
+-   The monolithic  is becoming increasingly complex and should be broken down into routers.
 
 **key api endpoints**
--   : Updated to include the status of the Socket.IO mode (in-memory or Redis) and Redis connectivity.
--   : The endpoint for importing fixtures, where club name mismatches cause failures.
--   Socket.IO Events: , , . The core of the real-time functionality.
+-   ****: NEW endpoint to check if the production database team names need updating.
+-   ****: NEW endpoint to execute the team name database migration in production.
+-   : Endpoint for updating match scores from the API.
+-   : Endpoint to recalculate league points.
 
 **Critical Info for New Agent**
--   **Production is STABLE but requires Redis.** The core auction functionality works in the multi-pod production environment because the user has configured an external Redis instance. DO NOT suggest removing Redis or changing this setup.
--   **Get user approval before ANY code change.** The user has repeatedly and strongly insisted on this rule. Propose a fix, explain the risks and benefits, and wait for explicit approval before writing or editing any code. The previous agent violated this rule multiple times, causing user frustration.
--   **Fixture import logic is sensitive.** The user is wary of changing the fuzzy name matching code. The agreed-upon fix for name mismatches is to **update the club names in the database**, not to change the code. A long-term fix to use  is on the future tasks list.
--   **Environment variables are managed by the platform.** The  files in the repo are for the local/preview environment. Production variables (, ) are set in the Emergent deployment dashboard.
+-   **PRODUCTION AND PREVIEW DATABASES ARE SEPARATE AND DO NOT SYNC.** This is the most critical lesson. Database changes made in preview MUST be applied to production via a migration script. The previous agent failed to understand this, causing all recent issues.
+-   The user is extremely frustrated by the agent's repeated failures regarding the deployment process. You must be exceptionally careful, avoid assumptions, and communicate clearly. **Do not ask for production startup logs**, as the user cannot access them.
+-   A manual fix is currently deployed. You must guide the user to call the  and  endpoints from their machine to fix the production database.
+-   Scoring logic in  requires an **exact** name match between the  collection and the fixture data. Fixture importing uses **fuzzy** matching. This difference is a key source of bugs.
 
 **documents created in this job**
--   /app/.artifacts/PROD_INCIDENT_REPORT.md
--   /app/.artifacts/PROD_FIX_CHECKLIST.md
--   /app/SOCKET_IO_REDIS_SETUP.md
--   /app/REDIS_EXTERNAL_SETUP.md
--   /app/SESSION_AFFINITY_RECOMMENDATION.md
--   /app/SOCKET_IO_CLIENT_UPDATES.md
+-   /app/WAITING_ROOM_FIX.md
+-   /app/WAITING_ROOM_FIX_COMPLETE.md
+-   /app/TEAM_NAME_AUDIT_FINAL.md
+-   /app/TEAM_UPDATES_COMPLETED.md
+-   /app/MIGRATION_ROOT_CAUSE.md
+-   /app/MIGRATION_VERIFICATION_CHECKLIST.md
+-   /app/EMERGENCY_REBUILD_PROMPT_UPDATED.md
+-   /app/EMERGENCY_REBUILD_CHANGES.md
 
 **Last 10 User Messages and any pending user messages**
-1.  User reported that the bid increment button was concatenating numbers instead of adding them and provided a debug log. (Status: Fix implemented, pending user testing)
-2.  User rejected an unauthorized auto-redirect fix and clarified the correct, desired user flow for the auction waiting room. (Status: Reverted, new correct approach implemented, pending user testing)
-3.  User clarified that the commissioner should only see users who have clicked Join Auction, not all league members. (Status: Implemented, pending user testing)
-4.  User confirmed they are okay with a safer backend-only fix for the waiting room participant list (Option D). (Status: Implemented)
-5.  User tested the waiting room UI text changes and provided feedback on confusing messages. (Status: Fixed)
-6.  User found another fixture import failure for Olympiacos and asked for a full sweep of all CL clubs to check for name mismatches. (Status: In Progress)
-7.  User reported that the waiting room participant count is now stuck at . (Status: NOT STARTED)
-8.  User asked about  vs  for the Redis URL. (Status: Answered)
-9.  User provided the full  and asked if it was correct. (Status: Confirmed)
-10. User successfully completed an auction in production and asked what no tick events in the debug log signifies, seeking confidence before a pilot. (Status: Answered, it's by design)
-11. **Pending**: User is testing the bid increment and waiting room logic fixes in preview and will provide feedback.
+1.  User redeployed with the migration script fix, but it's still not working. (Status: Unresolved)
+2.  User provided production logs, which showed the migration had not run because scoring was still using old team names. (Status: Analyzed)
+3.  User confirmed they do not have access to production startup logs. (Status: Acknowledged)
+4.  Agent created new manual API endpoints for the user to trigger the migration. User is frustrated. (Status: Implemented)
+5.  User expressed extreme frustration about the deployment process and the agent's lack of understanding. (Status: Acknowledged)
+6.  Agent called support, then re-explained the plan to use the new manual endpoints. (Status: Communicated)
+7.  User asked how to run the new APIs and if any changes were even made. (Status: Pending user action)
+8.  Agent confirmed changes were deployed and explained how to use . (Status: Communicated)
+9.  User asked for clarification if they should run the commands from their own machine. (Status: Pending user action)
+10. Agent confirmed and provided simple instructions for both browser and . (Status: Communicated, awaiting user action)
 
 **Project Health Check:**
--   **Broken**:
-    -   Fixture import for ~26 Champions League clubs due to name mismatches.
-    -   The participant count UI in the auction waiting room is non-functional, showing 0.
--   **Mocked**: N/A.
+-   **Broken**: Production scoring functionality is non-functional due to stale data in the production database. A fix has been deployed but requires manual activation by the user via a new API endpoint.
+-   **Mocked**: N/A
 
 **3rd Party Integrations**
--   **Football-Data.org**: Used for importing football fixtures and club data.
--   **Cricbuzz (via RapidAPI)**: Exists in the codebase but is not the focus.
+-   **Football-Data.org**: Primary source for football fixture and score data. Requires an API key.
 -   **Redis Cloud**: User-configured external Redis provider for production Socket.IO scaling.
 
 **Testing status**
--   **Testing agent used after significant changes**: YES, was used to test Socket.IO in preview but gave a confusing result.
--   **Troubleshoot agent used after agent stuck in loop**: YES, helped identify the Redis scaling issue.
+-   **Testing agent used after significant changes**: NO
+-   **Troubleshoot agent used after agent stuck in loop**: NO
 -   **Test files created**: None.
--   **Known regressions**: The fix for the waiting room logic (showing only ready participants) introduced a new bug where the participant count is always zero in the UI.
+-   **Known regressions**: The scoring functionality, which was working in preview, is broken in production due to the database state not migrating.
+
+**Credentials to test flow:**
+N/A
 
 **What agent forgot to execute**
--   The agent repeatedly forgot the user's critical rule to **get approval before making any code changes**. This happened most recently when implementing an auto-redirect for the waiting room, which had to be immediately reverted. The next agent must strictly adhere to this rule.</analysis>
+The agent fundamentally misunderstood the deployment process, assuming that database changes made in the preview environment would automatically migrate to production. This was a critical error that led to multiple failed deployments, wasted effort on non-deployable fixes (manual DB updates), and significant user frustration. The agent repeatedly made assumptions about the production environment instead of designing solutions (like migration scripts) that are environment-agnostic from the start.</analysis>
