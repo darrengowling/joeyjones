@@ -5844,7 +5844,7 @@ app.add_middleware(
 )
 
 # Include routers
-app.include_router(api_router, prefix="/api")
+app.include_router(api_router)
 
 # Migration endpoint for manual verification/execution
 from migration_endpoint import migration_router
