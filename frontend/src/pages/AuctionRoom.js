@@ -985,35 +985,37 @@ function AuctionRoom() {
         <div className="max-w-6xl mx-auto">
           {/* Auction Header */}
           <div className="bg-white rounded-lg shadow-lg p-3 sm:p-4 mb-4">
-            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
-              <div className="min-w-0 flex-1">
-                <div className="flex flex-wrap items-center gap-2 max-w-full">
-                  <h1 className="text-lg sm:text-2xl font-bold text-gray-900 truncate min-w-0 flex-shrink">
-                    {league ? league.name : "Strategic Competition Arena"}
-                  </h1>
-                  {league?.sportKey && (
-                    <span className="px-2 py-0.5 bg-blue-100 text-blue-800 text-xs rounded whitespace-nowrap flex-shrink-0 capitalize">
-                      {league.sportKey}
-                    </span>
-                  )}
-                  {auction?.status === "paused" && (
-                    <span className="px-2 py-0.5 bg-yellow-100 text-yellow-800 text-xs rounded whitespace-nowrap flex-shrink-0">
-                      ⏸️ PAUSED
-                    </span>
-                  )}
+            <div className="flex flex-col gap-3">
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
+                <div className="min-w-0 flex-1">
+                  <div className="flex flex-wrap items-center gap-2 max-w-full">
+                    <h1 className="text-lg sm:text-2xl font-bold text-gray-900 truncate min-w-0 flex-shrink">
+                      {league ? league.name : "Strategic Competition Arena"}
+                    </h1>
+                    {league?.sportKey && (
+                      <span className="px-2 py-0.5 bg-blue-100 text-blue-800 text-xs rounded whitespace-nowrap flex-shrink-0 capitalize">
+                        {league.sportKey}
+                      </span>
+                    )}
+                    {auction?.status === "paused" && (
+                      <span className="px-2 py-0.5 bg-yellow-100 text-yellow-800 text-xs rounded whitespace-nowrap flex-shrink-0">
+                        ⏸️ PAUSED
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-xs sm:text-sm text-gray-600 mt-1">
+                    Lot #{auction?.currentLot || 0}
+                  </p>
                 </div>
-                <p className="text-xs sm:text-sm text-gray-600 mt-1">
-                  Lot #{auction?.currentLot || 0}
-                </p>
               </div>
               
               {/* Commissioner Controls */}
               {isCommissioner && (
-                <div className="row-gap-md flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-2">
                   {auction?.status === "active" && (
                     <button
                       onClick={pauseAuction}
-                      className="btn btn-secondary px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600"
+                      className="btn btn-secondary px-3 py-1.5 sm:px-4 sm:py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 text-sm"
                       title="Pause Auction"
                     >
                       ⏸️ Pause
@@ -1023,7 +1025,7 @@ function AuctionRoom() {
                   {auction?.status === "paused" && (
                     <button
                       onClick={resumeAuction}
-                      className="btn btn-secondary px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+                      className="btn btn-secondary px-3 py-1.5 sm:px-4 sm:py-2 bg-green-500 text-white rounded hover:bg-green-600 text-sm"
                       title="Resume Auction"
                     >
                       ▶️ Resume
@@ -1033,7 +1035,7 @@ function AuctionRoom() {
                   {(auction?.status === "paused" || auction?.status === "completed") && (
                     <button
                       onClick={resetAuction}
-                      className="btn btn-warning px-4 py-2 bg-orange-500 text-white rounded hover:bg-orange-600"
+                      className="btn btn-warning px-3 py-1.5 sm:px-4 sm:py-2 bg-orange-500 text-white rounded hover:bg-orange-600 text-sm"
                       title="Reset Auction"
                     >
                       🔄 Reset
@@ -1042,7 +1044,7 @@ function AuctionRoom() {
                   
                   <button
                     onClick={completeLot}
-                    className="btn btn-danger px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                    className="btn btn-danger px-3 py-1.5 sm:px-4 sm:py-2 bg-red-500 text-white rounded hover:bg-red-600 text-sm"
                     title="Complete Current Lot"
                   >
                     Complete Lot
@@ -1050,7 +1052,7 @@ function AuctionRoom() {
                   
                   <button
                     onClick={deleteAuction}
-                    className="btn btn-danger px-4 py-2 bg-red-700 text-white rounded hover:bg-red-800"
+                    className="btn btn-danger px-3 py-1.5 sm:px-4 sm:py-2 bg-red-700 text-white rounded hover:bg-red-800 text-sm"
                     title="Delete Entire Auction"
                   >
                     🗑️ Delete Auction
@@ -1060,7 +1062,7 @@ function AuctionRoom() {
               
               {/* Debug Tools - Available for all users */}
               {auction && (
-                <div className="mt-4">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-2">
                   <button
                     onClick={() => {
                       try {
@@ -1075,12 +1077,12 @@ function AuctionRoom() {
                         toast.error("Failed to download report");
                       }
                     }}
-                    className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm"
+                    className="px-3 py-1.5 sm:px-4 sm:py-2 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm"
                     title="Download debug report with all bid logs for troubleshooting"
                   >
                     📊 Download Debug Report
                   </button>
-                  <span className="ml-2 text-xs text-gray-600">
+                  <span className="text-xs text-gray-600">
                     Stats: {debugLogger.getStats().totalAttempts} attempts, {debugLogger.getStats().totalSuccesses} successes
                   </span>
                 </div>
