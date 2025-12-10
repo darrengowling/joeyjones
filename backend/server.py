@@ -183,6 +183,18 @@ async def startup_db_client():
     # Initialize services after database connection
     sport_service = SportService(db)
     asset_service = AssetService(db)
+    
+    # Run team name migration (idempotent - safe to run multiple times)
+    try:
+        from migrate_team_names import migrate_team_names
+        logger.info("🔄 Running team name migration...")
+        migration_success = await migrate_team_names()
+        if migration_success:
+            logger.info("✅ Team name migration completed")
+        else:
+            logger.warning("⚠️ Team name migration had issues (check logs)")
+    except Exception as e:
+        logger.error(f"❌ Team name migration failed: {e}")
 
 # Sports feature flags
 SPORTS_CRICKET_ENABLED = os.environ.get('SPORTS_CRICKET_ENABLED', 'false').lower() == 'true'
