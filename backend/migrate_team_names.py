@@ -183,5 +183,9 @@ async def migrate_team_names():
 
 
 if __name__ == "__main__":
+    # Only load .env when running as standalone script
+    from dotenv import load_dotenv
+    load_dotenv()
+    
     success = asyncio.run(migrate_team_names())
     exit(0 if success else 1)
