@@ -195,7 +195,7 @@ async def startup_db_client():
         
         from migrate_team_names import migrate_team_names
         logger.info("🔄 Running team name migration...")
-        migration_success = await migrate_team_names()
+        migration_success = await migrate_team_names(logger=logger)
         if migration_success:
             logger.info("✅ Team name migration completed")
         else:
