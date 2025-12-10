@@ -1,329 +1,407 @@
-# Emergency Project Rebuild Prompt
+# Emergency Project Rebuild Prompt - UPDATED December 2025
 
-Use this prompt to recreate the Fantasy Sports Auction Platform from scratch in a new environment (Emergent or other development platform).
+**⚠️ CRITICAL: Use this prompt to recreate the Fantasy Sports Auction Platform from scratch**
+
+Last Updated: December 9, 2025  
+Current Production Version: Fully functional multi-sport auction platform
 
 ---
 
 ## 🎯 Project Overview
 
-Build a **multi-sport fantasy auction platform** that enables users to create private competitions, conduct live player auctions, and manage ongoing tournaments with automated scoring for both **Football (Soccer)** and **Cricket**.
+Build a **multi-sport fantasy auction platform** enabling users to create private leagues, conduct live player auctions via Socket.IO, and manage tournaments with automated scoring for **Football (Soccer)** and **Cricket**.
 
 ---
 
 ## 🏗️ Core Architecture
 
-### Tech Stack Requirements
-- **Frontend**: React 18 + Tailwind CSS + shadcn/ui components + Socket.IO Client + React Router v6
-- **Backend**: FastAPI (Python 3.10+) + python-socketio + JWT authentication + Motor (async MongoDB driver)
-- **Database**: MongoDB with collections: users, leagues, auctions, fixtures, assets, sports, participants
-- **Real-time**: Socket.IO for bidirectional WebSocket communication
+### Tech Stack (VERIFIED CURRENT)
+- **Frontend**: React 18 + Tailwind CSS + shadcn/ui + Socket.IO Client + React Router v6 + axios + react-hot-toast
+- **Backend**: FastAPI (Python 3.10+) + python-socketio + Motor (async MongoDB) + PyJWT
+- **Database**: MongoDB (single database: `test_database`)
+- **Real-time**: Socket.IO with Redis adapter for multi-pod production (optional for single-pod)
+- **Authentication**: Magic Link (email-based, no passwords)
 
-### Project Structure
+### Project Structure (VERIFIED)
 ```
 /app/
 ├── backend/
-│   ├── server.py                    # Monolithic FastAPI app (all routes in one file)
-│   ├── auth.py                      # JWT token generation/validation
-│   ├── socketio_init.py             # Socket.IO server configuration
-│   ├── scoring_service.py           # Point calculation logic
+│   ├── server.py                    # Monolithic FastAPI (ALL routes in one file)
+│   ├── auth.py                      # JWT + Magic Link generation
+│   ├── socketio_init.py             # Socket.IO server with conditional Redis
+│   ├── scoring_service.py           # Point calculation (CRITICAL: uses exact name matching)
 │   ├── football_data_client.py      # Football-Data.org API wrapper
-│   ├── rapidapi_client.py           # Cricbuzz API wrapper (via RapidAPI)
-│   ├── seed_openfootball_clubs.py   # Seed football players
+│   ├── rapidapi_client.py           # Cricbuzz API wrapper
+│   ├── models.py                    # Pydantic models (MUST include usersInWaitingRoom)
+│   ├── seed_openfootball_clubs.py   # Seed football clubs
 │   ├── seed_ashes_players.py        # Seed cricket players
-│   └── .env                         # Backend environment variables
+│   └── .env                         # Backend env vars
 ├── frontend/
 │   └── src/
 │       ├── pages/
-│       │   ├── Login.js
-│       │   ├── Register.js
-│       │   ├── MyCompetitions.js    # List user's competitions
-│       │   ├── CreateLeague.js      # Competition creation + player selection
-│       │   ├── LeagueDetail.js      # Pre-auction team management
-│       │   ├── CompetitionDashboard.js  # Post-auction: standings, fixtures, scores
-│       │   └── AuctionRoom.js       # Live bidding interface
-│       └── components/ui/           # shadcn/ui components (button, card, dialog, etc.)
+│       │   ├── MyCompetitions.js    # Home page + auth (NO separate Login.js)
+│       │   ├── CreateLeague.js      # League creation + club selection
+│       │   ├── LeagueDetail.js      # Pre-auction: waiting room, participants
+│       │   ├── AuctionRoom.js       # Live bidding (Socket.IO)
+│       │   ├── CompetitionDashboard.js  # Post-auction: standings, fixtures
+│       │   ├── ClubsList.js         # Browse all clubs
+│       │   └── Help.js              # User guide
+│       ├── components/
+│       │   ├── ui/                  # shadcn/ui components
+│       │   └── DebugFooter.js       # Shows build hash + backend URL
+│       └── utils/
+│           ├── socket.js            # Socket.IO client setup
+│           └── sentry.js            # Error tracking (optional)
 ```
 
 ---
 
-## 📊 Database Schema (MongoDB)
+## 📊 Database Schema (MongoDB) - VERIFIED CURRENT STATE
+
+### Database Name
+- **ONLY ONE DATABASE**: `test_database`
+- Collections: `users`, `leagues`, `league_participants`, `auctions`, `bids`, `assets`, `fixtures`, `league_points`, `standings`, `sports`, `cricket_leaderboard`, `league_stats`, `magic_links`
 
 ### Collection: `users`
 ```javascript
 {
   "id": "uuid-string",
   "email": "user@example.com",
-  "password": "bcrypt-hashed-password",
   "name": "User Name",
-  "createdAt": "2024-01-01T00:00:00Z"  // ISO string
+  "createdAt": "2025-01-01T00:00:00+00:00"  // ISO string with timezone
 }
 ```
+⚠️ **NO PASSWORD FIELD** - uses magic link authentication
 
-### Collection: `leagues` (Competitions)
+### Collection: `leagues`
 ```javascript
 {
   "id": "uuid-string",
-  "name": "Competition Name",
-  "sport": "Football" | "Cricket",
+  "name": "My League",
   "commissionerId": "user-id",
-  "participants": [
-    {
-      "userId": "user-id",
-      "userName": "Display Name",
-      "budget": 100.0,
-      "squad": ["asset-id-1", "asset-id-2"],
-      "totalSpent": 50.0
-    }
-  ],
-  "settings": {
-    "initialBudget": 100.0,
-    "maxSquadSize": 11,
-    "minBid": 1.0,
-    "bidIncrement": 0.5,
-    "timerDuration": 30
-  },
-  "inviteToken": "random-6-char-string",
-  "selectedAssets": ["asset-id-1", "asset-id-2"],  // Player pool
-  "createdAt": "2024-01-01T00:00:00Z",  // ISO string
-  "status": "draft" | "auction_pending" | "active"
+  "sportKey": "football" | "cricket",
+  "competitionCode": "CL" | "PL" | "AFCON",
+  "status": "draft" | "auction_pending" | "auction_live" | "active" | "completed",
+  "budget": 500000000,  // Budget in smallest unit (pence for £)
+  "minManagers": 2,
+  "maxManagers": 8,
+  "clubSlots": 3,
+  "timerSeconds": 30,
+  "antiSnipeSeconds": 10,
+  "inviteToken": "6-char-string",
+  "assetsSelected": ["asset-id-1", "asset-id-2"],  // Selected clubs/players
+  "createdAt": "2025-01-01T00:00:00+00:00",
+  "scoringOverrides": {}  // Optional custom scoring rules
 }
 ```
+
+### Collection: `league_participants` (CRITICAL)
+```javascript
+{
+  "id": "uuid-string",
+  "leagueId": "league-id",
+  "userId": "user-id",
+  "userName": "Display Name",
+  "userEmail": "user@example.com",
+  "budgetRemaining": 500000000,
+  "clubsWon": ["asset-id-1", "asset-id-2"],  // Clubs won in auction
+  "totalSpent": 150000000,
+  "joinedAt": "2025-01-01T00:00:00+00:00"
+}
+```
+⚠️ **CRITICAL**: Points are NOT in this collection
 
 ### Collection: `auctions`
 ```javascript
 {
   "id": "uuid-string",
   "leagueId": "league-id",
-  "status": "waiting" | "active" | "completed",
-  "currentLot": {
-    "assetId": "asset-id",
-    "currentBid": 5.0,
-    "currentBidder": "user-id",
-    "timerEnd": "2024-01-01T00:00:30Z"  // ISO string
-  },
-  "lots": [
-    {
-      "assetId": "asset-id",
-      "winnerId": "user-id" | null,
-      "finalPrice": 10.0,
-      "allBids": [
-        {"userId": "user-id", "amount": 5.0, "timestamp": "ISO-string"}
-      ]
-    }
-  ],
-  "lotIndex": 0,
-  "createdAt": "2024-01-01T00:00:00Z"  // ISO string
+  "status": "waiting" | "active" | "paused" | "completed",
+  "currentClubId": "asset-id",  // Current lot
+  "currentLotId": "lot-id",
+  "bidTimer": 30,
+  "antiSnipeSeconds": 10,
+  "timerEndsAt": "2025-01-01T00:00:30+00:00",
+  "clubQueue": ["asset-id-1", "asset-id-2"],  // Upcoming lots
+  "unsoldClubs": ["asset-id-3"],  // Clubs with no bids
+  "minimumBudget": 1000000,
+  "currentBid": 5000000,
+  "currentBidder": {"userId": "user-id", "displayName": "Name"},
+  "bidSequence": 42,  // Monotonic counter for bid updates
+  "usersInWaitingRoom": ["user-id-1", "user-id-2"],  // CRITICAL: Track who entered
+  "pausedAt": "2025-01-01T00:00:00+00:00",  // If paused
+  "pausedRemainingTime": 15,  // Seconds remaining when paused
+  "createdAt": "2025-01-01T00:00:00+00:00",
+  "completedAt": "2025-01-01T00:00:00+00:00"
 }
 ```
 
-### Collection: `assets` (Players)
+### Collection: `assets` (CRITICAL - ALL clubs AND players)
 ```javascript
+// Football club
 {
   "id": "uuid-string",
+  "sportKey": "football",
+  "name": "Chelsea FC",  // ⚠️ MUST match API exactly for scoring
+  "externalId": "61",  // Football-Data.org team ID
+  "competitions": ["UEFA Champions League", "English Premier League"],  // Array of strings
+  "competitionShort": "PL",
+  "city": "London",
+  "country": "England",
+  "logo": "https://...",
+  "createdAt": "2025-01-01T00:00:00+00:00",
+  "updatedAt": "2025-01-01T00:00:00+00:00"
+}
+
+// Cricket player
+{
+  "id": "uuid-string",
+  "sportKey": "cricket",
   "name": "Player Name",
-  "sport": "Football" | "Cricket",
-  "competition": "Premier League" | "Ashes" | "La Liga",
-  "position": "Forward" | "Midfielder" | "Defender" | "Goalkeeper",  // Football
-  "role": "Batsman" | "Bowler" | "All-rounder" | "Wicket-keeper",   // Cricket
+  "externalId": "cricapi-player-id",
   "meta": {
-    "teamName": "Club/Country Name",
-    "nationality": "Country Code",
-    "externalId": "api-provider-player-id"
+    "role": "Batsman" | "Bowler" | "All-rounder" | "Wicket-keeper",
+    "team": "Country Name"
   },
-  "createdAt": "2024-01-01T00:00:00Z",  // ⚠️ MUST BE ISO STRING, NOT datetime object
-  "updatedAt": "2024-01-01T00:00:00Z"   // ⚠️ MUST BE ISO STRING, NOT datetime object
+  "createdAt": "2025-01-01T00:00:00+00:00",
+  "updatedAt": "2025-01-01T00:00:00+00:00"
 }
 ```
+⚠️ **CRITICAL**: 
+- NO separate `clubs` or `teams` collection
+- Filter by `sportKey: "football"` for clubs
+- Filter by `sportKey: "cricket"` for players
+- Competition names MUST be exact: "UEFA Champions League", "English Premier League", "Africa Cup of Nations"
 
 ### Collection: `fixtures`
 ```javascript
 {
   "id": "uuid-string",
+  "leagueId": "league-id",  // ⚠️ CRITICAL: MUST have leagueId for scoring
+  "sportKey": "football" | "cricket",
+  "homeTeam": "Chelsea FC",  // Exact team name from API
+  "awayTeam": "Arsenal FC",
+  "homeTeamId": "asset-id",  // Link to assets collection
+  "awayTeamId": "asset-id",
+  "homeAssetId": "asset-id",  // Duplicate field (legacy)
+  "awayAssetId": "asset-id",
+  "startsAt": "2025-01-15T15:00:00+00:00",
+  "status": "ns" | "live" | "ft" | "scheduled" | "completed",  // ⚠️ "ft" for finished
+  "goalsHome": 2,
+  "goalsAway": 1,
+  "winner": "home" | "away" | "draw",
+  "externalMatchId": "football-data-fixture-id",
+  "footballDataId": 551918,  // Football-Data.org ID
+  "source": "api" | "csv",
+  "round": "Matchday 1",
+  "venue": "Stadium Name",
+  "autoScoringEnabled": true,
+  "createdAt": "2025-01-01T00:00:00+00:00",
+  "updatedAt": "2025-01-01T00:00:00+00:00"
+}
+```
+
+### Collection: `league_points` (⭐ SOURCE OF TRUTH FOR SCORING)
+```javascript
+{
+  "id": "uuid-string",
   "leagueId": "league-id",
-  "sport": "Football" | "Cricket",
-  "homeTeam": "Team Name",
-  "awayTeam": "Team Name",
-  "date": "2024-01-15T15:00:00Z",  // ISO string
-  "status": "scheduled" | "in_progress" | "completed",
-  "externalId": "api-provider-fixture-id",
-  "scores": {
-    "home": 2,
-    "away": 1
-  },
-  "playerScores": [
-    {"assetId": "player-id", "points": 10}
+  "clubId": "asset-id",
+  "clubName": "Chelsea FC",
+  "wins": 5,
+  "draws": 2,
+  "losses": 3,
+  "goalsScored": 15,
+  "goalsConceded": 10,
+  "totalPoints": 32,  // (wins * 3) + (draws * 1) + goalsScored
+  "lastUpdated": "2025-01-01T00:00:00+00:00"
+}
+```
+⚠️ **CRITICAL**: This is WHERE points are calculated and stored
+
+### Collection: `standings` (Aggregated view)
+```javascript
+{
+  "id": "uuid-string",
+  "leagueId": "league-id",
+  "userId": "user-id",
+  "userName": "Display Name",
+  "totalPoints": 95,
+  "clubs": [
+    {
+      "clubId": "asset-id",
+      "clubName": "Chelsea FC",
+      "points": 32
+    }
   ],
-  "createdAt": "2024-01-01T00:00:00Z"  // ISO string
+  "lastUpdated": "2025-01-01T00:00:00+00:00"
 }
 ```
 
 ### Collection: `sports`
 ```javascript
 {
-  "name": "Cricket" | "Football",
-  "rules": {
-    "run": 1,
-    "four": 5,
-    "six": 10,
-    "wicket": 25,
-    // ... full scoring rules
+  "key": "football" | "cricket",
+  "name": "Football" | "Cricket",
+  "enabled": true,
+  "scoringRules": {
+    "win": 3,
+    "draw": 1,
+    "goalScored": 1,
+    "goalConceded": 0
+    // ... more rules
   }
 }
 ```
 
 ---
 
-## 🔐 Authentication & Authorization
+## 🔐 Authentication - Magic Link (NO PASSWORDS)
 
-### JWT Implementation
-- Use PyJWT library
-- Token contains: `{"user_id": "uuid", "email": "user@example.com", "exp": timestamp}`
-- Secret key stored in `JWT_SECRET` environment variable
-- Token passed in `Authorization: Bearer <token>` header
+### Implementation
+1. User enters email
+2. Backend generates 6-digit code, stores in `magic_links` collection
+3. Backend sends email (or shows code in dev mode)
+4. User enters code
+5. Backend validates, returns JWT tokens (access + refresh)
+
+### JWT Tokens
+```python
+# Access token (short-lived)
+{
+  "user_id": "uuid",
+  "email": "user@example.com",
+  "exp": timestamp  # 15 minutes
+}
+
+# Refresh token (long-lived)
+{
+  "user_id": "uuid",
+  "type": "refresh",
+  "exp": timestamp  # 7 days
+}
+```
 
 ### Protected Routes
-- All `/api/leagues/*` endpoints require valid JWT (except GET list)
-- Commissioner-only actions: start auction, delete league, import fixtures
-- Verify `commissionerId` matches `user_id` from JWT token
+- All `/api/leagues/*` require valid JWT
+- Commissioner-only: start auction, delete league, import fixtures
+- Verify `commissionerId` matches `user_id` from token
 
 ---
 
-## 🎮 Critical Features & Workflows
+## 🎮 Critical Features & Implementation
 
-### 1. Competition Creation (Commissioner Flow)
+### 1. Auction System (Socket.IO Real-time)
 
-**Endpoint**: `POST /api/leagues`
-
-```python
-# Request body
-{
-  "name": "My Competition",
-  "sport": "Football",
-  "settings": {
-    "initialBudget": 100.0,
-    "maxSquadSize": 11,
-    "minBid": 1.0,
-    "bidIncrement": 0.5,
-    "timerDuration": 30
-  },
-  "selectedAssets": ["asset-id-1", "asset-id-2", ...]  # Player pool
-}
-
-# Response
-{
-  "id": "league-id",
-  "inviteToken": "ABC123"
-}
-```
-
-**Important**: 
-- Generate 6-character `inviteToken` for participants to join
-- Initialize commissioner as first participant with full budget
-- Set `status: "draft"`
-
-### 2. Participant Join
-
-**Endpoint**: `POST /api/leagues/{league_id}/join`
-
-```python
-# Request body
-{
-  "inviteToken": "ABC123"
-}
-
-# Action
-- Verify token matches league.inviteToken
-- Add user to league.participants array
-- Initialize with full budget and empty squad
-```
-
-### 3. Auction System (Real-time Socket.IO)
-
-**Socket Events to Implement**:
-
-**Client → Server**:
-- `join_auction`: User joins auction room
-  - Add to Socket.IO room: `auction_{auction_id}`
-  - Emit current auction state to user
+**Socket Events (Client → Server)**:
+- `join_auction`: User enters auction room
+  ```javascript
+  { auctionId: "id", userId: "user-id" }
+  ```
+  - Add to room: `auction:{auction_id}`
+  - Add to `usersInWaitingRoom` array in auctions collection
+  - Broadcast `waiting_room_updated` to all in room
+  - Send `auction_snapshot` to joining user
 
 - `place_bid`: User places bid
   ```javascript
-  {
-    "auctionId": "auction-id",
-    "amount": 10.0
-  }
+  { auctionId: "id", amount: 10000000, userId: "user-id" }
   ```
-  - Validate: amount > currentBid, user has budget, user hasn't won this lot
-  - Update `currentLot.currentBid` and `currentBidder`
-  - Reset timer to full duration (anti-snipe)
-  - Broadcast `bid_placed` to all clients in room
+  - Validate: amount > currentBid, user has budget
+  - Update auction document
+  - Increment `bidSequence` (monotonic counter)
+  - Broadcast `bid_update` to all in room
+  - Reset timer (anti-snipe)
 
-- `leave_auction`: User disconnects
-
-**Server → Client**:
-- `auction_state`: Full auction state (sent on join or state change)
-- `bid_placed`: New bid notification
+**Socket Events (Server → Client)**:
+- `waiting_room_updated`: Participant list changed
   ```javascript
-  {
-    "assetId": "player-id",
-    "amount": 10.0,
-    "bidderName": "User Name",
-    "timeRemaining": 30
-  }
+  { usersInWaitingRoom: ["user-id-1", "user-id-2"] }
   ```
-- `lot_won`: Current lot completed
-- `new_lot`: Next player up for auction
+- `auction_snapshot`: Full state (on join)
+- `bid_update`: New bid placed
+- `tick`: Timer countdown
+- `auction_lot_won`: Lot completed
 - `auction_complete`: All lots finished
 
-**Timer Logic**:
-- Use Python `asyncio.create_task()` for countdown
-- Store timer task in memory, cancel on new bid
+**Timer Logic (CRITICAL)**:
+- Use `asyncio.create_task()` for countdown
+- Store task reference, cancel on new bid
 - On timer expiry:
-  - Award player to `currentBidder`
-  - Deduct `currentBid` from winner's budget
-  - Add asset to winner's squad
-  - Emit `lot_won`
-  - Move to next lot or complete auction
+  - Award club to currentBidder
+  - Deduct amount from winner's budget
+  - Add to clubsWon array
+  - Move to next lot or complete
 
-### 4. Fixture Import
-
-**Football**: `POST /api/leagues/{league_id}/fixtures/import-football`
-- Use Football-Data.org API
-- Filter fixtures by competition (e.g., Premier League)
-- Create fixture documents linked to league
-- Map team names to match format
-
-**Cricket**: `POST /api/leagues/{league_id}/fixtures/import-next-cricket`
-- Use Cricbuzz API via RapidAPI: `/series/v1/9107` (Ashes series ID)
-- Filter for fixtures AFTER league creation date
-- Import only the NEXT upcoming match
-- **Critical**: Cricbuzz `/matches/v1/upcoming` is unreliable for future dates
-
-### 5. Scoring System
-
-**Endpoint**: `POST /api/leagues/{league_id}/fixtures/{fixture_id}/scores/upload`
-
+**Redis for Production (Multi-pod)**:
 ```python
-# CSV Upload format
-player_name,player_id,stat_type,value
-"Player Name","asset-id","runs",50
-"Player Name","asset-id","wickets",2
+# socketio_init.py
+if os.getenv('REDIS_URL'):
+    mgr = socketio.AsyncRedisManager(os.getenv('REDIS_URL'))
+    sio = socketio.AsyncServer(async_mode='asgi', client_manager=mgr)
+else:
+    sio = socketio.AsyncServer(async_mode='asgi')
 ```
 
-**Processing**:
-1. Parse CSV
-2. Lookup scoring rules from `sports` collection
-3. Calculate points: `points = sum(rule[stat_type] * value for each stat)`
-4. Update fixture.playerScores
-5. Recalculate league standings:
-   ```python
-   for participant in league.participants:
-       total_points = sum(
-           fixture.playerScores[asset_id].points 
-           for asset_id in participant.squad
-       )
-   ```
-6. Sort participants by total_points descending
+### 2. Fixture Import
+
+**Football (API)**: `POST /api/leagues/{league_id}/fixtures/import-from-api`
+```python
+# Use Football-Data.org API
+GET https://api.football-data.org/v4/competitions/{code}/matches
+# code: "CL" or "PL"
+
+# For each match:
+# 1. Match team names using FUZZY logic (substring matching)
+# 2. Create fixture with homeTeamId, awayTeamId
+# 3. Store footballDataId for score updates
+# 4. MUST include leagueId field
+```
+
+**Cricket (Manual CSV)**: `POST /api/leagues/{league_id}/fixtures/import-csv`
+
+### 3. Score Updates
+
+**Endpoint**: `GET /api/leagues/{league_id}/fixtures/update-scores`
+
+**Process**:
+1. Fetch latest scores from Football-Data.org API
+2. Find fixtures by `footballDataId`
+3. Update `goalsHome`, `goalsAway`, `status: "ft"`, `winner`
+4. ⚠️ ONLY updates fixtures, does NOT calculate points
+
+### 4. Score Calculation (CRITICAL)
+
+**Endpoint**: `POST /api/leagues/{league_id}/score/recompute`
+
+**Process (`scoring_service.py`)**:
+```python
+# 1. Get league's selected assets
+assets = await db.assets.find({"id": {"$in": league.assetsSelected}})
+team_names = [asset["name"] for asset in assets]
+
+# 2. Find completed fixtures FOR THIS LEAGUE
+fixtures = await db.fixtures.find({
+    "leagueId": league_id,  # ⚠️ CRITICAL: Filter by leagueId
+    "status": "ft",
+    "sportKey": "football",
+    "$or": [
+        {"homeTeam": {"$in": team_names}},  # ⚠️ EXACT match required
+        {"awayTeam": {"$in": team_names}}
+    ]
+})
+
+# 3. Calculate points for each team
+# Win: 3 pts, Draw: 1 pt, Goal: 1 pt
+
+# 4. Store in league_points collection
+```
+
+⚠️ **CRITICAL REQUIREMENTS**:
+- Fixture `status` MUST be "ft" (not "completed")
+- Team names in `assets` MUST match `fixtures` exactly
+- MUST filter by `leagueId` to avoid counting duplicates
+- Scoring uses EXACT name matching, fixture import uses FUZZY
 
 ---
 
@@ -331,59 +409,69 @@ player_name,player_id,stat_type,value
 
 ### Football-Data.org API
 ```python
-# Required header
 headers = {"X-Auth-Token": os.getenv("FOOTBALL_DATA_TOKEN")}
-
-# Endpoints
+GET https://api.football-data.org/v4/competitions/CL/matches
 GET https://api.football-data.org/v4/competitions/PL/matches
-GET https://api.football-data.org/v4/matches/{match_id}
 ```
+
+**Team Names MUST Match Exactly**:
+- Store in database: "Chelsea FC" (not "Chelsea")
+- Store in database: "Atalanta BC" (not "Atalanta")
+- See `/app/TEAM_UPDATES_COMPLETED.md` for full list
 
 ### Cricbuzz API (via RapidAPI)
 ```python
-# Required headers
 headers = {
     "X-RapidAPI-Key": os.getenv("RAPIDAPI_KEY"),
     "X-RapidAPI-Host": "cricbuzz-cricket.p.rapidapi.com"
 }
-
-# Endpoints
-GET https://cricbuzz-cricket.p.rapidapi.com/series/v1/9107  # Ashes series
+GET https://cricbuzz-cricket.p.rapidapi.com/series/v1/{seriesId}
 ```
-
-**Ashes Series ID**: 9107
 
 ---
 
-## ⚠️ Critical Gotchas & Lessons Learned
+## ⚠️ CRITICAL Gotchas (MUST READ)
 
-### 1. MongoDB DateTime Serialization
-**Problem**: Python `datetime` objects cause `TypeError: Object of type datetime is not JSON serializable` during auctions.
+### 1. Team Names MUST Match API Exactly
+**Problem**: Scoring uses exact MongoDB `$in` matching. If DB has "Chelsea" but fixtures have "Chelsea FC", scoring fails.
 
-**Solution**: 
-- Always store dates as ISO-formatted strings: `datetime.now(timezone.utc).isoformat()`
-- Never insert Python `datetime` objects directly into MongoDB
-- When seeding players, use:
-  ```python
-  "createdAt": datetime.now(timezone.utc).isoformat(),
-  "updatedAt": datetime.now(timezone.utc).isoformat()
-  ```
+**Solution**: All team names in `assets` collection MUST match Football-Data.org API exactly:
+- "Chelsea FC" (not "Chelsea")
+- "Arsenal FC" (not "Arsenal")
+- "Club Atlético de Madrid" (not "Atlético de Madrid")
 
-### 2. MongoDB `_id` Field
-**Problem**: MongoDB auto-generates ObjectId `_id` field, which can't be JSON serialized.
+See `/app/TEAM_UPDATES_COMPLETED.md` for complete list of 56 verified teams.
 
-**Solution**: 
-- Always exclude `_id` in queries: `db.collection.find({}, {"_id": 0})`
-- Use custom `id` field (UUID string) as primary key
+### 2. Fixture Import vs Scoring - Different Matching
+- **Fixture Import**: Uses FUZZY substring matching (forgiving)
+- **Scoring**: Uses EXACT matching (strict)
 
-### 3. CORS Configuration
-**Problem**: Frontend can't connect to backend due to CORS errors.
+This is why fixtures import successfully but scoring fails if names don't match exactly.
 
-**Solution**:
+### 3. leagueId MUST Be in Fixtures
+**Problem**: Without `leagueId` filter in scoring query, same fixture counted multiple times if multiple leagues imported it.
+
+**Solution**: ALWAYS include `leagueId: league_id` in fixture find query.
+
+### 4. MongoDB DateTime Serialization
+**Problem**: Python `datetime` objects cause JSON serialization errors.
+
+**Solution**: ALWAYS use `.isoformat()`:
 ```python
-# In FastAPI
-from fastapi.middleware.cors import CORSMiddleware
+"createdAt": datetime.now(timezone.utc).isoformat()
+```
 
+### 5. MongoDB _id Field
+**Problem**: Auto-generated ObjectId can't be JSON serialized.
+
+**Solution**: ALWAYS exclude `_id`:
+```python
+db.collection.find({}, {"_id": 0})
+```
+
+### 6. CORS Configuration
+```python
+# FastAPI
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[os.getenv("CORS_ORIGINS")],
@@ -391,153 +479,81 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"]
 )
-```
 
-### 4. Socket.IO CORS
-**Problem**: Socket.IO connections fail even with FastAPI CORS configured.
-
-**Solution**:
-```python
+# Socket.IO
 sio = socketio.AsyncServer(
-    async_mode='asgi',
     cors_allowed_origins=os.getenv("CORS_ORIGINS").split(",")
 )
 ```
 
-### 5. Frontend API Base URL
-**Problem**: Hardcoded URLs break across environments.
+### 7. Frontend Environment Variables
+- NEVER hardcode URLs
+- ALWAYS use `process.env.REACT_APP_BACKEND_URL`
 
-**Solution**:
-- Always use `process.env.REACT_APP_BACKEND_URL` in frontend
-- Never hardcode `http://localhost:8001` or production URLs
-
-### 6. Cricket API Endpoint Selection
-**Problem**: Cricbuzz `/matches/v1/upcoming` doesn't return future Test matches.
-
-**Solution**: 
-- Use series endpoint: `/series/v1/{seriesId}` 
-- Parse full series schedule
-- Filter for upcoming matches after league creation date
-
----
-
-## 🎨 Frontend Key Components
-
-### Player Card Component Pattern
-```javascript
-// Reusable card for displaying players
-<div className="border rounded-lg p-4">
-  <h3 className="font-bold">{player.name}</h3>
-  <p className="text-sm text-gray-600">{player.meta.teamName}</p>
-  <p className="text-sm">{player.position || player.role}</p>
-  {player.meta.nationality && (
-    <p className="text-xs text-gray-500">
-      Nationality: {player.meta.nationality}
-    </p>
-  )}
-</div>
+### 8. Pydantic Models MUST Include usersInWaitingRoom
+```python
+# models.py - Auction model
+class Auction(BaseModel):
+    # ... other fields
+    usersInWaitingRoom: Optional[List[str]] = []  # CRITICAL for waiting room
 ```
 
-### Socket.IO Integration Pattern
-```javascript
-import io from 'socket.io-client';
-
-const socket = io(process.env.REACT_APP_BACKEND_URL);
-
-// Join auction
-socket.emit('join_auction', { auctionId });
-
-// Listen for updates
-socket.on('auction_state', (data) => {
-  // Update UI with full auction state
-});
-
-socket.on('bid_placed', (data) => {
-  // Show toast notification
-});
-
-// Place bid
-const placeBid = (amount) => {
-  socket.emit('place_bid', { auctionId, amount });
-};
-```
-
-### Protected Route Pattern
-```javascript
-import { Navigate } from 'react-router-dom';
-
-const ProtectedRoute = ({ children }) => {
-  const token = localStorage.getItem('token');
-  return token ? children : <Navigate to="/login" />;
-};
+### 9. Socket.IO userId from Event Data
+```python
+# Backend receives userId in event data, NOT from session
+@sio.on('join_auction')
+async def join_auction(sid, data):
+    user_id = data.get('userId')  # From client
 ```
 
 ---
 
 ## 🚀 Environment Variables
 
-### Backend `.env`
+### Backend `.env` (VERIFIED)
 ```bash
 MONGO_URL="mongodb://localhost:27017"
-DB_NAME="fantasy_sports_db"
+DB_NAME="test_database"
 CORS_ORIGINS="http://localhost:3000"
-FRONTEND_ORIGIN="http://localhost:3000"
-JWT_SECRET="change-in-production"
-JWT_SECRET_KEY="change-in-production"
-SPORTS_CRICKET_ENABLED=true
-FEATURE_MY_COMPETITIONS=true
-FEATURE_ASSET_SELECTION=true
-FEATURE_WAITING_ROOM=true
-API_FOOTBALL_KEY="your-key-here"
-FOOTBALL_DATA_TOKEN="your-key-here"
+JWT_SECRET="your-secret-key-here"
+FOOTBALL_DATA_TOKEN="your-token-here"
 RAPIDAPI_KEY="your-key-here"
-CRICAPI_KEY="multisport-auction"
-REDIS_URL=""
-ENABLE_RATE_LIMITING=false
-ENABLE_METRICS=true
-SENTRY_DSN=""
-ENV="development"
+REDIS_URL=""  # Optional: for multi-pod production
 ```
 
-### Frontend `.env`
+### Frontend `.env` (VERIFIED)
 ```bash
 REACT_APP_BACKEND_URL="http://localhost:8001"
-WDS_SOCKET_PORT=3000
-REACT_APP_FEATURE_MY_COMPETITIONS=true
-REACT_APP_FEATURE_ASSET_SELECTION=true
-REACT_APP_SENTRY_DSN=""
 ```
 
 ---
 
-## 📦 Key Dependencies
+## 📦 Key Dependencies (CURRENT)
 
-### Backend `requirements.txt`
+### Backend
 ```
-fastapi==0.104.1
-uvicorn[standard]==0.24.0
-motor==3.3.1
-pymongo==4.5.0
-python-socketio==5.10.0
-python-jose[cryptography]==3.3.0
-passlib[bcrypt]==1.7.4
-python-multipart==0.0.6
-pydantic==2.4.2
-python-dotenv==1.0.0
-httpx==0.25.0
+fastapi>=0.104.1
+uvicorn[standard]>=0.24.0
+motor>=3.3.1
+pymongo>=4.5.0
+python-socketio>=5.10.0
+PyJWT>=2.8.0
+passlib[bcrypt]>=1.7.4
+python-multipart
+pydantic>=2.4.2
+python-dotenv
+httpx
 ```
 
-### Frontend `package.json` (key dependencies)
+### Frontend
 ```json
 {
-  "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-router-dom": "^6.18.0",
-    "socket.io-client": "^4.5.4",
-    "axios": "^1.6.0",
-    "tailwindcss": "^3.3.5"
-  }
+  "react": "^18.2.0",
+  "react-router-dom": "^6.x",
+  "socket.io-client": "^4.x",
+  "axios": "^1.x",
+  "tailwindcss": "^3.x",
+  "react-hot-toast": "^2.x"
 }
 ```
 
@@ -545,123 +561,96 @@ httpx==0.25.0
 
 ## 🧪 Testing Checklist
 
-### 1. Authentication Flow
-- [ ] Register new user
-- [ ] Login and receive JWT token
-- [ ] Access protected route with token
-- [ ] Reject request with invalid/missing token
+### 1. Authentication
+- [ ] User enters email, receives magic link code
+- [ ] User enters code, receives JWT tokens
+- [ ] Protected routes reject invalid tokens
+- [ ] Token refresh works on 401
 
-### 2. Competition Creation
-- [ ] Create football competition
-- [ ] Create cricket competition
-- [ ] Verify invite token generated
-- [ ] Non-commissioner can't delete league
+### 2. League Creation
+- [ ] Create league with selected clubs
+- [ ] Invite token generated
+- [ ] Commissioner joins automatically
 
 ### 3. Participant Flow
-- [ ] Join with valid invite token
+- [ ] Join with valid token
 - [ ] Reject invalid token
-- [ ] Verify participant added with full budget
+- [ ] Budget initialized correctly
 
-### 4. Auction Flow
-- [ ] Start auction (commissioners only)
-- [ ] All participants receive `auction_state` via Socket.IO
-- [ ] Place valid bid (amount > current, user has budget)
-- [ ] Reject invalid bid (insufficient funds)
+### 4. Auction Flow (Socket.IO)
+- [ ] Multiple users join waiting room
+- [ ] Participant count updates in real-time
+- [ ] Start auction (commissioner only)
+- [ ] Place bids with validation
 - [ ] Timer resets on new bid (anti-snipe)
-- [ ] Lot completes on timer expiry
-- [ ] Winner's budget deducted
-- [ ] Asset added to winner's squad
+- [ ] Lot completes, winner assigned
+- [ ] Budget deducted
 - [ ] Progress to next lot
-- [ ] Auction completes after all lots
+- [ ] Auction completes
 
-### 5. Fixture Import
-- [ ] Import football fixtures (Football-Data.org)
-- [ ] Import next cricket fixture (Cricbuzz)
-- [ ] Fixtures display on dashboard
-- [ ] Fixtures linked to correct league
-
-### 6. Scoring
-- [ ] Upload CSV with player stats
-- [ ] Points calculated correctly
-- [ ] Standings updated
-- [ ] Dashboard shows updated league table
+### 5. Fixtures & Scoring
+- [ ] Import CL fixtures (Chelsea FC, Arsenal FC match exactly)
+- [ ] Import PL fixtures
+- [ ] Update scores from API
+- [ ] Recompute points (check league_points collection)
+- [ ] Standings update correctly
+- [ ] Verify no duplicate counting (leagueId filter working)
 
 ---
 
-## 🎯 Build Priority Order
+## 🎯 Build Priority
 
-1. **Phase 1: Core Infrastructure** (Day 1-2)
-   - Set up MongoDB connection
-   - Implement JWT authentication
-   - Create user registration/login endpoints and pages
+1. **Infrastructure** (Day 1-2)
+   - MongoDB connection
+   - Magic link auth
+   - JWT middleware
 
-2. **Phase 2: Competition Management** (Day 3-4)
-   - League creation endpoint and UI
-   - Participant join flow
-   - Competition dashboard (basic)
+2. **League Management** (Day 3-4)
+   - Create/join leagues
+   - Club selection
+   - Participant management
 
-3. **Phase 3: Player Management** (Day 5)
-   - Seed football players
-   - Seed cricket players
-   - Player selection UI
+3. **Auction System** (Day 5-7)
+   - Socket.IO setup with Redis option
+   - Bidding logic with anti-snipe
+   - Waiting room tracking
+   - Timer system
 
-4. **Phase 4: Auction System** (Day 6-8)
-   - Implement Socket.IO server
-   - Build auction backend logic (bidding, timer, lot progression)
-   - Create auction room UI
-   - Test real-time bidding with multiple users
+4. **Fixtures & Scoring** (Day 8-9)
+   - Football-Data.org integration
+   - Fixture import with leagueId
+   - Score updates
+   - Points calculation (exact name matching)
 
-5. **Phase 5: Fixtures & Scoring** (Day 9-10)
-   - Football API integration
-   - Cricket API integration
-   - CSV upload and scoring logic
-   - Dashboard leaderboard
-
-6. **Phase 6: Polish & Testing** (Day 11-12)
-   - End-to-end testing
+5. **Testing & Polish** (Day 10)
+   - End-to-end flows
    - Bug fixes
-   - UI improvements
+   - Verify all 56 team names match API
 
 ---
 
-## 📞 Emergency Contact Points
+## 📞 Critical Files Reference
 
-If rebuilding fails or you encounter blockers:
-
-### Known Complex Areas
-1. **Socket.IO auction timer**: Most complex part. Use `asyncio.create_task()` and store task reference to cancel on new bids.
-2. **MongoDB serialization**: Test with single record first before bulk operations.
-3. **Cricbuzz API**: Series endpoint `/series/v1/{seriesId}` is reliable. Other endpoints may have missing data.
-
-### Alternative Approaches
-- **Auction Timer**: Could use Redis for distributed timer if scaling to multiple servers
-- **Scoring**: Could use background jobs (Celery) instead of synchronous CSV processing
-- **Player Data**: Could scrape from Wikipedia/ESPN if APIs fail
+- `/app/SYSTEM_ARCHITECTURE_AUDIT.md` - Complete system documentation
+- `/app/TEAM_UPDATES_COMPLETED.md` - All 56 verified team names
+- `/app/AGENT_ONBOARDING_PROMPT.md` - Common mistakes to avoid
+- `/app/WAITING_ROOM_FIX_COMPLETE.md` - Socket.IO implementation details
 
 ---
 
 ## ✅ Success Criteria
 
-You've successfully rebuilt the platform when:
-
-1. ✅ Users can register, login, and create competitions
-2. ✅ Commissioner can select players and invite participants
-3. ✅ Multiple users can join an auction room simultaneously
-4. ✅ Real-time bidding works with timer anti-snipe protection
-5. ✅ Budget enforcement prevents overbidding
-6. ✅ Fixtures can be imported for both football and cricket
-7. ✅ CSV score upload calculates points and updates standings
-8. ✅ Dashboard shows league table, fixtures, and player stats
-
----
-
-## 💾 Backup Recommendation
-
-Before attempting rebuild, ensure you have:
-- Complete MongoDB dump: `mongodump --db fantasy_sports_db --out /backup`
-- Full Git repository with all commits
-- Copy of this document and `/app/README.md`
+Platform rebuilt successfully when:
+1. ✅ Magic link auth works
+2. ✅ Multiple users can create/join leagues
+3. ✅ Real-time auction with anti-snipe timer
+4. ✅ Waiting room shows live participant count
+5. ✅ CL/PL fixtures import successfully
+6. ✅ Score updates work from API
+7. ✅ Points calculate correctly (all 56 teams)
+8. ✅ Standings display correctly
+9. ✅ No duplicate point counting
 
 ---
 
-**This document is your lifeline. Treat it as the source of truth for recreating the entire application from zero.**
+**This document contains VERIFIED CURRENT STATE as of December 9, 2025. Treat as source of truth for rebuild.**
