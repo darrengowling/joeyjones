@@ -5843,8 +5843,12 @@ app.add_middleware(
     max_age=600,  # Cache preflight for 10 minutes
 )
 
-# Include the router in the main app
-app.include_router(api_router)
+# Include routers
+app.include_router(api_router, prefix="/api")
+
+# Migration endpoint for manual verification/execution
+from migration_endpoint import migration_router
+app.include_router(migration_router, prefix="/api")
 
 # Serve AFCON template file
 @app.get("/api/templates/afcon_2025_fixtures_with_names.csv")
