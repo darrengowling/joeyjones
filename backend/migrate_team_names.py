@@ -6,9 +6,6 @@ Run this to ensure all team names match the API exactly for scoring to work
 import asyncio
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
-from dotenv import load_dotenv
-
-load_dotenv()
 
 async def migrate_team_names():
     """Update all 40 team names to match API exactly"""
