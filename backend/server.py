@@ -186,6 +186,13 @@ async def startup_db_client():
     
     # Run team name migration (idempotent - safe to run multiple times)
     try:
+        import sys
+        import os
+        # Add backend directory to path if not already there
+        backend_dir = os.path.dirname(os.path.abspath(__file__))
+        if backend_dir not in sys.path:
+            sys.path.insert(0, backend_dir)
+        
         from migrate_team_names import migrate_team_names
         logger.info("🔄 Running team name migration...")
         migration_success = await migrate_team_names()
@@ -195,6 +202,8 @@ async def startup_db_client():
             logger.warning("⚠️ Team name migration had issues (check logs)")
     except Exception as e:
         logger.error(f"❌ Team name migration failed: {e}")
+        import traceback
+        logger.error(f"Migration traceback: {traceback.format_exc()}")
 
 # Sports feature flags
 SPORTS_CRICKET_ENABLED = os.environ.get('SPORTS_CRICKET_ENABLED', 'false').lower() == 'true'
