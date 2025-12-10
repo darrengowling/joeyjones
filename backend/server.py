@@ -193,17 +193,30 @@ async def startup_db_client():
         if backend_dir not in sys.path:
             sys.path.insert(0, backend_dir)
         
-        from migrate_team_names import migrate_team_names
-        logger.info("🔄 Running team name migration...")
+        logger.info("="*80)
+        logger.info("🔄 STARTUP: Initializing team name migration...")
+        logger.info(f"🔍 Environment check:")
+        logger.info(f"   MONGO_URL set: {'MONGO_URL' in os.environ}")
+        logger.info(f"   DB_NAME: {os.environ.get('DB_NAME', 'not set')}")
+        logger.info(f"   Backend dir: {backend_dir}")
+        logger.info("="*80)
+        
+        from migrate_team_names_v2 import migrate_team_names
         migration_success = await migrate_team_names(logger=logger)
+        
         if migration_success:
-            logger.info("✅ Team name migration completed")
+            logger.info("✅ Team name migration completed successfully")
         else:
-            logger.warning("⚠️ Team name migration had issues (check logs)")
-    except Exception as e:
-        logger.error(f"❌ Team name migration failed: {e}")
+            logger.error("❌ Team name migration returned False - check logs above for details")
+    except ImportError as e:
+        logger.error(f"❌ Migration import failed: {e}")
+        logger.error(f"   sys.path: {sys.path}")
         import traceback
-        logger.error(f"Migration traceback: {traceback.format_exc()}")
+        logger.error(f"   Traceback: {traceback.format_exc()}")
+    except Exception as e:
+        logger.error(f"❌ Team name migration failed with exception: {e}")
+        import traceback
+        logger.error(f"   Full traceback: {traceback.format_exc()}")
 
 # Sports feature flags
 SPORTS_CRICKET_ENABLED = os.environ.get('SPORTS_CRICKET_ENABLED', 'false').lower() == 'true'
