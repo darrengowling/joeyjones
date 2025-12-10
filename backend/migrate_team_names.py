@@ -7,24 +7,30 @@ import asyncio
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
 
-async def migrate_team_names():
+async def migrate_team_names(logger=None):
     """Update all 40 team names to match API exactly"""
+    def log(msg):
+        if logger:
+            logger.info(msg)
+        else:
+            print(msg)
+    
     mongo_url = os.environ.get('MONGO_URL')
     db_name = os.environ.get('DB_NAME', 'test_database')
     
     if not mongo_url:
-        print("❌ MONGO_URL not set")
+        log("❌ MONGO_URL not set")
         return False
     
     # Log connection details (mask sensitive parts)
     if 'localhost' in mongo_url:
-        print(f"🔍 Connecting to: LOCAL MongoDB (localhost)")
+        log(f"🔍 Migration connecting to: LOCAL MongoDB (localhost)")
     elif 'mongodb.net' in mongo_url or 'atlas' in mongo_url.lower():
-        print(f"🔍 Connecting to: MongoDB ATLAS (production)")
+        log(f"🔍 Migration connecting to: MongoDB ATLAS (production)")
     else:
         masked_url = mongo_url[:20] + "..." if len(mongo_url) > 20 else mongo_url
-        print(f"🔍 Connecting to: {masked_url}")
-    print(f"🔍 Database name: {db_name}")
+        log(f"🔍 Migration connecting to: {masked_url}")
+    log(f"🔍 Migration database: {db_name}")
     
     client = AsyncIOMotorClient(mongo_url)
     db = client[db_name]
