@@ -222,6 +222,7 @@ export default function ClubsList() {
 
 function getCountryFlag(country) {
   const flags = {
+    // Football countries
     Spain: "🇪🇸",
     England: "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
     Germany: "🇩🇪",
@@ -239,6 +240,18 @@ function getCountryFlag(country) {
     Ukraine: "🇺🇦",
     Denmark: "🇩🇰",
     Poland: "🇵🇱",
+    // Cricket countries
+    Australia: "🇦🇺",
+    India: "🇮🇳",
+    Pakistan: "🇵🇰",
+    "South Africa": "🇿🇦",
+    "New Zealand": "🇳🇿",
+    "Sri Lanka": "🇱🇰",
+    Bangladesh: "🇧🇩",
+    "West Indies": "🏴‍☠️",
+    Afghanistan: "🇦🇫",
+    Ireland: "🇮🇪",
+    Zimbabwe: "🇿🇼",
   };
-  return flags[country] || "🏴";
+  return flags[country] || "🏏";
 }
