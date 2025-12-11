@@ -602,154 +602,167 @@ export default function LeagueDetail() {
             </div>
           )}
 
-          <div className="flex justify-between items-start mb-6">
-            <div>
-              <div className="text-xs uppercase tracking-wide text-gray-500 mb-1">Competition Detail Page</div>
-              <h1 className="h1 text-3xl font-bold text-gray-900 mb-2">{league.name}</h1>
-              <div className="stack-md">
-                <div className="row-gap-md flex items-center">
-                  <span
-                    className={`chip px-3 py-1 rounded-full text-sm font-semibold ${
-                      league.status === "active"
-                        ? "bg-green-100 text-green-800"
-                        : "bg-gray-100 text-gray-800"
-                    }`}
-                  >
-                    {league.status}
-                  </span>
-                  <span className="subtle text-sm text-gray-600">
-                    {participants.length}/{league.maxManagers} managers
-                  </span>
-                </div>
-                <div className="flex flex-wrap items-center gap-2">
-                  <span className="text-sm text-gray-600">Invite Token:</span>
-                  <code className="chip bg-gray-100 px-2 py-1 rounded font-mono text-sm">{league.inviteToken}</code>
-                  <button
-                    onClick={() => {
-                      navigator.clipboard.writeText(league.inviteToken);
-                      toast.success("Token copied!");
-                    }}
-                    className="px-3 py-1.5 bg-blue-600 text-white rounded text-sm hover:bg-blue-700 transition-colors"
-                    title="Copy invite token to clipboard"
-                  >
-                    📋 Copy
-                  </button>
-                  {navigator.share && (
-                    <button
-                      onClick={() => {
-                        navigator.share({
-                          title: `Join ${league.name}`,
-                          text: `Join my league on Sport X! Use token: ${league.inviteToken}\n\n${window.location.origin}`
-                        }).catch((err) => {
-                          // Fallback to clipboard if share cancelled or fails
-                          if (err.name !== 'AbortError') {
-                            navigator.clipboard.writeText(league.inviteToken);
-                            toast.success("Token copied!");
-                          }
-                        });
-                      }}
-                      className="px-3 py-1.5 bg-green-600 text-white rounded text-sm hover:bg-green-700 transition-colors"
-                      title="Share invite via your device's share options"
-                    >
-                      📤 Share
-                    </button>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* Optional: Import Fixtures Before Auction (not for AFCON - CSV only) */}
-            {league.status === "pending" && isCommissioner && league.assetsSelected && league.assetsSelected.length > 0 && league.competitionCode !== 'AFCON' && (
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-2 mb-4">
-                <div className="flex flex-wrap items-center gap-2">
-                  <span className="text-sm">📅</span>
-                  <span className="text-xs text-gray-700 font-medium">Import Fixtures (Optional):</span>
-                  
-                  {importingFixtures ? (
-                    <div className="flex items-center gap-2 text-xs text-blue-700">
-                      <div className="animate-spin rounded-full h-3 w-3 border-2 border-blue-700 border-t-transparent"></div>
-                      <span>Importing...</span>
-                    </div>
-                  ) : fixturesImported ? (
-                    <span className="text-xs text-green-700 font-medium">✅ Imported</span>
-                  ) : (
-                    <>
-                      {league.sportKey === 'football' && league.competitionCode !== 'AFCON' && (
-                        <button 
-                          onClick={handleImportFootballFixtures}
-                          className="px-2.5 py-1 bg-blue-600 text-white rounded text-xs hover:bg-blue-700"
-                          title="Import fixtures so managers see opponents during bidding"
-                        >
-                          Import Fixtures
-                        </button>
-                      )}
-                      
-                      {league.sportKey === 'cricket' && (
-                        <button 
-                          onClick={handleImportCricketFixture}
-                          className="px-2.5 py-1 bg-blue-600 text-white rounded text-xs hover:bg-blue-700"
-                          title="Import next cricket match fixture"
-                        >
-                          Import Next Match
-                        </button>
-                      )}
-                      <span className="text-xs text-gray-500">or skip</span>
-                    </>
-                  )}
-                </div>
-              </div>
-            )}
-
-            <div className="flex flex-col gap-3 max-w-full overflow-hidden">
-              {league.status === "pending" && isCommissioner && (
-                <div>
-                  <button
-                    onClick={startAuction}
-                    disabled={!canStartAuction || startingAuction}
-                    className={`w-full btn btn-primary px-6 py-3 rounded-lg font-semibold flex items-center gap-2 ${
-                      canStartAuction && !startingAuction
-                        ? "bg-green-600 text-white hover:bg-green-700"
-                        : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                    }`}
-                    data-testid="start-auction-button"
-                  >
-                    {startingAuction && (
-                      <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                    )}
-                    {startingAuction ? "Moving to waiting room..." : "Enter Waiting Room"}
-                  </button>
-                  {!canStartAuction && (
-                    <p className="text-sm text-red-600 mt-2">
-                      Need {league.minManagers - participants.length} more strategic competitors to begin
-                    </p>
-                  )}
-                </div>
-              )}
-              
-              {league.status === "active" && (
-                <button
-                  onClick={goToAuction}
-                  className="btn btn-primary px-6 py-3 rounded-lg font-semibold bg-blue-600 text-white hover:bg-blue-700"
-                  data-testid="go-to-auction-button"
-                >
-                  Enter Auction Room
-                </button>
-              )}
-              
-              {isCommissioner && (league.status === "pending" || league.status === "completed") && (
-                <button
-                  onClick={deleteLeague}
-                  className="w-full btn btn-danger px-6 py-3 rounded-lg font-semibold bg-red-600 text-white hover:bg-red-700"
-                  data-testid="delete-league-button"
-                >
-                  Delete League
-                </button>
-              )}
+          {/* League Header */}
+          <div className="mb-6">
+            <div className="text-xs uppercase tracking-wide text-gray-500 mb-1">Competition Detail Page</div>
+            <h1 className="h1 text-3xl font-bold text-gray-900 mb-2">{league.name}</h1>
+            <div className="flex items-center gap-3">
+              <span
+                className={`chip px-3 py-1 rounded-full text-sm font-semibold ${
+                  league.status === "active"
+                    ? "bg-green-100 text-green-800"
+                    : "bg-gray-100 text-gray-800"
+                }`}
+              >
+                {league.status}
+              </span>
+              <span className="text-sm text-gray-600">
+                {participants.length}/{league.maxManagers} managers
+              </span>
             </div>
           </div>
+
+          {/* Invite Section */}
+          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-4 mb-6">
+            <div className="flex flex-col gap-3">
+              <div className="flex items-center gap-2">
+                <span className="text-xl">🎯</span>
+                <h3 className="font-semibold text-gray-900">Invite Friends</h3>
+              </div>
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="text-sm text-gray-600">Token:</span>
+                <code className="bg-white px-3 py-1.5 rounded font-mono text-sm border border-gray-200">{league.inviteToken}</code>
+                <button
+                  onClick={() => {
+                    navigator.clipboard.writeText(league.inviteToken);
+                    toast.success("Token copied!");
+                  }}
+                  className="px-3 py-1.5 bg-blue-600 text-white rounded text-sm hover:bg-blue-700 transition-colors font-medium"
+                  title="Copy invite token to clipboard"
+                >
+                  📋 Copy
+                </button>
+                {navigator.share && (
+                  <button
+                    onClick={() => {
+                      navigator.share({
+                        title: `Join ${league.name}`,
+                        text: `Join my league on Sport X! Use token: ${league.inviteToken}\n\n${window.location.origin}`
+                      }).catch((err) => {
+                        if (err.name !== 'AbortError') {
+                          navigator.clipboard.writeText(league.inviteToken);
+                          toast.success("Token copied!");
+                        }
+                      });
+                    }}
+                    className="px-3 py-1.5 bg-green-600 text-white rounded text-sm hover:bg-green-700 transition-colors font-medium"
+                    title="Share invite via your device's share options"
+                  >
+                    📤 Share
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Optional: Import Fixtures (Commissioner) */}
+          {league.status === "pending" && isCommissioner && league.assetsSelected && league.assetsSelected.length > 0 && league.competitionCode !== 'AFCON' && (
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-6">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="text-sm">📅</span>
+                <span className="text-sm text-gray-700 font-medium">Import Fixtures (Optional):</span>
+                
+                {importingFixtures ? (
+                  <div className="flex items-center gap-2 text-sm text-blue-700">
+                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-blue-700 border-t-transparent"></div>
+                    <span>Importing...</span>
+                  </div>
+                ) : fixturesImported ? (
+                  <span className="text-sm text-green-700 font-medium">✅ Imported</span>
+                ) : (
+                  <>
+                    {league.sportKey === 'football' && league.competitionCode !== 'AFCON' && (
+                      <button 
+                        onClick={handleImportFootballFixtures}
+                        className="px-3 py-1.5 bg-blue-600 text-white rounded text-sm hover:bg-blue-700 font-medium"
+                        title="Import fixtures so managers see opponents during bidding"
+                      >
+                        Import Fixtures
+                      </button>
+                    )}
+                    
+                    {league.sportKey === 'cricket' && (
+                      <button 
+                        onClick={handleImportCricketFixture}
+                        className="px-3 py-1.5 bg-blue-600 text-white rounded text-sm hover:bg-blue-700 font-medium"
+                        title="Import next cricket match fixture"
+                      >
+                        Import Next Match
+                      </button>
+                    )}
+                    <span className="text-sm text-gray-500">or skip</span>
+                  </>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Main Action Buttons */}
+          <div className="flex flex-col gap-3 mb-6">
+            {league.status === "pending" && isCommissioner && (
+              <>
+                <button
+                  onClick={startAuction}
+                  disabled={!canStartAuction || startingAuction}
+                  className={`w-full px-6 py-4 rounded-lg font-semibold text-lg flex items-center justify-center gap-2 transition-all ${
+                    canStartAuction && !startingAuction
+                      ? "bg-green-600 text-white hover:bg-green-700 shadow-lg hover:shadow-xl"
+                      : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  }`}
+                  data-testid="start-auction-button"
+                >
+                  {startingAuction && (
+                    <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                  )}
+                  {startingAuction ? "Moving to waiting room..." : "Enter Waiting Room"}
+                </button>
+                {!canStartAuction && (
+                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+                    <p className="text-sm text-yellow-800 text-center">
+                      ⏳ Need {league.minManagers - participants.length} more manager{league.minManagers - participants.length > 1 ? 's' : ''} to begin
+                    </p>
+                  </div>
+                )}
+              </>
+            )}
+            
+            {league.status === "active" && (
+              <button
+                onClick={goToAuction}
+                className="w-full px-6 py-4 rounded-lg font-semibold text-lg bg-blue-600 text-white hover:bg-blue-700 shadow-lg hover:shadow-xl transition-all"
+                data-testid="go-to-auction-button"
+              >
+                Enter Auction Room →
+              </button>
+            )}
+          </div>
+
+          {/* Danger Zone (Commissioner Only) */}
+          {isCommissioner && (league.status === "pending" || league.status === "completed") && (
+            <div className="border-t border-gray-200 pt-6 mt-6">
+              <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Danger Zone</h3>
+              <button
+                onClick={deleteLeague}
+                className="w-full px-4 py-2 rounded-lg font-medium bg-red-50 text-red-700 border border-red-200 hover:bg-red-100 transition-colors"
+                data-testid="delete-league-button"
+              >
+                🗑️ Delete League
+              </button>
+            </div>
+          )}
 
           {/* Participants */}
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
