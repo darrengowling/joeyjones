@@ -621,8 +621,39 @@ export default function LeagueDetail() {
                     {participants.length}/{league.maxManagers} managers
                   </span>
                 </div>
-                <div className="subtle text-sm text-gray-600">
-                  Invite Token: <code className="chip bg-gray-100 px-2 py-1 rounded font-mono">{league.inviteToken}</code>
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="text-sm text-gray-600">Invite Token:</span>
+                  <code className="chip bg-gray-100 px-2 py-1 rounded font-mono text-sm">{league.inviteToken}</code>
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText(league.inviteToken);
+                      toast.success("Token copied!");
+                    }}
+                    className="px-3 py-1.5 bg-blue-600 text-white rounded text-sm hover:bg-blue-700 transition-colors"
+                    title="Copy invite token to clipboard"
+                  >
+                    📋 Copy
+                  </button>
+                  {navigator.share && (
+                    <button
+                      onClick={() => {
+                        navigator.share({
+                          title: `Join ${league.name}`,
+                          text: `Join my league on Sport X! Use token: ${league.inviteToken}\n\n${window.location.origin}`
+                        }).catch((err) => {
+                          // Fallback to clipboard if share cancelled or fails
+                          if (err.name !== 'AbortError') {
+                            navigator.clipboard.writeText(league.inviteToken);
+                            toast.success("Token copied!");
+                          }
+                        });
+                      }}
+                      className="px-3 py-1.5 bg-green-600 text-white rounded text-sm hover:bg-green-700 transition-colors"
+                      title="Share invite via your device's share options"
+                    >
+                      📤 Share
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
