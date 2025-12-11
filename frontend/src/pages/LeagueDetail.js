@@ -660,59 +660,42 @@ export default function LeagueDetail() {
 
             {/* Optional: Import Fixtures Before Auction (not for AFCON - CSV only) */}
             {league.status === "pending" && isCommissioner && league.assetsSelected && league.assetsSelected.length > 0 && league.competitionCode !== 'AFCON' && (
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
-                <div className="flex items-center gap-3">
-                  <div className="flex-shrink-0 text-2xl">
-                    📅
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-gray-900 text-sm mb-1">
-                      Import Fixtures (Optional)
-                    </h3>
-                    <p className="text-xs text-gray-600 mb-2">
-                      <strong>After selecting your teams,</strong> import fixtures so managers see opponents during bidding.
-                    </p>
-                    
-                    {importingFixtures ? (
-                      <div className="flex items-center gap-2 text-xs text-blue-700">
-                        <div className="animate-spin rounded-full h-3 w-3 border-2 border-blue-700 border-t-transparent"></div>
-                        <span>Importing...</span>
-                      </div>
-                    ) : fixturesImported ? (
-                      <div className="text-xs text-green-700 font-medium">
-                        ✅ Fixtures imported
-                      </div>
-                    ) : (
-                      <div className="flex items-center gap-2">
-                        {(() => {
-                          console.log('🔍 Import button check:', {
-                            sportKey: league.sportKey,
-                            competitionCode: league.competitionCode,
-                            shouldShow: league.sportKey === 'football' && league.competitionCode !== 'AFCON'
-                          });
-                          return null;
-                        })()}
-                        {league.sportKey === 'football' && league.competitionCode !== 'AFCON' && (
-                          <button 
-                            onClick={handleImportFootballFixtures}
-                            className="px-3 py-1.5 bg-blue-600 text-white rounded text-xs font-medium hover:bg-blue-700"
-                          >
-                            Import Fixtures
-                          </button>
-                        )}
-                        
-                        {league.sportKey === 'cricket' && (
-                          <button 
-                            onClick={handleImportCricketFixture}
-                            className="px-3 py-1.5 bg-blue-600 text-white rounded text-xs font-medium hover:bg-blue-700"
-                          >
-                            Import Next Match
-                          </button>
-                        )}
-                        <span className="text-xs text-gray-500">or skip for now</span>
-                      </div>
-                    )}
-                  </div>
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-2 mb-4">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="text-sm">📅</span>
+                  <span className="text-xs text-gray-700 font-medium">Import Fixtures (Optional):</span>
+                  
+                  {importingFixtures ? (
+                    <div className="flex items-center gap-2 text-xs text-blue-700">
+                      <div className="animate-spin rounded-full h-3 w-3 border-2 border-blue-700 border-t-transparent"></div>
+                      <span>Importing...</span>
+                    </div>
+                  ) : fixturesImported ? (
+                    <span className="text-xs text-green-700 font-medium">✅ Imported</span>
+                  ) : (
+                    <>
+                      {league.sportKey === 'football' && league.competitionCode !== 'AFCON' && (
+                        <button 
+                          onClick={handleImportFootballFixtures}
+                          className="px-2.5 py-1 bg-blue-600 text-white rounded text-xs hover:bg-blue-700"
+                          title="Import fixtures so managers see opponents during bidding"
+                        >
+                          Import Fixtures
+                        </button>
+                      )}
+                      
+                      {league.sportKey === 'cricket' && (
+                        <button 
+                          onClick={handleImportCricketFixture}
+                          className="px-2.5 py-1 bg-blue-600 text-white rounded text-xs hover:bg-blue-700"
+                          title="Import next cricket match fixture"
+                        >
+                          Import Next Match
+                        </button>
+                      )}
+                      <span className="text-xs text-gray-500">or skip</span>
+                    </>
+                  )}
                 </div>
               </div>
             )}
