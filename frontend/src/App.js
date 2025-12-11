@@ -1052,7 +1052,7 @@ const Home = () => {
               className="btn btn-outline bg-transparent text-blue-600 px-6 py-4 rounded-lg hover:bg-blue-600 hover:text-white text-lg font-semibold border-2 border-blue-600"
               data-testid="view-clubs-button"
             >
-              Explore Available Teams
+              Explore Available Teams/Players
             </button>
           </div>
 
