@@ -173,13 +173,16 @@ export default function ClubsList() {
                 
                 {selectedSport === 'cricket' && asset.meta && (
                   <div>
+                    {asset.meta.team && (
+                      <div className="flex items-center gap-2 text-gray-600 mb-2">
+                        <span className="text-2xl">{getCountryFlag(asset.meta.team)}</span>
+                        <span>{asset.meta.team}</span>
+                      </div>
+                    )}
                     <div className="text-gray-600 mb-2">
                       <span className="inline-block bg-blue-100 text-blue-800 px-2 py-1 rounded text-sm mr-2">
                         {asset.meta.role}
                       </span>
-                    </div>
-                    <div className="text-sm text-gray-500">
-                      {asset.meta.franchise}
                     </div>
                   </div>
                 )}
