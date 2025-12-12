@@ -545,10 +545,26 @@ function AuctionRoom() {
     
     const amount = parseCurrencyInput(bidAmount);
     
-    // Get current state for logging (not validation)
+    // Get current state for validation and logging
     const userParticipant = participants.find((p) => p.userId === user.id);
     const currentBids = bids.filter((b) => b.clubId === currentClub.id);
     const highestBid = currentBids.length > 0 ? Math.max(...currentBids.map((b) => b.amount)) : 0;
+    
+    // Frontend validation: Bid must exceed current highest bid
+    if (highestBid > 0 && amount <= highestBid) {
+      toast.error(`Bid must exceed current bid of ${formatCurrency(highestBid)}`);
+      console.log("⚠️ bid:rejected_frontend", { amount, highestBid, reason: "not_higher" });
+      debugLogger.log('bid:rejected_frontend', { amount, highestBid, reason: "not_higher" });
+      return;
+    }
+    
+    // Also use currentBid state as a backup check (in case bids list is stale)
+    if (currentBid && amount <= currentBid) {
+      toast.error(`Bid must exceed current bid of ${formatCurrency(currentBid)}`);
+      console.log("⚠️ bid:rejected_frontend", { amount, currentBid, reason: "not_higher_than_current" });
+      debugLogger.log('bid:rejected_frontend', { amount, currentBid, reason: "not_higher_than_current" });
+      return;
+    }
 
     // Detailed logging for diagnostics
     const attemptData = {
