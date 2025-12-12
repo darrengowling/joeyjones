@@ -4457,6 +4457,15 @@ async def place_bid(auction_id: str, bid_input: BidCreate):
     if not current_club_id:
         raise HTTPException(status_code=400, detail="No club currently on the block. Please wait for commissioner to start a lot.")
     
+    # CRITICAL: Bid must exceed current highest bid
+    current_bid = auction.get("currentBid", 0)
+    if current_bid > 0 and bid_input.amount <= current_bid:
+        logger.warning(f"Bid rejected: {bid_input.amount} <= {current_bid}")
+        raise HTTPException(
+            status_code=400,
+            detail=f"Bid must exceed current bid of £{current_bid:,.0f}. Please bid higher."
+        )
+    
     # Create bid
     bid_obj = Bid(
         auctionId=auction_id,
