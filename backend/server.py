@@ -4570,7 +4570,16 @@ async def place_bid(auction_id: str, bid_input: BidCreate):
     
     # Note: Roster fullness check moved to complete_lot (after clubs are awarded)
     
-    return {"message": "Bid placed successfully", "bid_obj": bid_obj}
+    return {
+        "message": "Bid placed successfully",
+        "bid": {
+            "userId": bid_obj.userId,
+            "amount": bid_obj.amount,
+            "clubId": bid_obj.clubId,
+            "auctionId": bid_obj.auctionId,
+            "userName": bid_obj.userName
+        }
+    }
 
 @api_router.options("/auction/{auction_id}/bid")
 async def bid_preflight(auction_id: str):
