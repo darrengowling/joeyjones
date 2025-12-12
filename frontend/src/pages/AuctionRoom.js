@@ -947,21 +947,21 @@ function AuctionRoom() {
           {/* Prompt G: Top strip with league info and progress */}
           {league && auction && (
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-2 mb-4">
-              <div className="flex justify-between items-center">
-                <div className="flex items-center space-x-4">
-                  <div>
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                  <div className="whitespace-nowrap">
                     <span className="text-xs font-medium text-blue-800">League:</span>
                     <span className="text-xs text-blue-600 ml-1">{league.name}</span>
                   </div>
-                  <div>
+                  <div className="whitespace-nowrap">
                     <span className="text-xs font-medium text-blue-800">Progress:</span>
                     <span className="text-xs text-blue-600 ml-1">
                       Lot {auction.currentLot || 0} / {auction.clubQueue?.length || 0}
                     </span>
                   </div>
-                  <div>
+                  <div className="w-full sm:w-auto">
                     <span className="text-xs font-medium text-blue-800">Managers with slots left:</span>
-                    <span className="text-xs text-blue-600 ml-1">
+                    <span className="text-xs text-blue-600 ml-1 break-words">
                       {participants.filter(p => (p.clubsWon?.length || 0) < (league.clubSlots || 3)).map(p => {
                         const slotsLeft = (league.clubSlots || 3) - (p.clubsWon?.length || 0);
                         return `${p.userName}=${slotsLeft}`;
@@ -970,7 +970,7 @@ function AuctionRoom() {
                   </div>
                 </div>
                 {auction.status === "completed" && (
-                  <div className="bg-green-100 text-green-800 px-2 py-0.5 rounded text-xs font-medium">
+                  <div className="bg-green-100 text-green-800 px-2 py-0.5 rounded text-xs font-medium whitespace-nowrap">
                     ✅ Auction Complete
                   </div>
                 )}
