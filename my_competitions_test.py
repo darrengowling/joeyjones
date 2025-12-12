@@ -14,7 +14,7 @@ from datetime import datetime, timezone
 from typing import Dict, List, Optional
 
 # Configuration - Use production URL from frontend/.env
-BASE_URL = "https://prod-stable-soccer.preview.emergentagent.com/api"
+BASE_URL = "https://pilot-ready-deploy.preview.emergentagent.com/api"
 
 class MyCompetitionsTester:
     def __init__(self):

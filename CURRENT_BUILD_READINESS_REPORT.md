@@ -592,7 +592,7 @@ All features listed in the comprehensive assessment as "working" have been valid
 ## Test Environment Details
 
 **Test Date:** January 26, 2025  
-**Backend URL:** https://prod-stable-soccer.preview.emergentagent.com/api  
+**Backend URL:** https://pilot-ready-deploy.preview.emergentagent.com/api  
 **Test Duration:** ~10 minutes  
 **Test Coverage:** 22 backend API tests + frontend UI validation  
 **Success Rate:** 100% (22/22 backend tests passed)
