@@ -5367,6 +5367,15 @@ async def delete_auction(auction_id: str, commissioner_id: str = None):
     
     logger.info(f"Deleted auction {auction_id}: {delete_results}")
     
+    # CRITICAL: Notify all connected users that auction was deleted
+    await sio.emit('auction_deleted', {
+        'auctionId': auction_id,
+        'leagueId': auction["leagueId"],
+        'message': 'Auction has been deleted by the commissioner'
+    }, room=f'auction:{auction_id}')
+    
+    logger.info(f"Emitted auction_deleted event to room auction:{auction_id}")
+    
     return {
         "message": "Auction deleted successfully",
         "deletedData": delete_results
