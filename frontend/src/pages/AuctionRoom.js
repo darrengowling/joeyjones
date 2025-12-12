@@ -336,6 +336,7 @@ function AuctionRoom() {
     socket.on('auction_complete', onAuctionComplete);
     socket.on('auction_paused', onAuctionPaused);
     socket.on('auction_resumed', onAuctionResumed);
+    socket.on('auction_deleted', onAuctionDeleted); // CRITICAL: Handle deletion
     socket.on('participants_changed', onParticipantsChanged); // Prompt A
     
     // Handle waiting room updates
