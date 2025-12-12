@@ -4460,7 +4460,7 @@ async def place_bid(auction_id: str, bid_input: BidCreate):
     # CRITICAL: Bid must exceed current highest bid
     current_bid = auction.get("currentBid", 0)
     if current_bid > 0 and bid_input.amount <= current_bid:
-        metrics.increment_bid_rejected("not_higher")
+        logger.warning(f"Bid rejected: {bid_input.amount} <= {current_bid}")
         raise HTTPException(
             status_code=400,
             detail=f"Bid must exceed current bid of £{current_bid:,.0f}. Please bid higher."
