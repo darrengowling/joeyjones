@@ -526,11 +526,29 @@ const Home = () => {
                 <>
                   {/* Step 2: Token Input */}
                   <div className="mb-4 p-4 bg-green-50 border border-green-200 rounded-lg">
-                    <p className="text-sm text-green-800 font-medium mb-2">Magic link generated!</p>
-                    <p className="text-xs text-green-700">
-                      In pilot mode, your token is: <code className="bg-white px-2 py-1 rounded font-mono">{magicToken}</code>
-                    </p>
-                    <p className="text-xs text-green-600 mt-2">
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className="text-lg">🎯</span>
+                      <p className="text-sm text-green-800 font-semibold">Magic Link Generated!</p>
+                    </div>
+                    
+                    <div className="flex flex-wrap items-center gap-2 mb-3">
+                      <span className="text-sm text-green-700 font-medium">Your Token:</span>
+                      <code className="bg-white px-3 py-1.5 rounded font-mono text-sm border border-green-200">
+                        {magicToken}
+                      </code>
+                      <button
+                        onClick={() => {
+                          navigator.clipboard.writeText(magicToken);
+                          toast.success("Token copied!");
+                        }}
+                        className="px-3 py-1.5 bg-green-600 text-white rounded text-sm hover:bg-green-700 transition-colors font-medium"
+                        title="Copy token to clipboard"
+                      >
+                        📋 Copy
+                      </button>
+                    </div>
+                    
+                    <p className="text-xs text-green-600">
                       (In production, this would be sent to your email)
                     </p>
                   </div>
