@@ -301,6 +301,20 @@ function AuctionRoom() {
       loadAuction();
     };
 
+    // Handle auction_deleted event - CRITICAL for stuck users
+    const onAuctionDeleted = (data) => {
+      console.log("🗑️ Auction deleted by commissioner:", data);
+      toast.error(data.message || "Auction has been deleted by the commissioner", { duration: 5000 });
+      
+      // Clear any countdown overlay
+      setCountdown(null);
+      
+      // Navigate back to home after short delay
+      setTimeout(() => {
+        navigate('/');
+      }, 2000);
+    };
+
     // Prompt A: Handle participants_changed for live count updates
     const onParticipantsChanged = (data) => {
       console.log("👥 Participants changed:", data);
