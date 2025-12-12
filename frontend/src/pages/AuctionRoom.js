@@ -927,8 +927,8 @@ function AuctionRoom() {
   return (
     <div className="h-screen flex flex-col bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 overflow-hidden">
       {/* Header Section - Fixed */}
-      <div className="flex-shrink-0 px-4 pt-4 pb-2">
-        <div className="max-w-6xl mx-auto">
+      <div className="flex-shrink-0 px-2 sm:px-4 pt-4 pb-2">
+        <div className="max-w-6xl mx-auto w-full">
           {/* Breadcrumb Navigation */}
           <div className="flex items-center gap-2 text-sm text-white mb-4">
             <button onClick={() => navigate("/")} className="hover:underline">Home</button>
