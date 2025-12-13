@@ -140,7 +140,7 @@ This document reflects the **PRODUCTION** environment state. The preview/develop
 | Dec 12, 2025 | Critical bid validation fixes deployed | Fixed 500 errors on bidding |
 | Dec 12, 2025 | Auction deletion socket event added | Fixed frozen screens when auction deleted |
 | Dec 12, 2025 | Mobile UI fixes deployed | Fixed horizontal scrolling issues |
-| Dec 13, 2025 | Self-outbid prevention added | Users cannot outbid themselves - shows "You are already the highest bidder" |
+| Dec 13, 2025 | Self-outbid prevention added | Users cannot outbid themselves - shows toast and resets input to current bid |
 
 ---
 
