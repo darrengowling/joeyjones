@@ -4457,8 +4457,18 @@ async def place_bid(auction_id: str, bid_input: BidCreate):
     if not current_club_id:
         raise HTTPException(status_code=400, detail="No club currently on the block. Please wait for commissioner to start a lot.")
     
-    # CRITICAL: Bid must exceed current highest bid
+    # CRITICAL: Prevent user from outbidding themselves
     current_bid = auction.get("currentBid") or 0
+    current_bidder_info = auction.get("currentBidder")
+    if current_bidder_info and current_bidder_info.get("userId") == bid_input.userId:
+        logger.warning(f"Bid rejected: User {bid_input.userId} tried to outbid themselves")
+        metrics.increment_bid_rejected("self_outbid")
+        raise HTTPException(
+            status_code=400,
+            detail="You are already the highest bidder"
+        )
+    
+    # CRITICAL: Bid must exceed current highest bid
     if current_bid > 0 and bid_input.amount <= current_bid:
         logger.warning(f"Bid rejected: {bid_input.amount} <= {current_bid}")
         raise HTTPException(
