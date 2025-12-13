@@ -1,0 +1,217 @@
+# Agent Onboarding Checklist
+
+**Last Updated:** December 13, 2025  
+**Purpose:** Mandatory steps for every new agent before starting any work
+
+---
+
+## ⚠️ CRITICAL: DO NOT SKIP THESE STEPS
+
+Previous agents have wasted significant time and resources by:
+- Looking at preview environment config instead of production
+- Referencing outdated documentation
+- Making assumptions without verification
+- Attempting to "fix" things that weren't broken
+
+**This checklist prevents those mistakes.**
+
+---
+
+## 📋 Mandatory Onboarding Steps
+
+### Step 1: Verify Production Health (DO THIS FIRST)
+
+```bash
+# Run this command BEFORE anything else
+curl -s "https://draft-kings-mobile.emergent.host/api/health" | python3 -m json.tool
+```
+
+**Expected Response:**
+```json
+{
+  "status": "healthy",
+  "database": "connected",
+  "socketio": {
+    "mode": "redis",
+    "redis_configured": true,
+    "multi_pod_ready": true
+  }
+}
+```
+
+**⚠️ If Socket.IO shows `"mode": "in-memory"` in production, this is a PROBLEM.**
+
+---
+
+### Step 2: Read These Documents (In Order)
+
+| Order | Document | Purpose |
+|-------|----------|--------|
+| 1 | `/app/PRODUCTION_ENVIRONMENT_STATUS.md` | Current state of production |
+| 2 | `/app/OUTSTANDING_ISSUES.md` | Known issues and priorities |
+| 3 | `/app/AGENT_ONBOARDING_PROMPT.md` | System architecture overview |
+| 4 | `/app/SYSTEM_ARCHITECTURE_AUDIT.md` | Database schema and data flow |
+
+```bash
+# Quick read command
+head -100 /app/PRODUCTION_ENVIRONMENT_STATUS.md
+head -100 /app/OUTSTANDING_ISSUES.md
+```
+
+---
+
+### Step 3: Understand the Environment Difference
+
+**CRITICAL:** Production and Preview have DIFFERENT configurations!
+
+| Setting | Production | Preview/Local |
+|---------|------------|---------------|
+| REDIS_URL | ✅ SET (in deployment settings) | ❌ NOT in .env file |
+| Socket.IO Mode | `redis` (multi-pod) | `in-memory` (single pod) |
+| Rate Limiting | Configured (disabled) | Not configured |
+
+**The local `.env` file does NOT reflect production configuration.**
+
+To see production config, check the health endpoint, NOT the local `.env`.
+
+---
+
+### Step 4: Verify Current User Testing Status
+
+Ask the user:
+1. Is there active user testing happening right now?
+2. Any issues reported from current testing?
+3. What is the immediate priority?
+
+**DO NOT make changes during active testing without explicit approval.**
+
+---
+
+### Step 5: Check Recent Changes
+
+```bash
+# View recent commits
+cd /app && git log --oneline -10
+
+# Check recent documentation updates
+ls -lt /app/*.md | head -10
+```
+
+---
+
+### Step 6: Verify Database State
+
+```bash
+# Check collection counts
+mongosh --quiet --eval "db.getCollectionNames().forEach(c => { print(c + ': ' + db[c].countDocuments({})) })" test_database
+```
+
+**Key Collections:**
+- `assets`: Should have 127 (football clubs + cricket players)
+- `leagues`: Active competitions
+- `users`: Registered users
+- `league_points`: Scoring data (source of truth for points)
+
+---
+
+## 🚫 Common Mistakes to Avoid
+
+### Mistake 1: Trusting Local .env for Production State
+❌ **Wrong:** "Redis isn't configured" (based on local .env)  
+✅ **Right:** Check `/api/health` endpoint for actual production state
+
+### Mistake 2: Looking in Wrong Database Collection
+❌ **Wrong:** Looking for points in `league_participants`  
+✅ **Right:** Points are in `league_points` collection
+
+### Mistake 3: Looking for Teams in Wrong Collection
+❌ **Wrong:** Looking for `clubs` or `teams` collection  
+✅ **Right:** ALL teams/players are in `assets` collection
+
+### Mistake 4: Assuming Fixture Status Values
+❌ **Wrong:** Setting fixture status to `"completed"`  
+✅ **Right:** Scoring requires status `"ft"` (full-time)
+
+### Mistake 5: Making Changes Without Approval
+❌ **Wrong:** "I'll fix this real quick"  
+✅ **Right:** Present analysis to user, get explicit approval
+
+---
+
+## ✅ Pre-Work Verification Checklist
+
+Before starting ANY work, confirm:
+
+- [ ] Ran production health check
+- [ ] Read PRODUCTION_ENVIRONMENT_STATUS.md
+- [ ] Read OUTSTANDING_ISSUES.md  
+- [ ] Understand production uses Redis (even if local doesn't)
+- [ ] Asked user about current testing status
+- [ ] Know what the immediate priority is
+- [ ] Will get approval before making changes
+
+---
+
+## 🔍 Quick Reference Commands
+
+### Production Health
+```bash
+curl -s "https://draft-kings-mobile.emergent.host/api/health" | python3 -m json.tool
+```
+
+### Check Production Sports
+```bash
+curl -s "https://draft-kings-mobile.emergent.host/api/sports" | python3 -m json.tool
+```
+
+### Database Counts
+```bash
+mongosh --quiet --eval "db.getCollectionNames().forEach(c => { print(c + ': ' + db[c].countDocuments({})) })" test_database
+```
+
+### Backend Logs
+```bash
+tail -50 /var/log/supervisor/backend.err.log
+```
+
+### Frontend Logs
+```bash
+tail -50 /var/log/supervisor/frontend.err.log
+```
+
+### Restart Services (only if needed)
+```bash
+sudo supervisorctl restart backend
+sudo supervisorctl restart frontend
+```
+
+---
+
+## 📞 When to Ask the User
+
+**ALWAYS ask before:**
+- Making any code changes
+- Restarting services during testing
+- Running database migrations
+- Deploying to production
+
+**Ask for clarification when:**
+- Instructions are ambiguous
+- Reported issue doesn't match what you see
+- You're unsure which environment to check
+- Priority isn't clear
+
+---
+
+## 📝 After Completing Work
+
+1. Update `/app/PRODUCTION_ENVIRONMENT_STATUS.md` with any changes
+2. Update `/app/OUTSTANDING_ISSUES.md` (move fixed items to Resolved)
+3. Test your changes
+4. Report results to user with evidence
+5. Get user verification before considering task complete
+
+---
+
+**Document Version:** 1.0  
+**Mandatory Reading:** YES - Every new agent session
