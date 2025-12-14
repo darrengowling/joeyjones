@@ -21,6 +21,39 @@ When fixing an issue, update this document:
 
 ---
 
+## 🟠 P1 - High Priority (Under Investigation)
+
+### ISSUE-016: Mobile Roster Not Updating After Win
+**Status:** MONITORING - Awaiting test results  
+**Reported:** Dec 13, 2025  
+**Description:** Some mobile users report roster not always updating after successfully winning a bid.  
+**Hypothesis:** Race condition between `sold` socket event and `loadAuction()` API call overwriting fresh data with stale data.  
+**Files Involved:** `/app/frontend/src/pages/AuctionRoom.js` (lines 234-237)  
+**Data Needed:** Device/browser, does refresh fix it, console errors  
+**Proposed Fix:** Remove `loadAuction()` call from `onSold` handler - trust socket event data
+
+### ISSUE-017: Mobile Connection/Lag Issues
+**Status:** MONITORING - Awaiting more detail  
+**Reported:** Dec 13, 2025  
+**Description:** Some (not all) mobile users report losing connection repeatedly and bids being "laggy".  
+**Possible Causes:** Mobile network instability, Socket.IO reconnection handling, device/browser specific, background tab throttling  
+**Data Needed:** Which devices/browsers, WiFi vs mobile data, specific moments when it occurs, what "laggy" means (slow response vs visual stutter)  
+**Proposed Fix:** TBD - need more data before making changes
+
+### ISSUE-018: Team Selection UX Confusion
+**Status:** MONITORING - Design decision needed  
+**Reported:** Dec 13, 2025  
+**Description:** Commissioners selecting "PL" in create modal expect PL teams only, but all 74 teams are selected by default. "Manage Teams" section is below the fold and easy to miss.  
+**Impact:** Auctions started with wrong team mix (PL + CL + AFCON combined)  
+**Proposed Options:**  
+- A. Auto-filter teams based on `competitionCode` on page load (recommended)  
+- B. Move team selection into create modal  
+- C. Warning before auction start if multiple competitions selected  
+- D. Start with NO teams selected  
+**Proposed Fix:** TBD - awaiting user preference
+
+---
+
 ## 🟠 P1 - High Priority (Should Address Soon)
 
 ### 1. Manual Score Entry UI
