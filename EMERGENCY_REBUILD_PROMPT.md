@@ -715,12 +715,25 @@ Platform rebuilt successfully when:
 2. ✅ Multiple users can create/join leagues
 3. ✅ Real-time auction with anti-snipe timer
 4. ✅ Waiting room shows live participant count
-5. ✅ CL/PL fixtures import successfully
+5. ✅ CL/PL/AFCON fixtures import successfully
 6. ✅ Score updates work from API
-7. ✅ Points calculate correctly (all 56 teams)
+7. ✅ Points calculate correctly (all teams)
 8. ✅ Standings display correctly
 9. ✅ No duplicate point counting
+10. ✅ Users cannot outbid themselves
+11. ✅ Socket.IO works in multi-pod production (Redis)
 
 ---
 
-**This document contains VERIFIED CURRENT STATE as of December 9, 2025. Treat as source of truth for rebuild.**
+## 🔄 Pilot Readiness Checklist
+
+Before scaling to larger user groups:
+- [ ] Enable Sentry error monitoring (add SENTRY_DSN)
+- [ ] Configure database automated backups
+- [ ] Consider enabling rate limiting (ENABLE_RATE_LIMITING=true)
+- [ ] Resolve mobile connection/lag issues
+- [ ] Simplify team selection UX
+
+---
+
+**This document contains VERIFIED CURRENT STATE as of December 13, 2025. Treat as source of truth for rebuild.**
