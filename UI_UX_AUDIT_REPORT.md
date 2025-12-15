@@ -318,15 +318,52 @@ These can be implemented with minimal effort for maximum impact:
 
 ---
 
-## Appendix: Screenshot Reference
+## Appendix: Screenshot Capture Guide
 
-Screenshots captured during audit are available at:
-- `/tmp/home_desktop.png`, `/tmp/home_mobile.png`
-- `/tmp/create_desktop.png`, `/tmp/create_mobile.png`
-- `/tmp/league_detail_desktop_*.png`, `/tmp/league_detail_mobile_*.png`
-- `/tmp/auction_*.png`
-- `/tmp/dashboard_*.png`
-- `/tmp/help_desktop_*.png`, `/tmp/help_mobile.png`
+To capture fresh screenshots for sharing, visit these URLs:
+
+### Page URLs for Screenshots
+
+| Page | Desktop (1920x800) | Mobile (390x844) |
+|------|-------------------|------------------|
+| **Home** | `http://localhost:3000` | Same |
+| **Create Modal** | Click "Create Your Competition" on Home | Same |
+| **LeagueDetail** | `http://localhost:3000/league/{league_id}` | Same (scroll to see team selection) |
+| **AuctionRoom** | `http://localhost:3000/auction/{auction_id}` | Same |
+| **Dashboard** | `http://localhost:3000/competition/{league_id}` | Same |
+| **Help** | `http://localhost:3000/help` | Same |
+
+### Production URLs
+
+| Page | URL |
+|------|-----|
+| **Home** | `https://draft-kings-mobile.emergent.host` |
+| **Help** | `https://draft-kings-mobile.emergent.host/help` |
+
+### Key Screenshots to Capture
+
+1. **Home Page** - Shows button hierarchy issue (Explore equal to Create/Join)
+2. **LeagueDetail scrolled down** - Shows team selection filter below fold
+3. **AuctionRoom with active bid** - Shows bidding interface (reference red3 screenshot from testing)
+4. **Help Page** - Shows well-structured help sections
+
+### Screenshot from User Testing (Reference)
+
+The user shared a screenshot during testing showing the AuctionRoom with:
+- Current Bid: £5m
+- Bidder: daz2
+- +5m, +10m, +20m, +50m buttons
+- Input field showing "15"
+
+This screenshot demonstrates both the working bid controls and the self-outbid fix in action.
+
+---
+
+## Change Log
+
+| Date | Change |
+|------|--------|
+| Dec 13, 2025 | Initial audit report created |
 
 ---
 
