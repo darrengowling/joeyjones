@@ -452,6 +452,13 @@ GET https://cricbuzz-cricket.p.rapidapi.com/series/v1/{seriesId}
 
 ## ⚠️ CRITICAL Gotchas (MUST READ)
 
+### 0. Production vs Preview Environment
+**Problem**: Preview/local `.env` does NOT have `REDIS_URL` - but production DOES.  
+**Solution**: ALWAYS check production health endpoint, not local `.env`, to verify production state.
+```bash
+curl -s "https://draft-kings-mobile.emergent.host/api/health" | python3 -m json.tool
+```
+
 ### 1. Team Names MUST Match API Exactly
 **Problem**: Scoring uses exact MongoDB `$in` matching. If DB has "Chelsea" but fixtures have "Chelsea FC", scoring fails.
 
