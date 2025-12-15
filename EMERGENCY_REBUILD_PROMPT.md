@@ -656,12 +656,55 @@ httpx
 
 ---
 
+## 🔧 Recent Critical Fixes (Dec 2025)
+
+### Self-Outbid Prevention (Dec 13, 2025)
+**Problem**: Users could outbid themselves by clicking +bid buttons  
+**Solution**: 
+- Backend: Reject bids from current highest bidder with 400 error
+- Frontend: Reset input field to current bid on rejection
+**Files**: `server.py` (line ~4460), `AuctionRoom.js` (error handler)
+
+### Bid Validation Fix (Dec 12, 2025)
+**Problem**: 500 error on first bid due to Pydantic serialization  
+**Solution**: Robust handling of `None` values with `or 0` pattern  
+**Files**: `server.py`
+
+### Auction Deletion Handler (Dec 12, 2025)
+**Problem**: User screens froze when commissioner deleted auction  
+**Solution**: Emit `auction_deleted` Socket.IO event, frontend redirects  
+**Files**: `server.py`, `AuctionRoom.js`
+
+### Redis Multi-Pod (Dec 8, 2025)
+**Problem**: Socket.IO not working across multiple pods  
+**Solution**: Configured Redis Cloud for pub/sub  
+**Files**: `socketio_init.py`, production env vars
+
+---
+
+## 📋 Outstanding Issues (As of Dec 13, 2025)
+
+| Issue | Priority | Status |
+|-------|----------|--------|
+| Mobile roster not updating after win | P1 | Monitoring - race condition suspected |
+| Mobile connection/lag issues | P1 | Monitoring - need more device data |
+| Team selection UX confusion | P2 | Design decision needed |
+| Sentry not configured | P2 | Code ready, needs DSN |
+| Rate limiting disabled | P3 | Code ready, disabled for testing |
+
+See `/app/OUTSTANDING_ISSUES.md` for full details.
+
+---
+
 ## 📞 Critical Files Reference
 
+- `/app/PRODUCTION_ENVIRONMENT_STATUS.md` - Current production state
+- `/app/OUTSTANDING_ISSUES.md` - All known issues and priorities
+- `/app/AGENT_ONBOARDING_CHECKLIST.md` - Mandatory steps for new agents
 - `/app/SYSTEM_ARCHITECTURE_AUDIT.md` - Complete system documentation
-- `/app/TEAM_UPDATES_COMPLETED.md` - All 56 verified team names
 - `/app/AGENT_ONBOARDING_PROMPT.md` - Common mistakes to avoid
-- `/app/WAITING_ROOM_FIX_COMPLETE.md` - Socket.IO implementation details
+- `/app/TEAM_UPDATES_COMPLETED.md` - All 56 verified team names
+- `/app/PAYMENT_INTEGRATION_PLAN.md` - Future payment integration planning
 
 ---
 
