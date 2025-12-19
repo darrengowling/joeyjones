@@ -626,17 +626,19 @@ function AuctionRoom() {
       
       const duration = performance.now() - startTime;
       
+      // PERF INSTRUMENTATION: Enhanced timing metrics
       console.log("✅ bid:success", { 
         auctionId, 
         clubId: currentClub.id, 
         amount,
+        tapToAckMs: Math.round(duration),
         response: response.data 
       });
       
       debugLogger.log('bid:success', { 
         clubId: currentClub.id, 
         amount,
-        durationMs: Math.round(duration),
+        tapToAckMs: Math.round(duration),
         response: response.data 
       });
       
