@@ -13,7 +13,7 @@ This guide covers load testing the most critical path in the system: real-time a
 **1. Create a Test Auction**:
 ```bash
 # Go to your app
-https://pilot-ready-deploy.preview.emergentagent.com
+https://fix-roster-sync.preview.emergentagent.com
 
 # Steps:
 1. Sign in

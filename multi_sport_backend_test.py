@@ -16,7 +16,7 @@ from datetime import datetime, timezone
 from typing import Dict, List, Optional
 
 # Configuration
-BASE_URL = "https://pilot-ready-deploy.preview.emergentagent.com/api"
+BASE_URL = "https://fix-roster-sync.preview.emergentagent.com/api"
 
 class MultiSportTester:
     def __init__(self):

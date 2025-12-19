@@ -16,8 +16,8 @@ from datetime import datetime, timezone
 from typing import Dict, List, Optional
 
 # Configuration
-BASE_URL = "https://pilot-ready-deploy.preview.emergentagent.com/api"
-SOCKET_URL = "https://pilot-ready-deploy.preview.emergentagent.com"
+BASE_URL = "https://fix-roster-sync.preview.emergentagent.com/api"
+SOCKET_URL = "https://fix-roster-sync.preview.emergentagent.com"
 SOCKET_PATH = "/api/socket.io"
 
 class EvertonBugFixesTester:

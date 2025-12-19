@@ -11,7 +11,7 @@ import { test, expect, Page } from '@playwright/test';
  * - useSocketRoom hook prevents duplicate listeners
  */
 
-const BASE_URL = process.env.REACT_APP_BACKEND_URL || 'https://pilot-ready-deploy.preview.emergentagent.com';
+const BASE_URL = process.env.REACT_APP_BACKEND_URL || 'https://fix-roster-sync.preview.emergentagent.com';
 
 test.describe('Lobby Presence - Real-time Member Updates', () => {
   let commissionerPage: Page;

@@ -86,7 +86,7 @@ test.describe('League Table Zero State', () => {
     // Verify API response also has zero points
     const apiUrl = page.url().includes('localhost') 
       ? `http://localhost:8001/api/leagues/${leagueId}/standings`
-      : `https://pilot-ready-deploy.preview.emergentagent.com/api/leagues/${leagueId}/standings`;
+      : `https://fix-roster-sync.preview.emergentagent.com/api/leagues/${leagueId}/standings`;
     
     const apiResponse = await request.get(apiUrl);
     expect(apiResponse.status()).toBe(200);

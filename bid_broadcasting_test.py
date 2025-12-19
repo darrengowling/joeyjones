@@ -15,8 +15,8 @@ from typing import Dict, List, Optional
 from concurrent.futures import ThreadPoolExecutor
 
 # Configuration
-BASE_URL = "https://pilot-ready-deploy.preview.emergentagent.com/api"
-SOCKET_URL = "https://pilot-ready-deploy.preview.emergentagent.com"
+BASE_URL = "https://fix-roster-sync.preview.emergentagent.com/api"
+SOCKET_URL = "https://fix-roster-sync.preview.emergentagent.com"
 SOCKET_PATH = "/api/socket.io"
 
 class BidBroadcastingTester:

@@ -184,7 +184,7 @@ After deploying to production:
 
 **Frontend `.env` (Preview):**
 ```env
-REACT_APP_BACKEND_URL=https://pilot-ready-deploy.preview.emergentagent.com
+REACT_APP_BACKEND_URL=https://fix-roster-sync.preview.emergentagent.com
 REACT_APP_BUILD_HASH=1363bfb
 ```
 
@@ -202,11 +202,11 @@ REACT_APP_BUILD_HASH=<current-commit-hash>
 
 1. **Start auction in preview:**
    ```
-   https://pilot-ready-deploy.preview.emergentagent.com
+   https://fix-roster-sync.preview.emergentagent.com
    ```
 
 2. **Check debug footer shows:**
-   - Backend: `https://pilot-ready-deploy.preview.emergentagent.com`
+   - Backend: `https://fix-roster-sync.preview.emergentagent.com`
    - Socket: `/api/socket.io`
 
 3. **Verify Socket.IO connection:**

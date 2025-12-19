@@ -9,7 +9,7 @@ PRODUCTION:
 
 PREVIEW:
   - Main JS: bundle.js (development build)
-  - Backend URL configured: https://pilot-ready-deploy.preview.emergentagent.com
+  - Backend URL configured: https://fix-roster-sync.preview.emergentagent.com
 
 === BACKEND SERVER ANALYSIS ===
 

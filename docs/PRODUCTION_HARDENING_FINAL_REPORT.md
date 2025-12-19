@@ -1224,10 +1224,10 @@ tail -f /var/log/supervisor/backend.err.log
 ### Health Checks
 ```bash
 # API health
-curl https://pilot-ready-deploy.preview.emergentagent.com/api/health
+curl https://fix-roster-sync.preview.emergentagent.com/api/health
 
 # Frontend
-curl -I https://pilot-ready-deploy.preview.emergentagent.com
+curl -I https://fix-roster-sync.preview.emergentagent.com
 ```
 
 ### Backups
@@ -1246,7 +1246,7 @@ curl -I https://pilot-ready-deploy.preview.emergentagent.com
 ```bash
 # API load test (150 users)
 cd /app/tests/load
-locust -f locustfile.py --host=https://pilot-ready-deploy.preview.emergentagent.com --users=150 --spawn-rate=10 --run-time=10m --headless
+locust -f locustfile.py --host=https://fix-roster-sync.preview.emergentagent.com --users=150 --spawn-rate=10 --run-time=10m --headless
 
 # Socket.IO auction test
 source /tmp/test_auction_env.sh

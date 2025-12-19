@@ -61,7 +61,7 @@ def test_current_state():
     
     # Test API connectivity
     try:
-        response = requests.get("https://pilot-ready-deploy.preview.emergentagent.com/api/", timeout=10)
+        response = requests.get("https://fix-roster-sync.preview.emergentagent.com/api/", timeout=10)
         if response.status_code == 200:
             log("✅ API connectivity working")
         else:
