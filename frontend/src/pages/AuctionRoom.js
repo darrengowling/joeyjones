@@ -173,6 +173,13 @@ function AuctionRoom() {
         serverLatencyMs: serverLatency
       });
       
+      // PERF FIX: Detect seq gaps (missed events) - trigger resync if gap > 1
+      const seqGap = data.seq - bidSequence;
+      if (seqGap > 1) {
+        console.warn(`⚠️ Seq gap detected: expected ${bidSequence + 1}, got ${data.seq}. Resyncing...`);
+        loadAuction();
+      }
+      
       // Only accept bid updates with seq >= current seq (prevents stale updates)
       if (data.seq >= bidSequence) {
         console.log(`✅ Applying bid update: ${formatCurrency(data.amount)} by ${data.bidder?.displayName} (seq: ${data.seq}, latency: ${serverLatency}ms)`);
