@@ -1,6 +1,6 @@
 # UI/UX Audit Report - Sport X Platform
 
-**Date:** December 13, 2025  
+**Date:** December 13, 2025 (Updated Evening)  
 **Prepared by:** Development Team  
 **Purpose:** Comprehensive UI/UX review for pilot readiness and future improvements
 
@@ -14,6 +14,18 @@ A page-by-page UI/UX review was conducted across all key user flows. The platfor
 2. **Mobile Experience** - Long scrolling, some layout issues
 3. **Button Hierarchy** - Some secondary actions given equal weight
 4. **Auction Clarity** - Bidder status could be clearer
+5. **Real-time State Updates** - Roster display lag reported (technical fix in progress)
+
+---
+
+## User Testing Feedback (Dec 13 - "Ash friends test 2")
+
+| Feedback | Likely Cause | Status |
+|----------|--------------|--------|
+| "Couldn't place a bid" | Multiple possibilities - awaiting clarification | INVESTIGATING |
+| "1 team then full roster" | Race condition - fix identified | READY TO FIX |
+| "United offered 2 times" | Possibly unsold retry (expected) - awaiting clarification | INVESTIGATING |
+| "Roster lagged in 2 places" | Same race condition as above | READY TO FIX |
 
 ---
 
@@ -22,6 +34,7 @@ A page-by-page UI/UX review was conducted across all key user flows. The platfor
 | Priority | Issue | Page | Impact |
 |----------|-------|------|--------|
 | 🔴 High | Team selection doesn't filter based on competition | LeagueDetail | Commissioners start auctions with wrong teams |
+| 🔴 High | Roster display lag / wrong count | AuctionRoom | User confusion, incorrect "Full" status |
 | 🔴 High | "Unknown" manager names (verify if still occurring) | AuctionRoom | Confusing for users |
 | 🟠 Medium | "Explore" button equal weight to primary actions | Home | Visual clutter, especially mobile |
 | 🟠 Medium | No "you're winning/outbid" visual indicator | AuctionRoom | User confusion about bid status |
