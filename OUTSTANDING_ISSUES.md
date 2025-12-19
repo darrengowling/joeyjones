@@ -33,12 +33,35 @@ When fixing an issue, update this document:
 **Proposed Fix:** Remove `loadAuction()` call from `onSold` handler - trust socket event data
 
 ### ISSUE-017: Mobile Connection/Lag Issues
-**Status:** MONITORING - Awaiting more detail  
+**Status:** PARTIALLY ADDRESSED - Phase 1 implemented Dec 13, 2025  
 **Reported:** Dec 13, 2025  
 **Description:** Some (not all) mobile users report losing connection repeatedly and bids being "laggy".  
-**Possible Causes:** Mobile network instability, Socket.IO reconnection handling, device/browser specific, background tab throttling  
-**Data Needed:** Which devices/browsers, WiFi vs mobile data, specific moments when it occurs, what "laggy" means (slow response vs visual stutter)  
-**Proposed Fix:** TBD - need more data before making changes
+**Root Cause Analysis:** Identified two major latency amplifiers:
+1. Frontend: Every bid triggered 2 HTTP GETs (`loadAuction()` + `loadClubs()`) for every client
+2. Backend: Hot path has ~10 sequential awaits (7 DB reads, 2-3 writes, 2 emits)
+
+**Phase 1 Fix (IMPLEMENTED):**
+- Removed `loadAuction()` and `loadClubs()` from `bid_placed` handler
+- Added resync on socket reconnect only
+- Added seq gap detection for missed events
+- Added performance instrumentation (tap→ack, receive→render timing)
+
+**Remaining Improvements (Phase 2-5):**
+| Phase | Change | Risk | Status |
+|-------|--------|------|--------|
+| 2 | Remove diagnostic DB reads from hot path | 🟢 Low | NOT STARTED |
+| 3 | Use `findOneAndUpdate` instead of update+read | 🟡 Medium | NOT STARTED |
+| 4 | Consolidate to single socket event | 🟡 Medium | NOT STARTED |
+| 5 | Socket.IO for bid submission (optional) | 🔴 Higher | NOT STARTED |
+
+**Instrumentation Added:** Console logs now show:
+- `tapToAckMs`: Time from bid tap to server response
+- `serverLatencyMs`: Server-to-client latency
+- `bid_update rendered: totalMs`: Receive-to-render time
+
+**Files Modified:** 
+- `/app/frontend/src/pages/AuctionRoom.js` (bid handlers)
+- `/app/backend/server.py` (serverTime in emit)
 
 ### ISSUE-018: Team Selection UX Confusion
 **Status:** MONITORING - Design decision needed  
