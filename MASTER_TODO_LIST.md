@@ -109,17 +109,19 @@ These items need more detail from user testing before we can proceed:
 
 ---
 
-## ✅ RECENTLY RESOLVED (Dec 2025)
+### ✅ RECENTLY RESOLVED (Dec 2025)
 
-| Date | Item | Solution |
-|------|------|----------|
-| Dec 13 | Self-outbid prevention | Backend validation + input reset |
-| Dec 13 | Bid lag Phase 1 | Removed HTTP GETs from bid_placed handler |
-| Dec 12 | 500 error on first bid | Pydantic serialization fix |
-| Dec 12 | Screen freeze on auction delete | Socket.IO auction_deleted event |
-| Dec 12 | Mobile horizontal scrolling | AuctionRoom responsive fix |
-| Dec 12 | Bid validation (equal bids) | Require bid > current |
-| Dec 8 | Socket.IO multi-pod | Redis Cloud configuration |
+| # | Issue | Summary | Solution | Date |
+|---|-------|---------|----------|------|
+| 1 | Debug report incomplete | Debug report only captured client-side data, couldn't diagnose server issues | Enhanced to capture all 15 socket events + fetch server-side auction state via `/api/debug/auction-state/{id}` | Dec 19 |
+| 2 | Self-outbid | Users could increase their own winning bid | Backend validation + input reset on rejection | Dec 13 |
+| 3 | Bid lag Phase 1 | 2 HTTP GETs per bid per client causing lag | Removed loadAuction/loadClubs from bid_placed | Dec 13 |
+| 4 | 500 on first bid | Server error on initial bid | Fixed Pydantic serialization, None handling | Dec 12 |
+| 5 | Frozen on delete | Screen froze when auction deleted | Added auction_deleted socket event | Dec 12 |
+| 6 | Horizontal scroll | Mobile auction room had horizontal scroll | Fixed responsive layout | Dec 12 |
+| 7 | Equal bid accepted | Bids equal to current were accepted | Changed to require bid > current | Dec 12 |
+| 8 | Multi-pod Socket.IO | Socket.IO didn't work across pods | Configured Redis Cloud pub/sub | Dec 8 |
+| 9 | Production outage | 520 error, service unavailable | Emergent platform issue - resolved after redeploy | Dec 13 |
 
 ---
 
