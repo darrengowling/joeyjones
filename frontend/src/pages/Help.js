@@ -137,7 +137,7 @@ const Help = () => {
               <ul className="list-disc list-inside space-y-2 text-gray-700">
                 <li><strong>Create a Competition:</strong> Start your own league if you're the organizer</li>
                 <li><strong>Join a Competition:</strong> Enter an invite token from a friend</li>
-                <li><strong>Browse available teams/players:</strong> View the sports teams available for bidding</li>
+                <li><strong>Explore Available Teams:</strong> Browse the sports teams available for bidding</li>
               </ul>
             </div>
           </div>
