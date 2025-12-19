@@ -1138,21 +1138,22 @@ function AuctionRoom() {
               {auction && (
                 <div className="flex flex-col sm:flex-row sm:items-center gap-2">
                   <button
-                    onClick={() => {
+                    onClick={async () => {
                       try {
                         debugLogger.log('auction_complete', {
                           finalStatus: auction?.status,
                           totalBids: bids.length
                         });
-                        debugLogger.downloadReport();
-                        toast.success("Debug report downloaded!");
+                        toast("Generating debug report...", { duration: 2000 });
+                        await debugLogger.downloadReport();
+                        toast.success("Debug report downloaded with server state!");
                       } catch (e) {
                         console.error("Debug report error:", e);
                         toast.error("Failed to download report");
                       }
                     }}
                     className="px-3 py-1.5 sm:px-4 sm:py-2 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm"
-                    title="Download debug report with all bid logs for troubleshooting"
+                    title="Download debug report with all bid logs and server state for troubleshooting"
                   >
                     📊 Download Debug Report
                   </button>
