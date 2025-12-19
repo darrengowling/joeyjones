@@ -278,6 +278,7 @@ When fixing an issue, update this document:
 
 | ID | Issue | Resolved Date | Solution |
 |----|-------|---------------|----------|
+| - | Debug report missing server state | Dec 19, 2025 | Enhanced debugLogger to capture all 15 socket events + fetch server-side auction state via `/api/debug/auction-state/{id}` |
 | - | Users can outbid themselves | Dec 13, 2025 | Added backend validation to reject bids from current highest bidder |
 | - | 500 error on first bid | Dec 12, 2025 | Fixed Pydantic serialization and None value handling |
 | - | Screen freeze on auction deletion | Dec 12, 2025 | Added `auction_deleted` Socket.IO event |
