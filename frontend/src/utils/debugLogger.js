@@ -1,11 +1,12 @@
 /**
  * Debug Logger for Auction Bidding
- * Captures all bid-related events for post-auction analysis
+ * Captures all bid-related events AND socket events for post-auction analysis
  */
 
 class DebugLogger {
   constructor() {
     this.logs = [];
+    this.socketEvents = [];
     this.sessionStart = new Date().toISOString();
     this.auctionId = null;
   }
@@ -31,12 +32,43 @@ class DebugLogger {
     }
   }
 
+  // NEW: Log socket events for debugging
+  logSocketEvent(eventName, data) {
+    const entry = {
+      timestamp: new Date().toISOString(),
+      timestampMs: Date.now(),
+      eventName,
+      auctionId: this.auctionId,
+      data: this.sanitizeData(data)
+    };
+    
+    this.socketEvents.push(entry);
+    
+    // Keep only last 200 socket events
+    if (this.socketEvents.length > 200) {
+      this.socketEvents.shift();
+    }
+  }
+
+  // Sanitize data to avoid circular references
+  sanitizeData(data) {
+    try {
+      return JSON.parse(JSON.stringify(data));
+    } catch {
+      return { error: 'Could not serialize data' };
+    }
+  }
+
   getBidLogs() {
     return this.logs.filter(log => 
       log.event.includes('bid:') || 
       log.event === 'auction_start' ||
       log.event === 'auction_complete'
     );
+  }
+
+  getSocketEvents() {
+    return this.socketEvents;
   }
 
   getStats() {
@@ -47,6 +79,12 @@ class DebugLogger {
     const errors = bidLogs.filter(l => l.event === 'bid:error').length;
     const rateLimited = bidLogs.filter(l => l.event === 'bid:rate_limited').length;
     
+    // Socket event stats
+    const socketStats = {};
+    this.socketEvents.forEach(e => {
+      socketStats[e.eventName] = (socketStats[e.eventName] || 0) + 1;
+    });
+    
     return {
       totalAttempts: attempts,
       totalSent: sent,
@@ -54,7 +92,9 @@ class DebugLogger {
       totalErrors: errors,
       rateLimited,
       successRate: attempts > 0 ? ((successes / attempts) * 100).toFixed(1) + '%' : '0%',
-      networkSuccessRate: sent > 0 ? ((successes / sent) * 100).toFixed(1) + '%' : '0%'
+      networkSuccessRate: sent > 0 ? ((successes / sent) * 100).toFixed(1) + '%' : '0%',
+      socketEventsReceived: this.socketEvents.length,
+      socketEventsByType: socketStats
     };
   }
 
@@ -86,8 +126,19 @@ class DebugLogger {
       },
       statistics: this.getStats(),
       errorSummary: this.getErrorSummary(),
-      events: this.getBidLogs(),
-      allLogs: this.logs
+      bidEvents: this.getBidLogs(),
+      socketEvents: this.getSocketEvents(),
+      allLogs: this.logs,
+      // Instructions for getting server-side data
+      serverDebugInstructions: {
+        note: "To get full server-side state, call these endpoints:",
+        auctionState: this.auctionId 
+          ? `/api/debug/auction-state/${this.auctionId}`
+          : "/api/debug/auction-state/{auction_id}",
+        bidLogs: this.auctionId
+          ? `/api/debug/bid-logs/${this.auctionId}`
+          : "/api/debug/bid-logs/{auction_id}"
+      }
     };
     
     return report;
@@ -108,6 +159,7 @@ class DebugLogger {
 
   clear() {
     this.logs = [];
+    this.socketEvents = [];
     this.sessionStart = new Date().toISOString();
   }
 }
