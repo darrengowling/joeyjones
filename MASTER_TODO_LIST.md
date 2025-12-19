@@ -212,17 +212,19 @@
 
 ## 🎯 RECOMMENDED NEXT ACTIONS
 
-**Immediate:**
-1. Configure Sentry (code ready, need DSN) - 30 min
-2. Implement ISSUE-016 fix (remove loadAuction from onSold) - 30 min
-3. Deploy and test with users
+**⚠️ WARNING:** E1 agent has failed to implement ISSUE-016 and ISSUE-018 fixes. Consider:
+- Using E1.5 or E2 agent for complex frontend fixes
+- Manual implementation by developer
+- More detailed planning before any code changes
 
-**After user feedback on ISSUE-019/020/021:**
-4. Address based on clarification received
+**If proceeding with E1:**
+1. Configure Sentry (code ready, need DSN) - 30 min - CONFIG ONLY
+2. Rate limiting enable - CONFIG ONLY
+3. Backend-only fixes (ISSUE-017 Phase 2/3) - lower risk than frontend
 
-**When ready for UI/UX:**
-5. Team selection auto-filter (ISSUE-018) - needs design decision
-6. Bidder status indicator ("YOU'RE WINNING") - 2 hrs
+**DO NOT attempt without thorough analysis:**
+- ISSUE-016 (Roster Not Updating) - has hidden dependencies
+- ISSUE-018 (Team Selection UX) - partial fix only, frontend display broken
 
 ---
 
