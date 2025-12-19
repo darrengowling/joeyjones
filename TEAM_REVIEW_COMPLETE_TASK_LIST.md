@@ -96,7 +96,7 @@
 
 | # | Issue | Summary | Solution | Date |
 |---|-------|---------|----------|------|
-| 1 | **Debug report incomplete** | Debug report only captured client-side data, couldn't diagnose server issues | Enhanced to capture all 15 socket events + fetch server-side auction state via `/api/debug/auction-state/{id}` | Dec 19 |
+| 1 | **Debug report incomplete** | Debug report only captured client-side data, couldn't diagnose server issues | Enhanced to capture all 15 socket events + server state. Now auto-uploads to server - commissioners click "Report Issue", get reference ID (e.g., DBG-20251219-001), support can query via `/api/debug/reports` | Dec 19 |
 | 2 | Self-outbid | Users could increase their own winning bid | Backend validation + input reset on rejection | Dec 13 |
 | 3 | Bid lag Phase 1 | 2 HTTP GETs per bid per client causing lag | Removed loadAuction/loadClubs from bid_placed | Dec 13 |
 | 4 | 500 on first bid | Server error on initial bid | Fixed Pydantic serialization, None handling | Dec 12 |
