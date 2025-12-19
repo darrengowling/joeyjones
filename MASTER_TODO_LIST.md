@@ -159,6 +159,7 @@
 | 13 | **ISSUE-007** | **Cricket Error Messages** - Generic error messages for cricket | Insufficient error handling | Add specific error messages | 🟢 Low | Better user feedback |
 | 14 | **ISSUE-005** | **LeagueDetail Scrolling** - Excessive scrolling on mobile | Long page design | Add collapsible sections or tabs | 🟢 Low | Better mobile UX |
 | 15 | **ISSUE-006** | **"Complete Lot" Button** - Button may be redundant | Added for now-fixed bug | Monitor usage, remove if unused | 🟢 Low | Cleaner UI |
+| 16 | - | **Rate Limiting** - Rate limiting function exists but not applied to endpoints | Deferred during development | Apply `get_rate_limiter()` to key endpoints | 🟢 Low | Protection against API abuse |
 
 ---
 
