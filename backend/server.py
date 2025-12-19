@@ -6057,6 +6057,145 @@ async def lookup_league(name: str = None, limit: int = 50):
         logger.error(f"Error looking up league: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
+
+# ============================================================================
+# DEBUG REPORT SUBMISSION ENDPOINTS
+# ============================================================================
+
+@api_router.post("/debug/reports")
+async def submit_debug_report(report: dict = Body(...)):
+    """
+    Submit a debug report from commissioner UI.
+    Stores client + server state for troubleshooting user-reported issues.
+    
+    Returns a reference ID that commissioners can share with support.
+    """
+    try:
+        # Generate reference ID: DBG-YYYYMMDD-XXX
+        today = datetime.now(timezone.utc).strftime("%Y%m%d")
+        
+        # Count today's reports to generate sequence number
+        today_start = datetime.now(timezone.utc).replace(hour=0, minute=0, second=0, microsecond=0)
+        today_count = await db.debug_reports.count_documents({
+            "submittedAt": {"$gte": today_start}
+        })
+        
+        reference_id = f"DBG-{today}-{str(today_count + 1).zfill(3)}"
+        
+        # Extract key info from report
+        auction_id = report.get("metadata", {}).get("auctionId")
+        
+        # Get league ID from server state if available
+        league_id = None
+        server_state = report.get("serverState")
+        if server_state and isinstance(server_state, dict):
+            league_id = server_state.get("league", {}).get("id")
+        
+        # Build the document to store
+        debug_report = {
+            "referenceId": reference_id,
+            "auctionId": auction_id,
+            "leagueId": league_id,
+            "submittedAt": datetime.now(timezone.utc),
+            "metadata": report.get("metadata", {}),
+            "statistics": report.get("statistics", {}),
+            "errorSummary": report.get("errorSummary", {}),
+            "socketEvents": report.get("socketEvents", []),
+            "bidEvents": report.get("bidEvents", []),
+            "serverState": server_state,
+            "serverStateFetched": report.get("serverStateFetched", False),
+            "serverStateError": report.get("serverStateError"),
+        }
+        
+        await db.debug_reports.insert_one(debug_report)
+        
+        logger.info(f"Debug report submitted: {reference_id} for auction {auction_id}")
+        
+        return {
+            "referenceId": reference_id,
+            "message": "Report submitted successfully",
+            "auctionId": auction_id
+        }
+        
+    except Exception as e:
+        logger.error(f"Error submitting debug report: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@api_router.get("/debug/reports")
+async def list_debug_reports(
+    auction_id: str = None,
+    league_id: str = None,
+    limit: int = 50
+):
+    """
+    List debug reports with optional filters.
+    For admin/support use to review submitted reports.
+    """
+    try:
+        query = {}
+        if auction_id:
+            query["auctionId"] = auction_id
+        if league_id:
+            query["leagueId"] = league_id
+        
+        reports = await db.debug_reports.find(
+            query,
+            {
+                "_id": 0,
+                "referenceId": 1,
+                "auctionId": 1,
+                "leagueId": 1,
+                "submittedAt": 1,
+                "metadata.userAgent": 1,
+                "metadata.screenSize": 1,
+                "statistics": 1,
+                "serverStateFetched": 1
+            }
+        ).sort("submittedAt", -1).limit(limit).to_list(limit)
+        
+        # Convert datetime to ISO string for JSON serialization
+        for report in reports:
+            if report.get("submittedAt"):
+                report["submittedAt"] = report["submittedAt"].isoformat()
+        
+        return {
+            "count": len(reports),
+            "reports": reports
+        }
+        
+    except Exception as e:
+        logger.error(f"Error listing debug reports: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@api_router.get("/debug/reports/{reference_id}")
+async def get_debug_report(reference_id: str):
+    """
+    Get full details of a specific debug report by reference ID.
+    """
+    try:
+        report = await db.debug_reports.find_one(
+            {"referenceId": reference_id},
+            {"_id": 0}
+        )
+        
+        if not report:
+            raise HTTPException(status_code=404, detail=f"Report {reference_id} not found")
+        
+        # Convert datetime to ISO string
+        if report.get("submittedAt"):
+            report["submittedAt"] = report["submittedAt"].isoformat()
+        
+        return report
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error retrieving debug report: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 # Custom middleware to log CORS preflight requests
 @app.middleware("http")
 async def log_preflight_requests(request, call_next):
