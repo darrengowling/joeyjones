@@ -1,6 +1,6 @@
 # Outstanding Issues & Technical Debt
 
-**Last Updated:** December 13, 2025  
+**Last Updated:** December 13, 2025 (Evening)  
 **Updated By:** Agent  
 **Purpose:** Living document tracking all known issues, bugs, and technical debt
 
@@ -21,183 +21,172 @@ When fixing an issue, update this document:
 
 ---
 
-## 🟠 P1 - High Priority (Under Investigation)
+## 🟠 P1 - High Priority (Active Issues)
 
 ### ISSUE-016: Mobile Roster Not Updating After Win
-**Status:** MONITORING - Awaiting test results  
+**Status:** ROOT CAUSE IDENTIFIED - Fix ready, awaiting approval  
 **Reported:** Dec 13, 2025  
-**Description:** Some mobile users report roster not always updating after successfully winning a bid.  
-**Hypothesis:** Race condition between `sold` socket event and `loadAuction()` API call overwriting fresh data with stale data.  
-**Files Involved:** `/app/frontend/src/pages/AuctionRoom.js` (lines 234-237)  
-**Data Needed:** Device/browser, does refresh fix it, console errors  
-**Proposed Fix:** Remove `loadAuction()` call from `onSold` handler - trust socket event data
+**Latest Evidence:** "Ash friends test 2" - user reported "only got 1 team then full roster displayed"  
+**Root Cause:** Race condition - `sold` handler calls `loadAuction()` (line 264) which overwrites fresh `participants` data with stale HTTP response  
+**Files Involved:** `/app/frontend/src/pages/AuctionRoom.js` (line 264)  
+**Proposed Fix:** Remove `loadAuction()` call from `onSold` handler - trust socket event data (same pattern as Phase 1 bid fix)  
+**Risk:** 🟢 Low
 
 ### ISSUE-017: Mobile Connection/Lag Issues
 **Status:** PARTIALLY ADDRESSED - Phase 1 implemented Dec 13, 2025  
 **Reported:** Dec 13, 2025  
-**Description:** Some (not all) mobile users report losing connection repeatedly and bids being "laggy".  
-**Root Cause Analysis:** Identified two major latency amplifiers:
-1. Frontend: Every bid triggered 2 HTTP GETs (`loadAuction()` + `loadClubs()`) for every client
-2. Backend: Hot path has ~10 sequential awaits (7 DB reads, 2-3 writes, 2 emits)
+**Description:** Some mobile users report "laggy" bids and connection issues.  
+**Root Cause Analysis:** Two major latency amplifiers identified:
+1. Frontend: Every bid triggered 2 HTTP GETs per client (FIXED in Phase 1)
+2. Backend: Hot path has ~10 sequential awaits
 
 **Phase 1 Fix (IMPLEMENTED):**
-- Removed `loadAuction()` and `loadClubs()` from `bid_placed` handler
-- Added resync on socket reconnect only
-- Added seq gap detection for missed events
-- Added performance instrumentation (tap→ack, receive→render timing)
+- ✅ Removed `loadAuction()` and `loadClubs()` from `bid_placed` handler
+- ✅ Added resync on socket reconnect only
+- ✅ Added seq gap detection for missed events
+- ✅ Added performance instrumentation
 
-**Remaining Improvements (Phase 2-5):**
+**Remaining Improvements:**
 | Phase | Change | Risk | Status |
 |-------|--------|------|--------|
 | 2 | Remove diagnostic DB reads from hot path | 🟢 Low | NOT STARTED |
 | 3 | Use `findOneAndUpdate` instead of update+read | 🟡 Medium | NOT STARTED |
 | 4 | Consolidate to single socket event | 🟡 Medium | NOT STARTED |
-| 5 | Socket.IO for bid submission (optional) | 🔴 Higher | NOT STARTED |
-
-**Instrumentation Added:** Console logs now show:
-- `tapToAckMs`: Time from bid tap to server response
-- `serverLatencyMs`: Server-to-client latency
-- `bid_update rendered: totalMs`: Receive-to-render time
-
-**Files Modified:** 
-- `/app/frontend/src/pages/AuctionRoom.js` (bid handlers)
-- `/app/backend/server.py` (serverTime in emit)
+| 5 | Socket.IO for bid submission | 🔴 Higher | NOT STARTED |
 
 ### ISSUE-018: Team Selection UX Confusion
-**Status:** MONITORING - Design decision needed  
+**Status:** DESIGN DECISION NEEDED  
 **Reported:** Dec 13, 2025  
-**Description:** Commissioners selecting "PL" in create modal expect PL teams only, but all 74 teams are selected by default. "Manage Teams" section is below the fold and easy to miss.  
-**Impact:** Auctions started with wrong team mix (PL + CL + AFCON combined)  
+**Description:** Commissioners selecting "PL" in create modal expect PL teams only, but all 74 teams selected by default. "Manage Teams" section below fold.  
+**Impact:** Auctions started with wrong team mix  
 **Proposed Options:**  
-- A. Auto-filter teams based on `competitionCode` on page load (recommended)  
-- B. Move team selection into create modal  
-- C. Warning before auction start if multiple competitions selected  
-- D. Start with NO teams selected  
-**Proposed Fix:** TBD - awaiting user preference
+- A. Auto-filter teams based on `competitionCode` on page load (RECOMMENDED)
+- B. Move team selection into create modal
+- C. Warning before auction start if multiple competitions selected
+- D. Start with NO teams selected
+
+---
+
+## 🟡 AWAITING INFO - User Testing Feedback (Dec 13)
+
+### ISSUE-019: "Couldn't Place a Bid"
+**Status:** AWAITING CLARIFICATION  
+**Reported:** Dec 13, 2025 ("Ash friends test 2" testing)  
+**Description:** "One player pressed the bid button but couldn't place a bid"  
+**Possible Causes:**
+- Budget exhausted (expected behavior)
+- Roster full (expected behavior - button shows "Roster Full")
+- Self-outbid rejection (expected - shows toast "You are already the highest bidder")
+- Network timeout
+- Button stuck in disabled state (bug)
+
+**Questions for User:**
+1. Did button show "Place Bid" or "Roster Full" or "Loading..."?
+2. Was there an error toast message?
+3. Did user have budget remaining?
+4. What was the user trying to bid on?
+
+### ISSUE-020: "United Offered 2 Times"
+**Status:** AWAITING CLARIFICATION  
+**Reported:** Dec 13, 2025 ("Ash friends test 2" testing)  
+**Description:** "Roster lagged in 2 places and United was offered 2 times"  
+**Possible Causes:**
+- Unsold retry mechanism (EXPECTED - if no bids, team re-offered later with toast "Re-offering unsold team")
+- Data bug causing duplicate entry
+- UI showing stale data
+
+**Questions for User:**
+1. Which United? (Manchester United FC?)
+2. Did the team go unsold the first time (no one bid)?
+3. Was there a toast message like "Re-offering unsold team: Manchester United FC"?
+
+### ISSUE-021: "Roster Lagged in 2 Places"
+**Status:** AWAITING CLARIFICATION - Likely same as ISSUE-016  
+**Reported:** Dec 13, 2025 ("Ash friends test 2" testing)  
+**Description:** Roster display lagged/showed incorrect data  
+**Likely Cause:** Same race condition as ISSUE-016 (loadAuction overwriting socket data)
 
 ---
 
 ## 🟠 P1 - High Priority (Should Address Soon)
 
-### 1. Manual Score Entry UI
-**ID:** ISSUE-001  
+### ISSUE-001: Manual Score Entry UI
 **Status:** NOT STARTED  
 **Estimated Effort:** 3-4 hours  
-**Description:** Backend endpoint `PATCH /api/fixtures/{id}/score` exists but there's no frontend UI for commissioners to manually enter/update scores.  
-**Impact:** Commissioners must use CSV upload or API calls to update scores.  
-**Files Involved:**
-- Backend: `/app/backend/server.py` (endpoint exists)
-- Frontend: `/app/frontend/src/pages/CompetitionDashboard.js` (needs UI)
+**Description:** Backend endpoint exists but no frontend UI for manual score entry.  
+**Files:** `/app/frontend/src/pages/CompetitionDashboard.js`
 
-**Acceptance Criteria:**
-- [ ] UI on Fixtures tab to edit individual fixture scores
-- [ ] Validation for score inputs
-- [ ] Automatic recompute trigger after save
-- [ ] Success/error feedback to user
-
----
-
-### 2. Commissioner Authorization Checks
-**ID:** ISSUE-002  
+### ISSUE-002: Commissioner Authorization Checks
 **Status:** NOT STARTED  
 **Estimated Effort:** 2 hours  
-**Description:** Two TODO comments in server.py indicate missing authorization checks.  
-**Impact:** Currently any authenticated user might access commissioner-only functions.  
-**Files Involved:**
-- `/app/backend/server.py` (lines 3436, 3555)
+**Description:** TODO comments indicate missing auth checks in `server.py` (lines 3436, 3555)
 
-**Code References:**
-```python
-# Line 3436: # TODO: Add commissioner authorization check when auth is implemented
-# Line 3555: # TODO: Add commissioner authorization check here when auth is implemented
-```
-
-**Acceptance Criteria:**
-- [ ] Verify user is league commissioner before allowing action
-- [ ] Return 403 Forbidden if not authorized
-- [ ] Add tests for authorization
-
----
-
-### 3. Sentry Error Monitoring Not Configured
-**ID:** ISSUE-003  
+### ISSUE-003: Sentry Error Monitoring
 **Status:** CODE READY - NEEDS CONFIG  
 **Estimated Effort:** 30 minutes  
-**Description:** Sentry SDK is integrated in the code but `SENTRY_DSN` is not set.  
-**Impact:** No automated error tracking or alerting in production.  
-**Files Involved:**
-- `/app/backend/server.py` (lines 31-34, 84-106)
-- `/app/backend/.env` (SENTRY_DSN empty)
-
-**To Enable:**
-1. Create Sentry account at https://sentry.io
-2. Create new project (Python/FastAPI)
-3. Get DSN from project settings
-4. Set `SENTRY_DSN` in production environment variables
-5. Redeploy
+**Description:** Sentry SDK integrated but `SENTRY_DSN` not set.  
+**Action:** User to create Sentry account and provide DSN
 
 ---
 
-## 🟡 P2 - Medium Priority (Nice to Have)
+## 🟡 P2 - Medium Priority
 
-### 4. ESLint Configuration Warning
-**ID:** ISSUE-004  
+### ISSUE-004: ESLint Configuration Warning
 **Status:** NOT STARTED  
-**Estimated Effort:** 30 minutes  
-**Description:** Non-blocking webpack warning about `react-hooks/exhaustive-deps` rule not being defined.  
-**Impact:** Cosmetic - clutters build output but doesn't affect functionality.  
-**Files Involved:**
-- `/app/frontend/package.json` or `.eslintrc.json`
+**Effort:** 30 minutes  
+**Description:** Non-blocking webpack warning about `react-hooks/exhaustive-deps`
 
----
-
-### 5. Mobile League Detail Page Long Scrolling
-**ID:** ISSUE-005  
+### ISSUE-005: Mobile League Detail Long Scrolling
 **Status:** MONITORING  
-**Estimated Effort:** 2-3 hours  
-**Description:** The redesigned League Detail page requires significant scrolling on mobile.  
-**Impact:** UX friction for commissioners on mobile devices.  
-**Files Involved:**
-- `/app/frontend/src/pages/LeagueDetail.js`
+**Effort:** 2-3 hours  
+**Description:** League Detail page requires excessive scrolling on mobile  
+**Potential Fix:** Collapsible sections or tabs
 
-**Potential Solutions:**
-- Collapsible sections
-- Sticky action buttons
-- Tab-based layout for mobile
-
----
-
-### 6. "Complete Lot" Button Redundancy
-**ID:** ISSUE-006  
+### ISSUE-006: "Complete Lot" Button Redundancy
 **Status:** MONITORING  
-**Estimated Effort:** 1 hour  
-**Description:** This button was added as a manual override for a now-fixed bug. May no longer be needed.  
-**Impact:** UI clutter if not used.  
-**Action:** Monitor during testing - remove if unused.
+**Effort:** 1 hour  
+**Description:** May no longer be needed - monitor usage
+
+### ISSUE-007: Improve Cricket Error Messaging
+**Status:** NOT STARTED  
+**Effort:** 2 hours  
+**Description:** Generic error messages for cricket operations
+
+### ISSUE-022: "Unknown" Manager Names in Auction
+**Status:** VERIFY IF STILL OCCURRING  
+**Reported:** Dec 13, 2025 (UI Audit)  
+**Description:** Screenshots showed "Unknown" for some manager names in AuctionRoom  
+**Files:** `/app/frontend/src/pages/AuctionRoom.js`, `/app/backend/server.py`
 
 ---
 
-### 7. Improve Cricket Error Messaging
-**ID:** ISSUE-007  
-**Status:** NOT STARTED  
-**Estimated Effort:** 2 hours  
-**Description:** Error messages for cricket operations (especially future matches) are too generic.  
-**Impact:** Users don't understand what went wrong.  
-**Files Involved:**
-- `/app/backend/server.py` (cricket endpoints)
-- `/app/backend/services/scoring/cricket.py`
+## 🔵 P3 - Future / Post-Pilot
 
----
+### ISSUE-008: Refactor server.py Monolith
+**Effort:** 8 hours  
+**Description:** Split 5,917 line file into modular routers
 
-## 🔵 P3 - Future (Technical Debt / Enhancements)
+### ISSUE-009: Refactor Fixture Import Logic
+**Effort:** 4 hours  
+**Description:** Use `externalId` instead of fuzzy name matching
 
-### 8. Refactor server.py Monolith
-**ID:** ISSUE-008  
-**Status:** NOT STARTED  
-**Estimated Effort:** 8 hours  
-**Description:** `server.py` is 5,917 lines - should be split into modular routers.  
-**Impact:** Maintainability, testing, code reviews all harder.  
-**Proposed Structure:**
+### ISSUE-010: User-Configurable Scoring Rules
+**Effort:** 4 hours
+
+### ISSUE-011: Auction History Tab
+**Effort:** 4 hours
+
+### ISSUE-012: Email Notifications
+**Effort:** 6 hours
+
+### ISSUE-013: Analytics Integration
+**Effort:** 3 hours
+
+### ISSUE-014: Database Automated Backups
+**Effort:** 3 hours
+
+### ISSUE-015: Performance/Load Testing
+**Effort:** 4 hours**
 ```
 /app/backend/
 ├── routers/
