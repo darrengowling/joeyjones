@@ -103,7 +103,7 @@
 
 | # | Issue ID | Summary | Cause | Fix | Risk | Benefit |
 |---|----------|---------|-------|-----|------|---------|
-| 6 | - | **Demote "Explore" Button** - "Explore Teams" has equal visual weight to Create/Join | Button hierarchy not optimized | Change from button to text link | 🟢 Low | Reclaims mobile space, clearer primary actions |
+| 6 | - | **Demote "Explore" Button** - "Explore Teams" has equal visual weight to Create/Join | Button hierarchy not optimized | Consider removing altogether - serves no critical purpose | 🟢 Low | Reclaims mobile space, clearer primary actions |
 | 7 | - | **Bidder Status Indicator** - Users don't know if they're winning or outbid at a glance | No visual differentiation for current bidder | Add "YOU'RE WINNING" (green) / "OUTBID" (red) indicator | 🟢 Low | Major clarity improvement for auctions |
 | 8 | - | **Team Count Preview** - Users don't know how many teams they'll get when creating competition | No preview shown after competition selection | Add "20 PL teams will be included" text after dropdown | 🟢 Low | Sets correct expectations |
 | 9 | - | **Current Bid Label** - Bid input field lacks context for current bid amount | Only placeholder text, no label | Add "Current bid: £Xm" label above input | 🟢 Low | Clearer bidding context |
