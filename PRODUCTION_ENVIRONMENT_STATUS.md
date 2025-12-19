@@ -141,6 +141,7 @@ This document reflects the **PRODUCTION** environment state. The preview/develop
 | Dec 12, 2025 | Auction deletion socket event added | Fixed frozen screens when auction deleted |
 | Dec 12, 2025 | Mobile UI fixes deployed | Fixed horizontal scrolling issues |
 | Dec 13, 2025 | Self-outbid prevention added | Users cannot outbid themselves - shows toast and resets input to current bid |
+| Dec 19, 2025 | Debug report enhanced | Now captures all 15 socket events + fetches server-side auction state for comprehensive troubleshooting |
 
 ---
 
