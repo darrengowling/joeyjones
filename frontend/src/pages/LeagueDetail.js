@@ -271,8 +271,18 @@ export default function LeagueDetail() {
   const loadAssets = async () => {
     setLoadingAssets(true);
     try {
-      const response = await axios.get(`${API}/leagues/${leagueId}/assets`);
-      setAssets(response.data.assets || []);
+      let response;
+      // Auto-filter by league's competition code if no assets selected yet (ISSUE-018 fix)
+      if (league?.competitionCode && league?.sportKey === 'football' && (!league?.assetsSelected || league.assetsSelected.length === 0)) {
+        response = await axios.get(`${API}/clubs?sportKey=football&competition=${league.competitionCode}`);
+        setAssets(response.data || []);
+      } else if (league?.competitionCode && league?.sportKey === 'cricket' && (!league?.assetsSelected || league.assetsSelected.length === 0)) {
+        response = await axios.get(`${API}/clubs?sportKey=cricket&competition=${league.competitionCode}`);
+        setAssets(response.data || []);
+      } else {
+        response = await axios.get(`${API}/leagues/${leagueId}/assets`);
+        setAssets(response.data.assets || []);
+      }
     } catch (e) {
       console.error("Error loading assets:", e);
       setAssets([]);
