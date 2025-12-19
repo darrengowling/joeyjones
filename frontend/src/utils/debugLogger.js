@@ -144,13 +144,65 @@ class DebugLogger {
     return report;
   }
 
-  async downloadReport() {
+  /**
+   * Submit debug report to server for support review.
+   * Returns reference ID that commissioner can share.
+   */
+  async submitReport() {
     const report = this.generateReport();
+    const API_URL = process.env.REACT_APP_BACKEND_URL || '';
     
     // Fetch server-side state if auction ID is available
     if (this.auctionId) {
       try {
-        const API_URL = process.env.REACT_APP_BACKEND_URL || '';
+        const response = await fetch(`${API_URL}/api/debug/auction-state/${this.auctionId}`);
+        if (response.ok) {
+          const serverState = await response.json();
+          report.serverState = serverState;
+          report.serverStateFetched = true;
+        } else {
+          report.serverState = null;
+          report.serverStateFetched = false;
+          report.serverStateError = `HTTP ${response.status}: ${response.statusText}`;
+        }
+      } catch (error) {
+        report.serverState = null;
+        report.serverStateFetched = false;
+        report.serverStateError = error.message;
+      }
+    } else {
+      report.serverState = null;
+      report.serverStateFetched = false;
+      report.serverStateError = 'No auction ID available';
+    }
+    
+    // Submit report to server
+    const submitResponse = await fetch(`${API_URL}/api/debug/reports`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(report)
+    });
+    
+    if (!submitResponse.ok) {
+      throw new Error(`Failed to submit report: ${submitResponse.status}`);
+    }
+    
+    const result = await submitResponse.json();
+    return result; // { referenceId, message, auctionId }
+  }
+
+  /**
+   * Legacy download method - kept for backwards compatibility
+   */
+  async downloadReport() {
+    const report = this.generateReport();
+    const API_URL = process.env.REACT_APP_BACKEND_URL || '';
+    
+    // Fetch server-side state if auction ID is available
+    if (this.auctionId) {
+      try {
         const response = await fetch(`${API_URL}/api/debug/auction-state/${this.auctionId}`);
         if (response.ok) {
           const serverState = await response.json();
