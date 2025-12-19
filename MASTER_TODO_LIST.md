@@ -123,7 +123,6 @@
 | # | Issue ID | Summary | Cause | Fix | Risk | Benefit |
 |---|----------|---------|-------|-----|------|---------|
 | 11 | **ISSUE-003** | **Sentry Monitoring** - No automated error tracking in production | `SENTRY_DSN` not configured (code is ready) | User creates Sentry account, adds DSN to env vars | 🟢 Low | Visibility into production errors |
-| 12 | - | **Rate Limiting** - Rate limiting code exists but disabled | `ENABLE_RATE_LIMITING=false` for testing | Change to `true` in production env | 🟢 Low | Protection against API abuse |
 
 ---
 
