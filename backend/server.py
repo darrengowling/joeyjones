@@ -4545,7 +4545,8 @@ async def place_bid(auction_id: str, bid_input: BidCreate):
     await sio.emit('bid_placed', {
         'bid': bid_obj.model_dump(mode='json'),
         'auctionId': auction_id,
-        'clubId': current_club_id
+        'clubId': current_club_id,
+        'serverTime': datetime.now(timezone.utc).isoformat()
     }, room=f"auction:{auction_id}")
     
     # Check for anti-snipe
