@@ -298,14 +298,22 @@ export default function LeagueDetail() {
   // Prompt E: Team management functions
   const loadAvailableAssets = async () => {
     try {
-      const response = await axios.get(`${API}/leagues/${leagueId}/available-assets`);
+      let response;
+      // Auto-filter by league's competition code if set (ISSUE-018 fix)
+      if (league?.competitionCode && league?.sportKey === 'football') {
+        response = await axios.get(`${API}/clubs?sportKey=football&competition=${league.competitionCode}`);
+      } else if (league?.competitionCode && league?.sportKey === 'cricket') {
+        response = await axios.get(`${API}/clubs?sportKey=cricket&competition=${league.competitionCode}`);
+      } else {
+        response = await axios.get(`${API}/leagues/${leagueId}/available-assets`);
+      }
       setAvailableAssets(response.data);
       
-      // Set current selection
-      if (league?.assetsSelected) {
+      // Set current selection - preserve existing or default to all filtered
+      if (league?.assetsSelected && league.assetsSelected.length > 0) {
         setSelectedAssetIds(league.assetsSelected);
       } else {
-        setSelectedAssetIds(response.data.map(asset => asset.id)); // Default: all selected
+        setSelectedAssetIds(response.data.map(asset => asset.id)); // Default: all filtered selected
       }
     } catch (e) {
       console.error("Error loading available assets:", e);
