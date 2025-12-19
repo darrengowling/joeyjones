@@ -1065,6 +1065,7 @@ const Home = () => {
             >
               Join the Competition
             </button>
+            {/* TODO: Potentially delete altogether if no purpose - just navigates to /clubs browse page */}
             <button
               onClick={() => navigate("/clubs")}
               className="btn btn-outline bg-transparent text-blue-600 px-6 py-4 rounded-lg hover:bg-blue-600 hover:text-white text-lg font-semibold border-2 border-blue-600"
