@@ -1140,22 +1140,22 @@ function AuctionRoom() {
                   <button
                     onClick={async () => {
                       try {
-                        debugLogger.log('auction_complete', {
-                          finalStatus: auction?.status,
+                        debugLogger.log('report_submitted', {
+                          auctionStatus: auction?.status,
                           totalBids: bids.length
                         });
-                        toast("Generating debug report...", { duration: 2000 });
-                        await debugLogger.downloadReport();
-                        toast.success("Debug report downloaded with server state!");
+                        toast("Submitting report...", { duration: 2000 });
+                        const result = await debugLogger.submitReport();
+                        toast.success(`Report submitted! Reference: ${result.referenceId}`, { duration: 8000 });
                       } catch (e) {
-                        console.error("Debug report error:", e);
-                        toast.error("Failed to download report");
+                        console.error("Report submission error:", e);
+                        toast.error("Failed to submit report. Please try again.");
                       }
                     }}
-                    className="px-3 py-1.5 sm:px-4 sm:py-2 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm"
-                    title="Download debug report with all bid logs and server state for troubleshooting"
+                    className="px-3 py-1.5 sm:px-4 sm:py-2 bg-orange-500 text-white rounded hover:bg-orange-600 text-sm"
+                    title="Report an issue - submits debug info to support team"
                   >
-                    📊 Download Debug Report
+                    🚨 Report Issue
                   </button>
                   <span className="text-xs text-gray-600">
                     Stats: {debugLogger.getStats().totalAttempts} attempts, {debugLogger.getStats().totalSuccesses} successes
