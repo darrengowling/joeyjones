@@ -1,6 +1,6 @@
 # Agent Onboarding Checklist
 
-**Last Updated:** December 13, 2025  
+**Last Updated:** December 19, 2025  
 **Purpose:** Mandatory steps for every new agent before starting any work
 
 ---
@@ -12,8 +12,39 @@ Previous agents have wasted significant time and resources by:
 - Referencing outdated documentation
 - Making assumptions without verification
 - Attempting to "fix" things that weren't broken
+- **Making code changes without explicit user approval**
+- **Making "incremental guesses" instead of thorough analysis**
+- **Ignoring repeated instructions from user**
+- **Introducing new bugs while fixing existing ones (e.g., ISSUE-016 fix broke countdown display)**
 
 **This checklist prevents those mistakes.**
+
+---
+
+## 🔴 ABSOLUTE RULES (Dec 19, 2025)
+
+1. **NEVER make code changes without explicit user approval**
+2. **NEVER assume - verify everything first**
+3. **NEVER make incremental guesses - do thorough analysis**
+4. **Present complete plan before ANY implementation**
+5. **Check downstream effects before proposing fixes**
+6. **Test ALL related functionality, not just the fix**
+
+---
+
+## ⚠️ KNOWN AGENT FAILURES (Learn from these)
+
+### ISSUE-016 Attempt (Dec 19, 2025) - FAILED
+- **Task:** Remove `loadAuction()` from `onSold` handler to fix race condition
+- **Result:** Broke countdown display between lots
+- **Root cause:** Agent didn't check what else depended on `loadAuction()`
+- **Status:** Reverted, marked as "Agent unable to complete fix"
+
+### ISSUE-018 Attempt (Dec 19, 2025) - PARTIAL
+- **Task:** Auto-filter teams by competition code
+- **Result:** Multiple failed attempts, broke team selection display
+- **Root cause:** Agent made incremental guesses instead of understanding full data flow
+- **Status:** Backend fix working, frontend `loadAvailableAssets()` working, but `loadAssets()` changes reverted
 
 ---
 
