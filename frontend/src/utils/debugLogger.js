@@ -144,8 +144,34 @@ class DebugLogger {
     return report;
   }
 
-  downloadReport() {
+  async downloadReport() {
     const report = this.generateReport();
+    
+    // Fetch server-side state if auction ID is available
+    if (this.auctionId) {
+      try {
+        const API_URL = process.env.REACT_APP_BACKEND_URL || '';
+        const response = await fetch(`${API_URL}/api/debug/auction-state/${this.auctionId}`);
+        if (response.ok) {
+          const serverState = await response.json();
+          report.serverState = serverState;
+          report.serverStateFetched = true;
+        } else {
+          report.serverState = null;
+          report.serverStateFetched = false;
+          report.serverStateError = `HTTP ${response.status}: ${response.statusText}`;
+        }
+      } catch (error) {
+        report.serverState = null;
+        report.serverStateFetched = false;
+        report.serverStateError = error.message;
+      }
+    } else {
+      report.serverState = null;
+      report.serverStateFetched = false;
+      report.serverStateError = 'No auction ID available';
+    }
+    
     const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
