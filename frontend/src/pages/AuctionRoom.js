@@ -359,6 +359,14 @@ function AuctionRoom() {
     socket.on('auction_deleted', onAuctionDeleted); // CRITICAL: Handle deletion
     socket.on('participants_changed', onParticipantsChanged); // Prompt A
     
+    // PERF FIX: Resync on reconnect - only time we do full reload now
+    const onReconnect = () => {
+      console.log('🔄 Socket reconnected - resyncing auction state');
+      loadAuction();
+      loadClubs();
+    };
+    socket.on('connect', onReconnect);
+    
     // Handle waiting room updates
     const onWaitingRoomUpdated = (data) => {
       console.log('🚪 Waiting room updated:', data.usersInWaitingRoom);
@@ -393,6 +401,7 @@ function AuctionRoom() {
       socket.off('auction_resumed', onAuctionResumed);
       socket.off('auction_deleted', onAuctionDeleted); // CRITICAL
       socket.off('participants_changed', onParticipantsChanged); // Prompt A
+      socket.off('connect', onReconnect); // PERF FIX
       socket.off('waiting_room_updated', onWaitingRoomUpdated);
       socket.off('next_team_countdown', onNextTeamCountdown);
     };
