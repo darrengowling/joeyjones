@@ -267,8 +267,7 @@ function AuctionRoom() {
       if (data.participants) {
         setParticipants(data.participants);
       }
-      // REMOVED: loadAuction() - we trust the sold event data (participants) instead of reloading
-      // This prevents race condition where stale HTTP response overwrites fresh socket data
+      loadAuction();
       // REMOVED: loadClubs() - we trust the sold event data instead of reloading
     };
 
