@@ -42,9 +42,17 @@ This document reflects the **PRODUCTION** environment state. The preview/develop
 |-----------|--------|---------------|
 | **Backend** | ✅ Running | Multi-pod deployment with Redis coordination |
 | **Frontend** | ✅ Running | Production build, Build Hash: `1363bfb` |
-| **Database** | ✅ Connected | MongoDB Atlas |
+| **Database** | ✅ Connected | MongoDB Atlas (**SEPARATE from preview - see note below**) |
 | **Redis** | ✅ Connected | Redis Cloud instance for Socket.IO pub/sub |
 | **Socket.IO** | ✅ Multi-pod mode | Using Redis adapter for cross-pod communication |
+
+### ⚠️ CRITICAL: Database Separation
+| Environment | Database | Access Method |
+|-------------|----------|---------------|
+| **Preview** | localhost:27017 | Direct MongoDB queries via `mongosh` |
+| **Production** | MongoDB Atlas (cloud) | **API calls only** via `curl https://draft-kings-mobile.emergent.host/api/...` |
+
+**Production data (including debug reports) can ONLY be accessed via production API endpoints, NOT via direct database queries from the preview environment.**
 
 ### Environment Variables (Production)
 | Variable | Value | Notes |
