@@ -1848,19 +1848,20 @@ async def get_clubs(
     
     # Competition filtering for football
     if sportKey == "football" and competition:
-        if competition.upper() == "EPL":
+        comp_upper = competition.upper()
+        if comp_upper in ["EPL", "PL"]:
             # Include clubs with competitionShort="EPL" OR "English Premier League" in competitions array
             query["$or"] = [
                 {"competitionShort": "EPL"},
                 {"competitions": "English Premier League"}
             ]
-        elif competition.upper() == "UCL":
+        elif comp_upper in ["UCL", "CL"]:
             # Include clubs with competitionShort="UCL" OR "UEFA Champions League" in competitions array
             query["$or"] = [
                 {"competitionShort": "UCL"},
                 {"competitions": "UEFA Champions League"}
             ]
-        elif competition.upper() == "AFCON":
+        elif comp_upper == "AFCON":
             # Include clubs with competitionShort="AFCON" OR "Africa Cup of Nations" in competitions array
             query["$or"] = [
                 {"competitionShort": "AFCON"},
