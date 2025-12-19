@@ -177,6 +177,23 @@
 | 8 | **Multi-pod Socket.IO** | Socket.IO didn't work across pods | Configured Redis Cloud pub/sub | Dec 8 |
 | 9 | **Production outage** | 520 error, service unavailable | Emergent platform issue - resolved after redeploy | Dec 13 |
 | 10 | **Debug endpoint bug** | `/api/debug/auction-state` failed on clubsWon string IDs | Fixed to handle both string IDs and dict objects | Dec 19 |
+| 11 | **Debug report upload** | Debug reports only downloaded locally, support couldn't access | Added server upload with reference IDs, queryable via `/api/debug/reports` | Dec 19 |
+| 12 | **Socket event logging** | Debug reports missing socket event data | Added `logSocketEvent()` calls to all 15 socket handlers in AuctionRoom.js | Dec 19 |
+
+---
+
+## ❌ FAILED FIX ATTEMPTS (Dec 19, 2025)
+
+| Issue | Attempted Fix | Result | Status |
+|-------|---------------|--------|--------|
+| **ISSUE-016** | Remove `loadAuction()` from `onSold` handler | Broke countdown display between lots | REVERTED |
+| **ISSUE-018** | Auto-filter `loadAssets()` by competition | Multiple attempts failed, broke team selection display | REVERTED |
+
+**Lessons:**
+- Agent made "incremental guesses" instead of thorough analysis
+- Agent repeatedly ignored instructions to get approval before code changes
+- Agent didn't check downstream dependencies before implementing fixes
+- "Low risk" fixes can have hidden dependencies
 
 ---
 
