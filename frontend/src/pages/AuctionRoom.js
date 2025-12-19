@@ -104,6 +104,7 @@ function AuctionRoom() {
 
     // Prompt E: Handle auction_snapshot for late joiners (replaces sync_state)
     const onAuctionSnapshot = (data) => {
+      debugLogger.logSocketEvent('auction_snapshot', data);
       console.log("📸 Auction snapshot received:", data);
       
       // Hydrate full state from snapshot
@@ -121,6 +122,7 @@ function AuctionRoom() {
 
     // Handle sync_state (legacy) - same as auction_snapshot
     const onSyncState = (data) => {
+      debugLogger.logSocketEvent('sync_state', data);
       console.log("Received sync state:", data);
       if (data.currentClub) {
         setCurrentClub(data.currentClub);
@@ -150,6 +152,7 @@ function AuctionRoom() {
     // PERF FIX: Removed loadAuction() and loadClubs() - these caused 2 HTTP GETs per bid per client
     // Trust socket events as source of truth; resync only on reconnect or seq gap
     const onBidPlaced = (data) => {
+      debugLogger.logSocketEvent('bid_placed', data);
       const receiveTime = performance.now();
       console.log("📥 bid_placed received:", {
         ...data,
@@ -162,6 +165,7 @@ function AuctionRoom() {
 
     // Handle bid_update (updates current bid display) - prevents stale updates
     const onBidUpdate = (data) => {
+      debugLogger.logSocketEvent('bid_update', data);
       const receiveTime = performance.now();
       const serverLatency = data.serverTime ? (Date.now() - new Date(data.serverTime).getTime()) : null;
       
@@ -199,6 +203,7 @@ function AuctionRoom() {
 
     // Handle lot_started (new club on auction block)
     const onLotStarted = (data) => {
+      debugLogger.logSocketEvent('lot_started', data);
       console.log("🚀 Lot started:", data);
       
       if (data.isUnsoldRetry) {
@@ -222,6 +227,7 @@ function AuctionRoom() {
 
     // Handle sold event
     const onSold = (data) => {
+      debugLogger.logSocketEvent('sold', data);
       console.log("=== SOLD EVENT RECEIVED ===");
       console.log("  clubId:", data.clubId);
       console.log("  clubName:", data.clubName);
@@ -267,12 +273,14 @@ function AuctionRoom() {
 
     // Handle anti-snipe event
     const onAntiSnipe = (data) => {
+      debugLogger.logSocketEvent('anti_snipe', data);
       console.log("Anti-snipe triggered:", data);
       toast("🔥 Anti-snipe! Timer extended!", { duration: 3000, icon: '⏱️' });
     };
 
     // Handle auction_complete event
     const onAuctionComplete = (data) => {
+      debugLogger.logSocketEvent('auction_complete', data);
       console.log("Auction complete:", data);
       console.log("Final club ID:", data.finalClubId);
       console.log("Final winning bid:", data.finalWinningBid);
@@ -316,6 +324,7 @@ function AuctionRoom() {
 
     // Handle auction_paused event
     const onAuctionPaused = (data) => {
+      debugLogger.logSocketEvent('auction_paused', data);
       console.log("Auction paused:", data);
       toast(`⏸️ ${data.message}`, { duration: 4000, icon: '⏸️' });
       loadAuction();
@@ -323,6 +332,7 @@ function AuctionRoom() {
 
     // Handle auction_resumed event
     const onAuctionResumed = (data) => {
+      debugLogger.logSocketEvent('auction_resumed', data);
       console.log("Auction resumed:", data);
       toast(`▶️ ${data.message}`, { duration: 4000, icon: '▶️' });
       loadAuction();
@@ -330,6 +340,7 @@ function AuctionRoom() {
 
     // Handle auction_deleted event - CRITICAL for stuck users
     const onAuctionDeleted = (data) => {
+      debugLogger.logSocketEvent('auction_deleted', data);
       console.log("🗑️ Auction deleted by commissioner:", data);
       toast.error(data.message || "Auction has been deleted by the commissioner", { duration: 5000 });
       
@@ -344,6 +355,7 @@ function AuctionRoom() {
 
     // Prompt A: Handle participants_changed for live count updates
     const onParticipantsChanged = (data) => {
+      debugLogger.logSocketEvent('participants_changed', data);
       console.log("👥 Participants changed:", data);
       
       // Re-fetch participants from API to get latest data
@@ -368,6 +380,7 @@ function AuctionRoom() {
     
     // PERF FIX: Resync on reconnect - only time we do full reload now
     const onReconnect = () => {
+      debugLogger.logSocketEvent('reconnect', { timestamp: new Date().toISOString() });
       console.log('🔄 Socket reconnected - resyncing auction state');
       loadAuction();
       loadClubs();
@@ -376,6 +389,7 @@ function AuctionRoom() {
     
     // Handle waiting room updates
     const onWaitingRoomUpdated = (data) => {
+      debugLogger.logSocketEvent('waiting_room_updated', data);
       console.log('🚪 Waiting room updated:', data.usersInWaitingRoom);
       setAuction(prev => ({ ...prev, usersInWaitingRoom: data.usersInWaitingRoom }));
     };
@@ -383,6 +397,7 @@ function AuctionRoom() {
     
     // Handle countdown between lots
     const onNextTeamCountdown = (data) => {
+      debugLogger.logSocketEvent('next_team_countdown', data);
       console.log('⏱️ Countdown:', data.seconds);
       if (data.seconds === 0) {
         // Immediately clear overlay when countdown reaches 0
