@@ -149,13 +149,24 @@ This document reflects the **PRODUCTION** environment state. The preview/develop
 | Dec 12, 2025 | Auction deletion socket event added | Fixed frozen screens when auction deleted |
 | Dec 12, 2025 | Mobile UI fixes deployed | Fixed horizontal scrolling issues |
 | Dec 13, 2025 | Self-outbid prevention added | Users cannot outbid themselves - shows toast and resets input to current bid |
-| Dec 19, 2025 | Debug report enhanced | Now captures all 15 socket events + fetches server-side auction state for comprehensive troubleshooting |
+| Dec 19, 2025 | Debug report enhanced | Now captures all 15 socket events + server-side state |
+| Dec 19, 2025 | Debug report upload | Reports now stored in MongoDB, queryable via `/api/debug/reports` |
+| Dec 19, 2025 | Backend `/api/clubs` fix | Now accepts both `PL`/`EPL` and `CL`/`UCL` competition codes |
+
+---
+
+## ❌ Failed Changes (Dec 19, 2025)
+
+| Change | Attempted | Result |
+|--------|-----------|--------|
+| ISSUE-016 fix | Remove `loadAuction()` from `onSold` | Broke countdown display - REVERTED |
+| ISSUE-018 fix | Auto-filter `loadAssets()` | Broke team selection display - REVERTED |
 
 ---
 
 ## ⚠️ Known Limitations
 
-1. **Single Database:** Production and preview share the same MongoDB instance
+1. **Separate Databases:** Production uses MongoDB Atlas, Preview uses localhost:27017 - DATA IS NOT SHARED
 2. **Rate Limiting Disabled:** Currently off for easier pilot testing
 3. **No Sentry:** Error tracking not configured (SENTRY_DSN not set)
 4. **Preview vs Production Config Drift:** Preview .env does NOT have REDIS_URL
