@@ -91,6 +91,12 @@
 - ISSUE-002: `/app/backend/server.py` (lines 3436, 3555)
 - ISSUE-022: `/app/frontend/src/pages/AuctionRoom.js`, `/app/backend/server.py`
 
+**ISSUE-018 Status (Dec 19, 2025):**
+- ✅ Backend: `/api/clubs` endpoint now accepts both `PL`/`EPL` and `CL`/`UCL` - WORKING
+- ✅ Frontend `loadAvailableAssets()`: Auto-filters by competition in "Select Teams" modal - WORKING  
+- ❌ Frontend `loadAssets()`: Multiple failed attempts to filter "above the fold" display - REVERTED
+- **Partial fix deployed** - "Select Teams" modal works correctly, but page load still shows all clubs
+
 ---
 
 ## 🟠 MEDIUM PRIORITY - UI/UX
