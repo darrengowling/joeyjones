@@ -271,13 +271,19 @@ export default function LeagueDetail() {
   const loadAssets = async () => {
     setLoadingAssets(true);
     try {
+      // Get league data for filtering if not already loaded (ISSUE-018 fix)
+      let leagueData = league;
+      if (!leagueData) {
+        const leagueResponse = await axios.get(`${API}/leagues/${leagueId}`);
+        leagueData = leagueResponse.data;
+      }
+      
       let response;
-      // Auto-filter by league's competition code if no assets selected yet (ISSUE-018 fix)
-      if (league?.competitionCode && league?.sportKey === 'football' && (!league?.assetsSelected || league.assetsSelected.length === 0)) {
-        response = await axios.get(`${API}/clubs?sportKey=football&competition=${league.competitionCode}`);
+      if (leagueData?.competitionCode && leagueData?.sportKey === 'football' && (!leagueData?.assetsSelected || leagueData.assetsSelected.length === 0)) {
+        response = await axios.get(`${API}/clubs?sportKey=football&competition=${leagueData.competitionCode}`);
         setAssets(response.data || []);
-      } else if (league?.competitionCode && league?.sportKey === 'cricket' && (!league?.assetsSelected || league.assetsSelected.length === 0)) {
-        response = await axios.get(`${API}/clubs?sportKey=cricket&competition=${league.competitionCode}`);
+      } else if (leagueData?.competitionCode && leagueData?.sportKey === 'cricket' && (!leagueData?.assetsSelected || leagueData.assetsSelected.length === 0)) {
+        response = await axios.get(`${API}/clubs?sportKey=cricket&competition=${leagueData.competitionCode}`);
         setAssets(response.data || []);
       } else {
         response = await axios.get(`${API}/leagues/${leagueId}/assets`);
