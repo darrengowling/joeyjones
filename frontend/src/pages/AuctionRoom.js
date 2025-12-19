@@ -147,24 +147,44 @@ function AuctionRoom() {
     };
 
     // Handle bid_placed (adds to bid history)
+    // PERF FIX: Removed loadAuction() and loadClubs() - these caused 2 HTTP GETs per bid per client
+    // Trust socket events as source of truth; resync only on reconnect or seq gap
     const onBidPlaced = (data) => {
-      console.log("Bid placed event received:", data);
+      const receiveTime = performance.now();
+      console.log("📥 bid_placed received:", {
+        ...data,
+        receiveTime: new Date().toISOString(),
+        latencyMs: data.serverTime ? (Date.now() - new Date(data.serverTime).getTime()) : 'N/A'
+      });
       setBids((prev) => [data.bid, ...prev]);
-      loadAuction();
-      loadClubs();
+      // Note: Full reload removed for performance - bid_update handles UI state
     };
 
     // Handle bid_update (updates current bid display) - prevents stale updates
     const onBidUpdate = (data) => {
-      console.log("🔔 Bid update received:", data);
+      const receiveTime = performance.now();
+      const serverLatency = data.serverTime ? (Date.now() - new Date(data.serverTime).getTime()) : null;
+      
+      console.log("🔔 bid_update received:", {
+        seq: data.seq,
+        amount: data.amount,
+        bidder: data.bidder?.displayName,
+        receiveTime: new Date().toISOString(),
+        serverLatencyMs: serverLatency
+      });
       
       // Only accept bid updates with seq >= current seq (prevents stale updates)
       if (data.seq >= bidSequence) {
-        console.log(`✅ Updating current bid: ${formatCurrency(data.amount)} by ${data.bidder?.displayName} (seq: ${data.seq})`);
+        console.log(`✅ Applying bid update: ${formatCurrency(data.amount)} by ${data.bidder?.displayName} (seq: ${data.seq}, latency: ${serverLatency}ms)`);
         setCurrentBid(data.amount);
         setCurrentBidder(data.bidder);
         setBidSequence(data.seq);
-        // Note: Bid history list will be refreshed on next lot or page load
+        
+        // PERF INSTRUMENTATION: Log render timing
+        requestAnimationFrame(() => {
+          const renderTime = performance.now();
+          console.log(`🎨 bid_update rendered: totalMs=${Math.round(renderTime - receiveTime)}`);
+        });
       } else {
         console.log(`⚠️ Ignoring stale bid update: seq=${data.seq}, current=${bidSequence}`);
       }
