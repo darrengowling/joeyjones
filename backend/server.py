@@ -5861,6 +5861,197 @@ async def get_bid_logs(auction_id: str):
         logger.error(f"Error retrieving bid logs: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
+
+@api_router.get("/debug/auction-state/{auction_id}")
+async def get_auction_state(auction_id: str):
+    """
+    Comprehensive debug endpoint for auction troubleshooting.
+    Returns full auction state including league, participants, clubs, and bids.
+    
+    Use this to debug user-reported issues like:
+    - Roster not updating
+    - Unexpected bid behavior
+    - Club queue issues
+    """
+    try:
+        # Get auction
+        auction = await db.auctions.find_one({"id": auction_id}, {"_id": 0})
+        if not auction:
+            raise HTTPException(status_code=404, detail="Auction not found")
+        
+        league_id = auction.get("leagueId")
+        
+        # Get league
+        league = await db.leagues.find_one({"id": league_id}, {"_id": 0})
+        
+        # Get participants with full details
+        participants = await db.league_participants.find(
+            {"leagueId": league_id},
+            {"_id": 0}
+        ).to_list(100)
+        
+        # Get all bids for this auction
+        bids = await db.bids.find(
+            {"auctionId": auction_id},
+            {"_id": 0}
+        ).sort("createdAt", -1).to_list(500)
+        
+        # Get clubs/assets for this league
+        asset_ids = league.get("assetsSelected", []) if league else []
+        clubs = []
+        if asset_ids:
+            clubs = await db.assets.find(
+                {"id": {"$in": asset_ids}},
+                {"_id": 0, "id": 1, "name": 1, "competitionCode": 1}
+            ).to_list(100)
+        
+        # Build club status map from auction
+        club_queue = auction.get("clubQueue", [])
+        current_lot = auction.get("currentLot", 0)
+        
+        club_status = []
+        for i, club_id in enumerate(club_queue):
+            club_info = next((c for c in clubs if c["id"] == club_id), {"id": club_id, "name": "Unknown"})
+            
+            # Find if sold and to whom
+            winner = None
+            winning_bid = None
+            for p in participants:
+                if club_id in [c.get("id") or c for c in (p.get("clubsWon") or [])]:
+                    winner = p.get("userName") or p.get("userId")
+                    # Find winning bid amount
+                    club_bids = [b for b in bids if b.get("clubId") == club_id]
+                    if club_bids:
+                        winning_bid = max(b.get("amount", 0) for b in club_bids)
+                    break
+            
+            status = "pending"
+            if i < current_lot:
+                status = "sold" if winner else "unsold"
+            elif i == current_lot:
+                status = "current"
+            
+            club_status.append({
+                "position": i + 1,
+                "clubId": club_id,
+                "name": club_info.get("name"),
+                "status": status,
+                "winner": winner,
+                "winningBid": winning_bid
+            })
+        
+        # Participant summary
+        participant_summary = []
+        for p in participants:
+            clubs_won = p.get("clubsWon") or []
+            participant_summary.append({
+                "userId": p.get("userId"),
+                "userName": p.get("userName") or "Unknown",
+                "budgetRemaining": p.get("budgetRemaining"),
+                "clubsWonCount": len(clubs_won),
+                "clubsWon": [
+                    {
+                        "id": c.get("id") if isinstance(c, dict) else c,
+                        "name": c.get("name") if isinstance(c, dict) else "Unknown",
+                        "price": c.get("price") if isinstance(c, dict) else None
+                    }
+                    for c in clubs_won
+                ]
+            })
+        
+        # Recent bids (last 20)
+        recent_bids = [
+            {
+                "clubId": b.get("clubId"),
+                "clubName": b.get("clubName"),
+                "amount": b.get("amount"),
+                "userName": b.get("userName"),
+                "createdAt": b.get("createdAt")
+            }
+            for b in bids[:20]
+        ]
+        
+        return {
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "auction": {
+                "id": auction.get("id"),
+                "status": auction.get("status"),
+                "currentLot": current_lot,
+                "totalLots": len(club_queue),
+                "currentClubId": auction.get("currentClubId"),
+                "currentBid": auction.get("currentBid"),
+                "currentBidder": auction.get("currentBidder"),
+                "bidSequence": auction.get("bidSequence"),
+                "timerEndsAt": auction.get("timerEndsAt"),
+                "biddingTimerSeconds": auction.get("biddingTimerSeconds"),
+                "antiSnipeSeconds": auction.get("antiSnipeSeconds")
+            },
+            "league": {
+                "id": league.get("id") if league else None,
+                "name": league.get("name") if league else None,
+                "sportKey": league.get("sportKey") if league else None,
+                "competitionCode": league.get("competitionCode") if league else None,
+                "clubSlots": league.get("clubSlots") if league else None,
+                "budget": league.get("budget") if league else None
+            },
+            "participants": participant_summary,
+            "clubQueue": club_status,
+            "recentBids": recent_bids,
+            "stats": {
+                "totalBids": len(bids),
+                "totalParticipants": len(participants),
+                "totalClubs": len(club_queue),
+                "clubsSold": len([c for c in club_status if c["status"] == "sold"]),
+                "clubsUnsold": len([c for c in club_status if c["status"] == "unsold"])
+            }
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error retrieving auction state: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@api_router.get("/debug/league-lookup")
+async def lookup_league(name: str = None, limit: int = 50):
+    """
+    Search for leagues by name (partial match).
+    Useful when you only know part of the league name from user feedback.
+    """
+    try:
+        query = {}
+        if name:
+            query["name"] = {"$regex": name, "$options": "i"}
+        
+        leagues = await db.leagues.find(
+            query,
+            {"_id": 0, "id": 1, "name": 1, "status": 1, "sportKey": 1, "createdAt": 1}
+        ).sort("createdAt", -1).limit(limit).to_list(limit)
+        
+        # Get auction IDs for each league
+        results = []
+        for league in leagues:
+            auction = await db.auctions.find_one(
+                {"leagueId": league["id"]},
+                {"_id": 0, "id": 1, "status": 1}
+            )
+            results.append({
+                **league,
+                "auctionId": auction.get("id") if auction else None,
+                "auctionStatus": auction.get("status") if auction else None
+            })
+        
+        return {
+            "query": name,
+            "count": len(results),
+            "leagues": results
+        }
+        
+    except Exception as e:
+        logger.error(f"Error looking up league: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
 # Custom middleware to log CORS preflight requests
 @app.middleware("http")
 async def log_preflight_requests(request, call_next):
