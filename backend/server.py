@@ -5917,7 +5917,12 @@ async def get_auction_state(auction_id: str):
             winner = None
             winning_bid = None
             for p in participants:
-                if club_id in [c.get("id") or c for c in (p.get("clubsWon") or [])]:
+                # clubsWon can be list of strings (IDs) or dicts with 'id' key
+                clubs_won_ids = [
+                    (c.get("id") if isinstance(c, dict) else c) 
+                    for c in (p.get("clubsWon") or [])
+                ]
+                if club_id in clubs_won_ids:
                     winner = p.get("userName") or p.get("userId")
                     # Find winning bid amount
                     club_bids = [b for b in bids if b.get("clubId") == club_id]
