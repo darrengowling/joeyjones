@@ -80,28 +80,20 @@
 
 | # | Issue ID | Summary | Cause | Fix | Risk | Benefit |
 |---|----------|---------|-------|-----|------|---------|
-| 1 | **ISSUE-018** | **Team Selection UX Confusion** - Commissioners select "PL" but get all 74 teams from all competitions | `competitionCode` not used to filter teams on LeagueDetail page load. "Manage Teams" section below fold. | Auto-filter teams based on `competitionCode` when page loads (RECOMMENDED). Options: A) Auto-filter, B) Move to create modal, C) Warning before start, D) No default selection | 🟢 Low | Prevents wrong team selection, major UX improvement |
-| 2 | **ISSUE-017 Phase 2** | **Backend Diagnostic Reads** - Unnecessary DB reads in bid hot path add latency | Diagnostic logging reads league + participants on every bid | Move diagnostic reads to async background task | 🟢 Low | ~20-50ms faster bid processing |
-| 3 | **ISSUE-017 Phase 3** | **Backend findOneAndUpdate** - Extra DB read to get sequence number after update | Separate update + read operations | Use `findOneAndUpdate` with `returnDocument: "after"` | 🟡 Medium | Eliminates 1 DB round-trip per bid |
+| 1 | **ISSUE-017 Phase 2** | **Backend Diagnostic Reads** - Unnecessary DB reads in bid hot path add latency | Diagnostic logging reads league + participants on every bid | Move diagnostic reads to async background task | 🟢 Low | ~20-50ms faster bid processing |
+| 2 | **ISSUE-017 Phase 3** | **Backend findOneAndUpdate** - Extra DB read to get sequence number after update | Separate update + read operations | Use `findOneAndUpdate` with `returnDocument: "after"` | 🟡 Medium | Eliminates 1 DB round-trip per bid |
 
 **ISSUE-017 Phase 2/3 Note (Dec 19, 2025):**
 - Trade-off: Removing diagnostic logging saves 20-50ms per bid but loses troubleshooting visibility
 - With 150 pilot users, faster bids improve UX but diagnostic logs help debug issues
 - Decision: Defer until pilot feedback indicates latency is a user-reported problem
-| 4 | **ISSUE-002** | **Commissioner Auth Checks** - Missing authorization checks on some endpoints | TODO comments never implemented (server.py lines 3436, 3555) | Add `require_commissioner` check to flagged endpoints | 🟡 Medium | Security improvement |
-| 5 | **ISSUE-022** | **"Unknown" Manager Names** - Some manager names display as "Unknown" in auction | Missing `userName` in participant data or display logic bug | Verify data flow, ensure userName populated | 🟢 Low | Better user identification |
+| 3 | **ISSUE-002** | **Commissioner Auth Checks** - Missing authorization checks on some endpoints | TODO comments never implemented (server.py lines 3436, 3555) | Add `require_commissioner` check to flagged endpoints | 🟡 Medium | Security improvement |
+| 4 | **ISSUE-022** | **"Unknown" Manager Names** - Some manager names display as "Unknown" in auction | Missing `userName` in participant data or display logic bug | Verify data flow, ensure userName populated | 🟢 Low | Better user identification |
 
 **Files:**
-- ISSUE-018: `/app/frontend/src/pages/LeagueDetail.js`
 - ISSUE-017: `/app/backend/server.py` (bid hot path)
 - ISSUE-002: `/app/backend/server.py` (lines 3436, 3555)
 - ISSUE-022: `/app/frontend/src/pages/AuctionRoom.js`, `/app/backend/server.py`
-
-**ISSUE-018 Status (Dec 19, 2025):**
-- ✅ Backend: `/api/clubs` endpoint now accepts both `PL`/`EPL` and `CL`/`UCL` - WORKING
-- ✅ Frontend `loadAvailableAssets()`: Auto-filters by competition in "Select Teams" modal - WORKING  
-- ❌ Frontend `loadAssets()`: Multiple failed attempts to filter "above the fold" display - REVERTED
-- **Partial fix deployed** - "Select Teams" modal works correctly, but page load still shows all clubs
 
 ---
 
