@@ -1806,7 +1806,31 @@ async def get_league_assets(league_id: str, search: Optional[str] = None, page: 
             "pageSize": len(assets)
         }
     
-    # Otherwise, return all assets for selection (no assets selected yet)
+    # ISSUE-018 FIX: If no assets selected but competitionCode is set, filter by competition
+    competition_code = league.get("competitionCode")
+    
+    if sport_key == "football" and competition_code:
+        # Normalize competition codes (handle both PL/EPL and CL/UCL formats)
+        comp_filter = competition_code
+        if comp_filter == "EPL":
+            comp_filter = "PL"
+        elif comp_filter == "UCL":
+            comp_filter = "CL"
+        
+        clubs = await db.assets.find({
+            "sportKey": "football",
+            "competitionShort": comp_filter
+        }, {"_id": 0}).to_list(100)
+        
+        logger.info(f"ISSUE-018: Filtering by competitionCode={competition_code} -> {len(clubs)} clubs")
+        return {
+            "assets": clubs,
+            "total": len(clubs),
+            "page": 1,
+            "pageSize": len(clubs)
+        }
+    
+    # Fallback: return all assets for selection (no competition filter)
     if sport_key == "football":
         clubs = await db.assets.find({"sportKey": "football"}, {"_id": 0}).to_list(100)
         # Return without Pydantic validation to avoid apiFootballId type errors
