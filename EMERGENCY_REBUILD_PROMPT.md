@@ -3,7 +3,8 @@
 **⚠️ CRITICAL: Use this prompt to recreate the Fantasy Sports Auction Platform from scratch**
 
 Last Updated: December 20, 2025  
-Current Production Version: Fully functional multi-sport auction platform with live user testing (150+ users)
+Current Production Version: Fully functional multi-sport auction platform with live user testing (150+ users)  
+Document Version: 2.0
 
 ---
 
@@ -18,7 +19,7 @@ Build a **multi-sport fantasy auction platform** enabling users to create privat
 **Production URL:** https://draft-kings-mobile.emergent.host  
 **Health Check:** `curl -s "https://draft-kings-mobile.emergent.host/api/health"`
 
-**Current Production State (Verified Dec 13, 2025):**
+**Current Production State (Verified Dec 20, 2025):**
 ```json
 {
   "status": "healthy",
@@ -390,7 +391,67 @@ GET https://api.football-data.org/v4/competitions/{code}/matches
 3. Update `goalsHome`, `goalsAway`, `status: "ft"`, `winner`
 4. ⚠️ ONLY updates fixtures, does NOT calculate points
 
-### 4. Score Calculation (CRITICAL)
+### 4. Debug Report System (NEW - Dec 19, 2025)
+
+**Purpose**: Capture comprehensive client + server state for debugging production issues.
+
+**Frontend (`debugLogger.js`)**:
+```javascript
+// Collects: auction state, participants, socket events, user actions, errors
+// Auto-uploads to backend with reference ID for support tickets
+debugLogger.logSocketEvent(eventName, data);  // Call in all 15 socket handlers
+debugLogger.submitReport();  // Triggered by "Report Issue" button
+```
+
+**Backend Endpoints**:
+```python
+# Submit debug report (from frontend)
+POST /api/debug/reports
+Body: { auctionId, leagueId, clientState, metadata }
+Returns: { referenceId: "DBG-XXXXXX" }
+
+# List all reports (for support)
+GET /api/debug/reports?auctionId=xxx&leagueId=xxx
+
+# Get specific report
+GET /api/debug/reports/{referenceId}
+```
+
+**Database Collection: `debug_reports`**:
+```javascript
+{
+  "referenceId": "DBG-A1B2C3",
+  "auctionId": "auction-uuid",
+  "leagueId": "league-uuid",
+  "submittedBy": "user-id",
+  "submittedAt": "2025-12-19T00:00:00+00:00",
+  "clientState": {
+    "auction": { /* current auction state */ },
+    "participants": [ /* participant list */ ],
+    "socketEvents": [ /* last 50 events with timestamps */ ],
+    "userActions": [ /* recent user actions */ ],
+    "errors": [ /* captured errors */ ]
+  },
+  "serverState": {
+    "auction": { /* server-side auction doc */ },
+    "participants": [ /* from league_participants */ ]
+  },
+  "metadata": {
+    "userAgent": "...",
+    "screenSize": "...",
+    "connectionType": "..."
+  }
+}
+```
+
+**Socket Event Logging (All 15 handlers in AuctionRoom.js)**:
+- `auction_snapshot`, `bid_update`, `bid_placed`, `tick`, `timer_started`
+- `lot_sold`, `auction_lot_won`, `auction_complete`, `auction_paused`, `auction_resumed`
+- `waiting_room_updated`, `auction_started`, `auction_deleted`, `error`, `connect_error`
+
+---
+
+### 5. Score Calculation (CRITICAL)
 
 **Endpoint**: `POST /api/leagues/{league_id}/score/recompute`
 
@@ -658,6 +719,20 @@ httpx
 
 ## 🔧 Recent Critical Fixes (Dec 2025)
 
+### Debug Report Enhancement (Dec 19, 2025)
+**Problem**: Debug reports only downloaded locally, support couldn't access production issues  
+**Solution**: 
+- Reports now auto-upload to MongoDB `debug_reports` collection
+- Added socket event logging to all 15 handlers in AuctionRoom.js
+- New API endpoints for querying reports: `GET/POST /api/debug/reports`
+- Reference ID system (DBG-XXXXXX) for support tickets
+**Files**: `debugLogger.js`, `server.py`, `AuctionRoom.js`
+
+### Backend /api/clubs Fix (Dec 19, 2025)
+**Problem**: Frontend used `EPL`/`UCL` codes but backend only accepted `PL`/`CL`  
+**Solution**: Backend now accepts both code formats  
+**Files**: `server.py`
+
 ### Self-Outbid Prevention (Dec 13, 2025)
 **Problem**: Users could outbid themselves by clicking +bid buttons  
 **Solution**: 
@@ -679,6 +754,34 @@ httpx
 **Problem**: Socket.IO not working across multiple pods  
 **Solution**: Configured Redis Cloud for pub/sub  
 **Files**: `socketio_init.py`, production env vars
+
+---
+
+## ❌ Failed Fix Attempts (LESSONS LEARNED)
+
+⚠️ **These fixes were attempted but FAILED and were REVERTED. Document for future reference.**
+
+### ISSUE-016: Roster Not Updating (Dec 19, 2025) - FAILED
+**Attempted Fix**: Remove `loadAuction()` call from `onSold` handler in AuctionRoom.js  
+**Result**: Broke the 3-second countdown display between lots  
+**Root Cause**: The countdown UI only renders when `currentClub` is not null. `loadAuction()` was inadvertently repopulating this state after a sale.  
+**Lesson**: Check ALL downstream dependencies before removing function calls. The fix was logically correct but had hidden UI side effects.  
+**Status**: Reverted. Issue remains open.
+
+### ISSUE-018: Team Selection UX (Dec 19, 2025) - PARTIAL
+**Attempted Fix**: Auto-filter `loadAssets()` function by competition code  
+**Result**: Multiple attempts broke the selected teams display  
+**Root Cause**: `loadAssets()` is called before `league` data is loaded, causing it to default to all teams. Agent made incremental guesses instead of understanding the full data flow.  
+**What Works**: Backend accepts both codes. `loadAvailableAssets()` (modal) correctly filters.  
+**What's Broken**: "Above the fold" display still shows all teams regardless of competition.  
+**Status**: Partially fixed. Main display issue remains open.
+
+### Key Lessons for Future Agents:
+1. **Never make code changes without explicit user approval**
+2. **Analyze full component lifecycle before modifying state**
+3. **Check what else depends on functions before removing them**
+4. **Test ALL related UI elements, not just the targeted fix**
+5. **"Low risk" changes can have hidden dependencies**
 
 ---
 
