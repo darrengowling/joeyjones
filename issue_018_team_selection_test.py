@@ -273,14 +273,14 @@ class Issue018Tester:
         
         self.log(f"✅ Started auction: {self.test_auction_id}")
         
-        # Get auction details to verify club queue
+        # Get auction details to verify club queue (auction starts in "waiting" status)
         auction_details = self.test_api_endpoint("GET", f"/auction/{self.test_auction_id}")
         if "error" in auction_details:
             self.log(f"❌ Failed to get auction details: {auction_details}", "ERROR")
             return False
         
         auction_data = auction_details.get("auction", {})
-        clubs_queue = auction_data.get("clubsQueue", [])
+        clubs_queue = auction_data.get("clubQueue", [])
         
         self.log(f"Auction queue has {len(clubs_queue)} clubs")
         
@@ -288,6 +288,14 @@ class Issue018Tester:
         if len(clubs_queue) != 20:
             self.log(f"❌ Expected 20 clubs in auction queue, found {len(clubs_queue)}", "ERROR")
             return False
+        
+        # Begin the auction to move from "waiting" to "active" status
+        begin_result = self.test_api_endpoint("POST", f"/auction/{self.test_auction_id}/begin")
+        if "error" in begin_result:
+            self.log(f"❌ Failed to begin auction: {begin_result}", "ERROR")
+            return False
+        
+        self.log("✅ Auction begun successfully")
         
         # Get clubs list from auction endpoint
         clubs_list_result = self.test_api_endpoint("GET", f"/auction/{self.test_auction_id}/clubs")
@@ -304,8 +312,10 @@ class Issue018Tester:
             self.log(f"❌ Expected 20 clubs in auction, found {total_clubs_in_auction}", "ERROR")
             return False
         
-        # Verify all clubs are Premier League clubs
+        # Verify all clubs are Premier League clubs by checking names
         epl_clubs_in_auction = 0
+        non_epl_found = []
+        
         for club in clubs_data:
             club_name = club.get("name", "")
             # Check if this is a known EPL club (basic validation)
@@ -313,11 +323,22 @@ class Issue018Tester:
                 "Arsenal", "Chelsea", "Liverpool", "Manchester", "Tottenham", 
                 "Brighton", "Newcastle", "West Ham", "Aston Villa", "Crystal Palace",
                 "Everton", "Brentford", "Fulham", "Wolves", "Bournemouth",
-                "Sheffield", "Burnley", "Luton", "Nottingham"
+                "Sheffield", "Burnley", "Luton", "Nottingham", "Leicester"
             ]):
                 epl_clubs_in_auction += 1
+            else:
+                # Check if it's a non-EPL club that shouldn't be there
+                if any(non_epl in club_name for non_epl in [
+                    "Real Madrid", "Barcelona", "Bayern", "PSG", "Juventus",
+                    "AC Milan", "Inter Milan", "Atletico", "Dortmund", "Ajax"
+                ]):
+                    non_epl_found.append(club_name)
         
         self.log(f"Found {epl_clubs_in_auction} recognizable EPL clubs in auction")
+        
+        if non_epl_found:
+            self.log(f"❌ Found non-EPL clubs in Premier League auction: {non_epl_found}", "ERROR")
+            return False
         
         # Should have most clubs as EPL clubs (allowing for some name variations)
         if epl_clubs_in_auction < 15:  # At least 15 should be recognizable EPL clubs
