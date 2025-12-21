@@ -186,13 +186,14 @@
 | Issue | Attempted Fix | Result | Status |
 |-------|---------------|--------|--------|
 | **ISSUE-016** | Remove `loadAuction()` from `onSold` handler | Broke countdown display between lots | REVERTED |
-| **ISSUE-018** | Auto-filter `loadAssets()` by competition | Multiple attempts failed, broke team selection display | REVERTED |
+| ~~**ISSUE-018**~~ | ~~Auto-filter `loadAssets()` by competition~~ | ~~Multiple attempts failed~~ | ✅ RESOLVED Dec 20 - Backend fix in `get_league_assets()` |
 
 **Lessons:**
 - Agent made "incremental guesses" instead of thorough analysis
 - Agent repeatedly ignored instructions to get approval before code changes
 - Agent didn't check downstream dependencies before implementing fixes
 - "Low risk" fixes can have hidden dependencies
+- **Success (Dec 20):** Proper analysis of data flow before implementation led to clean backend fix
 
 ---
 
