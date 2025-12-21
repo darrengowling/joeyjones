@@ -19,15 +19,16 @@
 
 ---
 
-## 🔴 IMMEDIATE - Ready to Fix
+## 🔍 MONITORING - Needs More Data
 
-| # | Issue ID | Summary | Cause | Fix | Risk | Benefit |
-|---|----------|---------|-------|-----|------|---------|
-| 1 | **ISSUE-016** | **Roster Not Updating** - User wins team but roster shows wrong count or "Full" prematurely | Race condition: `onSold` handler calls `loadAuction()` (line 264) which overwrites fresh socket data with stale HTTP response | Remove `loadAuction()` from `onSold` handler - trust socket event data (same pattern as Phase 1 bid fix) | 🟢 Low | Fixes roster display issues, improves mobile reliability |
+| # | Issue ID | Summary | Cause | Evidence | Status |
+|---|----------|---------|-------|----------|--------|
+| 1 | **ISSUE-016** | **Roster Not Updating** - User wins team but roster shows wrong count or "Full" prematurely | Suspected race condition under higher concurrency (7+ users) | Single report from "Ash friends test 2" (7-user auction). Not reproduced in 100s of 4-6 user tests. | 🔍 MONITORING |
 
-**Files:** `/app/frontend/src/pages/AuctionRoom.js` (line 264)  
-**Evidence:** "Ash friends test 2" - user reported "only got 1 team then full roster displayed"  
-**Status:** ❌ AGENT UNABLE TO COMPLETE FIX - Attempted fix broke countdown display. Reverted Dec 19, 2025.
+**Decision (Dec 20, 2025):** Monitor before attempting fixes. Previous fix attempt broke countdown display. Issue may only manifest with larger user groups. If it recurs, use debug report system to capture state for analysis.
+
+**Files:** `/app/frontend/src/pages/AuctionRoom.js` (line 270 - `loadAuction()` in `onSold` handler)  
+**Next Action:** Wait for reproduction in larger group testing with debug report capture.
 
 ---
 
