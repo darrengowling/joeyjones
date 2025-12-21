@@ -785,29 +785,56 @@ httpx
 
 ---
 
-## 📋 Outstanding Issues (As of Dec 13, 2025)
+## 📋 Outstanding Issues (As of Dec 20, 2025)
 
-| Issue | Priority | Status |
-|-------|----------|--------|
-| Mobile roster not updating after win | P1 | Monitoring - race condition suspected |
-| Mobile connection/lag issues | P1 | Monitoring - need more device data |
-| Team selection UX confusion | P2 | Design decision needed |
-| Sentry not configured | P2 | Code ready, needs DSN |
-| Rate limiting disabled | P3 | Code ready, disabled for testing |
+### 🔴 Immediate Priority
+| Issue | Summary | Status |
+|-------|---------|--------|
+| ISSUE-016 | Roster not updating after win (race condition) | Agent unable to fix - reverted |
+| ISSUE-018 | Team selection shows all teams regardless of competition | Partial fix only |
 
-See `/app/OUTSTANDING_ISSUES.md` for full details.
+### 🟡 Awaiting User Feedback
+| Issue | Summary | Status |
+|-------|---------|--------|
+| ISSUE-019 | "Couldn't Place Bid" - likely roster full | Need debug report |
+| ISSUE-020 | "United Offered 2 Times" - display bug suspected | Need debug report |
+| ISSUE-021 | "Roster Lagged" - likely same as ISSUE-016 | Blocked by ISSUE-016 |
+
+### 🟠 Medium Priority
+| Issue | Summary | Status |
+|-------|---------|--------|
+| ISSUE-022 | "Unknown" manager names in auction | Not started |
+| ISSUE-017 | Backend diagnostic reads add latency | Deferred (keeping logs for pilot) |
+| ISSUE-002 | Commissioner auth checks missing | Not started |
+| ISSUE-003 | Sentry not configured | Code ready, needs DSN |
+
+### 🔵 Post-Pilot
+| Issue | Summary |
+|-------|---------|
+| ISSUE-008 | Refactor monolithic server.py (5,917 lines) |
+| ISSUE-001 | Manual score entry UI |
+| ISSUE-010 | Custom scoring rules |
+| ISSUE-012 | Email notifications |
+| Payment | Stripe Connect integration |
+
+See `/app/MASTER_TODO_LIST.md` for complete prioritized list with all details.
 
 ---
 
 ## 📞 Critical Files Reference
 
-- `/app/PRODUCTION_ENVIRONMENT_STATUS.md` - Current production state
-- `/app/OUTSTANDING_ISSUES.md` - All known issues and priorities
-- `/app/AGENT_ONBOARDING_CHECKLIST.md` - Mandatory steps for new agents
-- `/app/SYSTEM_ARCHITECTURE_AUDIT.md` - Complete system documentation
-- `/app/AGENT_ONBOARDING_PROMPT.md` - Common mistakes to avoid
-- `/app/TEAM_UPDATES_COMPLETED.md` - All 56 verified team names
-- `/app/PAYMENT_INTEGRATION_PLAN.md` - Future payment integration planning
+| File | Purpose |
+|------|---------|
+| `/app/MASTER_TODO_LIST.md` | **PRIMARY** - Single source of truth for all issues and tasks |
+| `/app/PRODUCTION_ENVIRONMENT_STATUS.md` | Current production state and recent changes |
+| `/app/AGENT_ONBOARDING_CHECKLIST.md` | Mandatory steps for new agents (includes failure lessons) |
+| `/app/SYSTEM_ARCHITECTURE_AUDIT.md` | Complete system documentation |
+| `/app/AGENT_ONBOARDING_PROMPT.md` | Common mistakes to avoid |
+| `/app/TEAM_UPDATES_COMPLETED.md` | All 56 verified team names |
+| `/app/PAYMENT_INTEGRATION_PLAN.md` | Future payment integration planning |
+| `/app/UI_UX_AUDIT_REPORT.md` | Full UI/UX review with screenshots |
+
+**Note**: `OUTSTANDING_ISSUES.md` and `TEAM_REVIEW_COMPLETE_TASK_LIST.md` were consolidated into `MASTER_TODO_LIST.md` on Dec 19, 2025.
 
 ---
 
@@ -825,6 +852,8 @@ Platform rebuilt successfully when:
 9. ✅ No duplicate point counting
 10. ✅ Users cannot outbid themselves
 11. ✅ Socket.IO works in multi-pod production (Redis)
+12. ✅ Debug reports capture client + server state and upload to MongoDB
+13. ✅ Backend accepts both PL/EPL and CL/UCL competition codes
 
 ---
 
@@ -839,4 +868,13 @@ Before scaling to larger user groups:
 
 ---
 
-**This document contains VERIFIED CURRENT STATE as of December 13, 2025. Treat as source of truth for rebuild.**
+**This document contains VERIFIED CURRENT STATE as of December 20, 2025. Treat as source of truth for rebuild.**
+
+---
+
+## 📝 Document History
+
+| Version | Date | Changes |
+|---------|------|---------|
+| 2.0 | Dec 20, 2025 | Added Debug Report System, Failed Fix Attempts section, updated Outstanding Issues |
+| 1.0 | Dec 13, 2025 | Initial comprehensive rebuild prompt |
