@@ -3929,6 +3929,7 @@ async def start_auction(league_id: str):
     # Get assets based on feature flag and league selection
     import random
     assets_selected = league.get("assetsSelected", [])
+    competition_code = league.get("competitionCode")  # ISSUE-018 FIX
     
     # Feature flag: Only use assetsSelected if FEATURE_ASSET_SELECTION is enabled
     if FEATURE_ASSET_SELECTION and assets_selected and len(assets_selected) > 0:
@@ -3951,6 +3952,36 @@ async def start_auction(league_id: str):
         logger.info("auction.seed_queue", extra={
             "leagueId": league_id,
             "mode": "selected",
+            "selected_count": len(all_assets),
+            "sportKey": sport_key
+        })
+    elif sport_key == "football" and competition_code:
+        # ISSUE-018 FIX: Filter by competitionCode when no explicit selection
+        comp_upper = competition_code.upper()
+        query = {"sportKey": "football"}
+        
+        if comp_upper in ["EPL", "PL"]:
+            query["$or"] = [
+                {"competitionShort": "EPL"},
+                {"competitions": "English Premier League"}
+            ]
+        elif comp_upper in ["UCL", "CL"]:
+            query["$or"] = [
+                {"competitionShort": "UCL"},
+                {"competitions": "UEFA Champions League"}
+            ]
+        elif comp_upper == "AFCON":
+            query["$or"] = [
+                {"competitionShort": "AFCON"},
+                {"competitions": "Africa Cup of Nations"}
+            ]
+        
+        all_assets = await db.assets.find(query, {"_id": 0}).to_list(100)
+        
+        logger.info("auction.seed_queue", extra={
+            "leagueId": league_id,
+            "mode": "competition_filtered",
+            "competitionCode": competition_code,
             "selected_count": len(all_assets),
             "sportKey": sport_key
         })
