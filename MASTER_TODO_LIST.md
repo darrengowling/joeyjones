@@ -177,6 +177,7 @@
 | 10 | **Debug endpoint bug** | `/api/debug/auction-state` failed on clubsWon string IDs | Fixed to handle both string IDs and dict objects | Dec 19 |
 | 11 | **Debug report upload** | Debug reports only downloaded locally, support couldn't access | Added server upload with reference IDs, queryable via `/api/debug/reports` | Dec 19 |
 | 12 | **Socket event logging** | Debug reports missing socket event data | Added `logSocketEvent()` calls to all 15 socket handlers in AuctionRoom.js | Dec 19 |
+| 13 | **ISSUE-018** | Team Selection UX - LeagueDetail showed all 74 clubs instead of competition-specific clubs | Backend `get_league_assets()` now filters by `competitionCode` when `assetsSelected` is empty. PL shows exactly 20 clubs. | Dec 20 |
 
 ---
 
