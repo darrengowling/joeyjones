@@ -93,7 +93,7 @@ cd /app/scripts
 
 OR manually via API:
 ```bash
-curl -X POST "https://sports-auction-app.preview.emergentagent.com/api/scoring/YOUR_LEAGUE_ID/ingest" \
+curl -X POST "https://fixture-correction.preview.emergentagent.com/api/scoring/YOUR_LEAGUE_ID/ingest" \
   -F "file=@example_match_1_scores.csv"
 ```
 
@@ -109,7 +109,7 @@ Check if points calculated correctly (use example file):
 ### 11. View Leaderboard
 ```bash
 # Via API
-curl "https://sports-auction-app.preview.emergentagent.com/api/scoring/YOUR_LEAGUE_ID/leaderboard" | jq
+curl "https://fixture-correction.preview.emergentagent.com/api/scoring/YOUR_LEAGUE_ID/leaderboard" | jq
 
 # Check output:
 # - All 3 managers listed

@@ -134,7 +134,7 @@ This document reflects the **PRODUCTION** environment state. The preview/develop
 | Property | Value |
 |----------|-------|
 | Build Hash | `1363bfb` |
-| Backend URL | `https://sports-auction-app.preview.emergentagent.com` |
+| Backend URL | `https://fixture-correction.preview.emergentagent.com` |
 | Socket.IO Path | `/api/socket.io` |
 
 ---

@@ -17,8 +17,8 @@ from datetime import datetime, timezone
 from typing import Dict, List, Optional
 
 # Backend URL from frontend/.env
-BACKEND_URL = "https://sports-auction-app.preview.emergentagent.com/api"
-SOCKET_URL = "https://sports-auction-app.preview.emergentagent.com"
+BACKEND_URL = "https://fixture-correction.preview.emergentagent.com/api"
+SOCKET_URL = "https://fixture-correction.preview.emergentagent.com"
 SOCKET_PATH = "/api/socket.io"
 
 class SocketIOAuctionTester:

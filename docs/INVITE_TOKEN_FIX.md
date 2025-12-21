@@ -97,7 +97,7 @@ const league = tokenSearchResponse.data.league;
 
 **Test invite token for "prem3":**
 ```bash
-curl "https://sports-auction-app.preview.emergentagent.com/api/leagues/by-token/b3015725"
+curl "https://fixture-correction.preview.emergentagent.com/api/leagues/by-token/b3015725"
 ```
 
 **Result:**
@@ -135,7 +135,7 @@ python /app/scripts/cleanup_load_test_data.py
 python /app/scripts/cleanup_load_test_users.py
 
 # Verify cleanup
-curl https://sports-auction-app.preview.emergentagent.com/api/leagues | \
+curl https://fixture-correction.preview.emergentagent.com/api/leagues | \
   python -c "import sys, json; print(f'Leagues: {len(json.load(sys.stdin))}')"
 ```
 

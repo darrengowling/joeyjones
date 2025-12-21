@@ -118,7 +118,7 @@ sudo supervisorctl stop backend
 sudo supervisorctl start backend
 
 # 4. Verify application is working
-curl https://sports-auction-app.preview.emergentagent.com/api/sports
+curl https://fixture-correction.preview.emergentagent.com/api/sports
 ```
 
 ### Selective Restore (Specific Backup)

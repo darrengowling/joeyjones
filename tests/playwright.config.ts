@@ -8,7 +8,7 @@ export default defineConfig({
   workers: 1, // Single worker for auction tests to avoid conflicts
   reporter: 'html',
   use: {
-    baseURL: 'https://sports-auction-app.preview.emergentagent.com',
+    baseURL: 'https://fixture-correction.preview.emergentagent.com',
     trace: 'on-first-retry',
     video: 'retain-on-failure',
     screenshot: 'only-on-failure',
