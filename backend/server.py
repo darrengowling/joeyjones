@@ -6393,6 +6393,19 @@ async def get_afcon_template():
         filename="afcon_2025_fixtures_with_names.csv"
     )
 
+
+# Serve corrected AFCON fixtures CSV (clean ASCII)
+@app.get("/api/templates/afcon_2025_clean.csv")
+async def get_afcon_clean_template():
+    """Serve the corrected AFCON fixtures template - clean ASCII encoding"""
+    file_path = "/app/public/templates/afcon_2025_clean.csv"
+    return FileResponse(
+        path=file_path,
+        media_type="text/csv; charset=utf-8",
+        filename="afcon_2025_fixtures_corrected.csv"
+    )
+
+
 # Mount Socket.IO - restore original working configuration
 # Note: Using 'api/socket.io' to match Kubernetes ingress routing rules
 socket_app = socketio.ASGIApp(
