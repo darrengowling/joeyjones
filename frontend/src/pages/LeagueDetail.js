@@ -298,22 +298,43 @@ export default function LeagueDetail() {
   // Prompt E: Team management functions
   const loadAvailableAssets = async () => {
     try {
-      let response;
-      // Auto-filter by league's competition code if set (ISSUE-018 fix)
-      if (league?.competitionCode && league?.sportKey === 'football') {
-        response = await axios.get(`${API}/clubs?sportKey=football&competition=${league.competitionCode}`);
-      } else if (league?.competitionCode && league?.sportKey === 'cricket') {
-        response = await axios.get(`${API}/clubs?sportKey=cricket&competition=${league.competitionCode}`);
-      } else {
-        response = await axios.get(`${API}/leagues/${leagueId}/available-assets`);
-      }
+      // Always load ALL football teams to allow commissioners to create mixed competitions
+      const response = await axios.get(`${API}/clubs?sportKey=${league?.sportKey || 'football'}`);
       setAvailableAssets(response.data);
       
-      // Set current selection - preserve existing or default to all filtered
+      // Set current selection
       if (league?.assetsSelected && league.assetsSelected.length > 0) {
+        // Preserve existing selection
         setSelectedAssetIds(league.assetsSelected);
+      } else if (league?.competitionCode && league?.sportKey === 'football') {
+        // ISSUE-018: Default to competition-filtered teams, but show ALL as available
+        // This allows commissioners to customize (add CL teams to PL competition, etc.)
+        const comp = league.competitionCode.toUpperCase();
+        let competitionName = null;
+        if (comp === 'PL' || comp === 'EPL') {
+          competitionName = 'English Premier League';
+        } else if (comp === 'CL' || comp === 'UCL') {
+          competitionName = 'UEFA Champions League';
+        } else if (comp === 'AFCON') {
+          competitionName = 'Africa Cup of Nations';
+        }
+        
+        if (competitionName) {
+          // Pre-select only teams from the chosen competition
+          const filteredIds = response.data
+            .filter(asset => asset.competitions?.includes(competitionName) || 
+                           (comp === 'PL' && asset.competitionShort === 'EPL') ||
+                           (comp === 'CL' && asset.competitionShort === 'UCL') ||
+                           (comp === 'AFCON' && asset.competitionShort === 'AFCON'))
+            .map(asset => asset.id);
+          setSelectedAssetIds(filteredIds);
+        } else {
+          // Unknown competition, select all
+          setSelectedAssetIds(response.data.map(asset => asset.id));
+        }
       } else {
-        setSelectedAssetIds(response.data.map(asset => asset.id)); // Default: all filtered selected
+        // Default: all selected
+        setSelectedAssetIds(response.data.map(asset => asset.id));
       }
     } catch (e) {
       console.error("Error loading available assets:", e);
