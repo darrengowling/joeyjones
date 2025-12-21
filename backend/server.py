@@ -1973,6 +1973,39 @@ async def update_asset(asset_id: str, updates: dict):
     
     return {"message": "Asset updated successfully", "asset": updated_asset}
 
+@api_router.post("/admin/fixtures/replace-team")
+async def replace_team_in_fixtures(old_team: str, new_team: str):
+    """
+    Admin endpoint to replace a team name in all fixtures.
+    Used for fixing data issues like incorrect team names.
+    
+    Example: POST /api/admin/fixtures/replace-team?old_team=Kenya&new_team=Cameroon
+    """
+    from datetime import datetime, timezone
+    
+    # Update homeTeam
+    home_result = await db.fixtures.update_many(
+        {"homeTeam": old_team},
+        {"$set": {"homeTeam": new_team, "updatedAt": datetime.now(timezone.utc).isoformat()}}
+    )
+    
+    # Update awayTeam
+    away_result = await db.fixtures.update_many(
+        {"awayTeam": old_team},
+        {"$set": {"awayTeam": new_team, "updatedAt": datetime.now(timezone.utc).isoformat()}}
+    )
+    
+    total_updated = home_result.modified_count + away_result.modified_count
+    
+    logger.info(f"✅ Replaced '{old_team}' with '{new_team}' in {total_updated} fixtures (home: {home_result.modified_count}, away: {away_result.modified_count})")
+    
+    return {
+        "message": f"Replaced '{old_team}' with '{new_team}' in fixtures",
+        "home_fixtures_updated": home_result.modified_count,
+        "away_fixtures_updated": away_result.modified_count,
+        "total_updated": total_updated
+    }
+
 # ===== LEAGUE ENDPOINTS =====
 @api_router.post("/leagues", response_model=League)
 async def create_league(input: LeagueCreate):
