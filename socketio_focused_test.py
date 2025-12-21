@@ -14,8 +14,8 @@ from datetime import datetime, timezone
 from typing import Dict, List, Optional
 
 # Configuration from environment
-BASE_URL = "https://fix-roster-sync.preview.emergentagent.com/api"
-SOCKET_URL = "https://fix-roster-sync.preview.emergentagent.com"
+BASE_URL = "https://sports-auction-app.preview.emergentagent.com/api"
+SOCKET_URL = "https://sports-auction-app.preview.emergentagent.com"
 SOCKET_PATH = "/api/socket.io"
 
 class FocusedSocketIOTester:

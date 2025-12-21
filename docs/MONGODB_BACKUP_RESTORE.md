@@ -118,7 +118,7 @@ sudo supervisorctl stop backend
 sudo supervisorctl start backend
 
 # 4. Verify application is working
-curl https://fix-roster-sync.preview.emergentagent.com/api/sports
+curl https://sports-auction-app.preview.emergentagent.com/api/sports
 ```
 
 ### Selective Restore (Specific Backup)

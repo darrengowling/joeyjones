@@ -6,7 +6,7 @@ import requests
 import sys
 import time
 
-BACKEND_URL = "https://fix-roster-sync.preview.emergentagent.com"
+BACKEND_URL = "https://sports-auction-app.preview.emergentagent.com"
 API = f"{BACKEND_URL}/api"
 
 def create_test_user():

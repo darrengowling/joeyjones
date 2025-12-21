@@ -6,7 +6,7 @@ Test the new clubs overview functionality
 import asyncio
 import aiohttp
 
-BASE_URL = "https://fix-roster-sync.preview.emergentagent.com/api"
+BASE_URL = "https://sports-auction-app.preview.emergentagent.com/api"
 
 async def test_clubs_overview():
     """Test the clubs overview endpoint"""

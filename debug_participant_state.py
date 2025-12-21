@@ -7,7 +7,7 @@ import requests
 import json
 import time
 
-BASE_URL = "https://fix-roster-sync.preview.emergentagent.com/api"
+BASE_URL = "https://sports-auction-app.preview.emergentagent.com/api"
 
 def check_participant_state(session, league_id, user_id, step_name):
     result = session.get(f"{BASE_URL}/leagues/{league_id}/participants")

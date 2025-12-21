@@ -6,7 +6,7 @@ Debug test to identify specific issues
 import requests
 import json
 
-BASE_URL = "https://fix-roster-sync.preview.emergentagent.com/api"
+BASE_URL = "https://sports-auction-app.preview.emergentagent.com/api"
 
 def test_endpoint(method: str, endpoint: str, data: dict = None, expected_status: int = 200) -> dict:
     """Test API endpoint with detailed debugging"""

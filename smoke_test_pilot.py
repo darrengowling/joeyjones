@@ -10,7 +10,7 @@ import time
 from datetime import datetime
 import sys
 
-BASE_URL = "https://fix-roster-sync.preview.emergentagent.com/api"
+BASE_URL = "https://sports-auction-app.preview.emergentagent.com/api"
 
 class SmokeTest:
     def __init__(self):
@@ -55,7 +55,7 @@ class SmokeTest:
     async def test_metrics_endpoint(self, session):
         """Test 2: Metrics endpoint accessible"""
         try:
-            async with session.get("https://fix-roster-sync.preview.emergentagent.com/api/metrics") as resp:
+            async with session.get("https://sports-auction-app.preview.emergentagent.com/api/metrics") as resp:
                 if resp.status == 200:
                     text = await resp.text()
                     has_metrics = "python_info" in text
@@ -72,7 +72,7 @@ class SmokeTest:
         """Test 3: CORS headers present"""
         try:
             headers = {
-                "Origin": "https://fix-roster-sync.preview.emergentagent.com"
+                "Origin": "https://sports-auction-app.preview.emergentagent.com"
             }
             async with session.options(f"{BASE_URL}/sports", headers=headers) as resp:
                 allow_origin = resp.headers.get('Access-Control-Allow-Origin', '')
@@ -167,7 +167,7 @@ class SmokeTest:
         """Test 8: Socket.IO endpoint responds"""
         try:
             async with session.get(
-                "https://fix-roster-sync.preview.emergentagent.com/socket.io/?transport=polling"
+                "https://sports-auction-app.preview.emergentagent.com/socket.io/?transport=polling"
             ) as resp:
                 is_ok = resp.status in [200, 400]  # 400 is OK if it's a connection error
                 self.log_test("Socket.IO Endpoint", is_ok, 

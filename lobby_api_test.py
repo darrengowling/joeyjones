@@ -21,7 +21,7 @@ import time
 import uuid
 
 # Get backend URL from environment
-BACKEND_URL = os.getenv('REACT_APP_BACKEND_URL', 'https://fix-roster-sync.preview.emergentagent.com')
+BACKEND_URL = os.getenv('REACT_APP_BACKEND_URL', 'https://sports-auction-app.preview.emergentagent.com')
 API_BASE = f"{BACKEND_URL}/api"
 
 class LobbyAPITester:
