@@ -152,6 +152,7 @@ This document reflects the **PRODUCTION** environment state. The preview/develop
 | Dec 19, 2025 | Debug report enhanced | Now captures all 15 socket events + server-side state |
 | Dec 19, 2025 | Debug report upload | Reports now stored in MongoDB, queryable via `/api/debug/reports` |
 | Dec 19, 2025 | Backend `/api/clubs` fix | Now accepts both `PL`/`EPL` and `CL`/`UCL` competition codes |
+| Dec 20, 2025 | **ISSUE-018 fix** | LeagueDetail now shows exactly 20 PL clubs (not 74) when competition is selected |
 
 ---
 
@@ -160,7 +161,7 @@ This document reflects the **PRODUCTION** environment state. The preview/develop
 | Change | Attempted | Result |
 |--------|-----------|--------|
 | ISSUE-016 fix | Remove `loadAuction()` from `onSold` | Broke countdown display - REVERTED |
-| ISSUE-018 fix | Auto-filter `loadAssets()` | Broke team selection display - REVERTED |
+| ~~ISSUE-018 fix~~ | ~~Auto-filter `loadAssets()`~~ | ✅ RESOLVED Dec 20 via backend fix |
 
 ---
 
