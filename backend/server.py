@@ -1810,17 +1810,30 @@ async def get_league_assets(league_id: str, search: Optional[str] = None, page: 
     competition_code = league.get("competitionCode")
     
     if sport_key == "football" and competition_code:
-        # Normalize competition codes (handle both PL/EPL and CL/UCL formats)
-        comp_filter = competition_code
-        if comp_filter == "EPL":
-            comp_filter = "PL"
-        elif comp_filter == "UCL":
-            comp_filter = "CL"
+        # Use same filtering logic as /api/clubs endpoint
+        comp_upper = competition_code.upper()
+        query = {"sportKey": "football"}
         
-        clubs = await db.assets.find({
-            "sportKey": "football",
-            "competitionShort": comp_filter
-        }, {"_id": 0}).to_list(100)
+        if comp_upper in ["EPL", "PL"]:
+            # Premier League: exactly 20 clubs
+            query["$or"] = [
+                {"competitionShort": "EPL"},
+                {"competitions": "English Premier League"}
+            ]
+        elif comp_upper in ["UCL", "CL"]:
+            # Champions League
+            query["$or"] = [
+                {"competitionShort": "UCL"},
+                {"competitions": "UEFA Champions League"}
+            ]
+        elif comp_upper == "AFCON":
+            # Africa Cup of Nations
+            query["$or"] = [
+                {"competitionShort": "AFCON"},
+                {"competitions": "Africa Cup of Nations"}
+            ]
+        
+        clubs = await db.assets.find(query, {"_id": 0}).to_list(100)
         
         logger.info(f"ISSUE-018: Filtering by competitionCode={competition_code} -> {len(clubs)} clubs")
         return {
