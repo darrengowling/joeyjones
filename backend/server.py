@@ -1933,6 +1933,46 @@ async def seed_clubs():
     
     return {"message": f"Seeded {len(clubs)} UEFA Champions League clubs into assets collection"}
 
+@api_router.patch("/admin/assets/{asset_id}")
+async def update_asset(asset_id: str, updates: dict):
+    """
+    Admin endpoint to update an asset by ID.
+    Used for fixing data issues like incorrect team names.
+    
+    Example: PATCH /api/admin/assets/a7c05f27-41dc-404b-af73-5719c34becbc
+    Body: {"name": "Cameroon", "country": "Cameroon"}
+    """
+    # Find the asset first
+    asset = await db.assets.find_one({"id": asset_id})
+    if not asset:
+        raise HTTPException(status_code=404, detail=f"Asset {asset_id} not found")
+    
+    # Only allow updating specific fields
+    allowed_fields = ["name", "country", "externalId", "competitionShort", "competitions"]
+    filtered_updates = {k: v for k, v in updates.items() if k in allowed_fields}
+    
+    if not filtered_updates:
+        raise HTTPException(status_code=400, detail="No valid fields to update")
+    
+    # Add updatedAt timestamp
+    from datetime import datetime, timezone
+    filtered_updates["updatedAt"] = datetime.now(timezone.utc).isoformat()
+    
+    # Update the asset
+    result = await db.assets.update_one(
+        {"id": asset_id},
+        {"$set": filtered_updates}
+    )
+    
+    if result.modified_count == 0:
+        return {"message": "No changes made", "asset_id": asset_id}
+    
+    # Return updated asset
+    updated_asset = await db.assets.find_one({"id": asset_id}, {"_id": 0})
+    logger.info(f"✅ Asset updated: {asset_id} - Changes: {filtered_updates}")
+    
+    return {"message": "Asset updated successfully", "asset": updated_asset}
+
 # ===== LEAGUE ENDPOINTS =====
 @api_router.post("/leagues", response_model=League)
 async def create_league(input: LeagueCreate):
