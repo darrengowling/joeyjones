@@ -143,16 +143,19 @@ This document reflects the **PRODUCTION** environment state. The preview/develop
 
 | Date | Change | Impact |
 |------|--------|--------|
-| Dec 8, 2025 | Redis Cloud configured for production | Socket.IO now works across multiple pods |
-| Dec 8, 2025 | Multi-pod deployment stabilized | Improved reliability for concurrent users |
-| Dec 12, 2025 | Critical bid validation fixes deployed | Fixed 500 errors on bidding |
-| Dec 12, 2025 | Auction deletion socket event added | Fixed frozen screens when auction deleted |
-| Dec 12, 2025 | Mobile UI fixes deployed | Fixed horizontal scrolling issues |
-| Dec 13, 2025 | Self-outbid prevention added | Users cannot outbid themselves - shows toast and resets input to current bid |
+| Dec 21, 2025 | **AFCON data fix** | Kenya → Cameroon asset updated in production, 36 group fixtures uploaded |
+| Dec 21, 2025 | **ISSUE-023 fix** | Bid input now read-only with +1m/+2m buttons added |
+| Dec 21, 2025 | **ISSUE-018 enhancement** | Auto-populate teams on league creation, filter dropdown defaults to competition |
+| Dec 20, 2025 | **ISSUE-018 fix** | LeagueDetail now shows exactly 20 PL clubs (not 74) when competition is selected |
 | Dec 19, 2025 | Debug report enhanced | Now captures all 15 socket events + server-side state |
 | Dec 19, 2025 | Debug report upload | Reports now stored in MongoDB, queryable via `/api/debug/reports` |
 | Dec 19, 2025 | Backend `/api/clubs` fix | Now accepts both `PL`/`EPL` and `CL`/`UCL` competition codes |
-| Dec 20, 2025 | **ISSUE-018 fix** | LeagueDetail now shows exactly 20 PL clubs (not 74) when competition is selected |
+| Dec 13, 2025 | Self-outbid prevention added | Users cannot outbid themselves - shows toast and resets input to current bid |
+| Dec 12, 2025 | Critical bid validation fixes deployed | Fixed 500 errors on bidding |
+| Dec 12, 2025 | Auction deletion socket event added | Fixed frozen screens when auction deleted |
+| Dec 12, 2025 | Mobile UI fixes deployed | Fixed horizontal scrolling issues |
+| Dec 8, 2025 | Redis Cloud configured for production | Socket.IO now works across multiple pods |
+| Dec 8, 2025 | Multi-pod deployment stabilized | Improved reliability for concurrent users |
 
 ---
 
