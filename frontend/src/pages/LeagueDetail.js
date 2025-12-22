@@ -1042,7 +1042,21 @@ export default function LeagueDetail() {
                   </div>
                   
                   <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3 max-h-96 overflow-y-auto">
-                    {availableAssets.map((asset) => (
+                    {availableAssets
+                      .filter(asset => {
+                        // Filter based on competitionFilter for football
+                        if (league.sportKey === "football" && competitionFilter !== "all") {
+                          if (competitionFilter === "EPL") {
+                            return asset.competitionShort === "EPL" || asset.competitions?.includes("English Premier League");
+                          } else if (competitionFilter === "UCL") {
+                            return asset.competitionShort === "UCL" || asset.competitions?.includes("UEFA Champions League");
+                          } else if (competitionFilter === "AFCON") {
+                            return asset.competitionShort === "AFCON" || asset.competitions?.includes("Africa Cup of Nations");
+                          }
+                        }
+                        return true; // Show all if filter is "all" or for other sports
+                      })
+                      .map((asset) => (
                       <label
                         key={asset.id}
                         className={`flex items-center p-3 border rounded-lg cursor-pointer transition-colors ${
