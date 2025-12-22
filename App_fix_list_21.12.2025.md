@@ -3,7 +3,8 @@
 
 | Category | Item | What Users Experience | What We're Doing | When | Risk | Why This Matters |
 |---|---|---|---|---|---|---|
-| ✅ **RESOLVED** | Team selection clarity (ISSUE-018) | Commissioners see too many teams | ~~Auto-filter teams by competition~~ **FIXED** - Backend now filters by competitionCode | **Done** | - | Prevents setup errors |
+| ✅ **RESOLVED** | Team selection clarity (ISSUE-018) | Commissioners see too many teams | ~~Auto-filter teams by competition~~ **FIXED** - Backend filters + modal defaults to competition | **Done** | - | Prevents setup errors |
+| ✅ **RESOLVED** | Team selection modal | "Manage Clubs" modal showed all 74 teams | Auto-populate teams on creation + filter dropdown defaults to competition | **Done** | - | Streamlined setup flow |
 | ✅ **RESOLVED** | AFCON Data Error | Kenya shown instead of Cameroon, wrong fixtures | Admin endpoints created, asset updated in production, corrected fixtures CSV uploaded | **Done** | - | Live tournament data accuracy |
 | ✅ **RESOLVED** | Bid input race condition (ISSUE-023) | Rapid bidding causes typed bids to append/inflate | Made input read-only, added +1m/+2m buttons | **Done** | - | Prevents accidental inflated bids |
 | 🔍 **Monitoring** | Roster not updating correctly (ISSUE-016) | Winning teams but roster looks full or wrong | Monitoring in larger group tests before attempting fix | Observe | Low | Previous fix broke countdown - needs careful analysis |
@@ -28,8 +29,9 @@
 
 ### ✅ Resolved This Week
 1. **ISSUE-018: Team Selection UX** - Premier League now shows exactly 20 teams, not 74
-2. **AFCON Data Fix** - Kenya replaced with Cameroon in production, corrected fixtures uploaded (36 group matches)
-3. **ISSUE-023: Bid Input Race Condition** - Input now read-only with +1m, +2m, +5m, +10m, +20m, +50m buttons
+2. **ISSUE-018 Enhancement: Manage Clubs Modal** - Auto-populates teams on creation, dropdown defaults to competition
+3. **AFCON Data Fix** - Kenya replaced with Cameroon in production, corrected fixtures uploaded (36 group matches)
+4. **ISSUE-023: Bid Input Race Condition** - Input now read-only with +1m, +2m, +5m, +10m, +20m, +50m buttons
 
 ### 🔍 Moved to Monitoring
 - ISSUE-022 (Unknown managers) - Not recurring in recent tests
