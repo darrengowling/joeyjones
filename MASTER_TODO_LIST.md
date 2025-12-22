@@ -1,6 +1,6 @@
 # Master TODO List - Sport X Platform
 
-**Last Updated:** December 20, 2025  
+**Last Updated:** December 21, 2025  
 **Purpose:** Single source of truth for all work items - issues, bugs, features, and technical debt
 
 ---
@@ -9,13 +9,12 @@
 
 | Category | Count |
 |----------|-------|
-| 🔍 Monitoring | 1 |
-| 🟡 Awaiting Info | 3 |
-| 🟠 Medium Priority - Technical | 4 |
-| 🟠 Medium Priority - UI/UX | 5 |
+| 🔍 Monitoring | 5 |
+| 🟠 Medium Priority - Technical | 2 |
+| 🟠 Medium Priority - UI/UX | 4 |
 | 🟠 Medium Priority - Config | 1 |
 | 🔵 Post-Pilot | 15 |
-| ✅ Recently Resolved | 13 |
+| ✅ Recently Resolved | 17 |
 
 ---
 
@@ -24,11 +23,15 @@
 | # | Issue ID | Summary | Cause | Evidence | Status |
 |---|----------|---------|-------|----------|--------|
 | 1 | **ISSUE-016** | **Roster Not Updating** - User wins team but roster shows wrong count or "Full" prematurely | Suspected race condition under higher concurrency (7+ users) | Single report from "Ash friends test 2" (7-user auction). Not reproduced in 100s of 4-6 user tests. | 🔍 MONITORING |
+| 2 | **ISSUE-019** | **"Couldn't Place Bid"** - User pressed bid button but bid didn't go through | Likely expected behavior (roster full) | Investigation suggests roster was full when bid attempted | 🔍 MONITORING |
+| 3 | **ISSUE-020** | **"United Offered 2 Times"** - Same team appeared twice mid-auction | Frontend display bug or socket duplication | No recurrence reported | 🔍 MONITORING |
+| 4 | **ISSUE-021** | **"Roster Lagged"** - Roster display showed incorrect/delayed data | Same root cause as ISSUE-016 | Linked to ISSUE-016 | 🔍 MONITORING |
+| 5 | **ISSUE-022** | **"Unknown" Manager Names** - Some managers show as "Unknown" | Missing userName in participant data | Not recurring in recent tests (Dec 21) | 🔍 MONITORING |
 
-**Decision (Dec 20, 2025):** Monitor before attempting fixes. Previous fix attempt broke countdown display. Issue may only manifest with larger user groups. If it recurs, use debug report system to capture state for analysis.
+**Decision (Dec 21, 2025):** All above issues moved to monitoring. Will revisit if they recur in larger group testing.
 
-**Files:** `/app/frontend/src/pages/AuctionRoom.js` (line 270 - `loadAuction()` in `onSold` handler)  
-**Next Action:** Wait for reproduction in larger group testing with debug report capture.
+**Files:** `/app/frontend/src/pages/AuctionRoom.js`  
+**Next Action:** Wait for reproduction with debug report capture.
 
 ---
 
