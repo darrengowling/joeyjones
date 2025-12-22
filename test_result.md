@@ -1437,3 +1437,21 @@ agent_communication:
 4. Verify Place Bid submits correctly
 
 **File Changed:** /app/frontend/src/pages/AuctionRoom.js
+
+## Test Request - December 21, 2025 (Option A Implementation)
+
+### Feature to Test: Auto-populate assetsSelected on League Creation
+
+**Changes Made:**
+- Backend now auto-populates `assetsSelected` based on `competitionCode` when league is created
+- PL → 20 teams, CL → 36 teams, AFCON → 24 teams
+- Commissioner still needs to click "Save Teams" in Manage Teams section to enable fixture import
+
+**Expected Behavior:**
+1. Create league with "Premier League" competition
+2. League Detail page shows 20 PL teams pre-selected in Manage Teams section
+3. Commissioner can review/modify team selection
+4. After clicking "Save Teams", fixture import is enabled
+5. Auction can start immediately without visiting Manage Teams
+
+**File Changed:** /app/backend/server.py (create_league function)
