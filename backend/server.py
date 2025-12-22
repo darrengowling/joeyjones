@@ -2011,6 +2011,44 @@ async def replace_team_in_fixtures(old_team: str, new_team: str):
 async def create_league(input: LeagueCreate):
     logger.info(f"🏆 CREATE_LEAGUE START: {input.name}")
     
+    # Option A: Auto-populate assetsSelected based on competitionCode if not provided
+    if (not input.assetsSelected or len(input.assetsSelected) == 0) and input.competitionCode:
+        logger.info(f"   Auto-populating assets for competitionCode: {input.competitionCode}")
+        
+        # Build query based on competition code
+        competition_code = input.competitionCode.upper()
+        if competition_code in ["PL", "EPL"]:
+            query = {"$or": [
+                {"competitionShort": "EPL"},
+                {"competitions": "English Premier League"}
+            ]}
+        elif competition_code in ["CL", "UCL"]:
+            query = {"$or": [
+                {"competitionShort": "UCL"},
+                {"competitions": "UEFA Champions League"}
+            ]}
+        elif competition_code == "AFCON":
+            query = {"$or": [
+                {"competitionShort": "AFCON"},
+                {"competitions": "Africa Cup of Nations"}
+            ]}
+        else:
+            # Fallback: try to match competitionShort directly
+            query = {"competitionShort": competition_code}
+        
+        # Also filter by sportKey
+        query["sportKey"] = input.sportKey
+        
+        # Get matching assets
+        assets = await db.assets.find(query, {"_id": 0, "id": 1}).to_list(200)
+        auto_selected_ids = [asset["id"] for asset in assets]
+        
+        if auto_selected_ids:
+            input.assetsSelected = auto_selected_ids
+            logger.info(f"   ✅ Auto-selected {len(auto_selected_ids)} assets for {competition_code}")
+        else:
+            logger.warning(f"   ⚠️ No assets found for competitionCode: {competition_code}")
+    
     # Prompt 4: Validate assets selection size
     from models import validate_assets_selection_size
     try:
