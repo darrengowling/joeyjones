@@ -35,68 +35,16 @@
 
 ---
 
-## 🟡 AWAITING INFO - Need Clarification
-
-| # | Issue ID | Summary | Potential Causes | Potential Fix | Risk | Benefit |
-|---|----------|---------|------------------|---------------|------|---------|
-| 1 | **ISSUE-019** | **"Couldn't Place Bid"** - User pressed bid button but bid didn't go through | Budget exhausted (expected), roster full (expected), self-outbid rejection (expected), network timeout, or button stuck disabled (bug) | Depends on cause - may be expected behavior or need UI clarification | 🟢-🟡 | Clearer error messaging, better UX |
-| 2 | **ISSUE-020** | **"United Offered 2 Times"** - Same team appeared twice in auction mid-auction (not at end) | Frontend display bug (race condition showing same team twice), socket event replayed/duplicated, OR actual queue bug | Investigate socket event handling; may need deduplication logic | 🟢-🟡 | Reduces user confusion |
-| 3 | **ISSUE-021** | **"Roster Lagged"** - Roster display showed incorrect/delayed data in multiple places | Same race condition as ISSUE-016 (loadAuction overwriting socket data) | Same fix as ISSUE-016 | 🟢 Low | Consistent, real-time roster updates |
-
-**Source:** "Ash friends test 2" auction (Dec 18, 2025) - Auction ID: `95c7d1a1-b224-486b-b1bc-df4690633924`
-
-### Investigation Findings (Dec 19, 2025):
-
-**Auction State:**
-- 7 participants, each ended with 2 clubs
-- 14 clubs sold, 2 unsold (AFC Bournemouth, Sunderland AFC - no bids)
-- 4 clubs never auctioned (Brentford stuck on "current", Nottingham Forest, Chelsea, Newcastle pending)
-- Auction stopped at Lot 16/20 when all rosters filled
-
-**ISSUE-019 Analysis ("Couldn't Place Bid"):**
-- User reported: had budget remaining, used +£50m button, happened mid-bidding exchange
-- Likely scenario: User's roster was already full (2/2) when attempting to bid
-- The auction auto-completed when all 7 users reached 2 clubs each (14 total = 7×2)
-- Unsold teams (Bournemouth, Sunderland) had NO bids - users may have tried but were roster-full
-
-**ISSUE-020 Analysis ("United Offered Twice"):**
-- User reported: Manchester United appeared twice MID-auction (not as unsold retry at end)
-- Investigation: Queue data shows Man United only once at position 3 (sold to pakhi.c93 for £410M)
-- No duplicate club IDs found in queue
-- **Possible cause:** Frontend display bug or socket event duplication - cannot confirm from stored data
-- No debug report exists (pre-feature deployment)
-
-**ISSUE-021 Analysis ("Roster Lagged"):**
-- User reported: "1 user had only 1 of 2 slots but showed roster full"
-- Investigation: All 7 users now show 2 clubs each in final state
-- Likely the same race condition as ISSUE-016 - display lagged behind actual state
-- The ISSUE-016 fix (remove loadAuction from onSold) should address this
-
-**Data Gaps:**
-- No debug report exists for this auction (occurred before feature deployment)
-- Bid history not fully captured in current API responses
-- rosterSize shows as "None" in league data (data integrity issue?)
-
----
-
 ## 🟠 MEDIUM PRIORITY - Technical/Bugs
 
 | # | Issue ID | Summary | Cause | Fix | Risk | Benefit |
 |---|----------|---------|-------|-----|------|---------|
 | 1 | **ISSUE-017 Phase 2** | **Backend Diagnostic Reads** - Unnecessary DB reads in bid hot path add latency | Diagnostic logging reads league + participants on every bid | Move diagnostic reads to async background task | 🟢 Low | ~20-50ms faster bid processing |
-| 2 | **ISSUE-017 Phase 3** | **Backend findOneAndUpdate** - Extra DB read to get sequence number after update | Separate update + read operations | Use `findOneAndUpdate` with `returnDocument: "after"` | 🟡 Medium | Eliminates 1 DB round-trip per bid |
-
-**ISSUE-017 Phase 2/3 Note (Dec 19, 2025):**
-- Trade-off: Removing diagnostic logging saves 20-50ms per bid but loses troubleshooting visibility
-- With 150 pilot users, faster bids improve UX but diagnostic logs help debug issues
-- Decision: Defer until pilot feedback indicates latency is a user-reported problem
-| 3 | **ISSUE-002** | **Commissioner Auth Checks** - Missing authorization checks on some endpoints | TODO comments never implemented (server.py lines 3436, 3555) | Add `require_commissioner` check to flagged endpoints | 🟡 Medium | Security improvement |
-| 4 | **ISSUE-022** | **"Unknown" Manager Names** - Some manager names display as "Unknown" in auction | Missing `userName` in participant data or display logic bug | Verify data flow, ensure userName populated | 🟢 Low | Better user identification |
+| 2 | **ISSUE-002** | **Commissioner Auth Checks** - Missing authorization checks on some endpoints | TODO comments never implemented (server.py lines 3436, 3555) | Add `require_commissioner` check to flagged endpoints | 🟡 Medium | Security improvement |
 
 **Files:**
 - ISSUE-017: `/app/backend/server.py` (bid hot path)
 - ISSUE-002: `/app/backend/server.py` (lines 3436, 3555)
-- ISSUE-022: `/app/frontend/src/pages/AuctionRoom.js`, `/app/backend/server.py`
 
 ---
 
