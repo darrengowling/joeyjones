@@ -116,19 +116,22 @@
 
 | # | Issue | Summary | Solution | Date |
 |---|-------|---------|----------|------|
-| 1 | **Debug report** | Debug report only captured client-side data, couldn't diagnose server issues | Enhanced to capture 15 socket events + server state. Auto-uploads to MongoDB with reference ID. Query via `/api/debug/reports` | Dec 19 |
-| 2 | **Self-outbid** | Users could increase their own winning bid | Backend validation + input reset on rejection | Dec 13 |
-| 3 | **Bid lag Phase 1** | 2 HTTP GETs per bid per client causing lag | Removed loadAuction/loadClubs from bid_placed handler | Dec 13 |
-| 4 | **500 on first bid** | Server error on initial bid | Fixed Pydantic serialization, None handling | Dec 12 |
-| 5 | **Frozen on delete** | Screen froze when auction deleted | Added auction_deleted socket event | Dec 12 |
-| 6 | **Horizontal scroll** | Mobile auction room had horizontal scroll | Fixed responsive layout | Dec 12 |
-| 7 | **Equal bid accepted** | Bids equal to current were accepted | Changed to require bid > current | Dec 12 |
-| 8 | **Multi-pod Socket.IO** | Socket.IO didn't work across pods | Configured Redis Cloud pub/sub | Dec 8 |
-| 9 | **Production outage** | 520 error, service unavailable | Emergent platform issue - resolved after redeploy | Dec 13 |
-| 10 | **Debug endpoint bug** | `/api/debug/auction-state` failed on clubsWon string IDs | Fixed to handle both string IDs and dict objects | Dec 19 |
-| 11 | **Debug report upload** | Debug reports only downloaded locally, support couldn't access | Added server upload with reference IDs, queryable via `/api/debug/reports` | Dec 19 |
-| 12 | **Socket event logging** | Debug reports missing socket event data | Added `logSocketEvent()` calls to all 15 socket handlers in AuctionRoom.js | Dec 19 |
-| 13 | **ISSUE-018** | Team Selection UX - LeagueDetail showed all 74 clubs instead of competition-specific clubs | Backend `get_league_assets()` now filters by `competitionCode` when `assetsSelected` is empty. PL shows exactly 20 clubs. | Dec 20 |
+| 1 | **AFCON Data Fix** | Kenya shown instead of Cameroon in AFCON competition, incorrect fixtures | Admin endpoints to update assets in production, corrected fixtures CSV uploaded (36 group matches) | Dec 21 |
+| 2 | **ISSUE-023** | Bid input race condition - rapid bidding caused typed amounts to append/inflate | Made bid input read-only, added +1m/+2m buttons (now: +1m, +2m, +5m, +10m, +20m, +50m) | Dec 21 |
+| 3 | **ISSUE-018 Enhancement** | "Manage Clubs" modal showed all 74 teams even when PL selected | Auto-populate `assetsSelected` on league creation + default filter dropdown to competition | Dec 21 |
+| 4 | **ISSUE-018** | Team Selection UX - LeagueDetail showed all 74 clubs instead of competition-specific clubs | Backend `get_league_assets()` now filters by `competitionCode` when `assetsSelected` is empty. PL shows exactly 20 clubs. | Dec 20 |
+| 5 | **Debug report** | Debug report only captured client-side data, couldn't diagnose server issues | Enhanced to capture 15 socket events + server state. Auto-uploads to MongoDB with reference ID. Query via `/api/debug/reports` | Dec 19 |
+| 6 | **Self-outbid** | Users could increase their own winning bid | Backend validation + input reset on rejection | Dec 13 |
+| 7 | **Bid lag Phase 1** | 2 HTTP GETs per bid per client causing lag | Removed loadAuction/loadClubs from bid_placed handler | Dec 13 |
+| 8 | **500 on first bid** | Server error on initial bid | Fixed Pydantic serialization, None handling | Dec 12 |
+| 9 | **Frozen on delete** | Screen froze when auction deleted | Added auction_deleted socket event | Dec 12 |
+| 10 | **Horizontal scroll** | Mobile auction room had horizontal scroll | Fixed responsive layout | Dec 12 |
+| 11 | **Equal bid accepted** | Bids equal to current were accepted | Changed to require bid > current | Dec 12 |
+| 12 | **Multi-pod Socket.IO** | Socket.IO didn't work across pods | Configured Redis Cloud pub/sub | Dec 8 |
+| 13 | **Production outage** | 520 error, service unavailable | Emergent platform issue - resolved after redeploy | Dec 13 |
+| 14 | **Debug endpoint bug** | `/api/debug/auction-state` failed on clubsWon string IDs | Fixed to handle both string IDs and dict objects | Dec 19 |
+| 15 | **Debug report upload** | Debug reports only downloaded locally, support couldn't access | Added server upload with reference IDs, queryable via `/api/debug/reports` | Dec 19 |
+| 16 | **Socket event logging** | Debug reports missing socket event data | Added `logSocketEvent()` calls to all 15 socket handlers in AuctionRoom.js | Dec 19 |
 
 ---
 
@@ -158,6 +161,7 @@
 | Roster updates | Does roster display update after winning? |
 | "Complete Lot" button | Is it being used? If not, remove |
 | Debug reports | Are commissioners using "Report Issue" button? |
+| Bid input buttons | Are +1m/+2m buttons being used? Is read-only input confusing? |
 
 ---
 
