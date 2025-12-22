@@ -1332,7 +1332,7 @@ function AuctionRoom() {
                   <div>
                     {/* Quick Bid Buttons */}
                     <div className="flex gap-2 mb-2 overflow-x-auto pb-2">
-                      {[5, 10, 20, 50].map((amount) => (
+                      {[1, 2, 5, 10, 20, 50].map((amount) => (
                         <button
                           key={amount}
                           onClick={() => {
@@ -1351,13 +1351,11 @@ function AuctionRoom() {
                     
                     <div className="flex flex-col sm:flex-row gap-2 mb-2">
                       <input
-                        type="number"
-                        inputMode="numeric"
-                        pattern="[0-9]*"
-                        placeholder="Enter bid amount"
-                        className="w-full sm:flex-1 px-3 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-[16px]"
-                        value={bidAmount}
-                        onChange={(e) => setBidAmount(e.target.value)}
+                        type="text"
+                        readOnly
+                        placeholder="Use buttons above"
+                        className="w-full sm:flex-1 px-3 py-3 border rounded-lg bg-gray-50 text-[16px] cursor-default"
+                        value={bidAmount ? `£${bidAmount}m` : ""}
                         disabled={!ready}
                         data-testid="bid-amount-input"
                       />
