@@ -980,24 +980,8 @@ export default function LeagueDetail() {
                       <label className="block text-sm font-medium text-gray-700 mb-1">Filter by Competition</label>
                       <select
                         className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mb-2"
-                        onChange={async (e) => {
-                          const filter = e.target.value;
-                          try {
-                            let response;
-                            if (filter === "all") {
-                              response = await axios.get(`${API}/clubs?sportKey=football`);
-                            } else {
-                              response = await axios.get(`${API}/clubs?sportKey=football&competition=${filter}`);
-                            }
-                            setAvailableAssets(response.data);
-                            // Auto-select all teams in filtered view
-                            if (filter !== "all") {
-                              setSelectedAssetIds(response.data.map(t => t.id));
-                            }
-                          } catch (error) {
-                            console.error("Error filtering clubs:", error);
-                          }
-                        }}
+                        value={competitionFilter}
+                        onChange={(e) => setCompetitionFilter(e.target.value)}
                       >
                         <option value="all">All Teams ({availableAssets.length})</option>
                         <option value="EPL">Premier League Only (20)</option>
