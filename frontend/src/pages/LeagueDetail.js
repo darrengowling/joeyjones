@@ -32,6 +32,8 @@ export default function LeagueDetail() {
   const [importingFixtures, setImportingFixtures] = useState(false);
   const [fixturesImported, setFixturesImported] = useState(false);
   const [startingAuction, setStartingAuction] = useState(false);
+  // Filter state for Manage Clubs modal
+  const [competitionFilter, setCompetitionFilter] = useState("all");
   // Fixtures state
   const [fixtures, setFixtures] = useState([]);
   const [loadingFixtures, setLoadingFixtures] = useState(false);
