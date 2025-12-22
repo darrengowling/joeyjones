@@ -1395,3 +1395,28 @@ agent_communication:
       - working: true
         agent: "testing"
         comment: "✅ COMPREHENSIVE BACKEND READINESS TEST COMPLETED: All 22/22 tests passed (100% success rate). ✅ MULTI-SPORT FOUNDATION (4/4): GET /api/sports returns Football + Cricket, individual sport endpoints working, SPORTS_CRICKET_ENABLED=true verified. ✅ ASSET MANAGEMENT (2/2): Football assets returns 36 clubs as expected, Cricket assets returns 30 players successfully. ✅ LEAGUE CREATION & MANAGEMENT (4/4): League creation with £500M budget working, invite token join flow functional, leagues appear in GET /api/leagues, user competitions tracked in GET /api/me/competitions. ✅ AUCTION CORE FUNCTIONALITY (5/5): Auction start via POST /api/leagues/:id/auction/start working, auction status retrieval functional, clubs list endpoint operational, bid validation correctly rejects bids below £1M minimum, bid placement endpoint working with proper validation. ✅ CRICKET-SPECIFIC FEATURES (3/3): Cricket assets available, cricket league creation successful, cricket scoring ingest endpoint POST /api/scoring/:id/ingest operational. ✅ MY COMPETITIONS ENDPOINTS (3/3): League summary with all required fields working, standings with table structure functional, fixtures endpoint operational. ✅ SOCKET.IO CONFIGURATION (1/1): Path /api/socket.io correctly configured and accessible. RECOMMENDATION: ✅ GO - Backend is ready for production. All core functionality validated and operational."
+
+## Test Request - December 21, 2025
+
+### Feature to Test: ISSUE-023 - Bid Input Race Condition Fix
+
+**Changes Made:**
+1. Made bid input read-only (no manual typing)
+2. Added +1m and +2m buttons to existing button set
+3. New button order: +1m, +2m, +5m, +10m, +20m, +50m
+4. Input now displays formatted value (e.g., "£105m") but is not editable
+
+**Expected Behavior:**
+- Users cannot type in the bid input field
+- Clicking +1m adds 1 to current bid value
+- Clicking +2m adds 2 to current bid value
+- Input updates to show new bid amount with £ prefix and m suffix
+- Place Bid button submits the correct amount
+
+**Test Scenarios:**
+1. Verify all 6 bid buttons are visible (+1m, +2m, +5m, +10m, +20m, +50m)
+2. Verify bid input is read-only (cannot type)
+3. Verify clicking buttons updates the displayed bid amount
+4. Verify Place Bid submits correctly
+
+**File Changed:** /app/frontend/src/pages/AuctionRoom.js
