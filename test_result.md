@@ -1438,6 +1438,19 @@ agent_communication:
 
 **File Changed:** /app/frontend/src/pages/AuctionRoom.js
 
+frontend:
+  - task: "Auto-populate assetsSelected on League Creation - Option A Implementation"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py (create_league function), /app/frontend/src/pages/LeagueDetail.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "✅ AUTO-POPULATION TEAMS TESTING COMPLETED: Comprehensive testing of the auto-population feature for Premier League team selection performed successfully. RESULTS: 13/13 test criteria passed (100% success rate) - feature is working perfectly. ✅ LEAGUE CREATION: Successfully created 'Test Option A' league with Premier League competition selection, league created with ID c129e02e-3698-4e7c-9e6b-df9e59edc91c. ✅ AUTO-POPULATION VERIFICATION: Backend correctly auto-populated exactly 20 teams for Premier League competition (displayed as '20 clubs selected for auction'), selection counter shows 'Selected: 20 / 74' confirming correct filtering. ✅ PREMIER LEAGUE TEAMS VALIDATED: All 6 major Premier League teams pre-selected (Arsenal, Chelsea, Liverpool, Manchester United, Manchester City, Tottenham), teams displayed correctly in Available Clubs section (Chelsea FC, Nottingham Forest FC, Wolverhampton Wanderers FC, etc.). ✅ COMMISSIONER FUNCTIONALITY: Team selection/deselection working perfectly (successfully deselected and re-selected Arsenal), 'Save Selection' button available for commissioners, 'Manage Clubs' section properly accessible. ✅ AUCTION READINESS: 'Enter Waiting Room' button available without requiring manual team selection, confirming backend auto-population enables immediate auction start. ✅ UI/UX VALIDATION: League Detail page loads correctly with proper title, Manage Clubs section visible and functional, team selection interface responsive with proper filtering options. ✅ BACKEND INTEGRATION: create_league function correctly auto-populates assetsSelected field based on competitionCode='PL', frontend properly displays pre-selected teams, no manual intervention required for basic auction setup. The auto-population feature is production-ready and meets all specified requirements."
+
 ## Test Request - December 21, 2025 (Option A Implementation)
 
 ### Feature to Test: Auto-populate assetsSelected on League Creation
