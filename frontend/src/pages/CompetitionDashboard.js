@@ -756,6 +756,11 @@ export default function CompetitionDashboard() {
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {isCricket ? entry.tiebreakers.wickets : entry.tiebreakers.wins}
                   </td>
+                  {!isCricket && (
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {entry.tiebreakers.draws || 0}
+                    </td>
+                  )}
                   {isCricket && (
                     <>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
