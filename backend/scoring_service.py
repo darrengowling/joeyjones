@@ -423,6 +423,7 @@ async def update_standings_from_club_points(db, league_id: str):
         total_points = sum(cp.get("totalPoints", 0) for cp in club_points)
         total_goals = sum(cp.get("goalsScored", 0) for cp in club_points)
         total_wins = sum(cp.get("wins", 0) for cp in club_points)
+        total_draws = sum(cp.get("draws", 0) for cp in club_points)
         
         table.append({
             "userId": user_id,
@@ -432,6 +433,7 @@ async def update_standings_from_club_points(db, league_id: str):
             "tiebreakers": {
                 "goals": float(total_goals),
                 "wins": float(total_wins),
+                "draws": float(total_draws),
                 "runs": 0.0,
                 "wickets": 0.0
             }
