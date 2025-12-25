@@ -95,6 +95,7 @@
 | 7 | **ISSUE-010** | **Custom Scoring Rules** - All leagues use same scoring rules | Hardcoded scoring | Add commissioner UI to customize points | 🟡 Medium | Flexibility for different tournaments |
 | 8 | **ISSUE-012** | **Email Notifications** - Users must manually check app | No email integration | Integrate SendGrid for invites, reminders, results | 🟡 Medium | Better user engagement |
 | 9 | - | **Payment Integration** - No entry fees or charity donations | Feature not built | Stripe Connect integration (see PAYMENT_INTEGRATION_PLAN.md) | 🟡 Medium | Revenue capability, charity support |
+| 10 | **ISSUE-024** | **Auto-Import Fixtures** - Users forget to import fixtures, scoring fails | Manual step easily missed | Auto-import fixtures when commissioner saves teams (Option A: trigger on `update_league_assets`) | 🟢 Low | Removes friction, prevents "no scores" confusion |
 
 ---
 
@@ -102,13 +103,14 @@
 
 | # | Issue ID | Summary | Cause | Fix | Risk | Benefit |
 |---|----------|---------|-------|-----|------|---------|
-| 10 | **ISSUE-013** | **Analytics** - No visibility into user behavior | Not implemented | Add Google Analytics | 🟢 Low | Usage insights |
-| 11 | **ISSUE-014** | **Database Backups** - Risk of data loss | No automated backups | Configure MongoDB Atlas daily backups | 🟢 Low | Data protection |
-| 12 | **ISSUE-004** | **ESLint Warnings** - Build output cluttered with warnings | Missing ESLint rule config | Add rule to eslintrc | 🟢 Low | Cleaner builds |
-| 13 | **ISSUE-007** | **Cricket Error Messages** - Generic error messages for cricket | Insufficient error handling | Add specific error messages | 🟢 Low | Better user feedback |
-| 14 | **ISSUE-005** | **LeagueDetail Scrolling** - Excessive scrolling on mobile | Long page design | Add collapsible sections or tabs | 🟢 Low | Better mobile UX |
-| 15 | **ISSUE-006** | **"Complete Lot" Button** - Button may be redundant | Added for now-fixed bug | Monitor usage, remove if unused | 🟢 Low | Cleaner UI |
-| 16 | - | **Rate Limiting** - Rate limiting function exists but not applied to endpoints | Deferred during development | Apply `get_rate_limiter()` to key endpoints | 🟢 Low | Protection against API abuse |
+| 11 | **ISSUE-013** | **Analytics** - No visibility into user behavior | Not implemented | Add Google Analytics | 🟢 Low | Usage insights |
+| 12 | **ISSUE-014** | **Database Backups** - Risk of data loss | No automated backups | Configure MongoDB Atlas daily backups | 🟢 Low | Data protection |
+| 13 | **ISSUE-004** | **ESLint Warnings** - Build output cluttered with warnings | Missing ESLint rule config | Add rule to eslintrc | 🟢 Low | Cleaner builds |
+| 14 | **ISSUE-007** | **Cricket Error Messages** - Generic error messages for cricket | Insufficient error handling | Add specific error messages | 🟢 Low | Better user feedback |
+| 15 | **ISSUE-005** | **LeagueDetail Scrolling** - Excessive scrolling on mobile | Long page design | Add collapsible sections or tabs | 🟢 Low | Better mobile UX |
+| 16 | **ISSUE-006** | **"Complete Lot" Button** - Button may be redundant | Added for now-fixed bug | Monitor usage, remove if unused | 🟢 Low | Cleaner UI |
+| 17 | - | **Rate Limiting** - Rate limiting function exists but not applied to endpoints | Deferred during development | Apply `get_rate_limiter()` to key endpoints | 🟢 Low | Protection against API abuse |
+| 18 | **ISSUE-025** | **Rename Help to User Testing Guide** - "Help" button name not clear | Generic naming | Rename "Help" to "User Testing Guide" in UI | 🟢 Low | Clearer purpose for testers |
 
 ---
 
