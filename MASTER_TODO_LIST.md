@@ -13,7 +13,7 @@
 | 🟠 Medium Priority - Technical | 2 |
 | 🟠 Medium Priority - UI/UX | 4 |
 | 🟠 Medium Priority - Config | 1 |
-| 🔵 Post-Pilot | 15 |
+| 🔵 Post-Pilot | 18 |
 | ✅ Recently Resolved | 17 |
 
 ---
