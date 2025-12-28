@@ -75,6 +75,30 @@
 
 ---
 
+## 🔴 MIGRATION PRE-REQUISITES (Confirm Before Migration)
+
+**Status:** AWAITING USER INPUT  
+**Priority:** HIGH - Required before any migration work proceeds  
+**Reason:** Previous agent assumptions led to unnecessary work (e.g., MongoDB Atlas Cluster0 setup). Migration plan accuracy depends on confirmed details.
+
+| # | Item | What's Needed | Status |
+|---|------|---------------|--------|
+| 1 | **Redis Cloud Account** | Confirm connection string/URL from your Redis Cloud dashboard | ❓ Pending |
+| 2 | **MongoDB Atlas Cluster0** | Clarify: Did you create this, or was it set up by an agent? Can it be deleted? | ❓ Pending |
+| 3 | **Football-Data.org API** | Confirm API tier and rate limits (free tier may not support 250+ users) | ❓ Pending |
+| 4 | **Custom Domain** | Confirm if domain purchased for production (e.g., sportx.app) | ❓ Pending |
+| 5 | **Data Migration Approach** | Decision: Fresh start (re-seed) or export/import existing data? | ❓ Pending |
+| 6 | **Staging Environment** | Decision: Separate Railway project for staging, or single project? | ❓ Pending |
+
+**Why This Matters:**
+- Agent cannot access external dashboards (Railway, Redis Cloud, Atlas, Football-Data.org)
+- Previous assumptions about MongoDB configuration were incorrect
+- Migration plan must be based on confirmed facts, not assumptions
+
+**Action:** User to provide details when ready. Agent will update MIGRATION_PLAN.md accordingly.
+
+---
+
 ## 🔵 POST-PILOT - Technical Debt
 
 | # | Issue ID | Summary | Cause | Fix | Risk | Benefit |
