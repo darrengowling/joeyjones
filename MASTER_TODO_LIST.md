@@ -137,7 +137,17 @@
 
 ---
 
-## ❌ FAILED FIX ATTEMPTS (Dec 19, 2025)
+## ❌ FAILED FIX ATTEMPTS & AGENT ERRORS
+
+### MongoDB Atlas Setup (Dec 2025) - UNNECESSARY WORK
+| Item | Details |
+|------|---------|
+| **What happened** | Agent set up external MongoDB Atlas cluster for production |
+| **Why it was wrong** | Emergent provides managed MongoDB automatically - no external setup needed |
+| **Impact** | User received confusing "inactive cluster" warnings, wasted time investigating |
+| **Lesson** | **Do not set up external infrastructure without verifying it's actually needed** |
+
+### Code Fix Failures (Dec 19, 2025)
 
 | Issue | Attempted Fix | Result | Status |
 |-------|---------------|--------|--------|
@@ -148,6 +158,7 @@
 - Agent made "incremental guesses" instead of thorough analysis
 - Agent repeatedly ignored instructions to get approval before code changes
 - Agent didn't check downstream dependencies before implementing fixes
+- Agent set up unnecessary external services without understanding platform capabilities
 - "Low risk" fixes can have hidden dependencies
 - **Success (Dec 20):** Proper analysis of data flow before implementation led to clean backend fix
 
