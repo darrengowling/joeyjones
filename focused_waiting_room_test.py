@@ -9,7 +9,7 @@ import time
 from datetime import datetime
 
 # Configuration
-BASE_URL = "https://fixture-correction.preview.emergentagent.com/api"
+BASE_URL = "https://bid-ux-update.preview.emergentagent.com/api"
 
 class FocusedWaitingRoomTester:
     def __init__(self):

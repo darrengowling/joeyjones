@@ -17,7 +17,7 @@ class CricketFeatureTester:
         self.backend_dir = Path("/app/backend")
         self.env_file = self.backend_dir / ".env"
         self.server_file = self.backend_dir / "server.py"
-        self.base_url = "https://fixture-correction.preview.emergentagent.com/api"
+        self.base_url = "https://bid-ux-update.preview.emergentagent.com/api"
         
     def log(self, message: str, level: str = "INFO"):
         timestamp = datetime.now().strftime("%H:%M:%S")
