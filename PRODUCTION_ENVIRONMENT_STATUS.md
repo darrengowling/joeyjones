@@ -11,29 +11,34 @@
 
 ### ⚠️ PREVIOUS AGENT ERROR - DO NOT REPEAT
 
-**A previous agent incorrectly set up an external MongoDB Atlas cluster**, believing it was required for production. **This was unnecessary and incorrect.**
+**A previous agent incorrectly told the user to set up their own MongoDB Atlas cluster**, believing it was required for production. **This was unnecessary and incorrect.**
 
 | Issue | Details |
 |-------|---------|
-| **What happened** | Agent created MongoDB Atlas Cluster0 thinking it was needed for production |
-| **The reality** | Emergent provides **managed MongoDB automatically** for all deployments |
-| **Result** | User received "inactive cluster" warnings from Atlas for an unused database |
-| **User's data location** | Emergent's managed MongoDB (NOT the Atlas cluster) |
-| **Atlas cluster status** | Can be safely deleted - contains no production data |
+| **What happened** | Agent told user to create their own MongoDB Atlas cluster (Cluster0) |
+| **The reality** | Emergent provides managed MongoDB Atlas under **Emergent's account** |
+| **Result** | User received "inactive cluster" warnings for their unused Cluster0 |
+| **User's data location** | Emergent's managed MongoDB Atlas (`customer-apps.oxfwhh.mongodb.net`) |
+| **User's Atlas Cluster0** | Can be safely deleted - contains no production data |
 
 ### ✅ CORRECT MongoDB Configuration
 
-| Environment | Database | Who Manages It |
-|-------------|----------|----------------|
-| **Preview** | `localhost:27017` | Emergent (auto-provisioned) |
-| **Production** | Emergent Managed MongoDB | Emergent (auto-provisioned) |
+**Production MONGO_URL (from deployment env variables):**
+```
+mongodb+srv://draft-kings-mobile:****@customer-apps.oxfwhh.mongodb.net/?appName=fixture-correction&maxPoolSize=5&retryWrites=true&timeoutMS=10000&w=majority
+```
+
+| Environment | Database | Host | Who Manages It |
+|-------------|----------|------|----------------|
+| **Preview** | Local MongoDB | `localhost:27017` | Emergent (auto-provisioned) |
+| **Production** | Emergent Managed Atlas | `customer-apps.oxfwhh.mongodb.net` | Emergent (auto-provisioned) |
 
 **DO NOT:**
-- ❌ Set up external MongoDB Atlas clusters
-- ❌ Configure external database connection strings for production
+- ❌ Tell users to set up their own MongoDB Atlas clusters
+- ❌ Configure external database connection strings
 - ❌ Assume production needs separate database setup
 
-**Emergent handles production MongoDB automatically. No external database setup is required.**
+**Emergent handles production MongoDB automatically via their own Atlas infrastructure. No user-side database setup is required.**
 
 ---
 
