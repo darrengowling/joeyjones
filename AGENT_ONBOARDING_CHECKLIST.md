@@ -24,23 +24,28 @@ Previous agents have wasted significant time and resources by:
 
 ## 🚨 CRITICAL: MONGODB CONFIGURATION (Dec 21, 2025)
 
-### ⛔ DO NOT SET UP EXTERNAL MONGODB
+### ⛔ DO NOT TELL USERS TO SET UP EXTERNAL MONGODB
 
-**Emergent provides managed MongoDB automatically for all deployments.**
+**Emergent provides managed MongoDB Atlas automatically for all deployments (under Emergent's account).**
 
-A previous agent incorrectly set up MongoDB Atlas, believing it was required for production. This was **completely unnecessary** and caused confusion when the user received "inactive cluster" warnings for an unused database.
+A previous agent incorrectly told the user to create their own MongoDB Atlas cluster, believing it was required for production. This was **completely unnecessary** and caused confusion when the user received "inactive cluster" warnings for an unused database.
 
-| Environment | Database | Management |
-|-------------|----------|------------|
-| **Preview** | `localhost:27017` | Emergent (automatic) |
-| **Production** | Emergent Managed MongoDB | Emergent (automatic) |
+**Production MONGO_URL (auto-configured by Emergent):**
+```
+mongodb+srv://...@customer-apps.oxfwhh.mongodb.net/...
+```
+
+| Environment | Database | Host | Management |
+|-------------|----------|------|------------|
+| **Preview** | Local MongoDB | `localhost:27017` | Emergent (automatic) |
+| **Production** | Emergent Managed Atlas | `customer-apps.oxfwhh.mongodb.net` | Emergent (automatic) |
 
 **DO NOT:**
-- ❌ Create MongoDB Atlas clusters
+- ❌ Tell users to create MongoDB Atlas clusters
 - ❌ Configure external database URLs for production
 - ❌ Tell users they need to set up external databases
 
-**Emergent handles all database infrastructure. No external setup required.**
+**Emergent handles all database infrastructure via their own Atlas account. No user-side setup required.**
 
 ---
 
