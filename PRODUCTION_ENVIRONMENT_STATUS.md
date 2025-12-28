@@ -1,9 +1,39 @@
 # Production Environment Status Report
 
-**Last Updated:** December 13, 2025  
+**Last Updated:** December 21, 2025  
 **Updated By:** Agent  
 **Production URL:** https://draft-kings-mobile.emergent.host  
 **Purpose:** Living document tracking the current state of the production environment
+
+---
+
+## 🚨 CRITICAL: MONGODB CONFIGURATION CLARIFICATION (Dec 21, 2025)
+
+### ⚠️ PREVIOUS AGENT ERROR - DO NOT REPEAT
+
+**A previous agent incorrectly set up an external MongoDB Atlas cluster**, believing it was required for production. **This was unnecessary and incorrect.**
+
+| Issue | Details |
+|-------|---------|
+| **What happened** | Agent created MongoDB Atlas Cluster0 thinking it was needed for production |
+| **The reality** | Emergent provides **managed MongoDB automatically** for all deployments |
+| **Result** | User received "inactive cluster" warnings from Atlas for an unused database |
+| **User's data location** | Emergent's managed MongoDB (NOT the Atlas cluster) |
+| **Atlas cluster status** | Can be safely deleted - contains no production data |
+
+### ✅ CORRECT MongoDB Configuration
+
+| Environment | Database | Who Manages It |
+|-------------|----------|----------------|
+| **Preview** | `localhost:27017` | Emergent (auto-provisioned) |
+| **Production** | Emergent Managed MongoDB | Emergent (auto-provisioned) |
+
+**DO NOT:**
+- ❌ Set up external MongoDB Atlas clusters
+- ❌ Configure external database connection strings for production
+- ❌ Assume production needs separate database setup
+
+**Emergent handles production MongoDB automatically. No external database setup is required.**
 
 ---
 
@@ -16,7 +46,7 @@ This document reflects the **PRODUCTION** environment state. The preview/develop
 ## 🟢 Current Production Health
 
 **Status:** HEALTHY  
-**Last Verified:** December 13, 2025 00:08 UTC
+**Last Verified:** December 21, 2025
 
 ### Health Endpoint Response
 ```json
@@ -41,16 +71,16 @@ This document reflects the **PRODUCTION** environment state. The preview/develop
 | Component | Status | Configuration |
 |-----------|--------|---------------|
 | **Backend** | ✅ Running | Multi-pod deployment with Redis coordination |
-| **Frontend** | ✅ Running | Production build, Build Hash: `1363bfb` |
-| **Database** | ✅ Connected | MongoDB Atlas (**SEPARATE from preview - see note below**) |
+| **Frontend** | ✅ Running | Production build |
+| **Database** | ✅ Connected | **Emergent Managed MongoDB** (NOT external Atlas) |
 | **Redis** | ✅ Connected | Redis Cloud instance for Socket.IO pub/sub |
 | **Socket.IO** | ✅ Multi-pod mode | Using Redis adapter for cross-pod communication |
 
-### ⚠️ CRITICAL: Database Separation
+### Database Access
 | Environment | Database | Access Method |
 |-------------|----------|---------------|
 | **Preview** | localhost:27017 | Direct MongoDB queries via `mongosh` |
-| **Production** | MongoDB Atlas (cloud) | **API calls only** via `curl https://draft-kings-mobile.emergent.host/api/...` |
+| **Production** | Emergent Managed MongoDB | **API calls only** via `curl https://draft-kings-mobile.emergent.host/api/...` |
 
 **Production data (including debug reports) can ONLY be accessed via production API endpoints, NOT via direct database queries from the preview environment.**
 
