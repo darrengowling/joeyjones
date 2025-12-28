@@ -1,6 +1,6 @@
 # Agent Onboarding Checklist
 
-**Last Updated:** December 19, 2025  
+**Last Updated:** December 21, 2025  
 **Purpose:** Mandatory steps for every new agent before starting any work
 
 ---
@@ -16,23 +16,54 @@ Previous agents have wasted significant time and resources by:
 - **Making "incremental guesses" instead of thorough analysis**
 - **Ignoring repeated instructions from user**
 - **Introducing new bugs while fixing existing ones (e.g., ISSUE-016 fix broke countdown display)**
+- **Setting up unnecessary external services (see MongoDB Atlas failure below)**
 
 **This checklist prevents those mistakes.**
 
 ---
 
-## 🔴 ABSOLUTE RULES (Dec 19, 2025)
+## 🚨 CRITICAL: MONGODB CONFIGURATION (Dec 21, 2025)
+
+### ⛔ DO NOT SET UP EXTERNAL MONGODB
+
+**Emergent provides managed MongoDB automatically for all deployments.**
+
+A previous agent incorrectly set up MongoDB Atlas, believing it was required for production. This was **completely unnecessary** and caused confusion when the user received "inactive cluster" warnings for an unused database.
+
+| Environment | Database | Management |
+|-------------|----------|------------|
+| **Preview** | `localhost:27017` | Emergent (automatic) |
+| **Production** | Emergent Managed MongoDB | Emergent (automatic) |
+
+**DO NOT:**
+- ❌ Create MongoDB Atlas clusters
+- ❌ Configure external database URLs for production
+- ❌ Tell users they need to set up external databases
+
+**Emergent handles all database infrastructure. No external setup required.**
+
+---
+
+## 🔴 ABSOLUTE RULES (Dec 21, 2025)
 
 1. **NEVER make code changes without explicit user approval**
 2. **NEVER assume - verify everything first**
 3. **NEVER make incremental guesses - do thorough analysis**
-4. **Present complete plan before ANY implementation**
-5. **Check downstream effects before proposing fixes**
-6. **Test ALL related functionality, not just the fix**
+4. **NEVER set up external services without confirming they're actually needed**
+5. **Present complete plan before ANY implementation**
+6. **Check downstream effects before proposing fixes**
+7. **Test ALL related functionality, not just the fix**
 
 ---
 
 ## ⚠️ KNOWN AGENT FAILURES (Learn from these)
+
+### MongoDB Atlas Setup (Dec 2025) - UNNECESSARY
+- **Task:** Set up production database
+- **Result:** Created external MongoDB Atlas cluster that was never used
+- **Root cause:** Agent didn't understand that Emergent provides managed MongoDB automatically
+- **Impact:** User received confusing "inactive cluster" warnings, wasted time investigating
+- **Lesson:** **Do not set up external infrastructure without verifying it's actually needed**
 
 ### ISSUE-016 Attempt (Dec 19, 2025) - FAILED
 - **Task:** Remove `loadAuction()` from `onSold` handler to fix race condition
