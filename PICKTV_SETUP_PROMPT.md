@@ -72,7 +72,7 @@ This document contains:
 
 **Do not proceed without reading this document.**
 
-### Step 3: Read Supporting Documentation
+### Step 4: Read Supporting Documentation
 
 After the onboarding doc, read these in order:
 
