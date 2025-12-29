@@ -11,12 +11,25 @@ You are starting work on **Pick TV**, a fantasy entertainment platform for reali
 **Key Facts:**
 - Pick TV shares 80%+ of code with Sport X (auction engine, auth, leagues, infrastructure)
 - You are NOT building from scratch - you're adapting an existing working platform
-- The codebase you have access to IS the Sport X codebase
-- Your job is to configure and extend it for reality TV shows
+- Your job is to configure and extend the Sport X codebase for reality TV shows
 
 ---
 
 ## CRITICAL FIRST STEPS
+
+### Step 0: Clone the Sport X Codebase
+
+**You must clone the Sport X repository FIRST before doing anything else.**
+
+```bash
+# Clone Sport X from GitHub (user provides URL)
+cd /app
+git clone https://github.com/USERNAME/sport-x.git .
+```
+
+**Ask the user for the GitHub repository URL if not provided.**
+
+⚠️ **DO NOT proceed until the clone is complete and you have the codebase.**
 
 ### Step 1: Verify You Have the Codebase
 
@@ -27,9 +40,24 @@ ls -la /app/backend/server.py /app/frontend/src/pages/AuctionRoom.js
 ```
 
 **If files exist:** You're ready. Proceed to Step 2.
-**If files don't exist:** STOP. Ask the user to connect this project to the Sport X GitHub repository.
+**If files don't exist:** STOP. The clone failed. Ask the user for help.
 
-### Step 2: Read the Onboarding Document
+### Step 2: Install Dependencies & Start Services
+
+```bash
+# Backend
+cd /app/backend
+pip install -r requirements.txt
+
+# Frontend  
+cd /app/frontend
+yarn install
+
+# Restart services
+sudo supervisorctl restart backend frontend
+```
+
+### Step 3: Read the Onboarding Document
 
 ```bash
 cat /app/PICKTV_ONBOARDING_PROMPT.md
