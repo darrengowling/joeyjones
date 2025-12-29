@@ -6,6 +6,33 @@
 
 ---
 
+## ⚠️ CRITICAL: How to Start This Project
+
+### Recommended Approach: Fork Sport X
+
+**Pick TV should be started by FORKING the Sport X project**, not from scratch. This gives you:
+- ✅ Full working auction engine
+- ✅ Authentication system
+- ✅ League management
+- ✅ All infrastructure (Socket.IO, Redis, MongoDB)
+- ✅ UI components and pages
+
+### Steps to Start Pick TV Project
+
+1. **In Emergent:** Use "Save to GitHub" on Sport X project
+2. **Create new Emergent project** and connect to the forked GitHub repo
+3. **OR** Ask Emergent support about forking an existing project
+4. **First task:** Configure for Pick TV (theming, terminology, sport config)
+
+### If Starting Fresh (Not Recommended)
+
+If you must start from scratch, you'll need to:
+1. Clone Sport X from GitHub: `https://github.com/[user]/sport-x` (get URL from user)
+2. Copy all backend and frontend code
+3. Reference documentation below for understanding
+
+---
+
 ## 🎯 Project Overview
 
 **Pick TV** is a fantasy entertainment platform where users draft reality TV contestants and earn points based on show outcomes. It shares the core auction engine and infrastructure with **Sport X** (fantasy sports), but targets elimination-based entertainment shows like Survivor, Bake Off, and Eurovision.
@@ -25,15 +52,17 @@
 
 ## 📚 Required Reading (In Order)
 
-Before any implementation, read these documents:
+Before any implementation, read these documents from the Sport X codebase:
 
-| # | Document | Purpose | Read Time |
-|---|----------|---------|----------|
-| 1 | `CORE_AUCTION_ENGINE.md` | Understand the reusable auction system | 15 min |
-| 2 | `SHARED_CODEBASE.md` | What's shared vs Pick TV specific | 10 min |
-| 3 | `REALITY_TV_TECHNICAL_SPEC.md` | Full technical specification | 30 min |
-| 4 | `SYSTEM_ARCHITECTURE_AUDIT.md` | Database schema, collections | 20 min |
-| 5 | `ADDING_NEW_COMPETITIONS_GUIDE.md` | How to add new "sports" | 10 min |
+| # | Document | Location | Purpose | Read Time |
+|---|----------|----------|---------|----------|
+| 1 | `CORE_AUCTION_ENGINE.md` | `/app/` or GitHub | Reusable auction system | 15 min |
+| 2 | `SHARED_CODEBASE.md` | `/app/` or GitHub | What's shared vs separate | 10 min |
+| 3 | `REALITY_TV_TECHNICAL_SPEC.md` | `/app/` or GitHub | Full technical spec | 30 min |
+| 4 | `DATABASE_SCHEMA.md` | `/app/` or `/app/docs/` | Database collections | 20 min |
+| 5 | `API_REFERENCE.md` | `/app/` or `/app/docs/` | All 61 endpoints | 15 min |
+
+**Note:** If forked, these files are in `/app/`. If cloned from GitHub, they're at repo root.
 
 ---
 
