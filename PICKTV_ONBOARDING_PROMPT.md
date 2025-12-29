@@ -6,30 +6,28 @@
 
 ---
 
-## ⚠️ CRITICAL: How to Start This Project
+## ⚠️ PREREQUISITE: You Must Have the Sport X Codebase
 
-### Recommended Approach: Fork Sport X
+**This document assumes you have already cloned the Sport X repository.**
 
-**Pick TV should be started by FORKING the Sport X project**, not from scratch. This gives you:
-- ✅ Full working auction engine
-- ✅ Authentication system
-- ✅ League management
+If you're reading this file, you should already have the codebase. If not:
+
+```bash
+# Clone Sport X (get URL from user)
+cd /app && git clone https://github.com/USERNAME/sport-x.git .
+```
+
+### What You Get From Sport X
+
+By cloning Sport X, you inherit:
+- ✅ Full working auction engine (~2,400 lines)
+- ✅ Authentication system (JWT, magic links)
+- ✅ League management (create, join, invite)
 - ✅ All infrastructure (Socket.IO, Redis, MongoDB)
-- ✅ UI components and pages
+- ✅ 61 API endpoints
+- ✅ Complete React frontend with UI components
 
-### Steps to Start Pick TV Project
-
-1. **In Emergent:** Use "Save to GitHub" on Sport X project
-2. **Create new Emergent project** and connect to the forked GitHub repo
-3. **OR** Ask Emergent support about forking an existing project
-4. **First task:** Configure for Pick TV (theming, terminology, sport config)
-
-### If Starting Fresh (Not Recommended)
-
-If you must start from scratch, you'll need to:
-1. Clone Sport X from GitHub: `https://github.com/[user]/sport-x` (get URL from user)
-2. Copy all backend and frontend code
-3. Reference documentation below for understanding
+**DO NOT rebuild any of these. Your job is to EXTEND for reality TV.**
 
 ---
 
