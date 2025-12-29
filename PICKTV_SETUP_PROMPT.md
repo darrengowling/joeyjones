@@ -250,16 +250,26 @@ Pick TV MVP is complete when:
 ## START HERE
 
 ```bash
-# 1. Verify codebase exists
-ls /app/backend/server.py
+# 0. Clone Sport X codebase (ask user for GitHub URL if not provided)
+cd /app && git clone https://github.com/USERNAME/sport-x.git .
 
-# 2. Read onboarding document
+# 1. Install dependencies
+cd /app/backend && pip install -r requirements.txt
+cd /app/frontend && yarn install
+
+# 2. Start services
+sudo supervisorctl restart backend frontend
+
+# 3. Verify codebase exists
+ls /app/backend/server.py /app/PICKTV_ONBOARDING_PROMPT.md
+
+# 4. Read onboarding document
 cat /app/PICKTV_ONBOARDING_PROMPT.md
 
-# 3. Check current sports in database
+# 5. Check current sports in database
 mongosh --quiet --eval "db.sports.find({}, {_id:0, key:1, name:1})" test_database
 
-# 4. Report back to user with your understanding and proposed plan
+# 6. Report back to user with your understanding and proposed plan
 ```
 
 ---
