@@ -555,12 +555,17 @@ async def calculate_elimination_scores(league_id: str, episode: dict):
 
 ## 📞 Support Resources
 
-### Documentation
+### Documentation (in Sport X codebase)
 
-- `CORE_AUCTION_ENGINE.md` - Auction mechanics
-- `SHARED_CODEBASE.md` - What's shared
-- `REALITY_TV_TECHNICAL_SPEC.md` - Full spec
-- `SYSTEM_ARCHITECTURE_AUDIT.md` - Database schema
+| Document | Purpose |
+|----------|---------|
+| `CORE_AUCTION_ENGINE.md` | Auction mechanics |
+| `SHARED_CODEBASE.md` | What's shared |
+| `REALITY_TV_TECHNICAL_SPEC.md` | Full spec |
+| `DATABASE_SCHEMA.md` | All collections |
+| `API_REFERENCE.md` | All 61 endpoints |
+| `ENV_VARIABLES.md` | Environment config |
+| `docs/guides/TROUBLESHOOTING.md` | Common issues |
 
 ### Code Examples
 
