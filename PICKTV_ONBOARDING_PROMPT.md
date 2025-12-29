@@ -581,10 +581,41 @@ async def calculate_elimination_scores(league_id: str, episode: dict):
 
 ---
 
+## 🔗 GitHub Repository
+
+**Sport X GitHub URL:** _(User to provide after "Save to GitHub")_
+
+### Key Files to Reference
+
+```
+/
+├── backend/
+│   ├── server.py              # Main backend (~6,400 lines)
+│   ├── models.py              # Pydantic models
+│   ├── scoring_service.py     # Scoring logic
+│   └── requirements.txt       # Python dependencies
+├── frontend/
+│   ├── src/
+│   │   ├── pages/
+│   │   │   ├── AuctionRoom.js      # Auction UI
+│   │   │   ├── LeagueDetail.js     # League management
+│   │   │   └── CompetitionDashboard.js  # Standings
+│   │   └── components/ui/     # shadcn components
+│   └── package.json           # JS dependencies
+├── CORE_AUCTION_ENGINE.md     # Auction mechanics
+├── SHARED_CODEBASE.md         # What's shared
+├── DATABASE_SCHEMA.md         # DB collections
+├── API_REFERENCE.md           # All endpoints
+└── docs/                      # Full documentation
+```
+
+---
+
 ## ✅ Ready to Start Checklist
 
 Before writing code:
 
+- [ ] **Have access to Sport X codebase** (fork or GitHub clone)
 - [ ] Read all 5 required documents
 - [ ] Understand auction engine mechanics
 - [ ] Know which components are reusable
@@ -595,6 +626,6 @@ Before writing code:
 
 ---
 
-**Document Version:** 1.0  
+**Document Version:** 1.1  
 **Last Updated:** December 28, 2025  
 **Status:** READY FOR NEW PROJECT
