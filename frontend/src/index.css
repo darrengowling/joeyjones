@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -58,42 +60,53 @@ code {
         --radius: 0.5rem;
     }
   .dark {
-        --background: 0 0% 3.9%;
-        --foreground: 0 0% 98%;
-        --card: 0 0% 3.9%;
-        --card-foreground: 0 0% 98%;
-        --popover: 0 0% 3.9%;
-        --popover-foreground: 0 0% 98%;
-        --primary: 0 0% 98%;
-        --primary-foreground: 0 0% 9%;
-        --secondary: 0 0% 14.9%;
-        --secondary-foreground: 0 0% 98%;
-        --muted: 0 0% 14.9%;
-        --muted-foreground: 0 0% 63.9%;
-        --accent: 0 0% 14.9%;
-        --accent-foreground: 0 0% 98%;
-        --destructive: 0 62.8% 30.6%;
-        --destructive-foreground: 0 0% 98%;
-        --border: 0 0% 14.9%;
-        --input: 0 0% 14.9%;
-        --ring: 0 0% 83.1%;
-        --chart-1: 220 70% 50%;
-        --chart-2: 160 60% 45%;
-        --chart-3: 30 80% 55%;
-        --chart-4: 280 65% 60%;
-        --chart-5: 340 75% 55%;
-    }
+    /* Semantic Color Mapping - Dark Mode */
+    --background: var(--brand-neutral-950);
+    --foreground: var(--brand-neutral-100);
+    --card: var(--brand-neutral-900);
+    --card-foreground: var(--brand-neutral-100);
+    --surface: var(--brand-neutral-900);
+    --surface-foreground: var(--brand-neutral-100);
+    --primary: var(--brand-primary-500);
+    --primary-foreground: var(--brand-neutral-50);
+    --secondary: var(--brand-secondary-400);
+    --secondary-foreground: var(--brand-neutral-900);
+    --accent: var(--brand-accent-400);
+    --accent-foreground: var(--brand-neutral-900);
+    --muted: var(--brand-neutral-800);
+    --muted-foreground: var(--brand-neutral-400);
+    --border: var(--brand-neutral-700);
+    --input: var(--brand-neutral-800);
+    --ring: var(--brand-primary-400);
+  }
 }
-
-
 
 @layer base {
   * {
     @apply border-border;
-    }
+  }
+  
   body {
+    margin: 0;
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     @apply bg-background text-foreground;
-    }
+  }
+  
+  code {
+    font-family: 'SF Mono', Monaco, Inconsolata, 'Roboto Mono', monospace;
+  }
+}
+
+@layer utilities {
+  /* Disable animations in test mode */
+  .test-mode * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* Toast animation */
