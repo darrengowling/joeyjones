@@ -3309,6 +3309,58 @@ async def update_fixture_score_manual(
         }
     }
 
+@api_router.post("/admin/fixtures/{fixture_id}/reset")
+async def reset_fixture_score(fixture_id: str, commissionerId: str = Query(...)):
+    """
+    Reset a fixture's score to null and status to scheduled - Commissioner only
+    Used to fix incorrectly imported scores
+    """
+    if not FEATURE_MY_COMPETITIONS:
+        raise HTTPException(status_code=404, detail="Feature not available")
+    
+    # Get fixture
+    fixture = await db.fixtures.find_one({"id": fixture_id}, {"_id": 0})
+    if not fixture:
+        raise HTTPException(status_code=404, detail="Fixture not found")
+    
+    # Get league to verify commissioner
+    league = await db.leagues.find_one({"id": fixture["leagueId"]}, {"_id": 0})
+    if not league:
+        raise HTTPException(status_code=404, detail="League not found")
+    
+    if league["commissionerId"] != commissionerId:
+        raise HTTPException(
+            status_code=403,
+            detail="Only the league commissioner can reset fixture scores"
+        )
+    
+    # Reset fixture
+    await db.fixtures.update_one(
+        {"id": fixture_id},
+        {"$set": {
+            "goalsHome": None,
+            "goalsAway": None,
+            "status": "scheduled",
+            "winner": None,
+            "updatedAt": datetime.now(timezone.utc).isoformat()
+        }}
+    )
+    
+    logger.info(f"Fixture reset: {fixture.get('homeTeam')} vs {fixture.get('awayTeam')} - scores cleared")
+    
+    return {
+        "success": True,
+        "message": f"Fixture reset: {fixture.get('homeTeam')} vs {fixture.get('awayTeam')}",
+        "fixture": {
+            "id": fixture_id,
+            "homeTeam": fixture.get("homeTeam"),
+            "awayTeam": fixture.get("awayTeam"),
+            "status": "scheduled",
+            "goalsHome": None,
+            "goalsAway": None
+        }
+    }
+
 @api_router.put("/leagues/{league_id}/assets")
 async def update_league_assets(league_id: str, asset_ids: List[str]):
     """Prompt 1: Update selected assets for league (commissioner only)"""
