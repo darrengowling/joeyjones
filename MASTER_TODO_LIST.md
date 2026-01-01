@@ -114,7 +114,8 @@
 
 | # | Issue ID | Summary | Cause | Fix | Risk | Benefit |
 |---|----------|---------|-------|-----|------|---------|
-| 5 | **ISSUE-001** | **Manual Score Entry UI** - No UI for manual score updates | Backend exists, frontend not built | Build score entry UI in CompetitionDashboard | 🟢 Low | Commissioners can fix scores without CSV |
+| 5 | **ISSUE-026** | **Scalable Fixture Template Management** - Updating CSV templates requires code deploy | Templates are static files served via hardcoded endpoints; frontend references specific filenames | Build admin UI for commissioners to upload/manage fixture templates per league, OR store templates in database with dynamic serving | 🟢 Low | No redeploy needed to update fixtures; scales to multiple leagues; reduces cost/friction of tournament updates |
+| 6 | **ISSUE-001** | **Manual Score Entry UI** - No UI for manual score updates | Backend exists, frontend not built | Build score entry UI in CompetitionDashboard | 🟢 Low | Commissioners can fix scores without CSV |
 | 6 | **ISSUE-011** | **Auction History Tab** - Can't review bid history after auction | Feature not implemented | Add history tab showing all bids, prices, winners | 🟢 Low | Post-auction review capability |
 | 7 | **ISSUE-010** | **Custom Scoring Rules** - All leagues use same scoring rules | Hardcoded scoring | Add commissioner UI to customize points | 🟡 Medium | Flexibility for different tournaments |
 | 8 | **ISSUE-012** | **Email Notifications** - Users must manually check app | No email integration | Integrate SendGrid for invites, reminders, results | 🟡 Medium | Better user engagement |
