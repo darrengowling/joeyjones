@@ -447,6 +447,21 @@ async def update_fixture_scores(fixture_ids: List[str] = None):
                 
                 # Process ALL fixtures that match (same match across multiple leagues)
                 for fixture in fixtures:
+                    # SAFETY CHECK: Don't update future fixtures with finished scores
+                    # This prevents historical results from overwriting future matches
+                    fixture_date_str = fixture.get("matchDate") or fixture.get("startsAt")
+                    if fixture_date_str and goals_home is not None and goals_away is not None:
+                        try:
+                            from dateutil import parser as date_parser
+                            fixture_date = date_parser.parse(fixture_date_str)
+                            now = datetime.now(timezone.utc)
+                            # If fixture is more than 1 day in the future but API says it's finished, SKIP
+                            if fixture_date > now + timedelta(days=1):
+                                logger.warning(f"SKIPPED: {home_name} vs {away_name} - fixture date {fixture_date_str} is in future but API has score {goals_home}-{goals_away}")
+                                continue
+                        except Exception as date_err:
+                            logger.warning(f"Could not parse fixture date {fixture_date_str}: {date_err}")
+                    
                     # Update the fixture
                     update_data = {
                         "status": status,
