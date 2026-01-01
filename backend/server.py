@@ -396,22 +396,54 @@ async def update_fixture_scores(fixture_ids: List[str] = None):
                 goals_home = api_match["goals"]["home"]
                 goals_away = api_match["goals"]["away"]
                 competition = api_match.get("_competition", "PL")
+                api_match_date = api_match["fixture"].get("date", "")  # ISO date from API
+                
+                # Parse the API match date for date-range filtering
+                match_date_filter = None
+                if api_match_date:
+                    try:
+                        from dateutil import parser as date_parser
+                        api_date = date_parser.parse(api_match_date)
+                        # Allow ±2 days tolerance for timezone differences
+                        date_start = (api_date - timedelta(days=2)).isoformat()
+                        date_end = (api_date + timedelta(days=2)).isoformat()
+                        match_date_filter = {"matchDate": {"$gte": date_start, "$lte": date_end}}
+                    except:
+                        pass  # If date parsing fails, skip date filter
                 
                 # Find ALL corresponding fixtures in our database for this competition
-                # Match by team names, competition, and footballDataId
-                fixtures = await db.fixtures.find({
-                    "$or": [
-                        {"footballDataId": fixture_id},  # Match by Football-Data.org ID (most accurate)
-                        {
-                            "$and": [
-                                {"homeTeam": {"$regex": home_name.split()[0], "$options": "i"}},
-                                {"awayTeam": {"$regex": away_name.split()[0], "$options": "i"}},
-                                {"competition": competition},  # Must match competition
-                                {"sportKey": "football"}
-                            ]
-                        }
-                    ]
-                }).to_list(1000)
+                # Match by footballDataId first (most accurate), OR by team names + competition + DATE
+                if match_date_filter:
+                    # With date filter - prevents matching historical results
+                    fixtures = await db.fixtures.find({
+                        "$or": [
+                            {"footballDataId": fixture_id},  # Match by Football-Data.org ID (most accurate)
+                            {
+                                "$and": [
+                                    {"homeTeam": {"$regex": home_name.split()[0], "$options": "i"}},
+                                    {"awayTeam": {"$regex": away_name.split()[0], "$options": "i"}},
+                                    {"competition": competition},  # Must match competition
+                                    {"sportKey": "football"},
+                                    match_date_filter  # MUST match date within ±2 days
+                                ]
+                            }
+                        ]
+                    }).to_list(1000)
+                else:
+                    # Fallback without date filter (only if date parsing failed)
+                    fixtures = await db.fixtures.find({
+                        "$or": [
+                            {"footballDataId": fixture_id},
+                            {
+                                "$and": [
+                                    {"homeTeam": {"$regex": home_name.split()[0], "$options": "i"}},
+                                    {"awayTeam": {"$regex": away_name.split()[0], "$options": "i"}},
+                                    {"competition": competition},
+                                    {"sportKey": "football"}
+                                ]
+                            }
+                        ]
+                    }).to_list(1000)
                 
                 # Process ALL fixtures that match (same match across multiple leagues)
                 for fixture in fixtures:
