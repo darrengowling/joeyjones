@@ -1,48 +1,48 @@
 startsAt,homeTeam,awayTeam,homeAssetExternalId,awayAssetExternalId,venue,round,externalMatchId,goalsHome,goalsAway,status
-2025-12-21T19:00:00Z,Morocco,Comoros,AFCON_001,AFCON_004,Prince Moulay Abdellah Stadium - Rabat,Group A MD1,AFCON_M001,,,scheduled
-2025-12-22T14:30:00Z,Mali,Zambia,AFCON_002,AFCON_003,Mohammed V Stadium - Casablanca,Group A MD1,AFCON_M002,,,scheduled
-2025-12-22T17:00:00Z,Egypt,Zimbabwe,AFCON_005,AFCON_008,Adrar Stadium - Agadir,Group B MD1,AFCON_M003,,,scheduled
-2025-12-22T19:30:00Z,South Africa,Angola,AFCON_006,AFCON_007,Marrakesh Stadium - Marrakesh,Group B MD1,AFCON_M004,,,scheduled
-2025-12-23T12:00:00Z,Nigeria,Tanzania,AFCON_009,AFCON_012,Fez Stadium - Fez,Group C MD1,AFCON_M005,,,scheduled
-2025-12-23T14:30:00Z,Tunisia,Uganda,AFCON_010,AFCON_011,Olympic Annex Stadium - Rabat,Group C MD1,AFCON_M006,,,scheduled
-2025-12-23T17:00:00Z,Senegal,Botswana,AFCON_013,AFCON_016,Ibn Batouta Stadium - Tangier,Group D MD1,AFCON_M007,,,scheduled
-2025-12-23T19:30:00Z,DR Congo,Benin,AFCON_014,AFCON_015,Al Barid Stadium - Rabat,Group D MD1,AFCON_M008,,,scheduled
-2025-12-24T12:00:00Z,Algeria,Sudan,AFCON_017,AFCON_020,Moulay Hassan Stadium - Rabat,Group E MD1,AFCON_M009,,,scheduled
-2025-12-24T14:30:00Z,Burkina Faso,Equatorial Guinea,AFCON_018,AFCON_019,Mohammed V Stadium - Casablanca,Group E MD1,AFCON_M010,,,scheduled
-2025-12-24T17:00:00Z,Ivory Coast,Mozambique,AFCON_021,AFCON_023,Marrakesh Stadium - Marrakesh,Group F MD1,AFCON_M011,,,scheduled
-2025-12-24T19:30:00Z,Cameroon,Gabon,AFCON_024,AFCON_022,Adrar Stadium - Agadir,Group F MD1,AFCON_M012,,,scheduled
-2025-12-26T12:00:00Z,Morocco,Mali,AFCON_001,AFCON_002,Prince Moulay Abdellah Stadium - Rabat,Group A MD2,AFCON_M013,,,scheduled
-2025-12-26T14:30:00Z,Zambia,Comoros,AFCON_003,AFCON_004,Mohammed V Stadium - Casablanca,Group A MD2,AFCON_M014,,,scheduled
-2025-12-26T17:00:00Z,Egypt,South Africa,AFCON_005,AFCON_006,Adrar Stadium - Agadir,Group B MD2,AFCON_M015,,,scheduled
-2025-12-26T19:30:00Z,Angola,Zimbabwe,AFCON_007,AFCON_008,Marrakesh Stadium - Marrakesh,Group B MD2,AFCON_M016,,,scheduled
-2025-12-27T12:00:00Z,Nigeria,Tunisia,AFCON_009,AFCON_010,Fez Stadium - Fez,Group C MD2,AFCON_M017,,,scheduled
-2025-12-27T14:30:00Z,Uganda,Tanzania,AFCON_011,AFCON_012,Al Barid Stadium - Rabat,Group C MD2,AFCON_M018,,,scheduled
-2025-12-27T17:00:00Z,Senegal,DR Congo,AFCON_013,AFCON_014,Ibn Batouta Stadium - Tangier,Group D MD2,AFCON_M019,,,scheduled
-2025-12-27T19:30:00Z,Benin,Botswana,AFCON_015,AFCON_016,Olympic Annex Stadium - Rabat,Group D MD2,AFCON_M020,,,scheduled
-2025-12-28T12:00:00Z,Algeria,Burkina Faso,AFCON_017,AFCON_018,Moulay Hassan Stadium - Rabat,Group E MD2,AFCON_M021,,,scheduled
-2025-12-28T14:30:00Z,Equatorial Guinea,Sudan,AFCON_019,AFCON_020,Mohammed V Stadium - Casablanca,Group E MD2,AFCON_M022,,,scheduled
-2025-12-28T17:00:00Z,Ivory Coast,Cameroon,AFCON_021,AFCON_024,Marrakesh Stadium - Marrakesh,Group F MD2,AFCON_M023,,,scheduled
-2025-12-28T19:30:00Z,Gabon,Mozambique,AFCON_022,AFCON_023,Adrar Stadium - Agadir,Group F MD2,AFCON_M024,,,scheduled
-2025-12-29T17:30:00Z,Comoros,Mali,AFCON_004,AFCON_002,Mohammed V Stadium - Casablanca,Group A MD3,AFCON_M025,,,scheduled
-2025-12-29T17:30:00Z,Zambia,Morocco,AFCON_003,AFCON_001,Prince Moulay Abdellah Stadium - Rabat,Group A MD3,AFCON_M026,,,scheduled
-2025-12-29T19:30:00Z,Angola,Egypt,AFCON_007,AFCON_005,Adrar Stadium - Agadir,Group B MD3,AFCON_M027,,,scheduled
-2025-12-29T19:30:00Z,Zimbabwe,South Africa,AFCON_008,AFCON_006,Marrakesh Stadium - Marrakesh,Group B MD3,AFCON_M028,,,scheduled
-2025-12-30T17:00:00Z,Tanzania,Tunisia,AFCON_012,AFCON_010,Olympic Annex Stadium - Rabat,Group C MD3,AFCON_M029,,,scheduled
-2025-12-30T17:00:00Z,Uganda,Nigeria,AFCON_011,AFCON_009,Fez Stadium - Fez,Group C MD3,AFCON_M030,,,scheduled
-2025-12-30T19:30:00Z,Benin,Senegal,AFCON_015,AFCON_013,Ibn Batouta Stadium - Tangier,Group D MD3,AFCON_M031,,,scheduled
-2025-12-30T19:30:00Z,Botswana,DR Congo,AFCON_016,AFCON_014,Al Barid Stadium - Rabat,Group D MD3,AFCON_M032,,,scheduled
-2025-12-31T17:00:00Z,Equatorial Guinea,Algeria,AFCON_019,AFCON_017,Moulay Hassan Stadium - Rabat,Group E MD3,AFCON_M033,,,scheduled
-2025-12-31T17:00:00Z,Sudan,Burkina Faso,AFCON_020,AFCON_018,Mohammed V Stadium - Casablanca,Group E MD3,AFCON_M034,,,scheduled
-2025-12-31T19:30:00Z,Gabon,Ivory Coast,AFCON_022,AFCON_021,Marrakesh Stadium - Marrakesh,Group F MD3,AFCON_M035,,,scheduled
-2025-12-31T19:30:00Z,Mozambique,Cameroon,AFCON_023,AFCON_024,Adrar Stadium - Agadir,Group F MD3,AFCON_M036,,,scheduled
-2026-01-03T17:00:00Z,Winner Group D,3rd Group B/E/F,TBD,TBD,Ibn Batouta Stadium - Tangier,Round of 16,AFCON_R16_1,,,scheduled
-2026-01-03T20:00:00Z,2nd Group A,2nd Group C,TBD,TBD,Mohammed V Stadium - Casablanca,Round of 16,AFCON_R16_2,,,scheduled
-2026-01-04T17:00:00Z,2nd Group B,2nd Group F,TBD,TBD,Prince Moulay Abdellah Stadium - Rabat,Round of 16,AFCON_R16_3,,,scheduled
-2026-01-04T20:00:00Z,Winner Group A,3rd Group C/D/E,TBD,TBD,Al Barid Stadium - Rabat,Round of 16,AFCON_R16_4,,,scheduled
-2026-01-05T17:00:00Z,Winner Group B,3rd Group A/C/D,TBD,TBD,Adrar Stadium - Agadir,Round of 16,AFCON_R16_5,,,scheduled
-2026-01-05T20:00:00Z,Winner Group C,3rd Group B/F,TBD,TBD,Fez Stadium - Fez,Round of 16,AFCON_R16_6,,,scheduled
-2026-01-06T17:00:00Z,Winner Group F,2nd Group E,TBD,TBD,Marrakesh Stadium - Marrakesh,Round of 16,AFCON_R16_7,,,scheduled
-2026-01-06T20:00:00Z,Winner Group E,2nd Group D,TBD,TBD,Moulay Hassan Stadium - Rabat,Round of 16,AFCON_R16_8,,,scheduled
+2025-12-21T19:00:00Z,Morocco,Comoros,AFCON_001,AFCON_004,Prince Moulay Abdellah Stadium - Rabat,Group A MD1,AFCON_M001,2,0,ft
+2025-12-22T14:30:00Z,Mali,Zambia,AFCON_002,AFCON_003,Mohammed V Stadium - Casablanca,Group A MD1,AFCON_M002,1,1,ft
+2025-12-22T17:00:00Z,Egypt,Zimbabwe,AFCON_005,AFCON_008,Adrar Stadium - Agadir,Group B MD1,AFCON_M003,2,1,ft
+2025-12-22T19:30:00Z,South Africa,Angola,AFCON_006,AFCON_007,Marrakesh Stadium - Marrakesh,Group B MD1,AFCON_M004,2,1,ft
+2025-12-23T12:00:00Z,Nigeria,Tanzania,AFCON_009,AFCON_012,Fez Stadium - Fez,Group C MD1,AFCON_M005,2,1,ft
+2025-12-23T14:30:00Z,Tunisia,Uganda,AFCON_010,AFCON_011,Olympic Annex Stadium - Rabat,Group C MD1,AFCON_M006,3,1,ft
+2025-12-23T17:00:00Z,Senegal,Botswana,AFCON_013,AFCON_016,Ibn Batouta Stadium - Tangier,Group D MD1,AFCON_M007,3,0,ft
+2025-12-23T19:30:00Z,DR Congo,Benin,AFCON_014,AFCON_015,Al Barid Stadium - Rabat,Group D MD1,AFCON_M008,1,0,ft
+2025-12-24T12:00:00Z,Algeria,Sudan,AFCON_017,AFCON_020,Moulay Hassan Stadium - Rabat,Group E MD1,AFCON_M009,3,0,ft
+2025-12-24T14:30:00Z,Burkina Faso,Equatorial Guinea,AFCON_018,AFCON_019,Mohammed V Stadium - Casablanca,Group E MD1,AFCON_M010,2,1,ft
+2025-12-24T17:00:00Z,Ivory Coast,Mozambique,AFCON_021,AFCON_023,Marrakesh Stadium - Marrakesh,Group F MD1,AFCON_M011,1,0,ft
+2025-12-24T19:30:00Z,Cameroon,Gabon,AFCON_024,AFCON_022,Adrar Stadium - Agadir,Group F MD1,AFCON_M012,1,0,ft
+2025-12-26T12:00:00Z,Morocco,Mali,AFCON_001,AFCON_002,Prince Moulay Abdellah Stadium - Rabat,Group A MD2,AFCON_M013,1,1,ft
+2025-12-26T14:30:00Z,Zambia,Comoros,AFCON_003,AFCON_004,Mohammed V Stadium - Casablanca,Group A MD2,AFCON_M014,0,0,ft
+2025-12-26T17:00:00Z,Egypt,South Africa,AFCON_005,AFCON_006,Adrar Stadium - Agadir,Group B MD2,AFCON_M015,1,0,ft
+2025-12-26T19:30:00Z,Angola,Zimbabwe,AFCON_007,AFCON_008,Marrakesh Stadium - Marrakesh,Group B MD2,AFCON_M016,1,1,ft
+2025-12-27T12:00:00Z,Nigeria,Tunisia,AFCON_009,AFCON_010,Fez Stadium - Fez,Group C MD2,AFCON_M017,3,2,ft
+2025-12-27T14:30:00Z,Uganda,Tanzania,AFCON_011,AFCON_012,Al Barid Stadium - Rabat,Group C MD2,AFCON_M018,1,1,ft
+2025-12-27T17:00:00Z,Senegal,DR Congo,AFCON_013,AFCON_014,Ibn Batouta Stadium - Tangier,Group D MD2,AFCON_M019,1,1,ft
+2025-12-27T19:30:00Z,Benin,Botswana,AFCON_015,AFCON_016,Olympic Annex Stadium - Rabat,Group D MD2,AFCON_M020,1,0,ft
+2025-12-28T12:00:00Z,Algeria,Burkina Faso,AFCON_017,AFCON_018,Moulay Hassan Stadium - Rabat,Group E MD2,AFCON_M021,1,0,ft
+2025-12-28T14:30:00Z,Equatorial Guinea,Sudan,AFCON_019,AFCON_020,Mohammed V Stadium - Casablanca,Group E MD2,AFCON_M022,0,1,ft
+2025-12-28T17:00:00Z,Ivory Coast,Cameroon,AFCON_021,AFCON_024,Marrakesh Stadium - Marrakesh,Group F MD2,AFCON_M023,1,1,ft
+2025-12-28T19:30:00Z,Gabon,Mozambique,AFCON_022,AFCON_023,Adrar Stadium - Agadir,Group F MD2,AFCON_M024,2,3,ft
+2025-12-29T17:30:00Z,Comoros,Mali,AFCON_004,AFCON_002,Mohammed V Stadium - Casablanca,Group A MD3,AFCON_M025,0,0,ft
+2025-12-29T17:30:00Z,Zambia,Morocco,AFCON_003,AFCON_001,Prince Moulay Abdellah Stadium - Rabat,Group A MD3,AFCON_M026,0,3,ft
+2025-12-29T19:30:00Z,Angola,Egypt,AFCON_007,AFCON_005,Adrar Stadium - Agadir,Group B MD3,AFCON_M027,0,0,ft
+2025-12-29T19:30:00Z,Zimbabwe,South Africa,AFCON_008,AFCON_006,Marrakesh Stadium - Marrakesh,Group B MD3,AFCON_M028,2,3,ft
+2025-12-30T17:00:00Z,Tanzania,Tunisia,AFCON_012,AFCON_010,Olympic Annex Stadium - Rabat,Group C MD3,AFCON_M029,1,1,ft
+2025-12-30T17:00:00Z,Uganda,Nigeria,AFCON_011,AFCON_009,Fez Stadium - Fez,Group C MD3,AFCON_M030,1,3,ft
+2025-12-30T19:30:00Z,Benin,Senegal,AFCON_015,AFCON_013,Ibn Batouta Stadium - Tangier,Group D MD3,AFCON_M031,0,3,ft
+2025-12-30T19:30:00Z,Botswana,DR Congo,AFCON_016,AFCON_014,Al Barid Stadium - Rabat,Group D MD3,AFCON_M032,0,3,ft
+2025-12-31T17:00:00Z,Equatorial Guinea,Algeria,AFCON_019,AFCON_017,Moulay Hassan Stadium - Rabat,Group E MD3,AFCON_M033,1,3,ft
+2025-12-31T17:00:00Z,Sudan,Burkina Faso,AFCON_020,AFCON_018,Mohammed V Stadium - Casablanca,Group E MD3,AFCON_M034,0,2,ft
+2025-12-31T19:30:00Z,Gabon,Ivory Coast,AFCON_022,AFCON_021,Marrakesh Stadium - Marrakesh,Group F MD3,AFCON_M035,2,3,ft
+2025-12-31T19:30:00Z,Mozambique,Cameroon,AFCON_023,AFCON_024,Adrar Stadium - Agadir,Group F MD3,AFCON_M036,1,2,ft
+2026-01-03T17:00:00Z,Senegal,Sudan,AFCON_013,AFCON_020,Ibn Batouta Stadium - Tangier,Round of 16,AFCON_R16_1,,,scheduled
+2026-01-03T20:00:00Z,Mali,Tunisia,AFCON_002,AFCON_010,Mohammed V Stadium - Casablanca,Round of 16,AFCON_R16_2,,,scheduled
+2026-01-04T17:00:00Z,Morocco,Tanzania,AFCON_001,AFCON_012,Prince Moulay Abdellah Stadium - Rabat,Round of 16,AFCON_R16_3,,,scheduled
+2026-01-04T20:00:00Z,South Africa,Cameroon,AFCON_006,AFCON_024,Al Barid Stadium - Rabat,Round of 16,AFCON_R16_4,,,scheduled
+2026-01-05T17:00:00Z,Egypt,Benin,AFCON_005,AFCON_015,Adrar Stadium - Agadir,Round of 16,AFCON_R16_5,,,scheduled
+2026-01-05T20:00:00Z,Nigeria,Mozambique,AFCON_009,AFCON_023,Fez Stadium - Fez,Round of 16,AFCON_R16_6,,,scheduled
+2026-01-06T17:00:00Z,Algeria,DR Congo,AFCON_017,AFCON_014,Moulay Hassan Stadium - Rabat,Round of 16,AFCON_R16_7,,,scheduled
+2026-01-06T20:00:00Z,Ivory Coast,Burkina Faso,AFCON_021,AFCON_018,Marrakesh Stadium - Marrakesh,Round of 16,AFCON_R16_8,,,scheduled
 2026-01-09T17:00:00Z,Winner R16-1,Winner R16-2,TBD,TBD,Ibn Batouta Stadium - Tangier,Quarter-final,AFCON_QF_1,,,scheduled
 2026-01-09T20:00:00Z,Winner R16-3,Winner R16-4,TBD,TBD,Prince Moulay Abdellah Stadium - Rabat,Quarter-final,AFCON_QF_2,,,scheduled
 2026-01-10T17:00:00Z,Winner R16-5,Winner R16-7,TBD,TBD,Marrakesh Stadium - Marrakesh,Quarter-final,AFCON_QF_3,,,scheduled
