@@ -455,9 +455,12 @@ async def update_fixture_scores(fixture_ids: List[str] = None):
                             from dateutil import parser as date_parser
                             fixture_date = date_parser.parse(fixture_date_str)
                             now = datetime.now(timezone.utc)
+                            days_until_match = (fixture_date - now).days
                             # If fixture is more than 1 day in the future but API says it's finished, SKIP
-                            if fixture_date > now + timedelta(days=1):
-                                logger.warning(f"SKIPPED: {home_name} vs {away_name} - fixture date {fixture_date_str} is in future but API has score {goals_home}-{goals_away}")
+                            if days_until_match > 1:
+                                skip_msg = f"SKIPPED: {home_name} vs {away_name} - match is {days_until_match} days in future but API has score {goals_home}-{goals_away}"
+                                logger.warning(skip_msg)
+                                errors.append(skip_msg)  # Add to errors so we can see it in response
                                 continue
                         except Exception as date_err:
                             logger.warning(f"Could not parse fixture date {fixture_date_str}: {date_err}")
