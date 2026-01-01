@@ -3361,6 +3361,49 @@ async def reset_fixture_score(fixture_id: str, commissionerId: str = Query(...))
         }
     }
 
+@api_router.get("/admin/fixtures/search")
+async def search_fixtures(
+    homeTeam: str = Query(None),
+    awayTeam: str = Query(None),
+    leagueId: str = Query(None)
+):
+    """
+    Search for fixtures by team names or league - Admin helper
+    Returns fixture IDs for use with reset endpoint
+    """
+    query = {}
+    
+    if leagueId:
+        query["leagueId"] = leagueId
+    
+    if homeTeam:
+        query["homeTeam"] = {"$regex": homeTeam, "$options": "i"}
+    
+    if awayTeam:
+        query["awayTeam"] = {"$regex": awayTeam, "$options": "i"}
+    
+    if not query:
+        raise HTTPException(status_code=400, detail="Provide at least one search parameter")
+    
+    fixtures = await db.fixtures.find(query, {"_id": 0}).to_list(50)
+    
+    return {
+        "count": len(fixtures),
+        "fixtures": [
+            {
+                "id": f.get("id"),
+                "homeTeam": f.get("homeTeam"),
+                "awayTeam": f.get("awayTeam"),
+                "matchDate": f.get("matchDate"),
+                "status": f.get("status"),
+                "goalsHome": f.get("goalsHome"),
+                "goalsAway": f.get("goalsAway"),
+                "leagueId": f.get("leagueId")
+            }
+            for f in fixtures
+        ]
+    }
+
 @api_router.put("/leagues/{league_id}/assets")
 async def update_league_assets(league_id: str, asset_ids: List[str]):
     """Prompt 1: Update selected assets for league (commissioner only)"""
