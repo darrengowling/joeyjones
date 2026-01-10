@@ -163,11 +163,12 @@ class TestMetrics:
 class AuctionStressTest:
     """Main test orchestrator"""
     
-    def __init__(self, invite_token: str, mode: str, num_users: int = 7, commissioner_email: str = None):
+    def __init__(self, invite_token: str, mode: str, num_users: int = 7, commissioner_email: str = None, use_existing_members: bool = False):
         self.invite_token = invite_token
         self.mode = mode
         self.num_users = num_users
         self.commissioner_email = commissioner_email
+        self.use_existing_members = use_existing_members
         self.users: List[TestUser] = []
         self.metrics = TestMetrics()
         self.commissioner: Optional[TestUser] = None
