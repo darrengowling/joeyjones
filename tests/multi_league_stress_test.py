@@ -464,17 +464,30 @@ class LeagueRunner:
         for task in tasks:
             task.cancel()
     
-    async def _check_auction_complete(self):
-        """Poll auction status via HTTP"""
+    async def _poll_auction_state(self):
+        """Poll auction status via HTTP since socket events are unreliable"""
         try:
             headers = {"Authorization": f"Bearer {self.league.commissioner.jwt_token}"}
             async with aiohttp.ClientSession() as session:
                 resp = await session.get(f"{BASE_URL}/auction/{self.league.auction_id}", headers=headers)
                 if resp.status == 200:
                     data = await resp.json()
-                    status = data.get('auction', {}).get('status')
+                    auction = data.get('auction', {})
+                    status = auction.get('status')
+                    
                     if status == 'completed':
                         self.auction_complete = True
+                        return
+                    
+                    if status == 'active':
+                        self.lot_active = True
+                        self.current_bid = auction.get('currentBid') or 0
+                        bidder = auction.get('currentBidder')
+                        self.current_bidder_id = bidder.get('userId') if bidder else None
+                        
+                        # Track lots sold
+                        completed = auction.get('completedLots') or []
+                        self.lots_sold = len([c for c in completed if c.get('sold')])
         except:
             pass
     
