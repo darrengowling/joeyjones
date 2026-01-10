@@ -103,11 +103,19 @@ class LeagueMetrics:
     start_time: float = 0
     end_time: float = 0
     lots_completed: int = 0
+    lots_sold: int = 0
+    lots_unsold: int = 0
     total_bids: int = 0
     successful_bids: int = 0
+    failed_bids: int = 0
+    socket_events_received: int = 0
+    socket_connected_users: int = 0
     errors: List[str] = field(default_factory=list)
     bid_latencies_ms: List[float] = field(default_factory=list)
+    bid_rejection_reasons: Dict[str, int] = field(default_factory=dict)
     status: str = "pending"
+    rosters_filled: int = 0
+    total_spend: int = 0
 
 @dataclass
 class GlobalMetrics:
