@@ -138,9 +138,11 @@ class GlobalMetrics:
 class LeagueRunner:
     """Creates and runs a single league auction"""
     
-    def __init__(self, league_index: int, competition: str = DEFAULT_COMPETITION):
+    def __init__(self, league_index: int, competition: str = DEFAULT_COMPETITION, users_per_league: int = USERS_PER_LEAGUE, teams_per_roster: int = TEAMS_PER_ROSTER):
         self.league_index = league_index
         self.competition = competition
+        self.users_per_league = users_per_league
+        self.teams_per_roster = teams_per_roster
         self.league = TestLeague()
         self.metrics = LeagueMetrics()
         
