@@ -417,8 +417,9 @@ class LeagueRunner:
         async def user_bidder(user: TestUser):
             """Individual user bidding coroutine"""
             while not self.auction_complete and (time.time() - start) < timeout:
-                if not self.lot_active:
-                    await asyncio.sleep(0.3)
+                # Skip if roster full
+                if user.teams_won >= self.teams_per_roster:
+                    await asyncio.sleep(1)
                     continue
                 
                 # Skip if already winning
@@ -426,16 +427,11 @@ class LeagueRunner:
                     await asyncio.sleep(0.5)
                     continue
                 
-                # Skip if roster full
-                if user.teams_won >= self.teams_per_roster:
-                    await asyncio.sleep(1)
-                    continue
-                
                 # Random delay (realistic bidding behavior)
-                await asyncio.sleep(random.uniform(0.3, 2.0))
+                await asyncio.sleep(random.uniform(0.5, 1.5))
                 
-                # Place bid if still active and not winning
-                if self.lot_active and self.current_bidder_id != user.user_id:
+                # Place bid if not winning
+                if self.current_bidder_id != user.user_id:
                     bid_amount = (self.current_bid or 0) + BID_INCREMENT
                     if bid_amount <= user.budget_remaining:
                         success = await self._place_bid(user, bid_amount)
