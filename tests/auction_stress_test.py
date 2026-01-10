@@ -257,8 +257,17 @@ class AuctionStressTest:
                 if resp.status != 200:
                     raise Exception(f"Failed to get league: {await resp.text()}")
                 data = await resp.json()
-                self.league_id = data['id']
-                self.league_name = data.get('name', 'Unknown')
+                
+                # API returns {"found": true, "league": {...}} structure
+                if not data.get('found'):
+                    raise Exception(f"League not found for token: {self.invite_token}")
+                
+                league = data.get('league', {})
+                self.league_id = league.get('id')
+                self.league_name = league.get('name', 'Unknown')
+                
+                if not self.league_id:
+                    raise Exception(f"League ID not found in response: {data}")
     
     async def _create_test_user(self, email: str) -> TestUser:
         """Create a test user via magic link (works in preview/dev mode)"""
