@@ -1,0 +1,53 @@
+{
+  "timestamp": "20260110_072046",
+  "config": {
+    "leagues": 1,
+    "users_per_league": 2,
+    "teams_per_roster": 2,
+    "stagger_seconds": 10,
+    "target_url": "http://localhost:8001/api"
+  },
+  "summary": {
+    "duration_seconds": 51.9,
+    "leagues_completed": 1,
+    "leagues_failed": 0,
+    "total_users": 2,
+    "total_bids": 4,
+    "successful_bids": 4,
+    "failed_bids": 0,
+    "bid_success_rate": 100.0,
+    "lots_sold": 4,
+    "socket_events": 3
+  },
+  "latency": {
+    "count": 4,
+    "avg_ms": 7.548511028289795,
+    "p50_ms": 7.797956466674805,
+    "p95_ms": 7.8754425048828125,
+    "p99_ms": 7.8754425048828125,
+    "max_ms": 7.8754425048828125,
+    "min_ms": 7.115364074707031
+  },
+  "verdict": "READY FOR PILOT",
+  "passes": [
+    "All leagues completed successfully",
+    "Bid latency excellent (p99=8ms)",
+    "Socket.IO events flowing (3 received)",
+    "Bid success rate healthy (100.0%)",
+    "Auction lots selling (4/4 sold)"
+  ],
+  "warnings": [],
+  "issues": [],
+  "per_league": [
+    {
+      "name": "StressTest-1-1768029594",
+      "status": "completed",
+      "duration_seconds": 51.9,
+      "lots_sold": 4,
+      "total_bids": 4,
+      "success_rate": 100.0,
+      "socket_events": 3,
+      "errors": []
+    }
+  ]
+}
