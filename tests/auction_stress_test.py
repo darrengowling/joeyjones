@@ -729,9 +729,11 @@ class AuctionStressTest:
     
     def _handle_unsold(self, data: Dict):
         """Handle lot unsold"""
+        club_name = data.get('clubName', self.current_lot_club_name or 'Unknown')
         duration = time.time() - (self.lot_start_time or time.time())
+        
         self.metrics.lots_completed.append(LotResult(
-            club_name=self.current_lot_club_name or 'Unknown',
+            club_name=club_name,
             winner_email=None,
             winning_amount=None,
             total_bids=self.lot_bid_count,
@@ -739,7 +741,9 @@ class AuctionStressTest:
         ))
         
         self.lot_active = False
-        print(f"   ✗ UNSOLD: {self.current_lot_club_name}")
+        self.current_bid = 0
+        self.current_bidder_id = None
+        print(f"   ✗ UNSOLD: {club_name}")
     
     # ========================================================================
     # BIDDING
