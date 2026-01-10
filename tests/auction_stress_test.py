@@ -362,10 +362,11 @@ class AuctionStressTest:
     
     async def _reset_auction(self):
         """Reset auction to allow restart"""
+        auth_user = self._get_auth_user()
         url = f"{BASE_URL}/leagues/{self.league_id}/auction/reset"
         headers = {
-            "Authorization": f"Bearer {self.users[0].jwt_token}",
-            "X-User-ID": self.users[0].user_id
+            "Authorization": f"Bearer {auth_user.jwt_token}",
+            "X-User-ID": auth_user.user_id
         }
         
         async with aiohttp.ClientSession() as session:
