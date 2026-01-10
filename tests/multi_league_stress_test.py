@@ -410,48 +410,108 @@ class LeagueRunner:
                     self.current_bid = auction.get('currentBid') or 0
     
     async def _run_bidding_loop(self, users: List[TestUser]):
-        """Run bidding until auction completes - uses HTTP polling for reliability"""
+        """
+        Run bidding until auction completes.
+        
+        CRITICAL FIX: The anti-snipe timer extends every time a bid is placed.
+        If we bid continuously, the timer never expires and no lots sell.
+        
+        Strategy:
+        1. Only bid if we are NOT the current high bidder
+        2. After bidding, WAIT for the timer to expire (let the other side respond or timer run out)
+        3. Use a longer poll interval than the anti-snipe window
+        """
         timeout = 600  # 10 min max
         start = time.time()
+        
+        # Get league's timer settings (default 10s timer + 10s anti-snipe)
+        timer_seconds = 15  # Wait time after bidding (should be > anti-snipe)
+        
+        # Track which lot we're on to detect lot transitions
+        last_lot_id = None
+        bid_placed_this_lot = {}  # Track which users bid on current lot
         
         while not self.auction_complete and (time.time() - start) < timeout:
             # Poll current auction state
             state = await self._get_auction_state()
             if not state:
-                await asyncio.sleep(1)
+                await asyncio.sleep(2)
                 continue
             
             if state.get('status') == 'completed':
                 self.auction_complete = True
+                print(f"   [League {self.league_index}] ✓ Auction completed!")
                 break
             
+            current_lot_id = state.get('lotId')
             current_bid = state.get('currentBid') or 0
             current_bidder = state.get('currentBidderId')
             
-            # Find a user who should bid
+            # Detect lot transition (new lot started)
+            if current_lot_id != last_lot_id:
+                last_lot_id = current_lot_id
+                bid_placed_this_lot = {}  # Reset tracking for new lot
+                
+                # Update lots_sold from completedLots
+                completed = state.get('completedLots', [])
+                sold_count = len([c for c in completed if c.get('sold')])
+                if sold_count > self.lots_sold:
+                    self.lots_sold = sold_count
+                    self.metrics.lots_sold = sold_count
+            
+            # ---- BIDDING LOGIC ----
+            # Key insight: We want ONE user to bid, then WAIT.
+            # If no one bids, the timer expires and lot sells (or goes unsold).
+            
+            # Select a bidder: pick first eligible user who is NOT the current bidder
+            bidder_selected = None
             for user in users:
-                # Skip if this user is already winning
+                # Skip if already the highest bidder
                 if current_bidder == user.user_id:
                     continue
                 
-                # Skip if user's roster is full (check from state)
+                # Skip if user's roster is full
                 user_roster_count = state.get('rosters', {}).get(user.user_id, 0)
                 if user_roster_count >= self.teams_per_roster:
+                    user.teams_won = user_roster_count  # Track locally
                     continue
                 
-                # Place a bid
+                # Check budget
                 bid_amount = current_bid + BID_INCREMENT
-                if bid_amount <= user.budget_remaining:
-                    await self._place_bid(user, bid_amount)
-                    break  # Only one bid per cycle
+                if bid_amount > user.budget_remaining:
+                    continue
+                
+                # This user can bid
+                bidder_selected = user
+                break
             
-            # Wait before next poll/bid cycle
-            await asyncio.sleep(3)
+            if bidder_selected:
+                bid_amount = current_bid + BID_INCREMENT
+                success = await self._place_bid(bidder_selected, bid_amount)
+                
+                if success:
+                    # After successful bid, WAIT for timer to potentially expire
+                    # This is critical - don't bid again immediately!
+                    await asyncio.sleep(timer_seconds)
+                else:
+                    # Bid failed - small wait and retry
+                    await asyncio.sleep(2)
+            else:
+                # No one can/should bid - wait for timer to expire
+                # This happens when:
+                # - Current bidder's roster is full (they win by default)
+                # - Or everyone's roster is full (auction ending)
+                await asyncio.sleep(timer_seconds)
             
-            # Progress update
+            # Progress update every 30 seconds
             elapsed = time.time() - start
-            if int(elapsed) % 30 == 0:
-                print(f"   [League {self.league_index}] {self.lots_sold} lots, {self.metrics.total_bids} bids, {elapsed:.0f}s")
+            if int(elapsed) % 30 == 0 and int(elapsed) > 0:
+                all_filled = all(
+                    state.get('rosters', {}).get(u.user_id, 0) >= self.teams_per_roster 
+                    for u in users
+                )
+                status = "ALL FILLED" if all_filled else f"bidder={current_bidder[:8] if current_bidder else 'none'}"
+                print(f"   [League {self.league_index}] {self.lots_sold} lots sold, {self.metrics.total_bids} bids, {elapsed:.0f}s [{status}]")
     
     async def _get_auction_state(self) -> Optional[Dict]:
         """Get current auction state via HTTP"""
