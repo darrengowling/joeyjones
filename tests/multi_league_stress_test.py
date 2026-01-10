@@ -258,7 +258,7 @@ class LeagueRunner:
         payload = {
             "name": league_name,
             "competition": self.competition,
-            "maxManagers": USERS_PER_LEAGUE,
+            "maxManagers": self.users_per_league,
             "budget": STARTING_BUDGET,
             "teamsPerManager": TEAMS_PER_ROSTER,
             "commissionerId": commissioner.user_id
