@@ -367,8 +367,14 @@ class AuctionStressTest:
             async with session.post(url, headers=headers) as resp:
                 if resp.status != 200:
                     text = await resp.text()
-                    if "already" not in text.lower():
-                        raise Exception(f"Failed to begin auction: {text}")
+                    if "already" in text.lower():
+                        return  # Already started, that's fine
+                    if "commissioner" in text.lower():
+                        print("   ⚠ Only commissioner can begin auction.")
+                        print("   → Please start the auction manually in the UI, then run this test again.")
+                        print("   → Or the auction may have already been started.")
+                        return  # Continue anyway - auction might be in progress
+                    raise Exception(f"Failed to begin auction: {text}")
     
     # ========================================================================
     # SOCKET.IO CONNECTION
