@@ -4902,16 +4902,18 @@ async def place_bid(auction_id: str, bid_input: BidCreate):
                 logger.info(f"Anti-snipe triggered for lot {lot_id}: seq={timer_data['seq']}, new end={timer_data['endsAt']}")
     
     # DIAGNOSTIC: Check what completion status should be after this bid
-    league = await db.leagues.find_one({"id": auction["leagueId"]}, {"_id": 0})
-    participants = await db.league_participants.find({"leagueId": auction["leagueId"]}, {"_id": 0}).to_list(100)
-    auction_state = {
-        "lots_sold": sum(1 for p in participants for c in p.get("clubsWon", [])),
-        "current_lot": auction.get("currentLot", 0),
-        "total_lots": len(auction.get("clubQueue", [])),
-        "unsold_count": len(auction.get("unsoldClubs", []))
-    }
-    status = compute_auction_status(league, participants, auction_state)
-    logger.info(f"🔍 AUCTION_STATUS after bid: {json.dumps(status)}")
+    # Only run in debug mode to avoid extra DB queries in production
+    if os.environ.get("DEBUG_AUCTION"):
+        league_debug = await db.leagues.find_one({"id": auction["leagueId"]}, {"_id": 0})
+        participants_debug = await db.league_participants.find({"leagueId": auction["leagueId"]}, {"_id": 0}).to_list(100)
+        auction_state = {
+            "lots_sold": sum(1 for p in participants_debug for c in p.get("clubsWon", [])),
+            "current_lot": auction.get("currentLot", 0),
+            "total_lots": len(auction.get("clubQueue", [])),
+            "unsold_count": len(auction.get("unsoldClubs", []))
+        }
+        status = compute_auction_status(league_debug, participants_debug, auction_state)
+        logger.info(f"🔍 AUCTION_STATUS after bid: {json.dumps(status)}")
     
     # Note: Roster fullness check moved to complete_lot (after clubs are awarded)
     
