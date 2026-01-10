@@ -464,9 +464,24 @@ class LeagueRunner:
                 if resp.status == 200:
                     self.metrics.successful_bids += 1
                     return True
-                return False
+                else:
+                    self.metrics.failed_bids += 1
+                    # Track rejection reason
+                    try:
+                        error_data = await resp.json()
+                        reason = error_data.get('detail', str(resp.status))
+                        if isinstance(reason, list):
+                            reason = reason[0].get('msg', str(resp.status)) if reason else str(resp.status)
+                    except:
+                        reason = str(resp.status)
+                    
+                    # Categorize the reason
+                    reason_key = reason[:50]  # Truncate for grouping
+                    self.metrics.bid_rejection_reasons[reason_key] = self.metrics.bid_rejection_reasons.get(reason_key, 0) + 1
+                    return False
         except Exception as e:
             self.metrics.errors.append(f"Bid error: {e}")
+            self.metrics.failed_bids += 1
             return False
     
     async def _cleanup(self):
