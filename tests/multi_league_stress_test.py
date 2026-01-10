@@ -450,6 +450,10 @@ class LeagueRunner:
         while not self.auction_complete and (time.time() - start) < timeout:
             await asyncio.sleep(1)
             
+            # Poll auction status every 10 seconds (fallback for socket issues)
+            if int(time.time() - start) % 10 == 0:
+                await self._check_auction_complete()
+            
             # Progress update every 30 seconds
             if time.time() - last_progress > 30:
                 elapsed = time.time() - start
@@ -459,6 +463,20 @@ class LeagueRunner:
         # Cancel remaining tasks
         for task in tasks:
             task.cancel()
+    
+    async def _check_auction_complete(self):
+        """Poll auction status via HTTP"""
+        try:
+            headers = {"Authorization": f"Bearer {self.league.commissioner.jwt_token}"}
+            async with aiohttp.ClientSession() as session:
+                resp = await session.get(f"{BASE_URL}/auction/{self.league.auction_id}", headers=headers)
+                if resp.status == 200:
+                    data = await resp.json()
+                    status = data.get('auction', {}).get('status')
+                    if status == 'completed':
+                        self.auction_complete = True
+        except:
+            pass
     
     async def _place_bid(self, user: TestUser, amount: int) -> bool:
         """Place a bid"""
