@@ -196,6 +196,7 @@ class LeagueRunner:
         try:
             # Connect all users to Socket.IO
             all_users = [self.league.commissioner] + self.league.members
+            print(f"   [League {self.league_index}] Users in auction: {len(all_users)} - {[u.email[:20] for u in all_users]}")
             await self._connect_all_sockets(all_users)
             
             # Start auction
