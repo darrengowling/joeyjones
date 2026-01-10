@@ -835,6 +835,18 @@ Examples:
         default=DEFAULT_COMPETITION,
         help=f"Competition type for leagues (default: {DEFAULT_COMPETITION})"
     )
+    parser.add_argument(
+        "--users",
+        type=int,
+        default=USERS_PER_LEAGUE,
+        help=f"Users per league (default: {USERS_PER_LEAGUE})"
+    )
+    parser.add_argument(
+        "--teams",
+        type=int,
+        default=TEAMS_PER_ROSTER,
+        help=f"Teams per user roster (default: {TEAMS_PER_ROSTER})"
+    )
     
     args = parser.parse_args()
     
@@ -851,7 +863,9 @@ Examples:
     test = MultiLeagueStressTest(
         num_leagues=args.leagues,
         stagger_seconds=args.stagger,
-        competition=args.competition
+        competition=args.competition,
+        users_per_league=args.users,
+        teams_per_roster=args.teams
     )
     await test.run()
 
