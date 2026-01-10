@@ -1,15 +1,15 @@
 {
     "leagues": [
-        {"invite_token": "LEAGUE_1_TOKEN", "commissioner_email": "commissioner1@example.com"},
-        {"invite_token": "LEAGUE_2_TOKEN", "commissioner_email": "commissioner2@example.com"},
-        {"invite_token": "LEAGUE_3_TOKEN", "commissioner_email": "commissioner3@example.com"},
-        {"invite_token": "LEAGUE_4_TOKEN", "commissioner_email": "commissioner4@example.com"},
-        {"invite_token": "LEAGUE_5_TOKEN", "commissioner_email": "commissioner5@example.com"},
-        {"invite_token": "LEAGUE_6_TOKEN", "commissioner_email": "commissioner6@example.com"},
-        {"invite_token": "LEAGUE_7_TOKEN", "commissioner_email": "commissioner7@example.com"},
-        {"invite_token": "LEAGUE_8_TOKEN", "commissioner_email": "commissioner8@example.com"},
-        {"invite_token": "LEAGUE_9_TOKEN", "commissioner_email": "commissioner9@example.com"},
-        {"invite_token": "LEAGUE_10_TOKEN", "commissioner_email": "commissioner10@example.com"}
+        {"invite_token": "LEAGUE_1_TOKEN"},
+        {"invite_token": "LEAGUE_2_TOKEN"},
+        {"invite_token": "LEAGUE_3_TOKEN"},
+        {"invite_token": "LEAGUE_4_TOKEN"},
+        {"invite_token": "LEAGUE_5_TOKEN"},
+        {"invite_token": "LEAGUE_6_TOKEN"},
+        {"invite_token": "LEAGUE_7_TOKEN"},
+        {"invite_token": "LEAGUE_8_TOKEN"},
+        {"invite_token": "LEAGUE_9_TOKEN"},
+        {"invite_token": "LEAGUE_10_TOKEN"}
     ],
     "stagger_seconds": 10
 }
