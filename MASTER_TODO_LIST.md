@@ -176,6 +176,7 @@ mongodb+srv://draft-kings-mobile:***@customer-apps.oxfwhh.mongodb.net/
 
 | # | Issue ID | Summary | Cause | Fix | Risk | Benefit |
 |---|----------|---------|-------|-----|------|---------|
+| 0 | **STRESS-TEST** | **Competitive Bidding Test Mode** - Current stress test only tests "happy path" (one bid per lot) | Anti-snipe and bidding wars not tested | Add competitive bidding mode with multiple users bidding on same lot | 🟡 Medium | Realistic load testing for pilot |
 | 1 | **ISSUE-008** | **Refactor server.py** - 5,917 line monolithic file | Rapid development, no time to split | Split into modular routers (auth, leagues, auctions, fixtures, scoring, assets) | 🟡 Medium | Maintainability, easier debugging |
 | 2 | **ISSUE-009** | **Fixture Import Logic** - Fuzzy name matching for fixture imports | Legacy implementation | Use `externalId` instead of name matching | 🟡 Medium | More reliable fixture imports |
 | 3 | **ISSUE-017 Phase 4** | **Consolidate Socket Events** - Two events per bid (`bid_update` + `bid_placed`) | Historical design | Merge into single `bid_committed` event | 🟡 Medium | Simpler client code, less state churn |
