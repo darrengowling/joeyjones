@@ -426,15 +426,22 @@ class AuctionStressTest:
         
         async with aiohttp.ClientSession() as session:
             async with session.post(url, headers=headers) as resp:
-                if resp.status != 200:
-                    text = await resp.text()
-                    if "already" in text.lower():
-                        return  # Already started, that's fine
-                    if "commissioner" in text.lower():
-                        print("   ⚠ Only commissioner can begin auction.")
-                        print("   → Please provide --commissioner-email flag or start the auction manually in the UI.")
-                        return  # Continue anyway - auction might be in progress
-                    raise Exception(f"Failed to begin auction: {text}")
+                if resp.status == 200:
+                    return  # Successfully started
+                
+                text = await resp.text()
+                
+                # These are acceptable states - auction already in progress
+                if any(x in text.lower() for x in ["already", "not in waiting", "active"]):
+                    print("   ✓ Auction already in progress")
+                    return
+                
+                if "commissioner" in text.lower():
+                    print("   ⚠ Only commissioner can begin auction.")
+                    print("   → Please provide --commissioner-email flag or start the auction manually in the UI.")
+                    return
+                
+                raise Exception(f"Failed to begin auction: {text}")
     
     # ========================================================================
     # SOCKET.IO CONNECTION
