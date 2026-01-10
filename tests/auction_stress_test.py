@@ -54,11 +54,15 @@ from collections import defaultdict
 from dataclasses import dataclass, field
 
 # ============================================================================
-# CONFIGURATION - Preview Environment
+# CONFIGURATION - Defaults (can be overridden via CLI)
 # ============================================================================
-BASE_URL = "http://localhost:8001/api"
-SOCKET_URL = "http://localhost:8001"
+DEFAULT_BASE_URL = "http://localhost:8001/api"
+DEFAULT_SOCKET_URL = "http://localhost:8001"
 SOCKET_PATH = "/api/socket.io"
+
+# These will be set from CLI args
+BASE_URL = DEFAULT_BASE_URL
+SOCKET_URL = DEFAULT_SOCKET_URL
 
 # Team popularity tiers (for realistic bidding behavior)
 HOT_TEAMS = [
