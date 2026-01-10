@@ -349,7 +349,10 @@ class AuctionStressTest:
     async def _begin_auction(self):
         """Begin auction (start first lot)"""
         url = f"{BASE_URL}/auction/{self.auction_id}/begin"
-        headers = {"Authorization": f"Bearer {self.users[0].jwt_token}"}
+        headers = {
+            "Authorization": f"Bearer {self.users[0].jwt_token}",
+            "X-User-ID": self.users[0].user_id
+        }
         
         async with aiohttp.ClientSession() as session:
             async with session.post(url, headers=headers) as resp:
