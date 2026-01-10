@@ -233,7 +233,7 @@ class AuctionStressTest:
         auction = await self._get_auction()
         
         if auction:
-            self.auction_id = auction.get('id')
+            self.auction_id = auction.get('auctionId') or auction.get('id')
             status = auction.get('status')
             print(f"   ✓ Existing auction found: {self.auction_id[:8]}... (status: {status})")
             
