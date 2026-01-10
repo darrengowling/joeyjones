@@ -490,17 +490,21 @@ class LeagueRunner:
                 success = await self._place_bid(bidder_selected, bid_amount)
                 
                 if success:
+                    print(f"      [League {self.league_index}] Bid OK: {bidder_selected.email[:20]}... bid £{bid_amount/1_000_000:.0f}M")
                     # After successful bid, WAIT for timer to potentially expire
                     # This is critical - don't bid again immediately!
                     await asyncio.sleep(timer_seconds)
                 else:
-                    # Bid failed - small wait and retry
+                    # Bid failed - get the reason from metrics
+                    last_reason = list(self.metrics.bid_rejection_reasons.keys())[-1] if self.metrics.bid_rejection_reasons else "unknown"
+                    print(f"      [League {self.league_index}] Bid FAIL: {last_reason[:40]}")
                     await asyncio.sleep(2)
             else:
                 # No one can/should bid - wait for timer to expire
                 # This happens when:
                 # - Current bidder's roster is full (they win by default)
                 # - Or everyone's roster is full (auction ending)
+                print(f"      [League {self.league_index}] No bidder selected (current={current_bidder[:8] if current_bidder else 'none'})")
                 await asyncio.sleep(timer_seconds)
             
             # Progress update every 30 seconds
