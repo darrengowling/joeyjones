@@ -328,13 +328,6 @@ class LeagueRunner:
                 await sio.connect(SOCKET_URL, socketio_path=SOCKET_PATH)
                 user.connected = True
                 
-                # Join auction room
-                if self.league.auction_id:
-                    await sio.emit('join_auction', {
-                        'auctionId': self.league.auction_id,
-                        'odIuser': user.user_id
-                    })
-                
             except Exception as e:
                 self.metrics.errors.append(f"Socket connect failed for {user.email}: {e}")
     
