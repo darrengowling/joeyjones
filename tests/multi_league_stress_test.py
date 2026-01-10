@@ -174,6 +174,7 @@ class LeagueAuctionRunner:
     
     async def _setup_league(self):
         """Get league info and auto-detect commissioner if needed"""
+        # Step 1: Get league ID from invite token
         url = f"{BASE_URL}/leagues/by-token/{self.invite_token}"
         async with aiohttp.ClientSession() as session:
             async with session.get(url) as resp:
@@ -186,18 +187,23 @@ class LeagueAuctionRunner:
                 self.league_id = league['id']
                 self.metrics.league_id = league['id']
                 self.metrics.league_name = league.get('name', 'Unknown')
-                
-                # Auto-detect commissioner email if not provided
-                if not self.commissioner_email:
-                    commissioner_id = league.get('commissionerId')
-                    if commissioner_id:
-                        # Fetch commissioner's email
-                        user_url = f"{BASE_URL}/users/{commissioner_id}"
-                        async with session.get(user_url) as user_resp:
-                            if user_resp.status == 200:
-                                user_data = await user_resp.json()
-                                self.commissioner_email = user_data.get('email')
-                                print(f"   [League {self.league_index}] ✓ Auto-detected commissioner: {self.commissioner_email}")
+            
+            # Step 2: Get full league details (includes commissionerId)
+            if not self.commissioner_email:
+                league_url = f"{BASE_URL}/leagues/{self.league_id}"
+                async with session.get(league_url) as league_resp:
+                    if league_resp.status == 200:
+                        full_league = await league_resp.json()
+                        commissioner_id = full_league.get('commissionerId')
+                        
+                        if commissioner_id:
+                            # Step 3: Fetch commissioner's email
+                            user_url = f"{BASE_URL}/users/{commissioner_id}"
+                            async with session.get(user_url) as user_resp:
+                                if user_resp.status == 200:
+                                    user_data = await user_resp.json()
+                                    self.commissioner_email = user_data.get('email')
+                                    print(f"   [League {self.league_index}] ✓ Auto-detected commissioner: {self.commissioner_email}")
                 
                 if not self.commissioner_email:
                     raise Exception("Could not determine commissioner email - please provide manually")
