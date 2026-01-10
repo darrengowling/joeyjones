@@ -494,8 +494,21 @@ class LeagueRunner:
             # Pick one eligible user - prefer users with fewer teams
             if eligible_users:
                 # Sort by roster count (ascending) - users with fewer teams bid first
-                eligible_users.sort(key=lambda u: state.get('rosters', {}).get(u.user_id, 0))
-                bidder_selected = eligible_users[0]
+                # Also use the lot number as a tiebreaker to alternate between users
+                eligible_users.sort(key=lambda u: (state.get('rosters', {}).get(u.user_id, 0), u.email))
+                
+                # Alternate based on lot number if rosters are equal
+                if len(eligible_users) > 1:
+                    roster0 = state.get('rosters', {}).get(eligible_users[0].user_id, 0)
+                    roster1 = state.get('rosters', {}).get(eligible_users[1].user_id, 0)
+                    if roster0 == roster1 and lot_num > 0:
+                        # Alternate: even lots → first user, odd lots → second user
+                        idx = lot_num % len(eligible_users)
+                        bidder_selected = eligible_users[idx]
+                    else:
+                        bidder_selected = eligible_users[0]
+                else:
+                    bidder_selected = eligible_users[0]
             
             if bidder_selected:
                 bid_amount = current_bid + BID_INCREMENT
