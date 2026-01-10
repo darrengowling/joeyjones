@@ -1281,10 +1281,6 @@ Examples:
             print(f"   Bids: {len(metrics.bids)}, Success Rate: {success_rate:.1f}%")
             print(f"   Latency p99: {p99:.0f}ms")
             print(f"   Lots: {len(metrics.lots_completed)}, Errors: {len(metrics.errors)}")
-        import traceback
-        traceback.print_exc()
-    finally:
-        test.generate_report()
 
 
 if __name__ == "__main__":
