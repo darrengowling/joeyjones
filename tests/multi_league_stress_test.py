@@ -421,11 +421,12 @@ class LeagueRunner:
         """
         timeout = 600  # 10 min max
         start = time.time()
-        poll_interval = 2  # Poll every 2 seconds
+        poll_interval = 1  # Poll every 1 second for fast lot detection
         
         # Track which lot we're on to detect lot transitions
         last_lot_id = None
         bid_placed_this_lot = False  # Has someone bid on current lot?
+        lots_we_bid_on = set()  # Track all lots we've bid on
         
         while not self.auction_complete and (time.time() - start) < timeout:
             # Poll current auction state
