@@ -376,10 +376,11 @@ class AuctionStressTest:
     
     async def _begin_auction(self):
         """Begin auction (start first lot)"""
+        auth_user = self._get_auth_user()
         url = f"{BASE_URL}/auction/{self.auction_id}/begin"
         headers = {
-            "Authorization": f"Bearer {self.users[0].jwt_token}",
-            "X-User-ID": self.users[0].user_id
+            "Authorization": f"Bearer {auth_user.jwt_token}",
+            "X-User-ID": auth_user.user_id
         }
         
         async with aiohttp.ClientSession() as session:
@@ -390,8 +391,7 @@ class AuctionStressTest:
                         return  # Already started, that's fine
                     if "commissioner" in text.lower():
                         print("   ⚠ Only commissioner can begin auction.")
-                        print("   → Please start the auction manually in the UI, then run this test again.")
-                        print("   → Or the auction may have already been started.")
+                        print("   → Please provide --commissioner-email flag or start the auction manually in the UI.")
                         return  # Continue anyway - auction might be in progress
                     raise Exception(f"Failed to begin auction: {text}")
     
