@@ -621,11 +621,14 @@ class AuctionStressTest:
     
     def _handle_bid_update(self, data: Dict, receiving_user: TestUser):
         """Handle bid update - track latency if this user placed the bid"""
-        new_bid = data.get('currentBid', 0)
-        old_bid = self.current_bid
+        # Server sends 'amount' and 'bidder' fields
+        new_bid = data.get('amount', 0)
+        bidder = data.get('bidder', {})
+        new_bidder_id = bidder.get('userId') if isinstance(bidder, dict) else bidder
         
+        old_bid = self.current_bid
         self.current_bid = new_bid
-        self.current_bidder_id = data.get('bidderId')
+        self.current_bidder_id = new_bidder_id
         self.lot_bid_count += 1
         
         # Check for anti-snipe (bid increased timer)
@@ -642,6 +645,38 @@ class AuctionStressTest:
             latency_ms = (time.time() - receiving_user.last_bid_sent_at) * 1000
             self.metrics.socket_broadcast_latencies_ms.append(latency_ms)
             receiving_user.last_bid_sent_at = None  # Reset
+    
+    def _handle_bid_placed(self, data: Dict, receiving_user: TestUser):
+        """Handle legacy bid_placed event"""
+        bid = data.get('bid', {})
+        new_bid = bid.get('amount', 0)
+        new_bidder_id = bid.get('userId')
+        
+        self.current_bid = new_bid
+        self.current_bidder_id = new_bidder_id
+        self.lot_bid_count += 1
+        
+        # Calculate broadcast latency if this user just bid
+        if receiving_user.last_bid_sent_at and self.current_bidder_id == receiving_user.user_id:
+            latency_ms = (time.time() - receiving_user.last_bid_sent_at) * 1000
+            self.metrics.socket_broadcast_latencies_ms.append(latency_ms)
+            receiving_user.last_bid_sent_at = None
+    
+    def _handle_auction_snapshot(self, data: Dict):
+        """Handle auction snapshot - initial state when joining"""
+        auction = data.get('auction', {})
+        current_lot = data.get('currentLot', {})
+        
+        if auction.get('status') == 'active':
+            self.lot_active = True
+            self.current_lot_club_id = auction.get('currentClubId')
+            self.current_lot_club_name = current_lot.get('clubName', 'Unknown')
+            self.current_bid = auction.get('currentBid') or 0
+            
+            bidder = auction.get('currentBidder')
+            self.current_bidder_id = bidder.get('userId') if bidder else None
+            
+            self.lot_start_time = time.time()
     
     def _handle_timer_sync(self, data: Dict):
         """Handle timer synchronization"""
