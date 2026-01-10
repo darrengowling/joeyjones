@@ -529,8 +529,9 @@ class MultiLeagueStressTest:
         print("MULTI-LEAGUE STRESS TEST (Fully Automated)")
         print("=" * 60)
         print(f"Leagues to create:    {self.num_leagues}")
-        print(f"Users per league:     {USERS_PER_LEAGUE}")
-        print(f"Total users:          {self.num_leagues * USERS_PER_LEAGUE}")
+        print(f"Users per league:     {self.users_per_league}")
+        print(f"Teams per roster:     {self.teams_per_roster}")
+        print(f"Total users:          {self.num_leagues * self.users_per_league}")
         print(f"Stagger between starts: {self.stagger_seconds}s")
         print(f"Competition:          {self.competition}")
         print("=" * 60)
@@ -542,13 +543,18 @@ class MultiLeagueStressTest:
         
         for i in range(self.num_leagues):
             print(f"\n   Creating League {i + 1}/{self.num_leagues}...")
-            runner = LeagueRunner(league_index=i + 1, competition=self.competition)
+            runner = LeagueRunner(
+                league_index=i + 1, 
+                competition=self.competition,
+                users_per_league=self.users_per_league,
+                teams_per_roster=self.teams_per_roster
+            )
             success = await runner.setup()
             
             if success:
                 self.runners.append(runner)
                 self.global_metrics.leagues_created += 1
-                self.global_metrics.total_users_created += USERS_PER_LEAGUE
+                self.global_metrics.total_users_created += self.users_per_league
             else:
                 self.global_metrics.leagues_failed += 1
         
