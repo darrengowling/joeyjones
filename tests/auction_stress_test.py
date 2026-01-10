@@ -218,17 +218,21 @@ class AuctionStressTest:
                 print(f"   ⚠ Failed to authenticate commissioner: {e}")
                 print("   → Will try to proceed without commissioner privileges")
         
-        # Step 2: Create test users
-        print(f"\n2. Creating {self.num_users} test users...")
-        for i in range(self.num_users):
-            email = f"stress-test-{i+1}-{int(time.time())}@test.local"
-            try:
-                user = await self._create_test_user(email)
-                self.users.append(user)
-                print(f"   ✓ {email[:30]}... (ID: {user.user_id[:8]}...)")
-            except Exception as e:
-                print(f"   ✗ Failed to create {email}: {e}")
-                self.metrics.errors.append(f"User creation failed: {e}")
+        # Step 2: Create or authenticate test users
+        if self.use_existing_members:
+            print(f"\n2. Using existing league members as test users...")
+            await self._authenticate_existing_members()
+        else:
+            print(f"\n2. Creating {self.num_users} test users...")
+            for i in range(self.num_users):
+                email = f"stress-test-{i+1}-{int(time.time())}@test.local"
+                try:
+                    user = await self._create_test_user(email)
+                    self.users.append(user)
+                    print(f"   ✓ {email[:30]}... (ID: {user.user_id[:8]}...)")
+                except Exception as e:
+                    print(f"   ✗ Failed to create {email}: {e}")
+                    self.metrics.errors.append(f"User creation failed: {e}")
         
         if len(self.users) < 2:
             raise Exception("Need at least 2 users to run test")
