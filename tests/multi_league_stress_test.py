@@ -519,22 +519,23 @@ class LeagueRunner:
                 success = await self._place_bid(bidder_selected, bid_amount)
                 
                 if success:
-                    print(f"      [League {self.league_index}] Bid OK: {bidder_selected.email[:20]}... bid £{bid_amount/1_000_000:.0f}M")
-                    # After successful bid, WAIT for timer to potentially expire
-                    # This is critical - don't bid again immediately!
-                    await asyncio.sleep(timer_seconds)
+                    bid_placed_this_lot = True  # Mark that we bid on this lot
+                    print(f"      [League {self.league_index}] Bid OK: {bidder_selected.email[:20]}... bid £{bid_amount/1_000_000:.0f}M on lot {lot_num}")
                 else:
                     # Bid failed - get the reason from metrics
                     last_reason = list(self.metrics.bid_rejection_reasons.keys())[-1] if self.metrics.bid_rejection_reasons else "unknown"
                     print(f"      [League {self.league_index}] Bid FAIL: {last_reason[:40]}")
-                    await asyncio.sleep(2)
             else:
-                # No one can/should bid - wait for timer to expire
-                # This happens when:
-                # - Current bidder's roster is full (they win by default)
-                # - Or everyone's roster is full (auction ending)
-                print(f"      [League {self.league_index}] No bidder selected (current={current_bidder[:8] if current_bidder else 'none'})")
-                await asyncio.sleep(timer_seconds)
+                # No one can/should bid - either everyone's roster is full or bidder is leading
+                if current_bidder:
+                    # Someone is leading - wait for timer to expire
+                    pass
+                else:
+                    # No bidder and no one eligible - lot will go unsold
+                    pass
+            
+            # Wait before next poll
+            await asyncio.sleep(poll_interval)
             
             # Progress update every 30 seconds
             elapsed = time.time() - start
