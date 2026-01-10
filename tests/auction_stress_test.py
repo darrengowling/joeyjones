@@ -553,7 +553,10 @@ class AuctionStressTest:
     async def _place_bid(self, user: TestUser, amount: int) -> bool:
         """Place a bid via HTTP POST"""
         url = f"{BASE_URL}/auction/{self.auction_id}/bid"
-        headers = {"Authorization": f"Bearer {user.jwt_token}"}
+        headers = {
+            "Authorization": f"Bearer {user.jwt_token}",
+            "X-User-ID": user.user_id
+        }
         
         user.last_bid_sent_at = time.time()
         start_time = time.time()
