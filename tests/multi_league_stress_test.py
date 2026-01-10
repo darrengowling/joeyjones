@@ -66,7 +66,7 @@ USERS_PER_LEAGUE = 8
 TEAMS_PER_ROSTER = 4
 BID_INCREMENT = 5_000_000  # £5M
 STARTING_BUDGET = 500_000_000  # £500M
-DEFAULT_COMPETITION = "ucl"  # UEFA Champions League
+DEFAULT_COMPETITION = "CL"  # UEFA Champions League (CL or UCL accepted)
 
 # ============================================================================
 # DATA STRUCTURES
