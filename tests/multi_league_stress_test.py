@@ -351,7 +351,7 @@ class LeagueRunner:
             data = await resp.json()
             self.league.auction_id = data.get('auctionId')
             
-            # Join all sockets to auction room
+            # NOW join all sockets to auction room (after we have the auction ID)
             all_users = [self.league.commissioner] + self.league.members
             for user in all_users:
                 if user.socket_client and user.connected:
@@ -359,6 +359,7 @@ class LeagueRunner:
                         'auctionId': self.league.auction_id,
                         'userId': user.user_id
                     })
+                    await asyncio.sleep(0.05)  # Small delay to avoid overwhelming
             
             # Begin auction (start first lot)
             resp = await session.post(
