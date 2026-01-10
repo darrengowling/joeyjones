@@ -609,15 +609,18 @@ class AuctionStressTest:
     
     def _handle_new_lot(self, data: Dict):
         """Handle new lot starting"""
-        self.current_lot_club_id = data.get('clubId')
-        self.current_lot_club_name = data.get('clubName', 'Unknown')
+        # Server sends 'club' object with 'id' and 'name'
+        club = data.get('club', {})
+        self.current_lot_club_id = club.get('id')
+        self.current_lot_club_name = club.get('name', 'Unknown')
         self.current_bid = 0
         self.current_bidder_id = None
         self.lot_active = True
         self.lot_start_time = time.time()
         self.lot_bid_count = 0
         
-        print(f"\n📢 NEW LOT: {self.current_lot_club_name}")
+        lot_number = data.get('lotNumber', '?')
+        print(f"\n📢 NEW LOT #{lot_number}: {self.current_lot_club_name}")
     
     def _handle_bid_update(self, data: Dict, receiving_user: TestUser):
         """Handle bid update - track latency if this user placed the bid"""
