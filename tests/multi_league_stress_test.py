@@ -523,6 +523,7 @@ class LeagueRunner:
                 
                 if success:
                     bid_placed_this_lot = True  # Mark that we bid on this lot
+                    lots_we_bid_on.add(current_lot_id)  # Track globally
                     print(f"      [League {self.league_index}] Bid OK: {bidder_selected.email[:20]}... bid £{bid_amount/1_000_000:.0f}M on lot {lot_num}")
                 else:
                     # Bid failed - get the reason from metrics
