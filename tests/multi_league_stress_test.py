@@ -440,7 +440,7 @@ class LeagueRunner:
                 print(f"   [League {self.league_index}] ✓ Auction completed!")
                 break
             
-            current_lot_id = state.get('lotId')
+            current_lot_id = state.get('lotId') or f"lot-{lot_num}"  # Fallback to lot number
             current_bid = state.get('currentBid') or 0
             current_bidder = state.get('currentBidderId')
             lot_num = state.get('currentLot', 0)
