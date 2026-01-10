@@ -264,7 +264,8 @@ class LeagueRunner:
             "maxManagers": self.users_per_league,
             "budget": STARTING_BUDGET,
             "clubSlots": self.teams_per_roster,
-            "commissionerId": commissioner.user_id
+            "commissionerId": commissioner.user_id,
+            "timerSeconds": 10  # Short timer for testing
         }
         
         async with aiohttp.ClientSession() as session:
