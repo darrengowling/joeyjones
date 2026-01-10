@@ -611,8 +611,8 @@ Config file format (leagues.json):
     
     # Load config
     if args.quick_test:
-        if not args.invite_token or not args.commissioner_email:
-            print("❌ --quick-test requires --invite-token and --commissioner-email")
+        if not args.invite_token:
+            print("❌ --quick-test requires --invite-token")
             return
         leagues_config = [{"invite_token": args.invite_token, "commissioner_email": args.commissioner_email}]
         stagger = 0
@@ -632,6 +632,15 @@ Config file format (leagues.json):
     if not leagues_config:
         print("❌ No leagues configured")
         return
+    
+    # Ensure each league has at least invite_token
+    for league in leagues_config:
+        if 'invite_token' not in league:
+            print("❌ Each league must have 'invite_token'")
+            return
+        # commissioner_email is now optional - will be auto-detected
+        if 'commissioner_email' not in league:
+            league['commissioner_email'] = None
     
     print(f"\n📋 Loaded {len(leagues_config)} league(s)")
     
