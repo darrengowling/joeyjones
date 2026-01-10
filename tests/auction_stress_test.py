@@ -689,6 +689,15 @@ class AuctionStressTest:
     
     def _handle_sold(self, data: Dict):
         """Handle lot sold"""
+        # Use clubId to prevent duplicate processing (all 7 users receive this event)
+        club_id = data.get('clubId')
+        if not hasattr(self, '_processed_sold_lots'):
+            self._processed_sold_lots = set()
+        
+        if club_id in self._processed_sold_lots:
+            return  # Already processed this lot
+        self._processed_sold_lots.add(club_id)
+        
         winning_bid = data.get('winningBid', {})
         is_unsold = data.get('unsold', False)
         
