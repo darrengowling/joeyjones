@@ -654,6 +654,10 @@ class AuctionStressTest:
         print("\n🚀 Beginning auction...")
         await self._begin_auction()
         
+        # Fetch initial auction state via HTTP (since Socket.IO may not send initial state)
+        print("   Fetching auction state...")
+        await self._fetch_auction_state()
+        
         # Wait for first lot
         print("   Waiting for first lot...")
         timeout = 10
