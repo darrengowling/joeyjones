@@ -436,6 +436,9 @@ class LeagueRunner:
                     if bid_amount <= user.budget_remaining:
                         success = await self._place_bid(user, bid_amount)
                         if success:
+                            # Update local state immediately
+                            self.current_bid = bid_amount
+                            self.current_bidder_id = user.user_id
                             user.teams_won += 1
                             user.budget_remaining -= bid_amount
         
