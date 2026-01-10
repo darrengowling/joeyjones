@@ -327,6 +327,47 @@ class AuctionStressTest:
         """Get the user to use for authenticated requests (commissioner if available)"""
         return self.commissioner if self.commissioner else self.users[0]
     
+    async def _fetch_auction_state(self):
+        """Fetch current auction state via HTTP to initialize local state"""
+        auth_user = self._get_auth_user()
+        url = f"{BASE_URL}/auction/{self.auction_id}"
+        headers = {
+            "Authorization": f"Bearer {auth_user.jwt_token}",
+            "X-User-ID": auth_user.user_id
+        }
+        
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.get(url, headers=headers) as resp:
+                    if resp.status == 200:
+                        data = await resp.json()
+                        auction = data.get('auction', {})
+                        current_club = data.get('currentClub', {})
+                        
+                        status = auction.get('status')
+                        if status == 'active':
+                            self.lot_active = True
+                            self.current_lot_club_id = auction.get('currentClubId')
+                            self.current_lot_club_name = current_club.get('name', 'Unknown')
+                            self.current_bid = auction.get('currentBid') or 0
+                            
+                            bidder = auction.get('currentBidder')
+                            self.current_bidder_id = bidder.get('userId') if bidder else None
+                            
+                            self.lot_start_time = time.time()
+                            
+                            print(f"   ✓ Auction active: {self.current_lot_club_name}")
+                            print(f"   ✓ Current bid: £{self.current_bid/1_000_000:.1f}M" if self.current_bid else "   ✓ No bids yet")
+                        elif status == 'completed':
+                            self.auction_complete = True
+                            print("   ⚠ Auction already completed")
+                        else:
+                            print(f"   ⚠ Auction status: {status}")
+                    else:
+                        print(f"   ⚠ Could not fetch auction state: {resp.status}")
+        except Exception as e:
+            print(f"   ⚠ Error fetching auction state: {e}")
+    
     async def _get_auction(self) -> Optional[Dict]:
         """Get current auction for league"""
         auth_user = self._get_auth_user()
