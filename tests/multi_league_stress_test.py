@@ -206,17 +206,22 @@ class LeagueRunner:
             # Run bidding loop
             await self._run_bidding_loop(all_users)
             
-            # Final poll to get accurate completion stats
-            final_state = await self._get_auction_state()
-            if final_state:
-                completed = final_state.get('completedLots', [])
-                final_sold = len([c for c in completed if c.get('sold')])
-                if final_sold > self.lots_sold:
-                    self.lots_sold = final_sold
-                    self.metrics.lots_sold = final_sold
-                    # Update total spend from completed lots
-                    total_spend = sum(c.get('winningBid', {}).get('amount', 0) for c in completed if c.get('sold'))
+            # Final poll to get accurate completion stats from PARTICIPANTS (ground truth)
+            headers = {"Authorization": f"Bearer {self.league.commissioner.jwt_token}"}
+            async with aiohttp.ClientSession() as session:
+                resp = await session.get(f"{BASE_URL}/leagues/{self.league.league_id}/participants", headers=headers)
+                if resp.status == 200:
+                    data = await resp.json()
+                    participants = data.get('participants', [])
+                    total_clubs = sum(len(p.get('clubsWon', [])) for p in participants)
+                    total_spend = sum(p.get('totalSpent', 0) for p in participants)
+                    
+                    self.lots_sold = total_clubs
+                    self.metrics.lots_sold = total_clubs
                     self.metrics.total_spend = total_spend
+                    self.metrics.rosters_filled = sum(1 for p in participants if len(p.get('clubsWon', [])) >= self.teams_per_roster)
+                    
+                    print(f"   [League {self.league_index}] Final: {total_clubs} clubs won, £{total_spend/1_000_000:.0f}M spent")
             
             self.metrics.status = "completed"
             self.metrics.lots_completed = self.lots_sold
