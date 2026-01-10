@@ -577,7 +577,8 @@ class LeagueRunner:
                         'status': auction.get('status'),
                         'currentBid': auction.get('currentBid') or 0,
                         'currentBidderId': auction.get('currentBidder', {}).get('userId') if auction.get('currentBidder') else None,
-                        'lotId': auction.get('currentLotId') or auction.get('currentClubId'),
+                        'lotId': auction.get('currentLotId'),  # Use currentLotId which includes lot number
+                        'clubId': auction.get('currentClubId'),  # The actual club/asset being auctioned
                         'currentLot': auction.get('currentLot', 0),
                         'rosters': rosters,
                         'completedLots': completed_lots
