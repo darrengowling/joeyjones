@@ -944,14 +944,21 @@ class MultiLeagueStressTest:
         # Final verdict
         print(f"\n{'='*70}")
         if not issues and not warnings:
-            print("🎉 VERDICT: READY FOR PILOT")
+            verdict = "READY FOR PILOT"
+            print(f"🎉 VERDICT: {verdict}")
         elif not issues:
-            print("⚠️  VERDICT: PROCEED WITH CAUTION - Review warnings")
+            verdict = "PROCEED WITH CAUTION - Review warnings"
+            print(f"⚠️  VERDICT: {verdict}")
         else:
-            print("❌ VERDICT: NOT READY - Fix issues before pilot")
+            verdict = "NOT READY - Fix issues before pilot"
+            print(f"❌ VERDICT: {verdict}")
         print(f"{'='*70}")
         
         print("\n" + "=" * 60)
+        
+        # Write results to file
+        self._write_results_file(duration, total_bids, total_success, total_failed, 
+                                  total_sold, passes, warnings, issues, verdict)
 
 
 # ============================================================================
