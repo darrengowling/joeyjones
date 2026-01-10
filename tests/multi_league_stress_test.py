@@ -414,29 +414,24 @@ class LeagueRunner:
         """
         Run bidding until auction completes.
         
-        CRITICAL FIX: The anti-snipe timer extends every time a bid is placed.
-        If we bid continuously, the timer never expires and no lots sell.
-        
         Strategy:
-        1. Only bid if we are NOT the current high bidder
-        2. After bidding, WAIT for the timer to expire (let the other side respond or timer run out)
-        3. Use a longer poll interval than the anti-snipe window
+        1. Poll frequently (every 2s) to detect lot changes
+        2. Only bid ONCE per lot (first eligible non-leading user)
+        3. Wait for the lot to change before bidding again
         """
         timeout = 600  # 10 min max
         start = time.time()
-        
-        # Get league's timer settings (default 10s timer + 10s anti-snipe)
-        timer_seconds = 15  # Wait time after bidding (should be > anti-snipe)
+        poll_interval = 2  # Poll every 2 seconds
         
         # Track which lot we're on to detect lot transitions
         last_lot_id = None
-        bid_placed_this_lot = {}  # Track which users bid on current lot
+        bid_placed_this_lot = False  # Has someone bid on current lot?
         
         while not self.auction_complete and (time.time() - start) < timeout:
             # Poll current auction state
             state = await self._get_auction_state()
             if not state:
-                await asyncio.sleep(2)
+                await asyncio.sleep(poll_interval)
                 continue
             
             if state.get('status') == 'completed':
@@ -447,11 +442,12 @@ class LeagueRunner:
             current_lot_id = state.get('lotId')
             current_bid = state.get('currentBid') or 0
             current_bidder = state.get('currentBidderId')
+            lot_num = state.get('currentLot', 0)
             
             # Detect lot transition (new lot started)
             if current_lot_id != last_lot_id:
                 last_lot_id = current_lot_id
-                bid_placed_this_lot = {}  # Reset tracking for new lot
+                bid_placed_this_lot = False  # Reset for new lot
                 
                 # Update lots_sold from completedLots
                 completed = state.get('completedLots', [])
@@ -459,28 +455,40 @@ class LeagueRunner:
                 if sold_count > self.lots_sold:
                     self.lots_sold = sold_count
                     self.metrics.lots_sold = sold_count
+                
+                # Check if all users have full rosters (auction should end)
+                all_filled = True
+                for u in users:
+                    roster = state.get('rosters', {}).get(u.user_id, 0)
+                    if roster < self.teams_per_roster:
+                        all_filled = False
+                        break
+                
+                if all_filled:
+                    print(f"   [League {self.league_index}] ✓ All rosters filled!")
+                    self.auction_complete = True
+                    break
             
             # ---- BIDDING LOGIC ----
-            # Key insight: We want ONE user to bid, then WAIT.
-            # If no one bids, the timer expires and lot sells (or goes unsold).
-            # IMPORTANT: Alternate between users to ensure fair distribution
+            # Only bid if we haven't already bid on this lot
+            if bid_placed_this_lot:
+                # Already bid on this lot, wait for it to close
+                await asyncio.sleep(poll_interval)
+                continue
             
-            # Select a bidder: rotate through users who are eligible
-            # Use lot number to help distribute lots among users
-            lot_num = state.get('currentLot', 0)
-            
+            # Select a bidder: pick the user with fewest teams who isn't leading
             bidder_selected = None
             eligible_users = []
             
             for user in users:
-                # Skip if already the highest bidder on this lot
+                # Skip if already the highest bidder
                 if current_bidder == user.user_id:
                     continue
                 
                 # Skip if user's roster is full
                 user_roster_count = state.get('rosters', {}).get(user.user_id, 0)
                 if user_roster_count >= self.teams_per_roster:
-                    user.teams_won = user_roster_count  # Track locally
+                    user.teams_won = user_roster_count
                     continue
                 
                 # Check budget
@@ -488,21 +496,17 @@ class LeagueRunner:
                 if bid_amount > user.budget_remaining:
                     continue
                 
-                # This user is eligible
                 eligible_users.append(user)
             
-            # Pick one eligible user - prefer users with fewer teams
             if eligible_users:
-                # Sort by roster count (ascending) - users with fewer teams bid first
-                # Also use the lot number as a tiebreaker to alternate between users
+                # Sort by roster count (ascending), then alternate based on lot number
                 eligible_users.sort(key=lambda u: (state.get('rosters', {}).get(u.user_id, 0), u.email))
                 
-                # Alternate based on lot number if rosters are equal
+                # Alternate between users with same roster count
                 if len(eligible_users) > 1:
                     roster0 = state.get('rosters', {}).get(eligible_users[0].user_id, 0)
                     roster1 = state.get('rosters', {}).get(eligible_users[1].user_id, 0)
                     if roster0 == roster1 and lot_num > 0:
-                        # Alternate: even lots → first user, odd lots → second user
                         idx = lot_num % len(eligible_users)
                         bidder_selected = eligible_users[idx]
                     else:
