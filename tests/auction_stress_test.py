@@ -237,15 +237,31 @@ class AuctionStressTest:
         if len(self.users) < 2:
             raise Exception("Need at least 2 users to run test")
         
-        # Step 3: Join league
+        # Step 3: Join league - ONLY keep users who successfully join
         print(f"\n3. Joining users to league...")
+        joined_users = []
         for user in self.users:
             try:
                 await self._join_league(user)
                 print(f"   ✓ {user.email[:30]}... joined")
+                joined_users.append(user)
             except Exception as e:
-                if "already" not in str(e).lower():
-                    print(f"   ⚠ {user.email[:30]}...: {e}")
+                error_str = str(e).lower()
+                if "already" in error_str or "member" in error_str:
+                    # User is already a member - they can still bid
+                    print(f"   ✓ {user.email[:30]}... (already member)")
+                    joined_users.append(user)
+                elif "full" in error_str:
+                    print(f"   ✗ {user.email[:30]}... CANNOT BID (league full)")
+                else:
+                    print(f"   ✗ {user.email[:30]}... CANNOT BID ({e})")
+        
+        # Replace users list with only those who can actually bid
+        self.users = joined_users
+        print(f"   → {len(self.users)} users can participate in auction")
+        
+        if len(self.users) < 2:
+            raise Exception("Need at least 2 users who are league members to run test. Use --use-existing-members for full leagues.")
         
         # Step 4: Check for existing auction or create new
         print(f"\n4. Checking auction status...")
