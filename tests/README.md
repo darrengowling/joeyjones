@@ -1,6 +1,15 @@
 # Auction Stress Test Suite
 
-Load testing tool for the Sport X auction system.
+Load testing tools for the Sport X auction system.
+
+## Two Test Scripts
+
+| Script | Purpose | Use When |
+|--------|---------|----------|
+| `auction_stress_test.py` | Single league, detailed metrics | Testing bid mechanics, latency |
+| `multi_league_stress_test.py` | Multiple concurrent leagues | Pre-pilot infrastructure validation |
+
+---
 
 ## Quick Start
 
@@ -9,56 +18,89 @@ Load testing tool for the Sport X auction system.
 pip install "python-socketio[asyncio_client]" aiohttp
 ```
 
-### 2. Run Against Production
+### 2. Download Scripts
+Copy these files to your local machine:
+- `auction_stress_test.py` - Single league test
+- `multi_league_stress_test.py` - Multi-league concurrent test
+- `leagues_config_template.json` - Config template
+
+---
+
+## Single League Test (`auction_stress_test.py`)
+
+Tests bid mechanics within ONE league (8 users, 32 teams).
 
 ```bash
-# Single test mode
+# Against production
 python auction_stress_test.py \
   --mode hot-lot \
-  --invite-token YOUR_LEAGUE_TOKEN \
-  --commissioner-email commissioner@email.com \
+  --invite-token YOUR_TOKEN \
+  --commissioner-email YOUR_EMAIL \
   --url https://your-app.emergent.sh \
-  --use-existing-members \
-  --users 10
+  --use-existing-members
 
-# Run ALL test modes (race-condition → hot-lot → full-auction)
+# Run all 3 test modes
 python auction_stress_test.py \
   --mode all \
-  --invite-token YOUR_LEAGUE_TOKEN \
-  --commissioner-email commissioner@email.com \
+  --invite-token YOUR_TOKEN \
+  --commissioner-email YOUR_EMAIL \
   --url https://your-app.emergent.sh \
-  --use-existing-members \
-  --users 10
-```
-
-### 3. Run Against Local/Preview
-```bash
-python auction_stress_test.py \
-  --mode hot-lot \
-  --invite-token YOUR_LEAGUE_TOKEN \
-  --commissioner-email commissioner@email.com \
   --use-existing-members
 ```
 
-## Test Modes
+### Test Modes
+| Mode | What it Tests |
+|------|---------------|
+| `hot-lot` | Aggressive bidding on one team |
+| `race-condition` | Simultaneous bids at same price |
+| `full-auction` | Complete 32-team auction |
+| `all` | Runs all 3 sequentially |
 
-| Mode | Description | Duration | Best For |
-|------|-------------|----------|----------|
-| `hot-lot` | 7+ users bid aggressively on one team | ~5 min | Bid throughput, anti-snipe |
-| `race-condition` | All users bid simultaneously | ~30 sec | Conflict resolution |
-| `full-auction` | Complete 32-team auction | 45-60 min | Sustained load, stability |
-| `all` | Runs all 3 modes sequentially | ~1 hour | Full validation |
+---
 
-## CLI Options
+## Multi-League Test (`multi_league_stress_test.py`)
 
-| Option | Required | Description |
-|--------|----------|-------------|
-| `--mode` | Yes | Test mode: `hot-lot`, `full-auction`, `race-condition`, or `all` |
-| `--invite-token` | Yes | League invite token |
-| `--url` | No | Production URL (default: localhost:8001) |
-| `--commissioner-email` | No | Commissioner's email for privileged operations |
-| `--users` | No | Number of test users (default: 7) |
-| `--use-existing-members` | No | Use existing league members (for full leagues) |
+**This is the pilot readiness test.** Simulates 10-20 leagues running concurrently.
+
+### Setup
+1. Create test leagues in production (each with 8 user slots)
+2. Get invite tokens and commissioner emails for each
+3. Create config file:
+
+```json
+{
+    "leagues": [
+        {"invite_token": "abc123", "commissioner_email": "user1@example.com"},
+        {"invite_token": "def456", "commissioner_email": "user2@example.com"},
+        {"invite_token": "ghi789", "commissioner_email": "user3@example.com"}
+    ],
+    "stagger_seconds": 10
+}
+```
+
+### Run
+```bash
+# Quick validation (single league)
+python multi_league_stress_test.py \
+  --quick-test \
+  --invite-token YOUR_TOKEN \
+  --commissioner-email YOUR_EMAIL \
+  --url https://your-app.emergent.sh
+
+# Full multi-league test (pilot simulation)
+python multi_league_stress_test.py \
+  --config leagues.json \
+  --url https://your-app.emergent.sh \
+  --stagger 10
+```
+
+### What It Tests
+- MongoDB handling writes from 10-20 concurrent auctions
+- Socket.IO managing separate rooms simultaneously
+- Timer accuracy across multiple auctions
+- Overall system stability
+
+---
 
 ## Interpreting Results
 
@@ -66,91 +108,43 @@ python auction_stress_test.py \
 
 | Metric | Good | Warning | Critical |
 |--------|------|---------|----------|
-| Bid Success Rate | >50% | 30-50% | <30% |
-| HTTP Latency p99 | <100ms | 100-500ms | >500ms |
-| Socket Latency p99 | <50ms | 50-200ms | >200ms |
-| Disconnects | 0 | 1-5 | >5 |
+| Leagues completed | 100% | 90-99% | <90% |
+| Bid Latency p99 | <100ms | 100-500ms | >500ms |
+| Lots sold per league | 32 | 20-31 | <20 |
 
-### Expected Behavior
+### Winner Determination (Clarification)
+- First bidder at a price **holds the high bid**
+- They remain high bidder until someone bids **higher**
+- 5 bids at £1M = first bidder wins (others needed to bid £6M+ to outbid)
 
-- **Low success rate in hot-lot** is normal - users are racing for the same bid
-- **Race condition test** should show only 1 bid accepted at the same price
-- **Disconnects at test end** are normal (cleanup)
+---
 
-## Scaling for 400-User Pilot
+## Pilot Readiness Checklist
 
-### Pre-Pilot Checklist
+Before running 400-user pilot:
 
-1. **Create dedicated test league** with 400+ max managers
-2. **Redis adapter** must be configured for multi-pod Socket.IO
-3. **Run tests in waves**: 50 → 100 → 200 → 400 users
-4. **Monitor server resources** during test (CPU, memory, connections)
+- [ ] Run `multi_league_stress_test.py` with 10 concurrent leagues
+- [ ] All leagues complete successfully
+- [ ] p99 latency < 100ms
+- [ ] No Socket.IO disconnection errors
+- [ ] Run `auction_stress_test.py --mode all` for detailed single-league metrics
 
-### Running Large-Scale Test
-
-```bash
-# Wave 1: 50 users
-python auction_stress_test.py --mode hot-lot --url https://prod.app.com \
-  --invite-token TOKEN --commissioner-email EMAIL --users 50
-
-# Wave 2: 100 users  
-python auction_stress_test.py --mode hot-lot --url https://prod.app.com \
-  --invite-token TOKEN --commissioner-email EMAIL --users 100
-
-# Wave 3: Full scale
-python auction_stress_test.py --mode all --url https://prod.app.com \
-  --invite-token TOKEN --commissioner-email EMAIL --users 200
-```
-
-### Expected Bottlenecks at Scale
-
-| Users | Likely Bottleneck | Mitigation |
-|-------|-------------------|------------|
-| 50-100 | None expected | - |
-| 100-200 | Socket.IO broadcasts | Enable Redis adapter |
-| 200-400 | MongoDB writes | Add write concern tuning |
-| 400+ | Single auction instance | Consider sharding by league |
+---
 
 ## Troubleshooting
 
-### "User is not a participant in this league"
-- League is full, use `--use-existing-members`
-- Or create a new league with higher `maxManagers`
+### "League not found"
+- Verify invite token is correct
+- Check league exists in production
 
-### "Only commissioner can begin auction"
-- Add `--commissioner-email` with the league commissioner's email
+### "User is not a participant"
+- League is full (8 users max)
+- Use `--use-existing-members` for single league test
 
-### High failure rate (>70%)
-- Check if auction is in "active" state
-- Verify users are league members
-- Check bid amounts vs budget limits
+### High latency (>500ms)
+- Check network connection to production
+- May indicate database contention - review MongoDB metrics
 
-### Connection timeouts
-- Production may have different Socket.IO path
-- Check firewall/CORS settings
-- Verify WebSocket upgrade is allowed
-
-## Sample Output
-
-```
-============================================================
-STRESS TEST REPORT
-============================================================
-Test Mode:      HOT-LOT
-Duration:       48.1 seconds
-Users:          7
-League:         TestLeague
-
-BID LATENCY (HTTP POST)
-p50:  8ms
-p95:  11ms
-p99:  13ms
-
-SOCKET BROADCAST LATENCY
-p50:  6ms
-p95:  8ms
-
-RECOMMENDATIONS
-✅ Bid latency acceptable (<1s p99)
-✅ Error count acceptable
-```
+### Socket disconnections
+- Production may have WebSocket timeout settings
+- Check if Redis adapter is configured for multi-pod
