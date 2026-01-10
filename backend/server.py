@@ -303,6 +303,22 @@ async def lifespan(app: FastAPI):
 # Create the main app with lifespan management
 app = FastAPI(lifespan=lifespan)
 
+# Root-level health check for Kubernetes liveness/readiness probes
+@app.get("/health")
+async def root_health_check():
+    """
+    Root-level health check for Kubernetes probes.
+    Returns simple 200 OK if the server is running.
+    """
+    try:
+        await db.command("ping")
+        return {"status": "healthy", "database": "connected"}
+    except Exception:
+        return JSONResponse(
+            status_code=503,
+            content={"status": "unhealthy", "database": "disconnected"}
+        )
+
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
 
