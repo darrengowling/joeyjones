@@ -446,10 +446,11 @@ class LeagueRunner:
             lot_num = state.get('currentLot', 0)
             
             # Detect lot transition (new lot started)
-            if current_lot_id != last_lot_id:
+            if current_lot_id != last_lot_id or lot_num != (last_lot_num if 'last_lot_num' in dir() else -1):
                 if last_lot_id is not None:
-                    print(f"      [League {self.league_index}] Lot changed: {last_lot_id[:8] if last_lot_id else 'none'}... -> {current_lot_id[:8] if current_lot_id else 'none'}...")
+                    print(f"      [League {self.league_index}] Lot changed: {lot_num-1 if lot_num > 1 else 0} -> {lot_num}")
                 last_lot_id = current_lot_id
+                last_lot_num = lot_num
                 bid_placed_this_lot = current_lot_id in lots_we_bid_on  # Check if we already bid on this lot
                 
                 # Update lots_sold from completedLots
