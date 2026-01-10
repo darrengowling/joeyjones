@@ -169,7 +169,7 @@ class LeagueRunner:
             print(f"   [League {self.league_index}] ✓ League created: {self.league.league_name}")
             
             # Step 3: Create members and join
-            for i in range(USERS_PER_LEAGUE - 1):  # -1 because commissioner is already a member
+            for i in range(self.users_per_league - 1):  # -1 because commissioner is already a member
                 member_email = f"member-{self.league_index}-{i+1}-{timestamp}@stresstest.local"
                 member = await self._create_user(member_email)
                 await self._join_league(member)
