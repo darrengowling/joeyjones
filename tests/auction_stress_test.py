@@ -211,6 +211,8 @@ class AuctionStressTest:
             try:
                 self.commissioner = await self._create_test_user(self.commissioner_email)
                 print(f"   ✓ Commissioner authenticated (ID: {self.commissioner.user_id[:8]}...)")
+                # Add commissioner to users list so they can participate in bidding
+                self.users.append(self.commissioner)
             except Exception as e:
                 print(f"   ⚠ Failed to authenticate commissioner: {e}")
                 print("   → Will try to proceed without commissioner privileges")
