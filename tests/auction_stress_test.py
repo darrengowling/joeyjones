@@ -689,16 +689,20 @@ class AuctionStressTest:
     
     def _handle_sold(self, data: Dict):
         """Handle lot sold"""
-        winner_id = data.get('winnerId')
-        winner_name = data.get('winnerName', 'Unknown')
-        amount = data.get('amount', 0)
+        winning_bid = data.get('winningBid', {})
+        is_unsold = data.get('unsold', False)
+        
+        winner_id = winning_bid.get('userId') if winning_bid else None
+        winner_name = winning_bid.get('userName', 'Unknown') if winning_bid else None
+        amount = winning_bid.get('amount', 0) if winning_bid else 0
+        club_name = data.get('clubName', self.current_lot_club_name or 'Unknown')
         
         # Find winning user
         winner_email = None
         for user in self.users:
             if user.user_id == winner_id:
                 user.bids_won += 1
-                user.clubs_won.append(self.current_lot_club_name or 'Unknown')
+                user.clubs_won.append(club_name)
                 user.budget_remaining -= amount
                 winner_email = user.email
                 break
@@ -706,16 +710,22 @@ class AuctionStressTest:
         # Record lot result
         duration = time.time() - (self.lot_start_time or time.time())
         self.metrics.lots_completed.append(LotResult(
-            club_name=self.current_lot_club_name or 'Unknown',
+            club_name=club_name,
             winner_email=winner_email,
-            winning_amount=amount,
+            winning_amount=int(amount) if amount else None,
             total_bids=self.lot_bid_count,
             duration_seconds=duration,
             anti_snipe_triggered=self.metrics.anti_snipe_triggers > 0
         ))
         
         self.lot_active = False
-        print(f"   ✓ SOLD: {self.current_lot_club_name} → {winner_name} for £{amount/1_000_000:.1f}M")
+        self.current_bid = 0
+        self.current_bidder_id = None
+        
+        if is_unsold or not winning_bid:
+            print(f"   ✗ UNSOLD: {club_name}")
+        else:
+            print(f"   ✓ SOLD: {club_name} → {winner_name} for £{amount/1_000_000:.1f}M")
     
     def _handle_unsold(self, data: Dict):
         """Handle lot unsold"""
