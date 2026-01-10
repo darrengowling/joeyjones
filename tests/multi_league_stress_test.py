@@ -1029,49 +1029,59 @@ class MultiLeagueStressTest:
         
         # Write JSON file
         json_filename = f"stress_test_results_{timestamp}.json"
-        with open(json_filename, 'w') as f:
-            json.dump(results, f, indent=2)
+        try:
+            with open(json_filename, 'w', encoding='utf-8') as f:
+                json.dump(results, f, indent=2)
+        except Exception as e:
+            print(f"Warning: Could not write JSON file: {e}")
+            json_filename = None
         
-        # Write text summary
+        # Write text summary (ASCII-safe for Windows)
         txt_filename = f"stress_test_results_{timestamp}.txt"
-        with open(txt_filename, 'w') as f:
-            f.write(f"STRESS TEST RESULTS - {timestamp}\n")
-            f.write("=" * 60 + "\n\n")
-            f.write(f"VERDICT: {verdict}\n\n")
-            f.write("CONFIG:\n")
-            f.write(f"  Leagues: {self.num_leagues}\n")
-            f.write(f"  Users per league: {self.users_per_league}\n")
-            f.write(f"  Teams per roster: {self.teams_per_roster}\n")
-            f.write(f"  Target: {BASE_URL}\n\n")
-            f.write("SUMMARY:\n")
-            f.write(f"  Duration: {duration:.1f}s\n")
-            f.write(f"  Leagues completed: {self.global_metrics.leagues_completed}/{self.num_leagues}\n")
-            f.write(f"  Total bids: {total_bids} ({total_success} success, {total_failed} failed)\n")
-            f.write(f"  Lots sold: {total_sold}\n\n")
-            if latency_stats:
-                f.write("LATENCY:\n")
-                f.write(f"  p50: {latency_stats['p50_ms']}ms\n")
-                f.write(f"  p95: {latency_stats['p95_ms']}ms\n")
-                f.write(f"  p99: {latency_stats['p99_ms']}ms\n")
-                f.write(f"  max: {latency_stats['max_ms']}ms\n\n")
-            if passes:
-                f.write("PASSED:\n")
-                for p in passes:
-                    f.write(f"  ✓ {p}\n")
-                f.write("\n")
-            if warnings:
-                f.write("WARNINGS:\n")
-                for w in warnings:
-                    f.write(f"  ⚠ {w}\n")
-                f.write("\n")
-            if issues:
-                f.write("ISSUES:\n")
-                for i in issues:
-                    f.write(f"  ✗ {i}\n")
+        try:
+            with open(txt_filename, 'w', encoding='utf-8') as f:
+                f.write(f"STRESS TEST RESULTS - {timestamp}\n")
+                f.write("=" * 60 + "\n\n")
+                f.write(f"VERDICT: {verdict}\n\n")
+                f.write("CONFIG:\n")
+                f.write(f"  Leagues: {self.num_leagues}\n")
+                f.write(f"  Users per league: {self.users_per_league}\n")
+                f.write(f"  Teams per roster: {self.teams_per_roster}\n")
+                f.write(f"  Target: {BASE_URL}\n\n")
+                f.write("SUMMARY:\n")
+                f.write(f"  Duration: {duration:.1f}s\n")
+                f.write(f"  Leagues completed: {self.global_metrics.leagues_completed}/{self.num_leagues}\n")
+                f.write(f"  Total bids: {total_bids} ({total_success} success, {total_failed} failed)\n")
+                f.write(f"  Lots sold: {total_sold}\n\n")
+                if latency_stats:
+                    f.write("LATENCY:\n")
+                    f.write(f"  p50: {latency_stats['p50_ms']}ms\n")
+                    f.write(f"  p95: {latency_stats['p95_ms']}ms\n")
+                    f.write(f"  p99: {latency_stats['p99_ms']}ms\n")
+                    f.write(f"  max: {latency_stats['max_ms']}ms\n\n")
+                if passes:
+                    f.write("PASSED:\n")
+                    for p in passes:
+                        f.write(f"  [OK] {p}\n")
+                    f.write("\n")
+                if warnings:
+                    f.write("WARNINGS:\n")
+                    for w in warnings:
+                        f.write(f"  [WARN] {w}\n")
+                    f.write("\n")
+                if issues:
+                    f.write("ISSUES:\n")
+                    for i in issues:
+                        f.write(f"  [FAIL] {i}\n")
+        except Exception as e:
+            print(f"Warning: Could not write TXT file: {e}")
+            txt_filename = None
         
-        print(f"\n📄 Results saved to:")
-        print(f"   {json_filename}")
-        print(f"   {txt_filename}")
+        print(f"\nResults saved to:")
+        if json_filename:
+            print(f"   {json_filename}")
+        if txt_filename:
+            print(f"   {txt_filename}")
 
 
 # ============================================================================
