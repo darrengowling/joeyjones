@@ -463,19 +463,17 @@ class LeagueRunner:
             # ---- BIDDING LOGIC ----
             # Key insight: We want ONE user to bid, then WAIT.
             # If no one bids, the timer expires and lot sells (or goes unsold).
+            # IMPORTANT: Alternate between users to ensure fair distribution
             
-            # Debug: Show all users' roster state
-            debug_info = []
-            for u in users:
-                roster_count = state.get('rosters', {}).get(u.user_id, 0)
-                is_bidder = current_bidder == u.user_id
-                can_afford = (current_bid + BID_INCREMENT) <= u.budget_remaining
-                debug_info.append(f"{u.email[:15]}:roster={roster_count},bidder={is_bidder},afford={can_afford}")
+            # Select a bidder: rotate through users who are eligible
+            # Use lot number to help distribute lots among users
+            lot_num = state.get('currentLot', 0)
             
-            # Select a bidder: pick first eligible user who is NOT the current bidder
             bidder_selected = None
+            eligible_users = []
+            
             for user in users:
-                # Skip if already the highest bidder
+                # Skip if already the highest bidder on this lot
                 if current_bidder == user.user_id:
                     continue
                 
@@ -490,9 +488,14 @@ class LeagueRunner:
                 if bid_amount > user.budget_remaining:
                     continue
                 
-                # This user can bid
-                bidder_selected = user
-                break
+                # This user is eligible
+                eligible_users.append(user)
+            
+            # Pick one eligible user - prefer users with fewer teams
+            if eligible_users:
+                # Sort by roster count (ascending) - users with fewer teams bid first
+                eligible_users.sort(key=lambda u: state.get('rosters', {}).get(u.user_id, 0))
+                bidder_selected = eligible_users[0]
             
             if bidder_selected:
                 bid_amount = current_bid + BID_INCREMENT
