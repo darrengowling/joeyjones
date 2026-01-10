@@ -410,57 +410,51 @@ class LeagueRunner:
                     self.current_bid = auction.get('currentBid') or 0
     
     async def _run_bidding_loop(self, users: List[TestUser]):
-        """Run bidding until auction completes"""
-        timeout = 3600  # 1 hour max
+        """Run bidding until auction completes - uses HTTP polling for reliability"""
+        timeout = 600  # 10 min max
         start = time.time()
-        last_progress = time.time()
         
-        async def user_bidder(user: TestUser):
-            """Individual user bidding coroutine"""
-            last_bid_time = 0
-            while not self.auction_complete and (time.time() - start) < timeout:
-                # Skip if already winning - wait for lot to complete
-                if self.current_bidder_id == user.user_id:
-                    await asyncio.sleep(5)
-                    continue
-                
-                # Don't bid more than once every 15 seconds (let timer expire)
-                if time.time() - last_bid_time < 15:
-                    await asyncio.sleep(1)
-                    continue
-                
-                # Place bid
-                bid_amount = (self.current_bid or 0) + BID_INCREMENT
-                if bid_amount <= user.budget_remaining:
-                    success = await self._place_bid(user, bid_amount)
-                    if success:
-                        self.current_bid = bid_amount
-                        self.current_bidder_id = user.user_id
-                        last_bid_time = time.time()
-        
-        # Run all bidders concurrently
-        tasks = [asyncio.create_task(user_bidder(user)) for user in users]
-        
-        # Wait for auction to complete or timeout, with progress updates
         while not self.auction_complete and (time.time() - start) < timeout:
-            await asyncio.sleep(1)
+            # Poll current auction state
+            state = await self._get_auction_state()
+            if not state:
+                await asyncio.sleep(1)
+                continue
             
-            # Poll auction status every 5 seconds (socket events unreliable)
-            if int(time.time() - start) % 5 == 0:
-                await self._poll_auction_state()
+            if state.get('status') == 'completed':
+                self.auction_complete = True
+                break
             
-            # Progress update every 30 seconds
-            if time.time() - last_progress > 30:
-                elapsed = time.time() - start
-                print(f"   [League {self.league_index}] Progress: {self.lots_sold} lots sold, {self.metrics.total_bids} bids, {elapsed:.0f}s elapsed")
-                last_progress = time.time()
-        
-        # Cancel remaining tasks
-        for task in tasks:
-            task.cancel()
+            current_bid = state.get('currentBid') or 0
+            current_bidder = state.get('currentBidderId')
+            
+            # Find a user who should bid
+            for user in users:
+                # Skip if this user is already winning
+                if current_bidder == user.user_id:
+                    continue
+                
+                # Skip if user's roster is full (check from state)
+                user_roster_count = state.get('rosters', {}).get(user.user_id, 0)
+                if user_roster_count >= self.teams_per_roster:
+                    continue
+                
+                # Place a bid
+                bid_amount = current_bid + BID_INCREMENT
+                if bid_amount <= user.budget_remaining:
+                    await self._place_bid(user, bid_amount)
+                    break  # Only one bid per cycle
+            
+            # Wait before next poll/bid cycle
+            await asyncio.sleep(3)
+            
+            # Progress update
+            elapsed = time.time() - start
+            if int(elapsed) % 30 == 0:
+                print(f"   [League {self.league_index}] {self.lots_sold} lots, {self.metrics.total_bids} bids, {elapsed:.0f}s")
     
-    async def _poll_auction_state(self):
-        """Poll auction status via HTTP since socket events are unreliable"""
+    async def _get_auction_state(self) -> Optional[Dict]:
+        """Get current auction state via HTTP"""
         try:
             headers = {"Authorization": f"Bearer {self.league.commissioner.jwt_token}"}
             async with aiohttp.ClientSession() as session:
@@ -468,23 +462,25 @@ class LeagueRunner:
                 if resp.status == 200:
                     data = await resp.json()
                     auction = data.get('auction', {})
-                    status = auction.get('status')
                     
-                    if status == 'completed':
-                        self.auction_complete = True
-                        return
+                    # Update local tracking
+                    self.lots_sold = len([c for c in (auction.get('completedLots') or []) if c.get('sold')])
                     
-                    if status == 'active':
-                        self.lot_active = True
-                        self.current_bid = auction.get('currentBid') or 0
-                        bidder = auction.get('currentBidder')
-                        self.current_bidder_id = bidder.get('userId') if bidder else None
-                        
-                        # Track lots sold
-                        completed = auction.get('completedLots') or []
-                        self.lots_sold = len([c for c in completed if c.get('sold')])
-        except:
-            pass
+                    # Build roster counts from completedLots
+                    rosters = {}
+                    for lot in (auction.get('completedLots') or []):
+                        if lot.get('sold') and lot.get('winnerId'):
+                            rosters[lot['winnerId']] = rosters.get(lot['winnerId'], 0) + 1
+                    
+                    return {
+                        'status': auction.get('status'),
+                        'currentBid': auction.get('currentBid') or 0,
+                        'currentBidderId': auction.get('currentBidder', {}).get('userId') if auction.get('currentBidder') else None,
+                        'rosters': rosters
+                    }
+        except Exception as e:
+            self.metrics.errors.append(f"Poll error: {e}")
+        return None
     
     async def _place_bid(self, user: TestUser, amount: int) -> bool:
         """Place a bid"""
