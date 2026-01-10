@@ -1,7 +1,80 @@
 # Master TODO List - Sport X Platform
 
-**Last Updated:** December 21, 2025  
+**Last Updated:** January 10, 2026  
 **Purpose:** Single source of truth for all work items - issues, bugs, features, and technical debt
+
+---
+
+## 🔴 HIGH PRIORITY - MongoDB Performance Investigation
+
+**Status:** PAUSED - Awaiting infrastructure decision  
+**Last Updated:** January 10, 2026
+
+### Problem Summary
+Production bid latency is ~700ms avg vs ~360ms in preview environment. Root cause identified as **network latency to MongoDB Atlas**.
+
+### Key Findings
+
+| Environment | MongoDB Location | Min Latency | Avg Latency |
+|-------------|------------------|-------------|-------------|
+| Preview | `localhost:27017` | ~306ms | ~360ms |
+| Production | `mongodb.net` (Atlas cloud) | ~640ms | ~700-900ms |
+
+**The ~300-400ms difference is pure network round-trip to remote MongoDB Atlas.**
+
+### Attempted Fixes (Jan 10, 2026)
+
+| Fix | Result | Notes |
+|-----|--------|-------|
+| Remove diagnostic query | ❌ Made worse in prod | Works in preview |
+| Remove duplicate league query | ❌ Made worse in prod | Works in preview |
+| Increase maxPoolSize (5→50) | ❌ No improvement | Pool size not the bottleneck |
+| Both fixes together in preview | ✅ 50% improvement | Confirms fixes work, prod infra is issue |
+
+### Why Fixes Work in Preview but Not Production
+- Preview: DB queries are local (~1-5ms each)
+- Production: Each DB query adds network round-trip (~50-100ms)
+- With 7-8 DB queries per bid, the network overhead dominates
+- Fixes reduce queries but can't eliminate network latency floor
+
+### Options to Investigate
+
+| Option | Effort | Impact | Risk |
+|--------|--------|--------|------|
+| **1. Accept current latency** | None | None | Production stays at ~700ms |
+| **2. Co-locate MongoDB** | High | High | Self-hosted or same-region Atlas |
+| **3. Aggressive caching** | Medium | Medium | Cache invalidation complexity |
+| **4. Reduce DB round-trips** | Medium | Medium | Atomic operations, query batching |
+
+### MongoDB Connection Details (Production)
+```
+mongodb+srv://draft-kings-mobile:***@customer-apps.oxfwhh.mongodb.net/
+?appName=bidding-tester&maxPoolSize=50&retryWrites=true&timeoutMS=10000&w=majority
+```
+
+### Test Results Archive
+
+| Date | Config | Environment | p50 | p95 | p99 |
+|------|--------|-------------|-----|-----|-----|
+| Jan 10 | 5 leagues, 6 users | Preview (with fixes) | 357ms | 407ms | 416ms |
+| Jan 10 | 5 leagues, 6 users | Production (baseline) | 713ms | 818ms | 961ms |
+| Jan 10 | 5 leagues, 6 users | Production (pool=50) | 709ms | 1220ms | 1453ms |
+| Jan 10 | 20 leagues, 8 users | Production | 809ms | 1479ms | 2079ms |
+
+### Files Created
+- `/app/tests/multi_league_stress_test.py` - Automated stress test script
+- `/app/tests/README.md` - Test instructions
+- Results output: `stress_test_results_YYYYMMDD_HHMMSS.json` and `.txt`
+
+### Next Steps (When Ready)
+1. Decide on MongoDB infrastructure approach
+2. If staying with Atlas: Implement aggressive caching (medium risk)
+3. If moving MongoDB: Co-locate with application server
+4. Consider Redis for auction state caching
+
+### External Analysis References
+- Claude analysis: Suggested removing diagnostic queries, caching (partially tested)
+- GPT analysis: Suggested test harness fixes, atomic DB operations (not yet tested)
 
 ---
 
