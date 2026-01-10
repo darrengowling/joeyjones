@@ -628,7 +628,8 @@ class AuctionStressTest:
         url = f"{BASE_URL}/auction/{self.auction_id}/bid"
         headers = {
             "Authorization": f"Bearer {user.jwt_token}",
-            "X-User-ID": user.user_id
+            "X-User-ID": user.user_id,
+            "Content-Type": "application/json"
         }
         
         user.last_bid_sent_at = time.time()
@@ -638,7 +639,7 @@ class AuctionStressTest:
             async with aiohttp.ClientSession() as session:
                 async with session.post(
                     url, 
-                    json={"amount": amount}, 
+                    json={"amount": amount, "userId": user.user_id}, 
                     headers=headers
                 ) as resp:
                     latency_ms = (time.time() - start_time) * 1000
