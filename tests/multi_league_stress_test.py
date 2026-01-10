@@ -283,7 +283,8 @@ class LeagueRunner:
             "budget": STARTING_BUDGET,
             "clubSlots": self.teams_per_roster,
             "commissionerId": commissioner.user_id,
-            "timerSeconds": 10  # Short timer for testing
+            "timerSeconds": 10,  # Short timer for testing
+            "antiSnipeSeconds": 10  # Anti-snipe extension
         }
         
         async with aiohttp.ClientSession() as session:
