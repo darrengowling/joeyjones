@@ -523,12 +523,15 @@ class LeagueRunner:
                     data = await resp.json()
                     auction = data.get('auction', {})
                     
+                    # Get completed lots
+                    completed_lots = auction.get('completedLots') or []
+                    
                     # Update local tracking
-                    self.lots_sold = len([c for c in (auction.get('completedLots') or []) if c.get('sold')])
+                    self.lots_sold = len([c for c in completed_lots if c.get('sold')])
                     
                     # Build roster counts from completedLots
                     rosters = {}
-                    for lot in (auction.get('completedLots') or []):
+                    for lot in completed_lots:
                         if lot.get('sold') and lot.get('winnerId'):
                             rosters[lot['winnerId']] = rosters.get(lot['winnerId'], 0) + 1
                     
@@ -536,7 +539,10 @@ class LeagueRunner:
                         'status': auction.get('status'),
                         'currentBid': auction.get('currentBid') or 0,
                         'currentBidderId': auction.get('currentBidder', {}).get('userId') if auction.get('currentBidder') else None,
-                        'rosters': rosters
+                        'lotId': auction.get('currentLotId') or auction.get('currentClubId'),
+                        'currentLot': auction.get('currentLot', 0),
+                        'rosters': rosters,
+                        'completedLots': completed_lots
                     }
         except Exception as e:
             self.metrics.errors.append(f"Poll error: {e}")
