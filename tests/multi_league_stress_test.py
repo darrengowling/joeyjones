@@ -469,7 +469,7 @@ class LeagueRunner:
                         break
                 
                 if all_filled:
-                    print(f"   [League {self.league_index}] ✓ All rosters filled!")
+                    print(f"   [League {self.league_index}] ✓ All rosters filled! (rosters: {[state.get('rosters', {}).get(u.user_id, 0) for u in users]})")
                     self.auction_complete = True
                     break
             
