@@ -390,6 +390,7 @@ class LeagueRunner:
         """Run bidding until auction completes"""
         timeout = 3600  # 1 hour max
         start = time.time()
+        last_progress = time.time()
         
         async def user_bidder(user: TestUser):
             """Individual user bidding coroutine"""
@@ -423,9 +424,15 @@ class LeagueRunner:
         # Run all bidders concurrently
         tasks = [asyncio.create_task(user_bidder(user)) for user in users]
         
-        # Wait for auction to complete or timeout
+        # Wait for auction to complete or timeout, with progress updates
         while not self.auction_complete and (time.time() - start) < timeout:
             await asyncio.sleep(1)
+            
+            # Progress update every 30 seconds
+            if time.time() - last_progress > 30:
+                elapsed = time.time() - start
+                print(f"   [League {self.league_index}] Progress: {self.lots_sold} lots sold, {self.metrics.total_bids} bids, {elapsed:.0f}s elapsed")
+                last_progress = time.time()
         
         # Cancel remaining tasks
         for task in tasks:
