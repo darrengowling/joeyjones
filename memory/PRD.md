@@ -48,7 +48,9 @@ Build a fantasy sports auction platform where users create leagues, bid on teams
 ### Phase 4: Testing Infrastructure (Complete - Jan 2026)
 - Created Python stress test script: `/app/tests/auction_stress_test.py`
 - Supports hot-lot, full-auction, and race-condition test modes
-- Validates: bid throughput, Socket.IO latency, anti-snipe triggers
+- Fixed Socket.IO event handling to match server events
+- Validates: bid throughput, Socket.IO latency, anti-snipe triggers, race conditions
+- Test results: 56.7% bid success rate (expected for competitive bidding), p99 latency 13ms
 
 ## P0/P1/P2 Features Remaining
 
@@ -77,13 +79,29 @@ Build a fantasy sports auction platform where users create leagues, bid on teams
 
 ## Key Files Reference
 - `/app/backend/server.py` - Main API (monolith, needs refactoring)
-- `/app/tests/auction_stress_test.py` - Load testing script
+- `/app/tests/auction_stress_test.py` - Load testing script (fully functional)
 - `/app/API_REFERENCE.md` - Complete API documentation
 - `/app/DATABASE_SCHEMA.md` - MongoDB schema documentation
 - `/app/MASTER_TODO_LIST.md` - Canonical task tracker
 - `/app/docs/` - Structured documentation
 
+## Stress Test Script Usage
+```bash
+# Hot lot test (aggressive bidding)
+python auction_stress_test.py --mode hot-lot --invite-token TOKEN \
+  --commissioner-email EMAIL --use-existing-members --users 6
+
+# Race condition test (simultaneous bids)
+python auction_stress_test.py --mode race-condition --invite-token TOKEN \
+  --commissioner-email EMAIL --use-existing-members
+
+# Full auction simulation
+python auction_stress_test.py --mode full-auction --invite-token TOKEN \
+  --commissioner-email EMAIL --use-existing-members
+```
+
 ## Important Notes
 - **GitHub Sync**: "Save to GitHub" may create conflict branches - check GitHub and merge PRs manually if deployment doesn't reflect changes
-- **Defensive API Integration**: Fixture import now validates dates before applying scores
-- **Preview Environment**: Test league `load10Jan` (token: `237b0451`) is full (8 members max)
+- **Defensive API Integration**: Fixture import validates dates before applying scores
+- **Socket.IO Events**: Server emits `lot_started`, `bid_update`, `bid_placed`, `sold`, `auction_complete`, `tick`, `auction_snapshot`
+- **Test League**: `load10Jan` (token: `237b0451`) is full (8 members), use `--use-existing-members` flag
