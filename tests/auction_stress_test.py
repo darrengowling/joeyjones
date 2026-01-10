@@ -205,6 +205,16 @@ class AuctionStressTest:
         print(f"   ✓ League: {self.league_name}")
         print(f"   ✓ League ID: {self.league_id}")
         
+        # Step 1.5: Authenticate commissioner if provided
+        if self.commissioner_email:
+            print(f"\n1.5. Authenticating commissioner ({self.commissioner_email})...")
+            try:
+                self.commissioner = await self._create_test_user(self.commissioner_email)
+                print(f"   ✓ Commissioner authenticated (ID: {self.commissioner.user_id[:8]}...)")
+            except Exception as e:
+                print(f"   ⚠ Failed to authenticate commissioner: {e}")
+                print("   → Will try to proceed without commissioner privileges")
+        
         # Step 2: Create test users
         print(f"\n2. Creating {self.num_users} test users...")
         for i in range(self.num_users):
