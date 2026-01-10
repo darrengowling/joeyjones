@@ -959,6 +959,119 @@ class MultiLeagueStressTest:
         # Write results to file
         self._write_results_file(duration, total_bids, total_success, total_failed, 
                                   total_sold, passes, warnings, issues, verdict)
+    
+    def _write_results_file(self, duration, total_bids, total_success, total_failed,
+                            total_sold, passes, warnings, issues, verdict):
+        """Write results to JSON and text files"""
+        import json
+        from datetime import datetime
+        
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        
+        # Calculate latency stats
+        latencies = self.global_metrics.all_latencies_ms
+        latency_stats = {}
+        if latencies:
+            sorted_lat = sorted(latencies)
+            latency_stats = {
+                "count": len(latencies),
+                "avg_ms": sum(latencies) / len(latencies),
+                "p50_ms": sorted_lat[len(sorted_lat) // 2],
+                "p95_ms": sorted_lat[int(len(sorted_lat) * 0.95)] if len(sorted_lat) > 1 else sorted_lat[0],
+                "p99_ms": sorted_lat[int(len(sorted_lat) * 0.99)] if len(sorted_lat) > 1 else sorted_lat[0],
+                "max_ms": max(latencies),
+                "min_ms": min(latencies)
+            }
+        
+        # Build results dict
+        results = {
+            "timestamp": timestamp,
+            "config": {
+                "leagues": self.num_leagues,
+                "users_per_league": self.users_per_league,
+                "teams_per_roster": self.teams_per_roster,
+                "stagger_seconds": self.stagger_seconds,
+                "target_url": BASE_URL
+            },
+            "summary": {
+                "duration_seconds": round(duration, 1),
+                "leagues_completed": self.global_metrics.leagues_completed,
+                "leagues_failed": self.global_metrics.leagues_failed,
+                "total_users": self.global_metrics.leagues_completed * self.users_per_league,
+                "total_bids": total_bids,
+                "successful_bids": total_success,
+                "failed_bids": total_failed,
+                "bid_success_rate": round(total_success / total_bids * 100, 1) if total_bids > 0 else 0,
+                "lots_sold": total_sold,
+                "socket_events": sum(m.socket_events_received for m in self.league_metrics)
+            },
+            "latency": latency_stats,
+            "verdict": verdict,
+            "passes": passes,
+            "warnings": warnings,
+            "issues": issues,
+            "per_league": []
+        }
+        
+        # Add per-league details
+        for m in self.league_metrics:
+            league_data = {
+                "name": m.league_name,
+                "status": m.status,
+                "duration_seconds": round(m.end_time - m.start_time, 1) if m.end_time and m.start_time else 0,
+                "lots_sold": m.lots_sold,
+                "total_bids": m.total_bids,
+                "success_rate": round(m.successful_bids / m.total_bids * 100, 1) if m.total_bids > 0 else 0,
+                "socket_events": m.socket_events_received,
+                "errors": m.errors[:5] if m.errors else []  # First 5 errors
+            }
+            results["per_league"].append(league_data)
+        
+        # Write JSON file
+        json_filename = f"stress_test_results_{timestamp}.json"
+        with open(json_filename, 'w') as f:
+            json.dump(results, f, indent=2)
+        
+        # Write text summary
+        txt_filename = f"stress_test_results_{timestamp}.txt"
+        with open(txt_filename, 'w') as f:
+            f.write(f"STRESS TEST RESULTS - {timestamp}\n")
+            f.write("=" * 60 + "\n\n")
+            f.write(f"VERDICT: {verdict}\n\n")
+            f.write("CONFIG:\n")
+            f.write(f"  Leagues: {self.num_leagues}\n")
+            f.write(f"  Users per league: {self.users_per_league}\n")
+            f.write(f"  Teams per roster: {self.teams_per_roster}\n")
+            f.write(f"  Target: {BASE_URL}\n\n")
+            f.write("SUMMARY:\n")
+            f.write(f"  Duration: {duration:.1f}s\n")
+            f.write(f"  Leagues completed: {self.global_metrics.leagues_completed}/{self.num_leagues}\n")
+            f.write(f"  Total bids: {total_bids} ({total_success} success, {total_failed} failed)\n")
+            f.write(f"  Lots sold: {total_sold}\n\n")
+            if latency_stats:
+                f.write("LATENCY:\n")
+                f.write(f"  p50: {latency_stats['p50_ms']}ms\n")
+                f.write(f"  p95: {latency_stats['p95_ms']}ms\n")
+                f.write(f"  p99: {latency_stats['p99_ms']}ms\n")
+                f.write(f"  max: {latency_stats['max_ms']}ms\n\n")
+            if passes:
+                f.write("PASSED:\n")
+                for p in passes:
+                    f.write(f"  ✓ {p}\n")
+                f.write("\n")
+            if warnings:
+                f.write("WARNINGS:\n")
+                for w in warnings:
+                    f.write(f"  ⚠ {w}\n")
+                f.write("\n")
+            if issues:
+                f.write("ISSUES:\n")
+                for i in issues:
+                    f.write(f"  ✗ {i}\n")
+        
+        print(f"\n📄 Results saved to:")
+        print(f"   {json_filename}")
+        print(f"   {txt_filename}")
 
 
 # ============================================================================
