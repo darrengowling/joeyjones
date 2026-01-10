@@ -285,13 +285,14 @@ class AuctionStressTest:
                 if not magic_token:
                     raise Exception("No token returned - are you in production mode?")
             
-            # Verify magic link
+            # Verify magic link - API requires both email and token
             url = f"{BASE_URL}/auth/verify-magic-link"
-            async with session.post(url, json={"token": magic_token}) as resp:
+            async with session.post(url, json={"email": email, "token": magic_token}) as resp:
                 if resp.status != 200:
                     raise Exception(f"Magic link verify failed: {await resp.text()}")
                 data = await resp.json()
-                user.jwt_token = data['token']
+                # API returns accessToken, not token
+                user.jwt_token = data.get('accessToken') or data.get('token')
                 user.user_id = data['user']['id']
         
         return user
