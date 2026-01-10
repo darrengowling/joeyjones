@@ -379,11 +379,15 @@ class LeagueRunner:
             all_users = [self.league.commissioner] + self.league.members
             for user in all_users:
                 if user.socket_client and user.connected:
-                    await user.socket_client.emit('join_auction', {
-                        'auctionId': self.league.auction_id,
-                        'userId': user.user_id
-                    })
-                    await asyncio.sleep(0.05)  # Small delay to avoid overwhelming
+                    try:
+                        await user.socket_client.emit('join_auction', {
+                            'auctionId': self.league.auction_id,
+                            'userId': user.user_id
+                        })
+                    except Exception as e:
+                        self.metrics.errors.append(f"join_auction emit failed: {e}")
+            
+            await asyncio.sleep(0.5)  # Wait for room joins to process
             
             # Begin auction (start first lot)
             resp = await session.post(
