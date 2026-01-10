@@ -206,6 +206,18 @@ class LeagueRunner:
             # Run bidding loop
             await self._run_bidding_loop(all_users)
             
+            # Final poll to get accurate completion stats
+            final_state = await self._get_auction_state()
+            if final_state:
+                completed = final_state.get('completedLots', [])
+                final_sold = len([c for c in completed if c.get('sold')])
+                if final_sold > self.lots_sold:
+                    self.lots_sold = final_sold
+                    self.metrics.lots_sold = final_sold
+                    # Update total spend from completed lots
+                    total_spend = sum(c.get('winningBid', {}).get('amount', 0) for c in completed if c.get('sold'))
+                    self.metrics.total_spend = total_spend
+            
             self.metrics.status = "completed"
             self.metrics.lots_completed = self.lots_sold
             
