@@ -971,13 +971,18 @@ Examples:
         default=7,
         help="Number of test users (default: 7)"
     )
+    parser.add_argument(
+        "--commissioner-email",
+        help="Email of the league commissioner (required to start auction)"
+    )
     
     args = parser.parse_args()
     
     test = AuctionStressTest(
         invite_token=args.invite_token,
         mode=args.mode,
-        num_users=args.users
+        num_users=args.users,
+        commissioner_email=args.commissioner_email
     )
     
     try:
