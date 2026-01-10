@@ -305,7 +305,7 @@ class AuctionStressTest:
         async with aiohttp.ClientSession() as session:
             async with session.post(
                 url, 
-                json={"inviteToken": self.invite_token}, 
+                json={"inviteToken": self.invite_token, "userId": user.user_id}, 
                 headers=headers
             ) as resp:
                 if resp.status not in [200, 409]:  # 409 = already joined
