@@ -439,8 +439,7 @@ class LeagueRunner:
                             # Update local state immediately
                             self.current_bid = bid_amount
                             self.current_bidder_id = user.user_id
-                            user.teams_won += 1
-                            user.budget_remaining -= bid_amount
+                            # Don't increment teams_won here - wait for lot to complete
         
         # Run all bidders concurrently
         tasks = [asyncio.create_task(user_bidder(user)) for user in users]
