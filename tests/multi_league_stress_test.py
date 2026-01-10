@@ -450,9 +450,9 @@ class LeagueRunner:
         while not self.auction_complete and (time.time() - start) < timeout:
             await asyncio.sleep(1)
             
-            # Poll auction status every 10 seconds (fallback for socket issues)
-            if int(time.time() - start) % 10 == 0:
-                await self._check_auction_complete()
+            # Poll auction status every 5 seconds (socket events unreliable)
+            if int(time.time() - start) % 5 == 0:
+                await self._poll_auction_state()
             
             # Progress update every 30 seconds
             if time.time() - last_progress > 30:
