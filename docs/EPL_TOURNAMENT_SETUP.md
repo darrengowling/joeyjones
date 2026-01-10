@@ -106,23 +106,23 @@ All teams include API-FOOTBALL team IDs for automated score updates:
 
 **Manual Score Update** (Recommended for Nov 29-30)
 ```bash
-curl -X POST https://fixturemaster.preview.emergentagent.com/api/fixtures/update-scores \
+curl -X POST https://bidding-tester.preview.emergentagent.com/api/fixtures/update-scores \
   -H "Content-Type: application/json"
 ```
 
 **Get All Fixtures**
 ```bash
-curl https://fixturemaster.preview.emergentagent.com/api/fixtures?sport_key=football
+curl https://bidding-tester.preview.emergentagent.com/api/fixtures?sport_key=football
 ```
 
 **Get Fixtures by Date**
 ```bash
-curl https://fixturemaster.preview.emergentagent.com/api/fixtures?sport_key=football&date=2025-11-29
+curl https://bidding-tester.preview.emergentagent.com/api/fixtures?sport_key=football&date=2025-11-29
 ```
 
 **Get Specific Fixture**
 ```bash
-curl https://fixturemaster.preview.emergentagent.com/api/fixtures/{fixture_id}
+curl https://bidding-tester.preview.emergentagent.com/api/fixtures/{fixture_id}
 ```
 
 ### Update Frequency Strategy

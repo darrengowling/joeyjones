@@ -1224,10 +1224,10 @@ tail -f /var/log/supervisor/backend.err.log
 ### Health Checks
 ```bash
 # API health
-curl https://fixturemaster.preview.emergentagent.com/api/health
+curl https://bidding-tester.preview.emergentagent.com/api/health
 
 # Frontend
-curl -I https://fixturemaster.preview.emergentagent.com
+curl -I https://bidding-tester.preview.emergentagent.com
 ```
 
 ### Backups
@@ -1246,7 +1246,7 @@ curl -I https://fixturemaster.preview.emergentagent.com
 ```bash
 # API load test (150 users)
 cd /app/tests/load
-locust -f locustfile.py --host=https://fixturemaster.preview.emergentagent.com --users=150 --spawn-rate=10 --run-time=10m --headless
+locust -f locustfile.py --host=https://bidding-tester.preview.emergentagent.com --users=150 --spawn-rate=10 --run-time=10m --headless
 
 # Socket.IO auction test
 source /tmp/test_auction_env.sh

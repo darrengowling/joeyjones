@@ -5,7 +5,7 @@
 
 import { test, expect, chromium, Browser, BrowserContext, Page } from '@playwright/test';
 
-const BASE_URL = 'https://fixturemaster.preview.emergentagent.com';
+const BASE_URL = 'https://bidding-tester.preview.emergentagent.com';
 
 test.describe('02 - Non-Commissioner Authorization', () => {
   let browserA: Browser;

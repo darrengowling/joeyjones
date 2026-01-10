@@ -13,7 +13,7 @@ from datetime import datetime, timezone
 from typing import Dict, List, Optional
 
 # Configuration
-BASE_URL = "https://fixturemaster.preview.emergentagent.com/api"
+BASE_URL = "https://bidding-tester.preview.emergentagent.com/api"
 
 class Prompt6SafetyTester:
     def __init__(self):

@@ -7,7 +7,7 @@ import requests
 import time
 from datetime import datetime
 
-BASE_URL = "https://fixturemaster.preview.emergentagent.com/api"
+BASE_URL = "https://bidding-tester.preview.emergentagent.com/api"
 
 def log(message: str, level: str = "INFO"):
     timestamp = datetime.now().strftime("%H:%M:%S")

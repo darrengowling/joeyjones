@@ -180,7 +180,7 @@
 - Frontend: React (hot reload enabled)
 - Backend: FastAPI (Python)
 - Database: MongoDB (local)
-- Preview URL: https://fixturemaster.preview.emergentagent.com
+- Preview URL: https://bidding-tester.preview.emergentagent.com
 
 **Key Endpoints:**
 - `/api/leagues` - Create/list leagues

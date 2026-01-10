@@ -15,8 +15,8 @@ from typing import Dict, List, Optional
 from concurrent.futures import ThreadPoolExecutor
 
 # Configuration
-BASE_URL = "https://fixturemaster.preview.emergentagent.com/api"
-SOCKET_URL = "https://fixturemaster.preview.emergentagent.com"
+BASE_URL = "https://bidding-tester.preview.emergentagent.com/api"
+SOCKET_URL = "https://bidding-tester.preview.emergentagent.com"
 SOCKET_PATH = "/api/socket.io"
 
 class BidBroadcastingTester:

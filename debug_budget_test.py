@@ -7,7 +7,7 @@ import requests
 import json
 import time
 
-BASE_URL = "https://fixturemaster.preview.emergentagent.com/api"
+BASE_URL = "https://bidding-tester.preview.emergentagent.com/api"
 
 def test_budget_reserve():
     session = requests.Session()
