@@ -463,6 +463,14 @@ class LeagueRunner:
             # Key insight: We want ONE user to bid, then WAIT.
             # If no one bids, the timer expires and lot sells (or goes unsold).
             
+            # Debug: Show all users' roster state
+            debug_info = []
+            for u in users:
+                roster_count = state.get('rosters', {}).get(u.user_id, 0)
+                is_bidder = current_bidder == u.user_id
+                can_afford = (current_bid + BID_INCREMENT) <= u.budget_remaining
+                debug_info.append(f"{u.email[:15]}:roster={roster_count},bidder={is_bidder},afford={can_afford}")
+            
             # Select a bidder: pick first eligible user who is NOT the current bidder
             bidder_selected = None
             for user in users:
