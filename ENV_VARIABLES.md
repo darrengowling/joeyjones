@@ -134,7 +134,7 @@ DB_NAME=test_database
 # ... rest auto-configured
 
 # Frontend .env (auto-configured)
-REACT_APP_BACKEND_URL=https://your-preview.preview.emergentagent.com
+REACT_APP_BACKEND_URL=https://fixturemaster.preview.emergentagent.com
 ```
 
 ### Emergent Production

@@ -63,7 +63,7 @@ CORS_ORIGINS="*"
 
 **After:**
 ```bash
-CORS_ORIGINS="https://bid-ux-update.preview.emergentagent.com"
+CORS_ORIGINS="https://fixturemaster.preview.emergentagent.com"
 ```
 
 **Note:** For multiple origins (e.g., production + staging), use comma-separated list:
@@ -76,7 +76,7 @@ CORS_ORIGINS="https://prod-domain.com,https://staging-domain.com"
 ## Configuration Reference
 
 ### Allowed Origins
-- **Current:** `https://bid-ux-update.preview.emergentagent.com`
+- **Current:** `https://fixturemaster.preview.emergentagent.com`
 - **Format:** Comma-separated list of full URLs (with protocol)
 - **Default:** `http://localhost:3000` (if env var not set)
 
@@ -107,14 +107,14 @@ CORS_ORIGINS="https://prod-domain.com,https://staging-domain.com"
 
 ### Test 1: Preflight from Allowed Origin ✅
 ```bash
-curl -X OPTIONS "https://bid-ux-update.preview.emergentagent.com/api/sports" \
-  -H "Origin: https://bid-ux-update.preview.emergentagent.com" \
+curl -X OPTIONS "https://fixturemaster.preview.emergentagent.com/api/sports" \
+  -H "Origin: https://fixturemaster.preview.emergentagent.com" \
   -H "Access-Control-Request-Method: GET"
 ```
 
 **Result:** ✅ PASS
 ```
-access-control-allow-origin: https://bid-ux-update.preview.emergentagent.com
+access-control-allow-origin: https://fixturemaster.preview.emergentagent.com
 access-control-allow-methods: GET, POST, PUT, DELETE, OPTIONS
 access-control-allow-headers: Accept, Authorization, Content-Type
 access-control-max-age: 600
@@ -122,19 +122,19 @@ access-control-max-age: 600
 
 ### Test 2: GET Request from Allowed Origin ✅
 ```bash
-curl -X GET "https://bid-ux-update.preview.emergentagent.com/api/sports" \
-  -H "Origin: https://bid-ux-update.preview.emergentagent.com"
+curl -X GET "https://fixturemaster.preview.emergentagent.com/api/sports" \
+  -H "Origin: https://fixturemaster.preview.emergentagent.com"
 ```
 
 **Result:** ✅ PASS
 ```
-access-control-allow-origin: https://bid-ux-update.preview.emergentagent.com
+access-control-allow-origin: https://fixturemaster.preview.emergentagent.com
 access-control-allow-credentials: true
 ```
 
 ### Test 3: Preflight from Blocked Origin ✅
 ```bash
-curl -X OPTIONS "https://bid-ux-update.preview.emergentagent.com/api/sports" \
+curl -X OPTIONS "https://fixturemaster.preview.emergentagent.com/api/sports" \
   -H "Origin: https://evil-hacker.com" \
   -H "Access-Control-Request-Method: GET"
 ```
@@ -147,7 +147,7 @@ Disallowed CORS origin
 
 ### Test 4: GET Request from Blocked Origin ✅
 ```bash
-curl -X GET "https://bid-ux-update.preview.emergentagent.com/api/sports" \
+curl -X GET "https://fixturemaster.preview.emergentagent.com/api/sports" \
   -H "Origin: https://evil-hacker.com"
 ```
 
@@ -358,7 +358,7 @@ Current implementation logs:
 {
   "method": "OPTIONS",
   "path": "/api/sports",
-  "origin": "https://bid-ux-update.preview.emergentagent.com",
+  "origin": "https://fixturemaster.preview.emergentagent.com",
   "cors_allowed": true,
   "status": 200
 }
@@ -396,15 +396,15 @@ Current implementation logs:
 cat /app/backend/.env | grep CORS_ORIGINS
 
 # Test endpoint with curl
-curl -X OPTIONS "https://bid-ux-update.preview.emergentagent.com/api/health" \
-  -H "Origin: https://bid-ux-update.preview.emergentagent.com" \
+curl -X OPTIONS "https://fixturemaster.preview.emergentagent.com/api/health" \
+  -H "Origin: https://fixturemaster.preview.emergentagent.com" \
   -i | grep -i access-control
 ```
 
 ### Test CORS from Browser Console
 ```javascript
 // Paste in browser console
-fetch('https://bid-ux-update.preview.emergentagent.com/api/sports', {
+fetch('https://fixturemaster.preview.emergentagent.com/api/sports', {
   credentials: 'include',
   headers: { 'Content-Type': 'application/json' }
 })

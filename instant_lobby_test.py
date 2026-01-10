@@ -24,7 +24,7 @@ import time
 import uuid
 
 # Get backend URL from environment
-BACKEND_URL = os.getenv('REACT_APP_BACKEND_URL', 'https://bid-ux-update.preview.emergentagent.com')
+BACKEND_URL = os.getenv('REACT_APP_BACKEND_URL', 'https://fixturemaster.preview.emergentagent.com')
 API_BASE = f"{BACKEND_URL}/api"
 SOCKET_URL = f"{BACKEND_URL}/api/socket.io"
 

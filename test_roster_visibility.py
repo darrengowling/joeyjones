@@ -7,7 +7,7 @@ import requests
 import json
 import time
 
-BASE_URL = "https://bid-ux-update.preview.emergentagent.com/api"
+BASE_URL = "https://fixturemaster.preview.emergentagent.com/api"
 
 def test_roster_visibility():
     session = requests.Session()
