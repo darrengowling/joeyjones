@@ -1049,6 +1049,11 @@ Examples:
         "--commissioner-email",
         help="Email of the league commissioner (required to start auction)"
     )
+    parser.add_argument(
+        "--use-existing-members",
+        action="store_true",
+        help="Use existing league members as test users (for full leagues)"
+    )
     
     args = parser.parse_args()
     
@@ -1056,7 +1061,8 @@ Examples:
         invite_token=args.invite_token,
         mode=args.mode,
         num_users=args.users,
-        commissioner_email=args.commissioner_email
+        commissioner_email=args.commissioner_email,
+        use_existing_members=args.use_existing_members
     )
     
     try:
