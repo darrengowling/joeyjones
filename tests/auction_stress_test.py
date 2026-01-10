@@ -1157,27 +1157,34 @@ class AuctionStressTest:
 # ============================================================================
 
 async def main():
+    global BASE_URL, SOCKET_URL
+    
     parser = argparse.ArgumentParser(
         description="Auction Stress Test Suite",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-    # Quick chaos test on first lot
+    # Test against local/preview environment
     python auction_stress_test.py --mode hot-lot --invite-token abc123
+
+    # Test against production
+    python auction_stress_test.py --mode hot-lot --invite-token abc123 \\
+        --url https://your-app.emergent.sh --commissioner-email you@email.com
     
-    # Full auction simulation
-    python auction_stress_test.py --mode full-auction --invite-token abc123
+    # Full test suite against production
+    python auction_stress_test.py --mode all --invite-token abc123 \\
+        --url https://your-app.emergent.sh --commissioner-email you@email.com
     
-    # Race condition test
-    python auction_stress_test.py --mode race-condition --invite-token abc123
+    # Scale test with more users
+    python auction_stress_test.py --mode hot-lot --invite-token abc123 --users 50
         """
     )
     
     parser.add_argument(
         "--mode", 
         required=True,
-        choices=["hot-lot", "full-auction", "race-condition"],
-        help="Test mode to run"
+        choices=["hot-lot", "full-auction", "race-condition", "all"],
+        help="Test mode to run ('all' runs all 3 tests sequentially)"
     )
     parser.add_argument(
         "--invite-token",
@@ -1199,24 +1206,81 @@ Examples:
         action="store_true",
         help="Use existing league members as test users (for full leagues)"
     )
+    parser.add_argument(
+        "--url",
+        help="Base URL for the API (e.g., https://your-app.emergent.sh). Defaults to localhost:8001"
+    )
     
     args = parser.parse_args()
     
-    test = AuctionStressTest(
-        invite_token=args.invite_token,
-        mode=args.mode,
-        num_users=args.users,
-        commissioner_email=args.commissioner_email,
-        use_existing_members=args.use_existing_members
-    )
+    # Set URLs from CLI args
+    if args.url:
+        # Remove trailing slash if present
+        base = args.url.rstrip('/')
+        BASE_URL = f"{base}/api"
+        SOCKET_URL = base
+        print(f"🌐 Target: {base}")
+    else:
+        BASE_URL = DEFAULT_BASE_URL
+        SOCKET_URL = DEFAULT_SOCKET_URL
+        print("🏠 Target: localhost:8001 (use --url for production)")
     
-    try:
-        await test.setup()
-        await test.run_test()
-    except KeyboardInterrupt:
-        print("\n\n⚠️  Test interrupted by user")
-    except Exception as e:
-        print(f"\n\n❌ Test failed: {e}")
+    # Determine which modes to run
+    if args.mode == "all":
+        modes = ["race-condition", "hot-lot", "full-auction"]
+        print(f"\n🔄 Running ALL test modes: {', '.join(modes)}\n")
+    else:
+        modes = [args.mode]
+    
+    all_results = []
+    
+    for mode in modes:
+        print(f"\n{'='*60}")
+        print(f"STARTING TEST: {mode.upper()}")
+        print(f"{'='*60}")
+        
+        test = AuctionStressTest(
+            invite_token=args.invite_token,
+            mode=mode,
+            num_users=args.users,
+            commissioner_email=args.commissioner_email,
+            use_existing_members=args.use_existing_members
+        )
+        
+        try:
+            await test.setup()
+            await test.run_test()
+            all_results.append((mode, test.metrics, "SUCCESS"))
+        except KeyboardInterrupt:
+            print("\n\n⚠️  Test interrupted by user")
+            all_results.append((mode, test.metrics, "INTERRUPTED"))
+            break
+        except Exception as e:
+            print(f"\n\n❌ Test failed: {e}")
+            import traceback
+            traceback.print_exc()
+            all_results.append((mode, test.metrics, f"FAILED: {e}"))
+        finally:
+            test.generate_report()
+        
+        # Brief pause between tests
+        if len(modes) > 1 and mode != modes[-1]:
+            print("\n⏳ Pausing 5 seconds before next test...\n")
+            await asyncio.sleep(5)
+    
+    # Summary if running all tests
+    if len(modes) > 1:
+        print("\n" + "=" * 60)
+        print("FULL TEST SUITE SUMMARY")
+        print("=" * 60)
+        for mode, metrics, status in all_results:
+            success_rate = metrics.bid_success_rate()
+            p99 = metrics.percentile(metrics.bid_latencies_ms, 99) if metrics.bid_latencies_ms else 0
+            print(f"\n{mode.upper()}:")
+            print(f"   Status: {status}")
+            print(f"   Bids: {len(metrics.bids)}, Success Rate: {success_rate:.1f}%")
+            print(f"   Latency p99: {p99:.0f}ms")
+            print(f"   Lots: {len(metrics.lots_completed)}, Errors: {len(metrics.errors)}")
         import traceback
         traceback.print_exc()
     finally:
