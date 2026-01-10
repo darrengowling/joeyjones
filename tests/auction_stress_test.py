@@ -288,6 +288,40 @@ class AuctionStressTest:
                 if not self.league_id:
                     raise Exception(f"League ID not found in response: {data}")
     
+    async def _authenticate_existing_members(self):
+        """Authenticate existing league members as test users"""
+        url = f"{BASE_URL}/leagues/{self.league_id}/members"
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url) as resp:
+                if resp.status != 200:
+                    raise Exception(f"Failed to get members: {await resp.text()}")
+                members = await resp.json()
+        
+        # Filter to stress-test users (not the commissioner)
+        test_members = [m for m in members if 'stress-test' in m.get('displayName', '').lower()]
+        
+        # Limit to num_users
+        test_members = test_members[:self.num_users]
+        
+        for member in test_members:
+            # Construct email from displayName (stress-test users use displayName@test.local)
+            display_name = member.get('displayName', '')
+            email = f"{display_name}@test.local"
+            
+            try:
+                user = await self._create_test_user(email)
+                # Verify the user ID matches
+                if user.user_id == member.get('userId'):
+                    self.users.append(user)
+                    print(f"   ✓ {email[:30]}... authenticated (ID: {user.user_id[:8]}...)")
+                else:
+                    print(f"   ⚠ {email}: User ID mismatch")
+            except Exception as e:
+                print(f"   ⚠ {email}: {e}")
+        
+        if len(self.users) == 0:
+            print("   ⚠ No existing stress-test members found. Will create new users.")
+
     async def _create_test_user(self, email: str) -> TestUser:
         """Create a test user via magic link (works in preview/dev mode)"""
         user = TestUser(email=email)
