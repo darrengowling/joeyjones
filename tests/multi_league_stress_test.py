@@ -417,23 +417,26 @@ class LeagueRunner:
         
         async def user_bidder(user: TestUser):
             """Individual user bidding coroutine"""
+            last_bid_time = 0
             while not self.auction_complete and (time.time() - start) < timeout:
-                # Skip if already winning - let timer expire
+                # Skip if already winning - wait for lot to complete
                 if self.current_bidder_id == user.user_id:
-                    await asyncio.sleep(2)
+                    await asyncio.sleep(5)
                     continue
                 
-                # Random delay before bidding
-                await asyncio.sleep(random.uniform(1.0, 3.0))
+                # Don't bid more than once every 15 seconds (let timer expire)
+                if time.time() - last_bid_time < 15:
+                    await asyncio.sleep(1)
+                    continue
                 
-                # Place bid if not winning
-                if self.current_bidder_id != user.user_id and not self.auction_complete:
-                    bid_amount = (self.current_bid or 0) + BID_INCREMENT
-                    if bid_amount <= user.budget_remaining:
-                        success = await self._place_bid(user, bid_amount)
-                        if success:
-                            self.current_bid = bid_amount
-                            self.current_bidder_id = user.user_id
+                # Place bid
+                bid_amount = (self.current_bid or 0) + BID_INCREMENT
+                if bid_amount <= user.budget_remaining:
+                    success = await self._place_bid(user, bid_amount)
+                    if success:
+                        self.current_bid = bid_amount
+                        self.current_bidder_id = user.user_id
+                        last_bid_time = time.time()
         
         # Run all bidders concurrently
         tasks = [asyncio.create_task(user_bidder(user)) for user in users]
