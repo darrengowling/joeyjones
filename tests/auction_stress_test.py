@@ -323,12 +323,17 @@ class AuctionStressTest:
                 if resp.status not in [200, 409]:  # 409 = already joined
                     raise Exception(f"Join failed: {await resp.text()}")
     
+    def _get_auth_user(self) -> TestUser:
+        """Get the user to use for authenticated requests (commissioner if available)"""
+        return self.commissioner if self.commissioner else self.users[0]
+    
     async def _get_auction(self) -> Optional[Dict]:
         """Get current auction for league"""
+        auth_user = self._get_auth_user()
         url = f"{BASE_URL}/leagues/{self.league_id}/auction"
         headers = {
-            "Authorization": f"Bearer {self.users[0].jwt_token}",
-            "X-User-ID": self.users[0].user_id
+            "Authorization": f"Bearer {auth_user.jwt_token}",
+            "X-User-ID": auth_user.user_id
         }
         
         async with aiohttp.ClientSession() as session:
