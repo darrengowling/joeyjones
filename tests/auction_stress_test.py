@@ -708,8 +708,16 @@ class AuctionStressTest:
                         user.bids_failed += 1
                         
                         # Track specific failure reasons
-                        if "outbid" in error_text.lower() or "higher" in error_text.lower():
+                        error_lower = error_text.lower()
+                        if "outbid" in error_lower or "higher" in error_lower:
                             user.bids_outbid += 1
+                        elif "participant" in error_lower or "member" in error_lower:
+                            # Critical: user can't bid at all
+                            if not hasattr(self, '_warned_non_member'):
+                                self._warned_non_member = set()
+                            if user.email not in self._warned_non_member:
+                                print(f"\n   ⛔ {user.email[:20]}... NOT A LEAGUE MEMBER - removing from test")
+                                self._warned_non_member.add(user.email)
                     
                     user.bids_placed += 1
                     
