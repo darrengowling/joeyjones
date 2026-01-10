@@ -546,8 +546,17 @@ class AuctionStressTest:
         async def on_bid_update(data):
             self._handle_bid_update(data, user)
         
+        @sio.on('bid_placed')
+        async def on_bid_placed(data):
+            # Legacy event - also handle this
+            self._handle_bid_placed(data, user)
+        
         @sio.on('timer_sync')
         async def on_timer_sync(data):
+            self._handle_timer_sync(data)
+        
+        @sio.on('tick')
+        async def on_tick(data):
             self._handle_timer_sync(data)
         
         @sio.on('sold')
@@ -558,10 +567,18 @@ class AuctionStressTest:
         async def on_unsold(data):
             self._handle_unsold(data)
         
-        @sio.on('auction_completed')
+        @sio.on('lot_started')
+        async def on_lot_started(data):
+            self._handle_new_lot(data)
+        
+        @sio.on('auction_complete')
         async def on_auction_complete(data):
             self.auction_complete = True
             print("\n🏁 AUCTION COMPLETED")
+        
+        @sio.on('auction_snapshot')
+        async def on_auction_snapshot(data):
+            self._handle_auction_snapshot(data)
         
         @sio.on('error')
         async def on_error(data):
