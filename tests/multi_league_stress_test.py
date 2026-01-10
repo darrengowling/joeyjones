@@ -123,9 +123,9 @@ class GlobalMetrics:
 class LeagueAuctionRunner:
     """Runs a complete auction for a single league"""
     
-    def __init__(self, invite_token: str, commissioner_email: str, league_index: int):
+    def __init__(self, invite_token: str, commissioner_email: Optional[str], league_index: int):
         self.invite_token = invite_token
-        self.commissioner_email = commissioner_email
+        self.commissioner_email = commissioner_email  # Can be None - will auto-detect
         self.league_index = league_index
         self.users: List[TestUser] = []
         self.metrics = LeagueMetrics(league_id="", league_name="")
@@ -173,7 +173,7 @@ class LeagueAuctionRunner:
         return self.metrics
     
     async def _setup_league(self):
-        """Get league info"""
+        """Get league info and auto-detect commissioner if needed"""
         url = f"{BASE_URL}/leagues/by-token/{self.invite_token}"
         async with aiohttp.ClientSession() as session:
             async with session.get(url) as resp:
@@ -186,6 +186,21 @@ class LeagueAuctionRunner:
                 self.league_id = league['id']
                 self.metrics.league_id = league['id']
                 self.metrics.league_name = league.get('name', 'Unknown')
+                
+                # Auto-detect commissioner email if not provided
+                if not self.commissioner_email:
+                    commissioner_id = league.get('commissionerId')
+                    if commissioner_id:
+                        # Fetch commissioner's email
+                        user_url = f"{BASE_URL}/users/{commissioner_id}"
+                        async with session.get(user_url) as user_resp:
+                            if user_resp.status == 200:
+                                user_data = await user_resp.json()
+                                self.commissioner_email = user_data.get('email')
+                                print(f"   [League {self.league_index}] ✓ Auto-detected commissioner: {self.commissioner_email}")
+                
+                if not self.commissioner_email:
+                    raise Exception("Could not determine commissioner email - please provide manually")
         
         print(f"   [League {self.league_index}] ✓ {self.metrics.league_name}")
     
