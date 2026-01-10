@@ -420,7 +420,7 @@ class LeagueRunner:
                     continue
                 
                 # Skip if roster full
-                if user.teams_won >= TEAMS_PER_ROSTER:
+                if user.teams_won >= self.teams_per_roster:
                     await asyncio.sleep(1)
                     continue
                 
