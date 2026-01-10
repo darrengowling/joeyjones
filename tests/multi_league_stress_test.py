@@ -902,10 +902,10 @@ class MultiLeagueStressTest:
         else:
             warnings.append(f"Bid success rate low ({success_rate:.1f}%) - check bidding logic")
         
-        # Check 5: Lots sold
-        expected_lots = self.global_metrics.leagues_completed * 32  # 32 teams per UCL auction
+        # Check 5: Lots sold - based on actual configuration
+        expected_lots = self.global_metrics.leagues_completed * self.users_per_league * self.teams_per_roster
         if total_sold >= expected_lots * 0.8:
-            passes.append(f"Auction lots selling ({total_sold} sold)")
+            passes.append(f"Auction lots selling ({total_sold}/{expected_lots} sold)")
         else:
             warnings.append(f"Low lot completion ({total_sold}/{expected_lots} expected)")
         
