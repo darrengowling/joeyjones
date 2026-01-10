@@ -317,15 +317,19 @@ class LeagueRunner:
                     if club_id and club_id not in self._processed_sold_lots:
                         self._processed_sold_lots.add(club_id)
                         self.lots_sold += 1
+                        self.metrics.lots_sold += 1
+                        self.metrics.socket_events_received += 1
+                        # Track winning bid amount
+                        winning_bid = data.get('winningBid', {})
+                        if winning_bid:
+                            self.metrics.total_spend += winning_bid.get('amount', 0)
                     self.lot_active = False
                     self.current_bid = 0
                 
                 @sio.on('unsold')
                 async def on_unsold(data):
-                    club_id = data.get('clubId')
-                    if club_id and club_id not in self._processed_sold_lots:
-                        self._processed_sold_lots.add(club_id)
-                        self.lots_sold += 1
+                    self.metrics.lots_unsold += 1
+                    self.metrics.socket_events_received += 1
                     self.lot_active = False
                     self.current_bid = 0
                 
