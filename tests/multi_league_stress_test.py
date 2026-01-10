@@ -588,66 +588,198 @@ class MultiLeagueStressTest:
         """Generate comprehensive report"""
         duration = self.global_metrics.end_time - self.global_metrics.start_time
         
-        print("\n" + "=" * 60)
+        print("\n" + "=" * 70)
         print("STRESS TEST REPORT")
-        print("=" * 60)
+        print("=" * 70)
         
-        print(f"\n--- SUMMARY ---")
-        print(f"Duration:              {duration:.1f}s ({duration/60:.1f} minutes)")
-        print(f"Leagues created:       {self.global_metrics.leagues_created}")
-        print(f"Leagues completed:     {self.global_metrics.leagues_completed}")
-        print(f"Leagues failed:        {self.global_metrics.leagues_failed}")
-        print(f"Total users created:   {self.global_metrics.total_users_created}")
-        print(f"Total bids placed:     {self.global_metrics.total_bids}")
-        print(f"Total lots auctioned:  {self.global_metrics.total_lots}")
+        # === EXECUTIVE SUMMARY ===
+        print(f"\n{'='*70}")
+        print("EXECUTIVE SUMMARY")
+        print(f"{'='*70}")
+        print(f"Test Duration:         {duration:.1f}s ({duration/60:.1f} minutes)")
+        print(f"Leagues Created:       {self.global_metrics.leagues_created}")
+        print(f"Leagues Completed:     {self.global_metrics.leagues_completed}")
+        print(f"Leagues Failed:        {self.global_metrics.leagues_failed}")
+        print(f"Total Users:           {self.global_metrics.total_users_created}")
+        print(f"Total Bids:            {self.global_metrics.total_bids}")
+        print(f"Total Lots Auctioned:  {self.global_metrics.total_lots}")
         
+        # === BID LATENCY ANALYSIS ===
+        print(f"\n{'='*70}")
+        print("BID LATENCY ANALYSIS")
+        print(f"{'='*70}")
         if self.global_metrics.all_latencies_ms:
             latencies = sorted(self.global_metrics.all_latencies_ms)
             p50 = latencies[len(latencies) // 2]
             p95 = latencies[int(len(latencies) * 0.95)]
             p99 = latencies[int(len(latencies) * 0.99)] if len(latencies) > 100 else latencies[-1]
+            avg = sum(latencies) / len(latencies)
             
-            print(f"\n--- BID LATENCY ---")
-            print(f"p50:  {p50:.0f}ms")
-            print(f"p95:  {p95:.0f}ms")
-            print(f"p99:  {p99:.0f}ms")
-            print(f"max:  {max(latencies):.0f}ms")
+            print(f"Samples:    {len(latencies)}")
+            print(f"Average:    {avg:.1f}ms")
+            print(f"p50:        {p50:.0f}ms")
+            print(f"p95:        {p95:.0f}ms")
+            print(f"p99:        {p99:.0f}ms")
+            print(f"Max:        {max(latencies):.0f}ms")
+            print(f"Min:        {min(latencies):.0f}ms")
+            
+            # Latency distribution
+            under_50 = len([l for l in latencies if l < 50])
+            under_100 = len([l for l in latencies if l < 100])
+            under_500 = len([l for l in latencies if l < 500])
+            print(f"\nDistribution:")
+            print(f"  <50ms:    {under_50} ({under_50/len(latencies)*100:.1f}%)")
+            print(f"  <100ms:   {under_100} ({under_100/len(latencies)*100:.1f}%)")
+            print(f"  <500ms:   {under_500} ({under_500/len(latencies)*100:.1f}%)")
+        else:
+            print("No latency data collected")
         
-        print(f"\n--- PER-LEAGUE RESULTS ---")
+        # === BID SUCCESS ANALYSIS ===
+        print(f"\n{'='*70}")
+        print("BID SUCCESS ANALYSIS")
+        print(f"{'='*70}")
+        total_success = sum(m.successful_bids for m in self.league_metrics)
+        total_failed = sum(m.failed_bids for m in self.league_metrics)
+        total_bids = total_success + total_failed
+        success_rate = (total_success / total_bids * 100) if total_bids > 0 else 0
+        
+        print(f"Total Bids:      {total_bids}")
+        print(f"Successful:      {total_success} ({success_rate:.1f}%)")
+        print(f"Failed:          {total_failed} ({100-success_rate:.1f}%)")
+        
+        # Aggregate rejection reasons
+        all_reasons = {}
+        for m in self.league_metrics:
+            for reason, count in m.bid_rejection_reasons.items():
+                all_reasons[reason] = all_reasons.get(reason, 0) + count
+        
+        if all_reasons:
+            print(f"\nBid Rejection Reasons:")
+            for reason, count in sorted(all_reasons.items(), key=lambda x: -x[1])[:10]:
+                print(f"  {count:5d}x  {reason[:60]}")
+        
+        # === AUCTION COMPLETION ANALYSIS ===
+        print(f"\n{'='*70}")
+        print("AUCTION COMPLETION ANALYSIS")
+        print(f"{'='*70}")
+        total_sold = sum(m.lots_sold for m in self.league_metrics)
+        total_unsold = sum(m.lots_unsold for m in self.league_metrics)
+        total_spend = sum(m.total_spend for m in self.league_metrics)
+        
+        print(f"Lots Sold:       {total_sold}")
+        print(f"Lots Unsold:     {total_unsold} (re-offered)")
+        print(f"Total Spend:     £{total_spend/1_000_000:.1f}M")
+        if total_sold > 0:
+            print(f"Avg Price:       £{total_spend/total_sold/1_000_000:.1f}M per team")
+        
+        # === PER-LEAGUE DETAILS ===
+        print(f"\n{'='*70}")
+        print("PER-LEAGUE DETAILS")
+        print(f"{'='*70}")
         for metrics in self.league_metrics:
             success_rate = (metrics.successful_bids / metrics.total_bids * 100) if metrics.total_bids > 0 else 0
             duration = metrics.end_time - metrics.start_time if metrics.end_time else 0
             status_icon = "✅" if metrics.status == "completed" else "❌"
-            print(f"{status_icon} {metrics.league_name}: {metrics.lots_completed} lots, {metrics.total_bids} bids ({success_rate:.0f}% success), {duration:.0f}s")
+            
+            print(f"\n{status_icon} {metrics.league_name}")
+            print(f"   Status:       {metrics.status}")
+            print(f"   Duration:     {duration:.0f}s")
+            print(f"   Lots Sold:    {metrics.lots_sold}")
+            print(f"   Lots Unsold:  {metrics.lots_unsold}")
+            print(f"   Total Bids:   {metrics.total_bids}")
+            print(f"   Success Rate: {success_rate:.1f}%")
+            print(f"   Total Spend:  £{metrics.total_spend/1_000_000:.1f}M")
+            print(f"   Socket Events: {metrics.socket_events_received}")
+            if metrics.errors:
+                print(f"   Errors:       {len(metrics.errors)}")
+                for err in metrics.errors[:3]:
+                    print(f"      - {err[:70]}")
         
+        # === SOCKET.IO HEALTH ===
+        print(f"\n{'='*70}")
+        print("SOCKET.IO HEALTH")
+        print(f"{'='*70}")
+        total_socket_events = sum(m.socket_events_received for m in self.league_metrics)
+        print(f"Total Events Received: {total_socket_events}")
+        if total_socket_events == 0:
+            print("⚠️  WARNING: No Socket.IO events received - users may not be in auction rooms!")
+        
+        # === ERRORS ===
         if self.global_metrics.errors:
-            print(f"\n--- ERRORS ({len(self.global_metrics.errors)}) ---")
-            for err in self.global_metrics.errors[:10]:
+            print(f"\n{'='*70}")
+            print(f"ERRORS ({len(self.global_metrics.errors)})")
+            print(f"{'='*70}")
+            for err in self.global_metrics.errors[:15]:
                 print(f"   • {err[:100]}")
         
-        # Pilot readiness assessment
-        print(f"\n--- PILOT READINESS ---")
+        # === PILOT READINESS ASSESSMENT ===
+        print(f"\n{'='*70}")
+        print("PILOT READINESS ASSESSMENT")
+        print(f"{'='*70}")
         
+        issues = []
+        warnings = []
+        passes = []
+        
+        # Check 1: League completion
         if self.global_metrics.leagues_failed == 0:
-            print("✅ All leagues completed successfully")
+            passes.append("All leagues completed successfully")
         else:
             fail_rate = self.global_metrics.leagues_failed / self.num_leagues * 100
-            print(f"⚠️  {fail_rate:.0f}% of leagues failed - investigate before pilot")
+            issues.append(f"{fail_rate:.0f}% of leagues failed")
         
+        # Check 2: Latency
         if self.global_metrics.all_latencies_ms:
             p99 = sorted(self.global_metrics.all_latencies_ms)[int(len(self.global_metrics.all_latencies_ms) * 0.99)]
             if p99 < 100:
-                print("✅ Bid latency excellent (<100ms p99)")
+                passes.append(f"Bid latency excellent (p99={p99:.0f}ms)")
             elif p99 < 500:
-                print("⚠️  Bid latency acceptable - monitor during pilot")
+                warnings.append(f"Bid latency acceptable but monitor (p99={p99:.0f}ms)")
             else:
-                print("❌ Bid latency too high - may affect user experience")
+                issues.append(f"Bid latency too high (p99={p99:.0f}ms)")
         
-        avg_lots = self.global_metrics.total_lots / max(self.global_metrics.leagues_completed, 1)
-        if avg_lots >= 30:
-            print(f"✅ Auctions completing properly ({avg_lots:.0f} avg lots per league)")
+        # Check 3: Socket events
+        if total_socket_events > 0:
+            passes.append(f"Socket.IO events flowing ({total_socket_events} received)")
         else:
-            print(f"⚠️  Auctions may be incomplete ({avg_lots:.0f} avg lots per league)")
+            issues.append("No Socket.IO events received - room join may be broken")
+        
+        # Check 4: Bid success rate
+        if success_rate >= 30:
+            passes.append(f"Bid success rate healthy ({success_rate:.1f}%)")
+        else:
+            warnings.append(f"Bid success rate low ({success_rate:.1f}%) - check bidding logic")
+        
+        # Check 5: Lots sold
+        expected_lots = self.global_metrics.leagues_completed * 32  # 32 teams per UCL auction
+        if total_sold >= expected_lots * 0.8:
+            passes.append(f"Auction lots selling ({total_sold} sold)")
+        else:
+            warnings.append(f"Low lot completion ({total_sold}/{expected_lots} expected)")
+        
+        print("\n🟢 PASSED:")
+        for p in passes:
+            print(f"   ✅ {p}")
+        
+        if warnings:
+            print("\n🟡 WARNINGS:")
+            for w in warnings:
+                print(f"   ⚠️  {w}")
+        
+        if issues:
+            print("\n🔴 ISSUES:")
+            for i in issues:
+                print(f"   ❌ {i}")
+        
+        # Final verdict
+        print(f"\n{'='*70}")
+        if not issues and not warnings:
+            print("🎉 VERDICT: READY FOR PILOT")
+        elif not issues:
+            print("⚠️  VERDICT: PROCEED WITH CAUTION - Review warnings")
+        else:
+            print("❌ VERDICT: NOT READY - Fix issues before pilot")
+        print(f"{'='*70}")
         
         print("\n" + "=" * 60)
 
