@@ -513,10 +513,12 @@ class LeagueRunner:
 class MultiLeagueStressTest:
     """Orchestrates multiple concurrent league auctions"""
     
-    def __init__(self, num_leagues: int, stagger_seconds: int = 5, competition: str = DEFAULT_COMPETITION):
+    def __init__(self, num_leagues: int, stagger_seconds: int = 5, competition: str = DEFAULT_COMPETITION, users_per_league: int = USERS_PER_LEAGUE, teams_per_roster: int = TEAMS_PER_ROSTER):
         self.num_leagues = num_leagues
         self.stagger_seconds = stagger_seconds
         self.competition = competition
+        self.users_per_league = users_per_league
+        self.teams_per_roster = teams_per_roster
         self.global_metrics = GlobalMetrics()
         self.league_metrics: List[LeagueMetrics] = []
         self.runners: List[LeagueRunner] = []
