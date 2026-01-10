@@ -260,7 +260,7 @@ class LeagueRunner:
             "competition": self.competition,
             "maxManagers": self.users_per_league,
             "budget": STARTING_BUDGET,
-            "teamsPerManager": TEAMS_PER_ROSTER,
+            "teamsPerManager": self.teams_per_roster,
             "commissionerId": commissioner.user_id
         }
         
