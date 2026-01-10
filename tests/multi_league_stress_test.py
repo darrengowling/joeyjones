@@ -168,17 +168,17 @@ class LeagueRunner:
             await self._create_league()
             print(f"   [League {self.league_index}] ✓ League created: {self.league.league_name}")
             
-            # Step 3: Commissioner joins their own league
+            # Step 3: Commissioner must join their own league (not automatic)
             await self._join_league(self.league.commissioner)
             
             # Step 4: Create additional members and join
-            for i in range(self.users_per_league - 1):  # -1 because commissioner already joined
+            for i in range(self.users_per_league - 1):
                 member_email = f"member-{self.league_index}-{i+1}-{timestamp}@stresstest.local"
                 member = await self._create_user(member_email)
                 await self._join_league(member)
                 self.league.members.append(member)
             
-            print(f"   [League {self.league_index}] ✓ {len(self.league.members) + 1} users joined (1 commissioner + {len(self.league.members)} members)")
+            print(f"   [League {self.league_index}] ✓ {len(self.league.members) + 1} users joined")
             return True
             
         except Exception as e:
