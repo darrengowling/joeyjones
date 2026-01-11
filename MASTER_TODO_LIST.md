@@ -5,6 +5,90 @@
 
 ---
 
+## 🔴 HIGH PRIORITY - Redis Connection Limit Issue
+
+**Status:** NEW - Needs Investigation  
+**Last Updated:** January 11, 2026
+
+### Problem Summary
+During 20-league stress tests, Redis Cloud sent alerts that connections reached **86% of limit**. Free tier has ~30 connections max. This likely contributes to Socket.IO failures and latency issues.
+
+### Evidence
+- Email alerts during stress tests: "database reached over 86% of connections limit"
+- Observed errors: "namespace failed to connect", "Connection refused"
+- Inconsistent latency between test runs
+
+### How Redis is Used
+```
+Socket.IO Pub/Sub:
+├─ Every bid update → Redis publish
+├─ Every auction event → Redis publish  
+├─ Timer syncs → Redis publish
+├─ Each connected client → Redis subscription
+└─ Multi-pod coordination → Redis adapter
+```
+
+### Connection Math (20 leagues, 8 users each)
+```
+Per league: ~10-15 connections (users + internal)
+20 leagues: 200-300 connections needed
+Free tier limit: 30 connections
+Result: ❌ Severely over limit
+```
+
+### Impact on Test Results
+| Symptom | Caused by Redis Limit? |
+|---------|----------------------|
+| Socket.IO connection failures | ✅ Likely |
+| Inconsistent latency | ✅ Likely |
+| "Connection refused" errors | ✅ Likely |
+| Varied results between runs | ✅ Likely |
+
+### Testing Plan: Isolate Redis vs MongoDB
+
+**Test 1: Small scale (under Redis limit)**
+```bash
+# 2 leagues × 6 users = ~30 connections (at limit)
+python multi_league_stress_test.py --leagues 2 --users 6 --teams 4 --url <PROD_URL>
+```
+- If latency is good → Redis limit is main issue
+- If latency still bad → MongoDB is main issue
+
+**Test 2: Disable Redis (preview only)**
+- Set `REDIS_URL=""` in preview
+- Run stress test against preview
+- Compare latency with Redis enabled vs disabled
+- Note: Only works single-pod, not production
+
+**Test 3: Upgrade Redis temporarily**
+- Upgrade to paid tier (100+ connections)
+- Run full 20-league test
+- Compare results to previous tests
+- Downgrade if not needed
+
+### Redis Cloud Pricing
+
+| Tier | Connections | Cost | Sufficient for Pilot? |
+|------|-------------|------|----------------------|
+| Free | 30 | £0 | ❌ No |
+| Essentials | 256 | ~£5/month | ✅ Yes |
+| Pro | 500+ | ~£20/month | ✅ Yes |
+
+### Next Steps
+1. Run Test 1 (small scale) to compare latency
+2. Consider upgrading Redis to Essentials tier (~£5/month)
+3. Rerun 20-league test after upgrade
+4. Compare results to isolate Redis vs MongoDB impact
+
+### Connection to MongoDB Issue
+Both issues may be contributing:
+- **MongoDB:** Adds ~300-600ms baseline latency per DB query
+- **Redis:** Causes connection failures and queuing under load
+
+Fixing one without the other may show partial improvement. Need to address both for production readiness.
+
+---
+
 ## 🔴 HIGH PRIORITY - MongoDB Performance Investigation
 
 **Status:** AWAITING EMERGENT RESPONSE  

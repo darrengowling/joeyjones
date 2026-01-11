@@ -85,19 +85,47 @@ Build a fantasy sports auction platform where users create leagues, bid on teams
 - `/app/MASTER_TODO_LIST.md` - Canonical task tracker
 - `/app/docs/` - Structured documentation
 
-## Stress Test Script Usage
+## Stress Test Scripts
+
+### Multi-League Stress Test (Primary - Jan 2026)
+```bash
+# Install dependencies
+pip install "python-socketio[asyncio_client]" aiohttp
+
+# Run from local machine against production
+python multi_league_stress_test.py --leagues 20 --users 8 --teams 4 --url https://YOUR-PRODUCTION-URL
+
+# Results saved to: stress_test_results_YYYYMMDD_HHMMSS.json/.txt
+```
+
+**Location:** `/app/tests/multi_league_stress_test.py`
+
+**Known limitations:**
+- £0M spend metric (wrong field reference)
+- Excessive "roster full" rejections (polling lag)
+- May under-count lots sold (race condition on completion)
+- Latency metrics are valid
+
+### Legacy Auction Stress Test
 ```bash
 # Hot lot test (aggressive bidding)
 python auction_stress_test.py --mode hot-lot --invite-token TOKEN \
   --commissioner-email EMAIL --use-existing-members --users 6
+```
 
-# Race condition test (simultaneous bids)
-python auction_stress_test.py --mode race-condition --invite-token TOKEN \
-  --commissioner-email EMAIL --use-existing-members
+## MongoDB Performance Investigation (Jan 2026)
 
-# Full auction simulation
-python auction_stress_test.py --mode full-auction --invite-token TOKEN \
-  --commissioner-email EMAIL --use-existing-members
+**Status:** Awaiting Emergent support response
+
+**Problem:** Production latency ~700-1100ms vs Preview ~360ms  
+**Root cause:** Emergent's shared MongoDB Atlas cluster (`customer-apps.oxfwhh.mongodb.net`)
+
+**Options:**
+1. Contact Emergent for dedicated cluster
+2. Bring your own MongoDB Atlas (M10 ~£45/month)
+3. Aggressive caching (complex, risky)
+
+**See:** `/app/MASTER_TODO_LIST.md` for full analysis and decision matrix
 ```
 
 ## Important Notes
