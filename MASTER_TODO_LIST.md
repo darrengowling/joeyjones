@@ -113,6 +113,16 @@ If Emergent can't help, set up your own Atlas cluster:
 - `/app/tests/README.md` - Test instructions
 - Results output: `stress_test_results_YYYYMMDD_HHMMSS.json` and `.txt`
 
+### Known Script Limitations (Jan 11, 2026)
+
+| Issue | Cause | Impact |
+|-------|-------|--------|
+| £0M spent displayed | Wrong field name or server doesn't populate `totalSpent` | Metric incorrect, not affecting test validity |
+| Excessive "roster full" rejections | Script polls HTTP, lags behind real-time Socket.IO state | Expected behavior for polling-based test |
+| Incomplete sales count | Race condition - exit loop before all sales propagate | May under-count, latency metrics still valid |
+
+**Note:** Latency measurements are valid. Auxiliary metrics (spend, exact lot counts) may be slightly off due to polling vs real-time state. Revisit if precise stats needed.
+
 ### Next Steps
 1. ⏳ Contact Emergent support with performance data
 2. ⏳ Wait for response (1 week max)
