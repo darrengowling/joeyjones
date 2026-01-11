@@ -120,6 +120,77 @@ If Emergent can't help, set up your own Atlas cluster:
 
 ---
 
+## 🟠 MEDIUM PRIORITY - Schema Change Management
+
+**Status:** PROCESS TO IMPLEMENT  
+**Last Updated:** January 11, 2026
+
+### Problem
+MongoDB is schema-less, which means:
+- Missing required fields → silent failures, not errors
+- Renamed fields → old documents have wrong field names
+- Data type changes → runtime errors on old documents
+
+Without a formal process, schema changes can cause subtle bugs that are hard to diagnose.
+
+### Current State
+- One migration function exists: `migrate_team_names()` (runs on startup)
+- No formal tracking of schema changes
+- No validation that documents have required fields
+
+### Recommended Process
+
+**For every code change that affects database structure:**
+
+1. **Document the change** in CHANGELOG.md:
+   ```
+   ## Jan 15, 2026
+   - SCHEMA: Added `displayName` field to `users` collection (optional, defaults to email prefix)
+   - SCHEMA: Renamed `clubId` → `teamId` in `bids` collection (MIGRATION REQUIRED)
+   ```
+
+2. **Determine if migration is needed:**
+   | Change Type | Migration Needed? |
+   |-------------|-------------------|
+   | Add optional field | ❌ No |
+   | Add required field | ✅ Yes - backfill existing docs |
+   | Rename field | ✅ Yes - update existing docs |
+   | Change data type | ✅ Yes - convert existing docs |
+   | Add index | ⚠️ Maybe - can be slow on large collections |
+   | Remove field | ❌ No (but clean up old data eventually) |
+
+3. **If migration needed, write a migration function:**
+   ```python
+   async def migrate_YYYYMMDD_description():
+       """Migration: Rename clubId to teamId in bids collection"""
+       result = await db.bids.update_many(
+           {"clubId": {"$exists": True}, "teamId": {"$exists": False}},
+           [{"$set": {"teamId": "$clubId"}}, {"$unset": "clubId"}]
+       )
+       logger.info(f"Migrated {result.modified_count} bids")
+   ```
+
+4. **Test migration on copy of production data before deploying**
+
+### Schema Change Log
+
+| Date | Collection | Change | Migration | Status |
+|------|------------|--------|-----------|--------|
+| Dec 2025 | `assets` | Added `teamName` field | `migrate_team_names()` | ✅ Done |
+| - | - | - | - | - |
+
+*(Add new schema changes here)*
+
+### Future Improvements (Post-Pilot)
+
+| Improvement | Effort | Benefit |
+|-------------|--------|---------|
+| Add `schemaVersion` field to all documents | Medium | Track which version each doc is |
+| Startup validation of required fields | Medium | Catch missing fields early |
+| Migration runner with version tracking | High | Automated, safe migrations |
+
+---
+
 ## Quick Stats
 
 | Category | Count |
