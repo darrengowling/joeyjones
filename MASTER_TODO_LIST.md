@@ -7,20 +7,26 @@
 
 ## 🔴 HIGH PRIORITY - MongoDB Performance Investigation
 
-**Status:** PAUSED - Awaiting infrastructure decision  
-**Last Updated:** January 10, 2026
+**Status:** AWAITING EMERGENT RESPONSE  
+**Last Updated:** January 11, 2026
 
 ### Problem Summary
-Production bid latency is ~700ms avg vs ~360ms in preview environment. Root cause identified as **network latency to MongoDB Atlas**.
+Production bid latency is ~700-1100ms avg vs ~360ms in preview environment. Root cause identified as **network latency to Emergent's shared MongoDB Atlas cluster**.
 
 ### Key Findings
 
 | Environment | MongoDB Location | Min Latency | Avg Latency |
 |-------------|------------------|-------------|-------------|
 | Preview | `localhost:27017` | ~306ms | ~360ms |
-| Production | `mongodb.net` (Atlas cloud) | ~640ms | ~700-900ms |
+| Production | `customer-apps.oxfwhh.mongodb.net` (shared Atlas) | ~640ms | ~700-1100ms |
 
-**The ~300-400ms difference is pure network round-trip to remote MongoDB Atlas.**
+**The ~300-600ms difference is network round-trip to Emergent's shared MongoDB Atlas cluster.**
+
+### Root Cause Analysis (Jan 11, 2026)
+- Emergent uses a **shared MongoDB Atlas cluster** (`customer-apps.oxfwhh.mongodb.net`) for all customers
+- Performance depends on "noisy neighbors" and Emergent's Atlas configuration
+- Region unknown - may be different from where production app runs
+- Cannot optimize further from application side - infrastructure is the bottleneck
 
 ### Attempted Fixes (Jan 10, 2026)
 
@@ -28,53 +34,89 @@ Production bid latency is ~700ms avg vs ~360ms in preview environment. Root caus
 |-----|--------|-------|
 | Remove diagnostic query | ❌ Made worse in prod | Works in preview |
 | Remove duplicate league query | ❌ Made worse in prod | Works in preview |
-| Increase maxPoolSize (5→50) | ❌ No improvement | Pool size not the bottleneck |
+| Increase maxPoolSize (5→50) | ❌ No improvement / worse | Pool size not the bottleneck |
 | Both fixes together in preview | ✅ 50% improvement | Confirms fixes work, prod infra is issue |
 
-### Why Fixes Work in Preview but Not Production
-- Preview: DB queries are local (~1-5ms each)
-- Production: Each DB query adds network round-trip (~50-100ms)
-- With 7-8 DB queries per bid, the network overhead dominates
-- Fixes reduce queries but can't eliminate network latency floor
+### Decision: Options to Pursue
 
-### Options to Investigate
+| Option | Effort | Impact | Risk | Recommendation |
+|--------|--------|--------|------|----------------|
+| **1. Contact Emergent Support** | Low | Unknown | Low | ✅ DO FIRST |
+| **2. Bring Your Own MongoDB** | Medium (2-4 hrs) | High | Low | ✅ BACKUP PLAN |
+| **3. Aggressive Caching** | Medium | Medium | High | ⚠️ AVOID - complex |
+| **4. Migrate off Emergent** | High (1-2 weeks) | High | Medium | ❌ LAST RESORT |
 
-| Option | Effort | Impact | Risk |
-|--------|--------|--------|------|
-| **1. Accept current latency** | None | None | Production stays at ~700ms |
-| **2. Co-locate MongoDB** | High | High | Self-hosted or same-region Atlas |
-| **3. Aggressive caching** | Medium | Medium | Cache invalidation complexity |
-| **4. Reduce DB round-trips** | Medium | Medium | Atomic operations, query batching |
+### Option 1: Contact Emergent Support (DO FIRST)
 
-### MongoDB Connection Details (Production)
+**Send this to Emergent support (Discord/Email):**
 ```
-mongodb+srv://draft-kings-mobile:***@customer-apps.oxfwhh.mongodb.net/
-?appName=bidding-tester&maxPoolSize=50&retryWrites=true&timeoutMS=10000&w=majority
+We're running stress tests for our pilot (400 users, 50 leagues) and seeing high MongoDB latency:
+- p50: 821ms
+- p99: 5254ms  
+- Bid success rate: 85%
+
+We're using your managed MongoDB (customer-apps.oxfwhh.mongodb.net) with maxPoolSize=23.
+
+Questions:
+1. What region is this Atlas cluster in vs. our production app?
+2. Is this a shared cluster affecting our performance?
+3. Can we upgrade to a dedicated MongoDB instance?
+4. Can you investigate the high latency/timeouts we're seeing?
+
+Our pilot launches soon - need to resolve performance issues.
 ```
+
+**Contact:**
+- Discord: https://discord.gg/VzKfwCXC4A
+- Email: support@emergent.sh
+- Include Job ID from chat interface
+
+### Option 2: Bring Your Own MongoDB (BACKUP PLAN)
+
+If Emergent can't help, set up your own Atlas cluster:
+
+**Steps:**
+1. Create MongoDB Atlas account at mongodb.com
+2. Create M10 cluster (~$60/month) in **same region as Emergent production app**
+3. Export data: `mongodump --uri="<emergent-mongo-url>"`
+4. Import data: `mongorestore --uri="<your-new-mongo-url>"`
+5. Update `MONGO_URL` environment variable in Emergent production
+6. Redeploy from Emergent - everything else stays the same
+
+**Expected improvement:**
+- p50: 821ms → ~100-200ms
+- p99: 5254ms → ~500ms
+- Bid success: 85% → 99%+
+
+**Pros:**
+- Still manage/deploy from Emergent
+- Full control over DB region, tier, configuration
+- Dedicated resources (no noisy neighbors)
+
+**Cons:**
+- Additional cost (~$60/month)
+- You're responsible for backups
+- Migration effort (2-4 hours)
 
 ### Test Results Archive
 
-| Date | Config | Environment | p50 | p95 | p99 |
-|------|--------|-------------|-----|-----|-----|
-| Jan 10 | 5 leagues, 6 users | Preview (with fixes) | 357ms | 407ms | 416ms |
-| Jan 10 | 5 leagues, 6 users | Production (baseline) | 713ms | 818ms | 961ms |
-| Jan 10 | 5 leagues, 6 users | Production (pool=50) | 709ms | 1220ms | 1453ms |
-| Jan 10 | 20 leagues, 8 users | Production | 809ms | 1479ms | 2079ms |
+| Date | Config | Environment | p50 | p95 | p99 | Success |
+|------|--------|-------------|-----|-----|-----|---------|
+| Jan 10 | 5 leagues, 6 users | Preview (with fixes) | 357ms | 407ms | 416ms | 100% |
+| Jan 10 | 5 leagues, 6 users | Production (baseline) | 713ms | 818ms | 961ms | 100% |
+| Jan 10 | 20 leagues, 8 users | Production | 809ms | 1479ms | 2079ms | 100% |
+| Jan 10 | 20 leagues, 8 users | Production (pool=50) | - | - | - | worse |
+| Jan 10 | 20 leagues, 8 users | Production (pool=5 reset) | 821ms | 2732ms | 5254ms | 85% |
 
 ### Files Created
 - `/app/tests/multi_league_stress_test.py` - Automated stress test script
 - `/app/tests/README.md` - Test instructions
 - Results output: `stress_test_results_YYYYMMDD_HHMMSS.json` and `.txt`
 
-### Next Steps (When Ready)
-1. Decide on MongoDB infrastructure approach
-2. If staying with Atlas: Implement aggressive caching (medium risk)
-3. If moving MongoDB: Co-locate with application server
-4. Consider Redis for auction state caching
-
-### External Analysis References
-- Claude analysis: Suggested removing diagnostic queries, caching (partially tested)
-- GPT analysis: Suggested test harness fixes, atomic DB operations (not yet tested)
+### Next Steps
+1. ⏳ Contact Emergent support with performance data
+2. ⏳ Wait for response (1 week max)
+3. If no help → Proceed with Option 2 (Bring Your Own MongoDB)
 
 ---
 
