@@ -454,7 +454,29 @@ If Railway has issues:
 | Football-Data.org tier? | ❓ | Check rate limits for 250+ users |
 | Staging environment needed? | ❓ | Separate Railway project? |
 | Data migration approach? | ❓ | Fresh start vs export/import |
-| Backup strategy for M0? | ❓ | Manual exports or upgrade to paid |
+| ~~Backup strategy for M0?~~ | ✅ | N/A - Using M10 which has automated backups |
+| **MongoDB Atlas region?** | ❓ | **Must match Railway region for low latency** |
+| **Railway region?** | ❓ | **Choose based on user location + Atlas region** |
+| **Emergent support response?** | ⏳ | Contacted re: dedicated MongoDB - awaiting response |
+
+---
+
+## Stress Testing Resources
+
+Testing scripts and documentation created during January 2026 investigation:
+
+| Resource | Location | Purpose |
+|----------|----------|---------|
+| Stress test script | `/app/tests/multi_league_stress_test.py` | Automated load testing |
+| Test README | `/app/tests/README.md` | Usage instructions |
+| Full stress test report | `/app/STRESS_TEST_REPORT.md` | Detailed findings |
+| Master TODO list | `/app/MASTER_TODO_LIST.md` | All issues and status |
+
+**To run stress test against new Railway deployment:**
+```bash
+pip install "python-socketio[asyncio_client]" aiohttp
+python multi_league_stress_test.py --leagues 5 --users 8 --teams 4 --url https://your-railway-url.railway.app
+```
 
 ---
 
