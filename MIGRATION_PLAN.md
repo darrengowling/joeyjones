@@ -1,10 +1,42 @@
 # Migration Plan: Emergent → Self-Hosted (Railway)
 
 **Created:** December 13, 2025  
-**Last Updated:** December 21, 2025  
-**Status:** PLANNED - Refactor first, then migrate  
+**Last Updated:** January 12, 2026  
+**Status:** PLANNING - Infrastructure bottlenecks identified via stress testing  
 **Target Platform:** Railway  
 **Reason:** Control and stakeholder credibility after production outages
+
+---
+
+## ⚠️ Critical Update: Stress Test Findings (January 2026)
+
+**Stress testing revealed infrastructure bottlenecks that must be addressed before or during migration:**
+
+| Issue | Current Impact | Migration Implication |
+|-------|---------------|----------------------|
+| **MongoDB Latency** | ~700ms baseline (shared Emergent cluster) | Must provision dedicated Atlas cluster |
+| **Redis Connections** | Upgraded to 256 (was 30) - now adequate | Current Redis Cloud account is portable |
+| **Server Capacity** | 75% bid success at 20 leagues | Need adequate Railway resources |
+
+### Performance Baselines (January 12, 2026)
+
+| Scale | Bid Success | p50 Latency | p99 Latency | Status |
+|-------|-------------|-------------|-------------|--------|
+| 2 leagues (16 users) | 100% | 688ms | 1,517ms | ✅ Acceptable |
+| 20 leagues (160 users) | 76% | 800ms | 3,121ms | ❌ Not acceptable |
+| 50 leagues (400 users) | Unknown | Unknown | Unknown | ❌ Pilot target |
+
+### Root Cause Analysis
+
+**MongoDB Network Latency:**
+- Emergent's shared cluster: `customer-apps.oxfwhh.mongodb.net`
+- Preview (localhost): 357ms average → Production (remote): 713ms average
+- **Gap of ~350-400ms is pure network overhead**
+
+**Implication for Migration:**
+- **DO NOT use free tier M0** for pilot with 250+ users
+- **Provision M10 (~£45/month) minimum** in same region as Railway deployment
+- Expected improvement: 700ms → 100-200ms latency
 
 ---
 
