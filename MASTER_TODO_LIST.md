@@ -111,21 +111,57 @@ Production bid latency is ~700-1100ms avg vs ~360ms in preview environment. Root
 ### Option 1: Contact Emergent Support (DO FIRST)
 
 **Send this to Emergent support (Discord/Email):**
+
 ```
-We're running stress tests for our pilot (400 users, 50 leagues) and seeing high MongoDB latency:
-- p50: 821ms
-- p99: 5254ms  
-- Bid success rate: 85%
+Subject: Infrastructure Support Request - Real-Time Auction Platform Performance
 
-We're using your managed MongoDB (customer-apps.oxfwhh.mongodb.net) with maxPoolSize=23.
+Hi Emergent team,
 
-Questions:
-1. What region is this Atlas cluster in vs. our production app?
-2. Is this a shared cluster affecting our performance?
-3. Can we upgrade to a dedicated MongoDB instance?
-4. Can you investigate the high latency/timeouts we're seeing?
+We're preparing for a 400-user pilot of our real-time auction platform and have been 
+running stress tests to validate infrastructure readiness. We've identified performance 
+bottlenecks that we'd like your help to resolve.
 
-Our pilot launches soon - need to resolve performance issues.
+CURRENT SETUP:
+- MongoDB: customer-apps.oxfwhh.mongodb.net (Emergent-managed)
+- Redis: Redis Cloud Essentials (256 connections) - our account
+- Multi-pod deployment with Socket.IO
+
+STRESS TEST RESULTS (January 12, 2026):
+
+| Scale | Bid Success | p50 Latency | p99 Latency |
+|-------|-------------|-------------|-------------|
+| 2 leagues (16 users) | 100% | 688ms | 1,517ms |
+| 20 leagues (160 users) | 76% | 800ms | 3,121ms |
+
+KEY FINDING:
+When testing in preview (localhost MongoDB), we achieved:
+- p50: 357ms
+- p99: 416ms
+- 100% success rate
+
+This suggests the ~350ms latency difference is due to network distance to the 
+shared MongoDB cluster. Our real-time bidding requires lower latency for 
+acceptable user experience.
+
+QUESTIONS:
+1. What region is the MongoDB cluster (customer-apps.oxfwhh.mongodb.net) hosted in?
+2. What region(s) are our application pods deployed to?
+3. Is it possible to get a dedicated MongoDB instance, or placement in the same 
+   region as our app pods?
+4. How many pods are currently allocated to our deployment?
+5. Can we increase pod count for better load distribution?
+
+CONTEXT:
+- We've already upgraded Redis from free (30 connections) to Essentials (256) 
+  which improved connection stability
+- Our target is 50 concurrent leagues (400 users) at 99%+ bid success rate
+- Current architecture requires 7-8 DB queries per bid
+
+We have detailed stress test reports available if helpful. Please let us know 
+what options are available to improve our production performance.
+
+Thanks,
+[Your name]
 ```
 
 **Contact:**
