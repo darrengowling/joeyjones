@@ -7,85 +7,63 @@
 
 ## 🔴 HIGH PRIORITY - Redis Connection Limit Issue
 
-**Status:** NEW - Needs Investigation  
-**Last Updated:** January 11, 2026
+**Status:** UPGRADED - Partial Improvement  
+**Last Updated:** January 12, 2026
 
 ### Problem Summary
-During 20-league stress tests, Redis Cloud sent alerts that connections reached **86% of limit**. Free tier has ~30 connections max. This likely contributes to Socket.IO failures and latency issues.
+~~During 20-league stress tests, Redis Cloud sent alerts that connections reached **86% of limit**.~~ 
 
-### Evidence
-- Email alerts during stress tests: "database reached over 86% of connections limit"
-- Observed errors: "namespace failed to connect", "Connection refused"
-- Inconsistent latency between test runs
+**UPDATE:** Upgraded to Redis Essentials (256 connections, ~£5/month). Connection exhaustion resolved but Socket.IO errors persist at scale.
 
-### How Redis is Used
-```
-Socket.IO Pub/Sub:
-├─ Every bid update → Redis publish
-├─ Every auction event → Redis publish  
-├─ Timer syncs → Redis publish
-├─ Each connected client → Redis subscription
-└─ Multi-pod coordination → Redis adapter
-```
+### Post-Upgrade Test Results (Jan 12, 2026)
 
-### Connection Math (20 leagues, 8 users each)
-```
-Per league: ~10-15 connections (users + internal)
-20 leagues: 200-300 connections needed
-Free tier limit: 30 connections
-Result: ❌ Severely over limit
-```
+| Test | Scale | p50 | p99 | Bid Success | Socket Errors |
+|------|-------|-----|-----|-------------|---------------|
+| 1 | 20 leagues | 768ms | 6,665ms | 75.2% | Many |
+| 2 | 2 leagues | 709ms | 2,968ms | 100% | Some |
+| 3 (redeploy) | 2 leagues | 688ms | 1,517ms | 100% | Some |
+| 4 (redeploy) | 20 leagues | 800ms | 3,121ms | 76.4% | Many |
 
-### Impact on Test Results
-| Symptom | Caused by Redis Limit? |
-|---------|----------------------|
-| Socket.IO connection failures | ✅ Likely |
-| Inconsistent latency | ✅ Likely |
-| "Connection refused" errors | ✅ Likely |
-| Varied results between runs | ✅ Likely |
+### Key Findings Post-Upgrade
 
-### Testing Plan: Isolate Redis vs MongoDB
+| Finding | Status |
+|---------|--------|
+| Connection exhaustion | ✅ Fixed (no more 86% alerts) |
+| Small scale success rate | ✅ Fixed (100% at 2 leagues) |
+| Large scale success rate | ❌ Still 75-76% at 20 leagues |
+| Socket.IO errors at scale | ❌ Still occurring |
+| Baseline latency (p50) | ❌ Still ~700-800ms (MongoDB issue) |
 
-**Test 1: Small scale (under Redis limit)**
-```bash
-# 2 leagues × 6 users = ~30 connections (at limit)
-python multi_league_stress_test.py --leagues 2 --users 6 --teams 4 --url <PROD_URL>
-```
-- If latency is good → Redis limit is main issue
-- If latency still bad → MongoDB is main issue
+### Remaining Issues at Scale (20 leagues)
 
-**Test 2: Disable Redis (preview only)**
-- Set `REDIS_URL=""` in preview
-- Run stress test against preview
-- Compare latency with Redis enabled vs disabled
-- Note: Only works single-pod, not production
+1. **Socket.IO namespace failures** - "One or more namespaces failed to connect"
+2. **Poll/semaphore timeouts** - "The semaphore timeout period has expired"
+3. **High p99 latency** - 3-6 seconds causing bid timeouts
 
-**Test 3: Upgrade Redis temporarily**
-- Upgrade to paid tier (100+ connections)
-- Run full 20-league test
-- Compare results to previous tests
-- Downgrade if not needed
+### Revised Capacity Estimates
 
-### Redis Cloud Pricing
+| Scale | Success Rate | p99 Latency | Verdict |
+|-------|-------------|-------------|---------|
+| 2-5 leagues | 100% | ~1.5-2s | ✅ Acceptable |
+| 10 leagues | ~90% | ~2-3s | ⚠️ Marginal |
+| 20 leagues | ~75% | ~3-6s | ❌ Not acceptable |
+| 50 leagues (pilot) | Unknown | Unknown | ❌ Likely worse |
 
-| Tier | Connections | Cost | Sufficient for Pilot? |
-|------|-------------|------|----------------------|
-| Free | 30 | £0 | ❌ No |
-| Essentials | 256 | ~£5/month | ✅ Yes |
-| Pro | 500+ | ~£20/month | ✅ Yes |
+### Options to Improve Scale Performance
+
+| Option | Effort | Expected Impact | Risk |
+|--------|--------|-----------------|------|
+| **MongoDB upgrade (M10)** | Medium | Reduce p50 700ms→100ms, fewer timeouts | Low |
+| **Increase server pods** | Low | Better load distribution | Low |
+| **Socket.IO tuning** | Medium | Reduce connection failures | Medium |
+| **Connection pooling (server)** | Medium | More efficient DB/Redis use | Medium |
+| **Rate limit bid frequency** | Low | Reduce server load | Low |
 
 ### Next Steps
-1. Run Test 1 (small scale) to compare latency
-2. Consider upgrading Redis to Essentials tier (~£5/month)
-3. Rerun 20-league test after upgrade
-4. Compare results to isolate Redis vs MongoDB impact
-
-### Connection to MongoDB Issue
-Both issues may be contributing:
-- **MongoDB:** Adds ~300-600ms baseline latency per DB query
-- **Redis:** Causes connection failures and queuing under load
-
-Fixing one without the other may show partial improvement. Need to address both for production readiness.
+1. ✅ Redis upgrade complete
+2. ⏳ Contact Emergent re: MongoDB + pod scaling
+3. ⏳ Investigate Socket.IO configuration for scale
+4. ⏳ Consider MongoDB upgrade if Emergent can't help
 
 ---
 
