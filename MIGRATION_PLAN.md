@@ -74,10 +74,12 @@
 
 | Service | Account Ownership | Action Needed |
 |---------|-------------------|---------------|
-| **MongoDB** | Emergent-managed (`customer-apps.oxfwhh.mongodb.net`) | Create your own Atlas cluster |
-| **Redis Cloud** | ✅ Your account | Keep credentials - already portable |
+| **MongoDB** | Emergent-managed (`customer-apps.oxfwhh.mongodb.net`) | ⚠️ **Create M10 Atlas cluster** (not M0 - see stress test findings) |
+| **Redis Cloud** | ✅ Your account (Essentials tier - 256 connections) | Keep credentials - already portable and upgraded |
 | **Football-Data.org** | ✅ Your account | Portable - API key in env vars |
 | **Cricbuzz/RapidAPI** | ✅ Your account | Portable - API key in env vars |
+
+**Note:** Redis was upgraded from Free (30 connections) to Essentials (256 connections) in January 2026 based on stress test findings showing connection exhaustion at scale.
 
 ---
 
