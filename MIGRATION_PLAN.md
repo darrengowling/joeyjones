@@ -497,5 +497,13 @@ python multi_league_stress_test.py --leagues 5 --users 8 --teams 4 --url https:/
 
 ---
 
-**Document Version:** 2.0  
-**Last Updated:** December 21, 2025
+**Document Version:** 3.0  
+**Last Updated:** January 12, 2026
+
+### Change Log
+
+| Version | Date | Changes |
+|---------|------|---------|
+| 3.0 | Jan 12, 2026 | Added stress test findings; Updated costs (M10 + Redis Essentials required); Added performance expectations |
+| 2.0 | Dec 21, 2025 | Added Railway-specific configurations |
+| 1.0 | Dec 13, 2025 | Initial plan created |
