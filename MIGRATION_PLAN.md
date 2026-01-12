@@ -44,9 +44,11 @@
 
 | Stage | Users | Monthly Cost | Key Components |
 |-------|-------|--------------|----------------|
-| **Pilot** | ≤250 | ~£10-15 | Railway, MongoDB Atlas M0, Redis Cloud Free, Sentry Free |
-| **Small Scale** | 500-2,000 | ~£80-150 | Railway (scaled), Atlas M2/M5, Redis Paid, Sentry Paid |
+| **Pilot** | ≤250 | ~£50-65 | Railway, MongoDB Atlas **M10**, Redis Cloud Essentials, Sentry Free |
+| **Small Scale** | 500-2,000 | ~£100-180 | Railway (scaled), Atlas M10/M20, Redis Paid, Sentry Paid |
 | **Confident Scale** | 5k-10k | ~£300-600 | Railway (autoscaling), Atlas Production, Redis Larger Tier |
+
+**⚠️ Updated January 2026:** Pilot cost increased from £10-15 to £50-65 due to MongoDB M10 requirement (stress testing showed M0 free tier insufficient for real-time bidding at scale).
 
 ---
 
