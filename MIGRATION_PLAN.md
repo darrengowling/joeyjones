@@ -52,6 +52,155 @@
 
 ---
 
+## Hybrid Test Plan: Emergent + Your Own MongoDB
+
+**Purpose:** Test if MongoDB latency is the primary bottleneck before committing to full migration.  
+**Investment:** 2-4 hours setup + £45/month  
+**Expected Outcome:** Determine if hybrid approach (85-92% success) is sufficient or full migration (95%+) is required.
+
+### Why Test This First?
+
+| Approach | Iteration Speed | Expected Performance | Cost |
+|----------|----------------|---------------------|------|
+| Current (Emergent + shared MongoDB) | ✅ Fast (agent-led) | ❌ 76% success at scale | £5/month |
+| **Hybrid (Emergent + your M10)** | ✅ Fast (agent-led) | ⚠️ 85-92% success? | £50/month |
+| Full Migration (Railway + your M10) | ⚠️ Slower (manual) | ✅ 95%+ success | £65/month |
+
+**If hybrid achieves 93%+ success rate, you keep agent-led iteration AND get acceptable performance.**
+
+### Step-by-Step Test Plan
+
+#### Step 1: Create MongoDB Atlas Cluster (30 minutes)
+
+1. Go to [mongodb.com/cloud/atlas](https://mongodb.com/cloud/atlas)
+2. Create account or sign in
+3. Create new cluster:
+   - **Tier:** M10 Dedicated (~£45/month)
+   - **Region:** Choose closest to your users (e.g., `europe-west2` for UK)
+   - **Name:** `sport-x-production`
+4. Wait for cluster to provision (~5-10 minutes)
+
+#### Step 2: Configure Database Access (15 minutes)
+
+1. **Database Access** → Add Database User
+   - Username: `sport-x-app`
+   - Password: Generate secure password (save it!)
+   - Role: `readWriteAnyDatabase`
+
+2. **Network Access** → Add IP Address
+   - Click "Allow Access from Anywhere" (`0.0.0.0/0`)
+   - Note: Required for Emergent's dynamic IPs
+
+3. **Get Connection String:**
+   - Click "Connect" → "Connect your application"
+   - Copy the connection string
+   - Replace `<password>` with your actual password
+   - Add database name: `/sport_x_production?`
+
+   ```
+   mongodb+srv://sport-x-app:<password>@sport-x-production.xxxxx.mongodb.net/sport_x_production?retryWrites=true&w=majority
+   ```
+
+#### Step 3: Migrate Data (30-60 minutes)
+
+**Option A: Export from Emergent MongoDB**
+```bash
+# Export from Emergent's cluster (need connection string from Emergent env)
+mongodump --uri="mongodb+srv://...@customer-apps.oxfwhh.mongodb.net/bidding-tester" --out=./backup
+
+# Import to your new cluster
+mongorestore --uri="mongodb+srv://sport-x-app:<password>@sport-x-production.xxxxx.mongodb.net" ./backup
+```
+
+**Option B: Fresh Start (if acceptable)**
+- Skip data migration
+- Re-seed teams/fixtures using app's import features
+- Users re-register (OK for testing)
+
+#### Step 4: Update Emergent Environment (15 minutes)
+
+1. In Emergent, update the production `MONGO_URL` environment variable:
+   ```
+   MONGO_URL=mongodb+srv://sport-x-app:<password>@sport-x-production.xxxxx.mongodb.net/sport_x_production?retryWrites=true&w=majority&maxPoolSize=20
+   ```
+
+2. Redeploy the application
+
+3. Verify app starts correctly:
+   ```bash
+   curl https://your-app.emergent.host/api/health
+   # Should return: {"status":"healthy","database":"connected",...}
+   ```
+
+#### Step 5: Run Stress Test (1 hour)
+
+**Small scale test:**
+```bash
+python multi_league_stress_test.py --leagues 2 --users 6 --teams 4 --url https://your-app.emergent.host
+```
+
+**Medium scale test:**
+```bash
+python multi_league_stress_test.py --leagues 10 --users 8 --teams 4 --url https://your-app.emergent.host
+```
+
+**Full scale test:**
+```bash
+python multi_league_stress_test.py --leagues 20 --users 8 --teams 4 --url https://your-app.emergent.host
+```
+
+#### Step 6: Evaluate Results
+
+**Success Criteria:**
+
+| Metric | Target | Action if Met | Action if Not Met |
+|--------|--------|---------------|-------------------|
+| Bid success rate | ≥93% at 20 leagues | ✅ Hybrid approach works! | Consider full migration |
+| p50 latency | ≤300ms | ✅ MongoDB fix worked | Check region alignment |
+| p99 latency | ≤1500ms | ✅ Acceptable for pilot | Server capacity issue |
+| Socket errors | Minimal | ✅ Proceed with pilot | Server capacity issue |
+
+**Decision Matrix:**
+
+| 20-League Results | Interpretation | Recommendation |
+|-------------------|----------------|----------------|
+| 93%+ success, p50 <300ms | MongoDB was the bottleneck | ✅ Stay on Emergent + your M10 |
+| 85-92% success, p50 <300ms | MongoDB fixed, server capacity marginal | ⚠️ OK for small pilot, monitor closely |
+| <85% success, p50 <300ms | Server capacity is the issue | ❌ Full migration needed |
+| Any success, p50 >500ms | Region mismatch or M10 insufficient | Check Atlas region, consider M20 |
+
+### Rollback Plan
+
+If hybrid approach fails or causes issues:
+
+1. **Immediate:** Update `MONGO_URL` back to Emergent's cluster
+2. **Redeploy** 
+3. **Data:** Your Atlas cluster keeps the data safe for later migration
+
+### Cost Comparison
+
+| Scenario | Monthly Cost | Notes |
+|----------|-------------|-------|
+| Current | £5 | Redis Essentials only |
+| Hybrid Test | £50 | Redis (£5) + MongoDB M10 (£45) |
+| Full Migration | £65 | Railway (£15) + Redis (£5) + MongoDB M10 (£45) |
+
+**Hybrid saves £15/month vs full migration AND preserves agent-led iteration speed.**
+
+### Timeline
+
+| Task | Duration |
+|------|----------|
+| Create Atlas cluster | 30 min |
+| Configure access | 15 min |
+| Migrate data | 30-60 min |
+| Update Emergent config | 15 min |
+| Run stress tests | 1 hour |
+| Evaluate & decide | 30 min |
+| **Total** | **3-4 hours** |
+
+---
+
 ## Pre-Migration: Refactor Recommendation
 
 **Recommended approach:** Refactor FIRST, then migrate
