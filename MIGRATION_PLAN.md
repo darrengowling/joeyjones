@@ -85,15 +85,15 @@
 
 ## Stage 1: Pilot (≤250 users)
 
-**Goal:** Validate live auctions and mobile experience with minimal cost and operational risk.  
-**Estimated Monthly Cost:** ~£10-15
+**Goal:** Validate live auctions and mobile experience with acceptable performance.  
+**Estimated Monthly Cost:** ~£50-65 *(Updated from £10-15 based on stress testing)*
 
 | Element | Vendor | What it does | Why it's right now | Cost |
 |---------|--------|--------------|-------------------|------|
 | App Hosting | Railway | Runs backend APIs, auctions, background jobs | Simple deploys, low ops overhead | £10-15 |
-| Database | MongoDB Atlas (M0) | Stores users, auctions, bids, leagues | Flexible, proven in pilot | £0 |
+| Database | **MongoDB Atlas (M10)** | Stores users, auctions, bids, leagues | **⚠️ M10 required for latency** (M0 showed 700ms+ latency) | **£45** |
 | Real-time Auctions | Socket.IO | Live bidding & updates | Designed for bursty real-time use | £0 |
-| Pub/Sub | Redis Cloud (free) | Syncs auctions if more than one app instance | Required even at pilot for reliability | £0 |
+| Pub/Sub | **Redis Cloud (Essentials)** | Syncs auctions across app instances | **⚠️ 256 connections required** (30 insufficient at scale) | **£5** |
 | Authentication | Built-in (app-level) | Login, sessions, roles | Fast, zero cost, sufficient for pilot | £0 |
 | File Storage | S3-compatible | Logos, CSV exports | Tiny usage, very cheap | £0 |
 | Error Monitoring | Sentry (free) | Captures crashes and key issues | Fast feedback during testing | £0 |
@@ -101,14 +101,25 @@
 | CDN | Cloudflare (free) | Frontend asset delivery | Faster global delivery | £0 |
 | Payments | Disabled | Code is payment-ready, but no money flows | Keeps pilot friction-free and low-risk | N/A |
 
-### ⚠️ Stage 1 Considerations
+### ⚠️ Stage 1 Considerations (Updated January 2026)
 
 | Item | Concern | Mitigation |
 |------|---------|------------|
+| **MongoDB M0 NOT sufficient** | Stress tests showed 700ms+ latency with shared cluster | **Use M10 minimum (~£45/mo)** - expect 100-200ms latency |
+| **Redis Free NOT sufficient** | 30 connections caused 85% bid success at 20 leagues | **Use Essentials tier (~£5/mo)** - 256 connections |
+| **Railway region selection** | Latency depends on proximity to MongoDB | **Deploy Railway in same region as Atlas cluster** |
 | **Railway cold starts** | Lower tiers may have cold starts affecting Socket.IO | Test reconnection handling; consider "always on" instance |
-| **M0 Free Tier limits** | 512MB storage, shared resources, auto-pauses after 60 days inactivity | Monitor closely; upgrade to M2 if issues |
-| **Redis Cloud Free** | 30MB limit, single zone | Sufficient for pilot; ensure graceful degradation |
-| **Atlas M0 backups** | No automated backups on free tier | Implement manual export routine weekly |
+| **Socket.IO at scale** | Namespace connection failures observed at 20 leagues | Monitor and consider Railway Pro if issues persist |
+
+### Expected Performance After Migration (with M10 + Essentials Redis)
+
+| Scale | Expected Bid Success | Expected p50 | Expected p99 |
+|-------|---------------------|--------------|--------------|
+| 2 leagues | 100% | ~100-150ms | ~300-500ms |
+| 20 leagues | 95%+ | ~150-250ms | ~800-1200ms |
+| 50 leagues | 90%+ | ~200-300ms | ~1000-1500ms |
+
+*Based on preview environment performance (localhost MongoDB: 357ms p50) and expected M10 same-region improvement.*
 
 ---
 
