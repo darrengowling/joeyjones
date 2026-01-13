@@ -268,21 +268,37 @@ updated_auction = await db.auctions.find_one_and_update(
 ```
 **Saves:** 1 DB call (~100ms with remote MongoDB)
 
-**Quick Win #2: Remove league query (Low Risk)**
+**Quick Win #2: Remove league query (Low Risk - BUT REQUIRES SCHEMA CHANGE)**
 
-League settings (timer, antisnipe, budget, roster slots) **never change once auction starts**. The auction document already contains `leagueId` and should contain cached league settings.
+League settings (timer, antisnipe, budget, roster slots) **never change once auction starts**. 
+
+**⚠️ VERIFIED: `clubSlots` is NOT currently in auction document.**
+
+The auction document contains `bidTimer` and `antiSnipeSeconds` but NOT `clubSlots`.
+
+**Before this optimization can be implemented:**
+1. Add `clubSlots: int` field to `Auction` model in `models.py`
+2. Update `start_auction()` to copy `clubSlots` from league:
+   ```python
+   auction_create = AuctionCreate(
+       leagueId=league_id,
+       bidTimer=league.get("timerSeconds", 30),
+       antiSnipeSeconds=league.get("antiSnipeSeconds", 10),
+       clubSlots=league.get("clubSlots", 3)  # ADD THIS
+   )
+   ```
+3. Existing auctions won't have this field - need fallback or migration
 
 ```python
-# Current: Fetches league every bid
+# Current: Fetches league every bid (REQUIRED because clubSlots not in auction)
 league = await db.leagues.find_one({"id": auction["leagueId"]}, {"_id": 0})
 max_slots = league.get("clubSlots", 3)
 
-# Optimized: Use auction's cached settings (set at auction start)
-max_slots = auction.get("clubSlots", 3)  # Already in auction doc
+# After schema change: Use auction's cached settings
+max_slots = auction.get("clubSlots", 3)
 ```
 **Saves:** 1 DB call (~100ms with remote MongoDB)
-
-**Requires:** Ensure auction document includes `clubSlots`, `timerSeconds`, `antiSnipeSeconds`, `budget` when auction is created.
+**Requires:** Schema change + migration consideration for existing auctions
 
 **Medium Win #3: Cache user info per auction session (Medium Risk)**
 
