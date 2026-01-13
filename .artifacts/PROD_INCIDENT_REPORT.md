@@ -2,7 +2,7 @@
 **Investigation Date:** December 8, 2025, 04:47-04:50 UTC  
 **Investigator:** E1 Agent (Fork Job)  
 **Production URL:** https://draft-kings-mobile.emergent.host/  
-**Preview URL:** https://bidding-tester.preview.emergentagent.com/
+**Preview URL:** https://fantasy-auction-test.preview.emergentagent.com/
 
 ---
 
@@ -72,7 +72,7 @@ access-control-max-age: 600
 access-control-allow-credentials: true
 access-control-allow-headers: Accept, Accept-Language, Authorization, Content-Language, Content-Type, x-user-id
 access-control-allow-methods: GET, POST, PUT, DELETE, OPTIONS
-access-control-allow-origin: https://bidding-tester.preview.emergentagent.com
+access-control-allow-origin: https://fantasy-auction-test.preview.emergentagent.com
 access-control-max-age: 600
 ```
 
@@ -101,7 +101,7 @@ REACT_APP_BACKEND_URL:"https://draft-kings-mobile.emergent.host"
 Both environments return HTTP 200 for Socket.IO polling transport:
 ```
 Production: https://draft-kings-mobile.emergent.host/socket.io/?EIO=4&transport=polling
-Preview: https://bidding-tester.preview.emergentagent.com/socket.io/?EIO=4&transport=polling
+Preview: https://fantasy-auction-test.preview.emergentagent.com/socket.io/?EIO=4&transport=polling
 ```
 
 ---

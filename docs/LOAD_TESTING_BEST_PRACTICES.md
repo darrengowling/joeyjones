@@ -147,7 +147,7 @@ async def cleanup_after_test():
 2. **Verify cleanup**:
    ```bash
    # Check remaining counts
-   curl https://bidding-tester.preview.emergentagent.com/api/leagues | python -c "import sys, json; print(len(json.load(sys.stdin)))"
+   curl https://fantasy-auction-test.preview.emergentagent.com/api/leagues | python -c "import sys, json; print(len(json.load(sys.stdin)))"
    ```
 
 3. **Document results**:
@@ -195,7 +195,7 @@ python /app/scripts/cleanup_load_test_users.py
 **Check database status:**
 ```bash
 # Count leagues
-curl https://bidding-tester.preview.emergentagent.com/api/leagues | python -c "import sys, json; print(f'Leagues: {len(json.load(sys.stdin))}')"
+curl https://fantasy-auction-test.preview.emergentagent.com/api/leagues | python -c "import sys, json; print(f'Leagues: {len(json.load(sys.stdin))}')"
 
 # Check users (requires database access)
 python -c "import asyncio; from motor.motor_asyncio import AsyncIOMotorClient; print(asyncio.run((lambda: AsyncIOMotorClient('mongodb://localhost:27017')['test_database'].users.count_documents({}))()))"

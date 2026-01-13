@@ -180,7 +180,7 @@
 - Frontend: React (hot reload enabled)
 - Backend: FastAPI (Python)
 - Database: MongoDB (local)
-- Preview URL: https://bidding-tester.preview.emergentagent.com
+- Preview URL: https://fantasy-auction-test.preview.emergentagent.com
 
 **Key Endpoints:**
 - `/api/leagues` - Create/list leagues

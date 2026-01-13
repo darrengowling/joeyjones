@@ -17,7 +17,7 @@ from datetime import datetime
 from typing import Dict, List, Optional
 
 # Configuration
-BASE_URL = "https://bidding-tester.preview.emergentagent.com/api"
+BASE_URL = "https://fantasy-auction-test.preview.emergentagent.com/api"
 
 class CricketScoringConfigTester:
     def __init__(self):

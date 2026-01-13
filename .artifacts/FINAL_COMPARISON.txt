@@ -9,7 +9,7 @@ PRODUCTION:
 
 PREVIEW:
   - Main JS: bundle.js (development build)
-  - Backend URL configured: https://bidding-tester.preview.emergentagent.com
+  - Backend URL configured: https://fantasy-auction-test.preview.emergentagent.com
 
 === BACKEND SERVER ANALYSIS ===
 

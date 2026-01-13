@@ -134,7 +134,7 @@ DB_NAME=test_database
 # ... rest auto-configured
 
 # Frontend .env (auto-configured)
-REACT_APP_BACKEND_URL=https://bidding-tester.preview.emergentagent.com
+REACT_APP_BACKEND_URL=https://fantasy-auction-test.preview.emergentagent.com
 ```
 
 ### Emergent Production
