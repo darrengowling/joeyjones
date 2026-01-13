@@ -228,6 +228,111 @@ If Emergent can't help, set up your own Atlas cluster:
 
 ---
 
+## 🟡 MEDIUM PRIORITY - Database Call Optimization
+
+**Status:** PLANNED - After hybrid infrastructure test  
+**Last Updated:** January 12, 2026
+
+### Problem Summary
+Each bid requires 7-8 database calls. With remote MongoDB (~100ms/call), this adds ~700ms latency per bid. Even with same-region MongoDB (~20ms/call), reducing calls would improve performance.
+
+### Current DB Calls in `place_bid` Endpoint
+
+| # | Call | Purpose | Can Optimize? |
+|---|------|---------|---------------|
+| 1 | `db.auctions.find_one()` | Get auction state | ✅ Required |
+| 2 | `db.users.find_one()` | Get user name/email | ⚠️ Could cache per auction session |
+| 3 | `db.leagues.find_one()` | Get league settings | ❌ **Unnecessary** - settings never change during auction |
+| 4 | `db.league_participants.find_one()` | Check budget & roster | ✅ Required (budget changes each bid) |
+| 5 | `db.bids.insert_one()` | Save the bid | ✅ Required |
+| 6 | `db.auctions.update_one()` | Update current bid | ⚠️ Combine with #7 |
+| 7 | `db.auctions.find_one()` | Get updated sequence | ❌ **Redundant** - use find_one_and_update |
+| 8 | `db.auctions.update_one()` | Anti-snipe timer | ⚠️ Conditional, could combine |
+
+### Optimization Opportunities
+
+**Quick Win #1: Combine calls 6+7 (Low Risk)**
+```python
+# Current: 2 calls
+await db.auctions.update_one({"id": auction_id}, {"$set": {...}, "$inc": {"bidSequence": 1}})
+updated_auction = await db.auctions.find_one({"id": auction_id}, {"bidSequence": 1})
+
+# Optimized: 1 call
+from pymongo import ReturnDocument
+updated_auction = await db.auctions.find_one_and_update(
+    {"id": auction_id},
+    {"$set": {...}, "$inc": {"bidSequence": 1}},
+    return_document=ReturnDocument.AFTER,
+    projection={"bidSequence": 1, "_id": 0}
+)
+```
+**Saves:** 1 DB call (~100ms with remote MongoDB)
+
+**Quick Win #2: Remove league query (Low Risk)**
+
+League settings (timer, antisnipe, budget, roster slots) **never change once auction starts**. The auction document already contains `leagueId` and should contain cached league settings.
+
+```python
+# Current: Fetches league every bid
+league = await db.leagues.find_one({"id": auction["leagueId"]}, {"_id": 0})
+max_slots = league.get("clubSlots", 3)
+
+# Optimized: Use auction's cached settings (set at auction start)
+max_slots = auction.get("clubSlots", 3)  # Already in auction doc
+```
+**Saves:** 1 DB call (~100ms with remote MongoDB)
+
+**Requires:** Ensure auction document includes `clubSlots`, `timerSeconds`, `antiSnipeSeconds`, `budget` when auction is created.
+
+**Medium Win #3: Cache user info per auction session (Medium Risk)**
+
+User name/email don't change during an auction. Could cache on first bid.
+
+```python
+# Cache key: f"auction:{auction_id}:user:{user_id}"
+# Store: {"name": "...", "email": "..."}
+# TTL: Duration of auction
+```
+**Saves:** 1 DB call per subsequent bid (~100ms each)
+**Risk:** Cache invalidation if user updates profile mid-auction (unlikely)
+
+### Impact Analysis
+
+| Scenario | DB Calls | Remote MongoDB | Same-Region MongoDB |
+|----------|----------|----------------|---------------------|
+| Current | 7-8 | ~700-800ms | ~140-160ms |
+| Quick wins only (#1, #2) | 5-6 | ~500-600ms | ~100-120ms |
+| All optimizations | 3-4 | ~300-400ms | ~60-80ms |
+
+### Implementation Priority
+
+| Optimization | Effort | Risk | Latency Saved | Priority |
+|--------------|--------|------|---------------|----------|
+| #1: Combine update+find | 30 min | 🟢 Low | ~100ms | ✅ Do first |
+| #2: Remove league query | 1-2 hrs | 🟢 Low | ~100ms | ✅ Do second |
+| #3: Cache user info | 2-3 hrs | 🟡 Medium | ~100ms/bid | ⏳ Later |
+
+### Prerequisites
+
+Before implementing #2 (remove league query), verify auction document contains:
+- [ ] `clubSlots` - roster limit per user
+- [ ] `timerSeconds` - lot timer duration
+- [ ] `antiSnipeSeconds` - anti-snipe extension
+- [ ] `budget` - starting budget per user
+
+### When to Implement
+
+1. **Test hybrid infrastructure first** - May reduce latency enough without code changes
+2. **If hybrid achieves 93%+ success** - Consider optimizations for further improvement
+3. **If hybrid <90% success** - Implement quick wins before full migration decision
+
+### Files to Modify
+
+- `/app/backend/server.py` - `place_bid` function (line ~4720)
+- `/app/backend/server.py` - `start_auction` function (ensure settings cached)
+
+---
+
 ## 🟠 MEDIUM PRIORITY - Schema Change Management
 
 **Status:** PROCESS TO IMPLEMENT  
