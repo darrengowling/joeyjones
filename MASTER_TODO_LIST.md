@@ -330,11 +330,17 @@ User name/email don't change during an auction. Could cache on first bid.
 
 ### Prerequisites
 
-Before implementing #2 (remove league query), verify auction document contains:
-- [ ] `clubSlots` - roster limit per user
-- [ ] `timerSeconds` - lot timer duration
-- [ ] `antiSnipeSeconds` - anti-snipe extension
-- [ ] `budget` - starting budget per user
+Before implementing #2 (remove league query):
+- [ ] Add `clubSlots: int` to `Auction` model (`/app/backend/models.py` line ~250)
+- [ ] Add `clubSlots: int` to `AuctionCreate` model (`/app/backend/models.py` line ~272)
+- [ ] Update `start_auction()` to copy `clubSlots` from league (`/app/backend/server.py` line ~4177)
+- [ ] Handle existing auctions that don't have `clubSlots` (fallback to league query or default)
+
+**Verified fields currently in Auction document:**
+- ✅ `bidTimer` (from league's `timerSeconds`)
+- ✅ `antiSnipeSeconds` (from league's `antiSnipeSeconds`)
+- ❌ `clubSlots` - **MISSING - must be added**
+- ❌ `budget` - not needed in place_bid (participant has `budgetRemaining`)
 
 ### When to Implement
 
