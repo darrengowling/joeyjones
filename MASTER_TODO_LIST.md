@@ -69,11 +69,81 @@
 
 ## 🔴 HIGH PRIORITY - MongoDB Performance Investigation
 
-**Status:** AWAITING EMERGENT RESPONSE  
-**Last Updated:** January 11, 2026
+**Status:** EMERGENT RESPONDED - Hybrid approach confirmed viable  
+**Last Updated:** January 13, 2026
+
+### Emergent Support Response (January 13, 2026)
+
+**Key findings:**
+
+| Question | Answer |
+|----------|--------|
+| MongoDB region | **United States** |
+| App server region | **United States** |
+| Pod count | **2 pods** (larger pods available, not more pods) |
+| Custom MongoDB | **Yes, supported** (but no maintenance/support from Emergent) |
+| Additional pods | **No** (but larger pods offered as alternative) |
+
+**Implications:**
+- UK → US network latency (~70-100ms per request) explains the ~350ms gap between preview and production
+- App and MongoDB are co-located in US (good) - latency is from YOUR location to US, not app-to-DB
+- Hybrid approach officially supported - can connect own MongoDB
+- Larger pods may help with 76% success rate at 20 leagues
+
+### ⚠️ Important: Hybrid MongoDB Region Selection
+
+If you set up your own MongoDB Atlas:
+
+| MongoDB Location | App Location | Latency per Query | Recommendation |
+|------------------|--------------|-------------------|----------------|
+| UK (europe-west2) | US | ~70-100ms | ❌ WORSE than current |
+| US (same region as Emergent) | US | ~5-10ms | ✅ BEST option |
+
+**You MUST deploy MongoDB in the same US region as Emergent's servers** - otherwise latency will be worse than current setup.
+
+### Action Items
+
+- [x] Contact Emergent support with performance data
+- [x] Received response confirming US hosting and hybrid option
+- [ ] **Redeploy and retest** (Emergent suggested this - may have made changes)
+- [ ] **Follow up:** Ask for larger pod sizes/pricing and exact US region
+- [ ] If retest doesn't improve: Proceed with hybrid test (MongoDB Atlas M10 in US region)
+
+### Follow-up Email Sent
+
+```
+Thanks Mayank,
+
+We'll redeploy and retest as suggested.
+
+Two follow-up questions:
+1. What larger pod sizes are available, and what's the pricing?
+2. Can you confirm which US region (us-east-1, us-west-2, etc.) the 
+   infrastructure is hosted in? This will help us choose the optimal 
+   region if we set up our own MongoDB.
+
+Cheers,
+Darren
+```
+
+### Revised Hybrid Test Plan
+
+**If retest doesn't show improvement:**
+
+1. Create MongoDB Atlas M10 in **same US region as Emergent** (await region confirmation)
+2. Update `MONGO_URL` in Emergent production env
+3. Redeploy and run stress test
+4. Expected improvement: Dedicated resources, same latency as current
+
+**Why this helps even without changing region:**
+- Dedicated M10 vs shared cluster = more consistent performance
+- No "noisy neighbors" competing for resources
+- Better connection pooling and indexing control
 
 ### Problem Summary
 Production bid latency is ~700-1100ms avg vs ~360ms in preview environment. Root cause identified as **network latency to Emergent's shared MongoDB Atlas cluster**.
+
+**UPDATE:** Emergent confirmed infrastructure is in **United States**. The ~350ms latency gap is primarily YOUR network distance to US servers, not app-to-database latency within their infrastructure.
 
 ### Key Findings
 
