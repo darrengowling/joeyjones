@@ -52,6 +52,62 @@
 | 2 | **Environment variable audit** | 30 min | 🟢 Low | ✅ Yes - High confidence | Ensure no hardcoded values |
 | 3 | **Update CORS config** | 15 min | 🟢 Low | ✅ Yes - High confidence | Add Railway domain to allowed origins |
 
+---
+
+### 🔐 AUTHENTICATION HARDENING (PRE-PILOT CRITICAL)
+
+**Current State:** Magic-link infrastructure exists but token returned in API response (dev mode)  
+**Required State:** Real email delivery + production security
+
+**What EXISTS (Good Foundation):**
+- ✅ JWT token generation and validation
+- ✅ Magic link tokens stored in MongoDB with expiry
+- ✅ Token hashing (secure storage)
+- ✅ Session management structure
+- ✅ Rate limiting infrastructure exists
+
+**What's MISSING (Must Fix Before Pilot):**
+
+| # | Item | Current | Required | Effort | Risk |
+|---|------|---------|----------|--------|------|
+| 1 | **Email delivery** | Token returned in response | Send via email (SendGrid/Resend) | 2-4 hrs | 🟢 Low |
+| 2 | **Remove dev token exposure** | `"token": magic_token` in response | Remove - only send via email | 5 min | 🟢 Low |
+| 3 | **Rate limiting on auth** | Not applied | Limit magic link requests (e.g., 3/hour/email) | 1 hr | 🟢 Low |
+| 4 | **Single-use tokens** | May allow reuse | Ensure token deleted after use | 30 min | 🟢 Low |
+| 5 | **Shorter token expiry** | 15 min (OK) | Verify appropriate for email delivery | Config | 🟢 Low |
+
+**Why This Matters for Pilot:**
+> Not enterprise-grade, but partners will assume these basics exist:
+> - Real authentication (no placeholders)
+> - Proper session handling  
+> - Clear access control
+> - No obvious data exposure
+
+**Implementation Plan:**
+
+```
+Step 1: Integrate email service (SendGrid or Resend)
+        - Add API key to environment
+        - Create email template for magic link
+        
+Step 2: Update /auth/magic-link endpoint
+        - Remove token from response
+        - Send email with link instead
+        - Return only { "message": "Check your email" }
+        
+Step 3: Add rate limiting
+        - Use existing rate limiter on magic-link endpoint
+        - 3 requests per hour per email
+        
+Step 4: Verify single-use enforcement
+        - Token should be deleted after successful verification
+        - Already in place? Verify and test
+```
+
+**Estimated Total Effort:** 1 day  
+**Can Do in Emergent:** ✅ Yes - High confidence  
+**Dependencies:** Email service API key (SendGrid free tier: 100 emails/day)
+
 ### Documentation to Prepare
 
 | # | Doc | Status |
