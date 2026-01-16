@@ -48,9 +48,9 @@
 
 | # | Task | Effort | Risk | Can Do in Emergent? | Notes |
 |---|------|--------|------|---------------------|-------|
-| 1 | **Add `/health` endpoint** | 5 min | 🟢 Low | ✅ Yes - High confidence | Already done |
-| 2 | **Environment variable audit** | 30 min | 🟢 Low | ✅ Yes - High confidence | Ensure no hardcoded values |
-| 3 | **Update CORS config** | 15 min | 🟢 Low | ✅ Yes - High confidence | Add Railway domain to allowed origins |
+| 1 | **Add `/health` endpoint** | 5 min | 🟢 Low | ✅ Yes - High confidence | ✅ Already done |
+| 2 | **Environment variable audit** | 30 min | 🟢 Low | ✅ Yes - High confidence | ✅ Done (Jan 16) - No hardcoded URLs, ready for Railway |
+| 3 | **Update CORS config** | 15 min | 🟢 Low | ✅ Yes - High confidence | Do during Railway setup - update FRONTEND_ORIGIN, CORS_ORIGINS |
 
 ---
 
