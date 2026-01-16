@@ -338,13 +338,20 @@ When significant user bases develop in other regions:
 
 ## 📁 RELATED DOCUMENTATION
 
-| Document | Purpose |
-|----------|---------|
-| `/app/MIGRATION_PLAN.md` | Railway migration details |
-| `/app/STRESS_TEST_REPORT.md` | Full performance analysis |
-| `/app/AGENT_ONBOARDING_PROMPT.md` | System architecture reference |
-| `/app/SYSTEM_ARCHITECTURE_AUDIT.md` | Database schema, endpoints |
-| `/app/tests/multi_league_stress_test.py` | Load testing script |
+**⚠️ AGENTS: READ THESE BEFORE WORKING ON THIS PROJECT**
+
+| Document | Purpose | Critical Items |
+|----------|---------|----------------|
+| `/app/docs/archive/COMPREHENSIVE_PILOT_READINESS_ASSESSMENT.md` | Full pilot readiness analysis | Auth, backups, load testing, error tracking |
+| `/app/docs/archive/ROLLBACK_AND_READINESS_REPORT.md` | Production readiness gaps | Auth security, Redis config, Sentry |
+| `/app/docs/archive/CURRENT_BUILD_READINESS_REPORT.md` | Build validation | Known limitations section |
+| `/app/docs/OPERATIONS_PLAYBOOK.md` | Operational procedures | Incident response, monitoring |
+| `/app/MIGRATION_PLAN.md` | Railway migration details | Infrastructure setup |
+| `/app/STRESS_TEST_REPORT.md` | Full performance analysis | Latency findings |
+| `/app/AGENT_ONBOARDING_PROMPT.md` | System architecture reference | Database schema, endpoints |
+| `/app/tests/multi_league_stress_test.py` | Load testing script | Usage instructions |
+
+**Lesson from previous sessions:** Critical items were documented but forgotten between agent handoffs. If you're a new agent, READ the archive docs above - don't rediscover known issues.
 
 ---
 
