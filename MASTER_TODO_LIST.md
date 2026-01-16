@@ -66,7 +66,9 @@
 - ✅ Session management structure
 - ✅ Rate limiting infrastructure exists
 
-**What's MISSING (Must Fix Before Pilot):**
+**⏸️ DEFERRED UNTIL SENDGRID SETUP**
+
+All auth hardening items grouped together - implement as a single piece of work once SendGrid account and API key are available:
 
 | # | Item | Current | Required | Effort | Risk |
 |---|------|---------|----------|--------|------|
@@ -76,37 +78,29 @@
 | 4 | **Single-use tokens** | May allow reuse | Ensure token deleted after use | 30 min | 🟢 Low |
 | 5 | **Shorter token expiry** | 15 min (OK) | Verify appropriate for email delivery | Config | 🟢 Low |
 
-**Why This Matters for Pilot:**
-> Not enterprise-grade, but partners will assume these basics exist:
-> - Real authentication (no placeholders)
-> - Proper session handling  
-> - Clear access control
-> - No obvious data exposure
+**Why deferred:**
+- Rate limiting could inadvertently block stress testing (unique emails per test, but still a risk)
+- All items should be implemented together once email delivery is working
+- No security risk pre-pilot as only team is using the system
 
-**Implementation Plan:**
+**Dependencies:**
+- SendGrid account (free tier: 100 emails/day) OR Resend account
+- API key added to environment
 
+**Implementation Plan (do all at once):**
 ```
-Step 1: Integrate email service (SendGrid or Resend)
-        - Add API key to environment
-        - Create email template for magic link
-        
-Step 2: Update /auth/magic-link endpoint
-        - Remove token from response
-        - Send email with link instead
+Step 1: Set up SendGrid/Resend account, get API key
+Step 2: Integrate email service, create magic link email template
+Step 3: Update /auth/magic-link endpoint:
+        - Send email with link instead of returning token
         - Return only { "message": "Check your email" }
-        
-Step 3: Add rate limiting
-        - Use existing rate limiter on magic-link endpoint
-        - 3 requests per hour per email
-        
-Step 4: Verify single-use enforcement
-        - Token should be deleted after successful verification
-        - Already in place? Verify and test
+Step 4: Add rate limiting (3 requests/hour/email)
+Step 5: Verify single-use token enforcement
+Step 6: Test full flow end-to-end
 ```
 
 **Estimated Total Effort:** 1 day  
-**Can Do in Emergent:** ✅ Yes - High confidence  
-**Dependencies:** Email service API key (SendGrid free tier: 100 emails/day)
+**When:** After stress testing complete, before pilot invites go out
 
 ### Documentation to Prepare
 
