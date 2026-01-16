@@ -155,7 +155,7 @@ Step 4: Verify single-use enforcement
 | # | Task | Effort | Risk | Confidence | Benefit |
 |---|------|--------|------|------------|---------|
 | 1 | **Bidder status indicator** | 2 hrs | 🟢 Low | ✅ High | "YOU'RE WINNING" / "OUTBID" clarity |
-| 2 | **Current bid label** | 30 min | 🟢 Low | ✅ High | Shows "Current: £Xm" above input |
+| 2 | ~~**Current bid label**~~ | 30 min | 🟢 Low | ✅ High | ⏸️ Review - already visible in main bid display |
 | 3 | **Rate limiting** | 1 hr | 🟢 Low | ✅ High | Protection against abuse |
 
 ### Monitoring Items (Watch During Pilot)
