@@ -241,6 +241,21 @@ Step 6: Test full flow end-to-end
 | 2 | MongoDB Atlas backups | Config | 🟢 Low | Data protection (M10 includes) |
 | 3 | ESLint warnings cleanup | 1 hr | 🟢 Low | Cleaner builds |
 
+### Code Cleanup Pass
+
+*Lint errors and code quality issues found during development - fix in a dedicated cleanup session*
+
+| File | Line | Error Code | Issue | Fix |
+|------|------|------------|-------|-----|
+| server.py | 252 | F541 | f-string without placeholders | Remove `f` prefix |
+| server.py | 481 | E722 | Bare `except:` clause | Change to `except Exception:` |
+| server.py | 1452 | F841 | Unused variable `asset_names` | Delete the line |
+| server.py | 6265 | E722 | Bare `except:` clause | Change to `except Exception:` |
+
+**Effort:** 30 min  
+**Risk:** 🟢 Low  
+**When:** During a dedicated cleanup session, not mid-feature
+
 ---
 
 ## 🔵 FUTURE / BACKLOG
