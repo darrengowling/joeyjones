@@ -1,5 +1,24 @@
 # Sport X Fantasy Auction Platform - PRD
 
+---
+## ⚠️ AGENT: READ THIS SECTION FIRST
+
+**Before doing ANYTHING, read these files:**
+1. `/app/MASTER_TODO_LIST.md` - Current tasks and priorities
+2. `/app/AGENT_START_HERE.md` - Quick reference and gotchas
+
+**Current Status (Jan 2026):** Migrating to Railway (EU). UK users have ~700ms latency on Emergent (US-hosted).
+
+**Critical gotchas:**
+- Teams/Players are in `assets` collection (NOT `clubs` or `teams`)
+- Points are in `league_points` collection (NOT `league_participants`)
+- Auth magic link returns token in response - needs email delivery for production
+- Competition names must be exact: "UEFA Champions League", "English Premier League", "Africa Cup of Nations"
+
+**Ask user for approval before implementing anything.**
+
+---
+
 ## Original Problem Statement
 Build a fantasy sports auction platform where users create leagues, bid on teams/clubs in real-time auctions, and compete based on team performance scores.
 
