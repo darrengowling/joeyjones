@@ -147,6 +147,8 @@ Step 4: Verify single-use enforcement
 | 1 | **DB Call Optimization #1** - Combine update+find | 30 min | 🟢 Low | ✅ High | -100ms per bid |
 | 2 | **DB Call Optimization #2** - Remove league query | 1-2 hrs | 🟢 Low | ⚠️ Medium | -100ms per bid (needs schema change) |
 | 3 | **Commissioner auth checks** | 1 hr | 🟡 Med | ✅ High | Security - prevent unauthorized actions |
+| 4 | **Frontend performance audit** | 2 days | 🟢 Low | ✅ High | React.memo for heavy components, debounce socket updates |
+| 5 | **Error recovery patterns** | 2-3 days | 🟡 Med | ⚠️ Medium | Retry logic for transient failures, graceful degradation |
 
 ### Medium Priority - Nice to Have
 
