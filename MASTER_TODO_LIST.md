@@ -216,6 +216,7 @@ Step 4: Verify single-use enforcement
 | 3 | ISSUE-017.4 | **Consolidate socket events** | 4 hrs | 🟡 Med | Simpler client code |
 | 4 | ISSUE-017.5 | **Socket.IO bidding** (replace HTTP POST) | 1 week | 🔴 High | Faster mobile bidding |
 | 5 | STRESS-TEST | **Competitive bidding test mode** | 4 hrs | 🟡 Med | Realistic load testing |
+| 6 | - | **E2E test suite expansion** | 4-5 days | 🟡 Med | Regression coverage, confidence |
 
 ### New Features
 
