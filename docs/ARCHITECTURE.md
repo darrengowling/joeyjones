@@ -111,7 +111,12 @@ See [DATABASE_SCHEMA.md](./DATABASE_SCHEMA.md) for collection details.
 2. POST /api/auction/{id}/bid
    │
    ▼
-3. Backend validates:
+3. Backend checks caches:
+   - Auction settings cached? → Use cache (saves 1 DB call)
+   - User info cached? → Use cache (saves 1 DB call)
+   │
+   ▼
+4. Backend validates:
    - User authenticated?
    - Bid > current bid?
    - Budget sufficient?
@@ -119,19 +124,33 @@ See [DATABASE_SCHEMA.md](./DATABASE_SCHEMA.md) for collection details.
    - Not self-outbid?
    │
    ▼
-4. Update auction in MongoDB
+5. Update auction in MongoDB
    │
    ▼
-5. Emit Socket.IO events:
+6. Emit Socket.IO events:
    - bid_placed (to bidder)
    - bid_update (to all)
    │
    ▼
-6. Redis pub/sub broadcasts to all pods
+7. Redis pub/sub broadcasts to all pods
    │
    ▼
-7. All connected clients update UI
+8. All connected clients update UI
 ```
+
+### Auction Caching (Jan 2026)
+
+In-memory caches reduce DB calls per bid:
+
+| Cache | Key | Data | Invalidation |
+|-------|-----|------|--------------|
+| `_auction_settings_cache` | auction_id | clubSlots, minimumBudget, antiSnipeSeconds, bidTimer | On auction complete |
+| `_user_cache` | user_id | name, email | Server restart |
+
+**Impact:**
+- First bid: 4 DB calls (populates caches)
+- Repeat bidder: 2 DB calls (uses both caches)
+- New bidder, same auction: 3 DB calls (uses auction cache)
 
 ### Scoring Flow
 
