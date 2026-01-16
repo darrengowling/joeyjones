@@ -1,10 +1,56 @@
 # Migration Plan: Emergent → Self-Hosted (Railway)
 
 **Created:** December 13, 2025  
-**Last Updated:** January 12, 2026  
+**Last Updated:** January 16, 2026  
 **Status:** PLANNING - Infrastructure bottlenecks identified via stress testing  
 **Target Platform:** Railway  
 **Reason:** Control and stakeholder credibility after production outages
+
+---
+
+## 🔄 Dual Development Workflow (Post-Migration)
+
+**Strategy:** Railway for production, Emergent for development sandbox
+
+```
+Emergent (development)
+    ↓ Push tested feature
+sandbox-repo (GitHub)
+    ↓ Create PR
+production-repo (GitHub, main branch)
+    ↓ Auto-deploy trigger
+Railway (production)
+```
+
+### Setup Steps
+
+1. **Create two GitHub repos:**
+   - `sportx-production` → Connected to Railway (auto-deploy on `main`)
+   - `sportx-sandbox` → Connected to Emergent
+
+2. **Configure Railway auto-deploy:**
+   - Railway Dashboard → Service Settings → Source
+   - Connect `sportx-production` repo
+   - Enable "Auto Deploy" on `main` branch
+   - Every merge to `main` triggers automatic deployment
+
+3. **Development workflow:**
+   - Develop/test features in Emergent (sandbox repo)
+   - When ready, create PR from `sandbox` → `production` repo
+   - Review PR, merge to `main`
+   - Railway auto-deploys
+
+### Sync Strategy
+
+| Direction | When | How |
+|-----------|------|-----|
+| Production → Sandbox | After production hotfixes | Pull production changes into sandbox repo |
+| Sandbox → Production | Feature complete & tested | PR from sandbox to production |
+
+### Benefits
+
+- **Emergent**: Fast iteration, AI-assisted development, quick testing
+- **Railway**: Stable production, EU hosting (low latency for UK users), full control
 
 ---
 
