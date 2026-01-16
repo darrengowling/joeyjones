@@ -4848,8 +4848,7 @@ async def place_bid(auction_id: str, bid_input: BidCreate):
     # Everton Bug Fix: Enforce budget reserve for remaining slots
     # User must keep £1m per remaining slot (except on final slot)
     clubs_won_count = len(participant.get("clubsWon", []))
-    max_slots = league.get("clubSlots", 3)
-    slots_remaining = max_slots - clubs_won_count
+    slots_remaining = club_slots - clubs_won_count
     
     if slots_remaining > 1:  # Not on final slot
         # Must reserve £1m per remaining slot
@@ -4865,13 +4864,11 @@ async def place_bid(auction_id: str, bid_input: BidCreate):
             )
     
     # Check if user has reached roster limit (Prompt C: Roster enforcement)
-    clubs_won_count = len(participant.get("clubsWon", []))
-    max_slots = league.get("clubSlots", 3)  # Default to 3 if not set
-    if clubs_won_count >= max_slots:
+    if clubs_won_count >= club_slots:
         metrics.increment_bid_rejected("roster_full")
         raise HTTPException(
             status_code=400,
-            detail=f"Roster full. You already own {clubs_won_count}/{max_slots} teams"
+            detail=f"Roster full. You already own {clubs_won_count}/{club_slots} teams"
         )
     
     # Get current club from auction
