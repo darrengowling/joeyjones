@@ -127,8 +127,9 @@ Step 4: Verify single-use enforcement
 | # | Task | Effort | Risk | Confidence | Why Critical |
 |---|------|--------|------|------------|--------------|
 | 1 | **Stress test on Railway** | 2 hrs | 🟢 Low | ✅ High | Validate migration fixed latency |
-| 2 | **Sentry monitoring** | 30 min | 🟢 Low | ✅ High | Need error visibility at scale |
-| 3 | **Verify all core flows** | 2 hrs | 🟢 Low | ✅ High | Create league, auction, scoring |
+| 2 | **Authentication hardening** | 1 day | 🟢 Low | ✅ High | Real email delivery, no token exposure |
+| 3 | **Sentry monitoring** | 30 min | 🟢 Low | ✅ High | Need error visibility at scale |
+| 4 | **Verify all core flows** | 2 hrs | 🟢 Low | ✅ High | Create league, auction, scoring |
 
 **Target metrics after migration:**
 
