@@ -150,7 +150,6 @@ Step 6: Test full flow end-to-end
 |---|------|--------|------|------------|---------|
 | 1 | ~~**Bidder status indicator**~~ | 2 hrs | 🟢 Low | ✅ High | ❌ Considered - not needed. Current bidder name next to bid is sufficient |
 | 2 | ~~**Current bid label**~~ | 30 min | 🟢 Low | ✅ High | ⏸️ Review - already visible in main bid display |
-| 3 | **Rate limiting** | 1 hr | 🟢 Low | ✅ High | Protection against abuse |
 
 ### Monitoring Items (Watch During Pilot)
 
