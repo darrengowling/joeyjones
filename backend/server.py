@@ -5520,6 +5520,9 @@ async def check_auction_completion(auction_id: str, final_club_id: str = None, f
             'participants': [LeagueParticipant(**p).model_dump(mode='json') for p in participants]
         }, room=f"auction:{auction_id}")
         
+        # Clear auction cache now that auction is complete
+        clear_auction_cache(auction_id)
+        
         # Emit league status changed event
         league = await db.leagues.find_one({"id": auction["leagueId"]}, {"_id": 0})
         if league:
