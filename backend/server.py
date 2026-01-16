@@ -69,6 +69,60 @@ load_dotenv(ROOT_DIR / '.env')
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+# ============================================================
+# AUCTION CACHING - Performance Optimization (Jan 2026)
+# Cache static data that doesn't change during an auction
+# to reduce DB calls per bid from 7-8 to ~4-5
+# ============================================================
+
+# Cache for auction static settings (populated on first bid, cleared on auction end)
+# Key: auction_id, Value: {leagueId, minimumBudget, antiSnipeSeconds, bidTimer, clubSlots}
+_auction_settings_cache = {}
+
+# Cache for user info (populated on first bid by user)
+# Key: user_id, Value: {name, email}
+_user_cache = {}
+
+def get_cached_auction_settings(auction_id: str) -> dict | None:
+    """Get cached auction settings, returns None if not cached"""
+    return _auction_settings_cache.get(auction_id)
+
+def cache_auction_settings(auction_id: str, auction: dict, league: dict):
+    """Cache static auction settings that don't change during bidding"""
+    _auction_settings_cache[auction_id] = {
+        "leagueId": auction.get("leagueId"),
+        "minimumBudget": auction.get("minimumBudget", 1000000.0),
+        "antiSnipeSeconds": auction.get("antiSnipeSeconds", 15),
+        "bidTimer": auction.get("bidTimer", 30),
+        "clubSlots": league.get("clubSlots", 3)
+    }
+    logger.info(f"📦 Cached auction settings for {auction_id}")
+
+def get_cached_user(user_id: str) -> dict | None:
+    """Get cached user info, returns None if not cached"""
+    return _user_cache.get(user_id)
+
+def cache_user(user_id: str, user: dict):
+    """Cache user info (name, email)"""
+    _user_cache[user_id] = {
+        "name": user.get("name"),
+        "email": user.get("email")
+    }
+
+def clear_auction_cache(auction_id: str):
+    """Clear cache for an auction when it ends"""
+    if auction_id in _auction_settings_cache:
+        del _auction_settings_cache[auction_id]
+        logger.info(f"🗑️ Cleared auction cache for {auction_id}")
+
+def clear_all_auction_caches():
+    """Clear all auction caches (e.g., on server restart)"""
+    _auction_settings_cache.clear()
+    _user_cache.clear()
+    logger.info("🗑️ Cleared all auction caches")
+
+# ============================================================
+
 # Utility function to remove MongoDB _id from documents
 def remove_id(doc):
     """Remove _id field from MongoDB document for JSON serialization"""
