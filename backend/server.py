@@ -4721,7 +4721,7 @@ async def place_bid(auction_id: str, bid_input: BidCreate):
     # Metrics: Track bid processing time
     start_time = time.time()
     
-    # Verify auction exists and is active (always need fresh data for status, currentBid, etc.)
+    # Verify auction exists and is active
     auction = await db.auctions.find_one({"id": auction_id}, {"_id": 0})
     if not auction:
         raise HTTPException(status_code=404, detail="Auction not found")
@@ -4729,53 +4729,26 @@ async def place_bid(auction_id: str, bid_input: BidCreate):
     if auction["status"] != "active":
         raise HTTPException(status_code=400, detail=f"Auction is not active (status: {auction['status']})")
     
-    # OPTIMIZATION: Try to get cached static settings (league.clubSlots, auction.minimumBudget, etc.)
-    cached_settings = get_cached_auction_settings(auction_id)
+    # Get user details
+    user = await db.users.find_one({"id": bid_input.userId}, {"_id": 0})
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
     
-    if cached_settings:
-        # Use cached values - saves 1 DB call (leagues.find_one)
-        club_slots = cached_settings["clubSlots"]
-        minimum_budget = cached_settings["minimumBudget"]
-        league_id = cached_settings["leagueId"]
-    else:
-        # First bid in this auction - need to fetch and cache
-        league = await db.leagues.find_one({"id": auction["leagueId"]}, {"_id": 0})
-        if not league:
-            raise HTTPException(status_code=404, detail="League not found")
-        
-        # Cache for subsequent bids
-        cache_auction_settings(auction_id, auction, league)
-        club_slots = league.get("clubSlots", 3)
-        minimum_budget = auction.get("minimumBudget", 1000000.0)
-        league_id = auction["leagueId"]
+    # Get league
+    league = await db.leagues.find_one({"id": auction["leagueId"]}, {"_id": 0})
+    if not league:
+        raise HTTPException(status_code=404, detail="League not found")
     
-    # OPTIMIZATION: Try to get cached user info
-    cached_user = get_cached_user(bid_input.userId)
-    
-    if cached_user:
-        # Use cached user - saves 1 DB call (users.find_one)
-        user_name = cached_user["name"]
-        user_email = cached_user["email"]
-    else:
-        # First bid by this user - need to fetch and cache
-        user = await db.users.find_one({"id": bid_input.userId}, {"_id": 0})
-        if not user:
-            raise HTTPException(status_code=404, detail="User not found")
-        
-        # Cache for subsequent bids
-        cache_user(bid_input.userId, user)
-        user_name = user["name"]
-        user_email = user["email"]
-    
-    # Get participant to check budget (CANNOT cache - budgetRemaining and clubsWon change)
+    # Get participant to check budget
     participant = await db.league_participants.find_one({
-        "leagueId": league_id,
+        "leagueId": auction["leagueId"],
         "userId": bid_input.userId
     }, {"_id": 0})
     if not participant:
         raise HTTPException(status_code=403, detail="User is not a participant in this league")
     
     # Check minimum bid amount
+    minimum_budget = auction.get("minimumBudget", 1000000.0)  # Default £1m
     if bid_input.amount < minimum_budget:
         metrics.increment_bid_rejected("minimum_bid")
         raise HTTPException(
@@ -4794,7 +4767,8 @@ async def place_bid(auction_id: str, bid_input: BidCreate):
     # Everton Bug Fix: Enforce budget reserve for remaining slots
     # User must keep £1m per remaining slot (except on final slot)
     clubs_won_count = len(participant.get("clubsWon", []))
-    slots_remaining = club_slots - clubs_won_count
+    max_slots = league.get("clubSlots", 3)
+    slots_remaining = max_slots - clubs_won_count
     
     if slots_remaining > 1:  # Not on final slot
         # Must reserve £1m per remaining slot
