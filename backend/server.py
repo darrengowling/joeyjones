@@ -4784,11 +4784,11 @@ async def place_bid(auction_id: str, bid_input: BidCreate):
             )
     
     # Check if user has reached roster limit (Prompt C: Roster enforcement)
-    if clubs_won_count >= club_slots:
+    if clubs_won_count >= max_slots:
         metrics.increment_bid_rejected("roster_full")
         raise HTTPException(
             status_code=400,
-            detail=f"Roster full. You already own {clubs_won_count}/{club_slots} teams"
+            detail=f"Roster full. You already own {clubs_won_count}/{max_slots} teams"
         )
     
     # Get current club from auction
