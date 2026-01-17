@@ -138,9 +138,9 @@ Step 6: Test full flow end-to-end
 
 | # | Task | Effort | Risk | Confidence | Benefit |
 |---|------|--------|------|------------|---------|
-| 1 | **DB Call Caching** | 1 hr | 🟢 Low | ✅ High | ✅ Done (Jan 16) - Cache league settings + user info. Saves 2 DB calls per bid for repeat bidders |
+| 1 | **DB Call Caching** | 2 hrs | 🟡 Med | ⚠️ Medium | ⏸️ Attempted Jan 16 - reverted due to bug. Needs more careful implementation |
 | 2 | **DB Call Optimization #2** - Combine update+find | 30 min | 🟢 Low | ✅ High | -100ms per bid (find_one_and_update) |
-| 3 | **DB Call Optimization #3** - Remove league query | 1-2 hrs | 🟢 Low | ⚠️ Medium | Now handled by caching above |
+| 3 | **DB Call Optimization #3** - Remove league query | 1-2 hrs | 🟢 Low | ⚠️ Medium | Part of caching approach above |
 | 4 | **Commissioner auth checks** | 1 hr | 🟡 Med | ✅ High | Security - prevent unauthorized actions |
 | 5 | **Frontend performance audit** | 2 days | 🟢 Low | ✅ High | React.memo for heavy components, debounce socket updates |
 | 6 | **Error recovery patterns** | 2-3 days | 🟡 Med | ⚠️ Medium | Retry logic for transient failures, graceful degradation |
