@@ -4821,8 +4821,8 @@ async def place_bid(auction_id: str, bid_input: BidCreate):
         clubId=current_club_id,
         userId=bid_input.userId,
         amount=bid_input.amount,
-        userName=user_name,
-        userEmail=user_email
+        userName=user["name"],
+        userEmail=user["email"]
     )
     await db.bids.insert_one(bid_obj.model_dump())
     
@@ -4833,7 +4833,7 @@ async def place_bid(auction_id: str, bid_input: BidCreate):
     # Update auction with current bid info and increment sequence atomically (Prompt B)
     current_bidder = {
         "userId": bid_input.userId,
-        "displayName": user_name
+        "displayName": user["name"]
     }
     
     # Use atomic increment to avoid race conditions in rapid bidding
