@@ -189,18 +189,6 @@ If user says:
 **Auctions:**
 - Auction state: `auctions` collection
 - Individual bids: `bids` collection
-- **In-memory caches:** `_auction_settings_cache`, `_user_cache` (see below)
-
-### Auction Caching (Jan 2026)
-
-The `place_bid` function uses in-memory caches to reduce DB calls:
-
-| Cache | Contents | Populated | Cleared |
-|-------|----------|-----------|---------|
-| `_auction_settings_cache[auction_id]` | clubSlots, minimumBudget, antiSnipeSeconds, bidTimer | First bid in auction | Auction complete |
-| `_user_cache[user_id]` | name, email | First bid by user | Server restart |
-
-**Impact:** Saves 1-2 DB calls per bid for repeat bidders
 
 ---
 
