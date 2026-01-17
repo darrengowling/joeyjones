@@ -4946,7 +4946,7 @@ async def place_bid(auction_id: str, bid_input: BidCreate):
         "seq": new_bid_sequence,
         "amount": bid_input.amount,
         "bidderId": bid_input.userId,
-        "bidderName": user["name"],
+        "bidderName": user_name,
         "roomSize": room_size,
         "timestamp": datetime.now(timezone.utc).isoformat()
     }))
