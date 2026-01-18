@@ -1,10 +1,10 @@
-# Emergency Project Rebuild Prompt - UPDATED December 2025
+# Emergency Project Rebuild Prompt - UPDATED January 2026
 
 **⚠️ CRITICAL: Use this prompt to recreate the Fantasy Sports Auction Platform from scratch**
 
-Last Updated: December 20, 2025  
-Current Production Version: Fully functional multi-sport auction platform with live user testing (150+ users)  
-Document Version: 2.0
+Last Updated: January 17, 2026  
+Current Production Version: Fully functional multi-sport auction platform - preparing for 400-user UK pilot  
+Document Version: 3.0
 
 ---
 
@@ -16,10 +16,15 @@ Build a **multi-sport fantasy auction platform** enabling users to create privat
 
 ## 🌐 Production Environment
 
-**Production URL:** https://draft-kings-mobile.emergent.host  
+**Current Production URL:** https://draft-kings-mobile.emergent.host  
 **Health Check:** `curl -s "https://draft-kings-mobile.emergent.host/api/health"`
 
-**Current Production State (Verified Dec 20, 2025):**
+**⚠️ CRITICAL INFRASTRUCTURE UPDATE (January 2026):**
+- **Current hosting**: Emergent (US-based) - causes ~700ms latency for UK users
+- **Migration planned**: Railway (EU-West/London) for UK pilot
+- **Root cause**: 6-7 DB calls per bid × ~100ms transatlantic round-trip = unacceptable latency
+
+**Current Production State (Verified Jan 17, 2026):**
 ```json
 {
   "status": "healthy",
@@ -32,47 +37,87 @@ Build a **multi-sport fantasy auction platform** enabling users to create privat
 }
 ```
 
+**Stress Test Results (Jan 17, 2026 - 10 leagues, 80 users):**
+| Metric | Value | Status |
+|--------|-------|--------|
+| p50 latency | 700ms | ⚠️ High (US hosting) |
+| p99 latency | 2808ms | ❌ Too high |
+| Bid success | 71% | ⚠️ Contention at scale |
+| Leagues completed | 100% | ✅ |
+
+---
+
+## 🚀 Migration Plan (Railway EU-West)
+
+**Why migrating:**
+- UK pilot users face ~700ms baseline latency to US servers
+- Emergent confirmed US-only hosting, 2-pod limit
+- Railway allows EU region selection
+
+**Target architecture:**
+```
+Railway (EU-West/London)
+├── Backend: FastAPI
+├── Frontend: React
+├── MongoDB Atlas M10 (europe-west2)
+└── Redis Cloud (existing account)
+```
+
+**Estimated cost:** ~£65/month (Railway £15 + Atlas M10 £45 + Redis £5)
+
+**Dual development workflow (post-migration):**
+```
+Emergent (sandbox) → Push tested feature → sandbox-repo (GitHub)
+                                              ↓ Create PR
+Railway (production) ← Auto-deploy ← production-repo (main branch)
+```
+
+See `/app/MIGRATION_PLAN.md` for full details.
+
 ---
 
 ## 🏗️ Core Architecture
 
 ### Tech Stack (VERIFIED CURRENT)
-- **Frontend**: React 18 + Tailwind CSS + shadcn/ui + Socket.IO Client + React Router v6 + axios + react-hot-toast
+- **Frontend**: React 18 + Tailwind CSS + shadcn/ui + Socket.IO Client + React Router v6 + axios + sonner (toasts)
 - **Backend**: FastAPI (Python 3.10+) + python-socketio + Motor (async MongoDB) + PyJWT
 - **Database**: MongoDB (single database: `test_database`)
-- **Real-time**: Socket.IO with Redis adapter for multi-pod production (optional for single-pod)
-- **Authentication**: Magic Link (email-based, no passwords)
+- **Real-time**: Socket.IO with Redis adapter for multi-pod production
+- **Authentication**: Magic Link (email-based, no passwords) - ⚠️ Needs hardening for pilot
+- **External Redis**: Redis Cloud Essentials (256 connections)
 
 ### Project Structure (VERIFIED)
 ```
 /app/
 ├── backend/
-│   ├── server.py                    # Monolithic FastAPI (ALL routes in one file)
+│   ├── server.py                    # Monolithic FastAPI (~5,900 lines)
 │   ├── auth.py                      # JWT + Magic Link generation
-│   ├── socketio_init.py             # Socket.IO server with conditional Redis
-│   ├── scoring_service.py           # Point calculation (CRITICAL: uses exact name matching)
+│   ├── socketio_init.py             # Socket.IO server with Redis adapter
+│   ├── scoring_service.py           # Point calculation
 │   ├── football_data_client.py      # Football-Data.org API wrapper
 │   ├── rapidapi_client.py           # Cricbuzz API wrapper
-│   ├── models.py                    # Pydantic models (MUST include usersInWaitingRoom)
-│   ├── seed_openfootball_clubs.py   # Seed football clubs
-│   ├── seed_ashes_players.py        # Seed cricket players
+│   ├── models.py                    # Pydantic models
+│   ├── metrics.py                   # Bid metrics tracking
 │   └── .env                         # Backend env vars
 ├── frontend/
 │   └── src/
 │       ├── pages/
-│       │   ├── MyCompetitions.js    # Home page + auth (NO separate Login.js)
+│       │   ├── MyCompetitions.js    # Home page + auth
 │       │   ├── CreateLeague.js      # League creation + club selection
-│       │   ├── LeagueDetail.js      # Pre-auction: waiting room, participants
-│       │   ├── AuctionRoom.js       # Live bidding (Socket.IO)
-│       │   ├── CompetitionDashboard.js  # Post-auction: standings, fixtures
-│       │   ├── ClubsList.js         # Browse all clubs
+│       │   ├── LeagueDetail.js      # Pre-auction: waiting room
+│       │   ├── AuctionRoom.js       # Live bidding (Socket.IO) - ⚠️ DO NOT MODIFY
+│       │   ├── CompetitionDashboard.js  # Post-auction: standings
 │       │   └── Help.js              # User guide
-│       ├── components/
-│       │   ├── ui/                  # shadcn/ui components
-│       │   └── DebugFooter.js       # Shows build hash + backend URL
+│       ├── components/ui/           # shadcn/ui components
 │       └── utils/
-│           ├── socket.js            # Socket.IO client setup
-│           └── sentry.js            # Error tracking (optional)
+│           ├── socket.js            # Socket.IO client
+│           └── debugLogger.js       # Debug report capture
+├── tests/
+│   └── multi_league_stress_test.py  # Load testing script
+├── MASTER_TODO_LIST.md              # Single source of truth for tasks
+├── MIGRATION_PLAN.md                # Railway migration details
+├── AGENT_START_HERE.md              # Quick reference for agents
+└── memory/PRD.md                    # Product requirements
 ```
 
 ---
@@ -81,7 +126,7 @@ Build a **multi-sport fantasy auction platform** enabling users to create privat
 
 ### Database Name
 - **ONLY ONE DATABASE**: `test_database`
-- Collections: `users`, `leagues`, `league_participants`, `auctions`, `bids`, `assets`, `fixtures`, `league_points`, `standings`, `sports`, `cricket_leaderboard`, `league_stats`, `magic_links`
+- Collections: `users`, `leagues`, `league_participants`, `auctions`, `bids`, `assets`, `fixtures`, `league_points`, `standings`, `sports`, `magic_links`, `debug_reports`
 
 ### Collection: `users`
 ```javascript
@@ -89,7 +134,7 @@ Build a **multi-sport fantasy auction platform** enabling users to create privat
   "id": "uuid-string",
   "email": "user@example.com",
   "name": "User Name",
-  "createdAt": "2025-01-01T00:00:00+00:00"  // ISO string with timezone
+  "createdAt": "2025-01-01T00:00:00+00:00"
 }
 ```
 ⚠️ **NO PASSWORD FIELD** - uses magic link authentication
@@ -103,16 +148,15 @@ Build a **multi-sport fantasy auction platform** enabling users to create privat
   "sportKey": "football" | "cricket",
   "competitionCode": "CL" | "PL" | "AFCON",
   "status": "draft" | "auction_pending" | "auction_live" | "active" | "completed",
-  "budget": 500000000,  // Budget in smallest unit (pence for £)
+  "budget": 500000000,
   "minManagers": 2,
   "maxManagers": 8,
   "clubSlots": 3,
   "timerSeconds": 30,
   "antiSnipeSeconds": 10,
   "inviteToken": "6-char-string",
-  "assetsSelected": ["asset-id-1", "asset-id-2"],  // Selected clubs/players
-  "createdAt": "2025-01-01T00:00:00+00:00",
-  "scoringOverrides": {}  // Optional custom scoring rules
+  "assetsSelected": ["asset-id-1", "asset-id-2"],
+  "createdAt": "2025-01-01T00:00:00+00:00"
 }
 ```
 
@@ -125,33 +169,32 @@ Build a **multi-sport fantasy auction platform** enabling users to create privat
   "userName": "Display Name",
   "userEmail": "user@example.com",
   "budgetRemaining": 500000000,
-  "clubsWon": ["asset-id-1", "asset-id-2"],  // Clubs won in auction
+  "clubsWon": ["asset-id-1", "asset-id-2"],
   "totalSpent": 150000000,
   "joinedAt": "2025-01-01T00:00:00+00:00"
 }
 ```
-⚠️ **CRITICAL**: Points are NOT in this collection
+⚠️ **CRITICAL**: Points are NOT in this collection - see `league_points`
 
 ### Collection: `auctions`
 ```javascript
 {
   "id": "uuid-string",
   "leagueId": "league-id",
-  "status": "waiting" | "active" | "paused" | "completed",
-  "currentClubId": "asset-id",  // Current lot
+  "status": "waiting" | "active" | "paused" | "auction_complete",
+  "currentClubId": "asset-id",
   "currentLotId": "lot-id",
+  "currentLot": 1,
   "bidTimer": 30,
   "antiSnipeSeconds": 10,
   "timerEndsAt": "2025-01-01T00:00:30+00:00",
-  "clubQueue": ["asset-id-1", "asset-id-2"],  // Upcoming lots
-  "unsoldClubs": ["asset-id-3"],  // Clubs with no bids
+  "clubQueue": ["asset-id-1", "asset-id-2"],
+  "unsoldClubs": ["asset-id-3"],
   "minimumBudget": 1000000,
   "currentBid": 5000000,
   "currentBidder": {"userId": "user-id", "displayName": "Name"},
-  "bidSequence": 42,  // Monotonic counter for bid updates
-  "usersInWaitingRoom": ["user-id-1", "user-id-2"],  // CRITICAL: Track who entered
-  "pausedAt": "2025-01-01T00:00:00+00:00",  // If paused
-  "pausedRemainingTime": 15,  // Seconds remaining when paused
+  "bidSequence": 42,
+  "usersInWaitingRoom": ["user-id-1", "user-id-2"],
   "createdAt": "2025-01-01T00:00:00+00:00",
   "completedAt": "2025-01-01T00:00:00+00:00"
 }
@@ -164,63 +207,19 @@ Build a **multi-sport fantasy auction platform** enabling users to create privat
   "id": "uuid-string",
   "sportKey": "football",
   "name": "Chelsea FC",  // ⚠️ MUST match API exactly for scoring
-  "externalId": "61",  // Football-Data.org team ID
-  "competitions": ["UEFA Champions League", "English Premier League"],  // Array of strings
-  "competitionShort": "PL",
-  "city": "London",
+  "externalId": "61",
+  "apiFootballId": "49",
+  "competitions": ["UEFA Champions League", "English Premier League"],
+  "competitionShort": "EPL",
   "country": "England",
-  "logo": "https://...",
-  "createdAt": "2025-01-01T00:00:00+00:00",
-  "updatedAt": "2025-01-01T00:00:00+00:00"
-}
-
-// Cricket player
-{
-  "id": "uuid-string",
-  "sportKey": "cricket",
-  "name": "Player Name",
-  "externalId": "cricapi-player-id",
-  "meta": {
-    "role": "Batsman" | "Bowler" | "All-rounder" | "Wicket-keeper",
-    "team": "Country Name"
-  },
-  "createdAt": "2025-01-01T00:00:00+00:00",
-  "updatedAt": "2025-01-01T00:00:00+00:00"
+  "logo": null,
+  "createdAt": "2025-01-01T00:00:00+00:00"
 }
 ```
 ⚠️ **CRITICAL**: 
 - NO separate `clubs` or `teams` collection
 - Filter by `sportKey: "football"` for clubs
-- Filter by `sportKey: "cricket"` for players
 - Competition names MUST be exact: "UEFA Champions League", "English Premier League", "Africa Cup of Nations"
-
-### Collection: `fixtures`
-```javascript
-{
-  "id": "uuid-string",
-  "leagueId": "league-id",  // ⚠️ CRITICAL: MUST have leagueId for scoring
-  "sportKey": "football" | "cricket",
-  "homeTeam": "Chelsea FC",  // Exact team name from API
-  "awayTeam": "Arsenal FC",
-  "homeTeamId": "asset-id",  // Link to assets collection
-  "awayTeamId": "asset-id",
-  "homeAssetId": "asset-id",  // Duplicate field (legacy)
-  "awayAssetId": "asset-id",
-  "startsAt": "2025-01-15T15:00:00+00:00",
-  "status": "ns" | "live" | "ft" | "scheduled" | "completed",  // ⚠️ "ft" for finished
-  "goalsHome": 2,
-  "goalsAway": 1,
-  "winner": "home" | "away" | "draw",
-  "externalMatchId": "football-data-fixture-id",
-  "footballDataId": 551918,  // Football-Data.org ID
-  "source": "api" | "csv",
-  "round": "Matchday 1",
-  "venue": "Stadium Name",
-  "autoScoringEnabled": true,
-  "createdAt": "2025-01-01T00:00:00+00:00",
-  "updatedAt": "2025-01-01T00:00:00+00:00"
-}
-```
 
 ### Collection: `league_points` (⭐ SOURCE OF TRUTH FOR SCORING)
 ```javascript
@@ -234,590 +233,250 @@ Build a **multi-sport fantasy auction platform** enabling users to create privat
   "losses": 3,
   "goalsScored": 15,
   "goalsConceded": 10,
-  "totalPoints": 32,  // (wins * 3) + (draws * 1) + goalsScored
+  "totalPoints": 32,
   "lastUpdated": "2025-01-01T00:00:00+00:00"
 }
 ```
-⚠️ **CRITICAL**: This is WHERE points are calculated and stored
 
-### Collection: `standings` (Aggregated view)
+### Collection: `fixtures`
 ```javascript
 {
   "id": "uuid-string",
-  "leagueId": "league-id",
-  "userId": "user-id",
-  "userName": "Display Name",
-  "totalPoints": 95,
-  "clubs": [
-    {
-      "clubId": "asset-id",
-      "clubName": "Chelsea FC",
-      "points": 32
-    }
-  ],
-  "lastUpdated": "2025-01-01T00:00:00+00:00"
-}
-```
-
-### Collection: `sports`
-```javascript
-{
-  "key": "football" | "cricket",
-  "name": "Football" | "Cricket",
-  "enabled": true,
-  "scoringRules": {
-    "win": 3,
-    "draw": 1,
-    "goalScored": 1,
-    "goalConceded": 0
-    // ... more rules
-  }
+  "leagueId": "league-id",  // ⚠️ CRITICAL: MUST have leagueId
+  "sportKey": "football",
+  "homeTeam": "Chelsea FC",
+  "awayTeam": "Arsenal FC",
+  "homeTeamId": "asset-id",
+  "awayTeamId": "asset-id",
+  "startsAt": "2025-01-15T15:00:00+00:00",
+  "status": "ns" | "live" | "ft",  // ⚠️ "ft" for finished
+  "goalsHome": 2,
+  "goalsAway": 1,
+  "winner": "home" | "away" | "draw",
+  "footballDataId": 551918,
+  "source": "api" | "csv"
 }
 ```
 
 ---
 
-## 🔐 Authentication - Magic Link (NO PASSWORDS)
+## 🔐 Authentication - Magic Link
 
-### Implementation
+### Current State (PRE-PILOT - NEEDS HARDENING)
 1. User enters email
-2. Backend generates 6-digit code, stores in `magic_links` collection
-3. Backend sends email (or shows code in dev mode)
-4. User enters code
-5. Backend validates, returns JWT tokens (access + refresh)
+2. Backend generates token, stores in `magic_links` collection
+3. ⚠️ **DEV MODE**: Token returned in API response (NOT emailed)
+4. User enters token
+5. Backend validates, returns JWT tokens
 
-### JWT Tokens
-```python
-# Access token (short-lived)
-{
-  "user_id": "uuid",
-  "email": "user@example.com",
-  "exp": timestamp  # 15 minutes
-}
+### Pre-Pilot Hardening Required
+| Item | Current | Required |
+|------|---------|----------|
+| Email delivery | Token in response | Send via SendGrid/Resend |
+| Rate limiting | None | 3 requests/hour/email |
+| Single-use tokens | Needs verification | Ensure deleted after use |
 
-# Refresh token (long-lived)
-{
-  "user_id": "uuid",
-  "type": "refresh",
-  "exp": timestamp  # 7 days
-}
-```
-
-### Protected Routes
-- All `/api/leagues/*` require valid JWT
-- Commissioner-only: start auction, delete league, import fixtures
-- Verify `commissionerId` matches `user_id` from token
+See `/app/MASTER_TODO_LIST.md` for full auth hardening plan.
 
 ---
 
-## 🎮 Critical Features & Implementation
+## 🎮 Critical Features
 
-### 1. Auction System (Socket.IO Real-time)
+### 1. Auction System (Socket.IO) - ⚠️ DO NOT MODIFY WITHOUT STAGING
 
-**Socket Events (Client → Server)**:
-- `join_auction`: User enters auction room
-  ```javascript
-  { auctionId: "id", userId: "user-id" }
-  ```
-  - Add to room: `auction:{auction_id}`
-  - Add to `usersInWaitingRoom` array in auctions collection
-  - Broadcast `waiting_room_updated` to all in room
-  - Send `auction_snapshot` to joining user
-
-- `place_bid`: User places bid
-  ```javascript
-  { auctionId: "id", amount: 10000000, userId: "user-id" }
-  ```
-  - Validate: amount > currentBid, user has budget
-  - Update auction document
-  - Increment `bidSequence` (monotonic counter)
-  - Broadcast `bid_update` to all in room
-  - Reset timer (anti-snipe)
+The auction system is complex and interconnected. Changes have caused production issues.
 
 **Socket Events (Server → Client)**:
 - `waiting_room_updated`: Participant list changed
-  ```javascript
-  { usersInWaitingRoom: ["user-id-1", "user-id-2"] }
-  ```
-- `auction_snapshot`: Full state (on join)
+- `auction_snapshot`: Full state on join
 - `bid_update`: New bid placed
-- `tick`: Timer countdown
-- `auction_lot_won`: Lot completed
+- `lot_started`: New lot begins
+- `sold`: Lot completed (sold or unsold)
+- `next_team_countdown`: 3-2-1 between lots
 - `auction_complete`: All lots finished
 
-**Timer Logic (CRITICAL)**:
-- Use `asyncio.create_task()` for countdown
-- Store task reference, cancel on new bid
-- On timer expiry:
-  - Award club to currentBidder
-  - Deduct amount from winner's budget
-  - Add to clubsWon array
-  - Move to next lot or complete
+**Key Logic**:
+- Anti-snipe: Timer extends on late bids
+- Unsold teams: Re-queued at end
+- Budget reserve: Must keep £1m per remaining slot
+- Self-outbid prevention: Can't outbid yourself
 
-**Redis for Production (Multi-pod)**:
-```python
-# socketio_init.py
-if os.getenv('REDIS_URL'):
-    mgr = socketio.AsyncRedisManager(os.getenv('REDIS_URL'))
-    sio = socketio.AsyncServer(async_mode='asgi', client_manager=mgr)
-else:
-    sio = socketio.AsyncServer(async_mode='asgi')
+**DB Calls Per Bid (Current - 6-7 calls)**:
+1. `auctions.find_one` - Get auction state
+2. `users.find_one` - Get bidder info
+3. `leagues.find_one` - Get league settings (clubSlots)
+4. `league_participants.find_one` - Get budget/roster
+5. `bids.insert_one` - Record bid
+6. `auctions.update_one` - Update current bid
+7. `auctions.find_one` - Get new bid sequence
+
+⚠️ **Caching attempt (Jan 16, 2026) FAILED** - reverted due to bug affecting auction completion.
+
+### 2. Fixture Import & Scoring
+
+**Import**: `POST /api/leagues/{league_id}/fixtures/import-from-api`
+- Uses FUZZY matching for team names
+
+**Scoring**: `POST /api/leagues/{league_id}/score/recompute`
+- Uses EXACT matching for team names
+- MUST filter by `leagueId`
+- Only counts fixtures with `status: "ft"`
+
+### 3. Debug Report System
+
+**Frontend captures**:
+- Auction state, participants, socket events, user actions, errors
+- Auto-uploads to `debug_reports` collection
+
+**Endpoints**:
 ```
-
-### 2. Fixture Import
-
-**Football (API)**: `POST /api/leagues/{league_id}/fixtures/import-from-api`
-```python
-# Use Football-Data.org API
-GET https://api.football-data.org/v4/competitions/{code}/matches
-# code: "CL" or "PL"
-
-# For each match:
-# 1. Match team names using FUZZY logic (substring matching)
-# 2. Create fixture with homeTeamId, awayTeamId
-# 3. Store footballDataId for score updates
-# 4. MUST include leagueId field
-```
-
-**Cricket (Manual CSV)**: `POST /api/leagues/{league_id}/fixtures/import-csv`
-
-### 3. Score Updates
-
-**Endpoint**: `GET /api/leagues/{league_id}/fixtures/update-scores`
-
-**Process**:
-1. Fetch latest scores from Football-Data.org API
-2. Find fixtures by `footballDataId`
-3. Update `goalsHome`, `goalsAway`, `status: "ft"`, `winner`
-4. ⚠️ ONLY updates fixtures, does NOT calculate points
-
-### 4. Debug Report System (NEW - Dec 19, 2025)
-
-**Purpose**: Capture comprehensive client + server state for debugging production issues.
-
-**Frontend (`debugLogger.js`)**:
-```javascript
-// Collects: auction state, participants, socket events, user actions, errors
-// Auto-uploads to backend with reference ID for support tickets
-debugLogger.logSocketEvent(eventName, data);  // Call in all 15 socket handlers
-debugLogger.submitReport();  // Triggered by "Report Issue" button
-```
-
-**Backend Endpoints**:
-```python
-# Submit debug report (from frontend)
-POST /api/debug/reports
-Body: { auctionId, leagueId, clientState, metadata }
-Returns: { referenceId: "DBG-XXXXXX" }
-
-# List all reports (for support)
-GET /api/debug/reports?auctionId=xxx&leagueId=xxx
-
-# Get specific report
-GET /api/debug/reports/{referenceId}
-```
-
-**Database Collection: `debug_reports`**:
-```javascript
-{
-  "referenceId": "DBG-A1B2C3",
-  "auctionId": "auction-uuid",
-  "leagueId": "league-uuid",
-  "submittedBy": "user-id",
-  "submittedAt": "2025-12-19T00:00:00+00:00",
-  "clientState": {
-    "auction": { /* current auction state */ },
-    "participants": [ /* participant list */ ],
-    "socketEvents": [ /* last 50 events with timestamps */ ],
-    "userActions": [ /* recent user actions */ ],
-    "errors": [ /* captured errors */ ]
-  },
-  "serverState": {
-    "auction": { /* server-side auction doc */ },
-    "participants": [ /* from league_participants */ ]
-  },
-  "metadata": {
-    "userAgent": "...",
-    "screenSize": "...",
-    "connectionType": "..."
-  }
-}
-```
-
-**Socket Event Logging (All 15 handlers in AuctionRoom.js)**:
-- `auction_snapshot`, `bid_update`, `bid_placed`, `tick`, `timer_started`
-- `lot_sold`, `auction_lot_won`, `auction_complete`, `auction_paused`, `auction_resumed`
-- `waiting_room_updated`, `auction_started`, `auction_deleted`, `error`, `connect_error`
-
----
-
-### 5. Score Calculation (CRITICAL)
-
-**Endpoint**: `POST /api/leagues/{league_id}/score/recompute`
-
-**Process (`scoring_service.py`)**:
-```python
-# 1. Get league's selected assets
-assets = await db.assets.find({"id": {"$in": league.assetsSelected}})
-team_names = [asset["name"] for asset in assets]
-
-# 2. Find completed fixtures FOR THIS LEAGUE
-fixtures = await db.fixtures.find({
-    "leagueId": league_id,  # ⚠️ CRITICAL: Filter by leagueId
-    "status": "ft",
-    "sportKey": "football",
-    "$or": [
-        {"homeTeam": {"$in": team_names}},  # ⚠️ EXACT match required
-        {"awayTeam": {"$in": team_names}}
-    ]
-})
-
-# 3. Calculate points for each team
-# Win: 3 pts, Draw: 1 pt, Goal: 1 pt
-
-# 4. Store in league_points collection
-```
-
-⚠️ **CRITICAL REQUIREMENTS**:
-- Fixture `status` MUST be "ft" (not "completed")
-- Team names in `assets` MUST match `fixtures` exactly
-- MUST filter by `leagueId` to avoid counting duplicates
-- Scoring uses EXACT name matching, fixture import uses FUZZY
-
----
-
-## 🔌 Third-Party Integrations
-
-### Football-Data.org API
-```python
-headers = {"X-Auth-Token": os.getenv("FOOTBALL_DATA_TOKEN")}
-GET https://api.football-data.org/v4/competitions/CL/matches
-GET https://api.football-data.org/v4/competitions/PL/matches
-```
-
-**Team Names MUST Match Exactly**:
-- Store in database: "Chelsea FC" (not "Chelsea")
-- Store in database: "Atalanta BC" (not "Atalanta")
-- See `/app/TEAM_UPDATES_COMPLETED.md` for full list
-
-### Cricbuzz API (via RapidAPI)
-```python
-headers = {
-    "X-RapidAPI-Key": os.getenv("RAPIDAPI_KEY"),
-    "X-RapidAPI-Host": "cricbuzz-cricket.p.rapidapi.com"
-}
-GET https://cricbuzz-cricket.p.rapidapi.com/series/v1/{seriesId}
+POST /api/debug/reports - Submit report
+GET /api/debug/reports - List reports
+GET /api/debug/reports/{referenceId} - Get specific report
 ```
 
 ---
 
-## ⚠️ CRITICAL Gotchas (MUST READ)
+## 🧪 Stress Testing
 
-### 0. Production vs Preview Environment
-**Problem**: Preview/local `.env` does NOT have `REDIS_URL` - but production DOES.  
-**Solution**: ALWAYS check production health endpoint, not local `.env`, to verify production state.
+**Script**: `/app/tests/multi_league_stress_test.py`
+
+**Run from local machine**:
 ```bash
-curl -s "https://draft-kings-mobile.emergent.host/api/health" | python3 -m json.tool
+# Prerequisites
+pip install "python-socketio[asyncio_client]" aiohttp
+
+# Commands
+python multi_league_stress_test.py --leagues 2 --users 6 --teams 4 --url https://your-url.com
+python multi_league_stress_test.py --leagues 10 --users 8 --teams 4 --url https://your-url.com
+python multi_league_stress_test.py --leagues 20 --users 8 --teams 4 --url https://your-url.com
 ```
+
+**Output**: Creates timestamped JSON and TXT result files.
+
+**Target metrics (post-Railway migration)**:
+| Scale | Target Success | Target p50 | Target p99 |
+|-------|---------------|------------|------------|
+| 20 leagues | ≥95% | ≤200ms | ≤1000ms |
+| 50 leagues | ≥90% | ≤300ms | ≤1500ms |
+
+---
+
+## 📱 Mobile Strategy (Post-Pilot)
+
+**Decision**: Capacitor (wrap existing React app)
+
+| Phase | Approach | When |
+|-------|----------|------|
+| Current | Mobile-responsive web | Now |
+| Post-Pilot | Capacitor | After successful pilot |
+| Scale | React Native | If Capacitor hits limits |
+
+**Capacitor benefits**:
+- Reuse 90%+ of existing code
+- Real App Store/Play Store presence
+- Push notifications
+- ~1-2 weeks implementation
+
+**Costs**: Apple Dev ~£79/year + Google Play ~£20 one-time
+
+---
+
+## ⚠️ CRITICAL Gotchas
 
 ### 1. Team Names MUST Match API Exactly
-**Problem**: Scoring uses exact MongoDB `$in` matching. If DB has "Chelsea" but fixtures have "Chelsea FC", scoring fails.
-
-**Solution**: All team names in `assets` collection MUST match Football-Data.org API exactly:
+- Scoring uses exact MongoDB `$in` matching
 - "Chelsea FC" (not "Chelsea")
-- "Arsenal FC" (not "Arsenal")
-- "Club Atlético de Madrid" (not "Atlético de Madrid")
-
-See `/app/TEAM_UPDATES_COMPLETED.md` for complete list of 56 verified teams.
+- See team name verification in assets collection
 
 ### 2. Fixture Import vs Scoring - Different Matching
-- **Fixture Import**: Uses FUZZY substring matching (forgiving)
-- **Scoring**: Uses EXACT matching (strict)
-
-This is why fixtures import successfully but scoring fails if names don't match exactly.
+- **Import**: FUZZY (forgiving)
+- **Scoring**: EXACT (strict)
 
 ### 3. leagueId MUST Be in Fixtures
-**Problem**: Without `leagueId` filter in scoring query, same fixture counted multiple times if multiple leagues imported it.
-
-**Solution**: ALWAYS include `leagueId: league_id` in fixture find query.
+- Without filter, same fixture counted multiple times
 
 ### 4. MongoDB DateTime Serialization
-**Problem**: Python `datetime` objects cause JSON serialization errors.
-
-**Solution**: ALWAYS use `.isoformat()`:
 ```python
 "createdAt": datetime.now(timezone.utc).isoformat()
 ```
 
 ### 5. MongoDB _id Field
-**Problem**: Auto-generated ObjectId can't be JSON serialized.
-
-**Solution**: ALWAYS exclude `_id`:
 ```python
-db.collection.find({}, {"_id": 0})
+db.collection.find({}, {"_id": 0})  # Always exclude
 ```
 
-### 6. CORS Configuration
-```python
-# FastAPI
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=[os.getenv("CORS_ORIGINS")],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"]
-)
-
-# Socket.IO
-sio = socketio.AsyncServer(
-    cors_allowed_origins=os.getenv("CORS_ORIGINS").split(",")
-)
-```
-
-### 7. Frontend Environment Variables
-- NEVER hardcode URLs
-- ALWAYS use `process.env.REACT_APP_BACKEND_URL`
-
-### 8. Pydantic Models MUST Include usersInWaitingRoom
-```python
-# models.py - Auction model
-class Auction(BaseModel):
-    # ... other fields
-    usersInWaitingRoom: Optional[List[str]] = []  # CRITICAL for waiting room
-```
-
-### 9. Socket.IO userId from Event Data
-```python
-# Backend receives userId in event data, NOT from session
-@sio.on('join_auction')
-async def join_auction(sid, data):
-    user_id = data.get('userId')  # From client
-```
+### 6. Auction Code is Fragile
+- ⚠️ Changes have broken production
+- Test in staging environment (Railway) before production
+- Even "low risk" changes can have hidden dependencies
 
 ---
 
 ## 🚀 Environment Variables
 
-### Backend `.env` (VERIFIED)
+### Backend `.env`
 ```bash
 MONGO_URL="mongodb://localhost:27017"
 DB_NAME="test_database"
 CORS_ORIGINS="http://localhost:3000"
-JWT_SECRET="your-secret-key-here"
-FOOTBALL_DATA_TOKEN="your-token-here"
-RAPIDAPI_KEY="your-key-here"
-REDIS_URL=""  # Optional: for multi-pod production
+JWT_SECRET="your-secret-key"
+FOOTBALL_DATA_TOKEN="your-token"
+RAPIDAPI_KEY="your-key"
+REDIS_URL="redis://..."  # Redis Cloud connection
+FRONTEND_ORIGIN="https://your-frontend-url"
 ```
 
-### Frontend `.env` (VERIFIED)
+### Frontend `.env`
 ```bash
 REACT_APP_BACKEND_URL="http://localhost:8001"
 ```
 
 ---
 
-## 📦 Key Dependencies (CURRENT)
+## 📋 Outstanding Issues (January 2026)
 
-### Backend
-```
-fastapi>=0.104.1
-uvicorn[standard]>=0.24.0
-motor>=3.3.1
-pymongo>=4.5.0
-python-socketio>=5.10.0
-PyJWT>=2.8.0
-passlib[bcrypt]>=1.7.4
-python-multipart
-pydantic>=2.4.2
-python-dotenv
-httpx
-```
-
-### Frontend
-```json
-{
-  "react": "^18.2.0",
-  "react-router-dom": "^6.x",
-  "socket.io-client": "^4.x",
-  "axios": "^1.x",
-  "tailwindcss": "^3.x",
-  "react-hot-toast": "^2.x"
-}
-```
-
----
-
-## 🧪 Testing Checklist
-
-### 1. Authentication
-- [ ] User enters email, receives magic link code
-- [ ] User enters code, receives JWT tokens
-- [ ] Protected routes reject invalid tokens
-- [ ] Token refresh works on 401
-
-### 2. League Creation
-- [ ] Create league with selected clubs
-- [ ] Invite token generated
-- [ ] Commissioner joins automatically
-
-### 3. Participant Flow
-- [ ] Join with valid token
-- [ ] Reject invalid token
-- [ ] Budget initialized correctly
-
-### 4. Auction Flow (Socket.IO)
-- [ ] Multiple users join waiting room
-- [ ] Participant count updates in real-time
-- [ ] Start auction (commissioner only)
-- [ ] Place bids with validation
-- [ ] Timer resets on new bid (anti-snipe)
-- [ ] Lot completes, winner assigned
-- [ ] Budget deducted
-- [ ] Progress to next lot
-- [ ] Auction completes
-
-### 5. Fixtures & Scoring
-- [ ] Import CL fixtures (Chelsea FC, Arsenal FC match exactly)
-- [ ] Import PL fixtures
-- [ ] Update scores from API
-- [ ] Recompute points (check league_points collection)
-- [ ] Standings update correctly
-- [ ] Verify no duplicate counting (leagueId filter working)
-
----
-
-## 🎯 Build Priority
-
-1. **Infrastructure** (Day 1-2)
-   - MongoDB connection
-   - Magic link auth
-   - JWT middleware
-
-2. **League Management** (Day 3-4)
-   - Create/join leagues
-   - Club selection
-   - Participant management
-
-3. **Auction System** (Day 5-7)
-   - Socket.IO setup with Redis option
-   - Bidding logic with anti-snipe
-   - Waiting room tracking
-   - Timer system
-
-4. **Fixtures & Scoring** (Day 8-9)
-   - Football-Data.org integration
-   - Fixture import with leagueId
-   - Score updates
-   - Points calculation (exact name matching)
-
-5. **Testing & Polish** (Day 10)
-   - End-to-end flows
-   - Bug fixes
-   - Verify all 56 team names match API
-
----
-
-## 🔧 Recent Critical Fixes (Dec 2025)
-
-### Debug Report Enhancement (Dec 19, 2025)
-**Problem**: Debug reports only downloaded locally, support couldn't access production issues  
-**Solution**: 
-- Reports now auto-upload to MongoDB `debug_reports` collection
-- Added socket event logging to all 15 handlers in AuctionRoom.js
-- New API endpoints for querying reports: `GET/POST /api/debug/reports`
-- Reference ID system (DBG-XXXXXX) for support tickets
-**Files**: `debugLogger.js`, `server.py`, `AuctionRoom.js`
-
-### Backend /api/clubs Fix (Dec 19, 2025)
-**Problem**: Frontend used `EPL`/`UCL` codes but backend only accepted `PL`/`CL`  
-**Solution**: Backend now accepts both code formats  
-**Files**: `server.py`
-
-### Self-Outbid Prevention (Dec 13, 2025)
-**Problem**: Users could outbid themselves by clicking +bid buttons  
-**Solution**: 
-- Backend: Reject bids from current highest bidder with 400 error
-- Frontend: Reset input field to current bid on rejection
-**Files**: `server.py` (line ~4460), `AuctionRoom.js` (error handler)
-
-### Bid Validation Fix (Dec 12, 2025)
-**Problem**: 500 error on first bid due to Pydantic serialization  
-**Solution**: Robust handling of `None` values with `or 0` pattern  
-**Files**: `server.py`
-
-### Auction Deletion Handler (Dec 12, 2025)
-**Problem**: User screens froze when commissioner deleted auction  
-**Solution**: Emit `auction_deleted` Socket.IO event, frontend redirects  
-**Files**: `server.py`, `AuctionRoom.js`
-
-### Redis Multi-Pod (Dec 8, 2025)
-**Problem**: Socket.IO not working across multiple pods  
-**Solution**: Configured Redis Cloud for pub/sub  
-**Files**: `socketio_init.py`, production env vars
-
----
-
-## ❌ Failed Fix Attempts (LESSONS LEARNED)
-
-⚠️ **These fixes were attempted but FAILED and were REVERTED. Document for future reference.**
-
-### ISSUE-016: Roster Not Updating (Dec 19, 2025) - FAILED
-**Attempted Fix**: Remove `loadAuction()` call from `onSold` handler in AuctionRoom.js  
-**Result**: Broke the 3-second countdown display between lots  
-**Root Cause**: The countdown UI only renders when `currentClub` is not null. `loadAuction()` was inadvertently repopulating this state after a sale.  
-**Lesson**: Check ALL downstream dependencies before removing function calls. The fix was logically correct but had hidden UI side effects.  
-**Status**: Reverted. Issue remains open.
-
-### ISSUE-018: Team Selection UX (Dec 19, 2025) - PARTIAL
-**Attempted Fix**: Auto-filter `loadAssets()` function by competition code  
-**Result**: Multiple attempts broke the selected teams display  
-**Root Cause**: `loadAssets()` is called before `league` data is loaded, causing it to default to all teams. Agent made incremental guesses instead of understanding the full data flow.  
-**What Works**: Backend accepts both codes. `loadAvailableAssets()` (modal) correctly filters.  
-**What's Broken**: "Above the fold" display still shows all teams regardless of competition.  
-**Status**: Partially fixed. Main display issue remains open.
-
-### Key Lessons for Future Agents:
-1. **Never make code changes without explicit user approval**
-2. **Analyze full component lifecycle before modifying state**
-3. **Check what else depends on functions before removing them**
-4. **Test ALL related UI elements, not just the targeted fix**
-5. **"Low risk" changes can have hidden dependencies**
-
----
-
-## 📋 Outstanding Issues (As of Dec 20, 2025)
-
-### 🔴 Immediate Priority
+### 🔴 P0 - Blockers
 | Issue | Summary | Status |
 |-------|---------|--------|
-| ISSUE-016 | Roster not updating after win (race condition) | Agent unable to fix - reverted |
-| ISSUE-018 | Team selection shows all teams regardless of competition | Partial fix only |
+| Infrastructure | UK users have ~700ms latency | Migration to Railway planned |
+| Auth hardening | Magic link returns token in response | Needs SendGrid integration |
 
-### 🟡 Awaiting User Feedback
+### 🟡 P1 - Pre-Pilot
 | Issue | Summary | Status |
 |-------|---------|--------|
-| ISSUE-019 | "Couldn't Place Bid" - likely roster full | Need debug report |
-| ISSUE-020 | "United Offered 2 Times" - display bug suspected | Need debug report |
-| ISSUE-021 | "Roster Lagged" - likely same as ISSUE-016 | Blocked by ISSUE-016 |
+| Sentry monitoring | Error tracking not configured | Needs DSN |
+| DB backups | Need to verify Atlas M10 backups | Config check |
+| Commissioner auth | Missing auth checks on some endpoints | Not started |
 
-### 🟠 Medium Priority
-| Issue | Summary | Status |
-|-------|---------|--------|
-| ISSUE-022 | "Unknown" manager names in auction | Not started |
-| ISSUE-017 | Backend diagnostic reads add latency | Deferred (keeping logs for pilot) |
-| ISSUE-002 | Commissioner auth checks missing | Not started |
-| ISSUE-003 | Sentry not configured | Code ready, needs DSN |
-
-### 🔵 Post-Pilot
+### 🟢 P2 - Post-Pilot
 | Issue | Summary |
 |-------|---------|
-| ISSUE-008 | Refactor monolithic server.py (5,917 lines) |
-| ISSUE-001 | Manual score entry UI |
-| ISSUE-010 | Custom scoring rules |
-| ISSUE-012 | Email notifications |
-| Payment | Stripe Connect integration |
+| Mobile apps | Capacitor implementation |
+| Server.py refactor | 5,900+ lines - needs splitting |
+| DB call optimization | Reduce 6-7 calls per bid |
+| Email notifications | Invite, reminder, results emails |
 
-See `/app/MASTER_TODO_LIST.md` for complete prioritized list with all details.
+See `/app/MASTER_TODO_LIST.md` for complete list.
+
+---
+
+## ❌ Failed Approaches (LESSONS LEARNED)
+
+### DB Call Caching (Jan 16, 2026) - FAILED
+**Attempted**: Cache league settings and user info to reduce DB calls  
+**Result**: Bug in implementation (missed variable reference) broke bidding  
+**Lesson**: Real-time auction code needs dedicated staging environment
+
+### MongoDB Pool Size Increase - NO EFFECT
+**Attempted**: Increase connection pool size  
+**Result**: No latency improvement  
+**Lesson**: Pool size wasn't the bottleneck
+
+### Hybrid DB Approach - RULED OUT
+**Attempted**: UK-based MongoDB with US-hosted app  
+**Result**: Wouldn't help - app server latency is the issue  
+**Lesson**: App and users must be in same region
 
 ---
 
@@ -825,16 +484,13 @@ See `/app/MASTER_TODO_LIST.md` for complete prioritized list with all details.
 
 | File | Purpose |
 |------|---------|
-| `/app/MASTER_TODO_LIST.md` | **PRIMARY** - Single source of truth for all issues and tasks |
-| `/app/PRODUCTION_ENVIRONMENT_STATUS.md` | Current production state and recent changes |
-| `/app/AGENT_ONBOARDING_CHECKLIST.md` | Mandatory steps for new agents (includes failure lessons) |
-| `/app/SYSTEM_ARCHITECTURE_AUDIT.md` | Complete system documentation |
-| `/app/AGENT_ONBOARDING_PROMPT.md` | Common mistakes to avoid |
-| `/app/TEAM_UPDATES_COMPLETED.md` | All 56 verified team names |
-| `/app/PAYMENT_INTEGRATION_PLAN.md` | Future payment integration planning |
-| `/app/UI_UX_AUDIT_REPORT.md` | Full UI/UX review with screenshots |
-
-**Note**: `OUTSTANDING_ISSUES.md` and `TEAM_REVIEW_COMPLETE_TASK_LIST.md` were consolidated into `MASTER_TODO_LIST.md` on Dec 19, 2025.
+| `/app/MASTER_TODO_LIST.md` | **PRIMARY** - All tasks organized by phase |
+| `/app/MIGRATION_PLAN.md` | Railway migration details |
+| `/app/AGENT_START_HERE.md` | Quick reference for agents |
+| `/app/memory/PRD.md` | Product requirements |
+| `/app/docs/ARCHITECTURE.md` | System architecture |
+| `/app/docs/OPERATIONS_PLAYBOOK.md` | Operational procedures |
+| `/app/tests/multi_league_stress_test.py` | Load testing script |
 
 ---
 
@@ -847,28 +503,27 @@ Platform rebuilt successfully when:
 4. ✅ Waiting room shows live participant count
 5. ✅ CL/PL/AFCON fixtures import successfully
 6. ✅ Score updates work from API
-7. ✅ Points calculate correctly (all teams)
-8. ✅ Standings display correctly
-9. ✅ No duplicate point counting
-10. ✅ Users cannot outbid themselves
-11. ✅ Socket.IO works in multi-pod production (Redis)
-12. ✅ Debug reports capture client + server state and upload to MongoDB
-13. ✅ Backend accepts both PL/EPL and CL/UCL competition codes
+7. ✅ Points calculate correctly
+8. ✅ Socket.IO works in multi-pod (Redis)
+9. ✅ Debug reports capture and upload
+10. ⏳ Auth hardening (pre-pilot)
+11. ⏳ UK latency ≤200ms (post-Railway migration)
 
 ---
 
 ## 🔄 Pilot Readiness Checklist
 
-Before scaling to larger user groups:
-- [ ] Enable Sentry error monitoring (add SENTRY_DSN)
-- [ ] Configure database automated backups
-- [ ] Consider enabling rate limiting (ENABLE_RATE_LIMITING=true)
-- [ ] Resolve mobile connection/lag issues
-- [ ] Simplify team selection UX
+Before 400-user UK pilot:
+- [ ] Complete Railway migration (EU-West)
+- [ ] Run stress test - verify p50 ≤200ms
+- [ ] Auth hardening (SendGrid email delivery)
+- [ ] Enable Sentry error monitoring
+- [ ] Verify MongoDB Atlas backups
+- [ ] Update CORS for new domain
 
 ---
 
-**This document contains VERIFIED CURRENT STATE as of December 20, 2025. Treat as source of truth for rebuild.**
+**This document contains VERIFIED CURRENT STATE as of January 17, 2026. Treat as source of truth for rebuild.**
 
 ---
 
@@ -876,5 +531,6 @@ Before scaling to larger user groups:
 
 | Version | Date | Changes |
 |---------|------|---------|
-| 2.0 | Dec 20, 2025 | Added Debug Report System, Failed Fix Attempts section, updated Outstanding Issues |
+| 3.0 | Jan 17, 2026 | Major update: Infrastructure findings, Railway migration plan, stress testing, mobile strategy, auth hardening, failed approaches |
+| 2.0 | Dec 20, 2025 | Added Debug Report System, Failed Fix Attempts |
 | 1.0 | Dec 13, 2025 | Initial comprehensive rebuild prompt |
