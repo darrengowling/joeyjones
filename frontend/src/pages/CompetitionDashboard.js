@@ -1139,7 +1139,10 @@ export default function CompetitionDashboard() {
       </div>
 
       {/* Tabs - Sticky on scroll */}
-      <div className="bg-white shadow sticky top-0 z-10">
+      <div 
+        className="bg-white shadow"
+        style={{ position: 'sticky', top: 0, zIndex: 10 }}
+      >
         <div className="container-narrow mx-auto px-4">
           <div className="border-b border-gray-200">
             <nav className="flex -mb-px">
