@@ -1138,12 +1138,16 @@ export default function CompetitionDashboard() {
         </div>
       </div>
 
-      {/* Tabs - Sticky on scroll */}
-      <div 
-        className="bg-white shadow"
-        style={{ position: 'sticky', top: 0, zIndex: 10 }}
-      >
-        <div className="container-narrow mx-auto px-4">
+      {/* Main Content */}
+      <div className="container-narrow mx-auto px-4 py-8" data-testid="comp-dashboard">
+        {error && (
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6 text-red-800">
+            {error}
+          </div>
+        )}
+
+        {/* Tabs */}
+        <div className="bg-white rounded-t-lg shadow">
           <div className="border-b border-gray-200">
             <nav className="flex -mb-px">
               <button
@@ -1182,15 +1186,6 @@ export default function CompetitionDashboard() {
             </nav>
           </div>
         </div>
-      </div>
-
-      {/* Main Content */}
-      <div className="container-narrow mx-auto px-4 py-8" data-testid="comp-dashboard">
-        {error && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6 text-red-800">
-            {error}
-          </div>
-        )}
 
         {/* Tab Content */}
         <div className="bg-gray-50 rounded-b-lg p-6">
