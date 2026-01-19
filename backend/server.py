@@ -195,7 +195,7 @@ async def startup_db_client():
         
         logger.info("="*80)
         logger.info("🔄 STARTUP: Initializing team name migration...")
-        logger.info(f"🔍 Environment check:")
+        logger.info("🔍 Environment check:")
         logger.info(f"   MONGO_URL set: {'MONGO_URL' in os.environ}")
         logger.info(f"   DB_NAME: {os.environ.get('DB_NAME', 'not set')}")
         logger.info(f"   Backend dir: {backend_dir}")
