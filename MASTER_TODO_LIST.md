@@ -220,7 +220,7 @@ Step 6: Test full flow end-to-end
 | 2 | ISSUE-011 | **Auction history tab** | 4 hrs | 🟢 Low | Review all bids post-auction |
 | 3 | ISSUE-010 | **Custom scoring rules** | 1 week | 🟡 Med | Flexibility per tournament |
 | 4 | ISSUE-012 | **Email notifications** | 1 week | 🟡 Med | Invites, reminders, results |
-| 5 | ISSUE-024 | **Auto-import fixtures** | 2 hrs | 🟢 Low | Removes manual step |
+| 5 | ~~ISSUE-024~~ | ~~**Auto-import fixtures**~~ | 2 hrs | 🟢 Low | ✅ Already implemented - imports working as intended |
 | 6 | ISSUE-026 | **Fixture template management** | 1 week | 🟢 Low | No redeploy for fixture updates |
 | 7 | - | **Payment integration** (Stripe) | 2 weeks | 🟡 Med | Entry fees, charity donations |
 
