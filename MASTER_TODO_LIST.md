@@ -229,7 +229,7 @@ Step 6: Test full flow end-to-end
 | # | Task | Effort | Risk | Benefit |
 |---|------|--------|------|---------|
 | 1 | Demote/remove "Explore" button | 30 min | 🟢 Low | Cleaner mobile UI |
-| 2 | Team count preview on create | 1 hr | 🟢 Low | "20 PL teams will be included" |
+| 2 | ~~Team count preview on create~~ | 1 hr | 🟢 Low | ❌ Considered - not needed. Users see teams on LeagueDetail page |
 | 3 | Sticky tabs on mobile | 1 hr | 🟢 Low | Better navigation |
 | 4 | Collapsible sections in LeagueDetail | 2 hrs | 🟢 Low | Less scrolling |
 
