@@ -328,12 +328,24 @@ When significant user bases develop in other regions:
 |---|-------|---------|----------|------|
 | 1 | Redis limits | Connection exhaustion at scale | Upgraded to Essentials (256 conn) | Jan 2026 |
 | 2 | Performance diagnosis | Identified US hosting as root cause | Stress testing + Emergent support | Jan 2026 |
-| 3 | AFCON Data Fix | Kenya→Cameroon, fixtures corrected | Admin endpoints + CSV upload | Dec 2025 |
-| 4 | ISSUE-023 | Bid input race condition | Read-only input + increment buttons | Dec 2025 |
-| 5 | ISSUE-018 | Team selection showing all 74 clubs | Backend filter by competitionCode | Dec 2025 |
-| 6 | Debug reports | Client-only → Server upload with IDs | MongoDB storage + query endpoint | Dec 2025 |
-| 7 | Self-outbid | Users could raise own winning bid | Backend validation | Dec 2025 |
-| 8 | Multi-pod Socket.IO | Sockets didn't sync across pods | Redis Cloud pub/sub | Dec 2025 |
+| 3 | Sentry monitoring | Backend error tracking | Configured DSN | Jan 19, 2026 |
+| 4 | Code cleanup | 4 Python lint errors | Fixed bare excepts, unused vars | Jan 19, 2026 |
+| 5 | Cricket bat icons | CL/AFCON teams showing 🏏 | Changed to flag or country name only | Jan 19, 2026 |
+| 6 | AFCON Data Fix | Kenya→Cameroon, fixtures corrected | Admin endpoints + CSV upload | Dec 2025 |
+| 7 | ISSUE-023 | Bid input race condition | Read-only input + increment buttons | Dec 2025 |
+| 8 | ISSUE-018 | Team selection showing all 74 clubs | Backend filter by competitionCode | Dec 2025 |
+| 9 | Debug reports | Client-only → Server upload with IDs | MongoDB storage + query endpoint | Dec 2025 |
+| 10 | Self-outbid | Users could raise own winning bid | Backend validation | Dec 2025 |
+| 11 | Multi-pod Socket.IO | Sockets didn't sync across pods | Redis Cloud pub/sub | Dec 2025 |
+
+---
+
+## ⚠️ KNOWN LIMITATIONS
+
+| Area | Limitation | Workaround |
+|------|------------|------------|
+| Bulk delete | Deleting 30+ leagues times out (token expires) | Delete in batches of 5-10 |
+| UK latency | ~700ms due to US hosting | Railway migration planned |
 
 ---
 
