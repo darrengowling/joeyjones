@@ -424,7 +424,7 @@ async def update_fixture_scores(fixture_ids: List[str] = None):
                         date_start = (api_date - timedelta(days=2)).isoformat()
                         date_end = (api_date + timedelta(days=2)).isoformat()
                         match_date_filter = {"matchDate": {"$gte": date_start, "$lte": date_end}}
-                    except:
+                    except Exception:
                         pass  # If date parsing fails, skip date filter
                 
                 # Find ALL corresponding fixtures in our database for this competition
