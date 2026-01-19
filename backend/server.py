@@ -1393,10 +1393,6 @@ async def get_league_fixtures(league_id: str):
                 "message": "No teams selected for this league yet"
             }
         
-        # Get team/player names for this league
-        assets = await db.assets.find({"id": {"$in": selected_asset_ids}}, {"_id": 0, "name": 1}).to_list(100)
-        asset_names = [asset.get("name") for asset in assets]
-        
         # Get fixtures for this league (league-specific only)
         # Fixtures are now always assigned to leagues, so only return fixtures with matching leagueId
         fixtures = await db.fixtures.find({
