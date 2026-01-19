@@ -161,13 +161,19 @@ export default function ClubsList() {
                 
                 {selectedSport === 'football' && (
                   <div>
-                    <div className="flex items-center gap-2 text-gray-600 mb-2">
-                      <span className="text-2xl">{getCountryFlag(asset.country)}</span>
-                      <span>{asset.country}</span>
-                    </div>
-                    <div className="text-sm text-gray-500">
-                      UEFA ID: {asset.uefaId}
-                    </div>
+                    {asset.country && (
+                      <div className="flex items-center gap-2 text-gray-600 mb-2">
+                        {getCountryFlag(asset.country) && (
+                          <span className="text-2xl">{getCountryFlag(asset.country)}</span>
+                        )}
+                        <span>{asset.country}</span>
+                      </div>
+                    )}
+                    {asset.uefaId && (
+                      <div className="text-sm text-gray-500">
+                        UEFA ID: {asset.uefaId}
+                      </div>
+                    )}
                   </div>
                 )}
                 
