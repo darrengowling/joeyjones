@@ -232,7 +232,7 @@ Step 6: Test full flow end-to-end
 | 2 | ~~Team count preview on create~~ | 1 hr | 🟢 Low | ❌ Considered - not needed. Users see teams on LeagueDetail page |
 | 3 | Sticky tabs on mobile | 1 hr | 🟢 Low | Better navigation |
 | 4 | Collapsible sections in LeagueDetail | 2 hrs | 🟢 Low | Less scrolling |
-| 5 | ~~Cricket bat icons for football teams~~ | 15 min | 🟢 Low | ✅ Fixed (Jan 17) - CL/AFCON teams now show 🌍 instead of 🏏 |
+| 5 | ~~Cricket bat icons for football teams~~ | 15 min | 🟢 Low | ✅ Fixed (Jan 17) - Removed fallback icons; teams now show flag if available, otherwise just country name |
 
 ### Infrastructure
 
