@@ -6175,7 +6175,7 @@ async def get_bid_logs(auction_id: str):
                         json_str = line[json_start:]
                         log_data = json.loads(json_str)
                         relevant_logs.append(log_data)
-                except:
+                except Exception:
                     # Not JSON, keep as raw string
                     relevant_logs.append({"raw": line})
         
