@@ -1146,8 +1146,8 @@ export default function CompetitionDashboard() {
           </div>
         )}
 
-        {/* Tabs */}
-        <div className="bg-white rounded-t-lg shadow">
+        {/* Tabs - Sticky on scroll */}
+        <div className="bg-white rounded-t-lg shadow sticky top-0 z-10">
           <div className="border-b border-gray-200">
             <nav className="flex -mb-px">
               <button
