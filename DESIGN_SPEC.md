@@ -860,75 +860,48 @@ Large prominent timer display.
 
 ---
 
-## Implementation Notes
+## Feature Status
 
-### New vs Existing Functionality
+### What Maps to Existing Backend
 
-| Screen | Existing Feature | New Feature (Future) |
-|--------|------------------|----------------------|
-| Sign In | ✅ Magic link auth | - |
-| Home | ✅ Create/Join league | - |
-| Auction Room | ✅ Real-time bidding | ❌ Banter chat |
-| Auction Banter | - | ❌ Full chat system |
-| Profile | ❌ Basic only | ❌ Hall of Fame, trophies, stats |
+| Screen | Feature | Backend Status |
+|--------|---------|----------------|
+| Sign In | Magic link authentication | ✅ Exists |
+| Home | Create competition | ✅ Exists |
+| Home | Join competition | ✅ Exists |
+| Home | View active leagues | ✅ Exists |
+| Auction Room | Real-time bidding | ✅ Exists |
+| Auction Room | Timer with anti-snipe | ✅ Exists |
+| Auction Room | Budget tracking | ✅ Exists |
+| Auction Room | Team queue | ✅ Exists |
 
-### Implementation Priority
+### Placeholder Features (No Backend Yet)
 
-**Phase 1 - Foundation (Do First)**
-1. Tailwind config with color palette
-2. Global CSS with glassmorphism, fonts
-3. GlassCard component
-4. Button components (Primary, Secondary, Bid, Pass)
-5. Bottom navigation component
+These features appear in mockups but require future backend development:
 
-**Phase 2 - Core Pages**
-1. Sign In page (new design)
-2. Home page (new design)
-3. Auction Room (new design, existing logic)
+| Screen | Feature | Notes |
+|--------|---------|-------|
+| Auction Banter | Live chat during auction | Requires WebSocket chat system |
+| Auction Banter | Quick reply pills | Requires chat backend |
+| Auction Banter | Bid event notifications in chat | Requires event integration |
+| Profile | Hall of Fame title | Requires stats aggregation |
+| Profile | Career stats (Total Wins, Clubs Owned) | Requires historical data |
+| Profile | Record Bid Placed | Requires bid history query |
+| Profile | Trophy Room | Requires competition history |
+| Profile | Trophy shelf with league titles | Requires achievement system |
+| Profile | "LEGENDARY" badge system | Requires ranking/tier system |
+| Stats Page | (Not yet designed) | Placeholder |
+| Social Page | (Not yet designed) | Placeholder |
 
-**Phase 3 - New Features (Future)**
-1. Banter/Chat system (requires backend)
-2. Profile/Hall of Fame (requires backend)
-3. Stats page
-4. Social page
+### Design-Only Deliverables
 
-### File Structure (Proposed)
+This specification covers **visual design and component structure only**. 
 
-```
-frontend/src/
-├── components/
-│   ├── ui/                    # Existing shadcn
-│   └── new/                   # New design system
-│       ├── GlassCard.jsx
-│       ├── PrimaryButton.jsx
-│       ├── SecondaryButton.jsx
-│       ├── BidButton.jsx
-│       ├── PassButton.jsx
-│       ├── BottomNav.jsx
-│       ├── Avatar.jsx
-│       ├── Timer.jsx
-│       ├── TeamCard.jsx
-│       ├── ManagerBadge.jsx
-│       ├── StatCard.jsx
-│       └── ChatBubble.jsx
-├── pages/
-│   ├── MyCompetitions.js      # Keep existing
-│   ├── AuctionRoom.js         # Keep existing
-│   └── new/                   # New designs
-│       ├── SignInNew.jsx
-│       ├── HomeNew.jsx
-│       └── AuctionRoomNew.jsx
-└── styles/
-    └── design-system.css      # Global effects, variables
-```
-
-### Critical Constraints
-
-1. **DO NOT modify existing pages** until new ones are tested
-2. **Keep existing backend logic** - only change UI layer
-3. **Mobile-first** - test at 390px width
-4. **Performance** - lazy load new components
-5. **Accessibility** - maintain WCAG AA contrast ratios
+When building:
+- Placeholder screens should be static/non-functional
+- Use mock data for demonstration
+- No backend integration until tested and approved
+- Build in a **separate project** to avoid affecting existing codebase
 
 ---
 
