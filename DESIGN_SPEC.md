@@ -1,9 +1,9 @@
 # Sport X Design Specification
 
-**Version:** 1.0  
+**Version:** 1.1  
 **Created:** January 2026  
-**Purpose:** Single source of truth for UI redesign implementation  
-**Status:** REFERENCE ONLY - No code changes until migration complete
+**Purpose:** Design specification for UI redesign - standalone reference document  
+**Status:** DESIGN DOCUMENTATION ONLY - To be built in separate project
 
 ---
 
