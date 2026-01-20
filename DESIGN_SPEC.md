@@ -916,6 +916,6 @@ Original mockups stored at:
 
 ---
 
-**Document Version:** 1.0  
+**Document Version:** 1.1  
 **Last Updated:** January 2026  
-**Status:** Reference specification - implementation pending Railway migration
+**Status:** Design specification only - build in separate project before integration
