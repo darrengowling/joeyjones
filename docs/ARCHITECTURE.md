@@ -261,7 +261,7 @@ All routes prefixed with `/api/`:
 ### Emergent Platform (Current)
 
 ```
-Preview:    https://fantasy-auction-test.preview.emergentagent.com
+Preview:    https://sportsbid-ux.preview.emergentagent.com
 Production: https://draft-kings-mobile.emergent.host
 ```
 

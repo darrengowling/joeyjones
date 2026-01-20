@@ -6,7 +6,7 @@ Debug script to check specific cricket scoring configuration issues
 import requests
 import json
 
-BASE_URL = "https://fantasy-auction-test.preview.emergentagent.com/api"
+BASE_URL = "https://sportsbid-ux.preview.emergentagent.com/api"
 
 def test_validation_errors():
     # Create test user and cricket league
