@@ -2,6 +2,7 @@
 
 **Created:** December 13, 2025  
 **Last Updated:** January 22, 2026  
+**Version:** 4.3  
 **Status:** READY TO EXECUTE  
 **Target Platform:** Railway (EU-West/London)  
 **Reason:** UK pilot users face ~700ms latency due to US-hosted Emergent
@@ -15,8 +16,10 @@
 | **Problem** | UK users experience ~700ms latency (US hosting) |
 | **Solution** | Railway EU-West + MongoDB Atlas europe-west2 |
 | **Expected Result** | p50 latency ~100-200ms (vs current 700ms) |
-| **Monthly Cost** | ~£65 (Railway £15 + Atlas M10 £45 + Redis £5) |
-| **Timeline** | 2-3 days (migration + validation + auth hardening) |
+| **Monthly Cost (Phased)** | Month 1: **£20-29** (M0/M2) → Month 2+: **£65** (M10) |
+| **Timeline** | 1-2 hours verification + 2-3 days migration |
+
+**Key Decision:** Phase 0 diagnostic test determines if M10 (£45/mo) is needed or if M0/M2 (£0-9/mo) is sufficient
 
 ---
 
@@ -29,7 +32,7 @@
 | Factor | Current (Emergent) | After Migration (Railway EU) |
 |--------|-------------------|------------------------------|
 | App server location | US | EU-West (London) |
-| MongoDB location | US (shared cluster) | EU (your dedicated M10) |
+| MongoDB location | US (shared cluster) | EU (your dedicated cluster) |
 | Network round-trip to UK | ~100ms per call | ~10-20ms per call |
 | DB calls per bid | 6-7 | 6-7 (same) |
 | **Total latency per bid** | **~700ms** | **~100-200ms** |
@@ -44,6 +47,80 @@ We considered keeping Emergent + your own MongoDB, but:
 
 ---
 
+## Phase 0: Root Cause Verification (DO THIS FIRST)
+
+**Goal:** Prove whether 700ms latency is caused by geography or database tier before committing to M10 (£45/mo)
+
+**Time Required:** 1-2 hours  
+**Cost:** £0 (uses existing Emergent MongoDB)
+
+### Why This Matters
+
+Your stress test showed 700ms p50 latency, but we don't know if it's:
+- **Geography** (US→UK network hops) → M0/M2 sufficient in EU (save £36-45/mo)
+- **Database throttling** (M0 shared CPU) → M10 required (£45/mo justified)
+- **Combination** of both → M2 initially, upgrade to M10 later
+
+**Cost impact:** £432-540/year difference
+
+### Quick Diagnostic Test
+
+**Deploy backend to Railway EU but keep using Emergent's M0 database temporarily**
+
+#### Setup (30 mins)
+
+1. **Create Railway account** (free trial)
+2. **Deploy backend only:**
+   - Connect your GitHub repo
+   - Use existing environment variables
+   - **Key:** Point `MONGO_URL` to Emergent's MongoDB (not new Atlas cluster yet)
+   - Set `CORS_ORIGINS` to allow Railway domain
+3. **Get Railway backend URL** (e.g., `https://sportx-backend-xxx.railway.app`)
+
+#### Stress Test (30 mins)
+
+1. **Update stress test to use Railway backend:**
+   ```bash
+   python /app/tests/multi_league_stress_test.py \
+     --backend-url https://sportx-backend-xxx.railway.app \
+     --num-leagues 20
+   ```
+
+2. **Compare results:**
+
+| Current (Emergent US) | Railway EU + Emergent DB | Diagnosis |
+|----------------------|--------------------------|-----------|
+| 700ms p50 latency | **150-250ms** | ✅ Geography was the main issue → **M0/M2 sufficient** |
+| 700ms p50 latency | **400-500ms** | ⚠️ Mixed (geography + DB) → **Start M2, upgrade to M10 if needed** |
+| 700ms p50 latency | **650-700ms** | ❌ Database is throttling → **M10 required** |
+
+#### Decision Point
+
+**Based on test results:**
+
+- **If latency drops to 150-250ms:** 
+  - Proceed with M0 (free) or M2 (£9/mo)
+  - Save £36-45/mo (£432-540/year)
+  - Monitor Atlas metrics, upgrade later if needed
+
+- **If latency drops to 400-500ms:**
+  - Start with M2 (£9/mo)
+  - Set alerts: CPU >70%, connections >400
+  - Upgrade to M10 when adding 3rd-5th charity
+
+- **If latency stays at 650-700ms:**
+  - Proceed directly to M10 (£45/mo)
+  - Database throttling confirmed
+
+### After Verification
+
+Once you know the root cause:
+1. Delete the Railway test deployment
+2. Proceed with full migration using appropriate MongoDB tier
+3. Update cost breakdown in your plan
+
+---
+
 ## Target Architecture
 
 ```
@@ -55,7 +132,7 @@ Railway (EU-West/London)
 ├── Frontend Service (React static)
 │
 └── External Services
-    ├── MongoDB Atlas M10 (europe-west2/London) ← YOUR ACCOUNT
+    ├── MongoDB Atlas M0/M2/M10 (europe-west2/London) ← YOUR ACCOUNT
     ├── Redis Cloud Essentials (256 conn) ← YOUR EXISTING ACCOUNT
     ├── Sentry (error tracking) ← CONFIGURED
     ├── Football-Data.org API
@@ -64,38 +141,86 @@ Railway (EU-West/London)
 
 ---
 
-## Cost Breakdown (Phased)
+## Cost Breakdown (Phased Approach)
 
-### Phase 1: Validation & Single-Charity Pilot (Weeks 1-2)
+### Phase 1: Owen McVeigh Pilot Only (Weeks 1-2)
 
-| Service | Tier | Monthly Cost |
-|---------|------|--------------|
-| Railway | Starter | ~£15 |
-| MongoDB Atlas | M2 (europe-west2) | ~£9 |
-| Redis Cloud | Essentials (256 conn) | ~£5 |
-| Sentry | Free | £0 |
-| **Total** | | **~£29/month** |
+**Scenario:** Single charity, ~50 users, 1-2 active leagues
 
-### Phase 2: Multi-Charity Scale (Week 3+)
+| Service | Tier | Monthly Cost | Notes |
+|---------|------|--------------|-------|
+| Railway | Starter | ~£15 | EU-West hosting |
+| MongoDB Atlas | **M0 (free)** or **M2** | **£0-9** | Decision based on Phase 0 test |
+| Redis Cloud | Essentials (256 conn) | ~£5 | Already upgraded |
+| Sentry | Free | £0 | Error tracking |
+| **Total** | | **£20-29/month** | |
 
-| Service | Tier | Monthly Cost |
-|---------|------|--------------|
-| Railway | Starter | ~£15 |
-| MongoDB Atlas | M10 (europe-west2) | ~£45 |
-| Redis Cloud | Essentials (256 conn) | ~£5 |
-| Sentry | Free | £0 |
-| **Total** | | **~£65/month** |
+**M0 vs M2 decision:**
+- **If Phase 0 test shows <250ms:** Use M0 (free)
+- **If Phase 0 test shows 400-500ms:** Use M2 (£9/mo)
+- **If Phase 0 test shows >650ms:** Skip to M10
 
-### Upgrade Triggers (M2 → M10)
+**Why M0/M2 might be sufficient:**
+- Owen McVeigh = 50 users × 2 connections = 100 connections (M0 limit: 500)
+- Single league = low concurrent DB operations
+- No connection exhaustion risk
+- Has basic backups (M2 only)
 
-Upgrade to M10 when ANY of these occur:
-- Atlas connections > 400
-- Atlas CPU > 70% sustained
-- Query latency > 200ms average
-- Adding 3rd+ charity to pilot
-- Stress test shows degradation
+**Risks of M0/M2:**
+- Shared CPU (possible throttling under load)
+- 500 connection limit (could hit if Socket.IO reconnects frequently)
+- No point-in-time restore (M0), limited backups (M2)
 
-**Rationale:** Start lean, validate assumptions, scale when proven necessary. Saves £36/month if M2 is sufficient.
+**Monitoring strategy:**
+- Set Atlas alerts: CPU >70%, connections >400, query latency >200ms
+- If any alert triggers → upgrade to M10
+
+---
+
+### Phase 2: Scaling to 5+ Charities (Week 3+)
+
+**Scenario:** 5-10 charities, 250-500 users, 10-20 concurrent leagues
+
+| Service | Tier | Monthly Cost | Notes |
+|---------|------|--------------|-------|
+| Railway | Starter | ~£15 | EU-West hosting |
+| MongoDB Atlas | **M10 (europe-west2)** | **~£45** | Dedicated cluster |
+| Redis Cloud | Essentials (256 conn) | ~£5 | Already upgraded |
+| Sentry | Free | £0 | Error tracking |
+| **Total** | | **~£65/month** | |
+
+**When to upgrade from M0/M2 → M10:**
+
+Upgrade triggers (any one):
+- ✅ Adding 3rd charity
+- ✅ Total users approaching 250
+- ✅ Atlas CPU consistently >70%
+- ✅ Connections approaching 400
+- ✅ Query latency degrading (p50 >200ms)
+- ✅ Any connection pool exhaustion errors
+
+**Why M10 at scale:**
+- 500 users × 2 connections = 1,000 connections (M0/M2 limit: 500)
+- 10-20 concurrent auctions = high DB operation volume
+- Dedicated CPU prevents throttling
+- Point-in-time restore protects pilot data
+- Performance insights for optimization
+
+---
+
+### Cost Comparison (First 3 Months)
+
+| Month | Scenario | Tier | Cost |
+|-------|----------|------|------|
+| **Month 1** | Owen McVeigh only | M2 | **£24** |
+| **Month 2** | Adding charities 2-3 | M2 → M10 | **£24** → **£65** |
+| **Month 3+** | 5-10 charities | M10 | **£65** |
+
+**Total first 3 months:** £153  
+**vs M10 from day 1:** £195  
+**Savings:** £42
+
+**Non-financial benefit:** Validates M10 is actually needed before committing to £540/year
 
 ---
 
@@ -106,60 +231,6 @@ Upgrade to M10 when ANY of these occur:
 - [x] Redis Cloud upgraded to Essentials (256 connections)
 - [x] Stress test script ready (`/app/tests/multi_league_stress_test.py`)
 - [x] Environment variables documented
-
----
-
-## Phase 0: Root Cause Verification (CRITICAL)
-
-**Goal:** Prove whether 700ms latency is geography or database tier before committing to M10
-
-**Time required:** 1-2 hours
-
-### Why This Matters
-
-| Root Cause | Solution | Monthly Cost |
-|------------|----------|--------------|
-| Geography (US→UK network) | M0/M2 in EU sufficient | £0-9 |
-| Database tier (shared CPU throttling) | M10 required | £45 |
-| Both factors | M10 required | £45 |
-
-**Cost impact:** £540/year difference between M0 and M10
-
-### Diagnostic Test Setup (30 mins)
-
-1. Create Railway account (railway.app)
-2. Deploy backend only to Railway EU-West
-3. **Keep using Emergent's existing MongoDB URL** (the US-hosted one)
-4. Update CORS to allow Railway domain temporarily
-
-### Run Diagnostic (30 mins)
-
-```bash
-# Run stress test against Railway EU backend (still using US database)
-python multi_league_stress_test.py --leagues 5 --users 6 --url https://YOUR-RAILWAY-BACKEND.railway.app
-```
-
-### Interpret Results
-
-| Current (Emergent) | Railway EU + US DB | Verdict | Action |
-|--------------------|--------------------|---------| -------|
-| 700ms | 150-250ms | **Geography was the issue** | ✅ Use M2 (£9/mo) |
-| 700ms | 400-500ms | **Mixed (geography + DB)** | Start M2, monitor closely |
-| 700ms | 650-700ms | **Database is the bottleneck** | ✅ Use M10 (£45/mo) |
-
-### Decision Point
-
-- **If latency drops significantly:** Proceed with M2, upgrade to M10 only if needed
-- **If latency stays high:** Proceed directly to M10
-
-### Skip Conditions
-
-You may skip Phase 0 if:
-- You're comfortable with £65/month regardless
-- You want M10's point-in-time backups for data safety
-- Time pressure requires proceeding immediately
-
----
 
 ### ⏳ Do After Migration (But Before Pilot)
 - [ ] **Auth hardening** - MUST complete before external pilot users
@@ -175,6 +246,7 @@ You may skip Phase 0 if:
 ### ❓ Decisions Needed
 - [ ] **Custom domain** - e.g., sportx.app (optional for pilot)
 - [ ] **Data migration** - Fresh start vs export existing data?
+- [ ] **MongoDB tier** - Will be decided after Phase 0 verification
 
 ---
 
@@ -235,7 +307,8 @@ Expected: HTTP 200 with {"status":"healthy","database":"connected"}
 **Environment variables:**
 ```bash
 # Database (YOUR Atlas cluster - EU region)
-MONGO_URL=mongodb+srv://user:pass@YOUR-cluster.europe-west2.mongodb.net/sport_x
+# Note: Add ?maxPoolSize=50 for production load
+MONGO_URL=mongodb+srv://user:pass@YOUR-cluster.europe-west2.mongodb.net/sport_x?maxPoolSize=50
 DB_NAME=sport_x_production
 
 # Auth
@@ -255,6 +328,9 @@ SENTRY_DSN=https://618d64387dd9bd3a8748f3671b530981@o4510411309907968.ingest.de.
 # Production settings (update after frontend deployed)
 CORS_ORIGINS=https://your-frontend-domain.com
 FRONTEND_ORIGIN=https://your-frontend-domain.com
+
+# Request timeout (recommended)
+REQUEST_TIMEOUT_SECONDS=30
 ```
 
 ### Frontend Service
@@ -377,7 +453,25 @@ db.bids.getIndexes()
 - Critical errors (500s, database connection failures)
 - Socket.IO connection failures
 
+### MongoDB Atlas Alerts (Phase 1: M0/M2 Monitoring)
+
+**Critical alerts for knowing when to upgrade:**
+
+| Metric | Warning Threshold | Critical Threshold | Action |
+|--------|-------------------|-------------------|--------|
+| CPU Usage | >70% sustained 10 min | >85% sustained 5 min | Upgrade to M10 |
+| Connections | >400 | >450 | Upgrade to M10 |
+| Query Execution Time (p50) | >200ms | >500ms | Check indexes, consider M10 |
+| Query Execution Time (p99) | >1000ms | >2000ms | Upgrade to M10 |
+
+**How to set up in Atlas:**
+1. Atlas Dashboard → Your Cluster → Alerts
+2. Click "Add Alert"
+3. Configure each metric above
+4. Set notification method (email)
+
 ### Key Metrics to Track
+
 | Metric | Warning | Critical |
 |--------|---------|----------|
 | API p50 latency | >300ms | >500ms |
@@ -432,7 +526,7 @@ If Railway has issues:
 
 ### Week 1: Stabilization
 11. **Configure MongoDB backups** (verify enabled)
-12. **Set up monitoring alerts** (Railway + Sentry)
+12. **Set up monitoring alerts** (Railway + Sentry + Atlas)
 13. **Update documentation** with new URLs
 14. **Prepare pilot user invitations**
 
@@ -473,53 +567,196 @@ If Railway has issues:
 | Socket.IO sticky sessions | ✅ Added | Replicas = 1 note |
 | Redis SSL format | ✅ Added | Verification note |
 | Health check config | ✅ Added | Path and expected response |
-| Monitoring alerts | ✅ Added | Thresholds defined |
+| Monitoring alerts | ✅ Added | Thresholds defined, Atlas M0/M2 monitoring added |
 | Security state | ✅ Added | DEV vs HARDENED documented |
 | Emergency contacts | ✅ Added | Support links |
 | Auth hardening timeline | ✅ Clarified | Day 3-4, before pilot |
-| Build command | ✅ Updated | --frozen-lockfile flag |
+| Cost optimization | ✅ Added | Phased M0/M2 → M10 approach |
+| Root cause verification | ✅ Added | Phase 0 diagnostic test |
 
-### Potential Gaps Remaining (Flagged for Review)
+### 🔴 HIGH PRIORITY Gaps - Could Break Pilot
 
-#### HIGH PRIORITY - Could Break Pilot
+These items require attention before or immediately after migration:
+
+#### 1. Connection Pool Sizing
+
+| Aspect | Details |
+|--------|---------|
+| **Risk** | HIGH |
+| **Issue** | 20 concurrent auctions × 8 users = high connection churn. Motor (MongoDB async driver) default pool may exhaust under load, causing bid failures. |
+| **Symptoms** | `ServerSelectionTimeoutError`, intermittent bid failures, "connection pool exhausted" in logs |
+| **Solution** | Add `?maxPoolSize=50` to MONGO_URL connection string |
+| **When** | During migration (add to env var) |
+| **Verification** | Monitor Atlas connections during stress test; should not approach limit |
+
+**Implementation:**
+```bash
+# Instead of:
+MONGO_URL=mongodb+srv://user:pass@cluster.mongodb.net/sport_x
+
+# Use:
+MONGO_URL=mongodb+srv://user:pass@cluster.mongodb.net/sport_x?maxPoolSize=50&connectTimeoutMS=10000&socketTimeoutMS=30000
+```
+
+#### 2. Request Timeouts
+
+| Aspect | Details |
+|--------|---------|
+| **Risk** | HIGH |
+| **Issue** | No explicit timeout configured. FastAPI default is no timeout. If a bid request hangs (DB issue, network blip), user sees infinite loading spinner. |
+| **Symptoms** | Frozen UI, users refreshing repeatedly, duplicate bid attempts |
+| **Solution** | Add request timeout middleware or per-route timeouts |
+| **When** | Before pilot (can be added post-migration) |
+| **Verification** | Test with simulated slow DB; requests should fail cleanly after 30s |
+
+**Implementation options:**
+
+Option A - Environment variable (simple):
+```bash
+REQUEST_TIMEOUT_SECONDS=30
+```
+
+Option B - FastAPI middleware (comprehensive):
+```python
+from starlette.middleware.base import BaseHTTPMiddleware
+import asyncio
+
+class TimeoutMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request, call_next):
+        try:
+            return await asyncio.wait_for(call_next(request), timeout=30.0)
+        except asyncio.TimeoutError:
+            return JSONResponse({"error": "Request timeout"}, status_code=504)
+
+app.add_middleware(TimeoutMiddleware)
+```
+
+Option C - Per-route timeout (targeted):
+```python
+@api_router.post("/auction/{auction_id}/bid")
+async def place_bid(...):
+    try:
+        result = await asyncio.wait_for(process_bid(...), timeout=10.0)
+    except asyncio.TimeoutError:
+        raise HTTPException(504, "Bid processing timeout")
+```
+
+**Recommendation:** Start with Option A (env var), implement Option C for bid endpoint if issues persist.
+
+#### 3. API-Wide Rate Limiting
+
+| Aspect | Details |
+|--------|---------|
+| **Risk** | MEDIUM-HIGH |
+| **Issue** | Only auth endpoints have rate limiting planned. A malicious user or buggy client could spam bid requests, overwhelming the server. |
+| **Symptoms** | Server slowdown, legitimate users affected, potential crash |
+| **Solution** | Add general API rate limiting using `slowapi` or similar |
+| **When** | Before pilot |
+| **Verification** | Test by sending 100 requests/second; should get 429 responses after limit |
+
+**Implementation:**
+```bash
+pip install slowapi
+```
+
+```python
+from slowapi import Limiter
+from slowapi.util import get_remote_address
+
+limiter = Limiter(key_func=get_remote_address)
+app.state.limiter = limiter
+
+# Global limit
+@app.middleware("http")
+async def rate_limit_middleware(request, call_next):
+    # 100 requests per minute per IP
+    ...
+
+# Or per-route
+@api_router.post("/auction/{auction_id}/bid")
+@limiter.limit("30/minute")  # 30 bids per minute per user
+async def place_bid(...):
+    ...
+```
+
+**Recommended limits:**
+| Endpoint Pattern | Limit | Rationale |
+|------------------|-------|-----------|
+| `/api/auth/*` | 5/minute | Prevent brute force |
+| `/api/auction/*/bid` | 30/minute | Normal bidding ~1/2 seconds |
+| `/api/*` (general) | 100/minute | Prevent abuse |
+
+#### 4. Backup Restore Testing
+
+| Aspect | Details |
+|--------|---------|
+| **Risk** | MEDIUM-HIGH |
+| **Issue** | Atlas M10 has point-in-time backups, but restore process never tested. If data corrupts during pilot, can you actually recover? |
+| **Symptoms** | N/A until disaster strikes |
+| **Solution** | Test restore to a separate temporary cluster before pilot |
+| **When** | After migration, before pilot invitations sent |
+| **Verification** | Successfully restore to temp cluster, verify data integrity |
+
+**Test procedure:**
+1. After migration, wait 24 hours for Atlas to have backup snapshots
+2. Atlas Dashboard → Backup → Restore
+3. Choose "Restore to a new cluster" (not production!)
+4. Select cluster tier: M0 (free) is fine for testing
+5. Wait for restore (~10-30 minutes depending on data size)
+6. Connect to restored cluster, verify:
+   - User count matches
+   - League count matches
+   - Sample queries return expected data
+7. Delete test cluster to avoid charges
+
+**Time required:** 1-2 hours  
+**Cost:** £0 (M0 test cluster is free)
+
+---
+
+### 🟡 MEDIUM PRIORITY Gaps - Monitor During Pilot
 
 | Area | Risk | Issue | Recommendation |
 |------|------|-------|----------------|
-| **Connection pool sizing** | High | 20 concurrent auctions × 8 users = high connection churn. Motor default pool may exhaust. | Add `maxPoolSize=50` to MONGO_URL: `?maxPoolSize=50` |
-| **Request timeouts** | High | No explicit timeout. If bid takes >30s, user sees infinite loading. | Add FastAPI timeout middleware or per-route timeouts. |
-| **API-wide rate limiting** | Medium | Only auth rate limiting planned. Malicious user could spam bids. | Consider `slowapi` or similar for general rate limiting. |
-| **Backup restore testing** | Medium | Atlas M10 has backups, but restore process untested. | Test restore to a separate cluster before pilot. |
+| **Memory limits** | Medium | No explicit memory limit. Railway may OOM-kill if unbounded. | Monitor during stress test; set Railway memory limit if needed (512MB-1GB recommended) |
+| **Graceful shutdown** | Medium | Uvicorn handles SIGTERM, but in-flight bids could be lost during deploy. | Accept risk for pilot; implement shutdown handler post-pilot if issues arise |
+| **WebSocket ping/pong** | Medium | Socket.IO defaults may not handle flaky mobile connections well. | Monitor disconnect rates; tune `pingTimeout`/`pingInterval` if >5% disconnect rate |
 
-#### LOWER PRIORITY - Monitor During Pilot
+---
+
+### 🟢 LOWER PRIORITY Gaps - Address Post-Pilot
 
 | Area | Risk | Notes |
 |------|------|-------|
-| **Graceful shutdown** | Low | Uvicorn handles SIGTERM, but in-flight bids could be lost. May need shutdown handler. |
-| **Log aggregation** | Low | Railway has logs, but no central aggregation. Consider if needed for debugging. |
-| **SSL/TLS certificate** | Low | Railway handles this automatically, but should verify after deploy. |
-| **WebSocket ping/pong** | Low | Socket.IO has defaults, but may need tuning for mobile clients with poor connections. |
-| **Memory limits** | Low | No explicit memory limit set. Railway may OOM-kill if unbounded. |
-| **Cold start time** | Low | First request after deploy may be slow. Consider health check warmup. |
+| **Log aggregation** | Low | Railway has logs, but no central aggregation. Consider Datadog/Papertrail if debugging becomes difficult. |
+| **SSL/TLS certificate** | Low | Railway handles automatically. Verify after deploy by checking browser padlock. |
+| **Cold start time** | Low | First request after deploy may be slow (~2-5s). Health check warmup helps. Not critical for pilot. |
 
-### Recommended Pre-Migration Verification
+---
+
+### Pre-Migration Verification Checklist
 
 Before executing migration, verify:
 
-1. [ ] **ROOT CAUSE VERIFICATION** - Complete Phase 0 diagnostic (geography vs database tier)
-2. [ ] Redis connection string format (redis:// vs rediss://)
-3. [ ] Football-Data.org API tier/limits
-4. [ ] Current data volume for export (if not fresh start)
-5. [ ] Atlas M2/M10 provisioning time (~5-10 minutes typically)
+1. [ ] **Phase 0 diagnostic test completed** - Know which MongoDB tier to use
+2. [ ] **Connection pool sizing** - `?maxPoolSize=50` added to MONGO_URL template
+3. [ ] Redis connection string format confirmed (redis:// vs rediss://)
+4. [ ] Football-Data.org API tier/limits documented
+5. [ ] Current data volume for export (if not fresh start)
+6. [ ] Atlas cluster provisioning time understood (~10 minutes for M0/M2, ~15 for M10)
 
-### Recommended Post-Migration Verification
+### Post-Migration Verification Checklist
 
 After migration, before pilot:
 
-1. [ ] All indexes created and verified
-2. [ ] Stress test passes with target metrics
-3. [ ] Auth hardening complete
-4. [ ] Backup restore tested at least once
-5. [ ] Monitoring alerts configured and tested
+1. [ ] All database indexes created and verified
+2. [ ] Stress test passes with target metrics (p50 <200ms, >95% success)
+3. [ ] **Request timeout** implemented (at least env var)
+4. [ ] **Rate limiting** implemented (at least on bid endpoint)
+5. [ ] Auth hardening complete (email delivery working)
+6. [ ] **Backup restore tested** on temporary cluster
+7. [ ] Monitoring alerts configured (Railway + Sentry + Atlas)
+8. [ ] Atlas performance metrics baseline established
 
 ---
 
@@ -527,7 +764,8 @@ After migration, before pilot:
 
 | Version | Date | Changes |
 |---------|------|---------|
-| 4.2 | Jan 22, 2026 | Added Phase 0 root cause verification test. Changed to phased cost model (M2→M10). Added upgrade triggers. Addresses reviewer feedback on unvalidated M10 assumption. |
+| 4.3 | Jan 22, 2026 | Merged reviewer v4.2 with HIGH PRIORITY gap details. Added specific implementation code for connection pooling, timeouts, rate limiting. Added backup restore test procedure. Reorganized gaps by priority level. Added pre/post migration checklists with HIGH PRIORITY items. |
+| 4.2 | Jan 22, 2026 | Added Phase 0 root cause verification test. Updated cost breakdown to phased approach (M0/M2 → M10). Added Atlas monitoring alerts for M0/M2. Updated executive summary with phased costs. |
 | 4.1 | Jan 22, 2026 | Corrected database indexes to match actual schema (assets not teams, league_participants not leagues.managers). Added comprehensive gap analysis. Added key metrics table. Added TTL index for magic_links. |
 | 4.0 | Jan 22, 2026 | Added: Database indexes, Socket.IO sticky sessions, monitoring alerts, auth hardening timeline clarification, security state documentation, emergency contacts |
 | 3.1 | Jan 19, 2026 | Removed hybrid approach; Updated Sentry status; Added auth hardening requirement; Simplified document |
