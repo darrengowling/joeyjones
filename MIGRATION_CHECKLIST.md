@@ -6,15 +6,36 @@
 
 ---
 
-## ⚠️ CRITICAL: Do Phase 0 First
+## ⚠️ CRITICAL: Phase 0 Limitation
 
-Before proceeding with full migration, complete Phase 0 to determine which MongoDB tier you need. This could save £432-540/year.
+**Phase 0 as originally designed is NOT EXECUTABLE.**
+
+Emergent's MongoDB runs on `localhost:27017` internally and is not accessible from external services like Railway. The original plan to test "Railway EU → Emergent MongoDB" cannot be performed.
+
+### Revised Approach
+
+**Skip Phase 0. Proceed directly to Phase 1 with M2 tier.**
+
+Rationale:
+- Stress tests already confirmed 700ms latency (evidence exists)
+- Phased cost model (M2 → M10) manages risk
+- Atlas alerts will trigger upgrade if M2 insufficient
+- £36/mo savings doesn't justify workaround complexity
+
+If M2 shows strain (CPU >70%, connections >400, latency >200ms), upgrade to M10.
 
 ---
 
-## Phase 0: Root Cause Verification (1-2 hours)
+## Phase 0: Root Cause Verification ~~(1-2 hours)~~ SKIPPED
 
-**Goal:** Prove if latency is geography or database tier issue
+~~**Goal:** Prove if latency is geography or database tier issue~~
+
+**Status:** ❌ NOT EXECUTABLE - Emergent MongoDB not externally accessible
+
+**Original steps preserved below for reference only. Do not attempt.**
+
+<details>
+<summary>Original Phase 0 (NOT EXECUTABLE - click to expand)</summary>
 
 ### Setup Railway Test Deployment (30 mins)
 
