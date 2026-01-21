@@ -520,6 +520,7 @@ After migration, before pilot:
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 4.2 | Jan 22, 2026 | Added Phase 0 root cause verification test. Changed to phased cost model (M2→M10). Added upgrade triggers. Addresses reviewer feedback on unvalidated M10 assumption. |
 | 4.1 | Jan 22, 2026 | Corrected database indexes to match actual schema (assets not teams, league_participants not leagues.managers). Added comprehensive gap analysis. Added key metrics table. Added TTL index for magic_links. |
 | 4.0 | Jan 22, 2026 | Added: Database indexes, Socket.IO sticky sessions, monitoring alerts, auth hardening timeline clarification, security state documentation, emergency contacts |
 | 3.1 | Jan 19, 2026 | Removed hybrid approach; Updated Sentry status; Added auth hardening requirement; Simplified document |
