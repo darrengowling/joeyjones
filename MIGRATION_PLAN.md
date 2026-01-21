@@ -47,12 +47,44 @@ We considered keeping Emergent + your own MongoDB, but:
 
 ---
 
-## Phase 0: Root Cause Verification (DO THIS FIRST)
+## Phase 0: Root Cause Verification
+
+### ⚠️ LIMITATION DISCOVERED
+
+**Phase 0 as originally designed is NOT EXECUTABLE.**
+
+Emergent's MongoDB runs on `localhost:27017` internally and is not accessible from external services. Railway cannot connect to Emergent's database to isolate the geography variable.
+
+**Original goal:** Deploy Railway EU → Emergent MongoDB (US) to test if latency is geography or database tier.  
+**Blocker:** Emergent MongoDB is not externally accessible.
+
+### Revised Options
+
+| Option | Approach | Pros | Cons |
+|--------|----------|------|------|
+| **A: Skip Phase 0** | Proceed with M2, upgrade to M10 if alerts trigger | Simple, stress tests already show 700ms | Doesn't isolate root cause |
+| **B: Modified Phase 0** | Create Atlas M0 (free) in US-East, test Railway EU → US Atlas | Tests geography hypothesis | Extra setup, not exact replica |
+| **C: Start with M10** | Accept £45/mo for guaranteed performance | No risk, best backups | Higher cost if M2 would suffice |
+
+### Recommendation
+
+**Option A (Skip Phase 0)** is pragmatic given:
+- Stress tests already confirmed 700ms latency
+- Phased cost model (M2 → M10) manages cost risk
+- Atlas alerts will trigger upgrade if M2 is insufficient
+- £36/mo difference doesn't justify additional complexity
+
+**If cost sensitivity is critical**, Option B can be attempted but adds 1-2 hours setup for inconclusive results (Atlas M0 US ≠ Emergent's managed MongoDB).
+
+---
+
+### Original Phase 0 Design (FOR REFERENCE ONLY - NOT EXECUTABLE)
 
 **Goal:** Prove whether 700ms latency is caused by geography or database tier before committing to M10 (£45/mo)
 
 **Time Required:** 1-2 hours  
-**Cost:** £0 (uses existing Emergent MongoDB)
+**Cost:** £0 (uses existing Emergent MongoDB)  
+**Status:** ❌ BLOCKED - Emergent MongoDB not externally accessible
 
 ### Why This Matters
 
