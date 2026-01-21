@@ -796,6 +796,7 @@ After migration, before pilot:
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 4.4 | Jan 22, 2026 | **CRITICAL FIX:** Phase 0 marked as NOT EXECUTABLE - Emergent MongoDB (localhost) is not externally accessible from Railway. Added limitation notice and revised options. Recommendation changed to skip Phase 0, start with M2. |
 | 4.3 | Jan 22, 2026 | Merged reviewer v4.2 with HIGH PRIORITY gap details. Added specific implementation code for connection pooling, timeouts, rate limiting. Added backup restore test procedure. Reorganized gaps by priority level. Added pre/post migration checklists with HIGH PRIORITY items. |
 | 4.2 | Jan 22, 2026 | Added Phase 0 root cause verification test. Updated cost breakdown to phased approach (M0/M2 → M10). Added Atlas monitoring alerts for M0/M2. Updated executive summary with phased costs. |
 | 4.1 | Jan 22, 2026 | Corrected database indexes to match actual schema (assets not teams, league_participants not leagues.managers). Added comprehensive gap analysis. Added key metrics table. Added TTL index for magic_links. |
