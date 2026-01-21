@@ -498,10 +498,11 @@ If Railway has issues:
 
 Before executing migration, verify:
 
-1. [ ] Redis connection string format (redis:// vs rediss://)
-2. [ ] Football-Data.org API tier/limits
-3. [ ] Current data volume for export (if not fresh start)
-4. [ ] Atlas M10 provisioning time (~10 minutes typically)
+1. [ ] **ROOT CAUSE VERIFICATION** - Complete Phase 0 diagnostic (geography vs database tier)
+2. [ ] Redis connection string format (redis:// vs rediss://)
+3. [ ] Football-Data.org API tier/limits
+4. [ ] Current data volume for export (if not fresh start)
+5. [ ] Atlas M2/M10 provisioning time (~5-10 minutes typically)
 
 ### Recommended Post-Migration Verification
 
