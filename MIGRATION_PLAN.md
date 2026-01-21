@@ -1,7 +1,7 @@
 # Migration Plan: Emergent → Railway (EU-West)
 
 **Created:** December 13, 2025  
-**Last Updated:** January 19, 2026  
+**Last Updated:** January 22, 2026  
 **Status:** READY TO EXECUTE  
 **Target Platform:** Railway (EU-West/London)  
 **Reason:** UK pilot users face ~700ms latency due to US-hosted Emergent
@@ -16,7 +16,7 @@
 | **Solution** | Railway EU-West + MongoDB Atlas europe-west2 |
 | **Expected Result** | p50 latency ~100-200ms (vs current 700ms) |
 | **Monthly Cost** | ~£65 (Railway £15 + Atlas M10 £45 + Redis £5) |
-| **Timeline** | 1-2 days (without refactor) |
+| **Timeline** | 2-3 days (migration + validation + auth hardening) |
 
 ---
 
@@ -84,11 +84,16 @@ Railway (EU-West/London)
 - [x] Stress test script ready (`/app/tests/multi_league_stress_test.py`)
 - [x] Environment variables documented
 
-### ⏳ Do Before Migration
-- [ ] **Auth hardening** - Magic link currently returns token in response (dev mode)
-  - Needs SendGrid/Resend for email delivery
-  - Add rate limiting (3/hour/email)
-  - Can do after migration if needed for pilot speed
+### ⏳ Do After Migration (But Before Pilot)
+- [ ] **Auth hardening** - MUST complete before external pilot users
+  - **Why delayed:** Stress testing requires programmatic token access (dev mode)
+  - **Timeline:** Complete within 24-48hrs after migration validated
+  - **Components:**
+    - SendGrid/Resend for email delivery
+    - Rate limiting (3 requests/hour/email)
+    - Remove token from API response
+  - **Blocker for:** Sending pilot invitations to real users
+  - **See Phase 11 in checklist for detailed steps**
 
 ### ❓ Decisions Needed
 - [ ] **Custom domain** - e.g., sportx.app (optional for pilot)
@@ -129,6 +134,7 @@ Railway (production)
    - Railway Dashboard → Service Settings → Source
    - Connect `sportx-production` repo
    - Enable "Auto Deploy" on `main` branch
+   - Verify GitHub webhook is active
 
 ---
 
@@ -141,6 +147,14 @@ Railway (production)
 uvicorn server:socket_app --host 0.0.0.0 --port $PORT
 ```
 
+**Health check:**
+```
+Path: /api/health
+Expected: HTTP 200 with {"status":"healthy","database":"connected"}
+```
+
+**Important:** Set replicas to 1 initially (Socket.IO sticky sessions requirement)
+
 **Environment variables:**
 ```bash
 # Database (YOUR Atlas cluster - EU region)
@@ -150,7 +164,8 @@ DB_NAME=sport_x_production
 # Auth
 JWT_SECRET=your-secure-secret-min-32-chars
 
-# Redis (YOUR existing Redis Cloud)
+# Redis (YOUR existing Redis Cloud - verify SSL format)
+# Check format: redis:// vs rediss:// (SSL) vs redis://...?ssl=true
 REDIS_URL=redis://user:pass@your-redis-cloud-host:port
 
 # APIs
@@ -160,7 +175,7 @@ RAPIDAPI_KEY=your-key
 # Sentry (already configured)
 SENTRY_DSN=https://618d64387dd9bd3a8748f3671b530981@o4510411309907968.ingest.de.sentry.io/4510734931722320
 
-# Production settings
+# Production settings (update after frontend deployed)
 CORS_ORIGINS=https://your-frontend-domain.com
 FRONTEND_ORIGIN=https://your-frontend-domain.com
 ```
@@ -169,7 +184,7 @@ FRONTEND_ORIGIN=https://your-frontend-domain.com
 
 **Build command:**
 ```bash
-yarn install && yarn build
+yarn install --frozen-lockfile && yarn build
 ```
 
 **Start command:**
@@ -186,6 +201,131 @@ REACT_APP_SENTRY_ENVIRONMENT=production
 
 ---
 
+## Database Index Strategy
+
+**Critical indexes required for performance.** Run these on your new Atlas cluster after data migration.
+
+### Core Collections
+
+```javascript
+// users collection
+db.users.createIndex({ "id": 1 }, { unique: true })
+db.users.createIndex({ "email": 1 }, { unique: true })
+
+// leagues collection
+db.leagues.createIndex({ "id": 1 }, { unique: true })
+db.leagues.createIndex({ "inviteToken": 1 }, { unique: true })
+db.leagues.createIndex({ "commissionerId": 1 })
+db.leagues.createIndex({ "status": 1 })
+
+// league_participants collection
+db.league_participants.createIndex({ "leagueId": 1, "userId": 1 }, { unique: true })
+db.league_participants.createIndex({ "leagueId": 1 })
+db.league_participants.createIndex({ "userId": 1 })
+
+// assets collection (teams, players, contestants)
+db.assets.createIndex({ "id": 1 }, { unique: true })
+db.assets.createIndex({ "sportKey": 1 })
+db.assets.createIndex({ "externalId": 1 })
+db.assets.createIndex({ "competitionShort": 1 })
+db.assets.createIndex({ "sportKey": 1, "competitionShort": 1 })
+```
+
+### Auction & Bidding Collections
+
+```javascript
+// auctions collection
+db.auctions.createIndex({ "id": 1 }, { unique: true })
+db.auctions.createIndex({ "leagueId": 1 })
+db.auctions.createIndex({ "status": 1 })
+
+// bids collection
+db.bids.createIndex({ "id": 1 }, { unique: true })
+db.bids.createIndex({ "auctionId": 1 })
+db.bids.createIndex({ "auctionId": 1, "clubId": 1 })
+db.bids.createIndex({ "userId": 1 })
+```
+
+### Scoring Collections
+
+```javascript
+// fixtures collection
+db.fixtures.createIndex({ "id": 1 }, { unique: true })
+db.fixtures.createIndex({ "leagueId": 1 })
+db.fixtures.createIndex({ "leagueId": 1, "status": 1 })
+db.fixtures.createIndex({ "externalMatchId": 1 })
+
+// league_points collection
+db.league_points.createIndex({ "leagueId": 1, "clubId": 1 }, { unique: true })
+db.league_points.createIndex({ "leagueId": 1 })
+
+// standings collection
+db.standings.createIndex({ "leagueId": 1 }, { unique: true })
+```
+
+### Utility Collections
+
+```javascript
+// magic_links collection (with TTL for auto-expiry)
+db.magic_links.createIndex({ "token": 1 }, { unique: true })
+db.magic_links.createIndex({ "expiresAt": 1 }, { expireAfterSeconds: 0 })
+
+// debug_reports collection
+db.debug_reports.createIndex({ "referenceId": 1 }, { unique: true })
+db.debug_reports.createIndex({ "auctionId": 1 })
+```
+
+**Why critical:** Even with EU hosting, queries without indexes will be slow at scale. The bidding hot path queries `auctions`, `bids`, `league_participants`, and `assets` collections on every bid.
+
+**Verification:** After creating indexes, run:
+```javascript
+db.auctions.getIndexes()
+db.bids.getIndexes()
+// etc.
+```
+
+---
+
+## Monitoring & Alerts
+
+### Railway Alerts (Recommended)
+- Memory usage > 80% (15-min average)
+- CPU usage > 80% (5-min average)
+- Error rate > 5% (1-min window)
+- Deployment failures
+
+### Sentry Alerts (Recommended)
+- New error type appears
+- Error count > 10 in 1 hour
+- Critical errors (500s, database connection failures)
+- Socket.IO connection failures
+
+### Key Metrics to Track
+| Metric | Warning | Critical |
+|--------|---------|----------|
+| API p50 latency | >300ms | >500ms |
+| API p99 latency | >1000ms | >2000ms |
+| Bid success rate | <95% | <90% |
+| Memory usage | >70% | >85% |
+| Active connections | >200 | >250 |
+
+---
+
+## Security Considerations
+
+### Current State (Migration Day 1-2)
+- ⚠️ Auth in DEV MODE (token returned in response)
+- ✅ Acceptable for: Internal testing, stress testing
+- ❌ NOT acceptable for: External pilot users
+
+### Hardened State (Day 3+)
+- ✅ Magic link sent via email only
+- ✅ Rate limiting prevents abuse
+- ✅ Tokens not exposed in responses
+- ✅ Ready for pilot users
+
+---
+
 ## Rollback Plan
 
 If Railway has issues:
@@ -193,16 +333,44 @@ If Railway has issues:
 1. **Immediate:** Emergent is still running - can revert DNS
 2. **Data safe:** MongoDB Atlas is external - data persists regardless
 3. **Alternative hosts:** Render, Fly.io have similar setup
+4. **Timeline:** Can rollback in < 1 hour by reverting DNS/URLs
 
 ---
 
 ## Post-Migration Tasks
 
-1. **Run stress test** to validate latency improvement
-2. **Monitor Sentry** for any new errors
-3. **Auth hardening** (if not done pre-migration)
-4. **Update documentation** with new URLs
-5. **Configure backups** (Atlas M10 includes automated backups)
+### Days 1-2: Migration & Validation
+1. **Execute migration** following checklist
+2. **Create database indexes** (see Database Index Strategy above)
+3. **Run stress test** to validate latency improvement
+4. **Monitor Sentry** for any new errors
+5. **Verify all critical flows** work (auth, league creation, auction)
+
+### Days 3-4: Auth Hardening (Before Pilot)
+6. **Implement SendGrid email delivery**
+7. **Add rate limiting** (3 requests/hour/email)
+8. **Remove token from API response**
+9. **Test complete auth flow** with real email
+10. **Update stress test script** with --skip-auth flag
+
+### Week 1: Stabilization
+11. **Configure MongoDB backups** (verify enabled)
+12. **Set up monitoring alerts** (Railway + Sentry)
+13. **Update documentation** with new URLs
+14. **Prepare pilot user invitations**
+
+---
+
+## Emergency Contacts
+
+| Issue | Contact/Resource |
+|-------|------------------|
+| Railway downtime | https://railway.statuspage.io |
+| Railway support | https://railway.app/help |
+| MongoDB Atlas issues | https://support.mongodb.com |
+| Redis Cloud issues | https://support.redis.com |
+| Critical bug alerts | Sentry → your email |
+| Stress test failures | Check `/app/tests/multi_league_stress_test.py` logs |
 
 ---
 
@@ -211,9 +379,62 @@ If Railway has issues:
 | Resource | Location |
 |----------|----------|
 | Migration Checklist | `/app/MIGRATION_CHECKLIST.md` |
+| Database Schema | `/app/DATABASE_SCHEMA.md` |
 | Stress Test Script | `/app/tests/multi_league_stress_test.py` |
 | Master TODO List | `/app/MASTER_TODO_LIST.md` |
 | Emergency Rebuild Prompt | `/app/docs/archive/EMERGENCY_REBUILD_PROMPT.md` |
+
+---
+
+## Gap Analysis (January 22, 2026)
+
+### Areas Reviewed and Addressed
+
+| Area | Status | Notes |
+|------|--------|-------|
+| Database indexes | ✅ Added | Corrected to match actual schema |
+| Socket.IO sticky sessions | ✅ Added | Replicas = 1 note |
+| Redis SSL format | ✅ Added | Verification note |
+| Health check config | ✅ Added | Path and expected response |
+| Monitoring alerts | ✅ Added | Thresholds defined |
+| Security state | ✅ Added | DEV vs HARDENED documented |
+| Emergency contacts | ✅ Added | Support links |
+| Auth hardening timeline | ✅ Clarified | Day 3-4, before pilot |
+| Build command | ✅ Updated | --frozen-lockfile flag |
+
+### Potential Gaps Remaining (Flagged for Review)
+
+| Area | Risk | Notes |
+|------|------|-------|
+| **Connection pool sizing** | Medium | Motor (MongoDB driver) defaults may not be optimal. Consider `maxPoolSize=50` for M10. |
+| **Request timeouts** | Medium | No explicit timeout config. FastAPI default is no timeout. Consider 30s limit. |
+| **Graceful shutdown** | Low | Uvicorn handles SIGTERM, but in-flight bids could be lost. May need shutdown handler. |
+| **Rate limiting (API-wide)** | Medium | Only auth rate limiting planned. Consider general API rate limiting for abuse prevention. |
+| **Log aggregation** | Low | Railway has logs, but no central aggregation. Consider if needed for debugging. |
+| **Backup restore testing** | Medium | Atlas M10 has backups, but restore process not tested. Should verify before pilot. |
+| **SSL/TLS certificate** | Low | Railway handles this automatically, but should verify after deploy. |
+| **WebSocket ping/pong** | Low | Socket.IO has defaults, but may need tuning for mobile clients with poor connections. |
+| **Memory limits** | Medium | No explicit memory limit set. Railway may OOM-kill if unbounded. |
+| **Cold start time** | Low | First request after deploy may be slow. Consider health check warmup. |
+
+### Recommended Pre-Migration Verification
+
+Before executing migration, verify:
+
+1. [ ] Redis connection string format (redis:// vs rediss://)
+2. [ ] Football-Data.org API tier/limits
+3. [ ] Current data volume for export (if not fresh start)
+4. [ ] Atlas M10 provisioning time (~10 minutes typically)
+
+### Recommended Post-Migration Verification
+
+After migration, before pilot:
+
+1. [ ] All indexes created and verified
+2. [ ] Stress test passes with target metrics
+3. [ ] Auth hardening complete
+4. [ ] Backup restore tested at least once
+5. [ ] Monitoring alerts configured and tested
 
 ---
 
@@ -221,7 +442,9 @@ If Railway has issues:
 
 | Version | Date | Changes |
 |---------|------|---------|
-| 3.1 | Jan 19, 2026 | Removed hybrid approach (ruled out); Updated Sentry status; Added auth hardening requirement; Simplified document |
+| 4.1 | Jan 22, 2026 | Corrected database indexes to match actual schema (assets not teams, league_participants not leagues.managers). Added comprehensive gap analysis. Added key metrics table. Added TTL index for magic_links. |
+| 4.0 | Jan 22, 2026 | Added: Database indexes, Socket.IO sticky sessions, monitoring alerts, auth hardening timeline clarification, security state documentation, emergency contacts |
+| 3.1 | Jan 19, 2026 | Removed hybrid approach; Updated Sentry status; Added auth hardening requirement; Simplified document |
 | 3.0 | Jan 12, 2026 | Added stress test findings |
 | 2.0 | Dec 21, 2025 | Added Railway configurations |
 | 1.0 | Dec 13, 2025 | Initial plan |
