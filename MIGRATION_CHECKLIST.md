@@ -1,28 +1,29 @@
 # Migration Checklist: Emergent → Railway
 
-**Last Updated:** January 22, 2026  
-**Version:** 2.1  
-**Estimated Time:** 1-2 hours (Phase 0) + 2-3 days (migration + validation + auth hardening)
+**Last Updated:** January 22, 2026
+**Version:** 2.3
+**Estimated Time:** 2-3 days (migration + validation + auth hardening)
 
 ---
 
-## ⚠️ CRITICAL: Phase 0 Limitation
+## ⚠️ CRITICAL: Phase 0 Not Executable
 
-**Phase 0 as originally designed is NOT EXECUTABLE.**
+**Phase 0 as originally designed cannot be executed.**
 
 Emergent's MongoDB runs on `localhost:27017` internally and is not accessible from external services like Railway. The original plan to test "Railway EU → Emergent MongoDB" cannot be performed.
 
-### Revised Approach
+### Revised Approach: Start with M2
 
-**Skip Phase 0. Proceed directly to Phase 1 with M2 tier.**
+**Proceed directly to Phase 1 with M2 tier (£9/mo)**
 
-Rationale:
-- Stress tests already confirmed 700ms latency (evidence exists)
-- Phased cost model (M2 → M10) manages risk
-- Atlas alerts will trigger upgrade if M2 insufficient
-- £36/mo savings doesn't justify workaround complexity
+**Rationale:**
+- ✅ Stress tests already confirmed 700ms latency (evidence exists)
+- ✅ Phased cost model (M2 → M10) manages risk
+- ✅ Atlas alerts will trigger upgrade if M2 insufficient
+- ✅ Real pilot data > synthetic test data
+- ✅ M2 has backups; M0 doesn't (worth £9/mo)
 
-If M2 shows strain (CPU >70%, connections >400, latency >200ms), upgrade to M10.
+**If M2 shows strain** (CPU >70%, connections >400, latency >200ms), upgrade to M10.
 
 ---
 
@@ -106,7 +107,7 @@ python /app/tests/multi_league_stress_test.py \
 
 ## Phase 1: MongoDB Atlas Setup (30 mins)
 
-**Use the tier determined in Phase 0**
+**Starting tier: M2 (£9/mo) - recommended**
 
 ### Create Atlas Account & Cluster
 
@@ -123,17 +124,23 @@ python /app/tests/multi_league_stress_test.py \
   - Name: "Sport X Production"
   - Skip adding members
   
-□ 1.4 Create cluster (tier from Phase 0)
+□ 1.4 Create cluster (start with M2)
   - Click "Build a Database"
-  - Select tier: _______ (M0/M2/M10 from Phase 0)
+  - Select tier: M2 (recommended starting point)
+  - Note: Can upgrade to M10 later if Atlas alerts trigger
   - Cloud Provider: Google Cloud
   - Region: europe-west2 (London)
   - Cluster Name: sportx-production
   - Click "Create Cluster"
   
+  Why M2:
+  - Has 24-hour backup snapshots (M0 has none)
+  - Sufficient for 50-user pilot
+  - Real production data will inform M10 upgrade decision
+  - Can downgrade to M0 if load minimal (unlikely)
+  
 □ 1.5 Wait for cluster provisioning
-  - M0/M2: ~5-10 minutes
-  - M10: ~10-15 minutes
+  - M2: ~5-10 minutes
   - Status shows "Active" when ready
 ```
 
@@ -192,7 +199,7 @@ python /app/tests/multi_league_stress_test.py \
 □ 1.12 Create database
   - use sport_x_production
   
-□ 1.13 Create indexes (copy from Migration Plan v4.3)
+□ 1.13 Create indexes (copy from Migration Plan v4.5)
   
   Core Collections:
   ☐ db.users.createIndex({ "id": 1 }, { unique: true })
@@ -240,12 +247,10 @@ python /app/tests/multi_league_stress_test.py \
   - Check each collection has expected indexes
 ```
 
-### Set Up Monitoring Alerts (If using M0/M2)
-
-**Skip this if you chose M10 after Phase 0**
+### Set Up Monitoring Alerts (M2 Monitoring)
 
 ```
-□ 1.15 Configure Atlas alerts for M0/M2 monitoring
+□ 1.15 Configure Atlas alerts for M2 monitoring
   - Atlas Dashboard → Alerts → Add Alert
   
   Alert 1: CPU Usage
@@ -263,7 +268,7 @@ python /app/tests/multi_league_stress_test.py \
   ☐ Threshold: > 1000ms
   ☐ Notification: Email
   
-  Why: These alerts tell you when to upgrade M0/M2 → M10
+  Why: These alerts tell you when to upgrade M2 → M10
 ```
 
 ---
@@ -273,7 +278,7 @@ python /app/tests/multi_league_stress_test.py \
 ### Create Production Project
 
 ```
-□ 2.1 Go to railway.app (or use existing account from Phase 0)
+□ 2.1 Go to railway.app
   - Sign in with GitHub
   
 □ 2.2 Create new project
@@ -383,7 +388,7 @@ python /app/tests/multi_league_stress_test.py \
 
   Option A: Environment variable (simple, already added in 3.1)
   - Requires custom middleware (add to server.py)
-  - See Migration Plan v4.3 for middleware code
+  - See Migration Plan v4.5 for middleware code
   
   Option B: Per-route timeout (recommended for pilot)
   - Add to bid endpoint only:
@@ -614,7 +619,7 @@ python /app/tests/multi_league_stress_test.py \
 ### MongoDB Atlas Monitoring
 
 ```
-□ 6.5 Verify Atlas alerts (if M0/M2 from Phase 1.15)
+□ 6.5 Verify Atlas alerts (from Phase 1.15)
   - Atlas Dashboard → Alerts
   - Verify 3 alerts configured
   - Test by temporarily reducing threshold
@@ -639,39 +644,23 @@ python /app/tests/multi_league_stress_test.py \
 ```
 □ 7.1 Check Atlas backup configuration
   - Atlas Dashboard → Backup
-  - M0: ❌ No automated backups (manual export only)
   - M2: ✅ Basic snapshots (24-hour intervals)
-  - M10: ✅ Continuous backups + point-in-time restore
   
-□ 7.2 If using M0 (no backups)
-  - Document backup strategy: Manual exports before major changes
-  - Set calendar reminder: Weekly manual export
-  
-  Export options:
-  Option A - MongoDB Compass (GUI, easier):
-    - Connect to cluster
-    - Select database → Collection → Export Collection
-    - Choose JSON format
-    - Save to local backup folder
-    
-  Option B - mongodump CLI (requires MongoDB tools installed):
-    mongodump --uri="mongodb+srv://..." --out=/backups/$(date +%Y%m%d)/
-  
-□ 7.3 If using M2 or M10
+□ 7.2 Verify backup schedule
+  - Atlas Dashboard → Backup tab
   - Verify backup schedule in Atlas dashboard
-  - Retention: 7 days (M2) or configurable (M10)
+  - Retention: 7 days (M2 default)
+  - Frequency: 24-hour snapshots
 ```
 
-### Test Backup Restore (HIGH PRIORITY - If M10 only)
-
-**Skip this if using M0/M2 (no point-in-time restore)**
+### Test Backup Restore (HIGH PRIORITY - M2)
 
 ```
-□ 7.4 Wait 24 hours after migration
+□ 7.3 Wait 24 hours after migration
   - Atlas needs time to create first backup snapshot
   - Set calendar reminder for 24 hours from now
   
-□ 7.5 Test restore to temporary cluster
+□ 7.4 Test restore to temporary cluster
   - Atlas Dashboard → Backup → Restore
   - Select: Latest snapshot
   - Destination: "Restore to a new cluster"
@@ -679,11 +668,13 @@ python /app/tests/multi_league_stress_test.py \
   - Region: Same as production
   - Click "Restore"
   
-□ 7.6 Wait for restore to complete
+  Note: M2 uses 24-hour snapshots, not point-in-time restore (M10 only)
+  
+□ 7.5 Wait for restore to complete
   - Takes ~10-30 minutes depending on data size
   - Monitor progress in Atlas dashboard
   
-□ 7.7 Verify restored data
+□ 7.6 Verify restored data
   - Connect to test cluster via Compass/mongosh
   - Check:
     ☐ User count matches production
@@ -691,13 +682,14 @@ python /app/tests/multi_league_stress_test.py \
     ☐ Sample queries return expected data
     ☐ Indexes are present (getIndexes())
   
-□ 7.8 Delete test cluster
+□ 7.7 Delete test cluster
   - Atlas Dashboard → Test Cluster → Delete
   - Confirm deletion to avoid charges
   
-□ 7.9 Document restore procedure
+□ 7.8 Document restore procedure
   - Add to runbook: "Tested restore on [date], took [X] minutes"
   - Note any issues encountered
+  - Note: Can only restore from 24-hour snapshots (not point-in-time)
 ```
 
 ---
@@ -757,12 +749,12 @@ python /app/tests/multi_league_stress_test.py \
   ☐ Database indexes created (Phase 1.13)
   ☐ Request timeout implemented (Phase 3.6)
   ☐ Rate limiting implemented (Phase 3.9)
-  ☐ Backup restore tested (Phase 7.5) - if M10 only
+  ☐ Backup restore tested (Phase 7.4)
   
 □ 9.2 Verify monitoring is working
   ☐ Railway alerts sending emails
   ☐ Sentry capturing errors
-  ☐ Atlas alerts configured (if M0/M2)
+  ☐ Atlas alerts configured (Phase 1.15)
   
 □ 9.3 Verify performance targets met
   ☐ p50 latency ≤200ms
@@ -794,7 +786,7 @@ python /app/tests/multi_league_stress_test.py \
 □ 10.3 Monitoring active
   ☐ Railway alerts configured
   ☐ Sentry alerts configured
-  ☐ Atlas alerts configured (if M0/M2)
+  ☐ Atlas alerts configured (M2)
   
 □ 10.4 Documentation updated
   ☐ URLs documented
@@ -806,7 +798,7 @@ python /app/tests/multi_league_stress_test.py \
   ☐ Indexes created
   ☐ Request timeout implemented
   ☐ Rate limiting implemented
-  ☐ Backup tested (if M10) or manual export scheduled (if M0)
+  ☐ Backup tested (M2 snapshot restore)
 ```
 
 ---
@@ -999,8 +991,8 @@ python /app/tests/multi_league_stress_test.py \
   ☐ Your contact info available for emergency escalations
   
 □ 12.5 Data safety verified
-  ☐ Backups enabled (M2/M10) or manual export scheduled (M0)
-  ☐ Backup restore tested (if M10)
+  ☐ Backups enabled (M2 24-hour snapshots)
+  ☐ Backup restore tested (Phase 7.4)
   ☐ Rollback plan documented and understood
 ```
 
@@ -1036,13 +1028,13 @@ python /app/tests/multi_league_stress_test.py \
 □ 12.9 First 24 hours monitoring
   - Check Sentry every 2 hours
   - Monitor Railway metrics every 4 hours
-  - Watch Atlas connections/CPU (if M0/M2)
+  - Watch Atlas connections/CPU (M2 alerts)
   - Respond to user feedback within 2 hours
   
 □ 12.10 First week monitoring
   - Daily Sentry review
   - Daily Railway metrics check
-  - Monitor Atlas alerts (if M0/M2, watch for upgrade triggers)
+  - Monitor Atlas alerts (watch for M2 → M10 upgrade triggers)
   - Weekly performance review meeting
   
 □ 12.11 Success metrics tracking
@@ -1062,7 +1054,7 @@ python /app/tests/multi_league_stress_test.py \
 ### Final Sign-Off
 
 ```
-□ All phases complete (0-12)
+□ All phases complete (1-12, Phase 0 skipped)
 □ All HIGH PRIORITY items addressed
 □ Performance targets met
 □ Security hardened
@@ -1074,14 +1066,18 @@ Migration completed by: _________________
 Date: _________________
 Railway backend URL: _________________
 Railway frontend URL: _________________
-MongoDB tier: _______ (M0/M2/M10)
-Total cost: £______ /month
+MongoDB tier: M2 (can upgrade to M10 if alerts trigger)
+Total cost: £29/month (Railway £15 + Atlas M2 £9 + Redis £5)
 
 Next steps:
 1. Send pilot invitations
 2. Monitor closely for first 48 hours
 3. Collect user feedback
-4. If using M0/M2, watch for upgrade triggers
+4. Watch for M2 → M10 upgrade triggers:
+   - CPU >70% sustained
+   - Connections >400
+   - Query latency p50 >200ms
+   - Adding 3rd charity
 5. Schedule post-pilot review meeting
 ```
 
@@ -1108,10 +1104,10 @@ Symptoms: "ServerSelectionTimeoutError" in logs
 Check:
 1. MONGO_URL includes ?maxPoolSize=50
 2. Atlas connections graph in dashboard
-3. If using M0/M2, might be hitting 500 connection limit
+3. If using M2, might be hitting 500 connection limit
 
 Solution: 
-- M0/M2: Upgrade to M10 (Phase 1.4 upgrade procedure)
+- M2: Upgrade to M10 (see upgrade procedure below)
 - M10: Increase maxPoolSize to 100
 ```
 
@@ -1150,7 +1146,7 @@ Check:
 Solution: Review Phase 11.2-11.5, re-verify sender authentication
 ```
 
-**Issue: M0/M2 performance degrading**
+**Issue: M2 performance degrading**
 ```
 Symptoms: Atlas alerts triggering, CPU >70%, connections >400
 Check:
@@ -1158,12 +1154,7 @@ Check:
 2. Number of active users/leagues
 3. Query performance (slow queries)
 
-Solution: Upgrade to M10 following Phase 1.4 procedure:
-1. Create M10 cluster
-2. Use Atlas migration tool to copy data
-3. Update MONGO_URL in Railway
-4. Verify indexes exist on new cluster
-5. Test before switching traffic
+Solution: Upgrade to M10 following procedure below
 ```
 
 **Issue: Redis connection failures**
@@ -1182,9 +1173,9 @@ Solution:
 
 ---
 
-## Appendix: MongoDB Tier Upgrade Procedure
+## Appendix: MongoDB M2 → M10 Upgrade Procedure
 
-**When to upgrade M0/M2 → M10:**
+**When to upgrade M2 → M10:**
 - CPU consistently >70%
 - Connections approaching 400
 - Query latency p50 >200ms
@@ -1196,12 +1187,12 @@ Solution:
 1. Create M10 cluster in same region (europe-west2)
    - Atlas → Create New Cluster
    - Tier: M10
-   - Region: europe-west2 (same as M0/M2)
+   - Region: europe-west2 (same as M2)
    - Name: sportx-production-m10
 
 2. Migrate data using Atlas Live Migration
    - Atlas → M10 Cluster → Migration
-   - Source: Your M0/M2 cluster
+   - Source: Your M2 cluster
    - Click "I'm ready to migrate"
    - Wait for sync (10-30 minutes)
 
@@ -1225,9 +1216,10 @@ Solution:
    - Test login, create league, place bid
    - Monitor Atlas M10 metrics
 
-7. Delete M0/M2 cluster (after 48 hours of stable M10)
-   - Atlas → Old Cluster → Delete
-   - Saves cost if you were on M2
+7. Delete M2 cluster (after 48 hours of stable M10)
+   - Atlas → M2 Cluster → Delete
+   - Confirm deletion
+   - New cost: £65/month (was £29)
 ```
 
 ---
@@ -1236,6 +1228,7 @@ Solution:
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 2.3 | Jan 22, 2026 | **FINAL VERSION:** Updated Phase 1.4 to specify M2 as starting tier (removed Phase 0 references). Updated Phase 7 backup testing for M2 snapshots (not point-in-time restore). Updated Final Sign-Off with M2 cost and upgrade triggers. Added M2→M10 upgrade procedure to appendix. |
 | 2.2 | Jan 22, 2026 | **CRITICAL FIX:** Phase 0 marked as NOT EXECUTABLE - Emergent MongoDB (localhost) not externally accessible. Phase 0 collapsed into reference-only section. Recommendation: skip Phase 0, start with M2 tier. |
 | 2.1 | Jan 22, 2026 | Added Phase 3.0 Redis SSL verification step. Fixed Phase 1.7 Railway IP note. Enhanced Phase 5.5 Socket.IO testing. Added Atlas UI export option for M0 backups. Clarified Phase 11.10 recommendation. Added Redis troubleshooting. |
 | 2.0 | Jan 22, 2026 | Complete rewrite: Added Phase 0 diagnostic test, HIGH PRIORITY items (connection pooling, timeouts, rate limiting, backup testing), auth hardening phase, pilot readiness checklist, troubleshooting guide, M0/M2→M10 upgrade procedure |
