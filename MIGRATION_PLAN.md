@@ -481,17 +481,24 @@ If Railway has issues:
 
 ### Potential Gaps Remaining (Flagged for Review)
 
+#### HIGH PRIORITY - Could Break Pilot
+
+| Area | Risk | Issue | Recommendation |
+|------|------|-------|----------------|
+| **Connection pool sizing** | High | 20 concurrent auctions × 8 users = high connection churn. Motor default pool may exhaust. | Add `maxPoolSize=50` to MONGO_URL: `?maxPoolSize=50` |
+| **Request timeouts** | High | No explicit timeout. If bid takes >30s, user sees infinite loading. | Add FastAPI timeout middleware or per-route timeouts. |
+| **API-wide rate limiting** | Medium | Only auth rate limiting planned. Malicious user could spam bids. | Consider `slowapi` or similar for general rate limiting. |
+| **Backup restore testing** | Medium | Atlas M10 has backups, but restore process untested. | Test restore to a separate cluster before pilot. |
+
+#### LOWER PRIORITY - Monitor During Pilot
+
 | Area | Risk | Notes |
 |------|------|-------|
-| **Connection pool sizing** | Medium | Motor (MongoDB driver) defaults may not be optimal. Consider `maxPoolSize=50` for M10. |
-| **Request timeouts** | Medium | No explicit timeout config. FastAPI default is no timeout. Consider 30s limit. |
 | **Graceful shutdown** | Low | Uvicorn handles SIGTERM, but in-flight bids could be lost. May need shutdown handler. |
-| **Rate limiting (API-wide)** | Medium | Only auth rate limiting planned. Consider general API rate limiting for abuse prevention. |
 | **Log aggregation** | Low | Railway has logs, but no central aggregation. Consider if needed for debugging. |
-| **Backup restore testing** | Medium | Atlas M10 has backups, but restore process not tested. Should verify before pilot. |
 | **SSL/TLS certificate** | Low | Railway handles this automatically, but should verify after deploy. |
 | **WebSocket ping/pong** | Low | Socket.IO has defaults, but may need tuning for mobile clients with poor connections. |
-| **Memory limits** | Medium | No explicit memory limit set. Railway may OOM-kill if unbounded. |
+| **Memory limits** | Low | No explicit memory limit set. Railway may OOM-kill if unbounded. |
 | **Cold start time** | Low | First request after deploy may be slow. Consider health check warmup. |
 
 ### Recommended Pre-Migration Verification
