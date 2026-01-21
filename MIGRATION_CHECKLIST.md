@@ -98,7 +98,9 @@ python /app/tests/multi_league_stress_test.py \
   Monthly cost: £______
 ```
 
-**STOP HERE until Phase 0 is complete. Do not proceed to Phase 1 without knowing which MongoDB tier to use.**
+</details>
+
+**Proceed directly to Phase 1 with M2 tier. Monitor Atlas alerts for upgrade triggers.**
 
 ---
 
