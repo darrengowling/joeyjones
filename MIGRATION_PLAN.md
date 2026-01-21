@@ -64,7 +64,19 @@ Railway (EU-West/London)
 
 ---
 
-## Cost Breakdown
+## Cost Breakdown (Phased)
+
+### Phase 1: Validation & Single-Charity Pilot (Weeks 1-2)
+
+| Service | Tier | Monthly Cost |
+|---------|------|--------------|
+| Railway | Starter | ~£15 |
+| MongoDB Atlas | M2 (europe-west2) | ~£9 |
+| Redis Cloud | Essentials (256 conn) | ~£5 |
+| Sentry | Free | £0 |
+| **Total** | | **~£29/month** |
+
+### Phase 2: Multi-Charity Scale (Week 3+)
 
 | Service | Tier | Monthly Cost |
 |---------|------|--------------|
@@ -73,6 +85,17 @@ Railway (EU-West/London)
 | Redis Cloud | Essentials (256 conn) | ~£5 |
 | Sentry | Free | £0 |
 | **Total** | | **~£65/month** |
+
+### Upgrade Triggers (M2 → M10)
+
+Upgrade to M10 when ANY of these occur:
+- Atlas connections > 400
+- Atlas CPU > 70% sustained
+- Query latency > 200ms average
+- Adding 3rd+ charity to pilot
+- Stress test shows degradation
+
+**Rationale:** Start lean, validate assumptions, scale when proven necessary. Saves £36/month if M2 is sufficient.
 
 ---
 
