@@ -107,6 +107,60 @@ Upgrade to M10 when ANY of these occur:
 - [x] Stress test script ready (`/app/tests/multi_league_stress_test.py`)
 - [x] Environment variables documented
 
+---
+
+## Phase 0: Root Cause Verification (CRITICAL)
+
+**Goal:** Prove whether 700ms latency is geography or database tier before committing to M10
+
+**Time required:** 1-2 hours
+
+### Why This Matters
+
+| Root Cause | Solution | Monthly Cost |
+|------------|----------|--------------|
+| Geography (US→UK network) | M0/M2 in EU sufficient | £0-9 |
+| Database tier (shared CPU throttling) | M10 required | £45 |
+| Both factors | M10 required | £45 |
+
+**Cost impact:** £540/year difference between M0 and M10
+
+### Diagnostic Test Setup (30 mins)
+
+1. Create Railway account (railway.app)
+2. Deploy backend only to Railway EU-West
+3. **Keep using Emergent's existing MongoDB URL** (the US-hosted one)
+4. Update CORS to allow Railway domain temporarily
+
+### Run Diagnostic (30 mins)
+
+```bash
+# Run stress test against Railway EU backend (still using US database)
+python multi_league_stress_test.py --leagues 5 --users 6 --url https://YOUR-RAILWAY-BACKEND.railway.app
+```
+
+### Interpret Results
+
+| Current (Emergent) | Railway EU + US DB | Verdict | Action |
+|--------------------|--------------------|---------| -------|
+| 700ms | 150-250ms | **Geography was the issue** | ✅ Use M2 (£9/mo) |
+| 700ms | 400-500ms | **Mixed (geography + DB)** | Start M2, monitor closely |
+| 700ms | 650-700ms | **Database is the bottleneck** | ✅ Use M10 (£45/mo) |
+
+### Decision Point
+
+- **If latency drops significantly:** Proceed with M2, upgrade to M10 only if needed
+- **If latency stays high:** Proceed directly to M10
+
+### Skip Conditions
+
+You may skip Phase 0 if:
+- You're comfortable with £65/month regardless
+- You want M10's point-in-time backups for data safety
+- Time pressure requires proceeding immediately
+
+---
+
 ### ⏳ Do After Migration (But Before Pilot)
 - [ ] **Auth hardening** - MUST complete before external pilot users
   - **Why delayed:** Stress testing requires programmatic token access (dev mode)
