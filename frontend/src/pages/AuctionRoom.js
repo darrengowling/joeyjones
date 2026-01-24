@@ -69,6 +69,7 @@ function AuctionRoom() {
         clearInterval(pollInterval);
       };
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auction?.status]);
 
   // Set page title
