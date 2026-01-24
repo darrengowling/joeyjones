@@ -551,9 +551,44 @@ Only pursue if WebSocket-only on Railway doesn't work.
 
 ---
 
-**Document Version:** 3.0  
+**Document Version:** 3.1  
 **Created:** January 23, 2026  
+**Updated:** January 24, 2026  
 **Focus:** WebSocket-only transport validation
+
+**Changes from v3.0 (January 24, 2026 - POC Execution):**
+
+### Fixes Required for Railway Deployment
+
+| Issue | Fix | File Changed |
+|-------|-----|--------------|
+| `yarn.lock` mismatch | Created `.yarnrc` with `--install.frozen-lockfile false` | `/frontend/.yarnrc` |
+| `startTransaction` not exported from `@sentry/react` | Replaced deprecated API with `performance.now()` + breadcrumbs | `/frontend/src/utils/sentry.js` |
+| `react-hooks/exhaustive-deps` rule not found | Created `.eslintrc.json` with react-hooks plugin config | `/frontend/.eslintrc.json` |
+| `nixpacks.toml` needed for build config | Created nixpacks config for Railway | `/frontend/nixpacks.toml` |
+
+### Key Learnings
+
+1. **Emergent vs Railway dependencies differ** - Fresh `yarn install` on Railway pulls latest package versions, which may have breaking API changes (e.g., Sentry v10 removed `startTransaction`)
+
+2. **ESLint 9 breaking changes** - The new ESLint flat config format doesn't auto-configure react-hooks plugin. Need explicit `.eslintrc.json`
+
+3. **yarn.lock sync issues** - Emergent's "Save to GitHub" may not always commit all files. Verify in GitHub browser before Railway deploy
+
+4. **Railway uses Nixpacks** - Custom build configuration goes in `nixpacks.toml`, not Railway dashboard
+
+### POC Results (January 24, 2026)
+
+| Test | Result |
+|------|--------|
+| Backend deploys | ✅ SUCCESS |
+| MongoDB Atlas connects | ✅ SUCCESS |
+| Health endpoint responds | ✅ SUCCESS |
+| WebSocket-only connects | ✅ SUCCESS |
+| Transport confirmed "websocket" | ✅ SUCCESS |
+| UK latency (subjective) | ✅ "Instant" vs ~700ms on Emergent |
+| Frontend deploys | 🔄 IN PROGRESS |
+| Full stress test | ⏳ PENDING |
 
 **Changes from v2.0:**
 - Removed sticky sessions as a requirement (Railway doesn't support)
