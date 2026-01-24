@@ -429,6 +429,7 @@ function AuctionRoom() {
       socket.off('waiting_room_updated', onWaitingRoomUpdated);
       socket.off('next_team_countdown', onNextTeamCountdown);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auctionId, user, bidSequence, listenerCount]);
 
   // Pre-fill bid input with current bid amount
