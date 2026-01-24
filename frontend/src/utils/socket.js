@@ -22,11 +22,12 @@ export const getSocket = () => {
   if (!socket) {
     socket = io(BACKEND_URL, {
       path: "/api/socket.io",
-      transports: ["websocket", "polling"], // Prefer WebSocket, fallback to polling
-      withCredentials: true, // Enable cookies for session affinity
+      transports: ["websocket"], // WebSocket-only for Railway (no sticky sessions)
+      upgrade: false, // Don't attempt transport upgrade
+      withCredentials: true,
       reconnection: true,
       reconnectionAttempts: 10,
-      reconnectionDelay: 500, // Faster initial reconnection
+      reconnectionDelay: 500,
       reconnectionDelayMax: 5000,
       timeout: 20000,
     });
