@@ -551,46 +551,158 @@ Only pursue if WebSocket-only on Railway doesn't work.
 
 ---
 
-**Document Version:** 3.1  
+**Document Version:** 3.2  
 **Created:** January 23, 2026  
 **Updated:** January 24, 2026  
 **Focus:** WebSocket-only transport validation
 
-**Changes from v3.0 (January 24, 2026 - POC Execution):**
+---
 
-### Fixes Required for Railway Deployment
-
-| Issue | Fix | File Changed |
-|-------|-----|--------------|
-| `yarn.lock` mismatch | Created `.yarnrc` with `--install.frozen-lockfile false` | `/frontend/.yarnrc` |
-| `startTransaction` not exported from `@sentry/react` | Replaced deprecated API with `performance.now()` + breadcrumbs | `/frontend/src/utils/sentry.js` |
-| `react-hooks/exhaustive-deps` rule not found | Created `.eslintrc.json` with react-hooks plugin config | `/frontend/.eslintrc.json` |
-| `nixpacks.toml` needed for build config | Created nixpacks config for Railway | `/frontend/nixpacks.toml` |
-
-### Key Learnings
-
-1. **Emergent vs Railway dependencies differ** - Fresh `yarn install` on Railway pulls latest package versions, which may have breaking API changes (e.g., Sentry v10 removed `startTransaction`)
-
-2. **ESLint 9 breaking changes** - The new ESLint flat config format doesn't auto-configure react-hooks plugin. Need explicit `.eslintrc.json`
-
-3. **yarn.lock sync issues** - Emergent's "Save to GitHub" may not always commit all files. Verify in GitHub browser before Railway deploy
-
-4. **Railway uses Nixpacks** - Custom build configuration goes in `nixpacks.toml`, not Railway dashboard
-
-### POC Results (January 24, 2026)
+## 🎯 POC RESULTS SUMMARY (January 24, 2026)
 
 | Test | Result |
 |------|--------|
 | Backend deploys | ✅ SUCCESS |
-| MongoDB Atlas connects | ✅ SUCCESS |
+| MongoDB Atlas (Ireland) connects | ✅ SUCCESS |
 | Health endpoint responds | ✅ SUCCESS |
 | WebSocket-only connects | ✅ SUCCESS |
 | Transport confirmed "websocket" | ✅ SUCCESS |
 | UK latency (subjective) | ✅ "Instant" vs ~700ms on Emergent |
-| Frontend deploys | 🔄 IN PROGRESS |
+| Frontend deploys | ✅ SUCCESS |
 | Full stress test | ⏳ PENDING |
 
-**Changes from v2.0:**
+**Conclusion: Railway POC PASSED - Proceed to full migration planning**
+
+---
+
+## 🚨 CRITICAL: Pre-Migration Checklist
+
+**Run these BEFORE attempting full migration:**
+
+```bash
+# 1. Test build with CI=true (catches all warnings-as-errors)
+cd /app/frontend && CI=true yarn build
+
+# 2. Verify yarn.lock is committed to GitHub
+# Check in browser: github.com/[repo]/blob/main/frontend/yarn.lock
+
+# 3. Verify all config files exist in GitHub:
+#    - frontend/.eslintrc.json
+#    - frontend/.yarnrc  
+#    - frontend/nixpacks.toml
+```
+
+---
+
+## 📋 Required Code Fixes for Railway
+
+These fixes are **already applied** and backwards-compatible with Emergent:
+
+| # | Issue | Symptom | Fix | File |
+|---|-------|---------|-----|------|
+| 1 | Sentry v10 breaking change | `startTransaction is not exported from @sentry/react` | Replaced with `performance.now()` + breadcrumbs | `frontend/src/utils/sentry.js` |
+| 2 | ESLint 9 breaking change | `react-hooks/exhaustive-deps rule not found` | Created `.eslintrc.json` with plugin config | `frontend/.eslintrc.json` |
+| 3 | CI=true treats warnings as errors | Build fails on any ESLint warning | Added `eslint-disable-next-line` to useEffects | `frontend/src/pages/AuctionRoom.js` |
+| 4 | yarn frozen-lockfile | `lockfile needs to be updated` | Created `.yarnrc` with `--install.frozen-lockfile false` | `frontend/.yarnrc` |
+
+---
+
+## 📚 Key Learnings for Full Migration
+
+### 1. Dependency Version Drift
+**Problem:** Fresh `yarn install` on Railway pulls LATEST package versions, not what's in Emergent's node_modules.
+
+**Impact:** Breaking API changes (Sentry v10 removed `startTransaction`, ESLint 9 changed config format)
+
+**Prevention:**
+- Lock critical packages to specific versions in `package.json`
+- Run `CI=true yarn build` locally before ANY Railway deploy
+- Consider pinning: `@sentry/react`, `eslint`, `eslint-plugin-react-hooks`
+
+### 2. CI Environment Differences
+**Problem:** Railway sets `CI=true` which treats warnings as errors.
+
+**Impact:** Builds that pass locally fail on Railway.
+
+**Prevention:**
+- Always test with `CI=true yarn build` before pushing
+- Fix all ESLint warnings OR add appropriate disable comments
+- Don't use `CI=false` workaround - fix the actual code
+
+### 3. Emergent → GitHub Sync Timing
+**Problem:** "Save to GitHub" only commits files staged at that moment. Changes made AFTER a save won't be in GitHub.
+
+**Impact:** Railway deploys "old" code, appears to ignore fixes.
+
+**Prevention:**
+- Always verify critical files in GitHub browser before Railway deploy
+- After fixing issues, do another "Save to GitHub"
+- Check git log to confirm files are in latest commit
+
+### 4. Railway Build System (Nixpacks)
+**Problem:** Railway uses Nixpacks which has its own install/build flow.
+
+**Key Files:**
+- `nixpacks.toml` - Custom build configuration
+- `.yarnrc` - Yarn-specific settings (frozen-lockfile override)
+- `.eslintrc.json` - ESLint configuration
+
+**Railway Settings Required:**
+- Backend: Root Directory = `/backend`, Start Command = `uvicorn server:socket_app --host 0.0.0.0 --port $PORT`
+- Frontend: Root Directory = `/frontend`, Start Command = `npx serve -s build -l $PORT`
+
+### 5. MongoDB Atlas Network Access
+**Requirement:** Whitelist `0.0.0.0/0` (allow from anywhere) for Railway to connect.
+
+**Security Note:** This is acceptable for POC/pilot. For production, consider:
+- Railway private networking (if available)
+- VPC peering
+- IP allowlist for Railway's egress IPs
+
+---
+
+## 🔧 Railway Configuration Reference
+
+### Backend Service (joeyjones)
+```
+Root Directory: /backend
+Start Command: uvicorn server:socket_app --host 0.0.0.0 --port $PORT
+Region: EU-West (Amsterdam)
+
+Variables:
+- MONGO_URL: mongodb+srv://[user]:[pass]@cluster0.xxx.mongodb.net/
+- DB_NAME: sport_x_poc (or sport_x_production for full migration)
+- JWT_SECRET_KEY: [32+ char string]
+- CORS_ORIGINS: * (or specific frontend URL for production)
+- FRONTEND_ORIGIN: * (or specific frontend URL)
+- ENV: production
+- SENTRY_DSN: [optional]
+```
+
+### Frontend Service (energetic-victory)
+```
+Root Directory: /frontend
+Build Command: yarn install --no-frozen-lockfile && yarn build
+Start Command: npx serve -s build -l $PORT
+Region: EU-West (Amsterdam)
+
+Variables:
+- REACT_APP_BACKEND_URL: https://[backend-service].up.railway.app
+```
+
+---
+
+## ⏭️ Next Steps After POC
+
+1. **Run stress test** on Railway deployment
+2. **Compare latency** - should see significant improvement from ~700ms
+3. **Update MIGRATION_PLAN.md** with verified Railway configuration
+4. **Plan data migration** - fresh start vs. export/import
+5. **Schedule migration window** with minimal user impact
+
+---
+
+**Changes from v3.0:**
 - Removed sticky sessions as a requirement (Railway doesn't support)
 - Made WebSocket-only the PRIMARY test path
 - Long-polling test marked as optional/informational
@@ -598,3 +710,11 @@ Only pursue if WebSocket-only on Railway doesn't work.
 - Simplified decision matrix around WebSocket-only success
 - Added frontend code change required for WebSocket-only
 - Focused on what matters: Does WebSocket-only work reliably?
+
+**Changes from v3.1 (POC Execution Learnings):**
+- Added complete POC results summary
+- Added pre-migration checklist
+- Documented all code fixes with file references
+- Added 5 key learnings with prevention strategies
+- Added Railway configuration reference
+- Added next steps after POC
