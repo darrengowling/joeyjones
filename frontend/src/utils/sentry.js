@@ -106,14 +106,18 @@ export const ErrorBoundary = Sentry.ErrorBoundary;
  */
 export const measurePerformance = async (name, fn) => {
   if (process.env.REACT_APP_SENTRY_DSN) {
-    const transaction = Sentry.startTransaction({ name });
+    const start = performance.now();
     try {
       const result = await fn();
-      transaction.finish();
+      const duration = performance.now() - start;
+      Sentry.addBreadcrumb({
+        message: `${name} completed`,
+        category: "performance",
+        data: { duration: `${duration.toFixed(2)}ms` },
+        level: "info",
+      });
       return result;
     } catch (error) {
-      transaction.setStatus("internal_error");
-      transaction.finish();
       throw error;
     }
   } else {
