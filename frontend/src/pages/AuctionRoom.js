@@ -87,6 +87,7 @@ function AuctionRoom() {
 
     loadAuction();
     loadClubs();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auctionId]);
 
   // Socket event handlers - single useEffect with proper cleanup
