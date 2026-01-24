@@ -79,7 +79,7 @@ async def seed_database():
             "name": club["name"],
             "country": club["country"],
             "uefaId": club["uefaId"],
-            "sportKey": "CL",
+            "sportKey": "football",
             "competitionCode": "CL",
             "type": "team",
             "flag": f"https://flagcdn.com/w40/{club['country'].lower()[:2]}.png"
