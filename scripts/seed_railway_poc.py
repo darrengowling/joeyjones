@@ -68,8 +68,8 @@ async def seed_database():
         return
     
     # Clear existing assets
-    result = await db.assets.delete_many({"sportKey": "CL"})
-    print(f"Cleared {result.deleted_count} existing CL assets")
+    result = await db.assets.delete_many({"sportKey": {"$in": ["CL", "football"]}})
+    print(f"Cleared {result.deleted_count} existing assets")
     
     # Insert CL teams
     assets = []
