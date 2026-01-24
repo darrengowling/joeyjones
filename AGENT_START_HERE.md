@@ -96,4 +96,18 @@ magic_links      → Auth tokens
 
 ---
 
-**Last Updated:** January 16, 2026
+**Last Updated:** January 24, 2026
+
+---
+
+## 🔧 Railway Deployment Fixes (January 2026)
+
+These code fixes were required when deploying to Railway (fresh dependencies):
+
+| Issue | Symptom | Fix |
+|-------|---------|-----|
+| Sentry API changed | `startTransaction is not exported from @sentry/react` | Updated `sentry.js` to use `performance.now()` instead |
+| ESLint 9 breaking changes | `react-hooks/exhaustive-deps rule not found` | Created `.eslintrc.json` with react-hooks plugin |
+| yarn.lock mismatch | `lockfile needs to be updated` | Created `.yarnrc` with `--install.frozen-lockfile false` |
+
+**These fixes are backwards-compatible with Emergent production.**
