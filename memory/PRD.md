@@ -6,14 +6,16 @@
 **Before doing ANYTHING, read these files:**
 1. `/app/MASTER_TODO_LIST.md` - Current tasks and priorities
 2. `/app/AGENT_START_HERE.md` - Quick reference and gotchas
+3. `/app/POC_RAILWAY_DEPLOYMENT.md` - Railway migration POC results
 
-**Current Status (Jan 2026):** Migrating to Railway (EU). UK users have ~700ms latency on Emergent (US-hosted).
+**Current Status (Jan 24, 2026):** ✅ Railway POC COMPLETED SUCCESSFULLY. Ready for full migration planning.
 
 **Critical gotchas:**
 - Teams/Players are in `assets` collection (NOT `clubs` or `teams`)
 - Points are in `league_points` collection (NOT `league_participants`)
 - Auth magic link returns token in response - needs email delivery for production
 - Competition names must be exact: "UEFA Champions League", "English Premier League", "Africa Cup of Nations"
+- `competitions` field must be array: `["UEFA Champions League"]` not `"UEFA Champions League"`
 
 **Ask user for approval before implementing anything.**
 
@@ -38,9 +40,10 @@ Build a fantasy sports auction platform where users create leagues, bid on teams
 ## Technology Stack
 - **Frontend**: React (port 3000)
 - **Backend**: FastAPI/Python (port 8001)
-- **Database**: MongoDB Atlas (Emergent-managed)
-- **Real-time**: Socket.IO with Redis adapter (for multi-pod)
+- **Database**: MongoDB Atlas (M0 free for POC, M2 recommended for production)
+- **Real-time**: Socket.IO with WebSocket-only transport
 - **External APIs**: Football-Data.org, Cricbuzz (via RapidAPI)
+- **Hosting**: Railway (EU-West) - validated via POC
 
 ## What's Been Implemented
 
@@ -71,84 +74,74 @@ Build a fantasy sports auction platform where users create leagues, bid on teams
 - Validates: bid throughput, Socket.IO latency, anti-snipe triggers, race conditions
 - Test results: 56.7% bid success rate (expected for competitive bidding), p99 latency 13ms
 
+### Phase 5: Railway POC (Complete - Jan 24, 2026)
+- ✅ Backend deploys successfully on Railway (EU-West Amsterdam)
+- ✅ Frontend deploys successfully (static build)
+- ✅ WebSocket-only transport works (no sticky sessions needed)
+- ✅ MongoDB Atlas (M0, Ireland) connects
+- ✅ Full auction flow completes end-to-end
+- ✅ 100% bid success rate (32/32 bids)
+- ✅ ~480ms average latency (vs ~700ms on Emergent)
+- ✅ Socket.IO events working (112 events received)
+
+**POC Fixes Applied:**
+- Sentry v10 API change (`startTransaction` removed)
+- ESLint 9 configuration for react-hooks
+- yarn frozen-lockfile override
+- `competitions` field as array in seed data
+
 ## P0/P1/P2 Features Remaining
 
 ### P0 (Critical)
-- [ ] Answer Migration Pre-requisites (awaiting user input):
-  - Redis Cloud connection string
-  - Football-Data.org API tier
-  - Custom domain availability
-  - Data migration approach
+- [x] ~~Railway POC~~ ✅ COMPLETED
+- [ ] Upgrade MongoDB Atlas to M2 (London region)
+- [ ] Upgrade Railway to paid tier (London region)
+- [ ] Run full 400-user stress test on Railway
 - [ ] Code refactor: Break `server.py` into routes/services structure
 
 ### P1 (High Priority)
+- [ ] Authentication hardening (SendGrid email delivery)
 - [ ] ISSUE-002: Fix Commissioner Auth Checks
-- [ ] ISSUE-003: Configure Sentry Monitoring (awaiting DSN)
 - [ ] UI Improvements: Bidder Status, Team Count, Current Bid Label, Sticky Tabs
 - [ ] ISSUE-026: Scalable Fixture Template Management
 - [ ] Reality TV Market Expansion (technical spec exists)
-- [ ] IPL Workplace Version
 
 ### P2 (Medium Priority)
 - [ ] ISSUE-016: Roster Not Updating (monitoring)
 - [ ] ISSUE-019: "Couldn't Place Bid" (monitoring)
 - [ ] ISSUE-020: "United Offered 2 Times" (monitoring)
-- [ ] ISSUE-021: "Roster Lagged" (monitoring)
 - [ ] ISSUE-022: "Unknown" Manager Names (monitoring)
 
 ## Key Files Reference
 - `/app/backend/server.py` - Main API (monolith, needs refactoring)
-- `/app/tests/auction_stress_test.py` - Load testing script (fully functional)
-- `/app/API_REFERENCE.md` - Complete API documentation
-- `/app/DATABASE_SCHEMA.md` - MongoDB schema documentation
+- `/app/tests/railway_stress_test.py` - Railway POC stress test (working)
+- `/app/tests/multi_league_stress_test.py` - Multi-league stress test
+- `/app/scripts/seed_railway_poc.py` - Seed script for Railway POC
+- `/app/POC_RAILWAY_DEPLOYMENT.md` - Railway POC results and learnings
 - `/app/MASTER_TODO_LIST.md` - Canonical task tracker
 - `/app/docs/` - Structured documentation
 
 ## Stress Test Scripts
 
-### Multi-League Stress Test (Primary - Jan 2026)
+### Railway POC Stress Test (Jan 24, 2026)
 ```bash
 # Install dependencies
 pip install "python-socketio[asyncio_client]" aiohttp
 
-# Run from local machine against production
-python multi_league_stress_test.py --leagues 20 --users 8 --teams 4 --url https://YOUR-PRODUCTION-URL
+# Run against Railway
+python /app/tests/railway_stress_test.py --leagues 1 --url https://joeyjones-production.up.railway.app
 
-# Results saved to: stress_test_results_YYYYMMDD_HHMMSS.json/.txt
+# Results: 100% success, 483ms avg latency, 112 socket events
 ```
 
-**Location:** `/app/tests/multi_league_stress_test.py`
-
-**Known limitations:**
-- £0M spend metric (wrong field reference)
-- Excessive "roster full" rejections (polling lag)
-- May under-count lots sold (race condition on completion)
-- Latency metrics are valid
-
-### Legacy Auction Stress Test
+### Multi-League Stress Test
 ```bash
-# Hot lot test (aggressive bidding)
-python auction_stress_test.py --mode hot-lot --invite-token TOKEN \
-  --commissioner-email EMAIL --use-existing-members --users 6
-```
-
-## MongoDB Performance Investigation (Jan 2026)
-
-**Status:** Awaiting Emergent support response
-
-**Problem:** Production latency ~700-1100ms vs Preview ~360ms  
-**Root cause:** Emergent's shared MongoDB Atlas cluster (`customer-apps.oxfwhh.mongodb.net`)
-
-**Options:**
-1. Contact Emergent for dedicated cluster
-2. Bring your own MongoDB Atlas (M10 ~£45/month)
-3. Aggressive caching (complex, risky)
-
-**See:** `/app/MASTER_TODO_LIST.md` for full analysis and decision matrix
+python multi_league_stress_test.py --leagues 20 --users 8 --teams 4 --url https://YOUR-PRODUCTION-URL
 ```
 
 ## Important Notes
-- **GitHub Sync**: "Save to GitHub" may create conflict branches - check GitHub and merge PRs manually if deployment doesn't reflect changes
-- **Defensive API Integration**: Fixture import validates dates before applying scores
-- **Socket.IO Events**: Server emits `lot_started`, `bid_update`, `bid_placed`, `sold`, `auction_complete`, `tick`, `auction_snapshot`
-- **Test League**: `load10Jan` (token: `237b0451`) is full (8 members), use `--use-existing-members` flag
+- **Railway requires WebSocket-only**: `transports: ['websocket'], upgrade: false` in Socket.IO client
+- **GitHub Sync**: "Save to GitHub" may not commit all files - verify in browser
+- **CI=true**: Railway treats ESLint warnings as errors - fix warnings or add disable comments
+- **Auction activation**: After creating auction, call `/api/auction/{id}/begin` to start
+- **MongoDB data**: `competitions` field must be array, not string
