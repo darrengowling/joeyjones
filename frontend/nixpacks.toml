@@ -1,0 +1,8 @@
+[phases.install]
+cmds = ["yarn install --no-frozen-lockfile"]
+
+[phases.build]
+cmds = ["yarn build"]
+
+[start]
+cmd = "npx serve -s build -l $PORT"
