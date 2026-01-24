@@ -54,6 +54,24 @@
 
 ---
 
+## 🚨 Emergent GitHub Sync Warning
+
+**"Save to GitHub" only commits staged changes at that moment.**
+
+If you make changes AFTER a save, they WON'T be in GitHub until the next save. This affects Railway deployments which pull from GitHub.
+
+**Symptoms:**
+- Railway deploys fail with errors about files you "fixed"
+- yarn.lock mismatch errors
+- Code changes not taking effect on Railway
+
+**Solution:**
+- Always "Save to GitHub" AFTER all changes are complete
+- Verify critical files in GitHub browser before Railway deploy
+- For yarn.lock issues on Railway, use Install Command: `yarn install --no-frozen-lockfile`
+
+---
+
 ## 🗄️ Database Quick Reference
 
 ```
