@@ -180,7 +180,7 @@
 - Frontend: React (hot reload enabled)
 - Backend: FastAPI (Python)
 - Database: MongoDB (local)
-- Preview URL: https://sportsbid-ux.preview.emergentagent.com
+- Preview URL: https://speedrail.preview.emergentagent.com
 
 **Key Endpoints:**
 - `/api/leagues` - Create/list leagues
