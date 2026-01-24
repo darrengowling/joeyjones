@@ -1,0 +1,104 @@
+{
+  "timestamp": "20260124_044038",
+  "config": {
+    "leagues": 5,
+    "users_per_league": 8,
+    "teams_per_roster": 4,
+    "stagger_seconds": 10,
+    "target_url": "https://joeyjones-production.up.railway.app/api"
+  },
+  "summary": {
+    "duration_seconds": 29.2,
+    "leagues_completed": 0,
+    "leagues_failed": 5,
+    "total_users": 0,
+    "total_bids": 0,
+    "successful_bids": 0,
+    "failed_bids": 0,
+    "bid_success_rate": 0,
+    "lots_sold": 0,
+    "socket_events": 0
+  },
+  "latency": {},
+  "verdict": "NOT READY - Fix issues before pilot",
+  "passes": [
+    "Auction lots selling (0/0 sold)"
+  ],
+  "warnings": [
+    "Bid success rate low (0.0%) - check bidding logic"
+  ],
+  "issues": [
+    "100% of leagues failed",
+    "No Socket.IO events received - room join may be broken"
+  ],
+  "per_league": [
+    {
+      "name": "StressTest-1-1769229514",
+      "status": "failed: Auction start failed: {\"detail\":\"No assets available for football sport. Please seed football assets first.\"}",
+      "duration_seconds": 10.9,
+      "lots_sold": 0,
+      "total_bids": 0,
+      "success_rate": 0,
+      "socket_events": 0,
+      "errors": [
+        "Auction start failed: {\"detail\":\"No assets available for football sport. Please seed football assets first.\"}"
+      ]
+    },
+    {
+      "name": "StressTest-2-1769229525",
+      "status": "failed: Auction start failed: {\"detail\":\"No assets available for football sport. Please seed football assets first.\"}",
+      "duration_seconds": 10.9,
+      "lots_sold": 0,
+      "total_bids": 0,
+      "success_rate": 0,
+      "socket_events": 0,
+      "errors": [
+        "Auction start failed: {\"detail\":\"No assets available for football sport. Please seed football assets first.\"}"
+      ]
+    },
+    {
+      "name": "StressTest-3-1769229535",
+      "status": "failed: Auction start failed: {\"detail\":\"No assets available for football sport. Please seed football assets first.\"}",
+      "duration_seconds": 10.6,
+      "lots_sold": 0,
+      "total_bids": 0,
+      "success_rate": 0,
+      "socket_events": 0,
+      "errors": [
+        "Auction start failed: {\"detail\":\"No assets available for football sport. Please seed football assets first.\"}"
+      ]
+    },
+    {
+      "name": "StressTest-4-1769229546",
+      "status": "failed: Auction start failed: {\"detail\":\"No assets available for football sport. Please seed football assets first.\"}",
+      "duration_seconds": 42.4,
+      "lots_sold": 0,
+      "total_bids": 0,
+      "success_rate": 0,
+      "socket_events": 0,
+      "errors": [
+        "Socket connect failed for commissioner-4-1769229545465@stresstest.local: Connection refused by the server",
+        "Socket connect failed for member-4-1-1769229545465@stresstest.local: Connection refused by the server",
+        "Socket connect failed for member-4-2-1769229545465@stresstest.local: Connection refused by the server",
+        "Socket connect failed for member-4-3-1769229545465@stresstest.local: Connection refused by the server",
+        "Socket connect failed for member-4-4-1769229545465@stresstest.local: Connection refused by the server"
+      ]
+    },
+    {
+      "name": "StressTest-5-1769229556",
+      "status": "failed: Auction start failed: {\"detail\":\"No assets available for football sport. Please seed football assets first.\"}",
+      "duration_seconds": 29.2,
+      "lots_sold": 0,
+      "total_bids": 0,
+      "success_rate": 0,
+      "socket_events": 0,
+      "errors": [
+        "Socket connect failed for commissioner-5-1769229555923@stresstest.local: Connection refused by the server",
+        "Socket connect failed for member-5-1-1769229555923@stresstest.local: Connection refused by the server",
+        "Socket connect failed for member-5-2-1769229555923@stresstest.local: Connection refused by the server",
+        "Socket connect failed for member-5-4-1769229555923@stresstest.local: Connection refused by the server",
+        "Auction start failed: {\"detail\":\"No assets available for football sport. Please seed football assets first.\"}"
+      ]
+    }
+  ]
+}
