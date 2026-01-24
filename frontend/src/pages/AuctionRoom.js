@@ -483,6 +483,7 @@ function AuctionRoom() {
     const pollInterval = setInterval(checkAuctionExists, 3000);
 
     return () => clearInterval(pollInterval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auction?.status, auctionId]);
 
 
