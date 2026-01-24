@@ -82,7 +82,7 @@ async def seed_database():
             "sportKey": "football",
             "competitionCode": "CL",
             "competitionShort": "UCL",
-            "competitions": "UEFA Champions League",
+            "competitions": ["UEFA Champions League"],  # Must be array!
             "type": "team",
             "flag": f"https://flagcdn.com/w40/{club['country'].lower()[:2]}.png"
         }
