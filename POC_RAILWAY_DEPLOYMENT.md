@@ -689,12 +689,50 @@ Variables:
 
 ## ⏭️ Next Steps After POC
 
+### Recommended Production Stack
+
+| Service | Tier | Cost | Region |
+|---------|------|------|--------|
+| Railway | Hobby ($5 min) | ~$5-15/month | EU-West (Amsterdam or London) |
+| MongoDB Atlas | M2 Dedicated | ~$9/month | London (europe-west2) |
+| **Total** | | **~$15-25/month** | |
+
+**Why Hobby over Pro:**
+- 400 users with WebSocket won't need 50GB RAM limit
+- Both tiers have EU regions
+- Upgrade to Pro only if you hit limits or need team seats
+- Monitor usage during pilot, scale as needed
+
+### Migration Checklist
+
 1. ✅ ~~POC completed successfully~~
-2. ☐ Upgrade MongoDB Atlas to M2 (dedicated) in London
-3. ☐ Upgrade Railway to paid tier for London region
-4. ☐ Run full 400-user stress test
-5. ☐ Plan data migration strategy
-6. ☐ Schedule migration window
+2. ☐ Upgrade MongoDB Atlas to M2 in London
+3. ☐ Subscribe to Railway Hobby plan
+4. ☐ Change Railway region to London (if available on Hobby)
+5. ☐ **Data migration** (see strategy below)
+6. ☐ Run full 400-user stress test
+7. ☐ Configure custom domain (optional)
+8. ☐ Set up SendGrid for email delivery
+9. ☐ Go live with UK pilot
+
+### Data Migration Strategy
+
+**Option A: Fresh Start (Recommended for Pilot)**
+- Create new users, leagues from scratch
+- No historical data to migrate
+- Cleanest approach for pilot
+- Risk: None
+
+**Option B: Export/Import**
+- Export collections from Emergent MongoDB
+- Import to Atlas M2
+- Requires: `mongoexport` / `mongoimport` or Atlas Live Migration
+- Risk: Schema mismatches, ObjectId references
+
+**Option C: Dual-Run**
+- Run both environments temporarily
+- Gradually migrate users
+- Most complex, not recommended for small pilot
 
 ---
 
