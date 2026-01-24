@@ -96,8 +96,8 @@ async def seed_database():
     print("✅ Created indexes")
     
     # Verify
-    count = await db.assets.count_documents({"sportKey": "CL"})
-    print(f"✅ Verified: {count} CL teams in database")
+    count = await db.assets.count_documents({"sportKey": "football"})
+    print(f"✅ Verified: {count} football teams in database")
     
     client.close()
     print("Done!")
