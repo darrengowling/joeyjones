@@ -1,9 +1,39 @@
-# Railway Proof-of-Concept Deployment Plan v3.0
+# Railway Proof-of-Concept Deployment Plan v4.0
 
 **Purpose:** Validate Railway works for your requirements with WebSocket-only transport  
-**Time Required:** 2-3 hours (comprehensive testing)  
-**Cost:** $0 (free trial includes $5 credit)  
-**Key Assumption:** WebSocket-only transport (no HTTP long-polling fallback)
+**Status:** ✅ **POC COMPLETED SUCCESSFULLY** (January 24, 2026)  
+**Cost:** $0 (free trial)  
+**Key Finding:** Railway works for this use case
+
+---
+
+## 🎯 POC FINAL RESULTS (January 24, 2026)
+
+| Metric | Result | Notes |
+|--------|--------|-------|
+| **Backend deploys** | ✅ SUCCESS | EU-West (Amsterdam) |
+| **Frontend deploys** | ✅ SUCCESS | Static build served |
+| **MongoDB Atlas connects** | ✅ SUCCESS | M0 free tier, Ireland |
+| **WebSocket-only works** | ✅ SUCCESS | No sticky sessions needed |
+| **Auction flow completes** | ✅ SUCCESS | Full end-to-end |
+| **Bid success rate** | **100%** | 32/32 bids |
+| **Average latency** | **483ms** | vs ~700ms on Emergent |
+| **p50 latency** | **489ms** | |
+| **p95 latency** | **529ms** | |
+| **Socket.IO events** | **112** | Working correctly |
+
+### Latency Analysis
+
+| Environment | Latency | Notes |
+|-------------|---------|-------|
+| Emergent (US) | ~700ms | Current production |
+| Railway POC (free tiers) | ~480ms | M0 + free Railway |
+| **Expected with M2 + paid** | <200ms | Same region, dedicated |
+
+**Conclusion:** Railway is viable. Current ~480ms on free tiers is expected. Full latency optimization requires:
+- M2 dedicated MongoDB cluster (vs shared M0)
+- Same region for Railway + Atlas (both London)
+- Paid Railway tier for better resource allocation
 
 ---
 
@@ -24,19 +54,19 @@
 - WebSocket support is near-universal in 2025 (99%+ browsers/networks)
 - For a charity pilot, this is acceptable risk
 
-**This POC validates:** Does WebSocket-only work reliably on Railway?
+**This POC validates:** Does WebSocket-only work reliably on Railway? **YES ✅**
 
 ---
 
 ## Prerequisites
 
 Before starting, have ready:
-- [ ] GitHub account (for deployment)
-- [ ] Your codebase pushed to GitHub
-- [ ] MongoDB Atlas connection string (your existing cluster)
-- [ ] Redis Cloud connection string (your existing account)
-- [ ] A UK-based device or VPN for latency testing
-- [ ] 2-3 hours uninterrupted time
+- [x] GitHub account (for deployment)
+- [x] Your codebase pushed to GitHub
+- [x] MongoDB Atlas connection string (your existing cluster)
+- [ ] Redis Cloud connection string (optional for single replica)
+- [x] A UK-based device for latency testing
+- [x] 2-3 hours uninterrupted time
 
 ---
 
