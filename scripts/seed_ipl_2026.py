@@ -57,7 +57,8 @@ def create_asset(player: Dict, team_name: str) -> Dict:
         "type": "player",
         "meta": {
             "role": player.get("role", "Unknown"),
-            "iplTeam": team_name
+            "franchise": team_name,    # For IPL team filtering
+            "iplTeam": team_name       # Keep for backwards compat
         },
         "competitions": ["IPL 2026"],
         "competitionShort": "IPL"
