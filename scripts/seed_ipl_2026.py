@@ -57,7 +57,8 @@ def create_asset(player: Dict, team_name: str) -> Dict:
         "type": "player",
         "meta": {
             "role": player.get("role", "Unknown"),
-            "franchise": team_name,    # For IPL team filtering
+            "team": team_name,         # Used by Browse tab (ClubsList.js line 182)
+            "franchise": team_name,    # Used for filtering
             "iplTeam": team_name       # Keep for backwards compat
         },
         "competitions": ["IPL 2026"],
