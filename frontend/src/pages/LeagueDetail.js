@@ -304,62 +304,79 @@ export default function LeagueDetail() {
   // Prompt E: Team management functions
   const loadAvailableAssets = async () => {
     try {
-      // Always load ALL football teams to allow commissioners to create mixed competitions
-      const response = await axios.get(`${API}/clubs?sportKey=${league?.sportKey || 'football'}`);
-      setAvailableAssets(response.data);
+      const sportKey = league?.sportKey || 'football';
       
-      // Set current selection AND default filter based on league's competition
-      if (league?.assetsSelected && league.assetsSelected.length > 0) {
-        // Preserve existing selection
-        setSelectedAssetIds(league.assetsSelected);
+      if (sportKey === 'cricket') {
+        // Load cricket players with pagination
+        const response = await axios.get(`${API}/assets?sportKey=cricket&pageSize=250`);
+        const players = response.data.assets || [];
+        const total = response.data.pagination?.total || players.length;
         
-        // Set default filter to league's competition code
-        if (league?.competitionCode && league?.sportKey === 'football') {
+        setAvailableAssets(players);
+        setTotalCricketPlayers(total);
+        
+        // Extract unique franchises for filter dropdown
+        const franchises = [...new Set(players.map(p => p.meta?.franchise).filter(Boolean))].sort();
+        setCricketFranchises(franchises);
+        
+        // Set selection based on league's existing assets or default to all
+        if (league?.assetsSelected && league.assetsSelected.length > 0) {
+          setSelectedAssetIds(league.assetsSelected);
+        } else {
+          setSelectedAssetIds(players.map(p => p.id));
+        }
+        setCricketTeamFilter('all');
+      } else {
+        // Football - existing logic
+        const response = await axios.get(`${API}/clubs?sportKey=${sportKey}`);
+        setAvailableAssets(response.data);
+        
+        // Set current selection AND default filter based on league's competition
+        if (league?.assetsSelected && league.assetsSelected.length > 0) {
+          setSelectedAssetIds(league.assetsSelected);
+          
+          if (league?.competitionCode && sportKey === 'football') {
+            const comp = league.competitionCode.toUpperCase();
+            if (comp === 'PL' || comp === 'EPL') {
+              setCompetitionFilter('EPL');
+            } else if (comp === 'CL' || comp === 'UCL') {
+              setCompetitionFilter('UCL');
+            } else if (comp === 'AFCON') {
+              setCompetitionFilter('AFCON');
+            } else {
+              setCompetitionFilter('all');
+            }
+          }
+        } else if (league?.competitionCode && sportKey === 'football') {
           const comp = league.competitionCode.toUpperCase();
+          let competitionName = null;
           if (comp === 'PL' || comp === 'EPL') {
+            competitionName = 'English Premier League';
             setCompetitionFilter('EPL');
           } else if (comp === 'CL' || comp === 'UCL') {
+            competitionName = 'UEFA Champions League';
             setCompetitionFilter('UCL');
           } else if (comp === 'AFCON') {
+            competitionName = 'Africa Cup of Nations';
             setCompetitionFilter('AFCON');
+          }
+          
+          if (competitionName) {
+            const filteredIds = response.data
+              .filter(asset => asset.competitions?.includes(competitionName) || 
+                             (comp === 'PL' && asset.competitionShort === 'EPL') ||
+                             (comp === 'CL' && asset.competitionShort === 'UCL') ||
+                             (comp === 'AFCON' && asset.competitionShort === 'AFCON'))
+              .map(asset => asset.id);
+            setSelectedAssetIds(filteredIds);
           } else {
+            setSelectedAssetIds(response.data.map(asset => asset.id));
             setCompetitionFilter('all');
           }
-        }
-      } else if (league?.competitionCode && league?.sportKey === 'football') {
-        // ISSUE-018: Default to competition-filtered teams, but show ALL as available
-        // This allows commissioners to customize (add CL teams to PL competition, etc.)
-        const comp = league.competitionCode.toUpperCase();
-        let competitionName = null;
-        if (comp === 'PL' || comp === 'EPL') {
-          competitionName = 'English Premier League';
-          setCompetitionFilter('EPL');
-        } else if (comp === 'CL' || comp === 'UCL') {
-          competitionName = 'UEFA Champions League';
-          setCompetitionFilter('UCL');
-        } else if (comp === 'AFCON') {
-          competitionName = 'Africa Cup of Nations';
-          setCompetitionFilter('AFCON');
-        }
-        
-        if (competitionName) {
-          // Pre-select only teams from the chosen competition
-          const filteredIds = response.data
-            .filter(asset => asset.competitions?.includes(competitionName) || 
-                           (comp === 'PL' && asset.competitionShort === 'EPL') ||
-                           (comp === 'CL' && asset.competitionShort === 'UCL') ||
-                           (comp === 'AFCON' && asset.competitionShort === 'AFCON'))
-            .map(asset => asset.id);
-          setSelectedAssetIds(filteredIds);
         } else {
-          // Unknown competition, select all
           setSelectedAssetIds(response.data.map(asset => asset.id));
           setCompetitionFilter('all');
         }
-      } else {
-        // Default: all selected
-        setSelectedAssetIds(response.data.map(asset => asset.id));
-        setCompetitionFilter('all');
       }
     } catch (e) {
       console.error("Error loading available assets:", e);
