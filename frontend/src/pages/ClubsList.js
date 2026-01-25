@@ -173,7 +173,7 @@ export default function ClubsList() {
                   onChange={(e) => setSelectedFranchise(e.target.value)}
                   data-testid="franchise-filter-select"
                 >
-                  <option value="all">All Teams ({currentAssets.length})</option>
+                  <option value="all">All Teams ({franchises.length})</option>
                   {franchises.map((franchise) => (
                     <option key={franchise} value={franchise}>
                       {franchise} ({currentAssets.filter(a => a.meta?.franchise === franchise).length})
