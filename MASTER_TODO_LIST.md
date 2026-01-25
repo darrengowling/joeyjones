@@ -251,9 +251,10 @@ Step 6: Test full flow end-to-end
 - Include `externalId` (football-data.org team ID) for fixture/score imports
 - Include `country` and `competitionShort: "WC2026"`
 
-**APIs:**
-- Primary: `football-data.org` (token: `FOOTBALL_DATA_TOKEN`)
-- Secondary: `api-football.com` (key: `API_FOOTBALL_KEY`)
+**APIs (verify which is used for football fixtures):**
+- `football-data.org` (token: `FOOTBALL_DATA_TOKEN`) - Referenced in code
+- `api-football.com` via RapidAPI (key: `RAPIDAPI_KEY`, `API_FOOTBALL_KEY`) - Available
+- **Action:** Check which API is used for EPL/UCL fixture imports and use the same for WC2026
 
 **UX Flow (same as IPL):**
 1. Create Competition → Select "World Cup 2026"
