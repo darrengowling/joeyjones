@@ -1907,7 +1907,7 @@ async def get_league_assets(league_id: str, search: Optional[str] = None, page: 
     
     # Fallback: return all assets for selection (no competition filter)
     if sport_key == "football":
-        clubs = await db.assets.find({"sportKey": "football"}, {"_id": 0}).to_list(100)
+        clubs = await db.assets.find({"sportKey": "football"}, {"_id": 0}).to_list(200)
         # Return without Pydantic validation to avoid apiFootballId type errors
         return {
             "assets": clubs,
