@@ -319,11 +319,12 @@ export default function LeagueDetail() {
         const franchises = [...new Set(players.map(p => p.meta?.franchise).filter(Boolean))].sort();
         setCricketFranchises(franchises);
         
-        // Set selection based on league's existing assets or default to all
+        // Set selection based on league's existing assets or default to NONE (so users can add team by team)
         if (league?.assetsSelected && league.assetsSelected.length > 0) {
           setSelectedAssetIds(league.assetsSelected);
         } else {
-          setSelectedAssetIds(players.map(p => p.id));
+          // Start with no players selected - commissioners will add team by team
+          setSelectedAssetIds([]);
         }
         setCricketTeamFilter('all');
       } else {
