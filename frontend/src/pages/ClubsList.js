@@ -13,6 +13,8 @@ export default function ClubsList() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedSport, setSelectedSport] = useState("football");
+  const [selectedFranchise, setSelectedFranchise] = useState("all");
+  const [selectedRole, setSelectedRole] = useState("all");
 
   // Set page title
   useEffect(() => {
