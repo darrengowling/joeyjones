@@ -1,0 +1,268 @@
+[
+  {
+    "id": "dc887b5e-61fd-4704-84f9-ab41525e9dac",
+    "name": "Chelsea FC",
+    "uefaId": "EPL_49",
+    "country": "England",
+    "logo": null,
+    "competition": "English Premier League",
+    "competitionShort": "UCL",
+    "competitions": [
+      "UEFA Champions League",
+      "English Premier League"
+    ],
+    "apiFootballId": "49"
+  },
+  {
+    "id": "6dc511b9-d3a8-4c34-9a57-77cfab200c02",
+    "name": "Nottingham Forest FC",
+    "uefaId": "EPL_65",
+    "country": "England",
+    "logo": null,
+    "competition": "English Premier League",
+    "competitionShort": "EPL",
+    "competitions": [
+      "English Premier League"
+    ],
+    "apiFootballId": "65"
+  },
+  {
+    "id": "3e310382-f3a3-4977-8b96-3b14ed7a3cd4",
+    "name": "Wolverhampton Wanderers FC",
+    "uefaId": "EPL_39",
+    "country": "England",
+    "logo": null,
+    "competition": "English Premier League",
+    "competitionShort": "EPL",
+    "competitions": [
+      "English Premier League"
+    ],
+    "apiFootballId": "39"
+  },
+  {
+    "id": "c6c08c41-f1b8-4dbd-8d7a-6b5e1f96bf4e",
+    "name": "Arsenal FC",
+    "uefaId": "ARS",
+    "country": "England",
+    "logo": null,
+    "competition": null,
+    "competitionShort": "UCL",
+    "competitions": [
+      "UEFA Champions League",
+      "English Premier League"
+    ],
+    "apiFootballId": null
+  },
+  {
+    "id": "c50c84c2-1899-4ea4-912d-3492861e9caa",
+    "name": "Liverpool FC",
+    "uefaId": "LIV",
+    "country": "England",
+    "logo": null,
+    "competition": null,
+    "competitionShort": "UCL",
+    "competitions": [
+      "UEFA Champions League",
+      "English Premier League"
+    ],
+    "apiFootballId": null
+  },
+  {
+    "id": "134c74bf-5bb0-430e-a0f2-55f794fe6027",
+    "name": "Newcastle United FC",
+    "uefaId": "NEW",
+    "country": "England",
+    "logo": null,
+    "competition": null,
+    "competitionShort": "UCL",
+    "competitions": [
+      "UEFA Champions League",
+      "English Premier League"
+    ],
+    "apiFootballId": null
+  },
+  {
+    "id": "45bf02d4-2f45-4e3f-a0dd-7240e1a23c49",
+    "name": "Tottenham Hotspur FC",
+    "uefaId": "TOT",
+    "country": "England",
+    "logo": null,
+    "competition": null,
+    "competitionShort": "UCL",
+    "competitions": [
+      "UEFA Champions League",
+      "English Premier League"
+    ],
+    "apiFootballId": null
+  },
+  {
+    "id": "b479ebdb-b406-4cb0-876a-f09e1068cd71",
+    "name": "Manchester City FC",
+    "uefaId": "MAN",
+    "country": "England",
+    "logo": null,
+    "competition": null,
+    "competitionShort": "UCL",
+    "competitions": [
+      "UEFA Champions League",
+      "English Premier League"
+    ],
+    "apiFootballId": null
+  },
+  {
+    "id": "04c4fdab-8a73-4f7a-a8bd-458d212dbac8",
+    "name": "Brentford FC",
+    "uefaId": "BRE",
+    "country": "England",
+    "logo": null,
+    "competition": null,
+    "competitionShort": "EPL",
+    "competitions": [
+      "English Premier League"
+    ],
+    "apiFootballId": null
+  },
+  {
+    "id": "ae7297c7-7270-4fd5-bfff-15a6fcfb0b18",
+    "name": "Brighton & Hove Albion FC",
+    "uefaId": "BRI",
+    "country": "England",
+    "logo": null,
+    "competition": null,
+    "competitionShort": "EPL",
+    "competitions": [
+      "English Premier League"
+    ],
+    "apiFootballId": null
+  },
+  {
+    "id": "cb2c59de-4e2c-49b9-bf01-d8819a6d8f01",
+    "name": "Crystal Palace FC",
+    "uefaId": "CRY",
+    "country": "England",
+    "logo": null,
+    "competition": null,
+    "competitionShort": "EPL",
+    "competitions": [
+      "English Premier League"
+    ],
+    "apiFootballId": null
+  },
+  {
+    "id": "096a622f-e12c-42da-8531-7fe036cdd18d",
+    "name": "Everton FC",
+    "uefaId": "EVE",
+    "country": "England",
+    "logo": null,
+    "competition": null,
+    "competitionShort": "EPL",
+    "competitions": [
+      "English Premier League"
+    ],
+    "apiFootballId": null
+  },
+  {
+    "id": "12a8fe56-5c61-402c-b9c4-eef277c67435",
+    "name": "West Ham United FC",
+    "uefaId": "WES",
+    "country": "England",
+    "logo": null,
+    "competition": null,
+    "competitionShort": "EPL",
+    "competitions": [
+      "English Premier League"
+    ],
+    "apiFootballId": null
+  },
+  {
+    "id": "40ccabc3-7d5c-4349-9cff-60f241f336e2",
+    "name": "Aston Villa FC",
+    "uefaId": "AVL",
+    "country": "England",
+    "logo": null,
+    "competition": null,
+    "competitionShort": "EPL",
+    "competitions": [
+      "English Premier League"
+    ],
+    "apiFootballId": null
+  },
+  {
+    "id": "2e0756e4-79f7-4ed1-9bde-dd1740098fac",
+    "name": "Manchester United FC",
+    "uefaId": "MUN",
+    "country": "England",
+    "logo": null,
+    "competition": null,
+    "competitionShort": "EPL",
+    "competitions": [
+      "English Premier League"
+    ],
+    "apiFootballId": null
+  },
+  {
+    "id": "abf2c5ed-2ab4-4695-9d7e-acd1c5104eeb",
+    "name": "Fulham FC",
+    "uefaId": "FUL",
+    "country": "England",
+    "logo": null,
+    "competition": null,
+    "competitionShort": "EPL",
+    "competitions": [
+      "English Premier League"
+    ],
+    "apiFootballId": null
+  },
+  {
+    "id": "745a9a6c-9adb-4ab4-ba7a-6b04c8e59dd3",
+    "name": "Burnley FC",
+    "uefaId": "BUR",
+    "country": "England",
+    "logo": null,
+    "competition": null,
+    "competitionShort": "EPL",
+    "competitions": [
+      "English Premier League"
+    ],
+    "apiFootballId": null
+  },
+  {
+    "id": "78b6c783-43fd-480a-b4f6-43f5441d2c1d",
+    "name": "Leeds United FC",
+    "uefaId": "LEE",
+    "country": "England",
+    "logo": null,
+    "competition": null,
+    "competitionShort": "EPL",
+    "competitions": [
+      "English Premier League"
+    ],
+    "apiFootballId": null
+  },
+  {
+    "id": "64dfde9d-fdce-4825-82e3-b8904cc555e6",
+    "name": "Sunderland AFC",
+    "uefaId": "SUN",
+    "country": "England",
+    "logo": null,
+    "competition": null,
+    "competitionShort": "EPL",
+    "competitions": [
+      "English Premier League"
+    ],
+    "apiFootballId": null
+  },
+  {
+    "id": "dda6413e-5854-4eb1-9755-46bdd0fef730",
+    "name": "AFC Bournemouth",
+    "uefaId": "BOU",
+    "country": "England",
+    "logo": null,
+    "competition": null,
+    "competitionShort": "EPL",
+    "competitions": [
+      "English Premier League"
+    ],
+    "apiFootballId": null
+  }
+]
