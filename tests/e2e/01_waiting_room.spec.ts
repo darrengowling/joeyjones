@@ -6,7 +6,7 @@
 import { test, expect, chromium, Browser, BrowserContext, Page } from '@playwright/test';
 import { setUserSession } from './helpers/session';  // Prompt C
 
-const BASE_URL = 'https://speedrail.preview.emergentagent.com';
+const BASE_URL = 'https://fastbid-platform.preview.emergentagent.com';
 
 test.describe('01 - Waiting Room UX', () => {
   let browserA: Browser;

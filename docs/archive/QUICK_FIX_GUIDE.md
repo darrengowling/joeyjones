@@ -15,7 +15,7 @@ Waiting room shows "Participants in Room (1)" instead of "(2)"
 1. **Check participants endpoint**:
 ```bash
 # Test the endpoint manually
-curl -X GET "https://speedrail.preview.emergentagent.com/api/leagues/{league_id}/participants"
+curl -X GET "https://fastbid-platform.preview.emergentagent.com/api/leagues/{league_id}/participants"
 ```
 
 2. **Check database**:

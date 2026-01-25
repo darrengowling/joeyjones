@@ -25,7 +25,7 @@ test.describe('Fixtures CSV Import (Commissioner)', () => {
     // Seed clubs if needed (to ensure we have clubs for CSV)
     const apiUrl = page.url().includes('localhost')
       ? 'http://localhost:8001/api/clubs'
-      : 'https://speedrail.preview.emergentagent.com/api/clubs';
+      : 'https://fastbid-platform.preview.emergentagent.com/api/clubs';
     
     try {
       const clubsResponse = await fetch(apiUrl);

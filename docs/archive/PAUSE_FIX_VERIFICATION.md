@@ -145,7 +145,7 @@ return (
 ### Manual Test Procedure:
 
 1. **Setup:**
-   - Navigate to auction: `https://speedrail.preview.emergentagent.com/auction/57a0390c-9ed9-451a-bf39-90b450649c70`
+   - Navigate to auction: `https://fastbid-platform.preview.emergentagent.com/auction/57a0390c-9ed9-451a-bf39-90b450649c70`
    - Ensure auction is active with timer running
 
 2. **Test Pause:**

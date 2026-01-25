@@ -6,7 +6,7 @@ Test the new clubs overview functionality
 import asyncio
 import aiohttp
 
-BASE_URL = "https://speedrail.preview.emergentagent.com/api"
+BASE_URL = "https://fastbid-platform.preview.emergentagent.com/api"
 
 async def test_clubs_overview():
     """Test the clubs overview endpoint"""

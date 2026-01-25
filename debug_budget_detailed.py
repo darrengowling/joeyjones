@@ -7,7 +7,7 @@ import requests
 import json
 import time
 
-BASE_URL = "https://speedrail.preview.emergentagent.com/api"
+BASE_URL = "https://fastbid-platform.preview.emergentagent.com/api"
 
 def test_budget_reserve_detailed():
     session = requests.Session()

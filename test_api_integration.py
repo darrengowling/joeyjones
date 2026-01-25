@@ -7,7 +7,7 @@ import requests
 import json
 import sys
 
-BACKEND_URL = "https://speedrail.preview.emergentagent.com/api"
+BACKEND_URL = "https://fastbid-platform.preview.emergentagent.com/api"
 
 def test_league_creation_with_assets():
     """Test creating a league with assetsSelected via API"""
