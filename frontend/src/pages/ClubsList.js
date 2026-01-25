@@ -207,7 +207,11 @@ export default function ClubsList() {
 
           {/* Assets Grid */}
           <div className="text-gray-600 mb-4">
-            Showing {filteredAssets.length} of {currentAssets.length} {currentSport?.uiHints.assetPlural.toLowerCase() || 'assets'}
+            {totalCounts[selectedSport] > currentAssets.length ? (
+              <>Showing first {filteredAssets.length} of {totalCounts[selectedSport]} {currentSport?.uiHints.assetPlural.toLowerCase() || 'assets'}</>
+            ) : (
+              <>Showing {filteredAssets.length} of {currentAssets.length} {currentSport?.uiHints.assetPlural.toLowerCase() || 'assets'}</>
+            )}
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
