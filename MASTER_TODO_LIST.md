@@ -224,6 +224,54 @@ Step 6: Test full flow end-to-end
 | 6 | ISSUE-026 | **Fixture template management** | 1 week | 🟢 Low | No redeploy for fixture updates |
 | 7 | - | **Payment integration** (Stripe) | 2 weeks | 🟡 Med | Entry fees, charity donations |
 | 8 | WC2026 | **FIFA World Cup 2026 Teams** | 2 hrs | 🟢 Low | High demand from pilot users |
+| 9 | IPL2026-API | **IPL 2026 Cricbuzz Integration** | 2 hrs | 🟢 Low | Auto fixture/score imports |
+
+### 🏏 IPL 2026 Cricbuzz Integration (IPL2026-API)
+
+**Status:** ⏸️ PAUSED - IPL 2026 series not yet in Cricbuzz API  
+**Priority:** PRE-PILOT (Required for live scoring during IPL)
+
+**Overview:**
+- Cricket fixtures/scores imported via **Cricbuzz API** (RapidAPI)
+- IPL 2025 series ID: `9237` - IPL 2026 TBC
+- Need to match our player names to Cricbuzz player IDs for scoring
+
+**Current State (Jan 2026):**
+- ✅ 125 curated IPL 2026 players in database
+- ✅ 100 players match Cricbuzz IPL 2025 names exactly
+- ❌ 24 players not matched (new 2026 signings not in Cricbuzz yet)
+
+**Players Not Yet in Cricbuzz (new 2026 signings):**
+```
+Jos Buttler, Cameron Green, Mitchell Starc, Kagiso Rabada, 
+Marco Jansen, Lockie Ferguson, Glenn Phillips, Jason Holder,
+Ben Duckett, Pathum Nissanka, Finn Allen, Matt Henry,
+Akeal Hosein, Cooper Connolly, Varun Chakravarthy, etc.
+```
+
+**Name Variations to Fix:**
+| Our Database | Cricbuzz |
+|--------------|----------|
+| Phil Salt | Philip Salt |
+| Mitch Owen | Mitchell Owen |
+
+**Implementation Plan:**
+
+| Step | Task | Notes |
+|------|------|-------|
+| 1 | **Wait for IPL 2026 series in Cricbuzz** | Usually available ~2 weeks before tournament |
+| 2 | **Get IPL 2026 series ID** | Query `/series/v1/league` or archives |
+| 3 | **Fetch all squad data** | `/series/v1/{seriesId}/squads/{squadId}` |
+| 4 | **Match players and add `cricbuzzId`** | Update `assets` collection with Cricbuzz player IDs |
+| 5 | **Fix name variations** | Update DB or add aliases |
+| 6 | **Test fixture import** | `POST /leagues/{id}/fixtures/import-next-cricket-fixture` |
+| 7 | **Test score updates** | `POST /cricket/update-scores` |
+
+**API Details:**
+- **Cricbuzz via RapidAPI** (`RAPIDAPI_KEY`)
+- See `/app/backend/rapidapi_client.py` - `RapidAPICricketClient` class
+- Endpoint for squads: `series/v1/{seriesId}/squads/{squadId}`
+- Player fields: `id`, `name`, `role`, `battingStyle`, `bowlingStyle`
 
 ### ⚽ FIFA World Cup 2026 Implementation (WC2026)
 
