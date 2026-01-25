@@ -307,22 +307,27 @@ export default function LeagueDetail() {
       const sportKey = league?.sportKey || 'football';
       
       if (sportKey === 'cricket') {
-        // Load cricket players with pagination
-        const response = await axios.get(`${API}/assets?sportKey=cricket&pageSize=300`);
-        const players = response.data.assets || [];
-        const total = response.data.pagination?.total || players.length;
+        // For cricket, only load the players that are selected for this league
+        const selectedIds = league?.assetsSelected || [];
         
-        setAvailableAssets(players);
-        setTotalCricketPlayers(total);
-        
-        // Extract unique franchises for filter dropdown
-        const franchises = [...new Set(players.map(p => p.meta?.franchise).filter(Boolean))].sort();
-        setCricketFranchises(franchises);
-        
-        // Use the league's saved assetsSelected (set at creation time by backend)
-        if (league?.assetsSelected) {
-          setSelectedAssetIds(league.assetsSelected);
+        if (selectedIds.length > 0) {
+          // Load only the selected players from the league assets endpoint
+          const response = await axios.get(`${API}/leagues/${league.id}/assets`);
+          const players = response.data.assets || [];
+          
+          setAvailableAssets(players);
+          setTotalCricketPlayers(players.length);
+          
+          // Extract unique franchises from SELECTED players only
+          const franchises = [...new Set(players.map(p => p.meta?.franchise).filter(Boolean))].sort();
+          setCricketFranchises(franchises);
+          
+          // All selected players are checked by default
+          setSelectedAssetIds(selectedIds);
         } else {
+          setAvailableAssets([]);
+          setTotalCricketPlayers(0);
+          setCricketFranchises([]);
           setSelectedAssetIds([]);
         }
         setCricketTeamFilter('all');
