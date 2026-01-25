@@ -1030,7 +1030,7 @@ export default function LeagueDetail() {
                         }}
                         data-testid="cricket-team-filter"
                       >
-                        <option value="all">All Teams ({cricketFranchises.length}) - {totalCricketPlayers > availableAssets.length ? `showing first ${availableAssets.length} of ${totalCricketPlayers}` : `${availableAssets.length}`} players</option>
+                        <option value="all">All Teams ({cricketFranchises.length}) - {availableAssets.length} players</option>
                         {cricketFranchises.map(franchise => (
                           <option key={franchise} value={franchise}>
                             {franchise} ({availableAssets.filter(p => p.meta?.franchise === franchise).length})
