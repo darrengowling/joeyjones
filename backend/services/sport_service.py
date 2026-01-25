@@ -20,8 +20,8 @@ class SportService:
         Args:
             enabled_only: If True, filter cricket based on SPORTS_CRICKET_ENABLED flag
         """
-        # Get all sports from database
-        sports_data = await self.db.sports.find().to_list(100)
+        # Get all sports from database (exclude _id to avoid ObjectId serialization issues)
+        sports_data = await self.db.sports.find({}, {"_id": 0}).to_list(100)
         sports = [Sport(**sport) for sport in sports_data]
         
         if not enabled_only:
