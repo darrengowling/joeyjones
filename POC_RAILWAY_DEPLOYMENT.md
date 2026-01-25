@@ -658,55 +658,43 @@ Connection: redis://default:[pass]@redis-12232.c338.eu-west-2-1.ec2.cloud.redisl
 2. Custom domain configuration
 3. SendGrid email delivery for magic links
 4. Scale testing at 100+ users
-| MongoDB Atlas | M2 Dedicated | ~$9/month | London (europe-west2) |
-| **Total** | | **~$15-25/month** | |
-
-**Why Hobby over Pro:**
-- 400 users with WebSocket won't need 50GB RAM limit
-- Both tiers have EU regions
-- Upgrade to Pro only if you hit limits or need team seats
-- Monitor usage during pilot, scale as needed
-
-### Migration Checklist
-
-1. ✅ ~~POC completed successfully~~
-2. ☐ Upgrade MongoDB Atlas to M2 in London
-3. ☐ Subscribe to Railway Hobby plan
-4. ☐ Change Railway region to London (if available on Hobby)
-5. ☐ **Data migration** (see strategy below)
-6. ☐ Run full 400-user stress test
-7. ☐ Configure custom domain (optional)
-8. ☐ Set up SendGrid for email delivery
-9. ☐ Go live with UK pilot
-
-### Data Migration Strategy
-
-**Option A: Fresh Start (Recommended for Pilot)**
-- Create new users, leagues from scratch
-- No historical data to migrate
-- Cleanest approach for pilot
-- Risk: None
-
-**Option B: Export/Import**
-- Export collections from Emergent MongoDB
-- Import to Atlas M2
-- Requires: `mongoexport` / `mongoimport` or Atlas Live Migration
-- Risk: Schema mismatches, ObjectId references
-
-**Option C: Dual-Run**
-- Run both environments temporarily
-- Gradually migrate users
-- Most complex, not recommended for small pilot
 
 ---
 
-**Changes from v3.0:**
-- Removed sticky sessions as a requirement (Railway doesn't support)
-- Made WebSocket-only the PRIMARY test path
+## Data Migration Strategy
 
-**Changes from v3.2 (POC Execution):**
-- Added complete POC results summary
-- Documented all code fixes with file references
-- Added stress test script reference
-- Added auction activation flow documentation
-- Marked POC as COMPLETED SUCCESSFULLY
+**For Football Pilot (EPL):**
+- Seed EPL teams using admin endpoint or script
+- Fresh start - no historical data needed
+- Users register fresh on Railway deployment
+
+**For Cricket Pilot (IPL - 2 months away):**
+- Create IPL seed script with teams + players
+- Admin endpoint: `POST /api/admin/seed/ipl`
+
+**Existing Data to Migrate:**
+| Data | Count | Source | Action |
+|------|-------|--------|--------|
+| EPL Teams | 20 | Emergent prod | Export or re-seed |
+| UCL Teams | 38 | Emergent prod | Export or re-seed |
+| Cricket Players | 53 | Emergent prod | Export |
+| Users/Leagues | N/A | Friends/family | Fresh start |
+
+---
+
+## Version History
+
+**v5.0 (January 25, 2026):**
+- Added Redis test results (67% latency improvement)
+- Updated production stack with Redis
+- Added comprehensive performance metrics
+- Marked APPROVED FOR PRODUCTION
+
+**v4.0 (January 24, 2026):**
+- POC completed successfully
+- Documented all code fixes
+- Added stress test scripts
+
+**v3.0 (January 23, 2026):**
+- Initial WebSocket-only focus
+- Removed sticky sessions requirement
