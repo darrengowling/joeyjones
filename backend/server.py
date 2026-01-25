@@ -2082,28 +2082,39 @@ async def create_league(input: LeagueCreate):
         # Handle Cricket competitions
         if input.sportKey == "cricket":
             if competition_code == "IPL":
-                # IPL: Select 11 players per franchise (110 total)
+                # IPL: Select the curated 124 probable starters + impact players
+                ipl_2026_names = [
+                    # RCB
+                    "Virat Kohli", "Phil Salt", "Venkatesh Iyer", "Rajat Patidar", "Jitesh Sharma", "Tim David", "Romario Shepherd", "Krunal Pandya", "Bhuvneshwar Kumar", "Suyash Sharma", "Josh Hazlewood", "Yash Dayal",
+                    # CSK
+                    "Sanju Samson", "Ayush Mhatre", "Ruturaj Gaikwad", "Shivam Dube", "Dewald Brevis", "Kartik Sharma", "Prashant Veer", "MS Dhoni", "Nathan Ellis", "Matt Henry", "Akeal Hosein", "Noor Ahmad", "Khaleel Ahmed",
+                    # MI
+                    "Rohit Sharma", "Quinton de Kock", "Suryakumar Yadav", "Tilak Varma", "Hardik Pandya", "Naman Dhir", "Mitchell Santner", "Shardul Thakur", "Jasprit Bumrah", "Trent Boult", "Deepak Chahar",
+                    # SRH
+                    "Travis Head", "Abhishek Sharma", "Ishan Kishan", "Nitish Kumar Reddy", "Heinrich Klaasen", "Aniket Verma", "Liam Livingstone", "Pat Cummins", "Harshal Patel", "Jaydev Unadkat",
+                    # KKR
+                    "Tim Seifert", "Finn Allen", "Ajinkya Rahane", "Angkrish Raghuvanshi", "Cameron Green", "Rahul Tripathi", "Anukul Roy", "Rinku Singh", "Ramandeep Singh", "Sunil Narine", "Harshit Rana", "Vaibhav Arora", "Matheesha Pathirana", "Mustafizur Rahman", "Varun Chakravarthy",
+                    # GT
+                    "Shubman Gill", "Jos Buttler", "Washington Sundar", "Shahrukh Khan", "Glenn Phillips", "Jason Holder", "Rahul Tewatia", "Rashid Khan", "Ravisrinivasan Sai Kishore", "Kagiso Rabada", "Mohammed Siraj", "Prasidh Krishna",
+                    # RR
+                    "Yashasvi Jaiswal", "Lhuan-dre Pretorius", "Riyan Parag", "Dhruv Jurel", "Shimron Hetmyer", "Ravindra Jadeja", "Sam Curran", "Donovan Ferreira", "Jofra Archer", "Ravi Bishnoi", "Tushar Deshpande", "Sandeep Sharma",
+                    # PBKS
+                    "Priyansh Arya", "Prabhsimran Singh", "Shreyas Iyer", "Nehal Wadhera", "Mitch Owen", "Cooper Connolly", "Marcus Stoinis", "Azmatullah Omarzai", "Shashank Singh", "Marco Jansen", "Arshdeep Singh", "Lockie Ferguson", "Yuzvendra Chahal", "Harpreet Brar",
+                    # DC
+                    "KL Rahul", "Ben Duckett", "Pathum Nissanka", "Nitish Rana", "Tristan Stubbs", "Axar Patel", "David Miller", "Ashutosh Sharma", "Vipraj Nigam", "Auqib Dar", "Kuldeep Yadav", "Mitchell Starc", "T Natarajan",
+                    # LSG
+                    "Mitchell Marsh", "Aiden Markram", "Nicholas Pooran", "Rishabh Pant", "Ayush Badoni", "Abdul Samad", "Wanindu Hasaranga", "Shahbaz Ahmed", "Avesh Khan", "Mohsin Khan", "Mohammed Shami", "Mayank Yadav"
+                ]
+                
+                # Find matching players in DB
                 all_players = await db.assets.find(
-                    {"sportKey": "cricket"}, 
-                    {"_id": 0, "id": 1, "meta.franchise": 1}
-                ).to_list(300)
+                    {"sportKey": "cricket", "name": {"$in": ipl_2026_names}}, 
+                    {"_id": 0, "id": 1, "name": 1}
+                ).to_list(150)
                 
-                # Group by franchise and take first 11 from each
-                franchise_groups = {}
-                for player in all_players:
-                    franchise = player.get("meta", {}).get("franchise")
-                    if franchise:
-                        if franchise not in franchise_groups:
-                            franchise_groups[franchise] = []
-                        if len(franchise_groups[franchise]) < 11:
-                            franchise_groups[franchise].append(player["id"])
-                
-                auto_selected_ids = []
-                for franchise, player_ids in franchise_groups.items():
-                    auto_selected_ids.extend(player_ids)
-                
+                auto_selected_ids = [p["id"] for p in all_players]
                 input.assetsSelected = auto_selected_ids
-                logger.info(f"   ✅ IPL: Auto-selected {len(auto_selected_ids)} players (11 per franchise)")
+                logger.info(f"   ✅ IPL: Auto-selected {len(auto_selected_ids)} curated players (probable starters + impact)")
             
             elif competition_code == "CUSTOM":
                 # CUSTOM: Start with empty selection, user builds team by team
