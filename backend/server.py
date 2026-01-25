@@ -3144,9 +3144,14 @@ async def import_fixtures_from_api(
         
         for team in teams:
             external_id = team.get("externalId")
-            if external_id and external_id.isdigit():
-                team_external_ids.append(int(external_id))
-                team_lookup[int(external_id)] = team
+            # Handle both int and string formats
+            if external_id is not None:
+                if isinstance(external_id, int):
+                    team_external_ids.append(external_id)
+                    team_lookup[external_id] = team
+                elif isinstance(external_id, str) and external_id.isdigit():
+                    team_external_ids.append(int(external_id))
+                    team_lookup[int(external_id)] = team
         
         if not team_external_ids:
             raise HTTPException(
