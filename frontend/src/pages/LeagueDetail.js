@@ -34,6 +34,10 @@ export default function LeagueDetail() {
   const [startingAuction, setStartingAuction] = useState(false);
   // Filter state for Manage Clubs modal
   const [competitionFilter, setCompetitionFilter] = useState("all");
+  // Cricket filter state
+  const [cricketTeamFilter, setCricketTeamFilter] = useState("all");
+  const [cricketFranchises, setCricketFranchises] = useState([]);
+  const [totalCricketPlayers, setTotalCricketPlayers] = useState(0);
   // Fixtures state
   const [fixtures, setFixtures] = useState([]);
   const [loadingFixtures, setLoadingFixtures] = useState(false);
