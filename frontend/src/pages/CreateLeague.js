@@ -18,6 +18,7 @@ export default function CreateLeague() {
   const [form, setForm] = useState({
     name: "",
     sportKey: "football", // Default to football
+    competitionCode: "", // EPL, UCL, AFCON for football; IPL, CUSTOM for cricket
     budget: 500000000, // £500m default budget
     minManagers: 2,
     maxManagers: 12,
