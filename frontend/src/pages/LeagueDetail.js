@@ -326,9 +326,23 @@ export default function LeagueDetail() {
         } else if (league?.competitionCode === 'CUSTOM') {
           // CUSTOM mode - start with empty selection, user builds team by team
           setSelectedAssetIds([]);
+        } else if (league?.competitionCode === 'IPL') {
+          // IPL mode - auto-select 11 players per franchise (110 total)
+          const franchiseGroups = {};
+          players.forEach(p => {
+            const franchise = p.meta?.franchise;
+            if (franchise) {
+              if (!franchiseGroups[franchise]) franchiseGroups[franchise] = [];
+              if (franchiseGroups[franchise].length < 11) {
+                franchiseGroups[franchise].push(p.id);
+              }
+            }
+          });
+          const iplPlayerIds = Object.values(franchiseGroups).flat();
+          setSelectedAssetIds(iplPlayerIds);
         } else {
-          // IPL or other - default to all players (backwards compatibility)
-          setSelectedAssetIds(players.map(p => p.id));
+          // Default - start empty for new competitions (safer default)
+          setSelectedAssetIds([]);
         }
         setCricketTeamFilter('all');
       } else {
