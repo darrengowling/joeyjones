@@ -1086,7 +1086,11 @@ export default function LeagueDetail() {
                             return asset.competitionShort === "AFCON" || asset.competitions?.includes("Africa Cup of Nations");
                           }
                         }
-                        return true; // Show all if filter is "all" or for other sports
+                        // Filter based on cricketTeamFilter for cricket
+                        if (league.sportKey === "cricket" && cricketTeamFilter !== "all") {
+                          return asset.meta?.franchise === cricketTeamFilter;
+                        }
+                        return true; // Show all if filter is "all"
                       })
                       .map((asset) => (
                       <label
