@@ -9,6 +9,7 @@ const API = `${BACKEND_URL}/api`;
 export default function ClubsList() {
   const navigate = useNavigate();
   const [assets, setAssets] = useState({ football: [], cricket: [] });
+  const [totalCounts, setTotalCounts] = useState({ football: 0, cricket: 0 });
   const [sports, setSports] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
