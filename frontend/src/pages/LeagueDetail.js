@@ -319,29 +319,10 @@ export default function LeagueDetail() {
         const franchises = [...new Set(players.map(p => p.meta?.franchise).filter(Boolean))].sort();
         setCricketFranchises(franchises);
         
-        // Set selection based on league's existing assets or competition type
-        if (league?.assetsSelected && league.assetsSelected.length > 0) {
-          // League has saved selection - use it
+        // Use the league's saved assetsSelected (set at creation time by backend)
+        if (league?.assetsSelected) {
           setSelectedAssetIds(league.assetsSelected);
-        } else if (league?.competitionCode === 'CUSTOM') {
-          // CUSTOM mode - start with empty selection, user builds team by team
-          setSelectedAssetIds([]);
-        } else if (league?.competitionCode === 'IPL') {
-          // IPL mode - auto-select 11 players per franchise (110 total)
-          const franchiseGroups = {};
-          players.forEach(p => {
-            const franchise = p.meta?.franchise;
-            if (franchise) {
-              if (!franchiseGroups[franchise]) franchiseGroups[franchise] = [];
-              if (franchiseGroups[franchise].length < 11) {
-                franchiseGroups[franchise].push(p.id);
-              }
-            }
-          });
-          const iplPlayerIds = Object.values(franchiseGroups).flat();
-          setSelectedAssetIds(iplPlayerIds);
         } else {
-          // Default - start empty for new competitions (safer default)
           setSelectedAssetIds([]);
         }
         setCricketTeamFilter('all');
