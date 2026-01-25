@@ -1015,32 +1015,43 @@ export default function LeagueDetail() {
                   {/* Competition Filter for Cricket */}
                   {league.sportKey === "cricket" && (
                     <div className="mb-3">
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Filter by Series</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Filter by Team</label>
                       <select
                         className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 mb-2"
-                        onChange={async (e) => {
-                          const filter = e.target.value;
-                          try {
-                            let response;
-                            if (filter === "all") {
-                              response = await axios.get(`${API}/clubs?sportKey=cricket`);
-                            } else {
-                              response = await axios.get(`${API}/clubs?sportKey=cricket&competition=${filter}`);
-                            }
-                            setAvailableAssets(response.data);
-                            // Auto-select all players in filtered view
-                            if (filter !== "all") {
-                              setSelectedAssetIds(response.data.map(p => p.id));
-                            }
-                          } catch (error) {
-                            console.error("Error filtering players:", error);
-                          }
+                        value={cricketTeamFilter}
+                        onChange={(e) => {
+                          const team = e.target.value;
+                          setCricketTeamFilter(team);
                         }}
+                        data-testid="cricket-team-filter"
                       >
-                        <option value="all">All Players (53)</option>
-                        <option value="ASHES">🏴󠁧󠁢󠁥󠁮󠁧󠁿🇦🇺 The Ashes 2025/26 (30)</option>
-                        <option value="NZ_ENG">🇳🇿🏴 NZ vs England ODI (23)</option>
+                        <option value="all">All Teams ({cricketFranchises.length}) - {totalCricketPlayers > availableAssets.length ? `showing first ${availableAssets.length} of ${totalCricketPlayers}` : `${availableAssets.length}`} players</option>
+                        {cricketFranchises.map(franchise => (
+                          <option key={franchise} value={franchise}>
+                            {franchise} ({availableAssets.filter(p => p.meta?.franchise === franchise).length})
+                          </option>
+                        ))}
                       </select>
+                      {/* Quick team selection button */}
+                      {cricketTeamFilter !== 'all' && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const teamPlayerIds = availableAssets
+                              .filter(p => p.meta?.franchise === cricketTeamFilter)
+                              .map(p => p.id);
+                            setSelectedAssetIds(prev => {
+                              // Add team players to existing selection (avoid duplicates)
+                              const combined = new Set([...prev, ...teamPlayerIds]);
+                              return Array.from(combined);
+                            });
+                            toast.success(`Added ${teamPlayerIds.length} players from ${cricketTeamFilter}`);
+                          }}
+                          className="w-full px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-semibold mb-2"
+                        >
+                          + Add All {cricketTeamFilter} Players
+                        </button>
+                      )}
                     </div>
                   )}
                   
