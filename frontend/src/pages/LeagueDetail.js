@@ -1037,26 +1037,6 @@ export default function LeagueDetail() {
                           </option>
                         ))}
                       </select>
-                      {/* Quick team selection button */}
-                      {cricketTeamFilter !== 'all' && (
-                        <button
-                          type="button"
-                          onClick={() => {
-                            const teamPlayerIds = availableAssets
-                              .filter(p => p.meta?.franchise === cricketTeamFilter)
-                              .map(p => p.id);
-                            setSelectedAssetIds(prev => {
-                              // Add team players to existing selection (avoid duplicates)
-                              const combined = new Set([...prev, ...teamPlayerIds]);
-                              return Array.from(combined);
-                            });
-                            toast.success(`Added ${teamPlayerIds.length} players from ${cricketTeamFilter}`);
-                          }}
-                          className="w-full px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-semibold mb-2"
-                        >
-                          + Add All {cricketTeamFilter} Players
-                        </button>
-                      )}
                     </div>
                   )}
                   
