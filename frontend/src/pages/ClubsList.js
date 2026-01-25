@@ -45,7 +45,7 @@ export default function ClubsList() {
             return { sport: sport.key, assets: response.data };
           } else {
             // Load assets for other sports
-            const response = await axios.get(`${API}/assets?sportKey=${sport.key}&pageSize=50`);
+            const response = await axios.get(`${API}/assets?sportKey=${sport.key}&pageSize=250`);
             return { sport: sport.key, assets: response.data.assets || [] };
           }
         } catch (e) {
