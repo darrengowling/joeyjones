@@ -630,7 +630,12 @@ const Home = () => {
                 <select
                   className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-[16px]"
                   value={leagueForm.sportKey}
-                  onChange={(e) => setLeagueForm({ ...leagueForm, sportKey: e.target.value })}
+                  onChange={(e) => {
+                    const newSport = e.target.value;
+                    // Reset competitionCode based on sport
+                    const newCompetitionCode = newSport === "cricket" ? "IPL" : "PL";
+                    setLeagueForm({ ...leagueForm, sportKey: newSport, competitionCode: newCompetitionCode });
+                  }}
                   data-testid="create-sport-select"
                 >
                   <option value="football">⚽ Football</option>
