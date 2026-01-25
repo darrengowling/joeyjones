@@ -678,11 +678,10 @@ const Home = () => {
                     onChange={(e) => setLeagueForm({ ...leagueForm, competitionCode: e.target.value })}
                     data-testid="create-cricket-competition-select"
                   >
-                    <option value="IPL">🏏 IPL 2026 (124 probable starters pre-selected)</option>
-                    <option value="CUSTOM">🎯 Custom Selection (start empty, build your own)</option>
+                    <option value="IPL">🏏 IPL 2026 (125 probable starters pre-selected)</option>
                   </select>
                   <p className="text-sm text-gray-500 mt-2">
-                    IPL: Pre-selects curated squad of 124 players. Custom: Start with 0, add on competition page.
+                    Curated squad of 125 probable starters + impact players. Uncheck any you don't need.
                   </p>
                 </div>
               )}
