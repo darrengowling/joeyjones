@@ -216,3 +216,38 @@ git diff /app/frontend/src/pages/ClubsList.js
 ---
 
 **Last Updated:** January 25, 2026, ~05:30 UTC
+
+---
+
+## Session Summary - Jan 25, 2026 (Latest)
+
+### ✅ Completed This Session:
+
+1. **IPL 2026 Player Curation**
+   - Added 125 curated players (probable starters + impact players)
+   - Added 5 missing players to database (Phil Salt, Mitch Owen, etc.)
+   - Added nationality for all 125 players
+   - Backend auto-selects 125 players when creating IPL competition
+
+2. **Cricket UI Simplification**
+   - Removed complex "Filter by Team" dropdown
+   - Simple flow: 125 pre-selected → uncheck unwanted → save
+   - Create Competition modal shows "IPL 2026" option
+
+3. **Railway EPL Fix**
+   - Added `externalId` to all 20 EPL teams in Railway MongoDB
+   - Fixed `.isdigit()` bug for fixture imports (handles int externalId)
+
+4. **Documentation**
+   - Added WC2026 task to MASTER_TODO_LIST.md
+   - Added IPL2026-API Cricbuzz integration task to MASTER_TODO_LIST.md
+
+### ⏳ Pending (User to do):
+
+1. Push changes to GitHub → Railway auto-deploys
+2. Test EPL fixture import on Railway
+3. Export local EPL data if needed
+4. Test cricket functionality on Railway
+
+### 📋 Scripts Created:
+- `/app/scripts/update_railway_epl_external_ids.py` - Updates Railway EPL teams with externalId
