@@ -663,6 +663,26 @@ const Home = () => {
                 </div>
               )}
 
+              {/* Competition Selector (Cricket) */}
+              {leagueForm.sportKey === "cricket" && (
+                <div className="mb-6">
+                  <label className="block text-gray-700 mb-2 font-semibold">Competition Type</label>
+                  <select
+                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                    value={leagueForm.competitionCode || ""}
+                    onChange={(e) => setLeagueForm({ ...leagueForm, competitionCode: e.target.value })}
+                    data-testid="create-cricket-competition-select"
+                  >
+                    <option value="">-- Select Competition Type --</option>
+                    <option value="IPL">🏏 IPL (Full Squads - 110 players, 11 per team)</option>
+                    <option value="CUSTOM">🎯 Custom Selection (build your own)</option>
+                  </select>
+                  <p className="text-sm text-gray-500 mt-2">
+                    IPL: Auto-selects 11 players per franchise. Custom: Start empty, add players on competition page.
+                  </p>
+                </div>
+              )}
+
               <div className="mb-6">
                 <label className="block text-gray-700 mb-2 font-semibold">
                   Budget per Manager
