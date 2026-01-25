@@ -6,6 +6,29 @@
 
 ---
 
+## 🚨 DEPLOYMENT CHECKLIST (Push to GitHub)
+
+### Code Fixes Required for Railway:
+
+| # | File | Change | Status |
+|---|------|--------|--------|
+| 1 | `backend/server.py` | Fix `.isdigit()` bug on line ~3147 - handle int externalId | ✅ Fixed locally |
+| 2 | `frontend/src/App.js` | Cricket competition dropdown (IPL 2026) | ✅ Fixed locally |
+| 3 | `frontend/src/pages/LeagueDetail.js` | Simplified player selection UI | ✅ Fixed locally |
+| 4 | `backend/services/asset_service.py` | Increased page size cap to 300 | ✅ Fixed locally |
+
+### Railway Database Updates (Already Done):
+- ✅ All 20 EPL teams have `externalId` set
+- ✅ 125 IPL 2026 curated players added
+- ✅ Player nationalities added
+
+### After GitHub Push:
+1. Railway will auto-deploy
+2. Test EPL fixture import on Railway
+3. Test IPL cricket competition creation
+
+---
+
 ## 1. Railway POC - COMPLETED ✅
 
 Railway deployment is fully working:
