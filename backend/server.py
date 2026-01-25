@@ -1895,7 +1895,7 @@ async def get_league_assets(league_id: str, search: Optional[str] = None, page: 
                 {"competitions": "Africa Cup of Nations"}
             ]
         
-        clubs = await db.assets.find(query, {"_id": 0}).to_list(100)
+        clubs = await db.assets.find(query, {"_id": 0}).to_list(200)
         
         logger.info(f"ISSUE-018: Filtering by competitionCode={competition_code} -> {len(clubs)} clubs")
         return {
