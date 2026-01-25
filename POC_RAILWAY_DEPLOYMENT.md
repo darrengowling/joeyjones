@@ -535,119 +535,129 @@ Only pursue if WebSocket-only on Railway doesn't work.
 
 ---
 
-**Document Version:** 4.0  
+**Document Version:** 5.0  
 **Created:** January 23, 2026  
-**Updated:** January 24, 2026  
-**Status:** ✅ POC COMPLETED SUCCESSFULLY
+**Updated:** January 25, 2026  
+**Status:** ✅ POC COMPLETED - APPROVED FOR PRODUCTION
 
 ---
 
-## 🧪 Updated Stress Test Script
+## 🧪 Test Scripts
 
-The original `multi_league_stress_test.py` did not account for the "waiting room" feature where auctions require explicit activation via `/api/auction/{id}/begin`.
+### Realistic Bidding Test (Recommended)
+**File:** `realistic_bidding_test.py` (user's local machine)
 
-**Updated script location:** `/app/tests/railway_stress_test.py`
+Tests anti-snipe behavior, sniping patterns, and realistic user strategies.
 
-**Key fixes:**
-1. Calls `/api/auction/{auction_id}/begin` to activate auction after creation
-2. Handles the waiting room → active state transition
-3. Properly structures `competitions` field as array (not string)
-
-**Usage:**
 ```bash
-# Install dependencies
+# Single league baseline
+python realistic_bidding_test.py --leagues 1 --url https://joeyjones-production.up.railway.app
+
+# Production scale (40 users)
+python realistic_bidding_test.py --leagues 5 --url https://joeyjones-production.up.railway.app
+```
+
+### Basic Stress Test
+**File:** `/app/tests/railway_stress_test.py`
+
+```bash
 pip install "python-socketio[asyncio_client]" aiohttp
-
-# Run against Railway
-python /app/tests/railway_stress_test.py --leagues 1 --url https://joeyjones-production.up.railway.app
-
-# Multi-league test
 python /app/tests/railway_stress_test.py --leagues 5 --url https://joeyjones-production.up.railway.app
 ```
 
 ---
 
-## 📋 Required Code Fixes for Railway
+## 📋 Code Fixes Applied for Railway
 
-These fixes are **already applied** and backwards-compatible with Emergent:
+These are **already applied** and backwards-compatible with Emergent:
 
-| # | Issue | Symptom | Fix | File |
-|---|-------|---------|-----|------|
-| 1 | Sentry v10 breaking change | `startTransaction is not exported from @sentry/react` | Replaced with `performance.now()` + breadcrumbs | `frontend/src/utils/sentry.js` |
-| 2 | ESLint 9 breaking change | `react-hooks/exhaustive-deps rule not found` | Created `.eslintrc.json` with plugin config | `frontend/.eslintrc.json` |
-| 3 | CI=true treats warnings as errors | Build fails on any ESLint warning | Added `eslint-disable-next-line` to useEffects | `frontend/src/pages/AuctionRoom.js` |
-| 4 | yarn frozen-lockfile | `lockfile needs to be updated` | Created `.yarnrc` with `--install.frozen-lockfile false` | `frontend/.yarnrc` |
-| 5 | Asset data structure | `competitions should be a list` | Seed script uses `competitions: ["UEFA Champions League"]` | `scripts/seed_railway_poc.py` |
+| # | Issue | Fix | File |
+|---|-------|-----|------|
+| 1 | Sentry v10 API removed `startTransaction` | Use `performance.now()` + breadcrumbs | `frontend/src/utils/sentry.js` |
+| 2 | ESLint 9 missing react-hooks | Created `.eslintrc.json` | `frontend/.eslintrc.json` |
+| 3 | CI=true treats warnings as errors | Added eslint-disable comments | `frontend/src/pages/AuctionRoom.js` |
+| 4 | yarn frozen-lockfile mismatch | Created `.yarnrc` | `frontend/.yarnrc` |
+| 5 | Pydantic expects array | `competitions: ["..."]` not string | `scripts/seed_railway_poc.py` |
 
 ---
 
-## 📚 Key Learnings for Full Migration
+## 📚 Key Learnings
 
-### 1. Dependency Version Drift
-**Problem:** Fresh `yarn install` on Railway pulls LATEST package versions, not what's in Emergent's node_modules.
+### 1. Redis is Essential
+- **Without Redis:** 952ms p50, 1895ms p95
+- **With Redis:** 544ms p50, 619ms p95
+- **Impact:** 67% latency reduction, must-have for production
 
-**Prevention:**
-- Lock critical packages to specific versions in `package.json`
-- Run `CI=true yarn build` locally before ANY Railway deploy
-
-### 2. CI Environment Differences
-**Problem:** Railway sets `CI=true` which treats warnings as errors.
-
-**Prevention:**
-- Always test with `CI=true yarn build` before pushing
-- Fix all ESLint warnings OR add appropriate disable comments
+### 2. Dependency Version Drift
+- Fresh `yarn install` pulls latest packages (breaking changes possible)
+- Always test with `CI=true yarn build` before Railway deploy
 
 ### 3. Auction Activation Flow
-**Problem:** Auctions start in "waiting" state and require explicit activation.
-
-**Solution:**
-- After `POST /api/leagues/{id}/auction/start` (creates auction)
-- Call `POST /api/auction/{auction_id}/begin` (activates auction)
+```
+POST /api/leagues/{id}/auction/start → Creates auction (status: "waiting")
+POST /api/auction/{id}/begin → Activates auction (status: "active")
+```
 
 ### 4. MongoDB Data Structure
-**Problem:** Pydantic models expect `competitions` as array, not string.
+- `competitions` field MUST be array: `["UEFA Champions League"]`
+- NOT string: `"UEFA Champions League"`
 
-**Solution:**
-- Seed data must use `competitions: ["UEFA Champions League"]` not `competitions: "UEFA Champions League"`
+### 5. GitHub Sync Timing
+- "Save to GitHub" only commits staged files at that moment
+- Verify critical files in GitHub browser before Railway deploy
 
 ---
 
 ## 🔧 Railway Configuration Reference
 
-### Backend Service
+### Backend Service (joeyjones)
 ```
 Root Directory: /backend
 Start Command: uvicorn server:socket_app --host 0.0.0.0 --port $PORT
-Region: EU-West (Amsterdam)
+Region: EU-West (Ireland)
 
 Variables:
 - MONGO_URL: mongodb+srv://[user]:[pass]@cluster0.xxx.mongodb.net/
 - DB_NAME: sport_x_poc
 - JWT_SECRET_KEY: [32+ char string]
+- REDIS_URL: redis://default:[pass]@redis-xxxxx.cloud.redislabs.com:xxxxx
 - CORS_ORIGINS: *
 - FRONTEND_ORIGIN: *
 - ENV: production
 ```
 
-### Frontend Service
+### Frontend Service (energetic-victory)
 ```
 Root Directory: /frontend
 Start Command: npx serve -s build -l $PORT
-Region: EU-West (Amsterdam)
+Region: EU-West (Ireland)
 
 Variables:
-- REACT_APP_BACKEND_URL: https://[backend-service].up.railway.app
+- REACT_APP_BACKEND_URL: https://joeyjones-production.up.railway.app
+```
+
+### Redis Cloud
+```
+Plan: 250MB Essentials
+Region: London (eu-west-2)
+Connection: redis://default:[pass]@redis-12232.c338.eu-west-2-1.ec2.cloud.redislabs.com:12232
 ```
 
 ---
 
-## ⏭️ Next Steps After POC
+## ⏭️ Next Steps
 
-### Recommended Production Stack
+### Immediate (Before Pilot)
+1. Seed EPL teams to production database
+2. Create admin seed endpoints for future competitions
+3. Test with real browsers (not just API)
+4. Set up basic monitoring
 
-| Service | Tier | Cost | Region |
-|---------|------|------|--------|
-| Railway | Hobby ($5 min) | ~$5-15/month | EU-West (Amsterdam or London) |
+### Future
+1. IPL teams/players for cricket pilot (2 months)
+2. Custom domain configuration
+3. SendGrid email delivery for magic links
+4. Scale testing at 100+ users
 | MongoDB Atlas | M2 Dedicated | ~$9/month | London (europe-west2) |
 | **Total** | | **~$15-25/month** | |
 
