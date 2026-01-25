@@ -885,19 +885,23 @@ export default function LeagueDetail() {
                   {assets.map((asset) => (
                     <div key={asset.id} className="bg-white border rounded-lg p-4">
                       <h4 className="font-semibold text-gray-900">{asset.name}</h4>
+                      {/* Football: Show country */}
                       {asset.country && (
                         <p className="text-sm text-gray-600">{asset.country}</p>
                       )}
+                      {/* Cricket: Show nationality, role, franchise */}
+                      {asset.meta && (
+                        <div className="text-xs text-gray-600 mt-1">
+                          {asset.meta.nationality && (
+                            <span className="bg-gray-200 px-2 py-0.5 rounded mr-1">{asset.meta.nationality}</span>
+                          )}
+                          {asset.meta.role && (
+                            <span className="text-gray-500">{asset.meta.role}</span>
+                          )}
+                        </div>
+                      )}
                       {asset.meta && asset.meta.franchise && (
-                        <p className="text-sm text-blue-600">{asset.meta.franchise}</p>
-                      )}
-                      {asset.meta && asset.meta.role && (
-                        <span className="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded mt-2">
-                          {asset.meta.role}
-                        </span>
-                      )}
-                      {asset.uefaId && (
-                        <p className="text-xs text-gray-500 mt-1">UEFA ID: {asset.uefaId}</p>
+                        <p className="text-sm text-purple-600 mt-1">{asset.meta.franchise}</p>
                       )}
                     </div>
                   ))}
