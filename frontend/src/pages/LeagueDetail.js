@@ -1040,7 +1040,7 @@ export default function LeagueDetail() {
                   <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3 max-h-96 overflow-y-auto">
                     {availableAssets
                       .filter(asset => {
-                        // Filter based on competitionFilter for football
+                        // Filter based on competitionFilter for football only
                         if (league.sportKey === "football" && competitionFilter !== "all") {
                           if (competitionFilter === "EPL") {
                             return asset.competitionShort === "EPL" || asset.competitions?.includes("English Premier League");
@@ -1050,11 +1050,7 @@ export default function LeagueDetail() {
                             return asset.competitionShort === "AFCON" || asset.competitions?.includes("Africa Cup of Nations");
                           }
                         }
-                        // Filter based on cricketTeamFilter for cricket
-                        if (league.sportKey === "cricket" && cricketTeamFilter !== "all") {
-                          return asset.meta?.franchise === cricketTeamFilter;
-                        }
-                        return true; // Show all if filter is "all"
+                        return true; // Show all for cricket and unfiltered football
                       })
                       .map((asset) => (
                       <label
