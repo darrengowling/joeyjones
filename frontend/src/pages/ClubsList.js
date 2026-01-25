@@ -134,7 +134,12 @@ export default function ClubsList() {
               <select
                 className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 value={selectedSport}
-                onChange={(e) => setSelectedSport(e.target.value)}
+                onChange={(e) => {
+                  setSelectedSport(e.target.value);
+                  setSelectedFranchise("all");
+                  setSelectedRole("all");
+                  setSearchTerm("");
+                }}
                 data-testid="sport-filter-select"
               >
                 {sports.map((sport) => (
@@ -156,6 +161,44 @@ export default function ClubsList() {
               />
             </div>
           </div>
+
+          {/* Cricket Filters */}
+          {selectedSport === 'cricket' && (
+            <div className="grid md:grid-cols-2 gap-4 mb-6">
+              <div>
+                <label className="block text-gray-700 mb-2 font-semibold">IPL Team</label>
+                <select
+                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={selectedFranchise}
+                  onChange={(e) => setSelectedFranchise(e.target.value)}
+                  data-testid="franchise-filter-select"
+                >
+                  <option value="all">All Teams ({currentAssets.length})</option>
+                  {franchises.map((franchise) => (
+                    <option key={franchise} value={franchise}>
+                      {franchise} ({currentAssets.filter(a => a.meta?.franchise === franchise).length})
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-gray-700 mb-2 font-semibold">Role</label>
+                <select
+                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={selectedRole}
+                  onChange={(e) => setSelectedRole(e.target.value)}
+                  data-testid="role-filter-select"
+                >
+                  <option value="all">All Roles</option>
+                  {roles.map((role) => (
+                    <option key={role} value={role}>
+                      {role} ({currentAssets.filter(a => a.meta?.role === role).length})
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          )}
 
           {/* Assets Grid */}
           <div className="text-gray-600 mb-4">
