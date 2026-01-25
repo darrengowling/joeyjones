@@ -321,32 +321,55 @@ export default function CreateLeague() {
                     {/* Competition Filter for Cricket */}
                     {form.sportKey === "cricket" && (
                       <div className="mb-3">
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Filter by Series</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Competition Type</label>
                         <select
                           className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                           onChange={async (e) => {
                             const filter = e.target.value;
                             try {
-                              let response;
-                              if (filter === "all") {
-                                response = await axios.get(`${API}/clubs?sportKey=cricket`);
-                              } else {
-                                response = await axios.get(`${API}/clubs?sportKey=cricket&competition=${filter}`);
-                              }
-                              setAvailableAssets(response.data);
-                              // Auto-select all players in filtered view
-                              if (filter !== "all") {
-                                setSelectedAssets(response.data.map(p => p.id));
+                              if (filter === "IPL") {
+                                // Fetch 11 players per IPL franchise (110 total)
+                                const response = await axios.get(`${API}/assets?sportKey=cricket&pageSize=300`);
+                                const allPlayers = response.data.assets || [];
+                                
+                                // Group by franchise and take first 11 from each
+                                const franchises = {};
+                                allPlayers.forEach(p => {
+                                  const franchise = p.meta?.franchise;
+                                  if (franchise) {
+                                    if (!franchises[franchise]) franchises[franchise] = [];
+                                    if (franchises[franchise].length < 11) {
+                                      franchises[franchise].push(p);
+                                    }
+                                  }
+                                });
+                                
+                                // Flatten to get 110 players (11 per team)
+                                const iplPlayers = Object.values(franchises).flat();
+                                setAvailableAssets(iplPlayers);
+                                setSelectedAssets(iplPlayers.map(p => p.id));
+                                // Store competition code for the league
+                                setForm({ ...form, competitionCode: "IPL" });
+                              } else if (filter === "CUSTOM") {
+                                // Custom - show all players but select none
+                                const response = await axios.get(`${API}/assets?sportKey=cricket&pageSize=300`);
+                                setAvailableAssets(response.data.assets || []);
+                                setSelectedAssets([]);
+                                setForm({ ...form, competitionCode: "CUSTOM" });
                               }
                             } catch (error) {
                               console.error("Error filtering players:", error);
                             }
                           }}
+                          data-testid="cricket-competition-select"
                         >
-                          <option value="all">All Players (53)</option>
-                          <option value="ASHES">🏴󠁧󠁢󠁥󠁮󠁧󠁿🇦🇺 The Ashes 2025/26 (30)</option>
-                          <option value="NZ_ENG">🇳🇿🏴 NZ vs England ODI (23)</option>
+                          <option value="">-- Select Competition Type --</option>
+                          <option value="IPL">🏏 IPL (Full Squads - 110 players, 11 per team)</option>
+                          <option value="CUSTOM">🎯 Custom Selection (build your own)</option>
                         </select>
+                        <p className="text-xs text-gray-500 mt-1">
+                          IPL: Auto-selects 11 players from each franchise. Custom: Start empty, add players on competition page.
+                        </p>
                       </div>
                     )}
                     
