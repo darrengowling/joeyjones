@@ -1,0 +1,3692 @@
+[
+  {
+    "id": "267124ca-0438-4d85-b0d7-2d76109a85c1",
+    "sportKey": "cricket",
+    "externalId": "11813",
+    "name": "Ruturaj Gaikwad",
+    "type": "player",
+    "meta": {
+      "role": "Batsman",
+      "iplTeam": "Chennai Super Kings"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "fdcbe3bc-64f7-42bf-922e-d94e2941c662",
+    "sportKey": "cricket",
+    "externalId": "20538",
+    "name": "Dewald Brevis",
+    "type": "player",
+    "meta": {
+      "role": "Batsman",
+      "iplTeam": "Chennai Super Kings"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "7f55a3f0-99b5-4f0c-9620-04c105748ead",
+    "sportKey": "cricket",
+    "externalId": "1431163",
+    "name": "Ayush Mhatre",
+    "type": "player",
+    "meta": {
+      "role": "Batsman",
+      "iplTeam": "Chennai Super Kings"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "5cee68b3-2554-4168-b302-4eba9fbc4219",
+    "sportKey": "cricket",
+    "externalId": "9456",
+    "name": "Matthew Short",
+    "type": "player",
+    "meta": {
+      "role": "Batsman",
+      "iplTeam": "Chennai Super Kings"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "44c6a055-7c16-4126-badb-79ec8a6196c7",
+    "sportKey": "cricket",
+    "externalId": "9429",
+    "name": "Sarfaraz Khan",
+    "type": "player",
+    "meta": {
+      "role": "Batsman",
+      "iplTeam": "Chennai Super Kings"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "206e0328-f9f4-411a-8df2-934cc6890ffa",
+    "sportKey": "cricket",
+    "externalId": "11195",
+    "name": "Shivam Dube",
+    "type": "player",
+    "meta": {
+      "role": "Batting Allrounder",
+      "iplTeam": "Chennai Super Kings"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "b3cbb561-342d-4065-b087-17def89344fb",
+    "sportKey": "cricket",
+    "externalId": "32835",
+    "name": "Ramakrishna Ghosh",
+    "type": "player",
+    "meta": {
+      "role": "Batting Allrounder",
+      "iplTeam": "Chennai Super Kings"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "6668fc30-d7cc-4444-b5e1-23dd234a5fd1",
+    "sportKey": "cricket",
+    "externalId": "8512",
+    "name": "Jamie Overton",
+    "type": "player",
+    "meta": {
+      "role": "Bowling Allrounder",
+      "iplTeam": "Chennai Super Kings"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "77d58992-187a-43f7-8645-68377f6454b7",
+    "sportKey": "cricket",
+    "externalId": "14598",
+    "name": "Anshul Kamboj",
+    "type": "player",
+    "meta": {
+      "role": "Bowling Allrounder",
+      "iplTeam": "Chennai Super Kings"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "db8b128c-161e-4a27-a485-7bc7f3a8b382",
+    "sportKey": "cricket",
+    "externalId": "24391",
+    "name": "Zakary Foulkes",
+    "type": "player",
+    "meta": {
+      "role": "Bowling Allrounder",
+      "iplTeam": "Chennai Super Kings"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "df821f18-72ac-4269-9c0d-014e9946fea1",
+    "sportKey": "cricket",
+    "externalId": "265",
+    "name": "MS Dhoni",
+    "type": "player",
+    "meta": {
+      "role": "WK-Batsman",
+      "iplTeam": "Chennai Super Kings"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "2bbe9737-c779-40df-ad45-f2444a1c0538",
+    "sportKey": "cricket",
+    "externalId": "13476",
+    "name": "Urvil Patel",
+    "type": "player",
+    "meta": {
+      "role": "WK-Batsman",
+      "iplTeam": "Chennai Super Kings"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "9e6d4d87-9d4a-4365-81ab-9f80eb40de9c",
+    "sportKey": "cricket",
+    "externalId": "8271",
+    "name": "Sanju Samson",
+    "type": "player",
+    "meta": {
+      "role": "WK-Batsman",
+      "iplTeam": "Chennai Super Kings"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "614ed373-5819-42d6-87e6-e98c289f4bee",
+    "sportKey": "cricket",
+    "externalId": "49557",
+    "name": "Kartik Sharma",
+    "type": "player",
+    "meta": {
+      "role": "WK-Batsman",
+      "iplTeam": "Chennai Super Kings"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "e9ba1664-991d-43d8-a734-b31ba36a311c",
+    "sportKey": "cricket",
+    "externalId": "9746",
+    "name": "Shreyas Gopal",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Chennai Super Kings"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "65a8d468-2705-48fb-a8ec-92e6838f9c3d",
+    "sportKey": "cricket",
+    "externalId": "10952",
+    "name": "Khaleel Ahmed",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Chennai Super Kings"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "11d0b7d2-ee20-4168-b224-a6b323756efb",
+    "sportKey": "cricket",
+    "externalId": "15480",
+    "name": "Nathan Ellis",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Chennai Super Kings"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "2db645a7-0e76-4990-a8a0-4174af9e0b42",
+    "sportKey": "cricket",
+    "externalId": "19807",
+    "name": "Gurjapneet Singh",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Chennai Super Kings"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "e1fc7fc2-1c9a-47ee-9a95-b6b6798a32f5",
+    "sportKey": "cricket",
+    "externalId": "13184",
+    "name": "Mukesh Choudhary",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Chennai Super Kings"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "eaa29bb7-e6e6-4be6-9691-a561ae78b7c5",
+    "sportKey": "cricket",
+    "externalId": "15452",
+    "name": "Noor Ahmad",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Chennai Super Kings"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "03da3232-d4d9-4ba1-9cda-47dd8184b0e9",
+    "sportKey": "cricket",
+    "externalId": "51417",
+    "name": "Prashant Veer",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Chennai Super Kings"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "8857465c-b534-41a7-a28a-ef445e4da3bf",
+    "sportKey": "cricket",
+    "externalId": "8435",
+    "name": "Akeal Hosein",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Chennai Super Kings"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "da2b7d95-7942-4e5c-8742-5858ea1fefb9",
+    "sportKey": "cricket",
+    "externalId": "9067",
+    "name": "Matt Henry",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Chennai Super Kings"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "ad512482-1818-48e5-a7e6-3c498c38b4c2",
+    "sportKey": "cricket",
+    "externalId": "12087",
+    "name": "Rahul Chahar",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Chennai Super Kings"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "24a7404d-46aa-4ed5-9a09-ebc93d1feb9f",
+    "sportKey": "cricket",
+    "externalId": "8257",
+    "name": "Karun Nair",
+    "type": "player",
+    "meta": {
+      "role": "Batsman",
+      "iplTeam": "Delhi Capitals"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "dd6c2154-d282-4ba9-8f5e-f0a5f79cf0af",
+    "sportKey": "cricket",
+    "externalId": "9204",
+    "name": "Nitish Rana",
+    "type": "player",
+    "meta": {
+      "role": "Batsman",
+      "iplTeam": "Delhi Capitals"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "0405a790-afff-4376-939a-921af186b20e",
+    "sportKey": "cricket",
+    "externalId": "14700",
+    "name": "Sameer Rizvi",
+    "type": "player",
+    "meta": {
+      "role": "Batsman",
+      "iplTeam": "Delhi Capitals"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "330923dd-a109-4ac6-8314-bbbe3359bb7f",
+    "sportKey": "cricket",
+    "externalId": "6349",
+    "name": "David Miller",
+    "type": "player",
+    "meta": {
+      "role": "Batsman",
+      "iplTeam": "Delhi Capitals"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "1dbf3784-e4d2-4778-864f-75eca4e0f740",
+    "sportKey": "cricket",
+    "externalId": "8502",
+    "name": "Ben Duckett",
+    "type": "player",
+    "meta": {
+      "role": "Batsman",
+      "iplTeam": "Delhi Capitals"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "6bb32805-439f-4913-ac50-7c355f98e55a",
+    "sportKey": "cricket",
+    "externalId": "13682",
+    "name": "Pathum Nissanka",
+    "type": "player",
+    "meta": {
+      "role": "Batsman",
+      "iplTeam": "Delhi Capitals"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "27b96eb1-87b2-4885-bb74-d38e704c90d9",
+    "sportKey": "cricket",
+    "externalId": "1430465",
+    "name": "Sahil Parakh",
+    "type": "player",
+    "meta": {
+      "role": "Batsman",
+      "iplTeam": "Delhi Capitals"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "504cd062-0d14-4fb6-8bb3-f68235500665",
+    "sportKey": "cricket",
+    "externalId": "13497",
+    "name": "Ashutosh Sharma",
+    "type": "player",
+    "meta": {
+      "role": "Batting Allrounder",
+      "iplTeam": "Delhi Capitals"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "ee7ba092-f254-45f0-8e87-0ecc17fa83c4",
+    "sportKey": "cricket",
+    "externalId": "22386",
+    "name": "Tripurana Vijay",
+    "type": "player",
+    "meta": {
+      "role": "Batting Allrounder",
+      "iplTeam": "Delhi Capitals"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "b1175cbc-725f-4f3d-bc49-568b49022044",
+    "sportKey": "cricket",
+    "externalId": "8808",
+    "name": "Axar Patel",
+    "type": "player",
+    "meta": {
+      "role": "Bowling Allrounder",
+      "iplTeam": "Delhi Capitals"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "d84b3831-e7fa-4e85-bc13-895c53cc88ec",
+    "sportKey": "cricket",
+    "externalId": "11777",
+    "name": "Ajay Jadav Mandal",
+    "type": "player",
+    "meta": {
+      "role": "Bowling Allrounder",
+      "iplTeam": "Delhi Capitals"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "fde44e45-28bf-40f8-aba6-47fc222922e8",
+    "sportKey": "cricket",
+    "externalId": "1447321",
+    "name": "Madhav Tiwari",
+    "type": "player",
+    "meta": {
+      "role": "Bowling Allrounder",
+      "iplTeam": "Delhi Capitals"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "ebd90b2a-2695-4b25-b1fa-78748fa1237f",
+    "sportKey": "cricket",
+    "externalId": "14179",
+    "name": "Auqib Nabi Dar",
+    "type": "player",
+    "meta": {
+      "role": "Bowling Allrounder",
+      "iplTeam": "Delhi Capitals"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "8c9a9504-49c0-456d-9a39-a681fd89ca5e",
+    "sportKey": "cricket",
+    "externalId": "24326",
+    "name": "Abishek Porel",
+    "type": "player",
+    "meta": {
+      "role": "WK-Batsman",
+      "iplTeam": "Delhi Capitals"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "88d118d7-27e1-4c0a-aa01-702a31270c8b",
+    "sportKey": "cricket",
+    "externalId": "8733",
+    "name": "KL Rahul",
+    "type": "player",
+    "meta": {
+      "role": "WK-Batsman",
+      "iplTeam": "Delhi Capitals"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "d1435c98-6d30-4346-a9d4-d06b6e455e11",
+    "sportKey": "cricket",
+    "externalId": "19243",
+    "name": "Tristan Stubbs",
+    "type": "player",
+    "meta": {
+      "role": "WK-Batsman",
+      "iplTeam": "Delhi Capitals"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "7153c149-9c3a-4a80-a6a4-bf045dc863b4",
+    "sportKey": "cricket",
+    "externalId": "8393",
+    "name": "Dushmantha Chameera",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Delhi Capitals"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "c8b5c0e7-490c-4bb2-9a40-58bda9907b76",
+    "sportKey": "cricket",
+    "externalId": "8292",
+    "name": "Kuldeep Yadav",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Delhi Capitals"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "4101d4e7-5d4e-4ede-9d6b-757aef405805",
+    "sportKey": "cricket",
+    "externalId": "10754",
+    "name": "Mukesh Kumar",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Delhi Capitals"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "f37a4de3-6681-4fc6-bf91-2bb78ac7068d",
+    "sportKey": "cricket",
+    "externalId": "10225",
+    "name": "T Natarajan",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Delhi Capitals"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "2427c7da-1301-4126-8615-b4d8e697d8a9",
+    "sportKey": "cricket",
+    "externalId": "1431811",
+    "name": "Vipraj Nigam",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Delhi Capitals"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "4f530104-0793-438f-8215-e0e789c9bb35",
+    "sportKey": "cricket",
+    "externalId": "7710",
+    "name": "Mitchell Starc",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Delhi Capitals"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "0c3344f7-0881-412c-9132-3df8580f8cca",
+    "sportKey": "cricket",
+    "externalId": "9603",
+    "name": "Lungi Ngidi",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Delhi Capitals"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "96854c7a-5fb9-4359-9819-0117a75c58f5",
+    "sportKey": "cricket",
+    "externalId": "9441",
+    "name": "Kyle Jamieson",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Delhi Capitals"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "d94ae9d4-3189-4a7c-b09a-5a5a2b9c6245",
+    "sportKey": "cricket",
+    "externalId": "11808",
+    "name": "Shubman Gill",
+    "type": "player",
+    "meta": {
+      "role": "Batsman",
+      "iplTeam": "Gujarat Titans"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "2a058584-7db1-4dfa-8d5e-ba5a9cd6d718",
+    "sportKey": "cricket",
+    "externalId": "10226",
+    "name": "Shahrukh Khan",
+    "type": "player",
+    "meta": {
+      "role": "Batting Allrounder",
+      "iplTeam": "Gujarat Titans"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "357a2357-135d-476b-a3de-11c2768f240e",
+    "sportKey": "cricket",
+    "externalId": "10693",
+    "name": "Glenn Phillips",
+    "type": "player",
+    "meta": {
+      "role": "Batting Allrounder",
+      "iplTeam": "Gujarat Titans"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "5a4afd51-0986-4816-a92b-9fd603ac3ec6",
+    "sportKey": "cricket",
+    "externalId": "22576",
+    "name": "Nishant Sindhu",
+    "type": "player",
+    "meta": {
+      "role": "Batting Allrounder",
+      "iplTeam": "Gujarat Titans"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "c7e630cc-a0cd-4f5c-84a2-c8ef2508589e",
+    "sportKey": "cricket",
+    "externalId": "9693",
+    "name": "Rahul Tewatia",
+    "type": "player",
+    "meta": {
+      "role": "Batting Allrounder",
+      "iplTeam": "Gujarat Titans"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "a95e836b-1e9a-455d-a13a-95817b69ded0",
+    "sportKey": "cricket",
+    "externalId": "10738",
+    "name": "Rashid Khan",
+    "type": "player",
+    "meta": {
+      "role": "Bowling Allrounder",
+      "iplTeam": "Gujarat Titans"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "af78cc58-5d33-40be-9bb2-9da89f0ac3f7",
+    "sportKey": "cricket",
+    "externalId": "10945",
+    "name": "Washington Sundar",
+    "type": "player",
+    "meta": {
+      "role": "Bowling Allrounder",
+      "iplTeam": "Gujarat Titans"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "d8a3ab77-ab96-4585-ad21-9429acc6430f",
+    "sportKey": "cricket",
+    "externalId": "18637",
+    "name": "Arshad Khan",
+    "type": "player",
+    "meta": {
+      "role": "Bowling Allrounder",
+      "iplTeam": "Gujarat Titans"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "e3351605-b9e2-4050-bf08-6ba1d357d221",
+    "sportKey": "cricket",
+    "externalId": "11595",
+    "name": "Ravisrinivasan Sai Kishore",
+    "type": "player",
+    "meta": {
+      "role": "Bowling Allrounder",
+      "iplTeam": "Gujarat Titans"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "13f041dc-5531-4cb2-84f9-2eb5225e566b",
+    "sportKey": "cricket",
+    "externalId": "8182",
+    "name": "Jayant Yadav",
+    "type": "player",
+    "meta": {
+      "role": "Bowling Allrounder",
+      "iplTeam": "Gujarat Titans"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "ea6436df-55e8-49d8-8811-1fe70f49f031",
+    "sportKey": "cricket",
+    "externalId": "8313",
+    "name": "Jason Holder",
+    "type": "player",
+    "meta": {
+      "role": "Bowling Allrounder",
+      "iplTeam": "Gujarat Titans"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "3abacfc0-15d9-4d04-a949-01fa96845569",
+    "sportKey": "cricket",
+    "externalId": "13135",
+    "name": "Anuj Rawat",
+    "type": "player",
+    "meta": {
+      "role": "WK-Batsman",
+      "iplTeam": "Gujarat Titans"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "69696aa8-6e3a-4ce4-98a8-09e6cce053f3",
+    "sportKey": "cricket",
+    "externalId": "2258",
+    "name": "Jos Buttler",
+    "type": "player",
+    "meta": {
+      "role": "WK-Batsman",
+      "iplTeam": "Gujarat Titans"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "eda17c55-2099-4bb6-b379-fa1d65b04833",
+    "sportKey": "cricket",
+    "externalId": "15779",
+    "name": "Kumar Kushagra",
+    "type": "player",
+    "meta": {
+      "role": "WK-Batsman",
+      "iplTeam": "Gujarat Titans"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "5c3e4f33-3e96-4cf3-88df-21b60efd1371",
+    "sportKey": "cricket",
+    "externalId": "12254",
+    "name": "Tom Banton",
+    "type": "player",
+    "meta": {
+      "role": "WK-Batsman",
+      "iplTeam": "Gujarat Titans"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "7d6ffc34-89b6-4843-aad0-a8439157a538",
+    "sportKey": "cricket",
+    "externalId": "14596",
+    "name": "Manav Suthar",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Gujarat Titans"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "b21207c9-5ac8-49dc-9c61-0b75493fb700",
+    "sportKey": "cricket",
+    "externalId": "22141",
+    "name": "Gurnoor Brar",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Gujarat Titans"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "888670c5-58e9-4d38-9f96-011eeb73c27a",
+    "sportKey": "cricket",
+    "externalId": "10808",
+    "name": "Mohammed Siraj",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Gujarat Titans"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "17159019-9f48-48b8-ada8-9cbe7ffedfc2",
+    "sportKey": "cricket",
+    "externalId": "10551",
+    "name": "Prasidh Krishna",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Gujarat Titans"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "58468334-823b-42b4-850c-5544b047bf70",
+    "sportKey": "cricket",
+    "externalId": "9585",
+    "name": "Kagiso Rabada",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Gujarat Titans"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "a67b7d5d-7156-4ae2-a302-3054d1e3b52f",
+    "sportKey": "cricket",
+    "externalId": "702",
+    "name": "Ishant Sharma",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Gujarat Titans"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "fb3a6012-7e24-45fc-b824-9c32ada3e431",
+    "sportKey": "cricket",
+    "externalId": "24261",
+    "name": "Ashok Sharma",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Gujarat Titans"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "67ce2db9-cf40-4d11-b299-8af202ef7afc",
+    "sportKey": "cricket",
+    "externalId": "13113",
+    "name": "Prithvi Raj Yarra",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Gujarat Titans"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "597259a1-3e9a-4f91-b819-d53911e78cfb",
+    "sportKey": "cricket",
+    "externalId": "9821",
+    "name": "Luke Wood",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Gujarat Titans"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "b90ae27d-e791-4886-b6d6-53f947b31420",
+    "sportKey": "cricket",
+    "externalId": "10636",
+    "name": "Rajat Patidar",
+    "type": "player",
+    "meta": {
+      "role": "Batsman",
+      "iplTeam": "Royal Challengers Bengaluru"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "cfaa1128-7ffb-4ce9-a521-8d89dc6a5b0f",
+    "sportKey": "cricket",
+    "externalId": "13169",
+    "name": "Tim David",
+    "type": "player",
+    "meta": {
+      "role": "Batsman",
+      "iplTeam": "Royal Challengers Bengaluru"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "e23a58f2-2aa6-4d9f-b530-3f4596726560",
+    "sportKey": "cricket",
+    "externalId": "1413",
+    "name": "Virat Kohli",
+    "type": "player",
+    "meta": {
+      "role": "Batsman",
+      "iplTeam": "Royal Challengers Bengaluru"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "de7bff77-65ea-4a21-9bca-2d2fc6a8d99f",
+    "sportKey": "cricket",
+    "externalId": "13088",
+    "name": "Devdutt Padikkal",
+    "type": "player",
+    "meta": {
+      "role": "Batsman",
+      "iplTeam": "Royal Challengers Bengaluru"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "6d6136ab-07c5-4e86-927e-3fffde29877e",
+    "sportKey": "cricket",
+    "externalId": "1430529",
+    "name": "Vihaan Malhotra",
+    "type": "player",
+    "meta": {
+      "role": "Batsman",
+      "iplTeam": "Royal Challengers Bengaluru"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "d96d8101-f7ce-44b5-8a28-47c79554faf5",
+    "sportKey": "cricket",
+    "externalId": "19636",
+    "name": "Jacob Bethell",
+    "type": "player",
+    "meta": {
+      "role": "Batting Allrounder",
+      "iplTeam": "Royal Challengers Bengaluru"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "5a0cf9b5-6997-441d-b609-2a7cdd301f15",
+    "sportKey": "cricket",
+    "externalId": "11311",
+    "name": "Krunal Pandya",
+    "type": "player",
+    "meta": {
+      "role": "Batting Allrounder",
+      "iplTeam": "Royal Challengers Bengaluru"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "7b696bec-f987-4d05-b65a-58cb8c7046ef",
+    "sportKey": "cricket",
+    "externalId": "10917",
+    "name": "Venkatesh Iyer",
+    "type": "player",
+    "meta": {
+      "role": "Batting Allrounder",
+      "iplTeam": "Royal Challengers Bengaluru"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "68d70757-031a-4350-a0ea-dc4186eb6d19",
+    "sportKey": "cricket",
+    "externalId": "13646",
+    "name": "Romario Shepherd",
+    "type": "player",
+    "meta": {
+      "role": "Bowling Allrounder",
+      "iplTeam": "Royal Challengers Bengaluru"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "f44d6e7b-4595-4d55-92bf-c05b228acc79",
+    "sportKey": "cricket",
+    "externalId": "10238",
+    "name": "Swapnil Singh",
+    "type": "player",
+    "meta": {
+      "role": "Bowling Allrounder",
+      "iplTeam": "Royal Challengers Bengaluru"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "9cd6d92d-ac33-420c-8e99-a26718938a95",
+    "sportKey": "cricket",
+    "externalId": "1455995",
+    "name": "Mangesh Yadav",
+    "type": "player",
+    "meta": {
+      "role": "Bowling Allrounder",
+      "iplTeam": "Royal Challengers Bengaluru"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "2779cf95-07eb-474c-9c3c-e19a2b285f5e",
+    "sportKey": "cricket",
+    "externalId": "1457033",
+    "name": "Kanishk Chouhan",
+    "type": "player",
+    "meta": {
+      "role": "Bowling Allrounder",
+      "iplTeam": "Royal Challengers Bengaluru"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "1d3d96fe-2e89-4cd5-abd3-1db90655d3ec",
+    "sportKey": "cricket",
+    "externalId": "1457482",
+    "name": "Satvik Deswal",
+    "type": "player",
+    "meta": {
+      "role": "Bowling Allrounder",
+      "iplTeam": "Royal Challengers Bengaluru"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "99231e8d-2557-4242-8e4a-0f9dbd2be559",
+    "sportKey": "cricket",
+    "externalId": "10479",
+    "name": "Philip Salt",
+    "type": "player",
+    "meta": {
+      "role": "WK-Batsman",
+      "iplTeam": "Royal Challengers Bengaluru"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "f7d48b67-fbe1-423a-a701-4fed12e71ec6",
+    "sportKey": "cricket",
+    "externalId": "10214",
+    "name": "Jitesh Sharma",
+    "type": "player",
+    "meta": {
+      "role": "WK-Batsman",
+      "iplTeam": "Royal Challengers Bengaluru"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "4ab3f256-ee8a-477c-bfe2-d6a321073802",
+    "sportKey": "cricket",
+    "externalId": "14813",
+    "name": "Jordan Cox",
+    "type": "player",
+    "meta": {
+      "role": "WK-Batsman",
+      "iplTeam": "Royal Challengers Bengaluru"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "409d8e21-4acc-4067-8d7a-00dba69633d1",
+    "sportKey": "cricket",
+    "externalId": "1447073",
+    "name": "Abhinandan Singh",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Royal Challengers Bengaluru"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "0cd0c25d-c217-4e15-902f-bbaf235803ca",
+    "sportKey": "cricket",
+    "externalId": "6258",
+    "name": "Josh Hazlewood",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Royal Challengers Bengaluru"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "56f7c270-9711-4090-bfa6-eada5bfc0891",
+    "sportKey": "cricket",
+    "externalId": "14274",
+    "name": "Rasikh Dar Salam",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Royal Challengers Bengaluru"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "f846055a-f903-49cc-bc51-1c9b76f7c462",
+    "sportKey": "cricket",
+    "externalId": "1726",
+    "name": "Bhuvneshwar Kumar",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Royal Challengers Bengaluru"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "9faf93fc-3152-4d42-9990-ac0224137023",
+    "sportKey": "cricket",
+    "externalId": "36487",
+    "name": "Suyash Sharma",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Royal Challengers Bengaluru"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "5057b38a-5419-4646-b2d0-686fa099c9ea",
+    "sportKey": "cricket",
+    "externalId": "14172",
+    "name": "Yash Dayal",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Royal Challengers Bengaluru"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "4895fa4f-8a7d-4d8b-9d8e-65f93775ce5c",
+    "sportKey": "cricket",
+    "externalId": "18509",
+    "name": "Nuwan Thushara",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Royal Challengers Bengaluru"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "06a0df61-1ae9-424e-8f73-62f7c36eca9a",
+    "sportKey": "cricket",
+    "externalId": "8554",
+    "name": "Jacob Duffy",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Royal Challengers Bengaluru"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "4b177364-2742-4df3-ade1-5f1b3266b4a7",
+    "sportKey": "cricket",
+    "externalId": "22616",
+    "name": "Vicky Ostwal",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Royal Challengers Bengaluru"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "fe434b17-69b5-4c8e-9cfc-86d65dcaa942",
+    "sportKey": "cricket",
+    "externalId": "9428",
+    "name": "Shreyas Iyer",
+    "type": "player",
+    "meta": {
+      "role": "Batsman",
+      "iplTeam": "Punjab Kings"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "125da7b2-4679-4090-9902-4c5ec083afd7",
+    "sportKey": "cricket",
+    "externalId": "14689",
+    "name": "Priyansh Arya",
+    "type": "player",
+    "meta": {
+      "role": "Batsman",
+      "iplTeam": "Punjab Kings"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "7267f26a-fc31-4e30-b764-7c2dcdbde3b7",
+    "sportKey": "cricket",
+    "externalId": "32525",
+    "name": "Pyla Avinash",
+    "type": "player",
+    "meta": {
+      "role": "Batsman",
+      "iplTeam": "Punjab Kings"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "24bf23fb-30f3-48ef-9a42-11606796d2c9",
+    "sportKey": "cricket",
+    "externalId": "22561",
+    "name": "Harnoor Singh",
+    "type": "player",
+    "meta": {
+      "role": "Batsman",
+      "iplTeam": "Punjab Kings"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "b7022e8f-443e-4aa4-bbe2-e2718679553e",
+    "sportKey": "cricket",
+    "externalId": "13915",
+    "name": "Nehal Wadhera",
+    "type": "player",
+    "meta": {
+      "role": "Batsman",
+      "iplTeam": "Punjab Kings"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "a0b17f96-7bde-4ba9-9d68-d9d6b3054590",
+    "sportKey": "cricket",
+    "externalId": "18568",
+    "name": "Mitchell Owen",
+    "type": "player",
+    "meta": {
+      "role": "Batting Allrounder",
+      "iplTeam": "Punjab Kings"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "18c9914a-3f6e-4867-92e7-fc5aa56da2a4",
+    "sportKey": "cricket",
+    "externalId": "27424",
+    "name": "Musheer Khan",
+    "type": "player",
+    "meta": {
+      "role": "Batting Allrounder",
+      "iplTeam": "Punjab Kings"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "d49335e7-7311-4014-b1a8-3116f06ecb4c",
+    "sportKey": "cricket",
+    "externalId": "10919",
+    "name": "Shashank Singh",
+    "type": "player",
+    "meta": {
+      "role": "Batting Allrounder",
+      "iplTeam": "Punjab Kings"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "357aa652-8000-4c10-ac44-086343994291",
+    "sportKey": "cricket",
+    "externalId": "8989",
+    "name": "Marcus Stoinis",
+    "type": "player",
+    "meta": {
+      "role": "Batting Allrounder",
+      "iplTeam": "Punjab Kings"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "41f1689d-13a4-48cd-9436-34397eaf72e7",
+    "sportKey": "cricket",
+    "externalId": "14922",
+    "name": "Suryansh Shedge",
+    "type": "player",
+    "meta": {
+      "role": "Batting Allrounder",
+      "iplTeam": "Punjab Kings"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "9dab8a70-086f-4057-8112-5c97346aa40b",
+    "sportKey": "cricket",
+    "externalId": "15927",
+    "name": "Cooper Connolly",
+    "type": "player",
+    "meta": {
+      "role": "Batting Allrounder",
+      "iplTeam": "Punjab Kings"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "15feaecb-49c9-4414-9370-a242387a2a46",
+    "sportKey": "cricket",
+    "externalId": "13214",
+    "name": "Azmatullah Omarzai",
+    "type": "player",
+    "meta": {
+      "role": "Bowling Allrounder",
+      "iplTeam": "Punjab Kings"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "8fdcea79-f24b-4b76-a1e2-4e3353644a55",
+    "sportKey": "cricket",
+    "externalId": "14565",
+    "name": "Marco Jansen",
+    "type": "player",
+    "meta": {
+      "role": "Bowling Allrounder",
+      "iplTeam": "Punjab Kings"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "33091e31-dd5d-44eb-8900-254e642678f9",
+    "sportKey": "cricket",
+    "externalId": "10484",
+    "name": "Praveen Dubey",
+    "type": "player",
+    "meta": {
+      "role": "Bowling Allrounder",
+      "iplTeam": "Punjab Kings"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "ec8b226f-1a5f-4809-9eb6-be3c3dac7986",
+    "sportKey": "cricket",
+    "externalId": "1461627",
+    "name": "Vishal Nishad",
+    "type": "player",
+    "meta": {
+      "role": "Bowling Allrounder",
+      "iplTeam": "Punjab Kings"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "5ef3ea2a-c086-49c3-b171-cf752e6ea250",
+    "sportKey": "cricket",
+    "externalId": "14254",
+    "name": "Prabhsimran Singh",
+    "type": "player",
+    "meta": {
+      "role": "WK-Batsman",
+      "iplTeam": "Punjab Kings"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "0089ba0d-5452-4d7a-824c-53f6683b0d1b",
+    "sportKey": "cricket",
+    "externalId": "11893",
+    "name": "Vishnu Vinod",
+    "type": "player",
+    "meta": {
+      "role": "WK-Batsman",
+      "iplTeam": "Punjab Kings"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "25dfe1e8-e3d8-4d21-be8f-1f530073a13a",
+    "sportKey": "cricket",
+    "externalId": "13217",
+    "name": "Arshdeep Singh",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Punjab Kings"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "4f97ccf1-a94d-4902-a59d-9c9285dc08d8",
+    "sportKey": "cricket",
+    "externalId": "11689",
+    "name": "Xavier Bartlett",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Punjab Kings"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "f4f8f40c-fda2-4e5c-86aa-0d7b46550d18",
+    "sportKey": "cricket",
+    "externalId": "7910",
+    "name": "Yuzvendra Chahal",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Punjab Kings"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "b8196cad-38f1-4826-8242-7f0bd8d7fcc2",
+    "sportKey": "cricket",
+    "externalId": "10692",
+    "name": "Lockie Ferguson",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Punjab Kings"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "9276c632-a408-4097-a8fa-d19fc8203d0f",
+    "sportKey": "cricket",
+    "externalId": "14452",
+    "name": "Harpreet Brar",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Punjab Kings"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "f66776cf-f3a3-465c-b571-efed55fb631b",
+    "sportKey": "cricket",
+    "externalId": "10486",
+    "name": "Vijaykumar Vyshak",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Punjab Kings"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "d0c07488-b0e5-40a3-b2c6-6731c00ec91e",
+    "sportKey": "cricket",
+    "externalId": "12096",
+    "name": "Yash Thakur",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Punjab Kings"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "8a796a80-751a-4e65-9eb6-e88a23783b5c",
+    "sportKey": "cricket",
+    "externalId": "9739",
+    "name": "Ben Dwarshuis",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Punjab Kings"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "377e14dc-07d4-4be3-b9e5-571d7e899358",
+    "sportKey": "cricket",
+    "externalId": "1447",
+    "name": "Ajinkya Rahane",
+    "type": "player",
+    "meta": {
+      "role": "Batsman",
+      "iplTeam": "Kolkata Knight Riders"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "5252a6ad-217b-49df-ad73-4929eebdefcf",
+    "sportKey": "cricket",
+    "externalId": "1836",
+    "name": "Manish Pandey",
+    "type": "player",
+    "meta": {
+      "role": "Batsman",
+      "iplTeam": "Kolkata Knight Riders"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "9b7e072e-75dc-4a93-8548-b311738c4b6b",
+    "sportKey": "cricket",
+    "externalId": "11445",
+    "name": "Rovman Powell",
+    "type": "player",
+    "meta": {
+      "role": "Batsman",
+      "iplTeam": "Kolkata Knight Riders"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "1adf3ad3-0f01-41c5-98b6-11690175388a",
+    "sportKey": "cricket",
+    "externalId": "22566",
+    "name": "Angkrish Raghuvanshi",
+    "type": "player",
+    "meta": {
+      "role": "Batsman",
+      "iplTeam": "Kolkata Knight Riders"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "5eee6187-a1ed-4f22-b300-4660499cd94d",
+    "sportKey": "cricket",
+    "externalId": "10896",
+    "name": "Rinku Singh",
+    "type": "player",
+    "meta": {
+      "role": "Batsman",
+      "iplTeam": "Kolkata Knight Riders"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "0f7ed083-45fd-40b8-b2e1-3d581069ff76",
+    "sportKey": "cricket",
+    "externalId": "11172",
+    "name": "Finn Allen",
+    "type": "player",
+    "meta": {
+      "role": "Batsman",
+      "iplTeam": "Kolkata Knight Riders"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "ba1f5839-71bc-49dc-9c7f-a3a7e575002d",
+    "sportKey": "cricket",
+    "externalId": "9012",
+    "name": "Rahul Tripathi",
+    "type": "player",
+    "meta": {
+      "role": "Batsman",
+      "iplTeam": "Kolkata Knight Riders"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "ef10bebe-8148-424d-94fb-de53dcf6d544",
+    "sportKey": "cricket",
+    "externalId": "11029",
+    "name": "Sarthak Ranjan",
+    "type": "player",
+    "meta": {
+      "role": "Batsman",
+      "iplTeam": "Kolkata Knight Riders"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "78026419-9702-430b-8a80-956fddc6a873",
+    "sportKey": "cricket",
+    "externalId": "12337",
+    "name": "Ramandeep Singh",
+    "type": "player",
+    "meta": {
+      "role": "Batting Allrounder",
+      "iplTeam": "Kolkata Knight Riders"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "b06725e4-0251-48ff-acc6-ce5588c707ff",
+    "sportKey": "cricket",
+    "externalId": "12344",
+    "name": "Anukul Roy",
+    "type": "player",
+    "meta": {
+      "role": "Batting Allrounder",
+      "iplTeam": "Kolkata Knight Riders"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "52191c37-5b03-4ea4-a318-23fbfb7a51d0",
+    "sportKey": "cricket",
+    "externalId": "12225",
+    "name": "Cameron Green",
+    "type": "player",
+    "meta": {
+      "role": "Batting Allrounder",
+      "iplTeam": "Kolkata Knight Riders"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "2e1b05b7-2059-4223-a80c-b8d2a168a4a3",
+    "sportKey": "cricket",
+    "externalId": "11177",
+    "name": "Rachin Ravindra",
+    "type": "player",
+    "meta": {
+      "role": "Batting Allrounder",
+      "iplTeam": "Kolkata Knight Riders"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "a4bc1ea5-ab2d-4f6c-93c8-9268f7b04a0e",
+    "sportKey": "cricket",
+    "externalId": "2276",
+    "name": "Sunil Narine",
+    "type": "player",
+    "meta": {
+      "role": "Bowling Allrounder",
+      "iplTeam": "Kolkata Knight Riders"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "1119eaff-fbd2-4a5c-bfb5-6924dc9c9664",
+    "sportKey": "cricket",
+    "externalId": "1467180",
+    "name": "Daksh Kamra",
+    "type": "player",
+    "meta": {
+      "role": "Bowling Allrounder",
+      "iplTeam": "Kolkata Knight Riders"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "2186a24a-347d-4b99-80b9-c8bc77350655",
+    "sportKey": "cricket",
+    "externalId": "9443",
+    "name": "Tim Seifert",
+    "type": "player",
+    "meta": {
+      "role": "WK-Batsman",
+      "iplTeam": "Kolkata Knight Riders"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "26d620b5-d3e4-4eb0-b584-3c8bcc6bdc8a",
+    "sportKey": "cricket",
+    "externalId": "1429684",
+    "name": "Tejasvi Dahiya",
+    "type": "player",
+    "meta": {
+      "role": "WK-Batsman",
+      "iplTeam": "Kolkata Knight Riders"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "a562acf5-3779-4ce9-be60-9fc0a973ef37",
+    "sportKey": "cricket",
+    "externalId": "15861",
+    "name": "Vaibhav Arora",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Kolkata Knight Riders"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "8dd9c52d-9527-465d-8747-6e42084c505b",
+    "sportKey": "cricket",
+    "externalId": "24729",
+    "name": "Harshit Rana",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Kolkata Knight Riders"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "fd610a58-b2ae-47f6-87fc-ac3b8d4b808e",
+    "sportKey": "cricket",
+    "externalId": "19027",
+    "name": "Umran Malik",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Kolkata Knight Riders"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "ac6b5b90-eb12-47d0-81a5-20b01e6f6948",
+    "sportKey": "cricket",
+    "externalId": "12926",
+    "name": "Varun Chakaravarthy",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Kolkata Knight Riders"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "545e24bd-575b-4ace-8b9d-dde745a58c8f",
+    "sportKey": "cricket",
+    "externalId": "12805",
+    "name": "Prashant Solanki",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Kolkata Knight Riders"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "16efe537-f230-4c82-a5f0-be3604662922",
+    "sportKey": "cricket",
+    "externalId": "13136",
+    "name": "Kartik Tyagi",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Kolkata Knight Riders"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "a156ec1a-ba41-4be2-a6c2-b594b200eba3",
+    "sportKey": "cricket",
+    "externalId": "16458",
+    "name": "Matheesha Pathirana",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Kolkata Knight Riders"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "ef2f4aa5-4148-4a9c-a886-6883c0cd3971",
+    "sportKey": "cricket",
+    "externalId": "14726",
+    "name": "Akash Deep",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Kolkata Knight Riders"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "2baafd9f-b2bf-49e9-a08d-1c0085f60c85",
+    "sportKey": "cricket",
+    "externalId": "8497",
+    "name": "Travis Head",
+    "type": "player",
+    "meta": {
+      "role": "Batsman",
+      "iplTeam": "Sunrisers Hyderabad"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "6bb6acb6-1b22-49de-9ee5-e48b56dd4f4c",
+    "sportKey": "cricket",
+    "externalId": "29130",
+    "name": "Smaran Ravichandran",
+    "type": "player",
+    "meta": {
+      "role": "Batsman",
+      "iplTeam": "Sunrisers Hyderabad"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "eadf6c25-3b93-49a5-8ed8-fa4c96b843c4",
+    "sportKey": "cricket",
+    "externalId": "1447065",
+    "name": "Aniket Verma",
+    "type": "player",
+    "meta": {
+      "role": "Batsman",
+      "iplTeam": "Sunrisers Hyderabad"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "3c13b292-8a7a-4276-8e92-ea06fb17e28a",
+    "sportKey": "cricket",
+    "externalId": "13348",
+    "name": "Jack Edwards",
+    "type": "player",
+    "meta": {
+      "role": "Batsman",
+      "iplTeam": "Sunrisers Hyderabad"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "c8fcea29-8a8a-436d-a960-b89bd3d9830f",
+    "sportKey": "cricket",
+    "externalId": "12086",
+    "name": "Abhishek Sharma",
+    "type": "player",
+    "meta": {
+      "role": "Batting Allrounder",
+      "iplTeam": "Sunrisers Hyderabad"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "9ab4cf3b-85ee-4818-8d0a-fce153e09ad9",
+    "sportKey": "cricket",
+    "externalId": "10940",
+    "name": "Kamindu Mendis",
+    "type": "player",
+    "meta": {
+      "role": "Batting Allrounder",
+      "iplTeam": "Sunrisers Hyderabad"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "b4cafc05-3df4-4ecc-b80c-090b917b4e9a",
+    "sportKey": "cricket",
+    "externalId": "14701",
+    "name": "Nitish Kumar Reddy",
+    "type": "player",
+    "meta": {
+      "role": "Batting Allrounder",
+      "iplTeam": "Sunrisers Hyderabad"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "555ece82-9393-45b5-be2d-b8593607687f",
+    "sportKey": "cricket",
+    "externalId": "1455907",
+    "name": "Shivang Kumar",
+    "type": "player",
+    "meta": {
+      "role": "Batting Allrounder",
+      "iplTeam": "Sunrisers Hyderabad"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "1ae3a08e-b105-4ab1-9b2c-eb787c62f57f",
+    "sportKey": "cricket",
+    "externalId": "10045",
+    "name": "Liam Livingstone",
+    "type": "player",
+    "meta": {
+      "role": "Batting Allrounder",
+      "iplTeam": "Sunrisers Hyderabad"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "38ce1cbc-6b89-4f19-8a92-b6b998e5c326",
+    "sportKey": "cricket",
+    "externalId": "14695",
+    "name": "Harsh Dubey",
+    "type": "player",
+    "meta": {
+      "role": "Bowling Allrounder",
+      "iplTeam": "Sunrisers Hyderabad"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "8c999de4-e8d2-4d17-9929-805ce64e23fc",
+    "sportKey": "cricket",
+    "externalId": "10276",
+    "name": "Ishan Kishan",
+    "type": "player",
+    "meta": {
+      "role": "WK-Batsman",
+      "iplTeam": "Sunrisers Hyderabad"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "4283f78c-ca30-4d40-aecb-d349a8411c31",
+    "sportKey": "cricket",
+    "externalId": "10209",
+    "name": "Heinrich Klaasen",
+    "type": "player",
+    "meta": {
+      "role": "WK-Batsman",
+      "iplTeam": "Sunrisers Hyderabad"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "6d727489-0de3-4b24-bb43-a85c263ea5a7",
+    "sportKey": "cricket",
+    "externalId": "15418",
+    "name": "Salil Arora",
+    "type": "player",
+    "meta": {
+      "role": "WK-Batsman",
+      "iplTeam": "Sunrisers Hyderabad"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "879e5fd7-e1e7-49ee-a24a-3137fb138500",
+    "sportKey": "cricket",
+    "externalId": "11436",
+    "name": "Brydon Carse",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Sunrisers Hyderabad"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "79dbcccf-e1ff-46fb-8c4b-d2c4759b4a74",
+    "sportKey": "cricket",
+    "externalId": "8095",
+    "name": "Pat Cummins",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Sunrisers Hyderabad"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "9b656c40-06dc-44b7-8ffe-e52053336048",
+    "sportKey": "cricket",
+    "externalId": "46926",
+    "name": "Eshan Malinga",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Sunrisers Hyderabad"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "d2b0a68c-7098-4f13-8b33-a95f0402731a",
+    "sportKey": "cricket",
+    "externalId": "6327",
+    "name": "Jaydev Unadkat",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Sunrisers Hyderabad"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "ebc40d51-9a7d-4080-aaae-1cef26f9631e",
+    "sportKey": "cricket",
+    "externalId": "8175",
+    "name": "Harshal Patel",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Sunrisers Hyderabad"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "ad85be1d-1159-456b-aed8-4ee90e6a1bf7",
+    "sportKey": "cricket",
+    "externalId": "10946",
+    "name": "Zeeshan Ansari",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Sunrisers Hyderabad"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "7e2ae2ea-720e-44c5-9597-3991f7fc0060",
+    "sportKey": "cricket",
+    "externalId": "33129",
+    "name": "Sakib Hussain",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Sunrisers Hyderabad"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "3c266fc8-053b-4c08-a8b1-2ee445c26fa5",
+    "sportKey": "cricket",
+    "externalId": "1453784",
+    "name": "Onkar Tukaram Tarmale",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Sunrisers Hyderabad"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "ea93e67f-06c2-4cbb-a5cf-2658ef81a858",
+    "sportKey": "cricket",
+    "externalId": "1466014",
+    "name": "Amit Kumar",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Sunrisers Hyderabad"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "30aa1f2f-e5e1-4080-907a-66b4d0553c7b",
+    "sportKey": "cricket",
+    "externalId": "1431793",
+    "name": "Praful Hinge",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Sunrisers Hyderabad"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "122be766-110f-40bc-9709-18357b6e8a55",
+    "sportKey": "cricket",
+    "externalId": "1449788",
+    "name": "Krains Fuletra",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Sunrisers Hyderabad"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "4acca15d-64b7-46b8-b830-5bba7d72fcaa",
+    "sportKey": "cricket",
+    "externalId": "12345",
+    "name": "Shivam Mavi",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Sunrisers Hyderabad"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "62527991-7461-495c-afdc-bdc8003c49b2",
+    "sportKey": "cricket",
+    "externalId": "19328",
+    "name": "Shubham Dubey",
+    "type": "player",
+    "meta": {
+      "role": "Batsman",
+      "iplTeam": "Rajasthan Royals"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "bb9b2dfe-691b-4364-832d-652e4273b2bc",
+    "sportKey": "cricket",
+    "externalId": "9789",
+    "name": "Shimron Hetmyer",
+    "type": "player",
+    "meta": {
+      "role": "Batsman",
+      "iplTeam": "Rajasthan Royals"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "8e8e01d4-f37b-48c1-9033-590ca68f3400",
+    "sportKey": "cricket",
+    "externalId": "13940",
+    "name": "Yashasvi Jaiswal",
+    "type": "player",
+    "meta": {
+      "role": "Batsman",
+      "iplTeam": "Rajasthan Royals"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "c2e5c595-71fc-4488-9ed5-ca2687e6539d",
+    "sportKey": "cricket",
+    "externalId": "51791",
+    "name": "Vaibhav Sooryavanshi",
+    "type": "player",
+    "meta": {
+      "role": "Batsman",
+      "iplTeam": "Rajasthan Royals"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "a990830f-9d49-4c30-aaf2-81964270240c",
+    "sportKey": "cricket",
+    "externalId": "1465819",
+    "name": "Aman Rao Perala",
+    "type": "player",
+    "meta": {
+      "role": "Batsman",
+      "iplTeam": "Rajasthan Royals"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "958f7df8-25ec-4b21-a2e5-1e4bd7b53b07",
+    "sportKey": "cricket",
+    "externalId": "12305",
+    "name": "Riyan Parag",
+    "type": "player",
+    "meta": {
+      "role": "Batting Allrounder",
+      "iplTeam": "Rajasthan Royals"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "20e31b6f-5a3a-4982-b2e6-422bee9af714",
+    "sportKey": "cricket",
+    "externalId": "10420",
+    "name": "Sam Curran",
+    "type": "player",
+    "meta": {
+      "role": "Bowling Allrounder",
+      "iplTeam": "Rajasthan Royals"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "4493b436-7897-44a3-9115-6555ad94faef",
+    "sportKey": "cricket",
+    "externalId": "587",
+    "name": "Ravindra Jadeja",
+    "type": "player",
+    "meta": {
+      "role": "Bowling Allrounder",
+      "iplTeam": "Rajasthan Royals"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "4994899c-7413-4814-9923-c3b60f05b973",
+    "sportKey": "cricket",
+    "externalId": "14691",
+    "name": "Dhruv Jurel",
+    "type": "player",
+    "meta": {
+      "role": "WK-Batsman",
+      "iplTeam": "Rajasthan Royals"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "946a76d0-7a02-4e4f-bf53-1bfcb91c8f21",
+    "sportKey": "cricket",
+    "externalId": "50545",
+    "name": "Lhuan-dre Pretorius",
+    "type": "player",
+    "meta": {
+      "role": "WK-Batsman",
+      "iplTeam": "Rajasthan Royals"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "c1009824-9dbd-4a90-b5ab-7f4972381e72",
+    "sportKey": "cricket",
+    "externalId": "14798",
+    "name": "Donovan Ferreira",
+    "type": "player",
+    "meta": {
+      "role": "WK-Batsman",
+      "iplTeam": "Rajasthan Royals"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "dbcb6c9a-a84a-4346-a440-319188dd2674",
+    "sportKey": "cricket",
+    "externalId": "1448413",
+    "name": "Ravi Singh",
+    "type": "player",
+    "meta": {
+      "role": "WK-Batsman",
+      "iplTeam": "Rajasthan Royals"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "a7756d3b-eea2-4006-81b9-19a473d645f8",
+    "sportKey": "cricket",
+    "externalId": "11540",
+    "name": "Jofra Archer",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Rajasthan Royals"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "c06673d4-9daa-4928-874d-28f0d3647182",
+    "sportKey": "cricket",
+    "externalId": "13630",
+    "name": "Nandre Burger",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Rajasthan Royals"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "633c3e34-ac37-4529-9299-d4e10d2c3e31",
+    "sportKey": "cricket",
+    "externalId": "11307",
+    "name": "Tushar Deshpande",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Rajasthan Royals"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "537642a5-ce73-4312-88fc-f3ddec50a3ff",
+    "sportKey": "cricket",
+    "externalId": "23346",
+    "name": "Kwena Maphaka",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Rajasthan Royals"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "5e7dd50f-3eb9-4298-9804-343024e8b064",
+    "sportKey": "cricket",
+    "externalId": "8356",
+    "name": "Sandeep Sharma",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Rajasthan Royals"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "939ad7c0-c755-4e3d-9160-abe468808737",
+    "sportKey": "cricket",
+    "externalId": "15749",
+    "name": "Yudhvir Singh Charak",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Rajasthan Royals"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "26e9f007-a768-462f-9d18-bdf9e1506fe7",
+    "sportKey": "cricket",
+    "externalId": "1447337",
+    "name": "Vignesh Puthur",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Rajasthan Royals"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "abffcf7c-fec0-48b6-a762-a79f8416b8b8",
+    "sportKey": "cricket",
+    "externalId": "1458811",
+    "name": "Yash Raj Punja",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Rajasthan Royals"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "a5d75a41-31b8-4c97-9c78-57dffe47a804",
+    "sportKey": "cricket",
+    "externalId": "14706",
+    "name": "Sushant Mishra",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Rajasthan Royals"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "a37c39af-d3d6-49f9-96a4-ba93995df855",
+    "sportKey": "cricket",
+    "externalId": "14659",
+    "name": "Ravi Bishnoi",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Rajasthan Royals"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "8dd85959-e325-407b-8060-19085aef0a20",
+    "sportKey": "cricket",
+    "externalId": "1467167",
+    "name": "Brijesh Sharma",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Rajasthan Royals"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "94637150-be78-46cf-b00a-f6e1f665b869",
+    "sportKey": "cricket",
+    "externalId": "7625",
+    "name": "Adam Milne",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Rajasthan Royals"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "e0a37bd8-461d-45c0-bc57-6d5969d8a640",
+    "sportKey": "cricket",
+    "externalId": "14336",
+    "name": "Kuldeep Sen",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Rajasthan Royals"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "8f30d7c6-24c5-4d52-954b-f7d2af10eaf4",
+    "sportKey": "cricket",
+    "externalId": "10223",
+    "name": "Himmat Singh",
+    "type": "player",
+    "meta": {
+      "role": "Batsman",
+      "iplTeam": "Lucknow Super Giants"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "5fdb9c9b-03e0-4ab9-8deb-3645fbf300f2",
+    "sportKey": "cricket",
+    "externalId": "9582",
+    "name": "Aiden Markram",
+    "type": "player",
+    "meta": {
+      "role": "Batsman",
+      "iplTeam": "Lucknow Super Giants"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "e81c81e6-33c1-4ad6-a2cf-5df0f69d5168",
+    "sportKey": "cricket",
+    "externalId": "24431",
+    "name": "Akshat Raghuwanshi",
+    "type": "player",
+    "meta": {
+      "role": "Batsman",
+      "iplTeam": "Lucknow Super Giants"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "2dfc0a03-5a9a-4185-b427-1d8ba897d443",
+    "sportKey": "cricket",
+    "externalId": "14628",
+    "name": "Abdul Samad",
+    "type": "player",
+    "meta": {
+      "role": "Batting Allrounder",
+      "iplTeam": "Lucknow Super Giants"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "0b67c251-7daf-4d4d-9f5b-3f4ee2087bd7",
+    "sportKey": "cricket",
+    "externalId": "13907",
+    "name": "Ayush Badoni",
+    "type": "player",
+    "meta": {
+      "role": "Batting Allrounder",
+      "iplTeam": "Lucknow Super Giants"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "1952285e-5f6b-4215-9680-131eb1c0cb24",
+    "sportKey": "cricket",
+    "externalId": "51378",
+    "name": "Arshin Kulkarni",
+    "type": "player",
+    "meta": {
+      "role": "Batting Allrounder",
+      "iplTeam": "Lucknow Super Giants"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "2d9480b5-9299-4c54-ba93-69538f325d82",
+    "sportKey": "cricket",
+    "externalId": "6250",
+    "name": "Mitchell Marsh",
+    "type": "player",
+    "meta": {
+      "role": "Batting Allrounder",
+      "iplTeam": "Lucknow Super Giants"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "fb5829eb-28c2-4696-aa97-60273d787a7b",
+    "sportKey": "cricket",
+    "externalId": "14606",
+    "name": "Shahbaz Ahmed",
+    "type": "player",
+    "meta": {
+      "role": "Bowling Allrounder",
+      "iplTeam": "Lucknow Super Giants"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "5c12bbe8-4ad6-49cd-87a5-7bf2fc30f557",
+    "sportKey": "cricket",
+    "externalId": "13747",
+    "name": "Arjun Tendulkar",
+    "type": "player",
+    "meta": {
+      "role": "Bowling Allrounder",
+      "iplTeam": "Lucknow Super Giants"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "c5b7a009-8a9f-419d-a20e-1cb7155935d3",
+    "sportKey": "cricket",
+    "externalId": "10926",
+    "name": "Wanindu Hasaranga",
+    "type": "player",
+    "meta": {
+      "role": "Bowling Allrounder",
+      "iplTeam": "Lucknow Super Giants"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "7ed06386-f6c6-44e8-bab1-996058e1096a",
+    "sportKey": "cricket",
+    "externalId": "10744",
+    "name": "Rishabh Pant",
+    "type": "player",
+    "meta": {
+      "role": "WK-Batsman",
+      "iplTeam": "Lucknow Super Giants"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "01a40792-99ee-4fa8-9e92-21972073e6f0",
+    "sportKey": "cricket",
+    "externalId": "13089",
+    "name": "Matthew Breetzke",
+    "type": "player",
+    "meta": {
+      "role": "WK-Batsman",
+      "iplTeam": "Lucknow Super Giants"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "b1e0103e-a4ee-4c34-a02f-7719ff555ae3",
+    "sportKey": "cricket",
+    "externalId": "9406",
+    "name": "Nicholas Pooran",
+    "type": "player",
+    "meta": {
+      "role": "WK-Batsman",
+      "iplTeam": "Lucknow Super Giants"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "4cb1b95f-3c6d-4780-9cf4-f85488bad956",
+    "sportKey": "cricket",
+    "externalId": "39219",
+    "name": "Mukul Choudhary",
+    "type": "player",
+    "meta": {
+      "role": "WK-Batsman",
+      "iplTeam": "Lucknow Super Giants"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "e54b6466-47a1-4a33-b2eb-b6b83fe57027",
+    "sportKey": "cricket",
+    "externalId": "10637",
+    "name": "Josh Inglis",
+    "type": "player",
+    "meta": {
+      "role": "WK-Batsman",
+      "iplTeam": "Lucknow Super Giants"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "db807d34-f3e3-49b2-866f-ad26c109d4f9",
+    "sportKey": "cricket",
+    "externalId": "14696",
+    "name": "Akash Maharaj Singh",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Lucknow Super Giants"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "cea915a8-ac36-473e-ad4d-3a55bf705519",
+    "sportKey": "cricket",
+    "externalId": "9781",
+    "name": "Avesh Khan",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Lucknow Super Giants"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "514c7755-73ca-4df8-9f83-bda7a6072809",
+    "sportKey": "cricket",
+    "externalId": "7909",
+    "name": "Mohammed Shami",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Lucknow Super Giants"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "14415e5f-05fb-4490-bc1b-8f92380e67b8",
+    "sportKey": "cricket",
+    "externalId": "54735",
+    "name": "Prince Yadav",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Lucknow Super Giants"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "915d4f92-e00b-4900-862c-b9ecefec1f6c",
+    "sportKey": "cricket",
+    "externalId": "13534",
+    "name": "Mohsin Khan",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Lucknow Super Giants"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "1a520724-8c8d-47a9-a37c-cef720d8f4d3",
+    "sportKey": "cricket",
+    "externalId": "1448289",
+    "name": "Digvesh Singh Rathi",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Lucknow Super Giants"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "a9b8e1a0-db25-4e50-b793-5a6b4e33c5c3",
+    "sportKey": "cricket",
+    "externalId": "12930",
+    "name": "Manimaran Siddharth",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Lucknow Super Giants"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "a005b175-f50c-42fe-ac58-6e9c99084c8d",
+    "sportKey": "cricket",
+    "externalId": "22401",
+    "name": "Mayank Yadav",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Lucknow Super Giants"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "aa581b7e-7928-4f01-ad48-5b1903ba6b2b",
+    "sportKey": "cricket",
+    "externalId": "11427",
+    "name": "Anrich Nortje",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Lucknow Super Giants"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "f72e04d8-89f4-44da-a29f-562dc9f3ff23",
+    "sportKey": "cricket",
+    "externalId": "51756",
+    "name": "Naman Tiwari",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Lucknow Super Giants"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "f0eda710-7733-4d12-8475-cf6e58d6e657",
+    "sportKey": "cricket",
+    "externalId": "36139",
+    "name": "Naman Dhir",
+    "type": "player",
+    "meta": {
+      "role": "Batsman",
+      "iplTeam": "Mumbai Indians"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "12b43b08-a26e-4bd9-b7e6-a5c11e649c5a",
+    "sportKey": "cricket",
+    "externalId": "576",
+    "name": "Rohit Sharma",
+    "type": "player",
+    "meta": {
+      "role": "Batsman",
+      "iplTeam": "Mumbai Indians"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "30e53ce6-6df0-456f-84d6-aa45bcf69fbd",
+    "sportKey": "cricket",
+    "externalId": "7915",
+    "name": "Suryakumar Yadav",
+    "type": "player",
+    "meta": {
+      "role": "Batsman",
+      "iplTeam": "Mumbai Indians"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "f1723aca-0726-4f3f-a9c4-c5582e2e85a6",
+    "sportKey": "cricket",
+    "externalId": "14504",
+    "name": "Tilak Varma",
+    "type": "player",
+    "meta": {
+      "role": "Batsman",
+      "iplTeam": "Mumbai Indians"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "4c24aadf-4bad-4a7f-894c-a96613a1b26c",
+    "sportKey": "cricket",
+    "externalId": "13748",
+    "name": "Sherfane Rutherford",
+    "type": "player",
+    "meta": {
+      "role": "Batting Allrounder",
+      "iplTeam": "Mumbai Indians"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "f82b6088-2825-4377-9616-9cb8a67045c6",
+    "sportKey": "cricket",
+    "externalId": "9647",
+    "name": "Hardik Pandya",
+    "type": "player",
+    "meta": {
+      "role": "Batting Allrounder",
+      "iplTeam": "Mumbai Indians"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "25215eb0-dde0-4a25-8277-2c6c00bf2761",
+    "sportKey": "cricket",
+    "externalId": "22601",
+    "name": "Raj Bawa",
+    "type": "player",
+    "meta": {
+      "role": "Batting Allrounder",
+      "iplTeam": "Mumbai Indians"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "01871573-3c52-4761-a48d-100d8ac5a60f",
+    "sportKey": "cricket",
+    "externalId": "12258",
+    "name": "Will Jacks",
+    "type": "player",
+    "meta": {
+      "role": "Batting Allrounder",
+      "iplTeam": "Mumbai Indians"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "e095d51c-e469-4c40-8bd9-2176dc1b22aa",
+    "sportKey": "cricket",
+    "externalId": "12341",
+    "name": "Mayank Rawat",
+    "type": "player",
+    "meta": {
+      "role": "Batting Allrounder",
+      "iplTeam": "Mumbai Indians"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "64509bae-5154-4c87-927a-5642fa94801f",
+    "sportKey": "cricket",
+    "externalId": "9576",
+    "name": "Corbin Bosch",
+    "type": "player",
+    "meta": {
+      "role": "Bowling Allrounder",
+      "iplTeam": "Mumbai Indians"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "1710befd-d66f-4c19-b7a6-220ef8758249",
+    "sportKey": "cricket",
+    "externalId": "10100",
+    "name": "Mitchell Santner",
+    "type": "player",
+    "meta": {
+      "role": "Bowling Allrounder",
+      "iplTeam": "Mumbai Indians"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "53bdf6e3-3b03-4983-a1d9-98f62cf91d83",
+    "sportKey": "cricket",
+    "externalId": "8683",
+    "name": "Shardul Thakur",
+    "type": "player",
+    "meta": {
+      "role": "Bowling Allrounder",
+      "iplTeam": "Mumbai Indians"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "65e9876a-ddd3-4c73-9be4-f047e927281a",
+    "sportKey": "cricket",
+    "externalId": "1431785",
+    "name": "Danish Malewar",
+    "type": "player",
+    "meta": {
+      "role": "Bowling Allrounder",
+      "iplTeam": "Mumbai Indians"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "baab6eb6-7cf2-43ab-950f-dce13098972d",
+    "sportKey": "cricket",
+    "externalId": "14703",
+    "name": "Atharva Ankolekar",
+    "type": "player",
+    "meta": {
+      "role": "Bowling Allrounder",
+      "iplTeam": "Mumbai Indians"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "50f399ee-4e11-4517-b543-34854b46afcc",
+    "sportKey": "cricket",
+    "externalId": "36454",
+    "name": "Robin Minz",
+    "type": "player",
+    "meta": {
+      "role": "WK-Batsman",
+      "iplTeam": "Mumbai Indians"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "809cb782-58e8-449c-9279-cce727d36df1",
+    "sportKey": "cricket",
+    "externalId": "13070",
+    "name": "Ryan Rickelton",
+    "type": "player",
+    "meta": {
+      "role": "WK-Batsman",
+      "iplTeam": "Mumbai Indians"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "a487b914-fa1d-4cf7-8d76-d1ad0b3d1bbe",
+    "sportKey": "cricket",
+    "externalId": "8520",
+    "name": "Quinton de Kock",
+    "type": "player",
+    "meta": {
+      "role": "WK-Batsman",
+      "iplTeam": "Mumbai Indians"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "9ed8205e-7a2f-49d4-a5d7-cc91c77362f5",
+    "sportKey": "cricket",
+    "externalId": "8117",
+    "name": "Trent Boult",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Mumbai Indians"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "1792e88f-2e59-44d5-b88c-b6a93bd42015",
+    "sportKey": "cricket",
+    "externalId": "11684",
+    "name": "Ashwani Kumar",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Mumbai Indians"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "0e168608-bb8e-41c7-9c30-9f49b5b75f0a",
+    "sportKey": "cricket",
+    "externalId": "9311",
+    "name": "Jasprit Bumrah",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Mumbai Indians"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "c9084734-b4d8-4b2b-a3a1-5ecc0d2ea61b",
+    "sportKey": "cricket",
+    "externalId": "7836",
+    "name": "Deepak Chahar",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Mumbai Indians"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "a114029b-33b3-4453-a110-e84e13275faa",
+    "sportKey": "cricket",
+    "externalId": "12627",
+    "name": "Mayank Markande",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Mumbai Indians"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "2a6a19b2-14c7-47d0-a622-e8b06e2a7457",
+    "sportKey": "cricket",
+    "externalId": "36501",
+    "name": "Allah Ghazanfar",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Mumbai Indians"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "55242814-c33b-4cb3-9bb4-8af9e5c62cf0",
+    "sportKey": "cricket",
+    "externalId": "13146",
+    "name": "Raghu Sharma",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Mumbai Indians"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  },
+  {
+    "id": "fd450184-922f-4760-9287-c8d5315573e3",
+    "sportKey": "cricket",
+    "externalId": "1465841",
+    "name": "Mohammed Salahuddin Izhar",
+    "type": "player",
+    "meta": {
+      "role": "Bowler",
+      "iplTeam": "Mumbai Indians"
+    },
+    "competitions": [
+      "IPL 2026"
+    ],
+    "competitionShort": "IPL"
+  }
+]
