@@ -76,10 +76,9 @@
 
 | # | Task | Effort | Notes |
 |---|------|--------|-------|
-| 1 | **Add missing 6 EPL externalIds** | 10 min | Burnley, Leeds, Sunderland + 3 promoted? |
-| 2 | **Test full auction flow** | 30 min | Create league, invite users, run auction |
-| 3 | **Test fixture scoring** | 30 min | Import fixtures, simulate match completion |
-| 4 | **Verify email delivery** | 15 min | Magic links in production mode |
+| 1 | **Test full auction flow** | 30 min | Create league, invite users, run auction |
+| 2 | **Test fixture scoring** | 30 min | Import fixtures, simulate match completion |
+| 3 | **Verify email delivery** | 15 min | Magic links in production mode |
 
 ### P1 - Nice to Have
 
