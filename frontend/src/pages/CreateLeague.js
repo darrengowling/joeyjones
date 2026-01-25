@@ -298,8 +298,10 @@ export default function CreateLeague() {
                               let response;
                               if (filter === "all") {
                                 response = await axios.get(`${API}/clubs?sportKey=football`);
+                                setForm({ ...form, competitionCode: "" });
                               } else {
                                 response = await axios.get(`${API}/clubs?sportKey=football&competition=${filter}`);
+                                setForm({ ...form, competitionCode: filter });
                               }
                               setAvailableAssets(response.data);
                               // Auto-select all teams in filtered view
