@@ -308,7 +308,7 @@ export default function LeagueDetail() {
       
       if (sportKey === 'cricket') {
         // Load cricket players with pagination
-        const response = await axios.get(`${API}/assets?sportKey=cricket&pageSize=250`);
+        const response = await axios.get(`${API}/assets?sportKey=cricket&pageSize=300`);
         const players = response.data.assets || [];
         const total = response.data.pagination?.total || players.length;
         
@@ -319,10 +319,15 @@ export default function LeagueDetail() {
         const franchises = [...new Set(players.map(p => p.meta?.franchise).filter(Boolean))].sort();
         setCricketFranchises(franchises);
         
-        // Set selection based on league's existing assets or default to all
+        // Set selection based on league's existing assets or competition type
         if (league?.assetsSelected && league.assetsSelected.length > 0) {
+          // League has saved selection - use it
           setSelectedAssetIds(league.assetsSelected);
+        } else if (league?.competitionCode === 'CUSTOM') {
+          // CUSTOM mode - start with empty selection, user builds team by team
+          setSelectedAssetIds([]);
         } else {
+          // IPL or other - default to all players (backwards compatibility)
           setSelectedAssetIds(players.map(p => p.id));
         }
         setCricketTeamFilter('all');
