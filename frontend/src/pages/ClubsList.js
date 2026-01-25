@@ -43,25 +43,29 @@ export default function ClubsList() {
               await axios.post(`${API}/clubs/seed`);
               response = await axios.get(`${API}/clubs`);
             }
-            return { sport: sport.key, assets: response.data };
+            return { sport: sport.key, assets: response.data, total: response.data.length };
           } else {
             // Load assets for other sports
             const response = await axios.get(`${API}/assets?sportKey=${sport.key}&pageSize=250`);
-            return { sport: sport.key, assets: response.data.assets || [] };
+            const total = response.data.pagination?.total || response.data.assets?.length || 0;
+            return { sport: sport.key, assets: response.data.assets || [], total };
           }
         } catch (e) {
           console.error(`Error loading ${sport.key} assets:`, e);
-          return { sport: sport.key, assets: [] };
+          return { sport: sport.key, assets: [], total: 0 };
         }
       });
       
       const assetsData = await Promise.all(assetPromises);
       const assetsBySport = {};
-      assetsData.forEach(({ sport, assets }) => {
+      const totalsBySport = {};
+      assetsData.forEach(({ sport, assets, total }) => {
         assetsBySport[sport] = assets;
+        totalsBySport[sport] = total;
       });
       
       setAssets(assetsBySport);
+      setTotalCounts(totalsBySport);
     } catch (e) {
       console.error("Error loading sports and assets:", e);
       toast.error("Error loading sports data");
