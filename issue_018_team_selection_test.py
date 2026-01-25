@@ -17,7 +17,7 @@ import time
 from datetime import datetime, timezone
 
 # Backend URL from frontend/.env
-BACKEND_URL = "https://fastbid-platform.preview.emergentagent.com/api"
+BACKEND_URL = "https://fantasy-sports-uk.preview.emergentagent.com/api"
 
 class Issue018Tester:
     def __init__(self):

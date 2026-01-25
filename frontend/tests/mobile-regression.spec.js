@@ -14,7 +14,7 @@ const DEVICES = {
 };
 
 // Test configuration
-const BASE_URL = process.env.REACT_APP_BACKEND_URL || 'https://fastbid-platform.preview.emergentagent.com';
+const BASE_URL = process.env.REACT_APP_BACKEND_URL || 'https://fantasy-sports-uk.preview.emergentagent.com';
 const SCREENSHOT_DIR = '/app/frontend/tests/artifacts/mobile';
 const TEST_EMAIL = 'mobile.test@example.com';
 

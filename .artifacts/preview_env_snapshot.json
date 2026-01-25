@@ -1,4 +1,4 @@
-REACT_APP_BACKEND_URL=https://fastbid-platform.preview.emergentagent.com
+REACT_APP_BACKEND_URL=https://fantasy-sports-uk.preview.emergentagent.com
 WDS_SOCKET_PORT=443
 REACT_APP_FEATURE_MY_COMPETITIONS=true
 REACT_APP_FEATURE_ASSET_SELECTION=true
