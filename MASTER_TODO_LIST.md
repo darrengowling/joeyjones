@@ -223,6 +223,42 @@ Step 6: Test full flow end-to-end
 | 5 | ~~ISSUE-024~~ | ~~**Auto-import fixtures**~~ | 2 hrs | 🟢 Low | ✅ Already implemented - imports working as intended |
 | 6 | ISSUE-026 | **Fixture template management** | 1 week | 🟢 Low | No redeploy for fixture updates |
 | 7 | - | **Payment integration** (Stripe) | 2 weeks | 🟡 Med | Entry fees, charity donations |
+| 8 | WC2026 | **FIFA World Cup 2026 Teams** | 2 hrs | 🟢 Low | High demand from pilot users |
+
+### ⚽ FIFA World Cup 2026 Implementation (WC2026)
+
+**Status:** ⏸️ PAUSED - Qualifying matches still outstanding  
+**Priority:** PRE-PILOT (High demand expected from UK pilot users)
+
+**Overview:**
+- 2026 World Cup is expanded to 48 teams (up from 32)
+- Hosted by USA, Canada, Mexico (June-July 2026)
+- Some qualifying spots still to be decided
+
+**Implementation Plan:**
+
+| Step | Task | Notes |
+|------|------|-------|
+| 1 | **Get final 48 qualified teams** | Wait for all qualifiers to complete |
+| 2 | **Match team names to football-data.org API** | Use same `externalId` format for fixture imports |
+| 3 | **Add teams to `assets` collection** | `sportKey: "football"`, `competitionShort: "WC2026"` |
+| 4 | **Add "World Cup 2026" dropdown option** | In Create Competition modal (alongside EPL/UCL/AFCON) |
+| 5 | **Backend auto-select** | When `competitionCode: "WC2026"`, pre-select all 48 teams |
+| 6 | **Test fixture import** | Verify scores import from football-data.org API |
+
+**Data Requirements:**
+- Team name must match football-data.org API exactly
+- Include `externalId` (football-data.org team ID) for fixture/score imports
+- Include `country` and `competitionShort: "WC2026"`
+
+**APIs:**
+- Primary: `football-data.org` (token: `FOOTBALL_DATA_TOKEN`)
+- Secondary: `api-football.com` (key: `API_FOOTBALL_KEY`)
+
+**UX Flow (same as IPL):**
+1. Create Competition → Select "World Cup 2026"
+2. 48 teams pre-checked
+3. Uncheck any if needed → Save → Done
 
 ### UI/UX Improvements
 
