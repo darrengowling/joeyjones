@@ -2077,52 +2077,91 @@ async def create_league(input: LeagueCreate):
     if (not input.assetsSelected or len(input.assetsSelected) == 0) and input.competitionCode:
         logger.info(f"   Auto-populating assets for competitionCode: {input.competitionCode}")
         
-        # Build query based on competition code
         competition_code = input.competitionCode.upper()
-        if competition_code in ["PL", "EPL"]:
-            query = {"$or": [
-                {"competitionShort": "EPL"},
-                {"competitions": "English Premier League"}
-            ]}
-        elif competition_code in ["CL", "UCL"]:
-            query = {"$or": [
-                {"competitionShort": "UCL"},
-                {"competitions": "UEFA Champions League"}
-            ]}
-        elif competition_code == "AFCON":
-            query = {"$or": [
-                {"competitionShort": "AFCON"},
-                {"competitions": "Africa Cup of Nations"}
-            ]}
+        
+        # Handle Cricket competitions
+        if input.sportKey == "cricket":
+            if competition_code == "IPL":
+                # IPL: Select 11 players per franchise (110 total)
+                all_players = await db.assets.find(
+                    {"sportKey": "cricket"}, 
+                    {"_id": 0, "id": 1, "meta.franchise": 1}
+                ).to_list(300)
+                
+                # Group by franchise and take first 11 from each
+                franchise_groups = {}
+                for player in all_players:
+                    franchise = player.get("meta", {}).get("franchise")
+                    if franchise:
+                        if franchise not in franchise_groups:
+                            franchise_groups[franchise] = []
+                        if len(franchise_groups[franchise]) < 11:
+                            franchise_groups[franchise].append(player["id"])
+                
+                auto_selected_ids = []
+                for franchise, player_ids in franchise_groups.items():
+                    auto_selected_ids.extend(player_ids)
+                
+                input.assetsSelected = auto_selected_ids
+                logger.info(f"   ✅ IPL: Auto-selected {len(auto_selected_ids)} players (11 per franchise)")
+            
+            elif competition_code == "CUSTOM":
+                # CUSTOM: Start with empty selection, user builds team by team
+                input.assetsSelected = []
+                logger.info(f"   ✅ CUSTOM: Starting with empty selection")
+            
+            else:
+                logger.warning(f"   ⚠️ Unknown cricket competition code: {competition_code}")
+                input.assetsSelected = []
+        
+        # Handle Football competitions
         else:
-            # Fallback: try to match competitionShort directly
-            query = {"competitionShort": competition_code}
-        
-        # Also filter by sportKey
-        query["sportKey"] = input.sportKey
-        
-        # Get matching assets
-        assets = await db.assets.find(query, {"_id": 0, "id": 1}).to_list(200)
-        auto_selected_ids = [asset["id"] for asset in assets]
-        
-        if auto_selected_ids:
-            input.assetsSelected = auto_selected_ids
-            logger.info(f"   ✅ Auto-selected {len(auto_selected_ids)} assets for {competition_code}")
-        else:
-            logger.warning(f"   ⚠️ No assets found for competitionCode: {competition_code}")
+            # Build query based on competition code
+            if competition_code in ["PL", "EPL"]:
+                query = {"$or": [
+                    {"competitionShort": "EPL"},
+                    {"competitions": "English Premier League"}
+                ]}
+            elif competition_code in ["CL", "UCL"]:
+                query = {"$or": [
+                    {"competitionShort": "UCL"},
+                    {"competitions": "UEFA Champions League"}
+                ]}
+            elif competition_code == "AFCON":
+                query = {"$or": [
+                    {"competitionShort": "AFCON"},
+                    {"competitions": "Africa Cup of Nations"}
+                ]}
+            else:
+                # Fallback: try to match competitionShort directly
+                query = {"competitionShort": competition_code}
+            
+            # Also filter by sportKey
+            query["sportKey"] = input.sportKey
+            
+            # Get matching assets
+            assets = await db.assets.find(query, {"_id": 0, "id": 1}).to_list(200)
+            auto_selected_ids = [asset["id"] for asset in assets]
+            
+            if auto_selected_ids:
+                input.assetsSelected = auto_selected_ids
+                logger.info(f"   ✅ Auto-selected {len(auto_selected_ids)} assets for {competition_code}")
+            else:
+                logger.warning(f"   ⚠️ No assets found for competitionCode: {competition_code}")
     
-    # Prompt 4: Validate assets selection size
+    # Prompt 4: Validate assets selection size (skip for CUSTOM which starts empty)
     from models import validate_assets_selection_size
-    try:
-        validate_assets_selection_size(
-            input.assetsSelected,
-            input.clubSlots,
-            input.minManagers,
-            logger
-        )
-    except ValueError as e:
-        logger.error(f"❌ League validation failed: {str(e)}")
-        raise HTTPException(status_code=400, detail=str(e))
+    if input.competitionCode != "CUSTOM":
+        try:
+            validate_assets_selection_size(
+                input.assetsSelected,
+                input.clubSlots,
+                input.minManagers,
+                logger
+            )
+        except ValueError as e:
+            logger.error(f"❌ League validation failed: {str(e)}")
+            raise HTTPException(status_code=400, detail=str(e))
     
     league_obj = League(**input.model_dump())
     logger.info(f"   League object created: ID={league_obj.id}")
