@@ -78,9 +78,8 @@
 |---|------|--------|-------|
 | 1 | **Test full auction flow** | 30 min | Create league, invite users, run auction |
 | 2 | **Test fixture scoring** | 30 min | Import fixtures, simulate match completion |
-| 3 | **Verify email delivery** | 15 min | Magic links in production mode |
 
-### P1 - Nice to Have
+### P1 - Post-Pilot (Production)
 
 | # | Task | Effort | Notes |
 |---|------|--------|-------|
