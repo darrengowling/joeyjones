@@ -46,7 +46,7 @@ class SportService:
         Args:
             key: Sport key (e.g., 'football', 'cricket')
         """
-        sport_data = await self.db.sports.find_one({"key": key})
+        sport_data = await self.db.sports.find_one({"key": key}, {"_id": 0})
         if not sport_data:
             return None
         
