@@ -1843,7 +1843,7 @@ async def get_assets(sportKey: str, search: Optional[str] = None, page: int = 1,
     return await asset_service.list_assets(sportKey, search, page, pageSize)
 
 @api_router.get("/leagues/{league_id}/assets")
-async def get_league_assets(league_id: str, search: Optional[str] = None, page: int = 1, pageSize: int = 100):
+async def get_league_assets(league_id: str, search: Optional[str] = None, page: int = 1, pageSize: int = 300):
     """Get assets for a specific league - returns SELECTED assets if they exist, otherwise all available"""
     # Get league to determine sportKey and selected assets
     league = await db.leagues.find_one({"id": league_id}, {"_id": 0})
