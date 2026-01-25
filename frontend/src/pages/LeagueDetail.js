@@ -1017,28 +1017,7 @@ export default function LeagueDetail() {
                     </div>
                   )}
 
-                  {/* Competition Filter for Cricket */}
-                  {league.sportKey === "cricket" && (
-                    <div className="mb-3">
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Filter by Team</label>
-                      <select
-                        className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 mb-2"
-                        value={cricketTeamFilter}
-                        onChange={(e) => {
-                          const team = e.target.value;
-                          setCricketTeamFilter(team);
-                        }}
-                        data-testid="cricket-team-filter"
-                      >
-                        <option value="all">All Teams ({cricketFranchises.length}) - {availableAssets.length} players</option>
-                        {cricketFranchises.map(franchise => (
-                          <option key={franchise} value={franchise}>
-                            {franchise} ({availableAssets.filter(p => p.meta?.franchise === franchise).length})
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  )}
+                  {/* Cricket: No filter needed - just show all players */}
                   
                   {/* Quick Action Buttons */}
                   <div className="mb-3 flex gap-2">
