@@ -26,7 +26,7 @@ class AssetService:
         """
         # Validate page parameters
         page = max(1, page)
-        page_size = min(max(1, page_size), 100)  # Cap at 100 items per page
+        page_size = min(max(1, page_size), 300)  # Cap at 300 items per page (needed for full IPL squad)
         
         skip = (page - 1) * page_size
         
