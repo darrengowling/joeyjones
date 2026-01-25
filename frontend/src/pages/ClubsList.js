@@ -72,6 +72,14 @@ export default function ClubsList() {
   const currentSport = sports.find(s => s.key === selectedSport);
   const currentAssets = assets[selectedSport] || [];
   
+  // Get unique franchises and roles for cricket filters
+  const franchises = selectedSport === 'cricket' 
+    ? [...new Set(currentAssets.map(a => a.meta?.franchise).filter(Boolean))].sort()
+    : [];
+  const roles = selectedSport === 'cricket'
+    ? [...new Set(currentAssets.map(a => a.meta?.role).filter(Boolean))].sort()
+    : [];
+  
   // Dynamic filtering based on sport
   const filteredAssets = currentAssets.filter((asset) => {
     const matchesSearch = asset.name.toLowerCase().includes(searchTerm.toLowerCase());
@@ -80,10 +88,12 @@ export default function ClubsList() {
       // For football, we can still filter by country if needed
       return matchesSearch;
     } else if (selectedSport === 'cricket') {
-      // For cricket, filter by franchise or role
-      const matchesFranchise = asset.meta?.franchise?.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesRole = asset.meta?.role?.toLowerCase().includes(searchTerm.toLowerCase());
-      return matchesSearch || matchesFranchise || matchesRole;
+      // Filter by franchise dropdown
+      const matchesFranchise = selectedFranchise === 'all' || asset.meta?.franchise === selectedFranchise;
+      // Filter by role dropdown
+      const matchesRole = selectedRole === 'all' || asset.meta?.role === selectedRole;
+      // Filter by search (name)
+      return matchesSearch && matchesFranchise && matchesRole;
     }
     
     return matchesSearch;
