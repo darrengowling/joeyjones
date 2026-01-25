@@ -12,7 +12,7 @@
 | Sports | 2 | 2 | ✅ Complete |
 | Football Teams | 74 | 56 | ⚠️ Missing UCL/AFCON teams |
 | Cricket Players | 252 | 125 | ✅ Curated (intentional) |
-| EPL externalIds | 14/20 | 14/20 | ⚠️ 6 missing |
+| EPL externalIds | 20/20 | 20/20 | ✅ Complete |
 | Leagues | 552 | 92 | ⚠️ Test data only |
 | Users | 853 | 665 | ⚠️ Test data |
 
