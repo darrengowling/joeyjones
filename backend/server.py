@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 from bson import ObjectId
+from pymongo import ReturnDocument
 import os
 import logging
 import json
@@ -4737,8 +4738,15 @@ async def get_auction(auction_id: str):
     if not auction:
         raise HTTPException(status_code=404, detail="Auction not found")
     
-    # Get all bids for this auction
-    bids = await db.bids.find({"auctionId": auction_id}, {"_id": 0}).to_list(1000)
+    # Get bids for current lot only (empty if no lot active)
+    current_club_id = auction.get("currentClubId")
+    if current_club_id:
+        bids = await db.bids.find({
+            "auctionId": auction_id,
+            "clubId": current_club_id
+        }, {"_id": 0}).to_list(100)
+    else:
+        bids = []
     
     # Get current asset if exists
     current_asset = None
@@ -4887,8 +4895,8 @@ async def place_bid(auction_id: str, bid_input: BidCreate):
         "displayName": user["name"]
     }
     
-    # Use atomic increment to avoid race conditions in rapid bidding
-    await db.auctions.update_one(
+    # Use atomic find_one_and_update to avoid race conditions and reduce DB calls
+    updated_auction = await db.auctions.find_one_and_update(
         {"id": auction_id},
         {
             "$set": {
@@ -4898,11 +4906,10 @@ async def place_bid(auction_id: str, bid_input: BidCreate):
             "$inc": {
                 "bidSequence": 1
             }
-        }
+        },
+        return_document=ReturnDocument.AFTER,
+        projection={"bidSequence": 1}
     )
-    
-    # Get the updated sequence number
-    updated_auction = await db.auctions.find_one({"id": auction_id}, {"bidSequence": 1})
     new_bid_sequence = updated_auction.get("bidSequence", 1)
     
     # Get room size for debugging
@@ -4931,9 +4938,11 @@ async def place_bid(auction_id: str, bid_input: BidCreate):
         'serverTime': datetime.now(timezone.utc).isoformat()
     }, room=f"auction:{auction_id}")
     
-    # Also emit legacy bid_placed for backward compatibility
+    # Also emit legacy bid_placed for backward compatibility (strip userEmail for privacy)
+    bid_data = bid_obj.model_dump(mode='json')
+    bid_data.pop('userEmail', None)
     await sio.emit('bid_placed', {
-        'bid': bid_obj.model_dump(mode='json'),
+        'bid': bid_data,
         'auctionId': auction_id,
         'clubId': current_club_id,
         'serverTime': datetime.now(timezone.utc).isoformat()
