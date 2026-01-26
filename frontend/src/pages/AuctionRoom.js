@@ -1232,9 +1232,15 @@ function AuctionRoom() {
                   {/* Compact Timer + Team + Current Bid */}
                   <div className="bg-black text-white p-4 rounded-lg mb-3 shadow-lg">
                     <div className="flex items-center justify-between gap-4 mb-3">
-                      {/* Team Name */}
+                      {/* Team/Player Name */}
                       <div className="flex-1 min-w-0">
                         <h3 className="text-2xl font-bold text-white truncate">{currentClub.name}</h3>
+                        {/* Franchise/Team for cricket players */}
+                        {currentClub.meta?.franchise && (
+                          <div className="text-sm text-cyan-300 font-medium">
+                            {currentClub.meta.franchise}
+                          </div>
+                        )}
                         {/* Next Fixture - Inline */}
                         {nextFixture && (
                           <div className="text-xs text-gray-300 mt-1">
