@@ -1514,6 +1514,10 @@ function AuctionRoom() {
                       <div className="flex justify-between items-start">
                         <div className="flex-1 min-w-0">
                           <div className="font-semibold truncate">{club.name}</div>
+                          {/* Cricket: Show franchise first, then nationality */}
+                          {sport?.key === "cricket" && club.meta?.franchise && (
+                            <div className="text-xs text-cyan-600 font-medium truncate">{club.meta.franchise}</div>
+                          )}
                           {/* Football: Show country */}
                           {sport?.key === "football" && club.country && (
                             <div className="text-xs opacity-75">{club.country}</div>
