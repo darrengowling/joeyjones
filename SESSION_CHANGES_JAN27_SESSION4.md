@@ -50,6 +50,44 @@ Productive session focused on completing the Stitch Technical Asset Spec impleme
 - **Dropdown styling**: Dark theme with cyan border, custom chevron, dark options
 - **Removed emojis** from sport selector dropdown
 - **Cricket player cards**: Changed to stacked layout showing full player names (no truncation)
+- **Single column layout** for better readability on mobile
+- **Empty state**: Replaced emoji with Material Symbol icon
+
+### 5. Live Auction Bid Interface Improvements (Critical Fix)
+**File:** `AuctionRoom.js`
+
+- **Fixed bid input persisting after placing bid**: Removed useEffect that auto-populated bidAmount on every currentBid change
+- **Bid increments now add to CURRENT BID**: Pressing +£1m on a £32m bid shows £33m (not accumulating in input)
+- **Input clears after successful bid**: "Place Bid" button disappears properly
+- **Input clears on errors**: No more confusing pre-filled values
+
+### 6. Waiting Room Improvements
+**File:** `AuctionRoom.js`
+
+- Replaced 🚀 emoji with Material Symbol `play_arrow` on "Begin Auction" button
+- Replaced SVG clock with Material Symbol `schedule` for waiting state
+- Updated font to `font-semibold` for consistency
+
+### 7. Commissioner Controls - Emoji Removal
+**File:** `AuctionRoom.js`
+
+- ⏸️ Pause → Material Symbol `pause`
+- ▶️ Resume → Material Symbol `play_arrow`  
+- Skip Lot → Material Symbol `skip_next`
+- Removed emoji from "Pass This Round" toast
+
+### 8. Auction Complete Screen
+**File:** `AuctionRoom.js`
+
+- Replaced 🎉 emoji with Material Symbol `check_circle` in cyan circle
+- Replaced ⏳ emoji with Material Symbol `hourglass_empty`
+
+### 9. Create Competition - Budget Display
+**File:** `CreateCompetition.jsx`
+
+- Fixed font inconsistency: £, 500, and M now all white with same `text-2xl font-black` styling
+- **Removed emojis** from sport selector dropdown
+- **Cricket player cards**: Changed to stacked layout showing full player names (no truncation)
 - **Empty state**: Replaced emoji with Material Symbol icon
 
 ### 5. Bug Fix: Auction End Navigation
