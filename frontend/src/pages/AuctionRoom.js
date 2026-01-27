@@ -1214,11 +1214,11 @@ function AuctionRoom() {
             <div className="text-8xl mb-4">🎉</div>
             <h2 className="text-3xl font-bold text-white mb-4">Auction Complete!</h2>
             <button
-              onClick={() => navigate(league ? `/league/${league.id}` : '/app/my-competitions')}
+              onClick={() => navigate('/app/my-competitions')}
               className="px-8 py-3 rounded-xl font-bold"
               style={{ background: '#06B6D4', color: '#0F172A' }}
             >
-              View Results
+              Go to My Competitions →
             </button>
           </div>
         ) : (
