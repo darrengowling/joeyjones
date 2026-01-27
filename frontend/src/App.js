@@ -12,6 +12,7 @@ const CreateLeague = lazy(() => import("./pages/CreateLeague"));
 const CreateCompetition = lazy(() => import("./pages/CreateCompetition"));
 const ClubsList = lazy(() => import("./pages/ClubsList"));
 const LeagueDetail = lazy(() => import("./pages/LeagueDetail"));
+const LeagueDetailNew = lazy(() => import("./pages/LeagueDetailNew"));
 const AuctionRoom = lazy(() => import("./pages/AuctionRoom"));
 const MyCompetitions = lazy(() => import("./pages/MyCompetitions"));
 const CompetitionDashboard = lazy(() => import("./pages/CompetitionDashboard"));
