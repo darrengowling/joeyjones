@@ -1229,9 +1229,9 @@ function AuctionRoom() {
         )}
       </div>
 
-      {/* ========== CONTROL PANEL (Sticky Bottom) ========== */}
+      {/* ========== CONTROL PANEL (Sticky Bottom, 16px base grid) ========== */}
       <div 
-        className="flex-shrink-0 px-6 py-4"
+        className="flex-shrink-0 px-4 py-4"
         style={{ 
           background: 'rgba(15, 23, 42, 0.95)',
           backdropFilter: 'blur(12px)',
