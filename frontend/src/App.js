@@ -15,6 +15,7 @@ const AuctionRoom = lazy(() => import("./pages/AuctionRoom"));
 const MyCompetitions = lazy(() => import("./pages/MyCompetitions"));
 const CompetitionDashboard = lazy(() => import("./pages/CompetitionDashboard"));
 const Help = lazy(() => import("./pages/Help"));
+const DesignPreview = lazy(() => import("./pages/DesignPreview"));
 
 // Debug footer for quick sanity checks
 import DebugFooter from "./components/DebugFooter";
