@@ -1417,7 +1417,7 @@ function AuctionRoom() {
 
         {/* Pass This Round Button */}
         <button
-          onClick={() => toast("Pass This Round - Coming soon!", { icon: '⏭️', duration: 2000 })}
+          onClick={() => toast("Pass This Round - Coming soon!", { duration: 2000 })}
           disabled={userRosterCount >= maxSlots}
           className="w-full h-12 rounded-xl font-bold transition-all active:scale-95 disabled:opacity-40"
           style={{ 
@@ -1433,8 +1433,8 @@ function AuctionRoom() {
         {isCommissioner && (
           <div className="flex gap-2 mt-3 pt-3" style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }}>
             {auction?.status === "active" && (
-              <button onClick={pauseAuction} className="flex-1 py-2 rounded-lg text-xs font-medium" style={{ background: 'rgba(255, 138, 0, 0.2)', color: '#FF8A00' }}>
-                ⏸️ Pause
+              <button onClick={pauseAuction} className="flex-1 py-2 rounded-lg text-xs font-medium flex items-center justify-center gap-1" style={{ background: 'rgba(255, 138, 0, 0.2)', color: '#FF8A00' }}>
+                <span className="material-symbols-outlined text-sm">pause</span> Pause
               </button>
             )}
             {auction?.status === "paused" && (
