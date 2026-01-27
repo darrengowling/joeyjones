@@ -54,6 +54,7 @@ const HomePage = () => {
     } else {
       setLeagues([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   const loadUserLeagues = async () => {
