@@ -739,7 +739,8 @@ export default function LeagueDetailNew() {
 
       {/* Manage Assets Modal */}
       {editingAssets && (
-        <div className="fixed inset-0 z-50 flex flex-col" style={{ background: '#0F172A' }}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.7)' }}>
+          <div className="w-full max-w-md h-full flex flex-col" style={{ background: '#0F172A' }}>
           {/* Modal Header */}
           <header className="px-4 py-4 flex items-center justify-between border-b border-white/10">
             <button onClick={() => setEditingAssets(false)} className="text-slate-400">
