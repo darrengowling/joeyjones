@@ -161,6 +161,12 @@ Step 6: Test full flow end-to-end
 | ISSUE-020 | Team offered twice | Socket duplication |
 | ISSUE-022 | "Unknown" manager names | Missing userName data |
 
+### UI/UX Bugs (Stitch Redesign)
+
+| Issue ID | Page | Summary | Status | Notes |
+|----------|------|---------|--------|-------|
+| UI-001 | CompetitionDashboard | Tab height too low on mobile | 🔴 Open | Tabs (Summary, League Table, Fixtures) appear cramped. Agent unable to reproduce - shows correctly in preview but user sees issue on same URL. May be browser/cache related or CSS specificity issue. |
+
 ---
 
 ## 🟢 POST-PILOT TASKS
