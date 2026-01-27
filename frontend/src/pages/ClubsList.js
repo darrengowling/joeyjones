@@ -107,107 +107,133 @@ export default function ClubsList() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 flex items-center justify-center">
-        <div className="text-white text-2xl">Loading sports assets...</div>
+      <div className="min-h-screen flex items-center justify-center" style={{ background: '#0B101B' }}>
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-[#00F0FF] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-white/60">Loading sports assets...</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 py-8">
-      <div className="container-narrow mx-auto px-4">
-        <div className="bg-white rounded-lg shadow-lg p-8">
-          <button
-            onClick={() => navigate("/")}
-            className="btn btn-secondary text-blue-600 hover:underline mb-4"
-          >
-            ← Back to Home
-          </button>
+    <div className="min-h-screen" style={{ background: '#0B101B', paddingBottom: '100px' }}>
+      {/* Header */}
+      <header 
+        className="fixed top-0 left-0 right-0 z-40 px-4 py-4 flex items-center justify-between"
+        style={{
+          background: 'rgba(11, 16, 27, 0.95)',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
+        }}
+      >
+        <button
+          onClick={() => navigate("/")}
+          className="flex items-center gap-2 text-white/60 hover:text-white transition-colors"
+        >
+          <span>←</span>
+          <span className="text-xl font-black tracking-tighter">
+            SPORT <span style={{ color: '#06B6D4' }}>X</span>
+          </span>
+        </button>
+      </header>
 
-          <div className="text-xs uppercase tracking-wide text-gray-500 mb-1">Browse Teams</div>
-          <h1 className="h1 text-3xl font-bold mb-6 text-gray-900">
-            {currentSport ? `${currentSport.name} ${currentSport.uiHints.assetPlural}` : 'Sports Assets'} - Available for Ownership
+      {/* Main Content */}
+      <div className="pt-20 px-4" data-testid="clubs-list-page">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-xs uppercase tracking-widest text-white/40 mb-1">Research Hub</div>
+          <h1 className="text-2xl font-bold text-white mb-2">
+            {currentSport ? `${currentSport.name} ${currentSport.uiHints.assetPlural}` : 'Sports Assets'}
           </h1>
-          <p className="subtle text-gray-600 mb-6">
-            Explore the {currentSport?.uiHints.assetPlural.toLowerCase() || 'assets'} you can bid for exclusive ownership. 
-            Each {currentSport?.uiHints.assetLabel.toLowerCase() || 'asset'} you own scores points for your strategic success.
+          <p className="text-white/60 text-sm mb-6">
+            Explore the {currentSport?.uiHints.assetPlural.toLowerCase() || 'assets'} you can bid for exclusive ownership.
           </p>
 
           {/* Sport Selection & Search */}
-          <div className="grid md:grid-cols-3 gap-4 mb-6">
-            <div>
-              <label className="block text-gray-700 mb-2 font-semibold">Sport</label>
-              <select
-                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                value={selectedSport}
-                onChange={(e) => {
-                  setSelectedSport(e.target.value);
-                  setSelectedFranchise("all");
-                  setSelectedRole("all");
-                  setSearchTerm("");
-                }}
-                data-testid="sport-filter-select"
-              >
-                {sports.map((sport) => (
-                  <option key={sport.key} value={sport.key}>
-                    {sport.key === 'football' ? '⚽' : '🏏'} {sport.name} ({sport.uiHints.assetPlural})
-                  </option>
-                ))}
-              </select>
+          <div 
+            className="rounded-xl p-4 mb-6"
+            style={{ background: '#151C2C', border: '1px solid rgba(255, 255, 255, 0.1)' }}
+          >
+            <div className="grid md:grid-cols-3 gap-4">
+              <div>
+                <label className="block text-white/60 mb-2 text-sm font-semibold">Sport</label>
+                <select
+                  className="w-full px-4 py-3 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-[#00F0FF]"
+                  style={{ background: '#0B101B', border: '1px solid rgba(255, 255, 255, 0.1)' }}
+                  value={selectedSport}
+                  onChange={(e) => {
+                    setSelectedSport(e.target.value);
+                    setSelectedFranchise("all");
+                    setSelectedRole("all");
+                    setSearchTerm("");
+                  }}
+                  data-testid="sport-filter-select"
+                >
+                  {sports.map((sport) => (
+                    <option key={sport.key} value={sport.key}>
+                      {sport.key === 'football' ? '⚽' : '🏏'} {sport.name} ({sport.uiHints.assetPlural})
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="md:col-span-2">
+                <label className="block text-white/60 mb-2 text-sm font-semibold">Search</label>
+                <input
+                  type="text"
+                  placeholder={`Search ${currentSport?.uiHints.assetPlural.toLowerCase() || 'assets'}...`}
+                  className="w-full px-4 py-3 rounded-xl text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-[#00F0FF]"
+                  style={{ background: '#0B101B', border: '1px solid rgba(255, 255, 255, 0.1)' }}
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  data-testid="asset-search-input"
+                />
+              </div>
             </div>
-            <div className="md:col-span-2">
-              <label className="block text-gray-700 mb-2 font-semibold">Search</label>
-              <input
-                type="text"
-                placeholder={`Search ${currentSport?.uiHints.assetPlural.toLowerCase() || 'assets'} available for ownership...`}
-                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                data-testid="asset-search-input"
-              />
-            </div>
+
+            {/* Cricket Filters */}
+            {selectedSport === 'cricket' && (
+              <div className="grid md:grid-cols-2 gap-4 mt-4 pt-4" style={{ borderTop: '1px solid rgba(255, 255, 255, 0.1)' }}>
+                <div>
+                  <label className="block text-white/60 mb-2 text-sm font-semibold">IPL Team</label>
+                  <select
+                    className="w-full px-4 py-3 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-[#00F0FF]"
+                    style={{ background: '#0B101B', border: '1px solid rgba(255, 255, 255, 0.1)' }}
+                    value={selectedFranchise}
+                    onChange={(e) => setSelectedFranchise(e.target.value)}
+                    data-testid="franchise-filter-select"
+                  >
+                    <option value="all">All Teams ({franchises.length})</option>
+                    {franchises.map((franchise) => (
+                      <option key={franchise} value={franchise}>
+                        {franchise} ({currentAssets.filter(a => a.meta?.franchise === franchise).length})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-white/60 mb-2 text-sm font-semibold">Role</label>
+                  <select
+                    className="w-full px-4 py-3 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-[#00F0FF]"
+                    style={{ background: '#0B101B', border: '1px solid rgba(255, 255, 255, 0.1)' }}
+                    value={selectedRole}
+                    onChange={(e) => setSelectedRole(e.target.value)}
+                    data-testid="role-filter-select"
+                  >
+                    <option value="all">All Roles</option>
+                    {roles.map((role) => (
+                      <option key={role} value={role}>
+                        {role} ({currentAssets.filter(a => a.meta?.role === role).length})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            )}
           </div>
 
-          {/* Cricket Filters */}
-          {selectedSport === 'cricket' && (
-            <div className="grid md:grid-cols-2 gap-4 mb-6">
-              <div>
-                <label className="block text-gray-700 mb-2 font-semibold">IPL Team</label>
-                <select
-                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  value={selectedFranchise}
-                  onChange={(e) => setSelectedFranchise(e.target.value)}
-                  data-testid="franchise-filter-select"
-                >
-                  <option value="all">All Teams ({franchises.length})</option>
-                  {franchises.map((franchise) => (
-                    <option key={franchise} value={franchise}>
-                      {franchise} ({currentAssets.filter(a => a.meta?.franchise === franchise).length})
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label className="block text-gray-700 mb-2 font-semibold">Role</label>
-                <select
-                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  value={selectedRole}
-                  onChange={(e) => setSelectedRole(e.target.value)}
-                  data-testid="role-filter-select"
-                >
-                  <option value="all">All Roles</option>
-                  {roles.map((role) => (
-                    <option key={role} value={role}>
-                      {role} ({currentAssets.filter(a => a.meta?.role === role).length})
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-          )}
-
-          {/* Assets Grid */}
-          <div className="text-gray-600 mb-4">
+          {/* Results Count */}
+          <div className="text-white/40 text-sm mb-4">
             {totalCounts[selectedSport] > currentAssets.length ? (
               <>Showing first {filteredAssets.length} of {totalCounts[selectedSport]} {currentSport?.uiHints.assetPlural.toLowerCase() || 'assets'}</>
             ) : (
@@ -215,27 +241,29 @@ export default function ClubsList() {
             )}
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* Assets Grid */}
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {filteredAssets.map((asset) => (
               <div
                 key={asset.id}
-                className="border rounded-lg p-6 hover:shadow-lg transition-shadow bg-white"
+                className="rounded-xl p-4 transition-all hover:scale-[1.02]"
+                style={{ background: '#151C2C', border: '1px solid rgba(255, 255, 255, 0.1)' }}
                 data-testid={`asset-card-${asset.id}`}
               >
-                <h3 className="text-xl font-bold text-gray-900 mb-2">{asset.name}</h3>
+                <h3 className="text-lg font-bold text-white mb-2">{asset.name}</h3>
                 
                 {selectedSport === 'football' && (
                   <div>
                     {asset.country && (
-                      <div className="flex items-center gap-2 text-gray-600 mb-2">
+                      <div className="flex items-center gap-2 text-white/60 mb-2">
                         {getCountryFlag(asset.country) && (
-                          <span className="text-2xl">{getCountryFlag(asset.country)}</span>
+                          <span className="text-xl">{getCountryFlag(asset.country)}</span>
                         )}
-                        <span>{asset.country}</span>
+                        <span className="text-sm">{asset.country}</span>
                       </div>
                     )}
                     {asset.uefaId && (
-                      <div className="text-sm text-gray-500">
+                      <div className="text-xs text-white/40">
                         UEFA ID: {asset.uefaId}
                       </div>
                     )}
@@ -244,16 +272,26 @@ export default function ClubsList() {
                 
                 {selectedSport === 'cricket' && asset.meta && (
                   <div>
-                    <div className="text-xs text-gray-600 mb-2">
+                    <div className="flex flex-wrap gap-2 mb-2">
                       {asset.meta.nationality && (
-                        <span className="bg-gray-200 px-2 py-0.5 rounded mr-1">{asset.meta.nationality}</span>
+                        <span 
+                          className="text-xs px-2 py-1 rounded-full"
+                          style={{ background: 'rgba(0, 240, 255, 0.2)', color: '#00F0FF' }}
+                        >
+                          {asset.meta.nationality}
+                        </span>
                       )}
                       {asset.meta.role && (
-                        <span className="text-gray-500">{asset.meta.role}</span>
+                        <span 
+                          className="text-xs px-2 py-1 rounded-full"
+                          style={{ background: 'rgba(255, 255, 255, 0.1)', color: 'rgba(255, 255, 255, 0.6)' }}
+                        >
+                          {asset.meta.role}
+                        </span>
                       )}
                     </div>
                     {asset.meta.franchise && (
-                      <p className="text-sm text-purple-600">{asset.meta.franchise}</p>
+                      <p className="text-sm" style={{ color: '#A78BFA' }}>{asset.meta.franchise}</p>
                     )}
                   </div>
                 )}
@@ -262,34 +300,43 @@ export default function ClubsList() {
           </div>
 
           {filteredAssets.length === 0 && currentAssets.length > 0 && (
-            <div className="text-center py-12">
+            <div 
+              className="rounded-xl p-12 text-center"
+              style={{ background: '#151C2C', border: '1px solid rgba(255, 255, 255, 0.1)' }}
+            >
               <div className="text-6xl mb-4">
                 {selectedSport === 'football' ? '⚽' : '🏏'}
               </div>
-              <p className="text-gray-600 mb-2 text-lg font-semibold">
+              <p className="text-white font-semibold mb-2">
                 No {currentSport?.uiHints.assetPlural.toLowerCase() || 'assets'} found
               </p>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-white/40">
                 Try adjusting your search criteria
               </p>
             </div>
           )}
           
           {currentAssets.length === 0 && !loading && (
-            <div className="text-center py-12">
+            <div 
+              className="rounded-xl p-12 text-center"
+              style={{ background: '#151C2C', border: '1px solid rgba(255, 255, 255, 0.1)' }}
+            >
               <div className="text-6xl mb-4">
                 {selectedSport === 'football' ? '⚽' : '🏏'}
               </div>
-              <p className="text-gray-600 mb-2 text-lg font-semibold">
+              <p className="text-white font-semibold mb-2">
                 No {currentSport?.uiHints.assetPlural || 'Assets'} available
               </p>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-white/40">
                 Try selecting a different sport above
               </p>
             </div>
           )}
         </div>
       </div>
+
+      {/* Bottom Navigation */}
+      <BottomNav onFabClick={() => navigate('/create-competition')} />
     </div>
   );
 }
