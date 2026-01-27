@@ -115,9 +115,9 @@
 
 ## Next Steps (Priority Order)
 
-1. **ClubsList.js Redesign** - Apply Stitch styling (visual-only) - NEXT
-2. **Detailed UX Improvements** - Match final vision for auction screen (team logos row, larger timer pill, etc.)
-3. **"Pass This Round" Functionality** - Implement actual feature (future)
+1. **Detailed UX Improvements** - Match final vision for auction screen (team logos row, larger timer pill, active managers avatars, etc.)
+2. **"Pass This Round" Functionality** - Implement actual feature
+3. **Other secondary pages** - CompetitionDashboard, settings, etc. if needed
 
 ---
 
