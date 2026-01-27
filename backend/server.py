@@ -4312,9 +4312,9 @@ async def start_auction(league_id: str):
     try:
         await db.leagues.update_one(
             {"id": league_id},
-            {"$set": {"status": "active"}}
+            {"$set": {"status": "active", "activeAuctionId": auction_obj.id}}
         )
-        logger.info("   ✅ League status updated to active")
+        logger.info("   ✅ League status updated to active with activeAuctionId")
     except Exception as e:
         logger.error(f"   ❌ Failed to update league status: {str(e)}")
     
