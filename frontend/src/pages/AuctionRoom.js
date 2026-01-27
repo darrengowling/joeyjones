@@ -7,6 +7,7 @@ import { useSocketRoom } from "../hooks/useSocketRoom";
 import { formatCurrency, parseCurrencyInput, isValidCurrencyInput } from "../utils/currency";
 import { debounceSocketEvent } from "../utils/performance";
 import { debugLogger } from "../utils/debugLogger";
+import TeamCrest from "../components/TeamCrest";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
