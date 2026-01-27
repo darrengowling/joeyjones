@@ -109,6 +109,7 @@ export default function LeagueDetailNew() {
       socket.off('participant_updated', handleParticipantUpdated);
       socket.off('auction_started', handleAuctionStarted);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, leagueId, socket]);
 
   // Data loading functions (matching original exactly)
