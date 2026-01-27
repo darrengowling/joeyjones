@@ -272,42 +272,44 @@ export default function ClubsList() {
                 style={{ background: '#151C2C', border: '1px solid rgba(255, 255, 255, 0.1)' }}
                 data-testid={`asset-card-${asset.id}`}
               >
-                <div className="flex items-start gap-3">
-                  <TeamCrest 
-                    clubId={asset.id}
-                    apiFootballId={asset.apiFootballId}
-                    name={asset.name}
-                    sportKey={selectedSport}
-                    variant="thumbnail"
-                  />
-                  <div className="flex-1 min-w-0">
-                    <h3 className="text-lg font-bold text-white mb-1 truncate">{asset.name}</h3>
-                    
-                    {selectedSport === 'football' && (
-                      <div>
-                        {asset.country && (
-                          <div className="flex items-center gap-2 text-white/60 mb-1">
-                            {getCountryFlag(asset.country) && (
-                              <span className="text-base">{getCountryFlag(asset.country)}</span>
-                            )}
-                            <span className="text-sm">{asset.country}</span>
-                          </div>
-                        )}
-                        {asset.uefaId && (
-                          <div className="text-xs text-white/40">
-                            UEFA ID: {asset.uefaId}
-                          </div>
-                        )}
-                      </div>
-                    )}
-                    
-                    {selectedSport === 'cricket' && asset.meta && (
-                      <div>
-                        <div className="flex flex-wrap gap-2 mb-2">
+                {selectedSport === 'football' ? (
+                  /* Football: Horizontal layout with crest */
+                  <div className="flex items-start gap-3">
+                    <TeamCrest 
+                      clubId={asset.id}
+                      apiFootballId={asset.apiFootballId}
+                      name={asset.name}
+                      sportKey={selectedSport}
+                      variant="thumbnail"
+                    />
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-base font-bold text-white mb-1">{asset.name}</h3>
+                      {asset.country && (
+                        <div className="flex items-center gap-2 text-white/60 mb-1">
+                          {getCountryFlag(asset.country) && (
+                            <span className="text-base">{getCountryFlag(asset.country)}</span>
+                          )}
+                          <span className="text-sm">{asset.country}</span>
+                        </div>
+                      )}
+                      {asset.uefaId && (
+                        <div className="text-xs text-white/40">
+                          UEFA ID: {asset.uefaId}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ) : (
+                  /* Cricket: Stacked layout for full player names */
+                  <div>
+                    <h3 className="text-base font-bold text-white mb-2">{asset.name}</h3>
+                    {asset.meta && (
+                      <div className="space-y-2">
+                        <div className="flex flex-wrap gap-2">
                           {asset.meta.nationality && (
                             <span 
                               className="text-xs px-2 py-1 rounded-full"
-                              style={{ background: 'rgba(0, 240, 255, 0.2)', color: '#00F0FF' }}
+                              style={{ background: 'rgba(6, 182, 212, 0.2)', color: '#06B6D4' }}
                             >
                               {asset.meta.nationality}
                             </span>
@@ -318,6 +320,18 @@ export default function ClubsList() {
                               style={{ background: 'rgba(255, 255, 255, 0.1)', color: 'rgba(255, 255, 255, 0.6)' }}
                             >
                               {asset.meta.role}
+                            </span>
+                          )}
+                        </div>
+                        {asset.meta.franchise && (
+                          <p className="text-sm" style={{ color: '#A78BFA' }}>{asset.meta.franchise}</p>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            ))}
                             </span>
                           )}
                         </div>
