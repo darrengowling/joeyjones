@@ -264,7 +264,7 @@ export default function ClubsList() {
           </div>
 
           {/* Assets Grid */}
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {filteredAssets.map((asset) => (
               <div
                 key={asset.id}
@@ -274,7 +274,7 @@ export default function ClubsList() {
               >
                 {selectedSport === 'football' ? (
                   /* Football: Horizontal layout with crest */
-                  <div className="flex items-start gap-3">
+                  <div className="flex items-start gap-4">
                     <TeamCrest 
                       clubId={asset.id}
                       apiFootballId={asset.apiFootballId}
@@ -282,7 +282,7 @@ export default function ClubsList() {
                       sportKey={selectedSport}
                       variant="thumbnail"
                     />
-                    <div className="flex-1 min-w-0">
+                    <div className="flex-1">
                       <h3 className="text-base font-bold text-white mb-1">{asset.name}</h3>
                       {asset.country && (
                         <div className="flex items-center gap-2 text-white/60 mb-1">
