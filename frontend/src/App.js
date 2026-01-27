@@ -1260,7 +1260,8 @@ export default function App() {
           <Route path="/clubs" element={<ClubsList />} />
           <Route path="/league/:leagueId" element={<LeagueDetailStitched />} />
           <Route path="/league-old/:leagueId" element={<LeagueDetail />} />
-          <Route path="/auction/:auctionId" element={<AuctionRoom />} />
+          <Route path="/auction/:auctionId" element={<AuctionRoomStitched />} />
+          <Route path="/auction-old/:auctionId" element={<AuctionRoom />} />
           <Route path="/app/my-competitions" element={<MyCompetitions />} />
           <Route path="/app/competitions/:leagueId" element={<CompetitionDashboard />} />
           <Route path="/competitions/:leagueId" element={<CompetitionDashboard />} />
