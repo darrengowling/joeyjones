@@ -1266,8 +1266,13 @@ export default function CompetitionDashboard() {
               <button
                 data-testid="tab-summary"
                 onClick={() => handleTabChange("summary")}
-                className="flex items-center justify-center h-14 px-4 text-base font-semibold transition-colors flex-1"
+                className="flex-1 font-semibold transition-colors"
                 style={{ 
+                  height: '56px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '16px',
                   borderBottom: activeTab === "summary" ? '3px solid #00F0FF' : '3px solid transparent',
                   color: activeTab === "summary" ? '#00F0FF' : 'rgba(255, 255, 255, 0.4)',
                   background: activeTab === "summary" ? 'rgba(0, 240, 255, 0.1)' : 'transparent'
@@ -1278,8 +1283,13 @@ export default function CompetitionDashboard() {
               <button
                 data-testid="tab-table"
                 onClick={() => handleTabChange("table")}
-                className="flex items-center justify-center h-14 px-4 text-base font-semibold transition-colors flex-1"
+                className="flex-1 font-semibold transition-colors"
                 style={{ 
+                  height: '56px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '16px',
                   borderBottom: activeTab === "table" ? '3px solid #00F0FF' : '3px solid transparent',
                   color: activeTab === "table" ? '#00F0FF' : 'rgba(255, 255, 255, 0.4)',
                   background: activeTab === "table" ? 'rgba(0, 240, 255, 0.1)' : 'transparent'
@@ -1290,8 +1300,13 @@ export default function CompetitionDashboard() {
               <button
                 data-testid="tab-fixtures"
                 onClick={() => handleTabChange("fixtures")}
-                className="flex items-center justify-center h-14 px-4 text-base font-semibold transition-colors flex-1"
+                className="flex-1 font-semibold transition-colors"
                 style={{ 
+                  height: '56px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '16px',
                   borderBottom: activeTab === "fixtures" ? '3px solid #00F0FF' : '3px solid transparent',
                   color: activeTab === "fixtures" ? '#00F0FF' : 'rgba(255, 255, 255, 0.4)',
                   background: activeTab === "fixtures" ? 'rgba(0, 240, 255, 0.1)' : 'transparent'
