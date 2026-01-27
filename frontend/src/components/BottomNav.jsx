@@ -48,7 +48,7 @@ const BottomNav = ({ onFabClick, fabIcon = "add" }) => {
 
   return (
     <nav 
-      className="fixed bottom-0 left-0 right-0 z-50"
+      className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md z-50"
       style={{
         background: 'rgba(15, 23, 42, 0.95)',
         backdropFilter: 'blur(20px)',
