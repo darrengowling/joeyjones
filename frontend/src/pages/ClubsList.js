@@ -263,18 +263,18 @@ export default function ClubsList() {
             )}
           </div>
 
-          {/* Assets Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Assets Grid - single column on mobile for full names */}
+          <div className="space-y-3">
             {filteredAssets.map((asset) => (
               <div
                 key={asset.id}
-                className="rounded-xl p-4 transition-all hover:scale-[1.02]"
+                className="rounded-xl p-4 transition-all hover:scale-[1.01]"
                 style={{ background: '#151C2C', border: '1px solid rgba(255, 255, 255, 0.1)' }}
                 data-testid={`asset-card-${asset.id}`}
               >
                 {selectedSport === 'football' ? (
                   /* Football: Horizontal layout with crest */
-                  <div className="flex items-start gap-4">
+                  <div className="flex items-center gap-4">
                     <TeamCrest 
                       clubId={asset.id}
                       apiFootballId={asset.apiFootballId}
@@ -283,18 +283,13 @@ export default function ClubsList() {
                       variant="thumbnail"
                     />
                     <div className="flex-1">
-                      <h3 className="text-base font-bold text-white mb-1">{asset.name}</h3>
+                      <h3 className="text-base font-bold text-white">{asset.name}</h3>
                       {asset.country && (
-                        <div className="flex items-center gap-2 text-white/60 mb-1">
+                        <div className="flex items-center gap-2 text-white/60 mt-1">
                           {getCountryFlag(asset.country) && (
-                            <span className="text-base">{getCountryFlag(asset.country)}</span>
+                            <span className="text-sm">{getCountryFlag(asset.country)}</span>
                           )}
                           <span className="text-sm">{asset.country}</span>
-                        </div>
-                      )}
-                      {asset.uefaId && (
-                        <div className="text-xs text-white/40">
-                          UEFA ID: {asset.uefaId}
                         </div>
                       )}
                     </div>
