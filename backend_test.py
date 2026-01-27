@@ -13,7 +13,7 @@ import io
 from datetime import datetime, timezone
 
 # Backend URL from frontend/.env
-BACKEND_URL = "https://sporty-ui.preview.emergentagent.com/api"
+BACKEND_URL = "https://stitch-fantasy.preview.emergentagent.com/api"
 
 class BackendTester:
     def __init__(self):

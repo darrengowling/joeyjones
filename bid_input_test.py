@@ -68,7 +68,7 @@ def test_api_endpoints():
     
     print("\n=== API ENDPOINTS TEST ===")
     
-    base_url = "https://sporty-ui.preview.emergentagent.com/api"
+    base_url = "https://stitch-fantasy.preview.emergentagent.com/api"
     
     try:
         # Test leagues endpoint

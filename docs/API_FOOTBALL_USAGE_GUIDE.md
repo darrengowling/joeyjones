@@ -32,7 +32,7 @@
 
 **How to trigger:**
 ```bash
-curl -X POST https://sporty-ui.preview.emergentagent.com/api/fixtures/update-scores
+curl -X POST https://stitch-fantasy.preview.emergentagent.com/api/fixtures/update-scores
 ```
 
 **What happens:**
@@ -45,7 +45,7 @@ curl -X POST https://sporty-ui.preview.emergentagent.com/api/fixtures/update-sco
 
 Create a simple admin button (can add later if needed) or use the browser console:
 ```javascript
-fetch('https://sporty-ui.preview.emergentagent.com/api/fixtures/update-scores', {
+fetch('https://stitch-fantasy.preview.emergentagent.com/api/fixtures/update-scores', {
   method: 'POST'
 }).then(r => r.json()).then(console.log);
 ```
@@ -86,7 +86,7 @@ fetch('https://sporty-ui.preview.emergentagent.com/api/fixtures/update-scores', 
 **Evening (after 17:30 GMT - last match ends):**
 ```bash
 # Trigger score update
-curl -X POST https://sporty-ui.preview.emergentagent.com/api/fixtures/update-scores
+curl -X POST https://stitch-fantasy.preview.emergentagent.com/api/fixtures/update-scores
 
 # Expected output:
 # {
@@ -105,7 +105,7 @@ curl -X POST https://sporty-ui.preview.emergentagent.com/api/fixtures/update-sco
 **Evening (after 16:30 GMT - last match ends):**
 ```bash
 # Trigger score update again
-curl -X POST https://sporty-ui.preview.emergentagent.com/api/fixtures/update-scores
+curl -X POST https://stitch-fantasy.preview.emergentagent.com/api/fixtures/update-scores
 
 # Expected output:
 # {
@@ -144,7 +144,7 @@ sudo supervisorctl restart backend
 
 **Check fixture status:**
 ```bash
-curl https://sporty-ui.preview.emergentagent.com/api/fixtures?sport_key=football&date=2025-11-29
+curl https://stitch-fantasy.preview.emergentagent.com/api/fixtures?sport_key=football&date=2025-11-29
 ```
 
 ### Issue: Standings not updating after score update
@@ -211,7 +211,7 @@ GET /api/fixtures?sport_key=football&date=2025-11-29
 **Test now (before Nov 29):**
 ```bash
 # This will return no fixtures (date in future) but confirms API works
-curl -X POST https://sporty-ui.preview.emergentagent.com/api/fixtures/update-scores
+curl -X POST https://stitch-fantasy.preview.emergentagent.com/api/fixtures/update-scores
 ```
 
 **Expected response:**

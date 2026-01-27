@@ -345,7 +345,7 @@ npx playwright test e2e/01_waiting_room.spec.ts --headed
 
 **Test Without Session** (browser manually):
 ```
-1. Open browser to https://sporty-ui.preview.emergentagent.com
+1. Open browser to https://stitch-fantasy.preview.emergentagent.com
 2. Manually navigate to /auction/some-id
 3. See auth panel (not redirect) ✅
 4. Click "Go to Home" → navigates to / ✅

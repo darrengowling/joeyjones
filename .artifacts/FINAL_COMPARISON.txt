@@ -9,7 +9,7 @@ PRODUCTION:
 
 PREVIEW:
   - Main JS: bundle.js (development build)
-  - Backend URL configured: https://sporty-ui.preview.emergentagent.com
+  - Backend URL configured: https://stitch-fantasy.preview.emergentagent.com
 
 === BACKEND SERVER ANALYSIS ===
 

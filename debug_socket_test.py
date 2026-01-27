@@ -11,8 +11,8 @@ import time
 from datetime import datetime, timezone
 
 # Configuration
-BASE_URL = "https://sporty-ui.preview.emergentagent.com/api"
-SOCKET_URL = "https://sporty-ui.preview.emergentagent.com"
+BASE_URL = "https://stitch-fantasy.preview.emergentagent.com/api"
+SOCKET_URL = "https://stitch-fantasy.preview.emergentagent.com"
 SOCKET_PATH = "/api/socket.io"
 
 def log(message: str, level: str = "INFO"):

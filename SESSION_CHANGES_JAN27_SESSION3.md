@@ -134,8 +134,8 @@
 - Status: `waiting`
 
 ### URLs:
-- Frontend: `https://sporty-ui.preview.emergentagent.com`
-- Backend API: `https://sporty-ui.preview.emergentagent.com/api`
+- Frontend: `https://stitch-fantasy.preview.emergentagent.com`
+- Backend API: `https://stitch-fantasy.preview.emergentagent.com/api`
 
 ---
 

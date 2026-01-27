@@ -7,7 +7,7 @@ import requests
 import json
 import time
 
-BACKEND_URL = "https://sporty-ui.preview.emergentagent.com/api"
+BACKEND_URL = "https://stitch-fantasy.preview.emergentagent.com/api"
 
 def test_auction_complete_event_structure():
     """Verify the auction_complete event now includes finalClubId and finalWinningBid"""
