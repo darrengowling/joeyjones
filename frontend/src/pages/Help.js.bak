@@ -15,17 +15,17 @@ const Help = () => {
   };
 
   const Section = ({ id, title, children, icon }) => (
-    <div className="mb-4 border border-white/10 rounded-lg overflow-hidden">
+    <div className="mb-4 border border-gray-200 rounded-lg overflow-hidden">
       <button
         onClick={() => toggleSection(id)}
-        className="w-full flex items-center justify-between p-4 bg-[#151C2C]/5 hover:bg-[#151C2C]/10 transition-colors"
+        className="w-full flex items-center justify-between p-4 bg-gray-50 hover:bg-gray-100 transition-colors"
       >
         <div className="flex items-center gap-3">
           <span className="text-2xl">{icon}</span>
-          <h3 className="text-lg font-semibold text-white">{title}</h3>
+          <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
         </div>
         <svg
-          className={`w-6 h-6 text-white/60 transition-transform ${openSection === id ? 'rotate-180' : ''}`}
+          className={`w-6 h-6 text-gray-600 transition-transform ${openSection === id ? 'rotate-180' : ''}`}
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -34,7 +34,7 @@ const Help = () => {
         </svg>
       </button>
       {openSection === id && (
-        <div className="p-6 bg-[#151C2C]">
+        <div className="p-6 bg-white">
           {children}
         </div>
       )}
@@ -42,13 +42,13 @@ const Help = () => {
   );
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="fixed top-0 left-0 right-0 z-40">
+      <div className="bg-white shadow-md">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <button
             onClick={() => navigate('/')}
-            className="flex items-center gap-2 text-[#00F0FF] hover:text-[#00F0FF]/80 font-semibold"
+            className="flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -56,8 +56,8 @@ const Help = () => {
             Back to Home
           </button>
           <div>
-            <div className="text-xs uppercase tracking-wide text-white/40 mb-1 text-center">Help Center</div>
-            <h1 className="text-2xl font-bold text-white">User Guide</h1>
+            <div className="text-xs uppercase tracking-wide text-gray-500 mb-1 text-center">Help Center</div>
+            <h1 className="text-2xl font-bold text-gray-900">User Guide</h1>
           </div>
           <div className="w-24"></div> {/* Spacer for centering */}
         </div>
@@ -66,39 +66,39 @@ const Help = () => {
       {/* Content */}
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         {/* Introduction */}
-        <div className="bg-[#00F0FF]/10 border border-[#00F0FF]/20 rounded-lg p-6 mb-8">
-          <h2 className="text-2xl font-bold text-white mb-3">Welcome to Sport X!</h2>
-          <p className="text-[#00F0FF] mb-2">
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
+          <h2 className="text-2xl font-bold text-blue-900 mb-3">Welcome to Sport X!</h2>
+          <p className="text-blue-800 mb-2">
             Sports Gaming with Friends. No Gambling. All Game.
           </p>
-          <p className="text-[#00F0FF]/80">
+          <p className="text-blue-700">
             Bid for exclusive ownership of players and teams who score your points. Experience the thrill of sports through strategic competition and community.
           </p>
         </div>
 
         {/* Quick Links */}
-        <div className="bg-[#151C2C] rounded-lg  p-6 mb-6">
-          <h3 className="text-lg font-semibold text-white mb-3">Quick Navigation</h3>
+        <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+          <h3 className="text-lg font-semibold text-gray-900 mb-3">Quick Navigation</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <button onClick={() => toggleSection('getting-started')} className="text-left px-4 py-2 bg-[#00F0FF]/10 hover:bg-[#00F0FF]/20 rounded-lg text-[#00F0FF]/80 font-medium transition-colors">
+            <button onClick={() => toggleSection('getting-started')} className="text-left px-4 py-2 bg-blue-50 hover:bg-blue-100 rounded-lg text-blue-700 font-medium transition-colors">
               🚀 Getting Started
             </button>
-            <button onClick={() => toggleSection('updates')} className="text-left px-4 py-2 bg-gradient-to-r from-blue-50 to-purple-50 hover:from-blue-100 hover:to-purple-100 rounded-lg text-[#A78BFA] font-medium transition-colors border border-[#A78BFA]/20">
+            <button onClick={() => toggleSection('updates')} className="text-left px-4 py-2 bg-gradient-to-r from-blue-50 to-purple-50 hover:from-blue-100 hover:to-purple-100 rounded-lg text-purple-700 font-medium transition-colors border border-purple-200">
               ✨ Recent Updates & New Features
             </button>
-            <button onClick={() => toggleSection('admin-create')} className="text-left px-4 py-2 bg-[#A78BFA]/10 hover:bg-[#A78BFA]/20 rounded-lg text-[#A78BFA] font-medium transition-colors">
+            <button onClick={() => toggleSection('admin-create')} className="text-left px-4 py-2 bg-purple-50 hover:bg-purple-100 rounded-lg text-purple-700 font-medium transition-colors">
               👑 For Commissioners
             </button>
-            <button onClick={() => toggleSection('user-join')} className="text-left px-4 py-2 bg-[#10B981]/10 hover:bg-[#10B981]/20 rounded-lg text-[#10B981] font-medium transition-colors">
+            <button onClick={() => toggleSection('user-join')} className="text-left px-4 py-2 bg-green-50 hover:bg-green-100 rounded-lg text-green-700 font-medium transition-colors">
               👥 For Players
             </button>
-            <button onClick={() => toggleSection('dashboards')} className="text-left px-4 py-2 bg-[#F59E0B]/10 hover:bg-[#F59E0B]/20 rounded-lg text-[#F59E0B] font-medium transition-colors">
+            <button onClick={() => toggleSection('dashboards')} className="text-left px-4 py-2 bg-orange-50 hover:bg-orange-100 rounded-lg text-orange-700 font-medium transition-colors">
               📊 Viewing Results
             </button>
-            <button onClick={() => toggleSection('scoring')} className="text-left px-4 py-2 bg-[#818CF8]/10 hover:bg-[#818CF8]/20 rounded-lg text-[#818CF8] font-medium transition-colors">
+            <button onClick={() => toggleSection('scoring')} className="text-left px-4 py-2 bg-indigo-50 hover:bg-indigo-100 rounded-lg text-indigo-700 font-medium transition-colors">
               🎯 Scoring Systems
             </button>
-            <button onClick={() => toggleSection('navigation')} className="text-left px-4 py-2 bg-[#EC4899]/10 hover:bg-[#EC4899]/20 rounded-lg text-[#EC4899] font-medium transition-colors">
+            <button onClick={() => toggleSection('navigation')} className="text-left px-4 py-2 bg-pink-50 hover:bg-pink-100 rounded-lg text-pink-700 font-medium transition-colors">
               🧭 Navigation & Finding Pages
             </button>
           </div>
@@ -108,14 +108,14 @@ const Help = () => {
         <Section id="getting-started" title="Getting Started" icon="🚀">
           <div className="space-y-6">
             <div>
-              <h4 className="text-lg font-semibold text-white mb-3">Account Setup & Sign In</h4>
-              <p className="text-white/80 mb-3">
+              <h4 className="text-lg font-semibold text-gray-900 mb-3">Account Setup & Sign In</h4>
+              <p className="text-gray-700 mb-3">
                 Sport X uses a secure <strong>magic link authentication</strong> system. No passwords required!
               </p>
               
-              <div className="bg-[#151C2C]/5 rounded-lg p-4 mb-4">
-                <h5 className="font-semibold text-white mb-2">Step-by-Step Sign In:</h5>
-                <ol className="list-decimal list-inside space-y-2 text-white/80">
+              <div className="bg-gray-50 rounded-lg p-4 mb-4">
+                <h5 className="font-semibold text-gray-900 mb-2">Step-by-Step Sign In:</h5>
+                <ol className="list-decimal list-inside space-y-2 text-gray-700">
                   <li>Click <strong>"Sign In"</strong> on the homepage</li>
                   <li>Enter your <strong>email address</strong> and optionally your name</li>
                   <li>Click <strong>"Continue"</strong> to generate your magic link token</li>
@@ -125,16 +125,16 @@ const Help = () => {
                 </ol>
               </div>
 
-              <div className="bg-[#00F0FF]/10 border border-[#00F0FF]/20 rounded-lg p-4">
-                <p className="text-[#00F0FF] text-sm">
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <p className="text-blue-800 text-sm">
                   <strong>💡 Tip:</strong> In production, the magic link token would be sent to your email. For the pilot, it's displayed on screen for convenience.
                 </p>
               </div>
             </div>
 
             <div>
-              <h4 className="text-lg font-semibold text-white mb-3">First Steps After Sign In</h4>
-              <ul className="list-disc list-inside space-y-2 text-white/80">
+              <h4 className="text-lg font-semibold text-gray-900 mb-3">First Steps After Sign In</h4>
+              <ul className="list-disc list-inside space-y-2 text-gray-700">
                 <li><strong>Create a Competition:</strong> Start your own league if you're the organizer</li>
                 <li><strong>Join a Competition:</strong> Enter an invite token from a friend</li>
                 <li><strong>Explore Available Teams:</strong> Browse the sports teams available for bidding</li>
@@ -147,14 +147,14 @@ const Help = () => {
         <Section id="admin-create" title="For Commissioners" icon="👑">
           <div className="space-y-6">
             <div>
-              <h4 className="text-lg font-semibold text-white mb-3">Creating a Competition</h4>
-              <p className="text-white/80 mb-3">
+              <h4 className="text-lg font-semibold text-gray-900 mb-3">Creating a Competition</h4>
+              <p className="text-gray-700 mb-3">
                 As a commissioner, you control the competition setup and manage the auction process.
               </p>
               
-              <div className="bg-[#151C2C]/5 rounded-lg p-4 mb-4">
-                <h5 className="font-semibold text-white mb-2">Competition Setup Steps:</h5>
-                <ol className="list-decimal list-inside space-y-2 text-white/80">
+              <div className="bg-gray-50 rounded-lg p-4 mb-4">
+                <h5 className="font-semibold text-gray-900 mb-2">Competition Setup Steps:</h5>
+                <ol className="list-decimal list-inside space-y-2 text-gray-700">
                   <li>Click <strong>"Create Your Competition"</strong> on the homepage</li>
                   <li>Enter a <strong>competition name</strong> (e.g., "Premier League 2025")</li>
                   <li>Select the <strong>sport</strong> (Cricket or Football)</li>
@@ -167,11 +167,11 @@ const Help = () => {
                 </ol>
               </div>
 
-              <div className="bg-[#A78BFA]/10 border border-[#A78BFA]/20 rounded-lg p-4 mb-4">
-                <p className="text-[#A78BFA] text-sm mb-2">
+              <div className="bg-purple-50 border border-purple-200 rounded-lg p-4 mb-4">
+                <p className="text-purple-800 text-sm mb-2">
                   <strong>💡 Key Settings Explained:</strong>
                 </p>
-                <ul className="text-[#A78BFA] text-sm space-y-1 list-disc list-inside">
+                <ul className="text-purple-700 text-sm space-y-1 list-disc list-inside">
                   <li><strong>Budget:</strong> Total virtual currency each manager gets for bidding</li>
                   <li><strong>Club Slots:</strong> Maximum teams each participant can acquire</li>
                   <li><strong>Auction Timer:</strong> Countdown for each bid - longer gives more thinking time</li>
@@ -179,39 +179,39 @@ const Help = () => {
                 </ul>
               </div>
 
-              <div className="bg-[#F59E0B]/10 border border-[#F59E0B]/20 rounded-lg p-4">
-                <p className="text-[#F59E0B] text-sm">
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                <p className="text-yellow-800 text-sm">
                   <strong>⚠️ Important:</strong> After creating the competition, you'll receive an <strong>8-character invite token</strong>. Share this with your participants so they can join!
                 </p>
               </div>
             </div>
 
             <div>
-              <h4 className="text-lg font-semibold text-white mb-3">Pre-Auction Setup (Optional)</h4>
+              <h4 className="text-lg font-semibold text-gray-900 mb-3">Pre-Auction Setup (Optional)</h4>
               
-              <div className="bg-[#00F0FF]/10 border border-[#00F0FF]/20 rounded-lg p-4 mb-4">
-                <h5 className="font-semibold text-white mb-2">📅 Import Fixtures Before Auction</h5>
-                <p className="text-white/80 mb-2">
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                <h5 className="font-semibold text-gray-900 mb-2">📅 Import Fixtures Before Auction</h5>
+                <p className="text-gray-700 mb-2">
                   <strong>New Feature!</strong> You can now import upcoming fixtures <em>before</em> starting the auction to help managers make strategic bidding decisions.
                 </p>
-                <ol className="list-decimal list-inside space-y-2 text-white/80">
+                <ol className="list-decimal list-inside space-y-2 text-gray-700">
                   <li>After selecting your teams, look for the <strong>"Import Fixtures (Optional)"</strong> section on the league detail page</li>
                   <li>Click <strong>"Import Fixtures"</strong> button</li>
                   <li>The system will fetch upcoming matches for your selected teams (next 7 days)</li>
                   <li>During the auction, each team will show their next fixture, helping managers bid strategically</li>
                 </ol>
-                <p className="text-[#00F0FF]/80 text-sm mt-2">
+                <p className="text-blue-700 text-sm mt-2">
                   <strong>💡 Why?</strong> Managers can see which teams have favorable upcoming matches and bid accordingly!
                 </p>
               </div>
             </div>
 
             <div>
-              <h4 className="text-lg font-semibold text-white mb-3">Running the Auction</h4>
+              <h4 className="text-lg font-semibold text-gray-900 mb-3">Running the Auction</h4>
               
-              <div className="bg-[#151C2C]/5 rounded-lg p-4 mb-4">
-                <h5 className="font-semibold text-white mb-2">Auction Control Steps:</h5>
-                <ol className="list-decimal list-inside space-y-2 text-white/80">
+              <div className="bg-gray-50 rounded-lg p-4 mb-4">
+                <h5 className="font-semibold text-gray-900 mb-2">Auction Control Steps:</h5>
+                <ol className="list-decimal list-inside space-y-2 text-gray-700">
                   <li>Wait for all managers to join using the invite token</li>
                   <li>Navigate to your competition page from "My Competitions"</li>
                   <li><strong>(Optional)</strong> Import fixtures before starting if you haven't already</li>
@@ -223,34 +223,34 @@ const Help = () => {
                 </ol>
               </div>
 
-              <div className="bg-[#A78BFA]/10 border border-[#A78BFA]/20 rounded-lg p-4">
-                <p className="text-[#A78BFA] text-sm">
+              <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
+                <p className="text-purple-800 text-sm">
                   <strong>💡 Admin Controls:</strong> As the commissioner, you have full control to start, pause, and manage the auction flow. You can see all bids in real-time and ensure fair play.
                 </p>
               </div>
             </div>
 
             <div>
-              <h4 className="text-lg font-semibold text-white mb-3">Managing Fixtures & Scores</h4>
-              <p className="text-white/80 mb-3">
+              <h4 className="text-lg font-semibold text-gray-900 mb-3">Managing Fixtures & Scores</h4>
+              <p className="text-gray-700 mb-3">
                 After the auction, commissioners manage the competition by importing fixtures and updating scores with a simple click - all automated!
               </p>
 
-              <div className="bg-[#151C2C]/5 rounded-lg p-4 mb-4">
-                <h5 className="font-semibold text-white mb-2">Import Fixtures (Multiple Options)</h5>
-                <p className="text-white/80 mb-2">You can import fixtures at different stages:</p>
-                <ul className="list-disc list-inside space-y-2 text-white/80 ml-4">
+              <div className="bg-gray-50 rounded-lg p-4 mb-4">
+                <h5 className="font-semibold text-gray-900 mb-2">Import Fixtures (Multiple Options)</h5>
+                <p className="text-gray-700 mb-2">You can import fixtures at different stages:</p>
+                <ul className="list-disc list-inside space-y-2 text-gray-700 ml-4">
                   <li><strong>Before Auction:</strong> On the league detail page (helps managers see upcoming matches during bidding)</li>
                   <li><strong>After Auction:</strong> On the Competition Dashboard → Fixtures tab (for ongoing management)</li>
                 </ul>
-                <p className="text-white/60 text-sm mt-2">
+                <p className="text-gray-600 text-sm mt-2">
                   <strong>Note:</strong> Fixtures imported before the auction will automatically appear on the Dashboard after the auction completes.
                 </p>
               </div>
 
-              <div className="bg-[#151C2C]/5 rounded-lg p-4 mb-4">
-                <h5 className="font-semibold text-white mb-2">How Fixture Import Works:</h5>
-                <ol className="list-decimal list-inside space-y-2 text-white/80">
+              <div className="bg-gray-50 rounded-lg p-4 mb-4">
+                <h5 className="font-semibold text-gray-900 mb-2">How Fixture Import Works:</h5>
+                <ol className="list-decimal list-inside space-y-2 text-gray-700">
                   <li>Navigate to Competition Dashboard → <strong>"Fixtures"</strong> tab</li>
                   <li>Click <strong>"Import Fixtures"</strong> (Football) or <strong>"Import Next Fixture"</strong> (Cricket)</li>
                   <li>The system automatically fetches upcoming matches from live sports data APIs</li>
@@ -259,9 +259,9 @@ const Help = () => {
                 </ol>
               </div>
 
-              <div className="bg-[#151C2C]/5 rounded-lg p-4 mb-4">
-                <h5 className="font-semibold text-white mb-2">Update Scores (Automatic)</h5>
-                <ol className="list-decimal list-inside space-y-2 text-white/80">
+              <div className="bg-gray-50 rounded-lg p-4 mb-4">
+                <h5 className="font-semibold text-gray-900 mb-2">Update Scores (Automatic)</h5>
+                <ol className="list-decimal list-inside space-y-2 text-gray-700">
                   <li>After a real match concludes, go to the <strong>"Fixtures"</strong> tab</li>
                   <li>Find the completed match in the fixtures list</li>
                   <li>Click the <strong>"Update Scores"</strong> button for that fixture</li>
@@ -271,8 +271,8 @@ const Help = () => {
                 </ol>
               </div>
 
-              <div className="bg-[#10B981]/10 border border-[#10B981]/20 rounded-lg p-4">
-                <p className="text-[#10B981] text-sm">
+              <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                <p className="text-green-800 text-sm">
                   <strong>✨ It's that easy!</strong> No manual data entry required. Just click the button and the system does all the work - fetching results, calculating points, and updating standings automatically.
                 </p>
               </div>
@@ -283,22 +283,22 @@ const Help = () => {
         {/* New Features & Updates */}
         <Section id="updates" title="Recent Updates & New Features" icon="✨">
           <div className="space-y-6">
-            <div className="bg-gradient-to-r from-blue-50 to-purple-50 border border-[#00F0FF]/20 rounded-lg p-4 mb-4">
-              <h4 className="text-lg font-semibold text-white mb-2">🎉 Latest Enhancements</h4>
-              <p className="text-white/80 text-sm mb-3">
+            <div className="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-lg p-4 mb-4">
+              <h4 className="text-lg font-semibold text-gray-900 mb-2">🎉 Latest Enhancements</h4>
+              <p className="text-gray-700 text-sm mb-3">
                 We've added several new features and improvements to enhance your competition experience!
               </p>
             </div>
 
             <div>
-              <h4 className="text-lg font-semibold text-white mb-3">🎮 Commissioner Auction Controls</h4>
-              <p className="text-white/80 mb-3">
+              <h4 className="text-lg font-semibold text-gray-900 mb-3">🎮 Commissioner Auction Controls</h4>
+              <p className="text-gray-700 mb-3">
                 As a commissioner, you have special controls during live auctions to manage the auction flow:
               </p>
               
-              <div className="bg-[#151C2C]/5 rounded-lg p-4 mb-4">
-                <h5 className="font-semibold text-white mb-2">Available Controls:</h5>
-                <ul className="space-y-3 text-white/80">
+              <div className="bg-gray-50 rounded-lg p-4 mb-4">
+                <h5 className="font-semibold text-gray-900 mb-2">Available Controls:</h5>
+                <ul className="space-y-3 text-gray-700">
                   <li>
                     <strong>⏸️ Pause:</strong> Temporarily pause the auction (timer stops, no bidding allowed). Use this if you need a break or to resolve an issue.
                   </li>
@@ -307,7 +307,7 @@ const Help = () => {
                   </li>
                   <li>
                     <strong>Complete Lot:</strong> Manually advance to the next team/player. The current lot is awarded to the highest bidder and the next team starts immediately.
-                    <div className="mt-1 text-sm text-[#F59E0B] bg-[#F59E0B]/10 border border-[#F59E0B]/20 rounded px-3 py-2">
+                    <div className="mt-1 text-sm text-amber-700 bg-amber-50 border border-amber-200 rounded px-3 py-2">
                       ⚠️ <strong>When to use:</strong> Only use this if the timer appears stuck or frozen. The auction normally advances automatically when the timer expires - you don't need to click this button in normal operation.
                     </div>
                   </li>
@@ -317,14 +317,14 @@ const Help = () => {
                 </ul>
               </div>
 
-              <h4 className="text-lg font-semibold text-white mb-3 mt-6">🔄 Auction Reset Feature (New!)</h4>
-              <p className="text-white/80 mb-3">
+              <h4 className="text-lg font-semibold text-gray-900 mb-3 mt-6">🔄 Auction Reset Feature (New!)</h4>
+              <p className="text-gray-700 mb-3">
                 Commissioners can now reset an auction and start fresh without recreating the entire league or re-inviting participants.
               </p>
               
-              <div className="bg-[#151C2C]/5 rounded-lg p-4 mb-4">
-                <h5 className="font-semibold text-white mb-2">How It Works:</h5>
-                <ol className="list-decimal list-inside space-y-2 text-white/80">
+              <div className="bg-gray-50 rounded-lg p-4 mb-4">
+                <h5 className="font-semibold text-gray-900 mb-2">How It Works:</h5>
+                <ol className="list-decimal list-inside space-y-2 text-gray-700">
                   <li><strong>Pause the auction:</strong> Click the ⏸️ Pause button in the Auction Room</li>
                   <li><strong>Reset auction:</strong> Click the 🔄 Reset button (appears when paused or completed)</li>
                   <li><strong>Confirm reset:</strong> Review what will be reset and confirm the action</li>
@@ -333,11 +333,11 @@ const Help = () => {
                 </ol>
               </div>
 
-              <div className="bg-[#A78BFA]/10 border border-[#A78BFA]/20 rounded-lg p-4 mb-4">
-                <p className="text-[#A78BFA] text-sm mb-2">
+              <div className="bg-purple-50 border border-purple-200 rounded-lg p-4 mb-4">
+                <p className="text-purple-800 text-sm mb-2">
                   <strong>💡 What Gets Reset:</strong>
                 </p>
-                <ul className="text-[#A78BFA] text-sm space-y-1 list-disc list-inside">
+                <ul className="text-purple-700 text-sm space-y-1 list-disc list-inside">
                   <li>All auction bids and history</li>
                   <li>Participant budgets (restored to full amount)</li>
                   <li>Participant rosters (clubs won are cleared)</li>
@@ -345,11 +345,11 @@ const Help = () => {
                 </ul>
               </div>
 
-              <div className="bg-[#10B981]/10 border border-[#10B981]/20 rounded-lg p-4 mb-4">
-                <p className="text-[#10B981] text-sm mb-2">
+              <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
+                <p className="text-green-800 text-sm mb-2">
                   <strong>✅ What's Preserved:</strong>
                 </p>
-                <ul className="text-[#10B981] text-sm space-y-1 list-disc list-inside">
+                <ul className="text-green-700 text-sm space-y-1 list-disc list-inside">
                   <li>All participants remain in the league (no re-inviting needed!)</li>
                   <li>League configuration (budget, slots, timer settings)</li>
                   <li>Selected teams for the auction</li>
@@ -357,71 +357,71 @@ const Help = () => {
                 </ul>
               </div>
 
-              <div className="bg-[#00F0FF]/10 border border-[#00F0FF]/20 rounded-lg p-4">
-                <p className="text-[#00F0FF] text-sm">
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <p className="text-blue-800 text-sm">
                   <strong>🎯 For Participants:</strong> If you're in the auction room when the commissioner resets, you'll automatically see a message within 3 seconds with a button to return to the competition page. Just wait there for the commissioner to restart the auction!
                 </p>
               </div>
             </div>
 
             <div>
-              <h4 className="text-lg font-semibold text-white mb-3">📊 API Rate Limit Display</h4>
-              <p className="text-white/80 mb-3">
+              <h4 className="text-lg font-semibold text-gray-900 mb-3">📊 API Rate Limit Display</h4>
+              <p className="text-gray-700 mb-3">
                 We now show accurate API request limits when importing fixtures for Premier League and Champions League competitions.
               </p>
               
-              <div className="bg-[#151C2C]/5 rounded-lg p-4 mb-4">
-                <h5 className="font-semibold text-white mb-2">What You'll See:</h5>
-                <ul className="list-disc list-inside space-y-2 text-white/80">
+              <div className="bg-gray-50 rounded-lg p-4 mb-4">
+                <h5 className="font-semibold text-gray-900 mb-2">What You'll See:</h5>
+                <ul className="list-disc list-inside space-y-2 text-gray-700">
                   <li><strong>Request counter:</strong> After importing fixtures, you'll see "API requests remaining this minute: X/10"</li>
                   <li><strong>Rate limit:</strong> Football-Data.org API allows 10 requests per minute on the free tier</li>
                   <li><strong>Resets automatically:</strong> The counter resets every 60 seconds</li>
                 </ul>
               </div>
 
-              <div className="bg-[#F59E0B]/10 border border-[#F59E0B]/20 rounded-lg p-4">
-                <p className="text-[#F59E0B] text-sm">
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                <p className="text-yellow-800 text-sm">
                   <strong>💡 Tip:</strong> If you hit the rate limit, simply wait a minute before importing more fixtures. This ensures smooth operation for all commissioners.
                 </p>
               </div>
             </div>
 
             <div>
-              <h4 className="text-lg font-semibold text-white mb-3">🌍 AFCON Competition Improvements</h4>
-              <p className="text-white/80 mb-3">
+              <h4 className="text-lg font-semibold text-gray-900 mb-3">🌍 AFCON Competition Improvements</h4>
+              <p className="text-gray-700 mb-3">
                 AFCON (Africa Cup of Nations) competitions now have a streamlined CSV-only workflow for fixture and score management.
               </p>
               
-              <div className="bg-[#151C2C]/5 rounded-lg p-4 mb-4">
-                <h5 className="font-semibold text-white mb-2">What Changed:</h5>
-                <ul className="list-disc list-inside space-y-2 text-white/80">
+              <div className="bg-gray-50 rounded-lg p-4 mb-4">
+                <h5 className="font-semibold text-gray-900 mb-2">What Changed:</h5>
+                <ul className="list-disc list-inside space-y-2 text-gray-700">
                   <li><strong>Simplified interface:</strong> The "Import Fixtures" button is hidden for AFCON leagues on the Competition Detail Page</li>
                   <li><strong>CSV-only workflow:</strong> AFCON uses manual CSV uploads for both fixtures and scores (as the primary data API doesn't cover this tournament)</li>
                   <li><strong>Clear instructions:</strong> All fixture/score management happens via the Competition Dashboard → Fixtures tab using CSV templates</li>
                 </ul>
               </div>
 
-              <div className="bg-[#00F0FF]/10 border border-[#00F0FF]/20 rounded-lg p-4">
-                <p className="text-[#00F0FF] text-sm">
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <p className="text-blue-800 text-sm">
                   <strong>📝 For AFCON Commissioners:</strong> Download the CSV template from the Fixtures tab, fill in your fixture data or match scores, and upload. The system will process everything automatically!
                 </p>
               </div>
             </div>
 
             <div>
-              <h4 className="text-lg font-semibold text-white mb-3">⚽ Team Name Fixes</h4>
-              <p className="text-white/80 mb-3">
+              <h4 className="text-lg font-semibold text-gray-900 mb-3">⚽ Team Name Fixes</h4>
+              <p className="text-gray-700 mb-3">
                 We've corrected team names to ensure reliable fixture imports across all football competitions.
               </p>
               
-              <div className="bg-[#151C2C]/5 rounded-lg p-4">
-                <h5 className="font-semibold text-white mb-2">Updated Teams:</h5>
-                <ul className="list-disc list-inside space-y-1 text-white/80">
+              <div className="bg-gray-50 rounded-lg p-4">
+                <h5 className="font-semibold text-gray-900 mb-2">Updated Teams:</h5>
+                <ul className="list-disc list-inside space-y-1 text-gray-700">
                   <li><strong>Manchester City FC:</strong> Previously "Man City" - now matches API naming</li>
                   <li><strong>Borussia Dortmund:</strong> Previously "B Dortmund" - now matches Champions League data</li>
                   <li><strong>Sport Lisboa e Benfica:</strong> Corrected external ID and full official name</li>
                 </ul>
-                <p className="text-white/60 text-sm mt-2">
+                <p className="text-gray-600 text-sm mt-2">
                   <em>These updates ensure fixtures import correctly for all selected teams without errors.</em>
                 </p>
               </div>
@@ -433,14 +433,14 @@ const Help = () => {
         <Section id="user-join" title="For Players" icon="👥">
           <div className="space-y-6">
             <div>
-              <h4 className="text-lg font-semibold text-white mb-3">Joining a Competition</h4>
-              <p className="text-white/80 mb-3">
+              <h4 className="text-lg font-semibold text-gray-900 mb-3">Joining a Competition</h4>
+              <p className="text-gray-700 mb-3">
                 To join a competition, you'll need an invite token from the commissioner.
               </p>
               
-              <div className="bg-[#151C2C]/5 rounded-lg p-4 mb-4">
-                <h5 className="font-semibold text-white mb-2">How to Join:</h5>
-                <ol className="list-decimal list-inside space-y-2 text-white/80">
+              <div className="bg-gray-50 rounded-lg p-4 mb-4">
+                <h5 className="font-semibold text-gray-900 mb-2">How to Join:</h5>
+                <ol className="list-decimal list-inside space-y-2 text-gray-700">
                   <li>Get the <strong>8-character invite token</strong> from your league commissioner</li>
                   <li>Click <strong>"Join the Competition"</strong> on the homepage</li>
                   <li>Enter the invite token</li>
@@ -449,19 +449,19 @@ const Help = () => {
                 </ol>
               </div>
 
-              <div className="bg-[#10B981]/10 border border-[#10B981]/20 rounded-lg p-4">
-                <p className="text-[#10B981] text-sm">
+              <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                <p className="text-green-800 text-sm">
                   <strong>✅ Success:</strong> Once joined, you'll see the competition in your "My Competitions" list and receive your starting budget for bidding!
                 </p>
               </div>
             </div>
 
             <div>
-              <h4 className="text-lg font-semibold text-white mb-3">Participating in Auctions</h4>
+              <h4 className="text-lg font-semibold text-gray-900 mb-3">Participating in Auctions</h4>
               
-              <div className="bg-[#151C2C]/5 rounded-lg p-4 mb-4">
-                <h5 className="font-semibold text-white mb-2">Bidding Strategy:</h5>
-                <ol className="list-decimal list-inside space-y-2 text-white/80">
+              <div className="bg-gray-50 rounded-lg p-4 mb-4">
+                <h5 className="font-semibold text-gray-900 mb-2">Bidding Strategy:</h5>
+                <ol className="list-decimal list-inside space-y-2 text-gray-700">
                   <li><strong>Wait for auction to start:</strong> The commissioner will begin when all managers are ready</li>
                   <li><strong>View current team:</strong> See the team up for bidding and its base price</li>
                   <li><strong>Monitor your budget:</strong> Keep track of remaining funds for future bids</li>
@@ -471,11 +471,11 @@ const Help = () => {
                 </ol>
               </div>
 
-              <div className="bg-[#00F0FF]/10 border border-[#00F0FF]/20 rounded-lg p-4 mb-4">
-                <p className="text-[#00F0FF] text-sm mb-2">
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                <p className="text-blue-800 text-sm mb-2">
                   <strong>💡 Pro Tips:</strong>
                 </p>
-                <ul className="text-[#00F0FF]/80 text-sm space-y-1 list-disc list-inside">
+                <ul className="text-blue-700 text-sm space-y-1 list-disc list-inside">
                   <li>Don't spend all your budget on the first few teams</li>
                   <li>Consider team performance and upcoming fixtures</li>
                   <li>Watch other managers' budgets to gauge competition</li>
@@ -484,8 +484,8 @@ const Help = () => {
                 </ul>
               </div>
 
-              <div className="bg-[#F59E0B]/10 border border-[#F59E0B]/20 rounded-lg p-4">
-                <p className="text-[#F59E0B] text-sm">
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                <p className="text-yellow-800 text-sm">
                   <strong>⚠️ Remember:</strong> Each bid increases the price by a set increment. Make sure you have enough budget remaining before placing a bid!
                 </p>
               </div>
@@ -497,14 +497,14 @@ const Help = () => {
         <Section id="dashboards" title="Viewing Dashboards & Results" icon="📊">
           <div className="space-y-6">
             <div>
-              <h4 className="text-lg font-semibold text-white mb-3">Competition Dashboard</h4>
-              <p className="text-white/80 mb-3">
+              <h4 className="text-lg font-semibold text-gray-900 mb-3">Competition Dashboard</h4>
+              <p className="text-gray-700 mb-3">
                 After the auction, track your teams' performance and standings in real-time.
               </p>
               
-              <div className="bg-[#151C2C]/5 rounded-lg p-4 mb-4">
-                <h5 className="font-semibold text-white mb-2">Dashboard Features:</h5>
-                <ul className="list-disc list-inside space-y-2 text-white/80">
+              <div className="bg-gray-50 rounded-lg p-4 mb-4">
+                <h5 className="font-semibold text-gray-900 mb-2">Dashboard Features:</h5>
+                <ul className="list-disc list-inside space-y-2 text-gray-700">
                   <li><strong>Leaderboard:</strong> See all managers ranked by total points</li>
                   <li><strong>Your Teams:</strong> View all teams you won in the auction</li>
                   <li><strong>Team Details:</strong> Click any team to see their match history</li>
@@ -513,7 +513,7 @@ const Help = () => {
                 </ul>
               </div>
 
-              <div className="bg-[#F59E0B]/10 border border-orange-200 rounded-lg p-4">
+              <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
                 <p className="text-orange-800 text-sm">
                   <strong>📈 Access Dashboard:</strong> Click on any competition from "My Competitions" to view its live dashboard and track your performance!
                 </p>
@@ -522,10 +522,10 @@ const Help = () => {
 
 
             <div>
-              <h4 className="text-lg font-semibold text-white mb-3">Finding Your Competitions</h4>
+              <h4 className="text-lg font-semibold text-gray-900 mb-3">Finding Your Competitions</h4>
               
-              <div className="bg-[#151C2C]/5 rounded-lg p-4">
-                <ol className="list-decimal list-inside space-y-2 text-white/80">
+              <div className="bg-gray-50 rounded-lg p-4">
+                <ol className="list-decimal list-inside space-y-2 text-gray-700">
                   <li>Click <strong>"My Competitions"</strong> in the top navigation</li>
                   <li>View all competitions you've created or joined</li>
                   <li>See current status: Pending, Auction Live, or Completed</li>
@@ -540,85 +540,85 @@ const Help = () => {
         <Section id="scoring" title="Scoring Systems" icon="🎯">
           <div className="space-y-6">
             <div>
-              <h4 className="text-lg font-semibold text-white mb-3">How Points Are Calculated</h4>
-              <p className="text-white/80 mb-4">
+              <h4 className="text-lg font-semibold text-gray-900 mb-3">How Points Are Calculated</h4>
+              <p className="text-gray-700 mb-4">
                 Your teams or players earn points based on their real-world performance. The scoring system varies by sport.
               </p>
             </div>
 
             <div>
-              <h4 className="text-lg font-semibold text-white mb-3">🏏 Cricket Scoring</h4>
-              <p className="text-white/80 mb-3">
+              <h4 className="text-lg font-semibold text-gray-900 mb-3">🏏 Cricket Scoring</h4>
+              <p className="text-gray-700 mb-3">
                 In cricket competitions, points are awarded <strong>per player, per match</strong> based on individual performance:
               </p>
               
-              <div className="bg-[#151C2C]/5 rounded-lg p-4 mb-4">
-                <h5 className="font-semibold text-white mb-3">Cricket Points Table:</h5>
+              <div className="bg-gray-50 rounded-lg p-4 mb-4">
+                <h5 className="font-semibold text-gray-900 mb-3">Cricket Points Table:</h5>
                 <div className="space-y-2">
-                  <div className="flex justify-between items-center py-2 border-b border-white/10">
-                    <span className="text-white/80 font-medium">Run scored</span>
-                    <span className="text-[#00F0FF] font-bold">1 point</span>
+                  <div className="flex justify-between items-center py-2 border-b border-gray-200">
+                    <span className="text-gray-700 font-medium">Run scored</span>
+                    <span className="text-blue-600 font-bold">1 point</span>
                   </div>
-                  <div className="flex justify-between items-center py-2 border-b border-white/10">
-                    <span className="text-white/80 font-medium">Wicket taken</span>
-                    <span className="text-[#00F0FF] font-bold">20 points</span>
+                  <div className="flex justify-between items-center py-2 border-b border-gray-200">
+                    <span className="text-gray-700 font-medium">Wicket taken</span>
+                    <span className="text-blue-600 font-bold">20 points</span>
                   </div>
-                  <div className="flex justify-between items-center py-2 border-b border-white/10">
-                    <span className="text-white/80 font-medium">Catch</span>
-                    <span className="text-[#00F0FF] font-bold">10 points</span>
+                  <div className="flex justify-between items-center py-2 border-b border-gray-200">
+                    <span className="text-gray-700 font-medium">Catch</span>
+                    <span className="text-blue-600 font-bold">10 points</span>
                   </div>
-                  <div className="flex justify-between items-center py-2 border-b border-white/10">
-                    <span className="text-white/80 font-medium">Stumping</span>
-                    <span className="text-[#00F0FF] font-bold">25 points</span>
+                  <div className="flex justify-between items-center py-2 border-b border-gray-200">
+                    <span className="text-gray-700 font-medium">Stumping</span>
+                    <span className="text-blue-600 font-bold">25 points</span>
                   </div>
                   <div className="flex justify-between items-center py-2">
-                    <span className="text-white/80 font-medium">Run out</span>
-                    <span className="text-[#00F0FF] font-bold">20 points</span>
+                    <span className="text-gray-700 font-medium">Run out</span>
+                    <span className="text-blue-600 font-bold">20 points</span>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-[#00F0FF]/10 border border-[#00F0FF]/20 rounded-lg p-4">
-                <p className="text-[#00F0FF] text-sm">
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <p className="text-blue-800 text-sm">
                   <strong>💡 Example:</strong> If your player scores 50 runs, takes 2 wickets, and makes 1 catch, they earn: (50 × 1) + (2 × 20) + (1 × 10) = <strong>100 points</strong>
                 </p>
               </div>
             </div>
 
             <div>
-              <h4 className="text-lg font-semibold text-white mb-3">⚽ Football Scoring</h4>
-              <p className="text-white/80 mb-3">
+              <h4 className="text-lg font-semibold text-gray-900 mb-3">⚽ Football Scoring</h4>
+              <p className="text-gray-700 mb-3">
                 In football competitions, points are awarded <strong>per team, per match</strong> based on match results and goals:
               </p>
               
-              <div className="bg-[#151C2C]/5 rounded-lg p-4 mb-4">
-                <h5 className="font-semibold text-white mb-3">Football Points Table:</h5>
+              <div className="bg-gray-50 rounded-lg p-4 mb-4">
+                <h5 className="font-semibold text-gray-900 mb-3">Football Points Table:</h5>
                 <div className="space-y-2">
-                  <div className="flex justify-between items-center py-2 border-b border-white/10">
-                    <span className="text-white/80 font-medium">Match win</span>
+                  <div className="flex justify-between items-center py-2 border-b border-gray-200">
+                    <span className="text-gray-700 font-medium">Match win</span>
                     <span className="text-green-600 font-bold">3 points</span>
                   </div>
-                  <div className="flex justify-between items-center py-2 border-b border-white/10">
-                    <span className="text-white/80 font-medium">Match draw</span>
+                  <div className="flex justify-between items-center py-2 border-b border-gray-200">
+                    <span className="text-gray-700 font-medium">Match draw</span>
                     <span className="text-green-600 font-bold">1 point</span>
                   </div>
                   <div className="flex justify-between items-center py-2">
-                    <span className="text-white/80 font-medium">Goal scored</span>
+                    <span className="text-gray-700 font-medium">Goal scored</span>
                     <span className="text-green-600 font-bold">1 point</span>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-[#10B981]/10 border border-[#10B981]/20 rounded-lg p-4">
-                <p className="text-[#10B981] text-sm">
+              <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                <p className="text-green-800 text-sm">
                   <strong>💡 Example:</strong> If your team wins 3-1, they earn: (1 × 3 for win) + (3 × 1 for goals) = <strong>6 points</strong>
                 </p>
               </div>
             </div>
 
             <div>
-              <h4 className="text-lg font-semibold text-white mb-3">Total Manager Score</h4>
-              <p className="text-white/80">
+              <h4 className="text-lg font-semibold text-gray-900 mb-3">Total Manager Score</h4>
+              <p className="text-gray-700">
                 Your total competition score is the <strong>sum of all points</strong> earned by your teams or players across all matches. The manager with the highest total score wins the competition!
               </p>
             </div>
@@ -629,29 +629,29 @@ const Help = () => {
         <Section id="navigation" title="Navigation & Finding Pages" icon="🧭">
           <div className="space-y-6">
             <div>
-              <h4 className="text-lg font-semibold text-white mb-3">Navigating the Platform</h4>
-              <p className="text-white/80 mb-4">
+              <h4 className="text-lg font-semibold text-gray-900 mb-3">Navigating the Platform</h4>
+              <p className="text-gray-700 mb-4">
                 We've made it easy to move between different areas of the platform. Here's how to find what you need:
               </p>
 
-              <div className="bg-[#00F0FF]/10 border border-[#00F0FF]/20 rounded-lg p-4 mb-4">
-                <h5 className="font-semibold text-white mb-2">📍 My Competitions Hub</h5>
-                <p className="text-white/80 mb-2">
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                <h5 className="font-semibold text-gray-900 mb-2">📍 My Competitions Hub</h5>
+                <p className="text-gray-700 mb-2">
                   Your central dashboard to access all your leagues:
                 </p>
-                <ul className="list-disc list-inside space-y-1 text-white/80 ml-4">
+                <ul className="list-disc list-inside space-y-1 text-gray-700 ml-4">
                   <li><strong>League Detail:</strong> Click to view league setup, participants, and invitation token</li>
                   <li><strong>View Dashboard:</strong> Access standings, fixtures, and scores</li>
                   <li><strong>🔴 Join Auction Now:</strong> When auction is live, this red button pulses - click to enter the auction room</li>
                 </ul>
               </div>
 
-              <div className="bg-[#A78BFA]/10 border border-[#A78BFA]/20 rounded-lg p-4 mb-4">
-                <h5 className="font-semibold text-white mb-2">🏠 Returning to Active Auctions</h5>
-                <p className="text-white/80 mb-2">
+              <div className="bg-purple-50 border border-purple-200 rounded-lg p-4 mb-4">
+                <h5 className="font-semibold text-gray-900 mb-2">🏠 Returning to Active Auctions</h5>
+                <p className="text-gray-700 mb-2">
                   <strong>Don't miss your auction!</strong> If you navigate away from an auction room:
                 </p>
-                <ol className="list-decimal list-inside space-y-1 text-white/80 ml-4">
+                <ol className="list-decimal list-inside space-y-1 text-gray-700 ml-4">
                   <li>Go to <strong>"My Competitions"</strong> from the top menu</li>
                   <li>Look for the competition with <strong className="text-red-600">🔴 Auction Live</strong> status</li>
                   <li>Click the pulsing <strong className="bg-red-600 text-white px-2 py-1 rounded text-xs">Join Auction Now</strong> button</li>
@@ -659,29 +659,29 @@ const Help = () => {
                 </ol>
               </div>
 
-              <div className="bg-[#10B981]/10 border border-[#10B981]/20 rounded-lg p-4 mb-4">
-                <h5 className="font-semibold text-white mb-2">🧭 Breadcrumb Navigation</h5>
-                <p className="text-white/80 mb-2">
+              <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
+                <h5 className="font-semibold text-gray-900 mb-2">🧭 Breadcrumb Navigation</h5>
+                <p className="text-gray-700 mb-2">
                   In the auction room, you'll see breadcrumbs at the top:
                 </p>
-                <p className="font-mono text-sm text-white/60 bg-[#151C2C] p-2 rounded border border-gray-300 mb-2">
+                <p className="font-mono text-sm text-gray-600 bg-white p-2 rounded border border-gray-300 mb-2">
                   Home › My Competitions › League Name › Auction Room
                 </p>
-                <p className="text-white/80 text-sm">
+                <p className="text-gray-700 text-sm">
                   Click any part of the path to navigate back to that page quickly.
                 </p>
               </div>
 
-              <div className="bg-[#F59E0B]/10 border border-orange-200 rounded-lg p-4">
-                <h5 className="font-semibold text-white mb-2">⚠️ League Detail Page Alert</h5>
-                <p className="text-white/80 mb-2">
+              <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
+                <h5 className="font-semibold text-gray-900 mb-2">⚠️ League Detail Page Alert</h5>
+                <p className="text-gray-700 mb-2">
                   When an auction is live and you're on the league detail page, you'll see a prominent red alert banner at the top:
                 </p>
-                <div className="bg-[#EF4444]/10 border-2 border-red-300 rounded p-3 my-2">
-                  <p className="text-[#EF4444] font-bold">🔴 Auction is Live!</p>
-                  <p className="text-[#EF4444] text-sm">Don't miss out - join the bidding now</p>
+                <div className="bg-red-50 border-2 border-red-300 rounded p-3 my-2">
+                  <p className="text-red-800 font-bold">🔴 Auction is Live!</p>
+                  <p className="text-red-700 text-sm">Don't miss out - join the bidding now</p>
                 </div>
-                <p className="text-white/80 text-sm">
+                <p className="text-gray-700 text-sm">
                   Click the <strong>"Join Auction Now →"</strong> button to enter immediately.
                 </p>
               </div>
@@ -693,43 +693,43 @@ const Help = () => {
         <Section id="faq" title="FAQ & Troubleshooting" icon="❓">
           <div className="space-y-4">
             <div className="border-l-4 border-blue-500 pl-4">
-              <h5 className="font-semibold text-white mb-1">What happens if I lose internet connection during an auction?</h5>
-              <p className="text-white/80 text-sm">
+              <h5 className="font-semibold text-gray-900 mb-1">What happens if I lose internet connection during an auction?</h5>
+              <p className="text-gray-700 text-sm">
                 The system has automatic reconnection built in. If you disconnect, it will attempt to reconnect you automatically. Your bids and budget are saved on the server.
               </p>
             </div>
 
             <div className="border-l-4 border-blue-500 pl-4">
-              <h5 className="font-semibold text-white mb-1">Can I change my bid after placing it?</h5>
-              <p className="text-white/80 text-sm">
+              <h5 className="font-semibold text-gray-900 mb-1">Can I change my bid after placing it?</h5>
+              <p className="text-gray-700 text-sm">
                 No, bids are final once placed. This maintains fairness in the auction. Make sure you're comfortable with the price before bidding!
               </p>
             </div>
 
             <div className="border-l-4 border-blue-500 pl-4">
-              <h5 className="font-semibold text-white mb-1">How does anti-snipe work?</h5>
-              <p className="text-white/80 text-sm">
+              <h5 className="font-semibold text-gray-900 mb-1">How does anti-snipe work?</h5>
+              <p className="text-gray-700 text-sm">
                 If a bid is placed in the last few seconds (as configured by the admin), the timer automatically extends by the anti-snipe duration. This prevents unfair last-second wins.
               </p>
             </div>
 
             <div className="border-l-4 border-blue-500 pl-4">
-              <h5 className="font-semibold text-white mb-1">Can I leave a competition after joining?</h5>
-              <p className="text-white/80 text-sm">
+              <h5 className="font-semibold text-gray-900 mb-1">Can I leave a competition after joining?</h5>
+              <p className="text-gray-700 text-sm">
                 Once the auction starts, you're committed to the competition. Contact your league commissioner if you need to withdraw before the auction begins.
               </p>
             </div>
 
             <div className="border-l-4 border-blue-500 pl-4">
-              <h5 className="font-semibold text-white mb-1">How are points calculated?</h5>
-              <p className="text-white/80 text-sm">
+              <h5 className="font-semibold text-gray-900 mb-1">How are points calculated?</h5>
+              <p className="text-gray-700 text-sm">
                 Points are based on real match outcomes and performance. Your teams earn points when they win matches or achieve specific milestones. The scoring system varies by sport.
               </p>
             </div>
 
             <div className="border-l-4 border-blue-500 pl-4">
-              <h5 className="font-semibold text-white mb-1">Can I be in multiple competitions at once?</h5>
-              <p className="text-white/80 text-sm">
+              <h5 className="font-semibold text-gray-900 mb-1">Can I be in multiple competitions at once?</h5>
+              <p className="text-gray-700 text-sm">
                 Yes! You can create or join as many competitions as you like. Each competition is independent with its own auction and standings.
               </p>
             </div>
@@ -737,9 +737,9 @@ const Help = () => {
         </Section>
 
         {/* Support */}
-        <div className="bg-[#151C2C]/10 rounded-lg p-6 mt-8 text-center">
-          <h3 className="text-xl font-bold text-white mb-3">Need More Help?</h3>
-          <p className="text-white/80 mb-4">
+        <div className="bg-gray-100 rounded-lg p-6 mt-8 text-center">
+          <h3 className="text-xl font-bold text-gray-900 mb-3">Need More Help?</h3>
+          <p className="text-gray-700 mb-4">
             If you have questions not covered in this guide, reach out to your league commissioner or contact support.
           </p>
           <button
