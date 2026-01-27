@@ -438,11 +438,6 @@ function AuctionRoom() {
 
   // Pre-fill bid input with current bid amount
   useEffect(() => {
-    if (!currentClub) {
-      // No active lot, clear the input
-      setBidAmount("");
-      return;
-    }
     // When club changes, clear any pending bid input
     // User must actively click +£1m/+£5m/+£10m to build their bid
     setBidAmount("");
