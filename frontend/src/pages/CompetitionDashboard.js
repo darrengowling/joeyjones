@@ -1105,58 +1105,77 @@ export default function CompetitionDashboard() {
         {/* Fixtures List */}
         <div data-testid="fixtures-list">
           {!hasFixtures ? (
-            <div className="bg-white rounded-lg shadow p-12 text-center" data-testid="fixtures-empty">
+            <div 
+              className="rounded-xl p-12 text-center"
+              style={{ background: '#151C2C', border: '1px solid rgba(255, 255, 255, 0.1)' }}
+              data-testid="fixtures-empty"
+            >
               <div className="text-6xl mb-4">📅</div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">No fixtures scheduled yet</h3>
-              <p className="text-gray-600">
+              <h3 className="text-xl font-bold text-white mb-2">No fixtures scheduled yet</h3>
+              <p className="text-white/60">
                 {isCommissioner
                   ? "Upload a CSV file above to schedule fixtures for your competition."
                   : "The commissioner will schedule fixtures soon."}
               </p>
             </div>
           ) : (
-            <div className="space-y-6">
+            <div className="space-y-4">
               {Object.entries(groupedFixtures).map(([date, dateFixtures]) => (
-                <div key={date} className="bg-white rounded-lg shadow overflow-hidden">
-                  <div className="bg-gray-50 px-4 py-3 border-b border-gray-200">
-                    <h3 className="font-bold text-gray-900">{date}</h3>
+                <div 
+                  key={date} 
+                  className="rounded-xl overflow-hidden"
+                  style={{ background: '#151C2C', border: '1px solid rgba(255, 255, 255, 0.1)' }}
+                >
+                  <div 
+                    className="px-4 py-3"
+                    style={{ background: 'rgba(0, 0, 0, 0.3)', borderBottom: '1px solid rgba(255, 255, 255, 0.05)' }}
+                  >
+                    <h3 className="font-bold text-white">{date}</h3>
                   </div>
-                  <div className="divide-y divide-gray-200">
-                    {dateFixtures.map((fixture) => (
-                      <div key={fixture.id} className="p-3 hover:bg-gray-50">
+                  <div>
+                    {dateFixtures.map((fixture, idx) => (
+                      <div 
+                        key={fixture.id} 
+                        className="p-3"
+                        style={{ borderBottom: idx < dateFixtures.length - 1 ? '1px solid rgba(255, 255, 255, 0.05)' : 'none' }}
+                      >
                         <div className="flex flex-col gap-2">
                           <div className="flex items-center gap-2">
-                            <div className="text-xs text-gray-500 flex-shrink-0">
+                            <div className="text-xs text-white/40 flex-shrink-0">
                               {formatTime(fixture.startsAt || fixture.matchDate)}
                             </div>
                             {fixture.round && (
-                              <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded whitespace-nowrap">
+                              <span 
+                                className="text-xs px-2 py-1 rounded whitespace-nowrap"
+                                style={{ background: 'rgba(255, 255, 255, 0.1)', color: 'rgba(255, 255, 255, 0.6)' }}
+                              >
                                 R{fixture.round}
                               </span>
                             )}
                             <span
-                              className={`text-xs px-2 py-1 rounded-full font-semibold whitespace-nowrap ml-auto ${
+                              className="text-xs px-2 py-1 rounded-full font-semibold whitespace-nowrap ml-auto"
+                              style={
                                 fixture.status === "completed" || fixture.status === "ft" || fixture.status === "final"
-                                  ? "bg-green-100 text-green-700"
+                                  ? { background: 'rgba(16, 185, 129, 0.2)', color: '#10B981' }
                                   : fixture.status === "live"
-                                  ? "bg-red-100 text-red-700"
-                                  : "bg-yellow-100 text-yellow-700"
-                              }`}
+                                  ? { background: 'rgba(239, 68, 68, 0.2)', color: '#EF4444' }
+                                  : { background: 'rgba(245, 158, 11, 0.2)', color: '#F59E0B' }
+                              }
                             >
                               {fixture.status === "completed" || fixture.status === "ft" || fixture.status === "final" ? "✅" : fixture.status === "live" ? "🔴" : "⏳"}
                             </span>
                           </div>
-                          <div className="text-sm font-medium text-gray-900">
+                          <div className="text-sm font-medium text-white">
                             {fixture.homeTeam && fixture.awayTeam
                               ? (
                                 <div className="flex items-center gap-2 flex-wrap">
                                   <span className="truncate">{fixture.homeTeam}</span>
                                   {(fixture.status === "ft" || fixture.status === "completed" || fixture.status === "final") && fixture.goalsHome !== null && fixture.goalsAway !== null ? (
-                                    <span className="font-bold text-base text-blue-600 flex-shrink-0">
+                                    <span className="font-bold text-base flex-shrink-0" style={{ color: '#00F0FF' }}>
                                       {fixture.goalsHome} - {fixture.goalsAway}
                                     </span>
                                   ) : (
-                                    <span className="text-gray-400 flex-shrink-0">vs</span>
+                                    <span className="text-white/40 flex-shrink-0">vs</span>
                                   )}
                                   <span className="truncate">{fixture.awayTeam}</span>
                                 </div>
@@ -1166,13 +1185,16 @@ export default function CompetitionDashboard() {
                               : fixture.round || fixture.externalMatchId || "Match"}
                           </div>
                           {fixture.venue && (
-                            <div className="text-xs text-gray-500">
+                            <div className="text-xs text-white/40">
                               📍 {fixture.venue}
                             </div>
                           )}
                           {fixture.externalMatchId && (
-                            <div className="text-xs text-gray-600 font-mono bg-gray-100 px-2 py-1 rounded inline-block w-fit">
-                              ID: <span className="font-semibold text-blue-600">{fixture.externalMatchId}</span>
+                            <div 
+                              className="text-xs font-mono px-2 py-1 rounded inline-block w-fit"
+                              style={{ background: 'rgba(255, 255, 255, 0.05)', color: 'rgba(255, 255, 255, 0.6)' }}
+                            >
+                              ID: <span className="font-semibold" style={{ color: '#00F0FF' }}>{fixture.externalMatchId}</span>
                             </div>
                           )}
                         </div>
