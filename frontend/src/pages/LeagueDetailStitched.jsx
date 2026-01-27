@@ -1573,7 +1573,8 @@ export default function LeagueDetailStitched() {
 
       {/* === MANAGE ASSETS MODAL (Full Screen) === */}
       {editingAssets && (
-        <div className="fixed inset-0 z-50 flex flex-col" style={{ background: 'var(--bg-base, #0F172A)' }}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.7)' }}>
+          <div className="w-full max-w-md h-full max-h-screen flex flex-col" style={{ background: 'var(--bg-base, #0F172A)' }}>
           {/* Modal Header */}
           <header 
             className="px-4 py-4 flex items-center justify-between"
