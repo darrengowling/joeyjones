@@ -1070,7 +1070,7 @@ function AuctionRoom() {
 
       {/* ========== TEAMS IN AUCTION SCROLL (80px) ========== */}
       <div 
-        className="flex-shrink-0 h-20 px-6 flex items-center"
+        className="flex-shrink-0 h-20 px-4 flex items-center"
         style={{ background: 'rgba(15, 23, 42, 0.5)', borderBottom: '1px solid rgba(255,255,255,0.05)' }}
       >
         <div className="flex-1 overflow-x-auto flex items-center gap-3" style={{ scrollbarWidth: 'none' }}>
@@ -1086,7 +1086,13 @@ function AuctionRoom() {
                   border: isCurrent ? '2px solid #06B6D4' : '1px solid rgba(255,255,255,0.1)'
                 }}
               >
-                <span className="text-lg">{sport?.key === 'cricket' ? '🏏' : '⚽'}</span>
+                <TeamCrest 
+                  clubId={club.id} 
+                  name={club.name} 
+                  sportKey={sport?.key || 'football'} 
+                  variant="small"
+                  isActive={isCurrent}
+                />
                 <span className="text-[10px] text-white/80 text-center px-1 truncate w-full">{club.name?.split(' ')[0]}</span>
               </div>
             );
