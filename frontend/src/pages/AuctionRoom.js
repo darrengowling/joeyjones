@@ -930,7 +930,7 @@ function AuctionRoom() {
                         <span className="text-sm font-medium text-white">
                           {p.userName}
                         </span>
-                        {p.userId === user.id && (
+                        {user && p.userId === user.id && (
                           <span 
                             className="text-xs px-2 py-0.5 rounded-full"
                             style={{ background: 'rgba(0, 240, 255, 0.3)', color: '#00F0FF' }}
