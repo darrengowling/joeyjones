@@ -1018,22 +1018,26 @@ export default function CompetitionDashboard() {
 
             {/* Cricket: Hybrid Fixtures & Scores */}
             {summary && summary.sportKey === "cricket" && (
-              <div className="bg-white rounded-lg shadow-md p-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-6">📊 Manage Fixtures & Scores</h3>
+              <div 
+                className="rounded-xl p-4"
+                style={{ background: '#151C2C', border: '1px solid rgba(255, 255, 255, 0.1)' }}
+              >
+                <h3 className="text-lg font-bold text-white mb-4">📊 Manage Fixtures & Scores</h3>
                 
                 {/* Import Next Fixture Section */}
-                <div className="mb-6">
+                <div className="mb-4">
                   <div className="flex items-center gap-2 mb-3">
-                    <div className="h-px bg-gray-300 flex-1"></div>
-                    <h4 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">Import Next Fixture</h4>
-                    <div className="h-px bg-gray-300 flex-1"></div>
+                    <div className="h-px flex-1" style={{ background: 'rgba(255, 255, 255, 0.1)' }}></div>
+                    <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wide">Import Next Fixture</h4>
+                    <div className="h-px flex-1" style={{ background: 'rgba(255, 255, 255, 0.1)' }}></div>
                   </div>
-                  <p className="text-sm text-gray-600 mb-3">Add next Australia vs England Test match</p>
+                  <p className="text-sm text-white/60 mb-3">Add next Australia vs England Test match</p>
                   <div className="text-center">
                     <button
                       onClick={handleImportNextCricketFixture}
                       disabled={importingFixture}
-                      className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed font-semibold inline-flex items-center gap-2"
+                      className="px-6 py-2 rounded-lg font-semibold inline-flex items-center gap-2 disabled:opacity-50"
+                      style={{ background: '#00F0FF', color: '#0B101B' }}
                     >
                       {importingFixture && (
                         <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -1049,19 +1053,20 @@ export default function CompetitionDashboard() {
                 {/* Update Player Scores Section */}
                 <div>
                   <div className="flex items-center gap-2 mb-3">
-                    <div className="h-px bg-gray-300 flex-1"></div>
-                    <h4 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">Update Player Scores</h4>
-                    <div className="h-px bg-gray-300 flex-1"></div>
+                    <div className="h-px flex-1" style={{ background: 'rgba(255, 255, 255, 0.1)' }}></div>
+                    <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wide">Update Player Scores</h4>
+                    <div className="h-px flex-1" style={{ background: 'rgba(255, 255, 255, 0.1)' }}></div>
                   </div>
                   
                   {/* Option 1: API */}
                   <div className="mb-4">
-                    <p className="text-sm font-medium text-gray-700 mb-2">Option 1: Automatic (API)</p>
+                    <p className="text-sm font-medium text-white/60 mb-2">Option 1: Automatic (API)</p>
                     <div className="text-center">
                       <button
                         onClick={handleUpdateCricketScores}
                         disabled={loading}
-                        className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed font-semibold"
+                        className="px-6 py-2 rounded-lg font-semibold disabled:opacity-50"
+                        style={{ background: '#10B981', color: 'white' }}
                       >
                         {loading ? "Updating..." : "Fetch Latest from Cricbuzz"}
                       </button>
@@ -1070,7 +1075,7 @@ export default function CompetitionDashboard() {
 
                   {/* Option 2: CSV */}
                   <div>
-                    <p className="text-sm font-medium text-gray-700 mb-2">Option 2: Manual (CSV)</p>
+                    <p className="text-sm font-medium text-white/60 mb-2">Option 2: Manual (CSV)</p>
                     <label className="block">
                       <span className="sr-only">Choose Scores CSV file</span>
                       <input
@@ -1078,19 +1083,19 @@ export default function CompetitionDashboard() {
                         accept=".csv"
                         onChange={handleScoreUpload}
                         disabled={uploadingCSV}
-                        className="block w-full text-sm text-gray-700
+                        className="block w-full text-sm text-white/60
                           file:mr-4 file:py-2 file:px-4
                           file:rounded-lg file:border-0
                           file:text-sm file:font-semibold
-                          file:bg-green-100 file:text-green-800
-                          hover:file:bg-green-200
+                          file:bg-[#10B981]/20 file:text-[#10B981]
+                          hover:file:bg-[#10B981]/30
                           disabled:opacity-50"
                       />
                     </label>
 
                   </div>
 
-                  <p className="text-xs text-gray-500 mt-3 text-center">💡 Import one fixture at a time as matches complete</p>
+                  <p className="text-xs text-white/40 mt-3 text-center">💡 Import one fixture at a time as matches complete</p>
                 </div>
               </div>
             )}
