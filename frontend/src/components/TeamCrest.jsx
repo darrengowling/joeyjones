@@ -98,9 +98,12 @@ const TeamCrest = memo(({
   // Color based on active state
   const color = isActive ? '#06B6D4' : '#94A3B8';
   
-  // Football-Data.org crest URL
-  const crestUrl = apiFootballId ? `https://crests.football-data.org/${apiFootballId}.svg` : null;
-  const hasCrest = crestUrl && !imgError && sportKey === 'football';
+  // Football-Data.org crest URL - DISABLED until apiFootballId mapping is verified
+  // The current apiFootballId values in the database are incorrect (showing wrong team crests)
+  // TODO: Re-enable when correct team IDs are sourced and verified
+  // const crestUrl = apiFootballId ? `https://crests.football-data.org/${apiFootballId}.svg` : null;
+  const crestUrl = null; // Always use placeholder for now
+  const hasCrest = false; // Disabled until IDs are corrected
   
   // For watermark variant, return with special styling
   if (variant === 'watermark') {
