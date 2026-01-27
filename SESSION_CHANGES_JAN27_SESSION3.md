@@ -141,9 +141,42 @@
 
 ## Next Steps (Priority Order)
 
-1. **Detailed UX Improvements** - Match final vision for auction screen (team logos row, larger timer pill, active managers avatars, etc.)
-2. **"Pass This Round" Functionality** - Implement actual feature
-3. **Other secondary pages** - CompetitionDashboard, settings, etc. if needed
+1. **Detailed Auction Room UX** - Match Stitch final vision (IN PROGRESS)
+2. **UI-001 Bug** - CompetitionDashboard tab height/centering (blocked - infrastructure issue)
+
+---
+
+## Auction Room Redesign Specification (from Stitch)
+
+### Structure & Layout
+- **Sticky Header (64px)**: User Roster | Live Status | Budget Left - backdrop-filter: blur(12px)
+- **Teams Scroll (80px)**: Horizontal scroll, team cards 100px wide, 12px radius
+- **Hero Section (40%)**: Team crest watermark (opacity 0.2, pulsing), timer, bid display
+- **Control Panel (Sticky Bottom)**: Manager avatars + bid buttons
+
+### Typography
+| Element | Font | Size | Weight | Color |
+|---------|------|------|--------|-------|
+| Timer | Roboto | 64px | 900 | #EF4444 |
+| Team Name | Inter | 32px | 800 | #FFFFFF |
+| Match Info | Inter | 14px | 500 | #94A3B8 |
+| Current Bid | Inter | 40px | 800 | #06B6D4 |
+| Leading Label | Inter | 12px | 700 | #06B6D4 |
+
+### Components
+- **Quick Bid Buttons**: 100px width, cyan outline, press feedback
+- **Pass Button**: Red outline, "Passed" disabled state
+- **Manager Avatars**: 40px diameter, 2px cyan ring for leading bidder
+
+### Spacing (8px Grid)
+- Screen margins: 24px
+- Inter-element gaps: 16px
+- Button padding: 12px
+
+### Interactions
+- [ ] Bid value "pop" animation (scale 10%)
+- [ ] Haptic feedback on bid (vibrate 50ms)
+- [ ] Dynamic background shift to team color
 
 ---
 
