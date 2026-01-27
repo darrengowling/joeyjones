@@ -1556,8 +1556,8 @@ export default function LeagueDetailStitched() {
                     style={{ background: 'rgba(6, 182, 212, 0.1)', border: '1px solid rgba(6, 182, 212, 0.2)' }}
                   >
                     <p className="text-xs" style={{ color: 'var(--text-secondary, rgba(255,255,255,0.6))' }}>
-                      <strong style={{ color: 'var(--color-primary, #06B6D4)' }}>Commissioner:</strong> After matches complete, click "Update Match Scores" to fetch latest results. 
-                      Then click "Refresh" in the Standings section to update league rankings.
+                      <strong style={{ color: 'var(--color-primary, #06B6D4)' }}>Commissioner:</strong> After matches complete, click &quot;Update Match Scores&quot; to fetch latest results. 
+                      Then click &quot;Refresh&quot; in the Standings section to update league rankings.
                     </p>
                   </div>
                 )}
