@@ -4,6 +4,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { formatCurrency } from "../utils/currency";
 import { getSocket, joinLeagueRoom, leaveLeagueRoom, setSocketUser } from "../utils/socket";
+import BottomNav from "../components/BottomNav";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
