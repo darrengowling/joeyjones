@@ -1260,20 +1260,20 @@ function AuctionRoom() {
                   )}
 
                   {/* Compact Timer + Team + Current Bid */}
-                  <div className="bg-black text-white p-4 rounded-lg mb-3 shadow-lg">
+                  <div className="rounded-xl p-4 mb-3" style={{ background: '#0B101B', border: '1px solid rgba(255,255,255,0.1)' }}>
                     <div className="flex items-center justify-between gap-4 mb-3">
                       {/* Team/Player Name */}
                       <div className="flex-1 min-w-0">
                         <h3 className="text-2xl font-bold text-white truncate">{currentClub.name}</h3>
                         {/* Franchise/Team for cricket players */}
                         {currentClub.meta?.franchise && (
-                          <div className="text-sm text-cyan-300 font-medium">
+                          <div className="text-sm font-medium" style={{ color: '#00F0FF' }}>
                             {currentClub.meta.franchise}
                           </div>
                         )}
                         {/* Next Fixture - Inline */}
                         {nextFixture && (
-                          <div className="text-xs text-gray-300 mt-1">
+                          <div className="text-xs text-white/40 mt-1">
                             Next: {nextFixture.opponent} ({nextFixture.isHome ? 'H' : 'A'})
                           </div>
                         )}
@@ -1281,7 +1281,7 @@ function AuctionRoom() {
                       
                       {/* Timer */}
                       <div className="text-center">
-                        <div className="text-4xl font-bold">
+                        <div className="text-5xl font-bold" style={{ textShadow: '0 0 20px rgba(255, 138, 0, 0.5)' }}>
                           {(() => {
                             const s = Math.ceil((remainingMs ?? 0) / 1000);
                             const mm = String(Math.floor(s / 60)).padStart(2, "0");
@@ -1291,13 +1291,9 @@ function AuctionRoom() {
                             return (
                               <span 
                                 data-testid="auction-timer" 
-                                className={
-                                  isPaused 
-                                    ? 'text-yellow-400' 
-                                    : warn 
-                                      ? 'text-red-400' 
-                                      : 'text-white'
-                                }
+                                style={{ 
+                                  color: isPaused ? '#FF8A00' : warn ? '#FF4D4D' : '#FF8A00'
+                                }}
                               >
                                 {mm}:{ss}
                                 {isPaused && ' ⏸️'}
@@ -1305,43 +1301,43 @@ function AuctionRoom() {
                             );
                           })()}
                         </div>
-                        <div className="text-xs text-gray-300">
+                        <div className="text-xs text-white/40">
                           {auction?.status === 'paused' ? 'PAUSED' : 'Time Left'}
                         </div>
                       </div>
                     </div>
                     
                     {/* Current Bid or No Bids */}
-                    <div className="border-t border-gray-600 pt-3">
+                    <div className="border-t border-white/10 pt-3">
                       {currentBid > 0 && currentBidder ? (
                         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                           <div className="text-center sm:text-left">
-                            <div className="text-xs text-gray-300">Current Bid</div>
-                            <div className="text-3xl sm:text-2xl font-bold text-green-400">{formatCurrency(currentBid)}</div>
+                            <div className="text-xs text-white/40">Current Bid</div>
+                            <div className="text-3xl sm:text-2xl font-bold" style={{ color: '#00F0FF' }}>{formatCurrency(currentBid)}</div>
                           </div>
                           <div className="flex items-center gap-2 justify-center sm:justify-end">
-                            <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                            <div className="w-8 h-8 rounded-full flex items-center justify-center text-black font-bold text-sm" style={{ background: '#00F0FF' }}>
                               {currentBidder.displayName.charAt(0).toUpperCase()}
                             </div>
-                            <div className="text-sm text-gray-200">{currentBidder.displayName}</div>
+                            <div className="text-sm text-white/80">{currentBidder.displayName}</div>
                           </div>
                         </div>
                       ) : (
                         <div className="text-center">
-                          <div className="text-sm text-gray-300">💰 No bids yet - Be the first!</div>
+                          <div className="text-sm text-white/60">💰 No bids yet - Be the first!</div>
                         </div>
                       )}
                     </div>
                   </div>
                   
                   {/* Team Metadata */}
-                  <div className="bg-gray-50 p-3 rounded-lg mb-3">
+                  <div className="rounded-lg p-3 mb-3" style={{ background: 'rgba(255,255,255,0.05)' }}>
                     {/* Football: Show country and UEFA ID */}
                     {sport?.key === "football" && (
                       <div className="flex items-center gap-3 text-sm">
-                        <span className="text-gray-700">{currentClub.country}</span>
+                        <span className="text-white/60">{currentClub.country}</span>
                         {currentClub.uefaId && (
-                          <span className="text-gray-500">UEFA ID: {currentClub.uefaId}</span>
+                          <span className="text-white/40">UEFA ID: {currentClub.uefaId}</span>
                         )}
                       </div>
                     )}
@@ -1350,30 +1346,30 @@ function AuctionRoom() {
                     {sport?.key === "cricket" && currentClub.meta && (
                       <div className="flex flex-wrap items-center gap-2 text-sm">
                         {currentClub.meta.nationality && (
-                          <span className="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-semibold">
+                          <span className="px-2 py-1 rounded text-xs font-semibold" style={{ background: 'rgba(16, 185, 129, 0.2)', color: '#10B981' }}>
                             {currentClub.meta.nationality}
                           </span>
                         )}
                         {currentClub.meta.role && (
-                          <span className="text-gray-700">Role: {currentClub.meta.role}</span>
+                          <span className="text-white/60">Role: {currentClub.meta.role}</span>
                         )}
                         {currentClub.meta.bowling && (
-                          <span className="text-gray-600">Bowling: {currentClub.meta.bowling}</span>
+                          <span className="text-white/40">Bowling: {currentClub.meta.bowling}</span>
                         )}
                       </div>
                     )}
                     
                     {/* Fallback for other sports */}
                     {sport?.key !== "football" && sport?.key !== "cricket" && currentClub.country && (
-                      <div className="text-sm text-gray-700">{currentClub.country}</div>
+                      <div className="text-sm text-white/60">{currentClub.country}</div>
                     )}
                   </div>
 
                   {/* Bid Input with Quick Buttons */}
                   <div>
-                    {/* Quick Bid Buttons */}
-                    <div className="flex gap-2 mb-2 overflow-x-auto pb-2">
-                      {[1, 2, 5, 10, 20, 50].map((amount) => (
+                    {/* Quick Bid Buttons - Updated to +1, +5, +10, +50 */}
+                    <div className="grid grid-cols-4 gap-2 mb-3">
+                      {[1, 5, 10, 50].map((amount) => (
                         <button
                           key={amount}
                           onClick={() => {
@@ -1383,19 +1379,30 @@ function AuctionRoom() {
                             setBidAmount(newBid.toString());
                           }}
                           disabled={!ready}
-                          className="flex-shrink-0 px-4 py-3 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-lg text-sm font-medium border border-gray-300 disabled:opacity-50"
+                          className="px-3 py-3 rounded-xl text-sm font-bold transition-all hover:scale-105 disabled:opacity-50"
+                          style={{ background: 'rgba(0, 240, 255, 0.1)', color: '#00F0FF', border: '1px solid rgba(0, 240, 255, 0.3)' }}
                         >
-                          +{amount}m
+                          +£{amount}m
                         </button>
                       ))}
                     </div>
+                    
+                    {/* Pass This Round Button - Placeholder */}
+                    <button
+                      onClick={() => toast("Pass This Round - Coming soon!", { icon: '⏭️', duration: 2000 })}
+                      className="w-full py-3 rounded-xl text-sm font-bold mb-3 transition-all"
+                      style={{ background: 'rgba(255, 77, 77, 0.1)', color: '#FF4D4D', border: '1px solid rgba(255, 77, 77, 0.3)' }}
+                    >
+                      ⏭️ Pass This Round
+                    </button>
                     
                     <div className="flex flex-col sm:flex-row gap-2 mb-2">
                       <input
                         type="text"
                         readOnly
                         placeholder="Use buttons above"
-                        className="w-full sm:flex-1 px-3 py-3 border rounded-lg bg-gray-50 text-[16px] cursor-default"
+                        className="w-full sm:flex-1 px-3 py-3 rounded-xl text-[16px] cursor-default text-white"
+                        style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)' }}
                         value={bidAmount ? `£${bidAmount}m` : ""}
                         disabled={!ready}
                         data-testid="bid-amount-input"
