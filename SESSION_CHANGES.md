@@ -148,7 +148,8 @@ Stitch-styled create competition page with:
 - Dark theme with gradient overlay
 - Progress indicator (step 1 of 3)
 - Competition Identity card (name, sport select)
-- Managers and Budget stepper controls
+- **Min Managers and Max Managers** - Separate fields matching existing functionality
+- **Budget** - £10m increments matching existing functionality
 - Teams per Manager control
 - Private Competition toggle
 - Fixed CTA button
@@ -156,6 +157,8 @@ Stitch-styled create competition page with:
 - Auto-joins commissioner as first participant after creation
 
 HomePage updated to navigate to `/create-competition` instead of `/create-league`.
+
+**Important:** This is a visual redesign only - all functionality matches the existing CreateLeague.js exactly.
 
 ---
 
