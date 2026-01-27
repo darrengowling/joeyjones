@@ -1129,7 +1129,7 @@ const Home = () => {
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.boxShadow = 'none';
-                e.currentTarget.style.background = 'transparent';
+                e.currentTarget.style.background = 'white';
               }}
               data-testid="view-clubs-button"
             >
