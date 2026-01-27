@@ -1266,7 +1266,7 @@ export default function CompetitionDashboard() {
               <button
                 data-testid="tab-summary"
                 onClick={() => handleTabChange("summary")}
-                className="py-5 px-4 text-base font-semibold transition-colors flex-1"
+                className="flex items-center justify-center h-14 px-4 text-base font-semibold transition-colors flex-1"
                 style={{ 
                   borderBottom: activeTab === "summary" ? '3px solid #00F0FF' : '3px solid transparent',
                   color: activeTab === "summary" ? '#00F0FF' : 'rgba(255, 255, 255, 0.4)',
@@ -1278,7 +1278,7 @@ export default function CompetitionDashboard() {
               <button
                 data-testid="tab-table"
                 onClick={() => handleTabChange("table")}
-                className="py-5 px-4 text-base font-semibold transition-colors flex-1"
+                className="flex items-center justify-center h-14 px-4 text-base font-semibold transition-colors flex-1"
                 style={{ 
                   borderBottom: activeTab === "table" ? '3px solid #00F0FF' : '3px solid transparent',
                   color: activeTab === "table" ? '#00F0FF' : 'rgba(255, 255, 255, 0.4)',
@@ -1290,7 +1290,7 @@ export default function CompetitionDashboard() {
               <button
                 data-testid="tab-fixtures"
                 onClick={() => handleTabChange("fixtures")}
-                className="py-5 px-4 text-base font-semibold transition-colors flex-1"
+                className="flex items-center justify-center h-14 px-4 text-base font-semibold transition-colors flex-1"
                 style={{ 
                   borderBottom: activeTab === "fixtures" ? '3px solid #00F0FF' : '3px solid transparent',
                   color: activeTab === "fixtures" ? '#00F0FF' : 'rgba(255, 255, 255, 0.4)',
