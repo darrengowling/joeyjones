@@ -1070,7 +1070,16 @@ const Home = () => {
           <div className="grid md:grid-cols-3 gap-6 mb-8">
             <button
               onClick={handleCreateCompetition}
-              className="btn btn-primary bg-blue-600 text-white px-6 py-4 rounded-lg hover:bg-blue-700 text-lg font-semibold"
+              className="px-6 py-4 text-lg font-bold rounded-xl transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+              style={{
+                background: 'var(--accent-primary)',
+                color: 'var(--text-primary)',
+                borderRadius: 'var(--radius-lg)',
+                boxShadow: 'none',
+                border: 'none',
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.boxShadow = 'var(--glow-primary)'}
+              onMouseLeave={(e) => e.currentTarget.style.boxShadow = 'none'}
               data-testid="create-league-button"
             >
               Create Your Competition
