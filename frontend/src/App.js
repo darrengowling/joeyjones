@@ -1257,7 +1257,8 @@ export default function App() {
           <Route path="/create-league" element={<CreateLeague />} />
           <Route path="/create-competition" element={<CreateCompetition />} />
           <Route path="/clubs" element={<ClubsList />} />
-          <Route path="/league/:leagueId" element={<LeagueDetail />} />
+          <Route path="/league/:leagueId" element={<LeagueDetailStitched />} />
+          <Route path="/league-old/:leagueId" element={<LeagueDetail />} />
           <Route path="/auction/:auctionId" element={<AuctionRoom />} />
           <Route path="/app/my-competitions" element={<MyCompetitions />} />
           <Route path="/app/competitions/:leagueId" element={<CompetitionDashboard />} />
