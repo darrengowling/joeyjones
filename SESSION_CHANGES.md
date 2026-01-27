@@ -153,6 +153,7 @@ Stitch-styled create competition page with:
 - Private Competition toggle
 - Fixed CTA button
 - BottomNav integration
+- Auto-joins commissioner as first participant after creation
 
 HomePage updated to navigate to `/create-competition` instead of `/create-league`.
 
