@@ -934,21 +934,25 @@ export default function CompetitionDashboard() {
 
             {/* AFCON: CSV-based Fixtures & Scores */}
             {summary && summary.competitionCode === 'AFCON' && (
-              <div className="bg-white rounded-lg shadow-md p-4">
-                <h3 className="text-xl font-bold text-gray-900 mb-6">📊 Manage Fixtures & Scores (CSV)</h3>
+              <div 
+                className="rounded-xl p-4"
+                style={{ background: '#151C2C', border: '1px solid rgba(255, 255, 255, 0.1)' }}
+              >
+                <h3 className="text-lg font-bold text-white mb-4">📊 Manage Fixtures & Scores (CSV)</h3>
                 
                 {/* Step 1: Download Template */}
-                <div className="mb-6">
+                <div className="mb-4">
                   <div className="flex items-center gap-2 mb-3">
-                    <div className="h-px bg-gray-300 flex-1"></div>
-                    <h4 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">Step 1: Download Template</h4>
-                    <div className="h-px bg-gray-300 flex-1"></div>
+                    <div className="h-px flex-1" style={{ background: 'rgba(255, 255, 255, 0.1)' }}></div>
+                    <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wide">Step 1: Download Template</h4>
+                    <div className="h-px flex-1" style={{ background: 'rgba(255, 255, 255, 0.1)' }}></div>
                   </div>
-                  <p className="text-sm text-gray-600 mb-3">Get pre-filled fixture list with all matches</p>
+                  <p className="text-sm text-white/60 mb-3">Get pre-filled fixture list with all matches</p>
                   <a
                     href={`${API}/templates/afcon_2025_fixtures_with_names.csv`}
                     download="afcon_2025_fixtures_with_names.csv"
-                    className="flex items-center justify-center gap-2 bg-blue-600 text-white px-4 py-3 rounded-lg hover:bg-blue-700 font-semibold text-sm w-full"
+                    className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-semibold text-sm w-full"
+                    style={{ background: '#00F0FF', color: '#0B101B' }}
                   >
                     <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -960,11 +964,11 @@ export default function CompetitionDashboard() {
                 {/* Step 2: Add Scores & Upload */}
                 <div>
                   <div className="flex items-center gap-2 mb-3">
-                    <div className="h-px bg-gray-300 flex-1"></div>
-                    <h4 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">Step 2: Add Scores & Upload</h4>
-                    <div className="h-px bg-gray-300 flex-1"></div>
+                    <div className="h-px flex-1" style={{ background: 'rgba(255, 255, 255, 0.1)' }}></div>
+                    <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wide">Step 2: Add Scores & Upload</h4>
+                    <div className="h-px flex-1" style={{ background: 'rgba(255, 255, 255, 0.1)' }}></div>
                   </div>
-                  <p className="text-sm text-gray-600 mb-3">Fill in goalsHome/goalsAway in Excel, then upload</p>
+                  <p className="text-sm text-white/60 mb-3">Fill in goalsHome/goalsAway in Excel, then upload</p>
                   
                   <div className="mb-3">
                     <label className="block">
@@ -974,34 +978,40 @@ export default function CompetitionDashboard() {
                         accept=".csv"
                         onChange={handleCSVUpload}
                         disabled={uploadingCSV}
-                        className="block w-full text-sm text-gray-500
+                        className="block w-full text-sm text-white/60
                           file:mr-4 file:py-2 file:px-4
                           file:rounded-lg file:border-0
                           file:text-sm file:font-semibold
-                          file:bg-blue-50 file:text-blue-700
-                          hover:file:bg-blue-100
+                          file:bg-[#00F0FF]/20 file:text-[#00F0FF]
+                          hover:file:bg-[#00F0FF]/30
                           disabled:opacity-50"
                       />
                     </label>
                   </div>
 
                   {uploadingCSV && (
-                    <div className="text-sm text-blue-600 text-center">Uploading...</div>
+                    <div className="text-sm text-center" style={{ color: '#00F0FF' }}>Uploading...</div>
                   )}
                   
                   {uploadSuccess && (
-                    <div className="text-sm text-green-600 bg-green-50 border border-green-200 rounded p-3">
+                    <div 
+                      className="text-sm rounded-lg p-3"
+                      style={{ background: 'rgba(16, 185, 129, 0.1)', color: '#10B981', border: '1px solid rgba(16, 185, 129, 0.2)' }}
+                    >
                       {uploadSuccess}
                     </div>
                   )}
                   
                   {uploadError && (
-                    <div className="text-sm text-red-600 bg-red-50 border border-red-200 rounded p-3">
+                    <div 
+                      className="text-sm rounded-lg p-3"
+                      style={{ background: 'rgba(239, 68, 68, 0.1)', color: '#EF4444', border: '1px solid rgba(239, 68, 68, 0.2)' }}
+                    >
                       {uploadError}
                     </div>
                   )}
 
-                  <p className="text-xs text-gray-500 mt-3 text-center">💡 Re-upload same file after each matchday</p>
+                  <p className="text-xs text-white/40 mt-3 text-center">💡 Re-upload same file after each matchday</p>
                 </div>
               </div>
             )}
