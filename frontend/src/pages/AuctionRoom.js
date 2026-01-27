@@ -1118,7 +1118,7 @@ function AuctionRoom() {
           onClick={() => setShowAllTeamsModal(false)}
         >
           <div 
-            className="w-full max-h-[70vh] rounded-t-3xl overflow-hidden"
+            className="w-full max-w-md max-h-[70vh] rounded-t-3xl overflow-hidden"
             style={{ background: '#0F172A' }}
             onClick={(e) => e.stopPropagation()}
           >
