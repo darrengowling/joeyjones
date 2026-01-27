@@ -42,6 +42,7 @@
 | Auction Room | `AuctionRoom.js` | ✅ Complete | Waiting room + live auction styled |
 | My Competitions | `MyCompetitions.js` | ✅ Complete | Competition cards, bulk delete modal |
 | Research Hub | `ClubsList.js` | ✅ Complete | Asset grid, sport filters, search |
+| Competition Dashboard | `CompetitionDashboard.js` | ✅ Complete | Summary, League Table, Fixtures tabs |
 
 ### Pages Pending Redesign:
 | Page | File | Priority |
