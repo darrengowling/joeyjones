@@ -51,6 +51,7 @@ function AuctionRoom() {
   const [timerSettings, setTimerSettings] = useState({ timerSeconds: 30, antiSnipeSeconds: 10 }); // Everton Bug Fix 3
   const [nextFixture, setNextFixture] = useState(null); // Next fixture for current club
   const [isSubmittingBid, setIsSubmittingBid] = useState(false); // Prevent double-submission
+  const [showAllTeamsModal, setShowAllTeamsModal] = useState(false); // View All teams modal
 
   // Use shared socket room hook
   const { socket, connected, ready, listenerCount } = useSocketRoom('auction', auctionId, { user });
