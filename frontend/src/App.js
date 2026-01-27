@@ -1092,7 +1092,22 @@ const Home = () => {
                   setShowJoinLeagueDialog(true);
                 }
               }}
-              className="btn btn-secondary bg-gray-100 text-gray-900 px-6 py-4 rounded-lg hover:bg-gray-200 text-lg font-semibold border border-gray-300"
+              className="px-6 py-4 text-lg font-bold rounded-xl transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+              style={{
+                background: 'var(--bg-base)',
+                color: 'var(--accent-primary)',
+                borderRadius: 'var(--radius-lg)',
+                border: '2px solid var(--accent-primary)',
+                boxShadow: 'none',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.boxShadow = 'var(--glow-primary)';
+                e.currentTarget.style.background = 'var(--accent-primary-subtle)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.boxShadow = 'none';
+                e.currentTarget.style.background = 'var(--bg-base)';
+              }}
               data-testid="join-league-button"
             >
               Join the Competition
@@ -1100,7 +1115,22 @@ const Home = () => {
             {/* TODO: Potentially delete altogether if no purpose - just navigates to /clubs browse page */}
             <button
               onClick={() => navigate("/clubs")}
-              className="btn btn-outline bg-transparent text-blue-600 px-6 py-4 rounded-lg hover:bg-blue-600 hover:text-white text-lg font-semibold border-2 border-blue-600"
+              className="px-6 py-4 text-lg font-bold rounded-xl transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+              style={{
+                background: 'transparent',
+                color: 'var(--accent-primary)',
+                borderRadius: 'var(--radius-lg)',
+                border: '2px solid var(--accent-primary)',
+                boxShadow: 'none',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.boxShadow = 'var(--glow-primary)';
+                e.currentTarget.style.background = 'var(--accent-primary-subtle)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.boxShadow = 'none';
+                e.currentTarget.style.background = 'transparent';
+              }}
               data-testid="view-clubs-button"
             >
               Explore Available Teams/Players
