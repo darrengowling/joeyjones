@@ -17,6 +17,7 @@ const CompetitionDashboard = lazy(() => import("./pages/CompetitionDashboard"));
 const Help = lazy(() => import("./pages/Help"));
 const DesignPreview = lazy(() => import("./pages/DesignPreview"));
 const HomePage = lazy(() => import("./pages/HomePage"));
+const PlaceholderPage = lazy(() => import("./pages/PlaceholderPage"));
 
 // Debug footer for quick sanity checks
 import DebugFooter from "./components/DebugFooter";
