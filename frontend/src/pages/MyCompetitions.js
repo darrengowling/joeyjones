@@ -205,249 +205,283 @@ export default function MyCompetitions() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen" style={{ background: '#0B101B', paddingBottom: '100px' }}>
       {/* Header */}
-      <div className="bg-white shadow-md app-header">
-        <div className="container-narrow mx-auto px-4 py-4 flex justify-between items-center">
-          <button
-            onClick={() => navigate("/")}
-            className="h2 text-blue-600 hover:text-blue-800 cursor-pointer"
-          >
-            ← Sport X
-          </button>
-          {user && (
-            <div className="flex items-center gap-4">
-              <span className="text-gray-700">
-                <strong>{user.name}</strong>
-              </span>
+      <header 
+        className="fixed top-0 left-0 right-0 z-40 px-4 py-4 flex items-center justify-between"
+        style={{
+          background: 'rgba(11, 16, 27, 0.95)',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
+        }}
+      >
+        <button
+          onClick={() => navigate("/")}
+          className="flex items-center gap-2 text-white/60 hover:text-white transition-colors"
+        >
+          <span>←</span>
+          <span className="text-xl font-black tracking-tighter">
+            SPORT <span style={{ color: '#06B6D4' }}>X</span>
+          </span>
+        </button>
+        {user && (
+          <div className="flex items-center gap-3">
+            <span className="text-sm text-white/60">{user.name}</span>
+          </div>
+        )}
+      </header>
+
+      {/* Main Content */}
+      <div className="pt-20 px-4" data-testid="my-competitions-page">
+        <div className="max-w-2xl mx-auto">
+          <div className="text-xs uppercase tracking-widest text-white/40 mb-1">Dashboard</div>
+          <h1 className="text-2xl font-bold text-white mb-6">My Competitions</h1>
+
+          {loading ? (
+            <div className="text-center py-12">
+              <div className="w-12 h-12 border-4 border-[#00F0FF] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+              <p className="text-white/60">Loading your competitions...</p>
+            </div>
+          ) : error ? (
+            <div 
+              className="rounded-xl p-6 text-center"
+              style={{ background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.3)' }}
+            >
+              <p className="text-red-400">{error}</p>
               <button
-                onClick={() => navigate("/")}
-                className="btn btn-secondary text-sm text-blue-600 hover:underline"
-                data-testid="nav-my-competitions"
+                onClick={() => loadCompetitions(user.id)}
+                className="mt-4 px-4 py-2 rounded-lg font-semibold transition"
+                style={{ background: '#00F0FF', color: '#0B101B' }}
               >
-                Home
+                Retry
               </button>
             </div>
+          ) : competitions.length === 0 ? (
+            // Empty State
+            <div 
+              className="rounded-2xl p-8 text-center"
+              style={{ background: '#151C2C', border: '1px solid rgba(255, 255, 255, 0.1)' }}
+            >
+              <div className="text-6xl mb-4">🏆</div>
+              <h2 className="text-xl font-bold text-white mb-4">
+                You&apos;re not in any competitions yet
+              </h2>
+              <p className="text-white/60 mb-8">
+                Create your own competition or join an existing one with an invite code.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                <button
+                  onClick={() => navigate("/")}
+                  className="px-6 py-3 rounded-xl font-bold transition"
+                  style={{ background: '#00F0FF', color: '#0B101B' }}
+                >
+                  Create League
+                </button>
+                <button
+                  onClick={() => navigate("/")}
+                  className="px-6 py-3 rounded-xl font-bold transition"
+                  style={{ background: 'rgba(255, 255, 255, 0.1)', color: 'white', border: '1px solid rgba(255, 255, 255, 0.2)' }}
+                >
+                  Enter Join Code
+                </button>
+              </div>
+            </div>
+          ) : (
+            <>
+              {/* Bulk Actions Toolbar */}
+              {competitions.filter(c => c.isCommissioner && c.status !== "active").length > 0 && (
+                <div 
+                  className="rounded-xl p-4 mb-6 flex items-center justify-between"
+                  style={{ background: '#151C2C', border: '1px solid rgba(255, 255, 255, 0.1)' }}
+                >
+                  <div className="flex items-center gap-4">
+                    <input
+                      type="checkbox"
+                      checked={selectedLeagues.size > 0 && selectedLeagues.size === competitions.filter(c => c.isCommissioner && c.status !== "active").length}
+                      onChange={toggleSelectAll}
+                      className="w-5 h-5 rounded"
+                      style={{ accentColor: '#00F0FF' }}
+                    />
+                    <span className="text-sm text-white/60">
+                      {selectedLeagues.size === 0 ? "Select leagues" : `${selectedLeagues.size} selected`}
+                    </span>
+                  </div>
+                  {selectedLeagues.size > 0 && (
+                    <button
+                      onClick={() => setShowDeleteModal(true)}
+                      className="px-4 py-2 rounded-lg font-semibold text-sm"
+                      style={{ background: 'rgba(239, 68, 68, 0.2)', color: '#EF4444' }}
+                    >
+                      🗑️ Delete ({selectedLeagues.size})
+                    </button>
+                  )}
+                </div>
+              )}
+
+              {/* Competition Cards */}
+              <div className="space-y-4">
+                {competitions.map((comp) => (
+                  <div
+                    key={comp.leagueId}
+                    data-testid={`comp-card-${comp.leagueId}`}
+                    className="rounded-xl p-4 transition-all hover:scale-[1.01]"
+                    style={{ background: '#151C2C', border: '1px solid rgba(255, 255, 255, 0.1)' }}
+                  >
+                    <div className="flex flex-col gap-3 mb-4">
+                      <div className="flex items-center gap-3 min-w-0 flex-1">
+                        {/* Checkbox for commissioner's non-active leagues */}
+                        {comp.isCommissioner && comp.status !== "active" && (
+                          <input
+                            type="checkbox"
+                            checked={selectedLeagues.has(comp.leagueId)}
+                            onChange={() => toggleSelectLeague(comp.leagueId)}
+                            className="w-5 h-5 rounded flex-shrink-0"
+                            style={{ accentColor: '#00F0FF' }}
+                            onClick={(e) => e.stopPropagation()}
+                          />
+                        )}
+                        <span className="text-3xl flex-shrink-0">{getSportEmoji(comp.sportKey)}</span>
+                        <div className="min-w-0 flex-1">
+                          <h2 className="text-lg font-bold text-white truncate">{comp.name}</h2>
+                          <p className="text-xs text-white/40 capitalize">{comp.sportKey}</p>
+                        </div>
+                      </div>
+                      <span
+                        data-testid="comp-status"
+                        className="px-3 py-1 rounded-full text-xs font-semibold self-start"
+                        style={getStatusChipStyle(comp.status)}
+                      >
+                        {getStatusLabel(comp.status)}
+                      </span>
+                    </div>
+
+                    {/* Your Teams/Players */}
+                    <div className="mb-4">
+                      <p className="text-sm font-semibold text-white/60 mb-2">
+                        Your {getUiHints(comp.sportKey).assetPlural}:
+                      </p>
+                      {comp.assetsOwned && comp.assetsOwned.length > 0 ? (
+                        <div className="space-y-2">
+                          {comp.assetsOwned.slice(0, 4).map((asset, idx) => (
+                            <div
+                              key={idx}
+                              className="flex items-center justify-between p-2 rounded-lg gap-2"
+                              style={{ background: 'rgba(0, 240, 255, 0.1)', border: '1px solid rgba(0, 240, 255, 0.2)' }}
+                            >
+                              <span className="text-sm font-semibold text-white truncate">
+                                {asset.name || `${getUiHints(comp.sportKey).assetLabel} ${idx + 1}`}
+                              </span>
+                              <span className="text-sm font-bold whitespace-nowrap" style={{ color: '#00F0FF' }}>
+                                {formatCurrency(asset.price)}
+                              </span>
+                            </div>
+                          ))}
+                          {comp.assetsOwned.length > 4 && (
+                            <div className="text-sm text-white/40 italic">
+                              + {comp.assetsOwned.length - 4} more {getUiHints(comp.sportKey).assetPlural.toLowerCase()}
+                            </div>
+                          )}
+                        </div>
+                      ) : (
+                        <p className="text-sm text-white/40 italic">
+                          No {getUiHints(comp.sportKey).assetPlural.toLowerCase()} acquired yet
+                        </p>
+                      )}
+                    </div>
+
+                    {/* Stats Row */}
+                    <div className="flex items-center gap-4 mb-4 text-xs text-white/40">
+                      <div className="flex items-center gap-1">
+                        <span>👥</span>
+                        <span>{comp.managersCount} managers</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <span>⏱️</span>
+                        <span>{comp.timerSeconds}s / {comp.antiSnipeSeconds}s</span>
+                      </div>
+                    </div>
+
+                    {/* Next Fixture */}
+                    {comp.nextFixtureAt && (
+                      <div 
+                        className="mb-4 p-3 rounded-lg"
+                        style={{ background: 'rgba(16, 185, 129, 0.1)', border: '1px solid rgba(16, 185, 129, 0.2)' }}
+                      >
+                        <p className="text-sm" style={{ color: '#10B981' }}>
+                          <strong>Next fixture:</strong>{" "}
+                          <span className="font-semibold">{formatRelativeTime(comp.nextFixtureAt)}</span>
+                          {" "}({formatExactDate(comp.nextFixtureAt)})
+                        </p>
+                      </div>
+                    )}
+
+                    {/* Action Buttons */}
+                    <div className="flex flex-col gap-2">
+                      {comp.status === "auction_live" && comp.activeAuctionId && (
+                        <button
+                          data-testid="comp-auction-btn"
+                          onClick={() => navigate(`/auction/${comp.activeAuctionId}`)}
+                          className="w-full py-3 rounded-xl font-bold text-white animate-pulse"
+                          style={{ background: 'linear-gradient(135deg, #EF4444, #DC2626)' }}
+                        >
+                          🔴 Join Auction Now
+                        </button>
+                      )}
+                      <div className="flex gap-2">
+                        <button
+                          data-testid="comp-detail-btn"
+                          onClick={() => navigate(`/league/${comp.leagueId}`)}
+                          className="flex-1 py-2 rounded-xl font-semibold text-sm transition"
+                          style={{ background: 'rgba(255, 255, 255, 0.1)', color: 'white' }}
+                        >
+                          League Detail
+                        </button>
+                        <button
+                          data-testid="comp-view-btn"
+                          onClick={() => navigate(`/competitions/${comp.leagueId}`)}
+                          className="flex-1 py-2 rounded-xl font-semibold text-sm transition"
+                          style={{ background: '#00F0FF', color: '#0B101B' }}
+                        >
+                          Dashboard
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </>
           )}
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="container-narrow mx-auto px-2 py-8" data-testid="my-competitions-page">
-        <div className="text-xs uppercase tracking-wide text-gray-500 mb-1">My Competitions</div>
-        <h1 className="h1 text-3xl font-bold mb-6 text-gray-900">My Competitions</h1>
-
-        {loading ? (
-          <div className="text-center py-12">
-            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-            <p className="mt-4 text-gray-600">Loading your competitions...</p>
-          </div>
-        ) : error ? (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
-            <p className="text-red-800">{error}</p>
-            <button
-              onClick={() => loadCompetitions(user.id)}
-              className="mt-4 btn btn-primary bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
-            >
-              Retry
-            </button>
-          </div>
-        ) : competitions.length === 0 ? (
-          // Empty State
-          <div className="bg-white rounded-lg shadow-lg p-12 text-center">
-            <div className="text-6xl mb-4">🏆</div>
-            <h2 className="h2 text-2xl font-bold mb-4 text-gray-900">
-              You&apos;re not in any competitions yet
-            </h2>
-            <p className="text-gray-600 mb-8">
-              Create your own competition or join an existing one with an invite code.
-            </p>
-            <div className="flex gap-4 justify-center">
-              <button
-                onClick={() => navigate("/")}
-                className="btn btn-primary bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 font-semibold"
-              >
-                Create League
-              </button>
-              <button
-                onClick={() => navigate("/")}
-                className="btn btn-secondary bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 font-semibold"
-              >
-                Enter Join Code
-              </button>
-            </div>
-          </div>
-        ) : (
-          <>
-            {/* Bulk Actions Toolbar */}
-            {competitions.filter(c => c.isCommissioner && c.status !== "active").length > 0 && (
-              <div className="bg-white rounded-lg shadow p-4 mb-6 flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <input
-                    type="checkbox"
-                    checked={selectedLeagues.size > 0 && selectedLeagues.size === competitions.filter(c => c.isCommissioner && c.status !== "active").length}
-                    onChange={toggleSelectAll}
-                    className="w-5 h-5 text-blue-600 rounded"
-                  />
-                  <span className="text-sm text-gray-600">
-                    {selectedLeagues.size === 0 ? "Select leagues" : `${selectedLeagues.size} selected`}
-                  </span>
-                </div>
-                {selectedLeagues.size > 0 && (
-                  <button
-                    onClick={() => setShowDeleteModal(true)}
-                    className="btn btn-danger bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 font-semibold"
-                  >
-                    🗑️ Delete Selected ({selectedLeagues.size})
-                  </button>
-                )}
-              </div>
-            )}
-
-            {/* Competition Cards */}
-            <div className="grid gap-6">
-              {competitions.map((comp) => (
-                <div
-                key={comp.leagueId}
-                data-testid={`comp-card-${comp.leagueId}`}
-                className="bg-white rounded-lg shadow-lg p-4 hover:shadow-xl transition-shadow"
-              >
-                <div className="flex flex-col gap-2 mb-4">
-                  <div className="flex items-center gap-3 min-w-0 flex-1">
-                    {/* Checkbox for commissioner's non-active leagues */}
-                    {comp.isCommissioner && comp.status !== "active" && (
-                      <input
-                        type="checkbox"
-                        checked={selectedLeagues.has(comp.leagueId)}
-                        onChange={() => toggleSelectLeague(comp.leagueId)}
-                        className="w-5 h-5 text-blue-600 rounded flex-shrink-0"
-                        onClick={(e) => e.stopPropagation()}
-                      />
-                    )}
-                    <span className="text-3xl flex-shrink-0">{getSportEmoji(comp.sportKey)}</span>
-                    <div className="min-w-0 flex-1">
-                      <h2 className="h2 text-[var(--t-lg)] font-bold text-gray-900 truncate">{comp.name}</h2>
-                      <p className="text-[var(--t-sm)] text-gray-500 capitalize">{comp.sportKey}</p>
-                    </div>
-                  </div>
-                  <span
-                    data-testid="comp-status"
-                    className={`px-2 py-1 rounded-full text-xs font-semibold border whitespace-nowrap flex-shrink-0 ${getStatusChipStyle(comp.status)}`}
-                  >
-                    {getStatusLabel(comp.status)}
-                  </span>
-                </div>
-
-                {/* Your Teams/Players */}
-                <div className="mb-4">
-                  <p className="text-sm font-semibold text-gray-700 mb-2">
-                    Your {getUiHints(comp.sportKey).assetPlural}:
-                  </p>
-                  {comp.assetsOwned && comp.assetsOwned.length > 0 ? (
-                    <div className="space-y-2">
-                      {comp.assetsOwned.slice(0, 4).map((asset, idx) => (
-                        <div
-                          key={idx}
-                          className="flex items-center justify-between p-2 bg-blue-50 rounded-lg border border-blue-200 gap-2"
-                        >
-                          <span className="text-[var(--t-sm)] font-semibold text-blue-900 truncate break-any">
-                            {asset.name || `${getUiHints(comp.sportKey).assetLabel} ${idx + 1}`}
-                          </span>
-                          <span className="text-[var(--t-sm)] text-blue-700 font-bold whitespace-nowrap">
-                            {formatCurrency(asset.price)}
-                          </span>
-                        </div>
-                      ))}
-                      {comp.assetsOwned.length > 4 && (
-                        <div className="text-sm text-gray-600 italic">
-                          + {comp.assetsOwned.length - 4} more {getUiHints(comp.sportKey).assetPlural.toLowerCase()}
-                        </div>
-                      )}
-                    </div>
-                  ) : (
-                    <p className="text-sm text-gray-500 italic">
-                      No {getUiHints(comp.sportKey).assetPlural.toLowerCase()} acquired yet
-                    </p>
-                  )}
-                </div>
-
-                {/* Stats Row */}
-                <div className="flex items-center gap-6 mb-4 text-sm text-gray-600">
-                  <div className="flex items-center gap-2">
-                    <span>👥</span>
-                    <span>{comp.managersCount} managers</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span>⏱️</span>
-                    <span>{comp.timerSeconds}s bidding / {comp.antiSnipeSeconds}s anti-snipe</span>
-                  </div>
-                </div>
-
-                {/* Next Fixture */}
-                {comp.nextFixtureAt && (
-                  <div className="mb-4 p-3 bg-green-50 rounded-lg border border-green-200">
-                    <p className="text-sm text-green-800">
-                      <strong>Next fixture:</strong>{" "}
-                      <span className="font-semibold">{formatRelativeTime(comp.nextFixtureAt)}</span>
-                      {" "}({formatExactDate(comp.nextFixtureAt)})
-                    </p>
-                  </div>
-                )}
-
-                {/* Action Buttons */}
-                <div className="flex flex-col gap-3">
-                  {comp.status === "auction_live" && comp.activeAuctionId && (
-                    <button
-                      data-testid="comp-auction-btn"
-                      onClick={() => navigate(`/auction/${comp.activeAuctionId}`)}
-                      className="btn btn-primary bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 font-semibold flex-1 animate-pulse"
-                    >
-                      🔴 Join Auction Now
-                    </button>
-                  )}
-                  <button
-                    data-testid="comp-detail-btn"
-                    onClick={() => navigate(`/league/${comp.leagueId}`)}
-                    className="btn btn-secondary bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 font-semibold"
-                  >
-                    League Detail
-                  </button>
-                  <button
-                    data-testid="comp-view-btn"
-                    onClick={() => navigate(`/competitions/${comp.leagueId}`)}
-                    className="btn btn-primary bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 font-semibold flex-1"
-                  >
-                    View Dashboard
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-          </>
-        )}
-      </div>
-
       {/* Delete Confirmation Modal */}
       {showDeleteModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
-            <h3 className="text-xl font-bold text-gray-900 mb-4">⚠️ Delete Leagues?</h3>
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+          <div 
+            className="rounded-2xl max-w-md w-full p-6"
+            style={{ background: '#151C2C', border: '1px solid rgba(255, 255, 255, 0.1)' }}
+          >
+            <h3 className="text-xl font-bold text-white mb-4">⚠️ Delete Leagues?</h3>
             
-            <p className="text-gray-700 mb-4">
-              You are about to permanently delete <strong>{selectedLeagues.size} league(s)</strong>.
+            <p className="text-white/60 mb-4">
+              You are about to permanently delete <strong className="text-white">{selectedLeagues.size} league(s)</strong>.
             </p>
             
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
-              <p className="text-sm text-red-800 mb-2">
+            <div 
+              className="rounded-xl p-4 mb-6"
+              style={{ background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.2)' }}
+            >
+              <p className="text-sm text-red-400 mb-2">
                 <strong>This will delete:</strong>
               </p>
-              <ul className="text-sm text-red-700 space-y-1 list-disc list-inside">
+              <ul className="text-sm text-red-400/80 space-y-1 list-disc list-inside">
                 <li>Selected leagues</li>
                 <li>All participants</li>
                 <li>All auction data & bids</li>
                 <li>All fixtures & standings</li>
               </ul>
-              <p className="text-sm text-red-900 font-semibold mt-3">
+              <p className="text-sm text-red-400 font-semibold mt-3">
                 ⚠️ This action cannot be undone!
               </p>
             </div>
@@ -456,14 +490,16 @@ export default function MyCompetitions() {
               <button
                 onClick={() => setShowDeleteModal(false)}
                 disabled={deleting}
-                className="flex-1 btn btn-secondary bg-gray-100 text-gray-700 px-4 py-3 rounded-lg hover:bg-gray-200 font-semibold"
+                className="flex-1 py-3 rounded-xl font-semibold transition"
+                style={{ background: 'rgba(255, 255, 255, 0.1)', color: 'white' }}
               >
                 Cancel
               </button>
               <button
                 onClick={handleBulkDelete}
                 disabled={deleting}
-                className="flex-1 btn btn-danger bg-red-600 text-white px-4 py-3 rounded-lg hover:bg-red-700 font-semibold disabled:opacity-50"
+                className="flex-1 py-3 rounded-xl font-semibold transition disabled:opacity-50"
+                style={{ background: '#EF4444', color: 'white' }}
               >
                 {deleting ? "Deleting..." : "Delete Forever"}
               </button>
@@ -471,6 +507,9 @@ export default function MyCompetitions() {
           </div>
         </div>
       )}
+
+      {/* Bottom Navigation */}
+      <BottomNav onFabClick={() => navigate('/create-competition')} />
     </div>
   );
 }
