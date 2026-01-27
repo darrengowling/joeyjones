@@ -28,10 +28,10 @@ import DebugFooter from "./components/DebugFooter";
 
 // Loading component for lazy-loaded routes
 const PageLoader = () => (
-  <div className="min-h-screen flex items-center justify-center bg-gray-50">
+  <div className="min-h-screen flex items-center justify-center">
     <div className="text-center">
       <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-      <p className="text-gray-600">Loading...</p>
+      <p className="text-white/60">Loading...</p>
     </div>
   </div>
 );
@@ -479,22 +479,22 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900">
+    <div className="min-h-screen ">
       {/* User Dialog */}
       {showUserDialog && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 pointer-events-auto">
-          <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4">
+          <div className="rounded-2xl p-8 max-w-md w-full mx-4">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-2xl font-bold text-gray-900">Enter Your Details</h2>
+              <h2 className="text-2xl font-bold text-white">Enter Your Details</h2>
               <button
                 onClick={handleCloseUserDialog}
-                className="btn btn-secondary text-gray-500 hover:text-gray-700"
+                className="btn btn-secondary text-white/40 hover:text-white/80"
               >
                 ✕
               </button>
             </div>
             {authError && (
-              <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+              <div className="mb-4 p-3 bg-red-100 border border-red-400 text-[#EF4444] rounded-lg">
                 {authError}
               </div>
             )}
@@ -503,12 +503,12 @@ const Home = () => {
                 <>
                   {/* Step 1: Email Input */}
                   <div className="mb-6">
-                    <label className="block text-gray-700 mb-2 font-medium">Email Address</label>
+                    <label className="block text-white/80 mb-2 font-medium">Email Address</label>
                     <input
                       type="email"
                       inputMode="email"
                       placeholder="your.email@example.com"
-                      className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 text-[16px]"
+                      className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00F0FF] disabled:bg-white/10 text-[16px]"
                       value={userForm.email}
                       onChange={(e) => setUserForm({ ...userForm, email: e.target.value })}
                       data-testid="user-email-input"
@@ -516,13 +516,13 @@ const Home = () => {
                       required
                       maxLength="100"
                     />
-                    <p className="text-sm text-gray-500 mt-2">
+                    <p className="text-sm text-white/40 mt-2">
                       We&apos;ll send you a magic link to sign in securely
                     </p>
                   </div>
                   <button
                     type="submit"
-                    className="btn btn-primary w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+                    className="btn btn-primary w-full bg-[#00F0FF] text-white py-3 rounded-lg hover:bg-[#00F0FF]/80 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
                     data-testid="request-magic-link-button"
                     disabled={authLoading}
                   >
@@ -532,15 +532,15 @@ const Home = () => {
               ) : (
                 <>
                   {/* Step 2: Token Input */}
-                  <div className="mb-4 p-4 bg-green-50 border border-green-200 rounded-lg">
+                  <div className="mb-4 p-4 bg-[#10B981]/10 border border-[#10B981]/20 rounded-lg">
                     <div className="flex items-center gap-2 mb-3">
                       <span className="text-lg">🎯</span>
-                      <p className="text-sm text-green-800 font-semibold">Magic Link Generated!</p>
+                      <p className="text-sm text-[#10B981] font-semibold">Magic Link Generated!</p>
                     </div>
                     
                     <div className="flex flex-wrap items-center gap-2 mb-3">
-                      <span className="text-sm text-green-700 font-medium">Your Token:</span>
-                      <code className="bg-white px-3 py-1.5 rounded font-mono text-sm border border-green-200">
+                      <span className="text-sm text-[#10B981] font-medium">Your Token:</span>
+                      <code className="bg-white px-3 py-1.5 rounded font-mono text-sm border border-[#10B981]/20">
                         {magicToken}
                       </code>
                       <button
@@ -548,30 +548,30 @@ const Home = () => {
                           navigator.clipboard.writeText(magicToken);
                           toast.success("Token copied!");
                         }}
-                        className="px-3 py-1.5 bg-green-600 text-white rounded text-sm hover:bg-green-700 transition-colors font-medium"
+                        className="px-3 py-1.5 bg-[#10B981] text-white rounded text-sm hover:bg-[#10B981]/80 transition-colors font-medium"
                         title="Copy token to clipboard"
                       >
                         📋 Copy
                       </button>
                     </div>
                     
-                    <p className="text-xs text-green-600">
+                    <p className="text-xs text-[#10B981]">
                       (In production, this would be sent to your email)
                     </p>
                   </div>
                   <div className="mb-6">
-                    <label className="block text-gray-700 mb-2 font-medium">Enter Magic Link Token</label>
+                    <label className="block text-white/80 mb-2 font-medium">Enter Magic Link Token</label>
                     <input
                       type="text"
                       placeholder="Paste your token here"
-                      className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 font-mono text-sm"
+                      className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00F0FF] disabled:bg-white/10 font-mono text-sm"
                       value={tokenInput}
                       onChange={(e) => setTokenInput(e.target.value)}
                       data-testid="magic-token-input"
                       disabled={authLoading}
                       required
                     />
-                    <p className="text-sm text-gray-500 mt-2">
+                    <p className="text-sm text-white/40 mt-2">
                       Token expires in 15 minutes
                     </p>
                   </div>
@@ -584,14 +584,14 @@ const Home = () => {
                         setMagicToken("");
                         setAuthError("");
                       }}
-                      className="btn btn-outline flex-1 border border-gray-300 text-gray-700 py-3 rounded-lg hover:bg-gray-50 disabled:opacity-50"
+                      className="btn btn-outline flex-1 border border-white/20 text-white/80 py-3 rounded-lg hover:bg-white/5 disabled:opacity-50"
                       disabled={authLoading}
                     >
                       Back
                     </button>
                     <button
                       type="submit"
-                      className="btn btn-primary flex-1 bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+                      className="btn btn-primary flex-1 bg-[#00F0FF] text-white py-3 rounded-lg hover:bg-[#00F0FF]/80 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
                       data-testid="verify-magic-link-button"
                       disabled={authLoading}
                     >
@@ -608,12 +608,12 @@ const Home = () => {
       {/* Create League Dialog */}
       {showCreateLeagueDialog && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 pointer-events-auto">
-          <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4 max-h-[90dvh] overflow-y-auto app-card">
+          <div className="rounded-2xl p-8 max-w-md w-full mx-4 max-h-[90dvh] overflow-y-auto app-card">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-2xl font-bold text-gray-900">Create Your Competition</h2>
+              <h2 className="text-2xl font-bold text-white">Create Your Competition</h2>
               <button
                 onClick={() => setShowCreateLeagueDialog(false)}
-                className="btn btn-secondary text-gray-500 hover:text-gray-700 min-w-[44px] min-h-[44px]"
+                className="btn btn-secondary text-white/40 hover:text-white/80 min-w-[44px] min-h-[44px]"
                 aria-label="Close dialog"
               >
                 ✕
@@ -621,10 +621,10 @@ const Home = () => {
             </div>
             <form onSubmit={handleCreateLeague}>
               <div className="mb-6">
-                <label className="block text-gray-700 mb-2 font-semibold">League Name</label>
+                <label className="block text-white/80 mb-2 font-semibold">League Name</label>
                 <input
                   type="text"
-                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00F0FF]"
                   value={leagueForm.name}
                   onChange={(e) => setLeagueForm({ ...leagueForm, name: e.target.value })}
                   required
@@ -633,9 +633,9 @@ const Home = () => {
               </div>
 
               <div className="mb-6">
-                <label className="block text-gray-700 mb-2 font-semibold">Sport</label>
+                <label className="block text-white/80 mb-2 font-semibold">Sport</label>
                 <select
-                  className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-[16px]"
+                  className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00F0FF] text-[16px]"
                   value={leagueForm.sportKey}
                   onChange={(e) => {
                     const newSport = e.target.value;
@@ -650,7 +650,7 @@ const Home = () => {
                     <option value="cricket">🏏 Cricket</option>
                   )}
                 </select>
-                <p className="text-sm text-gray-500 mt-2">
+                <p className="text-sm text-white/40 mt-2">
                   Choose the sport for your competition
                 </p>
               </div>
@@ -658,9 +658,9 @@ const Home = () => {
               {/* Competition Selector (Football Only) */}
               {leagueForm.sportKey === "football" && (
                 <div className="mb-6">
-                  <label className="block text-gray-700 mb-2 font-semibold">Competition</label>
+                  <label className="block text-white/80 mb-2 font-semibold">Competition</label>
                   <select
-                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00F0FF]"
                     value={leagueForm.competitionCode || "PL"}
                     onChange={(e) => setLeagueForm({ ...leagueForm, competitionCode: e.target.value })}
                     data-testid="create-competition-select"
@@ -669,7 +669,7 @@ const Home = () => {
                     <option value="CL">🏆 Champions League</option>
                     <option value="AFCON">🌍 AFCON</option>
                   </select>
-                  <p className="text-sm text-gray-500 mt-2">
+                  <p className="text-sm text-white/40 mt-2">
                     Select which competition to run
                   </p>
                 </div>
@@ -678,7 +678,7 @@ const Home = () => {
               {/* Competition Selector (Cricket) */}
               {leagueForm.sportKey === "cricket" && (
                 <div className="mb-6">
-                  <label className="block text-gray-700 mb-2 font-semibold">Competition</label>
+                  <label className="block text-white/80 mb-2 font-semibold">Competition</label>
                   <select
                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                     value={leagueForm.competitionCode || "IPL"}
@@ -687,14 +687,14 @@ const Home = () => {
                   >
                     <option value="IPL">🏏 IPL 2026</option>
                   </select>
-                  <p className="text-sm text-gray-500 mt-2">
+                  <p className="text-sm text-white/40 mt-2">
                     125 probable starters pre-selected. Uncheck any you don't need.
                   </p>
                 </div>
               )}
 
               <div className="mb-6">
-                <label className="block text-gray-700 mb-2 font-semibold">
+                <label className="block text-white/80 mb-2 font-semibold">
                   Budget per Manager
                 </label>
                 <div className="flex items-center gap-2">
@@ -706,14 +706,14 @@ const Home = () => {
                       setLeagueForm({ ...leagueForm, budget: newMillions * 1000000 });
                       setBudgetDisplay(newMillions.toString());
                     }}
-                    className="px-4 py-3 bg-gray-200 hover:bg-gray-300 rounded-lg font-bold text-xl"
+                    className="px-4 py-3 bg-white/10 hover:bg-white/20 rounded-lg font-bold text-xl"
                   >
                     −
                   </button>
                   <div className="flex-1 relative">
                     <input
                       type="text"
-                      className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-center font-semibold text-lg"
+                      className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00F0FF] text-center font-semibold text-lg"
                       value={budgetDisplay}
                       onChange={(e) => {
                         const value = e.target.value.replace(/[^0-9]/g, '');
@@ -725,7 +725,7 @@ const Home = () => {
                       required
                       data-testid="league-budget-input"
                     />
-                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 font-semibold">m</span>
+                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-white/60 font-semibold">m</span>
                   </div>
                   <button
                     type="button"
@@ -735,24 +735,24 @@ const Home = () => {
                       setLeagueForm({ ...leagueForm, budget: newMillions * 1000000 });
                       setBudgetDisplay(newMillions.toString());
                     }}
-                    className="px-4 py-3 bg-gray-200 hover:bg-gray-300 rounded-lg font-bold text-xl"
+                    className="px-4 py-3 bg-white/10 hover:bg-white/20 rounded-lg font-bold text-xl"
                   >
                     +
                   </button>
                 </div>
-                <p className="text-sm text-gray-500 mt-2">
+                <p className="text-sm text-white/40 mt-2">
                   Current: {formatCurrency(leagueForm.budget)} (adjust in £10m increments)
                 </p>
               </div>
 
               <div className="grid grid-cols-2 gap-4 mb-6">
                 <div>
-                  <label className="block text-gray-700 mb-2 font-semibold">Min Managers</label>
+                  <label className="block text-white/80 mb-2 font-semibold">Min Managers</label>
                   <input
                     type="number"
                     inputMode="numeric"
                     pattern="[0-9]*"
-                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-[16px]"
+                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00F0FF] text-[16px]"
                     value={leagueForm.minManagers}
                     onChange={(e) => setLeagueForm({ ...leagueForm, minManagers: Number(e.target.value) })}
                     min="2"
@@ -763,12 +763,12 @@ const Home = () => {
                 </div>
 
                 <div>
-                  <label className="block text-gray-700 mb-2 font-semibold">Max Managers</label>
+                  <label className="block text-white/80 mb-2 font-semibold">Max Managers</label>
                   <input
                     type="number"
                     inputMode="numeric"
                     pattern="[0-9]*"
-                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-[16px]"
+                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00F0FF] text-[16px]"
                     value={leagueForm.maxManagers}
                     onChange={(e) => setLeagueForm({ ...leagueForm, maxManagers: Number(e.target.value) })}
                     min="2"
@@ -780,14 +780,14 @@ const Home = () => {
               </div>
 
               <div className="mb-6">
-                <label className="block text-gray-700 mb-2 font-semibold">
+                <label className="block text-white/80 mb-2 font-semibold">
                   {sports.find(s => s.key === leagueForm.sportKey)?.uiHints.assetPlural || "Assets"} per Manager (1-10)
                 </label>
                 <input
                   type="number"
                   inputMode="numeric"
                   pattern="[0-9]*"
-                  className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-[16px]"
+                  className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00F0FF] text-[16px]"
                   value={leagueForm.clubSlots}
                   onChange={(e) => {
                     const val = e.target.value;
@@ -815,12 +815,12 @@ const Home = () => {
               {/* Prompt D: Timer Configuration */}
               <div className="grid md:grid-cols-2 gap-4 mb-6">
                 <div>
-                  <label className="block text-gray-700 mb-2 font-semibold">Bidding Timer (seconds)</label>
+                  <label className="block text-white/80 mb-2 font-semibold">Bidding Timer (seconds)</label>
                   <input
                     type="number"
                     inputMode="numeric"
                     pattern="[0-9]*"
-                    className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-[16px]"
+                    className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00F0FF] text-[16px]"
                     value={leagueForm.timerSeconds}
                     onChange={(e) => {
                       const val = e.target.value;
@@ -843,15 +843,15 @@ const Home = () => {
                     required
                     data-testid="league-timer-seconds-input"
                   />
-                  <p className="text-sm text-gray-500 mt-2">15-120 seconds</p>
+                  <p className="text-sm text-white/40 mt-2">15-120 seconds</p>
                 </div>
                 <div>
-                  <label className="block text-gray-700 mb-2 font-semibold">Anti-Snipe (seconds)</label>
+                  <label className="block text-white/80 mb-2 font-semibold">Anti-Snipe (seconds)</label>
                   <input
                     type="number"
                     inputMode="numeric"
                     pattern="[0-9]*"
-                    className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-[16px]"
+                    className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00F0FF] text-[16px]"
                     value={leagueForm.antiSnipeSeconds}
                     onChange={(e) => {
                       const val = e.target.value;
@@ -874,13 +874,13 @@ const Home = () => {
                     required
                     data-testid="league-anti-snipe-input"
                   />
-                  <p className="text-sm text-gray-500 mt-2">0-30 seconds, must be less than timer</p>
+                  <p className="text-sm text-white/40 mt-2">0-30 seconds, must be less than timer</p>
                 </div>
               </div>
 
               <button
                 type="submit"
-                className="btn btn-primary w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 font-semibold text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                className="btn btn-primary w-full bg-[#00F0FF] text-white py-3 rounded-lg hover:bg-[#00F0FF]/80 font-semibold text-lg disabled:opacity-50 disabled:cursor-not-allowed"
                 data-testid="create-league-submit"
                 disabled={creatingLeague}
               >
@@ -894,22 +894,22 @@ const Home = () => {
       {/* Join League Dialog */}
       {showJoinLeagueDialog && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 pointer-events-auto">
-          <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4">
+          <div className="rounded-2xl p-8 max-w-md w-full mx-4">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-2xl font-bold text-gray-900">Join the Competition</h2>
+              <h2 className="text-2xl font-bold text-white">Join the Competition</h2>
               <button
                 onClick={() => setShowJoinLeagueDialog(false)}
-                className="btn btn-secondary text-gray-500 hover:text-gray-700"
+                className="btn btn-secondary text-white/40 hover:text-white/80"
               >
                 ✕
               </button>
             </div>
             <form onSubmit={handleJoinLeague}>
               <div className="mb-4">
-                <label className="block text-gray-700 mb-2 font-semibold">Invite Token</label>
+                <label className="block text-white/80 mb-2 font-semibold">Invite Token</label>
                 <input
                   type="text"
-                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00F0FF]"
                   placeholder="Enter 8-character invite token"
                   value={inviteToken}
                   onChange={(e) => setInviteToken(e.target.value)}
@@ -917,14 +917,14 @@ const Home = () => {
                   required
                   data-testid="invite-token-input"
                 />
-                <p className="text-sm text-gray-500 mt-2">
+                <p className="text-sm text-white/40 mt-2">
                   Get the invite token from your competition commissioner to join the strategic arena
                 </p>
               </div>
 
               <button
                 type="submit"
-                className="btn btn-primary w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+                className="btn btn-primary w-full bg-[#00F0FF] text-white py-3 rounded-lg hover:bg-[#00F0FF]/80 font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
                 data-testid="join-league-submit"
                 disabled={joiningLeague}
               >
@@ -947,7 +947,7 @@ const Home = () => {
                 {process.env.REACT_APP_FEATURE_MY_COMPETITIONS === 'true' && (
                   <button
                     onClick={() => navigate("/app/my-competitions")}
-                    className="btn btn-secondary text-sm text-blue-600 hover:underline font-semibold"
+                    className="btn btn-secondary text-sm text-[#00F0FF] hover:underline font-semibold"
                     data-testid="nav-my-competitions"
                   >
                     My Competitions
@@ -955,17 +955,17 @@ const Home = () => {
                 )}
                 <button
                   onClick={() => navigate("/help")}
-                  className="btn btn-secondary text-sm text-gray-600 hover:text-gray-800 hover:underline"
+                  className="btn btn-secondary text-sm text-white/60 hover:text-white hover:underline"
                   data-testid="nav-help"
                 >
                   Help
                 </button>
-                <span className="text-gray-700 text-sm">
+                <span className="text-white/80 text-sm">
                   <strong>{user.name}</strong> ({user.email})
                 </span>
                 <button
                   onClick={() => setShowUserDialog(true)}
-                  className="btn btn-secondary text-sm text-blue-600 hover:underline"
+                  className="btn btn-secondary text-sm text-[#00F0FF] hover:underline"
                 >
                   Change
                 </button>
@@ -989,13 +989,13 @@ const Home = () => {
               
               {/* Mobile view - show condensed */}
               <div className="flex md:hidden items-center gap-2">
-                <span className="text-gray-700 text-xs truncate max-w-[120px]">
+                <span className="text-white/80 text-xs truncate max-w-[120px]">
                   <strong>{user.name}</strong>
                 </span>
                 {process.env.REACT_APP_FEATURE_MY_COMPETITIONS === 'true' && (
                   <button
                     onClick={() => navigate("/app/my-competitions")}
-                    className="btn btn-secondary text-xs px-2 py-1 text-blue-600 hover:underline"
+                    className="btn btn-secondary text-xs px-2 py-1 text-[#00F0FF] hover:underline"
                     data-testid="nav-my-competitions"
                   >
                     My Comps
@@ -1003,7 +1003,7 @@ const Home = () => {
                 )}
                 <button
                   onClick={() => navigate("/help")}
-                  className="btn btn-secondary text-xs px-2 py-1 text-gray-600 hover:underline"
+                  className="btn btn-secondary text-xs px-2 py-1 text-white/60 hover:underline"
                   data-testid="nav-help"
                 >
                   Help
@@ -1030,14 +1030,14 @@ const Home = () => {
             <div className="flex items-center gap-3">
               <button
                 onClick={() => navigate("/help")}
-                className="btn btn-secondary text-sm text-gray-600 hover:text-gray-800 hover:underline"
+                className="btn btn-secondary text-sm text-white/60 hover:text-white hover:underline"
                 data-testid="nav-help-logged-out"
               >
                 Help
               </button>
               <button
                 onClick={() => setShowUserDialog(true)}
-                className="btn btn-primary bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-sm md:text-base"
+                className="btn btn-primary bg-[#00F0FF] text-white px-4 py-2 rounded-lg hover:bg-[#00F0FF]/80 text-sm md:text-base"
                 data-testid="login-button"
               >
                 Sign In
@@ -1057,7 +1057,7 @@ const Home = () => {
             </div>
             <button
               onClick={() => navigate("/app/my-competitions")}
-              className="bg-white text-blue-600 px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+              className="bg-white text-[#00F0FF] px-4 py-2 rounded-lg font-semibold hover:bg-white/10 transition-colors"
             >
               View My Competitions
             </button>
@@ -1068,9 +1068,9 @@ const Home = () => {
       {/* Main Content */}
       <div className="container-narrow mx-auto px-4 py-8">
         <div className="bg-white rounded-lg shadow-lg p-8">
-          <h2 className="h1 text-3xl font-bold mb-6 text-gray-900">Welcome to Sport X</h2>
-          <p className="h2 text-lg font-semibold text-blue-900 mb-2">Sports Gaming with Friends. No Gambling. All Game.</p>
-          <p className="subtle text-gray-600 mb-8">
+          <h2 className="h1 text-3xl font-bold mb-6 text-white">Welcome to Sport X</h2>
+          <p className="h2 text-lg font-semibold text-white mb-2">Sports Gaming with Friends. No Gambling. All Game.</p>
+          <p className="subtle text-white/60 mb-8">
             Bid for exclusive ownership of players and teams who score your points. Experience the thrill of sports through strategic competition and community.
           </p>
 
@@ -1108,14 +1108,14 @@ const Home = () => {
           {/* Active Leagues - Compact Horizontal Layout */}
           <div>
             <div className="flex justify-between items-center mb-4">
-              <h3 className="h2 text-2xl font-bold text-gray-900">Active Leagues</h3>
+              <h3 className="h2 text-2xl font-bold text-white">Active Leagues</h3>
               {leagues.length > 0 && (
-                <p className="text-sm text-gray-500">{leagues.length} competitions</p>
+                <p className="text-sm text-white/40">{leagues.length} competitions</p>
               )}
             </div>
             {leagues.length === 0 ? (
-              <div className="text-center py-8 bg-gray-50 rounded-lg">
-                <p className="text-gray-500 text-lg">🏆 No competitions yet</p>
+              <div className="text-center py-8 bg-white/5 rounded-lg">
+                <p className="text-white/40 text-lg">🏆 No competitions yet</p>
                 <p className="text-gray-400 text-sm mt-2">Create your strategic arena to get started!</p>
               </div>
             ) : (
@@ -1129,14 +1129,14 @@ const Home = () => {
                     return (
                       <div
                         key={league.id}
-                        className="flex-shrink-0 w-72 border rounded-lg p-4 hover:shadow-md transition-all duration-200 cursor-pointer app-card bg-white hover:bg-gray-50"
+                        className="flex-shrink-0 w-72 border rounded-lg p-4 hover:shadow-md transition-all duration-200 cursor-pointer app-card bg-white hover:bg-white/5"
                         onClick={() => navigate(`/league/${league.id}`)}
                         data-testid={`league-card-${league.id}`}
                       >
                         <div className="flex items-start justify-between mb-3">
                           <div className="flex items-center space-x-2">
                             <span className="text-lg">{sportIcon}</span>
-                            <span className="chip bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs font-medium">
+                            <span className="chip bg-blue-100 text-[#00F0FF] px-2 py-1 rounded text-xs font-medium">
                               {sportName}
                             </span>
                           </div>
@@ -1147,18 +1147,18 @@ const Home = () => {
                           )}
                         </div>
                         
-                        <h4 className="text-lg font-semibold text-gray-900 mb-2 truncate" title={league.name}>
+                        <h4 className="text-lg font-semibold text-white mb-2 truncate" title={league.name}>
                           {league.name}
                         </h4>
                         
-                        <div className="space-y-2 text-sm text-gray-600">
+                        <div className="space-y-2 text-sm text-white/60">
                           <div className="flex justify-between">
                             <span>Budget:</span>
                             <span className="font-medium">£{(league.budget / 1000000).toFixed(0)}M</span>
                           </div>
                           <div className="flex justify-between">
                             <span>Managers:</span>
-                            <span className={`font-medium ${league.participantCount >= league.minManagers ? 'text-green-600' : ''}`}>
+                            <span className={`font-medium ${league.participantCount >= league.minManagers ? 'text-[#10B981]' : ''}`}>
                               {league.participantCount || 0}/{league.maxManagers}
                             </span>
                           </div>
@@ -1169,14 +1169,14 @@ const Home = () => {
                         </div>
                         
                         {league.participantCount >= league.minManagers && (
-                          <div className="mt-3 pt-3 border-t border-gray-200">
-                            <span className="text-xs text-green-600 font-medium">✓ Ready for Competition</span>
+                          <div className="mt-3 pt-3 border-t border-white/10">
+                            <span className="text-xs text-[#10B981] font-medium">✓ Ready for Competition</span>
                           </div>
                         )}
                         
-                        <div className="mt-3 pt-3 border-t border-gray-200">
-                          <p className="text-xs text-gray-500">
-                            Token: <code className="bg-gray-100 px-1 py-0.5 rounded text-xs">{league.inviteToken}</code>
+                        <div className="mt-3 pt-3 border-t border-white/10">
+                          <p className="text-xs text-white/40">
+                            Token: <code className="bg-white/10 px-1 py-0.5 rounded text-xs">{league.inviteToken}</code>
                           </p>
                         </div>
                         
@@ -1185,7 +1185,7 @@ const Home = () => {
                           <div className="mt-3">
                             <button
                               onClick={(e) => handleDeleteLeague(league, e)}
-                              className="w-full px-3 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition text-sm font-medium"
+                              className="w-full px-3 py-2 bg-red-100 text-[#EF4444] rounded-lg hover:bg-red-200 transition text-sm font-medium"
                               data-testid={`delete-league-${league.id}`}
                             >
                               🗑️ Delete League
@@ -1198,12 +1198,12 @@ const Home = () => {
                   
                   {/* Add League Card */}
                   <div
-                    className="flex-shrink-0 w-72 border-2 border-dashed border-gray-300 rounded-lg p-4 hover:border-blue-400 hover:bg-blue-50 transition-all duration-200 cursor-pointer flex flex-col items-center justify-center text-center"
+                    className="flex-shrink-0 w-72 border-2 border-dashed border-white/20 rounded-lg p-4 hover:border-blue-400 hover:bg-[#00F0FF]/10 transition-all duration-200 cursor-pointer flex flex-col items-center justify-center text-center"
                     onClick={handleCreateCompetition}
                   >
                     <div className="text-4xl mb-3 text-gray-400">+</div>
-                    <h4 className="text-lg font-semibold text-gray-700 mb-2">Create New Competition</h4>
-                    <p className="text-sm text-gray-500">Start your own strategic arena</p>
+                    <h4 className="text-lg font-semibold text-white/80 mb-2">Create New Competition</h4>
+                    <p className="text-sm text-white/40">Start your own strategic arena</p>
                   </div>
                 </div>
               </div>
