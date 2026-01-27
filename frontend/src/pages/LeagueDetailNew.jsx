@@ -61,6 +61,7 @@ export default function LeagueDetailNew() {
     loadStandings();
     loadFixtures();
     loadAssets();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [leagueId]);
 
   useEffect(() => {
