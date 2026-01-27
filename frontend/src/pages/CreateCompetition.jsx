@@ -337,9 +337,10 @@ export default function CreateCompetition() {
               >
                 <span className="material-symbols-outlined text-xl" style={{ color: '#06B6D4' }}>remove</span>
               </button>
-              <div className="flex items-center">
-                <span className="font-black text-xl mr-1" style={{ color: '#06B6D4' }}>£</span>
-                <span className="text-2xl font-black text-white">{budgetDisplay}M</span>
+              <div className="flex items-baseline">
+                <span className="text-2xl font-black" style={{ color: '#06B6D4' }}>£</span>
+                <span className="text-2xl font-black text-white">{budgetDisplay}</span>
+                <span className="text-2xl font-black" style={{ color: '#06B6D4' }}>M</span>
               </div>
               <button
                 type="button"
