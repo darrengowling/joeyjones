@@ -1094,7 +1094,7 @@ const Home = () => {
               }}
               className="px-6 py-4 text-lg font-bold rounded-xl transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
               style={{
-                background: 'var(--bg-base)',
+                background: 'white',
                 color: 'var(--accent-primary)',
                 borderRadius: 'var(--radius-lg)',
                 border: '2px solid var(--accent-primary)',
@@ -1106,7 +1106,7 @@ const Home = () => {
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.boxShadow = 'none';
-                e.currentTarget.style.background = 'var(--bg-base)';
+                e.currentTarget.style.background = 'white';
               }}
               data-testid="join-league-button"
             >
@@ -1117,7 +1117,7 @@ const Home = () => {
               onClick={() => navigate("/clubs")}
               className="px-6 py-4 text-lg font-bold rounded-xl transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
               style={{
-                background: 'transparent',
+                background: 'white',
                 color: 'var(--accent-primary)',
                 borderRadius: 'var(--radius-lg)',
                 border: '2px solid var(--accent-primary)',
