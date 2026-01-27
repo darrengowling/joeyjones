@@ -271,12 +271,12 @@ const HomePage = () => {
           </div>
           
           <div className="space-y-4">
-            <p className="text-xl font-bold text-slate-100 leading-tight uppercase tracking-tight">
-              Social Sports Gaming.<br />
+            <p className="text-xl font-bold text-slate-100 leading-tight">
+              Sports Gaming with Friends.<br />
               <span className="text-slate-400">No Gambling. All Game.</span>
             </p>
             <p className="text-slate-400 leading-relaxed text-sm font-medium">
-              The premium platform for sports team auctions. Build your legacy, compete with friends, and dominate the standings through strategic team ownership.
+              Bid for exclusive ownership of players and teams who score your points. Experience the thrill of sports through strategic competition and community.
             </p>
           </div>
 
@@ -296,7 +296,7 @@ const HomePage = () => {
 
         {/* Action Cards */}
         <section className="grid grid-cols-1 gap-4">
-          {/* Create League Card */}
+          {/* Create Competition Card */}
           <button 
             onClick={handleCreateCompetition}
             className="p-5 rounded-2xl flex items-center justify-between transition-all active:scale-[0.98] group text-left"
@@ -318,14 +318,14 @@ const HomePage = () => {
                 <span className="material-symbols-outlined" style={{ color: '#06B6D4' }}>add_box</span>
               </div>
               <div>
-                <span className="block font-black text-white uppercase tracking-tight text-sm">Create League</span>
+                <span className="block font-black text-white uppercase tracking-tight text-sm">Create Your Competition</span>
                 <span className="block text-slate-500 text-[10px] font-bold uppercase tracking-widest">Host a private auction</span>
               </div>
             </div>
             <span className="material-symbols-outlined text-slate-600 group-hover:text-cyan-500 transition-colors">chevron_right</span>
           </button>
 
-          {/* Browse Markets Card */}
+          {/* Explore Teams/Players Card */}
           <button 
             onClick={() => navigate('/clubs')}
             className="p-5 rounded-2xl flex items-center justify-between transition-all active:scale-[0.98] group text-left"
@@ -347,18 +347,18 @@ const HomePage = () => {
                 <span className="material-symbols-outlined text-slate-400">explore</span>
               </div>
               <div>
-                <span className="block font-black text-white uppercase tracking-tight text-sm">Browse Markets</span>
-                <span className="block text-slate-500 text-[10px] font-bold uppercase tracking-widest">Find live competitions</span>
+                <span className="block font-black text-white uppercase tracking-tight text-sm">Explore Available Teams/Players</span>
+                <span className="block text-slate-500 text-[10px] font-bold uppercase tracking-widest">Browse the roster</span>
               </div>
             </div>
             <span className="material-symbols-outlined text-slate-600 group-hover:text-cyan-500 transition-colors">chevron_right</span>
           </button>
         </section>
 
-        {/* Active Leagues Section */}
+        {/* Active Competitions Section */}
         <section className="space-y-5">
           <div className="flex items-end justify-between px-1">
-            <h3 className="text-xl font-black uppercase tracking-tighter text-white">Active Leagues</h3>
+            <h3 className="text-xl font-black uppercase tracking-tighter text-white">My Competitions</h3>
             {leagues.length > 0 && (
               <button 
                 onClick={() => navigate('/app/my-competitions')}
