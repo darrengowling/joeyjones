@@ -246,7 +246,7 @@ const HomePage = () => {
         </div>
       </header>
 
-      <main className="p-6 space-y-8">
+      <main className="pt-24 px-6 pb-6 space-y-8">
         {/* Hero Section */}
         <section 
           className="p-8 rounded-3xl space-y-6"
