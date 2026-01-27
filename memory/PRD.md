@@ -47,15 +47,32 @@ Build a fantasy sports auction platform where users create leagues, bid on teams
 
 ## What's Been Implemented
 
-### Phase 6: UI/UX Redesign - Stitch Design (In Progress - Jan 27, 2026)
+### Phase 6: UI/UX Redesign - Stitch Design (COMPLETE - Jan 27, 2026)
 - ✅ Design system CSS (`/app/frontend/src/styles/design-system.css`)
 - ✅ BottomNav component
 - ✅ HomePage (dark theme, glassmorphism)
 - ✅ CreateCompetition page
 - ✅ LeagueDetailStitched.jsx (tabbed layout, verified working)
 - ✅ AuctionRoom.js styling (waiting room + live auction + completed state)
-- ⏳ MyCompetitions.js (NEXT)
-- ⏳ ClubsList.js (Research Hub)
+- ✅ MyCompetitions.js 
+- ✅ ClubsList.js (Research Hub)
+- ✅ CompetitionDashboard.js
+- ✅ CreateLeague.js
+- ✅ Help.js (757 lines restyled)
+
+**Phase 6.1: Stitch Technical Asset Spec (Jan 27, 2026)**
+- ✅ Header height updated to 84px (per Stitch spec)
+- ✅ Bottom nav height updated to 88px (per Stitch spec)
+- ✅ Base grid padding updated to 16px (per Stitch spec)
+- ✅ TeamCrest placeholder SVG component created (`/app/frontend/src/components/TeamCrest.jsx`)
+- ✅ Team watermark background (15% opacity shield placeholder)
+- ✅ SVG nav icons (replaced emoji with proper SVGs)
+- ✅ FAB with cyan glow effect
+- ✅ Bid value "pop" animation (scale 10% on new bid)
+
+**Pending for Phase 6.1:**
+- ⏳ Real team crest SVG/PNG assets (placeholder system ready)
+- ⏳ Dynamic background shift to team color (needs team color data)
 
 **Bug Fixed (Session 3):**
 - Auth check moved before waiting room render to prevent `user.id` null access crash
