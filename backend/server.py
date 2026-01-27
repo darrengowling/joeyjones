@@ -2319,7 +2319,8 @@ async def join_league_by_token(input_data: JoinByTokenInput):
         id=str(uuid.uuid4()),
         leagueId=league_id,
         userId=input_data.userId,
-        displayName=user.get("displayName") or user.get("email", "").split("@")[0],
+        userName=user.get("displayName") or user.get("email", "").split("@")[0],
+        userEmail=user.get("email", ""),
         budgetRemaining=league["budget"],
         totalSpent=0,
         clubsWon=[],
@@ -2333,7 +2334,7 @@ async def join_league_by_token(input_data: JoinByTokenInput):
         room = f"league:{league_id}"
         await sio.emit('member_joined', {
             'userId': participant.userId,
-            'displayName': participant.displayName,
+            'displayName': participant.userName,
             'joinedAt': participant.joinedAt.isoformat()
         }, room=room)
     except Exception as e:
