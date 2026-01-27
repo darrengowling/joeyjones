@@ -205,15 +205,22 @@ export default function ClubsList() {
                 <div>
                   <label className="block text-white/60 mb-2 text-sm font-semibold">IPL Team</label>
                   <select
-                    className="w-full px-4 py-3 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-[#00F0FF]"
-                    style={{ background: '#0B101B', border: '1px solid rgba(255, 255, 255, 0.1)' }}
+                    className="w-full px-4 py-3 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-[#06B6D4] appearance-none cursor-pointer"
+                    style={{ 
+                      background: '#0B101B', 
+                      border: '1px solid rgba(255, 255, 255, 0.2)',
+                      backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2306B6D4'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
+                      backgroundRepeat: 'no-repeat',
+                      backgroundPosition: 'right 12px center',
+                      backgroundSize: '20px'
+                    }}
                     value={selectedFranchise}
                     onChange={(e) => setSelectedFranchise(e.target.value)}
                     data-testid="franchise-filter-select"
                   >
-                    <option value="all">All Teams ({franchises.length})</option>
+                    <option value="all" style={{ background: '#0B101B', color: '#fff' }}>All Teams ({franchises.length})</option>
                     {franchises.map((franchise) => (
-                      <option key={franchise} value={franchise}>
+                      <option key={franchise} value={franchise} style={{ background: '#0B101B', color: '#fff' }}>
                         {franchise} ({currentAssets.filter(a => a.meta?.franchise === franchise).length})
                       </option>
                     ))}
@@ -222,15 +229,22 @@ export default function ClubsList() {
                 <div>
                   <label className="block text-white/60 mb-2 text-sm font-semibold">Role</label>
                   <select
-                    className="w-full px-4 py-3 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-[#00F0FF]"
-                    style={{ background: '#0B101B', border: '1px solid rgba(255, 255, 255, 0.1)' }}
+                    className="w-full px-4 py-3 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-[#06B6D4] appearance-none cursor-pointer"
+                    style={{ 
+                      background: '#0B101B', 
+                      border: '1px solid rgba(255, 255, 255, 0.2)',
+                      backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2306B6D4'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
+                      backgroundRepeat: 'no-repeat',
+                      backgroundPosition: 'right 12px center',
+                      backgroundSize: '20px'
+                    }}
                     value={selectedRole}
                     onChange={(e) => setSelectedRole(e.target.value)}
                     data-testid="role-filter-select"
                   >
-                    <option value="all">All Roles</option>
+                    <option value="all" style={{ background: '#0B101B', color: '#fff' }}>All Roles</option>
                     {roles.map((role) => (
-                      <option key={role} value={role}>
+                      <option key={role} value={role} style={{ background: '#0B101B', color: '#fff' }}>
                         {role} ({currentAssets.filter(a => a.meta?.role === role).length})
                       </option>
                     ))}
