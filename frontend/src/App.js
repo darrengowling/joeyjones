@@ -1273,6 +1273,7 @@ export default function App() {
         </Routes>
       </Suspense>
       <DebugFooter />
+      </div>
     </BrowserRouter>
   );
 }
