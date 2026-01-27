@@ -1438,12 +1438,12 @@ function AuctionRoom() {
               </button>
             )}
             {auction?.status === "paused" && (
-              <button onClick={resumeAuction} className="flex-1 py-2 rounded-lg text-xs font-medium" style={{ background: 'rgba(16, 185, 129, 0.2)', color: '#10B981' }}>
-                ▶️ Resume
+              <button onClick={resumeAuction} className="flex-1 py-2 rounded-lg text-xs font-medium flex items-center justify-center gap-1" style={{ background: 'rgba(16, 185, 129, 0.2)', color: '#10B981' }}>
+                <span className="material-symbols-outlined text-sm">play_arrow</span> Resume
               </button>
             )}
-            <button onClick={completeLot} className="flex-1 py-2 rounded-lg text-xs font-medium" style={{ background: 'rgba(255, 77, 77, 0.2)', color: '#FF4D4D' }}>
-              Skip Lot
+            <button onClick={completeLot} className="flex-1 py-2 rounded-lg text-xs font-medium flex items-center justify-center gap-1" style={{ background: 'rgba(255, 77, 77, 0.2)', color: '#FF4D4D' }}>
+              <span className="material-symbols-outlined text-sm">skip_next</span> Skip
             </button>
           </div>
         )}
