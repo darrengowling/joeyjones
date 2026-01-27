@@ -65,14 +65,24 @@ Build a fantasy sports auction platform where users create leagues, bid on teams
 - ✅ Bottom nav height updated to 88px (per Stitch spec)
 - ✅ Base grid padding updated to 16px (per Stitch spec)
 - ✅ TeamCrest placeholder SVG component created (`/app/frontend/src/components/TeamCrest.jsx`)
-- ✅ Team watermark background (15% opacity shield placeholder)
+- ✅ Team watermark background (12% opacity)
 - ✅ SVG nav icons (replaced emoji with proper SVGs)
 - ✅ FAB with cyan glow effect
 - ✅ Bid value "pop" animation (scale 10% on new bid)
+- ✅ Football-Data.org crests integration (real team logos)
+- ✅ "View All" teams modal in auction room
+
+**Bug Fixes (Session 4 - Jan 27, 2026):**
+- ✅ Fixed auction end navigation (now goes to My Competitions)
+- ✅ Fixed 404 errors on league detail pages (wrong API endpoint)
+- ✅ Fixed tab alignment inconsistency between commissioner/participant views
+
+**Verified Working:**
+- ✅ Auction queue randomization (random.shuffle on start)
+- ✅ Queue order hidden from users (alphabetical sort preserves strategy)
 
 **Pending for Phase 6.1:**
-- ⏳ Real team crest SVG/PNG assets (placeholder system ready)
-- ⏳ Dynamic background shift to team color (needs team color data)
+- ⏳ Dynamic background shift to team color (needs team color data in DB)
 
 **Bug Fixed (Session 3):**
 - Auth check moved before waiting room render to prevent `user.id` null access crash
