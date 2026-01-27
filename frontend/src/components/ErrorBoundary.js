@@ -68,28 +68,34 @@ class ErrorBoundary extends React.Component {
 
       // Default fallback UI
       return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-          <div className="max-w-md w-full bg-white shadow-lg rounded-lg p-8">
+        <div className="min-h-screen flex items-center justify-center px-4" style={{ background: '#0B101B' }}>
+          <div 
+            className="max-w-md w-full rounded-2xl p-8"
+            style={{ background: '#151C2C', border: '1px solid rgba(255, 255, 255, 0.1)' }}
+          >
             <div className="text-center">
               <div className="text-6xl mb-4">😕</div>
-              <h1 className="text-2xl font-bold text-gray-900 mb-2">
+              <h1 className="text-2xl font-bold text-white mb-2">
                 Oops! Something went wrong
               </h1>
-              <p className="text-gray-600 mb-6">
+              <p className="text-white/60 mb-6">
                 We're sorry, but something unexpected happened. The error has been reported and we'll fix it as soon as possible.
               </p>
               
               {process.env.NODE_ENV === 'development' && this.state.error && (
                 <details className="mb-6 text-left">
-                  <summary className="cursor-pointer text-sm text-gray-500 hover:text-gray-700 mb-2">
+                  <summary className="cursor-pointer text-sm text-white/40 hover:text-white/60 mb-2">
                     Error Details (Development Only)
                   </summary>
-                  <div className="bg-gray-100 p-4 rounded text-xs overflow-auto max-h-48">
-                    <p className="font-mono text-red-600 mb-2">
+                  <div 
+                    className="p-4 rounded-xl text-xs overflow-auto max-h-48"
+                    style={{ background: 'rgba(0, 0, 0, 0.3)' }}
+                  >
+                    <p className="font-mono text-[#EF4444] mb-2">
                       {this.state.error.toString()}
                     </p>
                     {this.state.errorInfo && (
-                      <pre className="text-gray-700 whitespace-pre-wrap">
+                      <pre className="text-white/60 whitespace-pre-wrap">
                         {this.state.errorInfo.componentStack}
                       </pre>
                     )}
@@ -100,21 +106,24 @@ class ErrorBoundary extends React.Component {
               <div className="space-y-3">
                 <button
                   onClick={() => window.location.href = '/'}
-                  className="w-full bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                  className="w-full px-6 py-3 rounded-xl transition-colors font-medium"
+                  style={{ background: '#00F0FF', color: '#0B101B' }}
                 >
                   Return to Home
                 </button>
                 
                 <button
                   onClick={() => window.location.href = '/app/my-competitions'}
-                  className="w-full bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors font-medium"
+                  className="w-full px-6 py-3 rounded-xl transition-colors font-medium"
+                  style={{ background: '#10B981', color: 'white' }}
                 >
                   Go to My Competitions
                 </button>
                 
                 <button
                   onClick={this.handleReset}
-                  className="w-full bg-gray-200 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-300 transition-colors font-medium"
+                  className="w-full px-6 py-3 rounded-xl transition-colors font-medium"
+                  style={{ background: 'rgba(255, 255, 255, 0.1)', color: 'white' }}
                 >
                   Reload This Page
                 </button>
