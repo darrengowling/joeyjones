@@ -1,253 +1,191 @@
-# Session Changes Summary - January 25, 2026
+# Session Changes Log - UI/UX Redesign (Stitch)
+**Started:** January 27, 2026
+**Last Updated:** January 27, 2026
 
-**Purpose:** Document all uncommitted changes from this session for continuity if context is lost.
-
-**Status:** Changes tested locally, NOT pushed to GitHub yet.
-
----
-
-## 🚨 DEPLOYMENT CHECKLIST (Push to GitHub)
-
-### Code Fixes Required for Railway:
-
-| # | File | Change | Status |
-|---|------|--------|--------|
-| 1 | `backend/server.py` | Fix `.isdigit()` bug on line ~3147 - handle int externalId | ✅ Fixed locally |
-| 2 | `frontend/src/App.js` | Cricket competition dropdown (IPL 2026) | ✅ Fixed locally |
-| 3 | `frontend/src/pages/LeagueDetail.js` | Simplified player selection UI | ✅ Fixed locally |
-| 4 | `backend/services/asset_service.py` | Increased page size cap to 300 | ✅ Fixed locally |
-
-### Railway Database Updates (Already Done):
-- ✅ All 20 EPL teams have `externalId` set
-- ✅ 125 IPL 2026 curated players added
-- ✅ Player nationalities added
-
-### After GitHub Push:
-1. Railway will auto-deploy
-2. Test EPL fixture import on Railway
-3. Test IPL cricket competition creation
+## Overview
+This session focused on implementing the new UI/UX redesign based on Stitch design tool exports. The goal is to transform the app from a light-themed design to a premium dark-themed mobile-first design.
 
 ---
 
-## 1. Railway POC - COMPLETED ✅
+## Completed Work
 
-Railway deployment is fully working:
-- **Backend:** https://joeyjones-production.up.railway.app
-- **Frontend:** https://energetic-victory-production-4b19.up.railway.app
+### 1. Backend Optimizations (Pre-Design Work)
+**Files Modified:** `/app/backend/server.py`
 
-### Environment Variables Configured in Railway
+- **DB Optimization:** Replaced `update_one` + `find_one` with `find_one_and_update` in `place_bid` endpoint (~1 DB call saved per bid)
+- **Payload Filtering:** GET `/auction/{id}` now returns only bids for current lot (was returning ALL bids)
+- **Privacy Fix:** Stripped `userEmail` from `bid_placed` socket event
+- **Import Added:** `from pymongo import ReturnDocument`
 
-**Backend (joeyjones):**
-- MONGO_URL: `mongodb+srv://darts_admin:Anniepip1315@cluster0.edjfwnl.mongodb.net/?appName=Cluster0`
-- DB_NAME: `sport_x_poc`
-- JWT_SECRET_KEY: (set)
-- REDIS_URL: `redis://default:...@redis-12232.c338.eu-west-2-1.ec2.cloud.redislabs.com:12232`
-- CORS_ORIGINS: `*`
-- FRONTEND_ORIGIN: `*`
-- ENV: `production`
-- SENTRY_DSN: `https://38e67fde1c300ff4e1c292baa9b3dc67@o4510411309907968.ingest.de.sentry.io/4510768829366352`
-- SENTRY_ENVIRONMENT: `production`
-- SENTRY_TRACES_SAMPLE_RATE: `0.1`
-- FOOTBALL_DATA_TOKEN: `eddf5fb8a13a4e2c9c5808265cd28579`
-- API_FOOTBALL_KEY: `ce31120a72a2158ab9e33a56233bf39f`
-- RAPIDAPI_KEY: `62431ad8damshcc26bf0bb67d862p12ab40jsn9710a0c8967c`
+### 2. UI Fix - Auction Complete Screen
+**File:** `/app/frontend/src/pages/AuctionRoom.js`
 
-**Frontend (energetic-victory):**
-- REACT_APP_BACKEND_URL: `https://joeyjones-production.up.railway.app`
-- REACT_APP_SENTRY_DSN: `https://38e67fde1c300ff4e1c292baa9b3dc67@o4510411309907968.ingest.de.sentry.io/4510768829366352`
-- REACT_APP_SENTRY_ENVIRONMENT: `production`
-- REACT_APP_SENTRY_TRACES_SAMPLE_RATE: `0.1`
+- Added condition `auction?.status !== "completed"` to hide last team when auction ends
+- Shows "Auction Complete!" message with 🎉 emoji
+- Added "Go to My Competitions →" button navigating to `/app/my-competitions`
+
+### 3. UI Fix - Cricket Franchise Display
+**File:** `/app/frontend/src/pages/AuctionRoom.js`
+
+- Added franchise display below player name for cricket players
+- Shows in both main player card and players list
+- Uses `currentClub.meta?.franchise`
+
+### 4. Environment Variable Fix (Railway)
+**Issue:** Team selection not working on Railway
+**Root Cause:** Missing `FEATURE_ASSET_SELECTION=true` environment variable
+**Resolution:** User added to Railway manually
+
+### 5. Database Cleanup
+- Deleted 558 test leagues and associated data from local environment
+- Deleted `/app/frontend/src/pages/CompetitionDashboard.js.backup`
 
 ---
 
-## 2. Database Changes
+## Stitch Design System Implementation
 
-### Railway Atlas (sport_x_poc)
+### Step 1: Design System CSS ✅
+**File Created:** `/app/frontend/src/styles/design-system.css`
 
-**Sports collection seeded:**
-```javascript
-{
-  key: "football",
-  name: "Football",
-  assetType: "club",
-  uiHints: { assetLabel: "Club", assetPlural: "Clubs", currencySymbol: "£", currencyName: "Pounds" },
-  auctionTemplate: { defaultBudget: 500000000, defaultTimer: 30, ... },
-  scoringSchema: { win: 3, draw: 1, loss: 0 }
-}
-{
-  key: "cricket",
-  name: "Cricket",
-  assetType: "player",
-  uiHints: { assetLabel: "Player", assetPlural: "Players", currencySymbol: "₹", currencyName: "Rupees" },
-  ...
-}
+Contains verified Stitch tokens:
+```css
+/* Colors */
+--bg-base: #0F172A;           /* Navy background */
+--bg-glass: #1E293B;          /* Glass card background */
+--color-primary: #06B6D4;     /* Cyan accent */
+--color-timer-red: #EF4444;   /* Pass/Error */
+--color-timer-amber: #F59E0B; /* Warning */
+--color-timer-green: #10B981; /* Safe */
+
+/* Typography */
+--font-sans: 'Inter', sans-serif;
+--font-mono: 'Roboto Mono', monospace;
+H1: 32px / 700 / 1.2lh
+Body: 16px / 400
+Labels: 12px / 700 / Uppercase
+
+/* Spacing */
+--space-base: 8px;
+--space-card: 16px;
+--radius-sportx: 12px;
+
+/* Animation */
+--transition-default: 200ms ease-out;
+--scale-pressed: 0.98;
+
+/* Bottom Nav */
+--nav-fab-size: 64px;
+--nav-fab-border: 6px;
 ```
 
-**Assets collection:**
-- 56 football teams (EPL + UCL) - imported from Emergent production
-- 246 IPL 2026 players - seeded from Cricbuzz API
+**File Modified:** `/app/frontend/src/index.css`
+- Updated font imports to Inter + Roboto Mono
+- Added Material Symbols import
 
-**EPL Teams:** Imported with `sportKey: "football"` added.
+### Step 2: BottomNav Component ✅
+**File Created:** `/app/frontend/src/components/BottomNav.jsx`
 
-**IPL Players structure:**
-```javascript
-{
-  id: "uuid",
-  sportKey: "cricket",
-  externalId: "576",  // Cricbuzz player ID
-  name: "Virat Kohli",
-  type: "player",
-  meta: {
-    role: "Batsman",
-    team: "Royal Challengers Bengaluru",      // For Browse tab display
-    franchise: "Royal Challengers Bengaluru", // For filtering
-    iplTeam: "Royal Challengers Bengaluru"    // Backwards compat
-  },
-  competitions: ["IPL 2026"],
-  competitionShort: "IPL"
-}
-```
+Features:
+- Fixed position bottom nav
+- 64px cyan FAB with glow effect
+- 4 nav items: Home, Stats, Teams, Profile
+- Active state highlighting (cyan + filled icon)
+- iOS-style home indicator bar
+- Props: `onFabClick`, `fabIcon`
 
-### Local Preview Database (test_database)
-- Same IPL players seeded (246 players)
-- Old non-IPL cricket players removed
+### Step 3: Design Preview Page ✅
+**File Created:** `/app/frontend/src/pages/DesignPreview.jsx`
+**Route Added:** `/design-preview`
+
+Test page showing:
+- Typography scale
+- Button states (Primary, Disabled, Secondary, Danger)
+- Glass card example
+- Spacing/radius reference
+- BottomNav component
 
 ---
 
-## 3. Code Changes (NOT PUSHED TO GITHUB)
+## Pending Work (Next Steps)
 
-### File: `/app/backend/services/sport_service.py`
-**Change:** Added `{"_id": 0}` to MongoDB queries to exclude ObjectId (fixes 500 errors)
-**Lines:** ~24 and ~48
-**Status:** ✅ Already pushed to GitHub (was needed to fix Railway)
+### Step 4: New Home Page (NEXT)
+Replace current light-themed home with Stitch design:
+- Dark navy background
+- Glassmorphism hero card
+- "Join the Competition" primary CTA
+- "Create League" and "Browse Markets" secondary cards
+- "Active Leagues" section with empty state
+- BottomNav integration
 
-### File: `/app/frontend/src/pages/ClubsList.js`
-**Changes:**
-1. Added state variables for filters:
-   ```javascript
-   const [selectedFranchise, setSelectedFranchise] = useState("all");
-   const [selectedRole, setSelectedRole] = useState("all");
-   const [totalCounts, setTotalCounts] = useState({ football: 0, cricket: 0 });
-   ```
+### Step 5: Sign In Page
+Apply Stitch sign-in design (keeping magic links, just styling)
 
-2. Added franchise and role extraction:
-   ```javascript
-   const franchises = selectedSport === 'cricket' 
-     ? [...new Set(currentAssets.map(a => a.meta?.franchise).filter(Boolean))].sort()
-     : [];
-   const roles = selectedSport === 'cricket'
-     ? [...new Set(currentAssets.map(a => a.meta?.role).filter(Boolean))].sort()
-     : [];
-   ```
+### Step 6: Create Competition Modal
+Multi-step form with Stitch styling
 
-3. Updated filtering logic to use dropdowns
+### Step 7: Auction Lobby
+Pre-auction waiting room with manager list
 
-4. Added Cricket Filters UI section with:
-   - IPL Team dropdown (shows team count: "All Teams (10)")
-   - Role dropdown (Batsman, Bowler, All-rounder, etc.)
-
-5. Updated pageSize from 50 to 250 (backend caps at 100)
-
-6. Updated "Showing X of Y" text to show "Showing first 100 of 246 players" when paginated
-
-**Status:** ❌ NOT pushed - needs testing on competition detail page first
-
-### File: `/app/scripts/seed_ipl_2026.py`
-**New file:** Script to fetch IPL 2026 players from Cricbuzz API and seed to database
-**Status:** ❌ NOT pushed - local script only
+### Step 8: Auction Room
+Most complex - timer, bid buttons, team carousel, etc.
 
 ---
 
-## 4. What Still Needs To Be Done
+## Stitch Design Assets Location
+All Stitch exports extracted to: `/tmp/stitch_designs/`
+- `auction_lobby/code.html`
+- `auction_screen/code.html`
+- `create_modal/code.html`
+- `sign_in/code.html`
+- `ui_components/code.html`
 
-### Immediate (Before Push)
-1. **Competition Detail Page** - The "Filter by Series" dropdown shows old data (Ashes, NZ vs England) with only 53 players. Need to:
-   - Update to show IPL teams instead of series
-   - Should show "Filter by Team" with 10 IPL franchises
-   - Ensure all 246 players are accessible
-
-2. **Test all changes locally** before pushing
-
-### After Push
-1. Enable cricket in Railway: `SPORTS_CRICKET_ENABLED=true`
-2. Test full cricket auction flow on Railway
+Home screen HTML at: `/tmp/stitch_code/code.html`
 
 ---
 
-## 5. Key Files Reference
+## Key Design Decisions
 
-| File | Purpose | Changed This Session |
-|------|---------|---------------------|
-| `/app/frontend/src/pages/ClubsList.js` | Browse Players tab | ✅ Yes (filters) |
-| `/app/frontend/src/pages/LeagueDetail.js` | Competition detail page | ❌ Needs update |
-| `/app/backend/services/sport_service.py` | Sports API | ✅ Yes (_id fix) |
-| `/app/scripts/seed_ipl_2026.py` | IPL seed script | ✅ New file |
-| `/app/POC_RAILWAY_DEPLOYMENT.md` | Railway POC docs | ✅ Updated to v5.0 |
+1. **Mobile-first:** 90% of users on mobile
+2. **Bottom nav on all screens**
+3. **Keep magic links:** Style like Stitch but no email/password until testing complete
+4. **Placeholders for undeveloped features:** Stats, Profile, Wallet pages
+5. **No italics:** Strictly forbidden per Stitch spec
 
 ---
 
-## 6. Commands to Resume
+## Files Reference
 
-```bash
-# Check local preview
-curl http://localhost:8001/api/health
-curl http://localhost:8001/api/assets?sportKey=cricket | python3 -c "import sys,json; print(len(json.load(sys.stdin)['assets']))"
+### New Files Created This Session
+- `/app/frontend/src/styles/design-system.css`
+- `/app/frontend/src/components/BottomNav.jsx`
+- `/app/frontend/src/pages/DesignPreview.jsx`
 
-# Check Railway
-curl https://joeyjones-production.up.railway.app/api/health
-curl https://joeyjones-production.up.railway.app/api/assets?sportKey=cricket
+### Modified Files This Session
+- `/app/frontend/src/index.css` (font imports)
+- `/app/frontend/src/App.js` (route added, button fixes)
+- `/app/frontend/src/pages/AuctionRoom.js` (auction complete, franchise display)
+- `/app/backend/server.py` (DB optimizations)
 
-# Test frontend build
-cd /app/frontend && yarn build
-
-# View uncommitted changes
-git status
-git diff /app/frontend/src/pages/ClubsList.js
-```
-
----
-
-## 7. Railway URLs
-
-- **Backend:** https://joeyjones-production.up.railway.app
-- **Frontend:** https://energetic-victory-production-4b19.up.railway.app
-- **Health:** https://joeyjones-production.up.railway.app/api/health
+### Key Existing Files
+- `/app/DESIGN_SPEC.md` - Old design spec (being replaced by Stitch)
+- `/app/MASTER_TODO_LIST.md` - Project backlog
+- `/app/CONSOLIDATED_STATUS.md` - Migration status
 
 ---
 
-**Last Updated:** January 25, 2026, ~05:30 UTC
+## Test URLs
+- **Design Preview:** `/design-preview`
+- **Home (current):** `/`
+- **Create Competition:** Click "Create Your Competition" button
 
 ---
 
-## Session Summary - Jan 25, 2026 (Latest)
+## Important Notes for Next Agent
 
-### ✅ Completed This Session:
-
-1. **IPL 2026 Player Curation**
-   - Added 125 curated players (probable starters + impact players)
-   - Added 5 missing players to database (Phil Salt, Mitch Owen, etc.)
-   - Added nationality for all 125 players
-   - Backend auto-selects 125 players when creating IPL competition
-
-2. **Cricket UI Simplification**
-   - Removed complex "Filter by Team" dropdown
-   - Simple flow: 125 pre-selected → uncheck unwanted → save
-   - Create Competition modal shows "IPL 2026" option
-
-3. **Railway EPL Fix**
-   - Added `externalId` to all 20 EPL teams in Railway MongoDB
-   - Fixed `.isdigit()` bug for fixture imports (handles int externalId)
-
-4. **Documentation**
-   - Added WC2026 task to MASTER_TODO_LIST.md
-   - Added IPL2026-API Cricbuzz integration task to MASTER_TODO_LIST.md
-
-### ⏳ Pending (User to do):
-
-1. Push changes to GitHub → Railway auto-deploys
-2. Test EPL fixture import on Railway
-3. Export local EPL data if needed
-4. Test cricket functionality on Railway
-
-### 📋 Scripts Created:
-- `/app/scripts/update_railway_epl_external_ids.py` - Updates Railway EPL teams with externalId
+1. **Design system is ready** - Use CSS variables from `design-system.css`
+2. **BottomNav is ready** - Just import and add to pages
+3. **Don't modify old home page incrementally** - Build new HomePage.jsx and replace
+4. **Stitch HTML is reference only** - Convert to React, don't copy paste
+5. **Test on mobile viewport** - 390x844 (iPhone 14 Pro)
+6. **Material Symbols icons** - Already imported, use `<span className="material-symbols-outlined">icon_name</span>`
+7. **User's Stitch designs uploaded** - Check artifact URLs in handoff for zip files
