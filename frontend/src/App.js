@@ -1253,6 +1253,7 @@ export default function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/old-home" element={<Home />} />
           <Route path="/create-league" element={<CreateLeague />} />
+          <Route path="/create-competition" element={<CreateCompetition />} />
           <Route path="/clubs" element={<ClubsList />} />
           <Route path="/league/:leagueId" element={<LeagueDetail />} />
           <Route path="/auction/:auctionId" element={<AuctionRoom />} />
