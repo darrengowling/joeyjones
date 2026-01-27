@@ -40,12 +40,12 @@
 | Create Competition | `CreateCompetition.jsx` | ✅ Complete | - |
 | League Detail | `LeagueDetailStitched.jsx` | ✅ Complete | Tabbed layout, user verified |
 | Auction Room | `AuctionRoom.js` | ✅ Complete | Waiting room + live auction styled |
+| My Competitions | `MyCompetitions.js` | ✅ Complete | Competition cards, bulk delete modal |
 
 ### Pages Pending Redesign:
 | Page | File | Priority |
 |------|------|----------|
-| My Competitions | `MyCompetitions.js` | P1 - Next |
-| Research Hub | `ClubsList.js` | P1 |
+| Research Hub | `ClubsList.js` | P1 - Next |
 
 ---
 
