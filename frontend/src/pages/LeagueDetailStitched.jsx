@@ -841,12 +841,12 @@ export default function LeagueDetailStitched() {
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex gap-2 mb-6 overflow-x-auto pb-2">
+        <div className="flex justify-center gap-2 mb-6 overflow-x-auto pb-2">
           {['overview', 'managers', uiHints.assetPlural.toLowerCase(), 'fixtures'].map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className="px-4 py-2 rounded-full text-sm font-bold uppercase tracking-wide whitespace-nowrap transition-all"
+              className="px-4 py-2 rounded-full text-sm font-bold uppercase tracking-wide whitespace-nowrap transition-all flex-shrink-0"
               style={{
                 background: activeTab === tab ? 'var(--color-primary, #06B6D4)' : 'rgba(255,255,255,0.05)',
                 color: activeTab === tab ? 'var(--bg-base, #0F172A)' : 'var(--text-secondary, rgba(255,255,255,0.6))',
