@@ -121,16 +121,16 @@ Full Stitch-styled home page with:
 
 **Test URL:** `https://fantasy-sports-uk.preview.emergentagent.com/new`
 
+### Step 5: Swap Home Routes ✅
+Routes updated in App.js:
+- `/` now shows new `HomePage` (Stitch design)
+- `/old-home` keeps old `Home` component for rollback
+
 ---
 
 ## Pending Work (Next Steps)
 
-### Step 5: Swap Home Routes (NEXT)
-Once `/new` is tested and approved:
-- Replace `<Route path="/" element={<Home />} />` with `<Route path="/" element={<HomePage />} />`
-- Keep old Home component temporarily for rollback if needed
-
-### Step 6: Sign In Page
+### Step 6: Create Competition Page/Modal (NEXT)
 Apply Stitch sign-in design (keeping magic links, just styling)
 
 ### Step 6: Create Competition Modal
