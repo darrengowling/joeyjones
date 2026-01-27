@@ -96,7 +96,7 @@ Added all 20 EPL teams to the `clubs` collection:
 
 **Endpoint Test:**
 ```bash
-curl https://uxoverhaul-1.preview.emergentagent.com/api/clubs
+curl https://sporty-ui.preview.emergentagent.com/api/clubs
 ```
 
 **Results:**

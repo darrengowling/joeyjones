@@ -156,7 +156,7 @@ Full Stitch-styled home page with:
 - BottomNav integration
 - Material Symbols icons throughout
 
-**Test URL:** `https://uxoverhaul-1.preview.emergentagent.com/new`
+**Test URL:** `https://sporty-ui.preview.emergentagent.com/new`
 
 ### Step 5: Swap Home Routes ✅
 Routes updated in App.js:

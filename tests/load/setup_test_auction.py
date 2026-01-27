@@ -6,7 +6,7 @@ import requests
 import sys
 import time
 
-BACKEND_URL = "https://uxoverhaul-1.preview.emergentagent.com"
+BACKEND_URL = "https://sporty-ui.preview.emergentagent.com"
 API = f"{BACKEND_URL}/api"
 
 def create_test_user():

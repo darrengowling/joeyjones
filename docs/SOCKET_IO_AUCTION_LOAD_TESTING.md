@@ -13,7 +13,7 @@ This guide covers load testing the most critical path in the system: real-time a
 **1. Create a Test Auction**:
 ```bash
 # Go to your app
-https://uxoverhaul-1.preview.emergentagent.com
+https://sporty-ui.preview.emergentagent.com
 
 # Steps:
 1. Sign in

@@ -118,7 +118,7 @@ sudo supervisorctl stop backend
 sudo supervisorctl start backend
 
 # 4. Verify application is working
-curl https://uxoverhaul-1.preview.emergentagent.com/api/sports
+curl https://sporty-ui.preview.emergentagent.com/api/sports
 ```
 
 ### Selective Restore (Specific Backup)

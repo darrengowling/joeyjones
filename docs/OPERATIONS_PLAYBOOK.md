@@ -43,7 +43,7 @@ tail -f /var/log/supervisor/mongodb.out.log
 
 **API Health**:
 ```bash
-curl https://uxoverhaul-1.preview.emergentagent.com/api/health
+curl https://sporty-ui.preview.emergentagent.com/api/health
 ```
 
 **Expected Response** (Healthy):
@@ -60,7 +60,7 @@ curl https://uxoverhaul-1.preview.emergentagent.com/api/health
 
 **Frontend Status**:
 ```bash
-curl -I https://uxoverhaul-1.preview.emergentagent.com
+curl -I https://sporty-ui.preview.emergentagent.com
 # Should return 200 OK
 ```
 
@@ -89,7 +89,7 @@ tail -50 /var/log/supervisor/backend.err.log
    ```bash
    sudo supervisorctl restart backend
    sleep 3
-   curl https://uxoverhaul-1.preview.emergentagent.com/api/health
+   curl https://sporty-ui.preview.emergentagent.com/api/health
    ```
 
 2. **If restart fails**, check for:
@@ -211,7 +211,7 @@ top
 mongo mongodb://localhost:27017/test_database --eval "db.currentOp()"
 
 # Check API response times
-curl -w "@-" -o /dev/null -s https://uxoverhaul-1.preview.emergentagent.com/api/sports <<< "time_total: %{time_total}s"
+curl -w "@-" -o /dev/null -s https://sporty-ui.preview.emergentagent.com/api/sports <<< "time_total: %{time_total}s"
 ```
 
 **Solutions**:
@@ -240,7 +240,7 @@ curl -w "@-" -o /dev/null -s https://uxoverhaul-1.preview.emergentagent.com/api/
 grep -i "auth\|jwt" /var/log/supervisor/backend.err.log | tail -20
 
 # Test magic link generation
-curl -X POST https://uxoverhaul-1.preview.emergentagent.com/api/auth/magic-link \
+curl -X POST https://sporty-ui.preview.emergentagent.com/api/auth/magic-link \
   -H "Content-Type: application/json" \
   -d '{"email":"test@example.com"}'
 ```
@@ -316,7 +316,7 @@ sudo supervisorctl stop backend
 sudo supervisorctl start backend
 
 # Verify
-curl https://uxoverhaul-1.preview.emergentagent.com/api/health
+curl https://sporty-ui.preview.emergentagent.com/api/health
 ```
 
 ---
