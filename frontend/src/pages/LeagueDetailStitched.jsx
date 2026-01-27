@@ -682,7 +682,7 @@ export default function LeagueDetailStitched() {
     <div className="min-h-screen font-sans" style={{ background: 'var(--bg-base, #0F172A)', paddingBottom: '100px' }}>
       {/* Fixed Header */}
       <header 
-        className="fixed top-0 left-0 right-0 z-40 px-4 py-4 flex items-center justify-between"
+        className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-md z-40 px-4 py-4 flex items-center justify-between"
         style={{
           background: 'rgba(15, 23, 42, 0.95)',
           backdropFilter: 'blur(20px)',

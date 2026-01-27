@@ -1215,7 +1215,7 @@ export default function CompetitionDashboard() {
     <div className="min-h-screen" style={{ background: '#0B101B', paddingBottom: '100px' }}>
       {/* Header */}
       <header 
-        className="fixed top-0 left-0 right-0 z-40 px-4 py-4"
+        className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-md z-40 px-4 py-4"
         style={{
           background: 'rgba(11, 16, 27, 0.95)',
           backdropFilter: 'blur(20px)',
