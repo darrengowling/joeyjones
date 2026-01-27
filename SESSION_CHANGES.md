@@ -198,6 +198,8 @@ Home screen HTML at: `/tmp/stitch_code/code.html`
 - `/app/frontend/src/components/BottomNav.jsx`
 - `/app/frontend/src/pages/DesignPreview.jsx`
 - `/app/frontend/src/pages/HomePage.jsx`
+- `/app/frontend/src/pages/PlaceholderPage.jsx`
+- `/app/frontend/src/pages/CreateCompetition.jsx`
 
 ### Modified Files This Session
 - `/app/frontend/src/index.css` (font imports)
