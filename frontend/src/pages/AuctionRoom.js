@@ -864,6 +864,29 @@ function AuctionRoom() {
 
   const isCommissioner = league && user && league.commissionerId === user.id;
 
+  // Prompt C: Soft guard - render message instead of redirecting (moved before waiting room check)
+  if (!user) {
+    return (
+      <div className="min-h-screen py-8 flex items-center justify-center" style={{ background: '#0B101B' }}>
+        <div 
+          data-testid="auth-required" 
+          className="rounded-2xl p-8 max-w-md text-center"
+          style={{ background: '#151C2C', border: '1px solid rgba(255,255,255,0.1)' }}
+        >
+          <h2 className="text-2xl font-bold text-white mb-4">Authentication Required</h2>
+          <p className="text-white/60 mb-6">Please sign in to access the auction room.</p>
+          <button
+            onClick={() => navigate("/")}
+            className="px-6 py-3 rounded-xl text-black font-bold transition"
+            style={{ background: '#00F0FF' }}
+          >
+            Go to Home
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   // Prompt E: Show waiting room if auction status is "waiting"
   if (auction?.status === "waiting") {
     const handleBeginAuction = async () => {
