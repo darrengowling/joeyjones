@@ -209,9 +209,9 @@ const HomePage = () => {
     >
       {/* Header */}
       <header 
-        className="sticky top-0 z-40 px-6 py-5 flex items-center justify-between"
+        className="fixed top-0 left-0 right-0 z-40 px-6 py-5 flex items-center justify-between"
         style={{
-          background: 'rgba(15, 23, 42, 0.8)',
+          background: 'rgba(15, 23, 42, 0.95)',
           backdropFilter: 'blur(20px)',
           WebkitBackdropFilter: 'blur(20px)',
           borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
