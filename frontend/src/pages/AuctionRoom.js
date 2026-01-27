@@ -1410,11 +1410,18 @@ function AuctionRoom() {
                       <button
                         onClick={placeBid}
                         disabled={!ready || isSubmittingBid || participants.find((p) => p.userId === user?.id)?.clubsWon?.length >= (league?.clubSlots || 3)}
-                        className={`w-full sm:w-auto px-6 py-3 sm:py-2 rounded-lg font-semibold text-base ${
-                          !ready || isSubmittingBid || participants.find((p) => p.userId === user?.id)?.clubsWon?.length >= (league?.clubSlots || 3) 
-                            ? 'bg-gray-400 cursor-not-allowed' 
-                            : 'bg-blue-600 text-white hover:bg-blue-700'
-                        }`}
+                        className="w-full sm:w-auto px-6 py-3 sm:py-2 rounded-xl font-bold text-base transition-all"
+                        style={{ 
+                          background: (!ready || isSubmittingBid || participants.find((p) => p.userId === user?.id)?.clubsWon?.length >= (league?.clubSlots || 3))
+                            ? 'rgba(255,255,255,0.1)' 
+                            : '#00F0FF',
+                          color: (!ready || isSubmittingBid || participants.find((p) => p.userId === user?.id)?.clubsWon?.length >= (league?.clubSlots || 3))
+                            ? 'rgba(255,255,255,0.4)'
+                            : '#0B101B',
+                          cursor: (!ready || isSubmittingBid || participants.find((p) => p.userId === user?.id)?.clubsWon?.length >= (league?.clubSlots || 3))
+                            ? 'not-allowed'
+                            : 'pointer'
+                        }}
                         data-testid="place-bid-button"
                         title={
                           !ready 
@@ -1437,13 +1444,13 @@ function AuctionRoom() {
                       </button>
                     </div>
                     {participants.find((p) => p.userId === user?.id) && (
-                      <div className="text-sm text-gray-600 space-y-1">
+                      <div className="text-sm text-white/60 space-y-1">
                         <p>
-                          Your strategic budget remaining: {formatCurrency(participants.find((p) => p.userId === user.id).budgetRemaining)}
+                          Your strategic budget remaining: <span style={{ color: '#00F0FF' }}>{formatCurrency(participants.find((p) => p.userId === user.id).budgetRemaining)}</span>
                         </p>
                         <p className="flex items-center">
                           <span>Roster:</span>
-                          <span className="ml-1 font-medium">
+                          <span className="ml-1 font-medium text-white">
                             {participants.find((p) => p.userId === user.id).clubsWon?.length || 0} / {league?.clubSlots || 3}
                           </span>
                           <span className="ml-2">
@@ -1459,10 +1466,10 @@ function AuctionRoom() {
 
                   {/* Bid History for Current Club */}
                   <div className="mt-6">
-                    <h4 className="font-semibold text-gray-900 mb-3">Bid History</h4>
+                    <h4 className="font-semibold text-white mb-3">Bid History</h4>
                     <div className="max-h-64 overflow-y-auto">
                       {currentClubBids.length === 0 ? (
-                        <p className="text-gray-500">No bids yet</p>
+                        <p className="text-white/40">No bids yet</p>
                       ) : (
                         <div className="space-y-2">
                           {currentClubBids
@@ -1470,10 +1477,11 @@ function AuctionRoom() {
                             .map((bid) => (
                               <div
                                 key={bid.id}
-                                className="flex justify-between items-center p-3 bg-gray-50 rounded"
+                                className="flex justify-between items-center p-3 rounded-lg"
+                                style={{ background: 'rgba(255,255,255,0.05)' }}
                               >
-                                <span className="font-semibold">{bid.userName}</span>
-                                <span className="text-green-600 font-bold">{formatCurrency(bid.amount)}</span>
+                                <span className="font-semibold text-white">{bid.userName}</span>
+                                <span className="font-bold" style={{ color: '#00F0FF' }}>{formatCurrency(bid.amount)}</span>
                               </div>
                             ))}
                         </div>
@@ -1481,17 +1489,17 @@ function AuctionRoom() {
                     </div>
                   </div>
 
-                  <div className="mt-6 p-3 bg-yellow-50 border border-yellow-200 rounded-lg text-sm text-gray-700">
+                  <div className="mt-6 p-3 rounded-lg text-sm" style={{ background: 'rgba(255, 138, 0, 0.1)', border: '1px solid rgba(255, 138, 0, 0.2)', color: '#FF8A00' }}>
                     ⏱️ Ownership opportunity will auto-complete when timer expires. Next team will load automatically for strategic bidding.
                   </div>
                 </div>
               ) : (
                 <div className="text-center py-12">
                   <div className="text-6xl mb-4">{auction?.status === "completed" ? "🎉" : "⏳"}</div>
-                  <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                  <h2 className="text-2xl font-bold text-white mb-4">
                     {auction?.status === "completed" ? "Auction Complete!" : "Preparing Next Strategic Opportunity..."}
                   </h2>
-                  <p className="text-gray-600 mb-6">
+                  <p className="text-white/60 mb-6">
                     {auction?.status === "completed" 
                       ? `All ${uiHints.assetPlural.toLowerCase()} have been auctioned.` 
                       : `${uiHints.assetPlural} auto-load in random order. Next ${uiHints.assetLabel.toLowerCase()} starting soon...`}
