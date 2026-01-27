@@ -882,22 +882,25 @@ function AuctionRoom() {
     };
 
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 py-8">
+      <div className="min-h-screen py-8" style={{ background: '#0B101B' }}>
         <div className="container mx-auto px-4">
           <div className="max-w-2xl mx-auto">
             <button
               onClick={() => navigate("/")}
-              className="text-white hover:underline mb-4"
+              className="text-white/60 hover:text-white mb-4 flex items-center gap-2"
             >
               ← Back to Home
             </button>
             
-            <div className="bg-white rounded-lg shadow-xl p-8">
+            <div className="rounded-2xl p-8" style={{ background: '#151C2C', border: '1px solid rgba(255,255,255,0.1)' }}>
               <div className="text-center mb-6">
-                <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                  ⏳ Auction Waiting Room
+                <div className="w-20 h-20 rounded-full mx-auto mb-4 flex items-center justify-center" style={{ background: 'rgba(0, 240, 255, 0.1)' }}>
+                  <span className="text-4xl">⏳</span>
+                </div>
+                <h1 className="text-3xl font-bold text-white mb-2">
+                  Auction Waiting Room
                 </h1>
-                <p className="text-gray-600">
+                <p className="text-white/60">
                   {isCommissioner 
                     ? "Waiting for users to enter waiting room"
                     : "Waiting for other participants and commissioner to start"}
@@ -905,8 +908,8 @@ function AuctionRoom() {
               </div>
 
               {/* Participants List */}
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-                <h3 className="font-bold text-gray-900 mb-3">
+              <div className="rounded-xl p-4 mb-6" style={{ background: 'rgba(0, 240, 255, 0.1)', border: '1px solid rgba(0, 240, 255, 0.2)' }}>
+                <h3 className="font-bold text-white mb-3">
                   Participants Ready ({auction?.usersInWaitingRoom?.length || 0})
                 </h3>
                 <div className="flex flex-wrap gap-2">
@@ -915,23 +918,30 @@ function AuctionRoom() {
                     .map(p => (
                       <div
                         key={p.userId}
-                        className="flex items-center gap-2 bg-white px-3 py-2 rounded-full border border-gray-300"
+                        className="flex items-center gap-2 px-3 py-2 rounded-full"
+                        style={{ background: 'rgba(255,255,255,0.1)' }}
                       >
-                        <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
+                        <div 
+                          className="w-8 h-8 rounded-full flex items-center justify-center text-black text-sm font-bold"
+                          style={{ background: '#00F0FF' }}
+                        >
                           {p.userName?.charAt(0).toUpperCase() || '?'}
                         </div>
-                        <span className="text-sm font-medium text-gray-900">
+                        <span className="text-sm font-medium text-white">
                           {p.userName}
                         </span>
                         {p.userId === user.id && (
-                          <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">
+                          <span 
+                            className="text-xs px-2 py-0.5 rounded-full"
+                            style={{ background: 'rgba(0, 240, 255, 0.3)', color: '#00F0FF' }}
+                          >
                             You
                           </span>
                         )}
                       </div>
                     ))}
                   {(!auction?.usersInWaitingRoom || auction.usersInWaitingRoom.length === 0) && (
-                    <div className="text-center text-gray-500 py-4 w-full">
+                    <div className="text-center text-white/40 py-4 w-full">
                       {isCommissioner 
                         ? "Waiting for participants to click 'Enter Auction'..."
                         : "Waiting for other participants..."}
@@ -946,27 +956,28 @@ function AuctionRoom() {
                   <div>
                     <button
                       onClick={handleBeginAuction}
-                      className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-lg text-lg shadow-lg transition-colors"
+                      className="text-white font-bold py-4 px-8 rounded-xl text-lg shadow-lg transition-all hover:scale-105"
+                      style={{ background: 'linear-gradient(135deg, #10B981, #059669)' }}
                     >
                       🚀 Begin Auction
                     </button>
-                    <p className="text-sm text-gray-500 mt-3">
+                    <p className="text-sm text-white/40 mt-3">
                       Start when all participants are ready
                     </p>
                   </div>
                 ) : (
                   <div>
                     <div className="inline-block animate-pulse">
-                      <div className="bg-gray-200 rounded-full p-4 mb-3">
-                        <svg className="w-12 h-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <div className="rounded-full p-4 mb-3" style={{ background: 'rgba(255,255,255,0.1)' }}>
+                        <svg className="w-12 h-12 text-white/40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                       </div>
                     </div>
-                    <p className="text-lg font-medium text-gray-700">
+                    <p className="text-lg font-medium text-white/80">
                       Waiting for commissioner to start...
                     </p>
-                    <p className="text-sm text-gray-500 mt-2">
+                    <p className="text-sm text-white/40 mt-2">
                       The auction will begin shortly
                     </p>
                   </div>
