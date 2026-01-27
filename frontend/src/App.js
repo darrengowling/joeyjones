@@ -1256,6 +1256,7 @@ export default function App() {
           <Route path="/app/competitions/:leagueId" element={<CompetitionDashboard />} />
           <Route path="/competitions/:leagueId" element={<CompetitionDashboard />} />
           <Route path="/help" element={<Help />} />
+          <Route path="/design-preview" element={<DesignPreview />} />
         </Routes>
       </Suspense>
       <DebugFooter />
