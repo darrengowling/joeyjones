@@ -182,16 +182,42 @@ Stitch-styled league detail page with all original functionality:
 ## Pending Work (Next Steps)
 
 ### Step 9: Auction Lobby/Room (NEXT)
-Apply Stitch sign-in design (keeping magic links, just styling)
+Apply Stitch design to AuctionRoom.js - the main auction screen with timer, bids, etc.
 
-### Step 6: Create Competition Modal
-Multi-step form with Stitch styling
-
-### Step 7: Auction Lobby
+### Step 10: AuctionLobby
 Pre-auction waiting room with manager list
 
-### Step 8: Auction Room
-Most complex - timer, bid buttons, team carousel, etc.
+### Step 11: MyCompetitions
+My Competitions page redesign
+
+### Step 12: ClubsList (Research Hub)
+Browse teams/players page redesign
+
+---
+
+## Completed Work - January 27, 2026 (Session 2)
+
+### League Detail Page Complete Redesign
+**File Created:** `/app/frontend/src/pages/LeagueDetailStitched.jsx`
+**Route:** `/league/:leagueId` (new Stitch design)
+**Old version:** `/league-old/:leagueId` (preserved for rollback)
+
+Full visual redesign of the 1565-line LeagueDetail.js with:
+- All original functionality preserved exactly (state, logic, API calls, socket handlers)
+- Dark navy theme with glassmorphism cards
+- Fixed header with back navigation
+- Breadcrumb navigation
+- Status card (Budget, Clubs Each, Bid Timer, Anti-Snipe)
+- Invite section with copy/share buttons
+- Tab navigation (Overview, Managers, Teams/Players, Fixtures)
+- Commissioner actions section (Manage Teams, Import Fixtures, Start Auction)
+- Cricket scoring configuration (preserved)
+- Standings table with styling
+- Full-screen Manage Assets modal
+- All fixtures functionality (upcoming/completed)
+- BottomNav integration
+
+**CRITICAL:** This is a VISUAL-ONLY redesign. All functionality matches the original exactly.
 
 ---
 
