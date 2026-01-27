@@ -1712,6 +1712,7 @@ export default function LeagueDetailStitched() {
               </div>
             )}
           </div>
+          </div>
         </div>
       )}
 
