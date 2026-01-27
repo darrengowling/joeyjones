@@ -504,7 +504,7 @@ export default function CompetitionDashboard() {
     if (loading && !summary) {
       return (
         <div className="text-center py-8">
-          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+          <div className="w-8 h-8 border-4 border-[#00F0FF] border-t-transparent rounded-full animate-spin mx-auto"></div>
         </div>
       );
     }
@@ -515,41 +515,51 @@ export default function CompetitionDashboard() {
     const showCSVHint = isCommissioner && summary.status === "auction_complete" && fixtures?.length === 0;
 
     return (
-      <div className="space-y-6">
+      <div className="space-y-4">
         {/* League Info */}
-        <div className="bg-white rounded-lg shadow p-4">
+        <div 
+          className="rounded-xl p-4"
+          style={{ background: '#151C2C', border: '1px solid rgba(255, 255, 255, 0.1)' }}
+        >
           <div className="flex flex-col gap-3 mb-4">
             <div className="flex items-center gap-3">
               <span className="text-4xl flex-shrink-0">{getSportEmoji(summary.sportKey)}</span>
               <div className="flex-1 min-w-0">
-                <h2 className="text-[var(--t-lg)] font-bold text-gray-900 truncate">{summary.name}</h2>
-                <p className="text-[var(--t-sm)] text-gray-500 capitalize">{summary.sportKey}</p>
+                <h2 className="text-lg font-bold text-white truncate">{summary.name}</h2>
+                <p className="text-sm text-white/40 capitalize">{summary.sportKey}</p>
               </div>
             </div>
-            <span className={`px-3 py-1 rounded-full text-xs font-semibold border w-fit ${getStatusChipStyle(summary.status)}`}>
+            <span 
+              className="px-3 py-1 rounded-full text-xs font-semibold w-fit"
+              style={getStatusChipStyle(summary.status)}
+            >
               {getStatusLabel(summary.status)}
             </span>
           </div>
-          <div className="text-sm text-gray-600">
-            <p><strong>Commissioner:</strong> {summary.commissioner.name}</p>
-            <p><strong>Timer Settings:</strong> {summary.timerSeconds}s bidding / {summary.antiSnipeSeconds}s anti-snipe</p>
-            <p><strong>Total Budget:</strong> {formatCurrency(summary.totalBudget)} | <strong>Slots:</strong> {summary.clubSlots}</p>
+          <div className="text-sm text-white/60 space-y-1">
+            <p><span className="text-white/40">Commissioner:</span> {summary.commissioner.name}</p>
+            <p><span className="text-white/40">Timer:</span> {summary.timerSeconds}s / {summary.antiSnipeSeconds}s anti-snipe</p>
+            <p><span className="text-white/40">Budget:</span> {formatCurrency(summary.totalBudget)} | <span className="text-white/40">Slots:</span> {summary.clubSlots}</p>
           </div>
         </div>
 
         {/* CSV Import Hint for Commissioner */}
         {showCSVHint && (
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <div 
+            className="rounded-xl p-4"
+            style={{ background: 'rgba(0, 240, 255, 0.1)', border: '1px solid rgba(0, 240, 255, 0.2)' }}
+          >
             <div className="flex items-start gap-3">
               <span className="text-2xl">📊</span>
               <div className="flex-1">
-                <h3 className="font-semibold text-blue-900 mb-1">Import Fixtures</h3>
-                <p className="text-sm text-blue-800 mb-2">
+                <h3 className="font-semibold text-white mb-1">Import Fixtures</h3>
+                <p className="text-sm text-white/60 mb-2">
                   Upload a CSV file to schedule fixtures for your competition.
                 </p>
                 <button
                   onClick={() => handleTabChange("fixtures")}
-                  className="text-sm text-blue-600 hover:underline font-semibold"
+                  className="text-sm font-semibold hover:underline"
+                  style={{ color: '#00F0FF' }}
                 >
                   Go to Fixtures tab →
                 </button>
@@ -559,52 +569,68 @@ export default function CompetitionDashboard() {
         )}
 
         {/* Your Roster */}
-        <div className="bg-white rounded-lg shadow p-6" data-testid="summary-roster">
-          <h3 className="text-lg font-bold text-gray-900 mb-3">Your Roster</h3>
+        <div 
+          className="rounded-xl p-4"
+          style={{ background: '#151C2C', border: '1px solid rgba(255, 255, 255, 0.1)' }}
+          data-testid="summary-roster"
+        >
+          <h3 className="text-lg font-bold text-white mb-3">Your Roster</h3>
           {summary.yourRoster && summary.yourRoster.length > 0 ? (
             <div className="space-y-2">
               {summary.yourRoster.map((asset, idx) => (
                 <div
                   key={idx}
-                  className="flex items-center justify-between p-2 bg-blue-50 rounded-lg border border-blue-200 gap-2"
+                  className="flex items-center justify-between p-2 rounded-lg gap-2"
+                  style={{ background: 'rgba(0, 240, 255, 0.1)', border: '1px solid rgba(0, 240, 255, 0.2)' }}
                 >
                   <div className="flex items-center gap-2 min-w-0 flex-1">
-                    <span className="w-6 h-6 bg-blue-200 rounded-full flex items-center justify-center flex-shrink-0 text-[var(--t-xs)] font-bold">
+                    <span 
+                      className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold"
+                      style={{ background: 'rgba(0, 240, 255, 0.3)', color: '#00F0FF' }}
+                    >
                       {idx + 1}
                     </span>
-                    <span className="text-[var(--t-sm)] sm:text-[var(--t-md)] font-semibold text-blue-900 truncate break-any">
+                    <span className="text-sm font-semibold text-white truncate">
                       {asset.name || `${uiHints.assetLabel} ${idx + 1}`}
                     </span>
                   </div>
-                  <span className="text-[var(--t-sm)] sm:text-[var(--t-md)] text-blue-700 font-bold whitespace-nowrap flex-shrink-0">
+                  <span className="text-sm font-bold whitespace-nowrap flex-shrink-0" style={{ color: '#00F0FF' }}>
                     {formatCurrency(asset.price)}
                   </span>
                 </div>
               ))}
             </div>
           ) : (
-            <p className="text-sm text-gray-500 italic">No {uiHints.assetPlural.toLowerCase()} acquired yet</p>
+            <p className="text-sm text-white/40 italic">No {uiHints.assetPlural.toLowerCase()} acquired yet</p>
           )}
         </div>
 
         {/* Your Budget */}
-        <div className="bg-white rounded-lg shadow p-6" data-testid="summary-budget">
-          <h3 className="text-lg font-bold text-gray-900 mb-3">Your Budget</h3>
+        <div 
+          className="rounded-xl p-4"
+          style={{ background: '#151C2C', border: '1px solid rgba(255, 255, 255, 0.1)' }}
+          data-testid="summary-budget"
+        >
+          <h3 className="text-lg font-bold text-white mb-3">Your Budget</h3>
           <div className="flex items-baseline gap-2">
-            <span className="text-3xl font-bold text-green-600">
+            <span className="text-3xl font-bold" style={{ color: '#10B981' }}>
               {formatCurrency(summary.yourBudgetRemaining)}
             </span>
-            <span className="text-sm text-gray-500">remaining</span>
+            <span className="text-sm text-white/40">remaining</span>
           </div>
-          <div className="mt-2 text-sm text-gray-600">
+          <div className="mt-2 text-sm text-white/60">
             Spent: {formatCurrency(summary.totalBudget - summary.yourBudgetRemaining)} / {formatCurrency(summary.totalBudget)}
           </div>
         </div>
 
-        {/* Managers List with Rosters - Everton Bug Fix 5 */}
-        <div className="bg-white rounded-lg shadow p-6" data-testid="summary-managers">
-          <h3 className="text-lg font-bold text-gray-900 mb-3">Managers ({summary.managers.length})</h3>
-          <div className="space-y-4">
+        {/* Managers List with Rosters */}
+        <div 
+          className="rounded-xl p-4"
+          style={{ background: '#151C2C', border: '1px solid rgba(255, 255, 255, 0.1)' }}
+          data-testid="summary-managers"
+        >
+          <h3 className="text-lg font-bold text-white mb-3">Managers ({summary.managers.length})</h3>
+          <div className="space-y-3">
             {summary.managers.map((manager) => {
               const managerRoster = manager.roster || [];
               const isCurrentUser = manager.id === user.id;
@@ -612,22 +638,34 @@ export default function CompetitionDashboard() {
               return (
                 <div
                   key={manager.id}
-                  className={`p-4 rounded-lg border-2 ${isCurrentUser ? 'bg-blue-50 border-blue-300' : 'bg-gray-50 border-gray-200'}`}
+                  className="p-3 rounded-xl"
+                  style={{ 
+                    background: isCurrentUser ? 'rgba(0, 240, 255, 0.1)' : 'rgba(255, 255, 255, 0.05)',
+                    border: isCurrentUser ? '1px solid rgba(0, 240, 255, 0.3)' : '1px solid rgba(255, 255, 255, 0.1)'
+                  }}
                 >
                   {/* Manager Header */}
-                  <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-3">
-                      <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold ${isCurrentUser ? 'bg-blue-600' : 'bg-gray-500'}`}>
+                      <div 
+                        className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold"
+                        style={{ background: isCurrentUser ? '#00F0FF' : 'rgba(255, 255, 255, 0.2)' }}
+                      >
                         {manager.name.charAt(0).toUpperCase()}
                       </div>
                       <div>
                         <div className="flex items-center gap-2">
-                          <span className="font-semibold text-gray-900">{manager.name}</span>
+                          <span className="font-semibold text-white">{manager.name}</span>
                           {isCurrentUser && (
-                            <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full font-medium">You</span>
+                            <span 
+                              className="text-xs px-2 py-0.5 rounded-full font-medium"
+                              style={{ background: 'rgba(0, 240, 255, 0.3)', color: '#00F0FF' }}
+                            >
+                              You
+                            </span>
                           )}
                         </div>
-                        <div className="text-xs text-gray-500">
+                        <div className="text-xs text-white/40">
                           {managerRoster.length} / {summary.clubSlots} {uiHints.assetPlural.toLowerCase()} • {formatCurrency(manager.budgetRemaining)} remaining
                         </div>
                       </div>
@@ -640,24 +678,28 @@ export default function CompetitionDashboard() {
                       {managerRoster.map((asset, idx) => (
                         <div
                           key={idx}
-                          className={`flex items-center justify-between p-2 rounded border ${isCurrentUser ? 'bg-white border-blue-200' : 'bg-white border-gray-200'}`}
+                          className="flex items-center justify-between p-2 rounded-lg"
+                          style={{ background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.1)' }}
                         >
                           <div className="flex items-center gap-2">
-                            <span className={`w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold ${isCurrentUser ? 'bg-blue-200 text-blue-900' : 'bg-gray-300 text-gray-700'}`}>
+                            <span 
+                              className="w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold"
+                              style={{ background: isCurrentUser ? 'rgba(0, 240, 255, 0.3)' : 'rgba(255, 255, 255, 0.2)', color: isCurrentUser ? '#00F0FF' : 'white' }}
+                            >
                               {idx + 1}
                             </span>
-                            <span className="text-sm font-medium text-gray-900">
+                            <span className="text-sm font-medium text-white">
                               {asset.name}
                             </span>
                           </div>
-                          <span className="text-sm font-semibold text-gray-700">
+                          <span className="text-sm font-semibold text-white/60">
                             {formatCurrency(asset.price)}
                           </span>
                         </div>
                       ))}
                     </div>
                   ) : (
-                    <p className="text-xs text-gray-500 italic mt-2">No {uiHints.assetPlural.toLowerCase()} acquired yet</p>
+                    <p className="text-xs text-white/40 italic mt-2">No {uiHints.assetPlural.toLowerCase()} acquired yet</p>
                   )}
                 </div>
               );
