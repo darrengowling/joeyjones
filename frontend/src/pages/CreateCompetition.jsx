@@ -105,11 +105,6 @@ export default function CreateCompetition() {
     setBudgetDisplay(newMillions.toString());
   };
 
-  const adjustManagers = (delta) => {
-    const newValue = Math.max(2, Math.min(20, form.maxManagers + delta));
-    setForm({ ...form, maxManagers: newValue, minManagers: Math.min(form.minManagers, newValue) });
-  };
-
   const adjustSlots = (delta) => {
     const newValue = Math.max(1, Math.min(20, form.clubSlots + delta));
     setForm({ ...form, clubSlots: newValue });
