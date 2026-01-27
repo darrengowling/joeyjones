@@ -1308,7 +1308,9 @@ function AuctionRoom() {
           </div>
         ) : auction?.status === "completed" ? (
           <div className="text-center">
-            <div className="text-8xl mb-4">🎉</div>
+            <div className="w-20 h-20 mx-auto mb-6 rounded-full flex items-center justify-center" style={{ background: 'rgba(6, 182, 212, 0.2)' }}>
+              <span className="material-symbols-outlined text-4xl" style={{ color: '#06B6D4' }}>check_circle</span>
+            </div>
             <h2 className="text-3xl font-bold text-white mb-4">Auction Complete!</h2>
             <button
               onClick={() => navigate('/app/my-competitions')}
@@ -1320,7 +1322,9 @@ function AuctionRoom() {
           </div>
         ) : (
           <div className="text-center">
-            <div className="text-6xl mb-4">⏳</div>
+            <div className="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center" style={{ background: 'rgba(255, 255, 255, 0.1)' }}>
+              <span className="material-symbols-outlined text-3xl text-white/60">hourglass_empty</span>
+            </div>
             <h2 className="text-2xl font-bold text-white">Preparing next lot...</h2>
           </div>
         )}
