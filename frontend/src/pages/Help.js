@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import BottomNav from '../components/BottomNav';
 
 const Help = () => {
   const navigate = useNavigate();
@@ -15,10 +16,10 @@ const Help = () => {
   };
 
   const Section = ({ id, title, children, icon }) => (
-    <div className="mb-4 border border-white/10 rounded-lg overflow-hidden">
+    <div className="mb-4 border border-white/10 rounded-xl overflow-hidden" style={{ background: '#151C2C' }}>
       <button
         onClick={() => toggleSection(id)}
-        className="w-full flex items-center justify-between p-4 bg-[#151C2C]/5 hover:bg-[#151C2C]/10 transition-colors"
+        className="w-full flex items-center justify-between p-4 hover:bg-white/5 transition-colors"
       >
         <div className="flex items-center gap-3">
           <span className="text-2xl">{icon}</span>
@@ -34,7 +35,7 @@ const Help = () => {
         </svg>
       </button>
       {openSection === id && (
-        <div className="p-6 bg-[#151C2C]">
+        <div className="p-6" style={{ background: 'rgba(0,0,0,0.2)' }}>
           {children}
         </div>
       )}
@@ -42,29 +43,37 @@ const Help = () => {
   );
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen" style={{ background: '#0B101B', paddingBottom: '100px' }}>
       {/* Header */}
-      <div className="fixed top-0 left-0 right-0 z-40">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+      <header 
+        className="fixed top-0 left-0 right-0 z-40 px-4 py-4"
+        style={{
+          background: 'rgba(11, 16, 27, 0.95)',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
+        }}
+      >
+        <div className="container mx-auto flex items-center justify-between">
           <button
             onClick={() => navigate('/')}
-            className="flex items-center gap-2 text-[#00F0FF] hover:text-[#00F0FF]/80 font-semibold"
+            className="flex items-center gap-2 text-white/60 hover:text-white transition-colors"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-            </svg>
-            Back to Home
+            <span>←</span>
+            <span className="text-xl font-black tracking-tighter">
+              SPORT <span style={{ color: '#06B6D4' }}>X</span>
+            </span>
           </button>
-          <div>
-            <div className="text-xs uppercase tracking-wide text-white/40 mb-1 text-center">Help Center</div>
-            <h1 className="text-2xl font-bold text-white">User Guide</h1>
+          <div className="text-center">
+            <div className="text-xs uppercase tracking-widest text-white/40">Help Center</div>
+            <h1 className="text-lg font-bold text-white">User Guide</h1>
           </div>
-          <div className="w-24"></div> {/* Spacer for centering */}
+          <div className="w-20"></div>
         </div>
-      </div>
+      </header>
 
       {/* Content */}
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
+      <div className="container mx-auto px-4 pt-24 pb-8 max-w-4xl">
         {/* Introduction */}
         <div className="bg-[#00F0FF]/10 border border-[#00F0FF]/20 rounded-lg p-6 mb-8">
           <h2 className="text-2xl font-bold text-white mb-3">Welcome to Sport X!</h2>
