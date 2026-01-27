@@ -24,7 +24,12 @@ The agent deviated from clear user instructions. The user requested a **VISUAL R
 ### Current Status (Jan 27, 2026)
 - **LeagueDetailStitched.jsx** - NOW WORKING with tabs UX improvement
 - **User 2 can join waiting room** - VERIFIED WORKING
-- **Next:** Apply visual styling to `AuctionRoom.js` (waiting room + live auction)
+- **AuctionRoom.js** - VISUAL STYLING COMPLETE ✅
+
+### Bug Fix - January 27, 2026 (Session 3)
+**Issue:** `Cannot read properties of null (reading 'id')` error when accessing auction room without being logged in
+**Root Cause:** The waiting room UI rendered before the auth check, causing `user.id` to be accessed when `user` was null
+**Fix:** Moved the auth check before the waiting room render and added optional chaining (`user && p.userId === user.id`)
 
 ### Correct Approach Going Forward
 - **DO:** Modify existing `AuctionRoom.js` by changing only CSS classes and inline styles
