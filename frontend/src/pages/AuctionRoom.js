@@ -1186,12 +1186,13 @@ function AuctionRoom() {
                         toast.error("Failed to submit report. Please try again.");
                       }
                     }}
-                    className="px-3 py-1.5 sm:px-4 sm:py-2 bg-orange-500 text-white rounded hover:bg-orange-600 text-sm"
+                    className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg text-sm font-medium"
+                    style={{ background: 'rgba(255, 138, 0, 0.2)', color: '#FF8A00' }}
                     title="Report an issue - submits debug info to support team"
                   >
                     🚨 Report Issue
                   </button>
-                  <span className="text-xs text-gray-600">
+                  <span className="text-xs text-white/40">
                     Stats: {debugLogger.getStats().totalAttempts} attempts, {debugLogger.getStats().totalSuccesses} successes
                   </span>
                 </div>
@@ -1200,31 +1201,31 @@ function AuctionRoom() {
           </div>
 
           {/* Participant Budgets - Horizontal Scroll */}
-          <div className="bg-white rounded-lg shadow-lg p-3 mb-4">
-            <h2 className="text-lg font-bold mb-2 text-gray-900">Manager Budgets</h2>
+          <div className="rounded-xl p-3 mb-4" style={{ background: '#151C2C', border: '1px solid rgba(255,255,255,0.1)' }}>
+            <h2 className="text-lg font-bold mb-2 text-white">Manager Budgets</h2>
             <div className="flex gap-3 overflow-x-auto pb-2" style={{scrollbarWidth: 'thin'}}>
               {participants.map((p) => {
                 const isCurrentUser = user && p.userId === user.id;
                 return (
                   <div
                     key={p.id}
-                    className={`flex-shrink-0 w-32 sm:w-40 py-2 px-2.5 sm:p-3 rounded-lg border-2 ${
-                      isCurrentUser
-                        ? "bg-blue-50 border-blue-500"
-                        : "bg-gray-50 border-gray-200"
-                    }`}
+                    className="flex-shrink-0 w-32 sm:w-40 py-2 px-2.5 sm:p-3 rounded-lg"
+                    style={{ 
+                      background: isCurrentUser ? 'rgba(0, 240, 255, 0.1)' : 'rgba(255,255,255,0.05)',
+                      border: isCurrentUser ? '2px solid #00F0FF' : '1px solid rgba(255,255,255,0.1)'
+                    }}
                   >
-                    <div className="font-semibold text-gray-900 text-[10px] sm:text-[var(--t-xs)] mb-1 truncate break-any line-clamp-2">
+                    <div className="font-semibold text-white text-[10px] sm:text-xs mb-1 truncate break-any line-clamp-2">
                       {p.userName} {isCurrentUser && "(You)"}
                     </div>
                     <div className="space-y-0.5 sm:space-y-1">
-                      <div className="text-sm sm:text-lg font-bold text-green-600 truncate">
+                      <div className="text-sm sm:text-lg font-bold truncate" style={{ color: '#00F0FF' }}>
                         {formatCurrency(p.budgetRemaining)}
                       </div>
-                      <div className="text-[10px] sm:text-xs text-gray-500 truncate">
+                      <div className="text-[10px] sm:text-xs text-white/40 truncate">
                         Spent: {formatCurrency(p.totalSpent)}
                       </div>
-                      <div className="text-[10px] sm:text-xs text-gray-500 whitespace-nowrap">
+                      <div className="text-[10px] sm:text-xs text-white/40 whitespace-nowrap">
                         🏆 {uiHints.assetPlural}: {p.clubsWon.length}
                       </div>
                     </div>
@@ -1236,22 +1237,22 @@ function AuctionRoom() {
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             {/* Current Lot */}
-            <div className="lg:col-span-2 bg-white rounded-lg shadow-lg p-4 app-card">
+            <div className="lg:col-span-2 rounded-xl p-4" style={{ background: '#151C2C', border: '1px solid rgba(255,255,255,0.1)' }}>
               {currentClub && auction?.status !== "completed" ? (
                 <div>
-                  <h2 className="h2 text-2xl font-bold mb-4 text-gray-900">🔥 Current {uiHints.assetLabel} Ownership</h2>
+                  <h2 className="text-2xl font-bold mb-4 text-white">🔥 Current {uiHints.assetLabel} Ownership</h2>
                   
                   {/* Countdown Overlay Between Lots */}
                   {countdown !== null && countdown > 0 && (
-                    <div className="fixed inset-0 bg-black bg-opacity-75 z-50 flex items-center justify-center">
-                      <div className="bg-white rounded-lg p-12 text-center shadow-2xl">
-                        <div className="text-7xl font-bold text-blue-600 mb-4">
+                    <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: 'rgba(11, 16, 27, 0.95)' }}>
+                      <div className="rounded-2xl p-12 text-center" style={{ background: '#151C2C', border: '1px solid rgba(0, 240, 255, 0.3)', boxShadow: '0 0 60px rgba(0, 240, 255, 0.2)' }}>
+                        <div className="text-8xl font-bold mb-4" style={{ color: '#00F0FF', textShadow: '0 0 30px rgba(0, 240, 255, 0.5)' }}>
                           {countdown}
                         </div>
-                        <div className="text-2xl text-gray-700">
+                        <div className="text-2xl text-white">
                           Next team in {countdown}...
                         </div>
-                        <div className="text-sm text-gray-500 mt-2">
+                        <div className="text-sm text-white/40 mt-2">
                           Get ready to bid
                         </div>
                       </div>
