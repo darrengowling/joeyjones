@@ -673,7 +673,7 @@ const Help = () => {
                 <p className="text-white/80 mb-2">
                   In the auction room, you'll see breadcrumbs at the top:
                 </p>
-                <p className="font-mono text-sm text-white/60 bg-[#151C2C] p-2 rounded border border-gray-300 mb-2">
+                <p className="font-mono text-sm text-white/60 bg-[#151C2C] p-2 rounded border border-white/20 mb-2">
                   Home › My Competitions › League Name › Auction Room
                 </p>
                 <p className="text-white/80 text-sm">
@@ -701,42 +701,42 @@ const Help = () => {
         {/* FAQ / Troubleshooting */}
         <Section id="faq" title="FAQ & Troubleshooting" icon="❓">
           <div className="space-y-4">
-            <div className="border-l-4 border-blue-500 pl-4">
+            <div className="border-l-4 border-[#00F0FF] pl-4">
               <h5 className="font-semibold text-white mb-1">What happens if I lose internet connection during an auction?</h5>
               <p className="text-white/80 text-sm">
                 The system has automatic reconnection built in. If you disconnect, it will attempt to reconnect you automatically. Your bids and budget are saved on the server.
               </p>
             </div>
 
-            <div className="border-l-4 border-blue-500 pl-4">
+            <div className="border-l-4 border-[#00F0FF] pl-4">
               <h5 className="font-semibold text-white mb-1">Can I change my bid after placing it?</h5>
               <p className="text-white/80 text-sm">
                 No, bids are final once placed. This maintains fairness in the auction. Make sure you're comfortable with the price before bidding!
               </p>
             </div>
 
-            <div className="border-l-4 border-blue-500 pl-4">
+            <div className="border-l-4 border-[#00F0FF] pl-4">
               <h5 className="font-semibold text-white mb-1">How does anti-snipe work?</h5>
               <p className="text-white/80 text-sm">
                 If a bid is placed in the last few seconds (as configured by the admin), the timer automatically extends by the anti-snipe duration. This prevents unfair last-second wins.
               </p>
             </div>
 
-            <div className="border-l-4 border-blue-500 pl-4">
+            <div className="border-l-4 border-[#00F0FF] pl-4">
               <h5 className="font-semibold text-white mb-1">Can I leave a competition after joining?</h5>
               <p className="text-white/80 text-sm">
                 Once the auction starts, you're committed to the competition. Contact your league commissioner if you need to withdraw before the auction begins.
               </p>
             </div>
 
-            <div className="border-l-4 border-blue-500 pl-4">
+            <div className="border-l-4 border-[#00F0FF] pl-4">
               <h5 className="font-semibold text-white mb-1">How are points calculated?</h5>
               <p className="text-white/80 text-sm">
                 Points are based on real match outcomes and performance. Your teams earn points when they win matches or achieve specific milestones. The scoring system varies by sport.
               </p>
             </div>
 
-            <div className="border-l-4 border-blue-500 pl-4">
+            <div className="border-l-4 border-[#00F0FF] pl-4">
               <h5 className="font-semibold text-white mb-1">Can I be in multiple competitions at once?</h5>
               <p className="text-white/80 text-sm">
                 Yes! You can create or join as many competitions as you like. Each competition is independent with its own auction and standings.
