@@ -483,7 +483,7 @@ const Home = () => {
       {/* User Dialog */}
       {showUserDialog && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 pointer-events-auto">
-          <div className="rounded-2xl p-8 max-w-md w-full mx-4">
+          <div className="rounded-2xl p-8 max-w-md w-full mx-4" style={{ background: '#151C2C', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-2xl font-bold text-white">Enter Your Details</h2>
               <button
@@ -608,7 +608,7 @@ const Home = () => {
       {/* Create League Dialog */}
       {showCreateLeagueDialog && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 pointer-events-auto">
-          <div className="rounded-2xl p-8 max-w-md w-full mx-4 max-h-[90dvh] overflow-y-auto app-card">
+          <div className="rounded-2xl p-8 max-w-md w-full mx-4 max-h-[90dvh] overflow-y-auto" style={{ background: '#151C2C', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-2xl font-bold text-white">Create Your Competition</h2>
               <button
@@ -894,7 +894,7 @@ const Home = () => {
       {/* Join League Dialog */}
       {showJoinLeagueDialog && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 pointer-events-auto">
-          <div className="rounded-2xl p-8 max-w-md w-full mx-4">
+          <div className="rounded-2xl p-8 max-w-md w-full mx-4" style={{ background: '#151C2C', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-2xl font-bold text-white">Join the Competition</h2>
               <button
