@@ -2,6 +2,11 @@
 **Started:** January 27, 2026
 **Last Updated:** January 27, 2026
 
+## CRITICAL RULE
+**NEVER modify existing working code without explicit user approval.** Only create new files/components. This avoids expensive and potentially catastrophic mistakes and ensures the build remains stable.
+
+---
+
 ## Overview
 This session focused on implementing the new UI/UX redesign based on Stitch design tool exports. The goal is to transform the app from a light-themed design to a premium dark-themed mobile-first design.
 
