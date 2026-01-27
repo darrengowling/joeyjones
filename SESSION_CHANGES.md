@@ -188,8 +188,9 @@ Home screen HTML at: `/tmp/stitch_code/code.html`
 ---
 
 ## Test URLs
+- **New Home (testing):** `/new`
 - **Design Preview:** `/design-preview`
-- **Home (current):** `/`
+- **Old Home (current):** `/`
 - **Create Competition:** Click "Create Your Competition" button
 
 ---
