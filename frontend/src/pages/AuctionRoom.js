@@ -1087,26 +1087,26 @@ function AuctionRoom() {
       <div className="flex-1 overflow-y-auto overflow-x-hidden px-2 sm:px-4 pb-4">
         <div className="max-w-6xl mx-auto w-full">
           {/* Auction Header */}
-          <div className="bg-white rounded-lg shadow-lg p-3 sm:p-4 mb-4">
+          <div className="rounded-xl p-3 sm:p-4 mb-4" style={{ background: '#151C2C', border: '1px solid rgba(255,255,255,0.1)' }}>
             <div className="flex flex-col gap-3">
               <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-2 max-w-full">
-                    <h1 className="text-lg sm:text-2xl font-bold text-gray-900 truncate min-w-0 flex-shrink">
+                    <h1 className="text-lg sm:text-2xl font-bold text-white truncate min-w-0 flex-shrink">
                       {league ? league.name : "Strategic Competition Arena"}
                     </h1>
                     {league?.sportKey && (
-                      <span className="px-2 py-0.5 bg-blue-100 text-blue-800 text-xs rounded whitespace-nowrap flex-shrink-0 capitalize">
+                      <span className="px-2 py-0.5 text-xs rounded whitespace-nowrap flex-shrink-0 capitalize" style={{ background: 'rgba(0, 240, 255, 0.2)', color: '#00F0FF' }}>
                         {league.sportKey}
                       </span>
                     )}
                     {auction?.status === "paused" && (
-                      <span className="px-2 py-0.5 bg-yellow-100 text-yellow-800 text-xs rounded whitespace-nowrap flex-shrink-0">
+                      <span className="px-2 py-0.5 text-xs rounded whitespace-nowrap flex-shrink-0" style={{ background: 'rgba(255, 138, 0, 0.2)', color: '#FF8A00' }}>
                         ⏸️ PAUSED
                       </span>
                     )}
                   </div>
-                  <p className="text-xs sm:text-sm text-gray-600 mt-1">
+                  <p className="text-xs sm:text-sm text-white/40 mt-1">
                     Lot #{auction?.currentLot || 0}
                   </p>
                 </div>
@@ -1118,7 +1118,8 @@ function AuctionRoom() {
                   {auction?.status === "active" && (
                     <button
                       onClick={pauseAuction}
-                      className="btn btn-secondary px-3 py-1.5 sm:px-4 sm:py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 text-sm"
+                      className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg text-sm font-medium"
+                      style={{ background: 'rgba(255, 138, 0, 0.2)', color: '#FF8A00' }}
                       title="Pause Auction"
                     >
                       ⏸️ Pause
@@ -1128,7 +1129,8 @@ function AuctionRoom() {
                   {auction?.status === "paused" && (
                     <button
                       onClick={resumeAuction}
-                      className="btn btn-secondary px-3 py-1.5 sm:px-4 sm:py-2 bg-green-500 text-white rounded hover:bg-green-600 text-sm"
+                      className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg text-sm font-medium"
+                      style={{ background: 'rgba(16, 185, 129, 0.2)', color: '#10B981' }}
                       title="Resume Auction"
                     >
                       ▶️ Resume
@@ -1138,7 +1140,8 @@ function AuctionRoom() {
                   {(auction?.status === "paused" || auction?.status === "completed") && (
                     <button
                       onClick={resetAuction}
-                      className="btn btn-warning px-3 py-1.5 sm:px-4 sm:py-2 bg-orange-500 text-white rounded hover:bg-orange-600 text-sm"
+                      className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg text-sm font-medium"
+                      style={{ background: 'rgba(255, 138, 0, 0.2)', color: '#FF8A00' }}
                       title="Reset Auction"
                     >
                       🔄 Reset
@@ -1147,7 +1150,8 @@ function AuctionRoom() {
                   
                   <button
                     onClick={completeLot}
-                    className="btn btn-danger px-3 py-1.5 sm:px-4 sm:py-2 bg-red-500 text-white rounded hover:bg-red-600 text-sm"
+                    className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg text-sm font-medium"
+                    style={{ background: 'rgba(255, 77, 77, 0.2)', color: '#FF4D4D' }}
                     title="Complete Current Lot"
                   >
                     Complete Lot
@@ -1155,7 +1159,8 @@ function AuctionRoom() {
                   
                   <button
                     onClick={deleteAuction}
-                    className="btn btn-danger px-3 py-1.5 sm:px-4 sm:py-2 bg-red-700 text-white rounded hover:bg-red-800 text-sm"
+                    className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg text-sm font-medium"
+                    style={{ background: 'rgba(255, 77, 77, 0.3)', color: '#FF4D4D' }}
                     title="Delete Entire Auction"
                   >
                     🗑️ Delete Auction
