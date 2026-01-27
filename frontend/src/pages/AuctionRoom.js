@@ -1050,8 +1050,8 @@ function AuctionRoom() {
         </div>
         
         {/* Budget Left */}
-        <div className="flex items-center gap-2">
-          <span className="text-white/60 text-xs uppercase tracking-wider">Budget Left</span>
+        <div className="flex items-center gap-2 ml-4">
+          <span className="text-white/60 text-xs uppercase tracking-wider">Budget</span>
           <span className="text-white font-bold">{formatCurrency(userBudgetRemaining)}</span>
         </div>
       </header>
