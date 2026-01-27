@@ -189,16 +189,20 @@ export default function LeagueDetailStitched() {
       console.log('   Active Auction:', response.data.activeAuctionId);
       setLeague(response.data);
       
-      // CRITICAL FIX: Check for active auction after loading league
-      try {
-        const auctionsResponse = await axios.get(`${API}/auctions?leagueId=${leagueId}`);
-        const activeAuction = auctionsResponse.data.find(a => a.status === 'active');
-        if (activeAuction) {
-          console.log('Active auction detected:', activeAuction.id);
-          setLeague(prev => ({ ...prev, status: 'active', activeAuctionId: activeAuction.id }));
+      // Check for active auction using the correct endpoint
+      // The league already contains activeAuctionId, so we just verify it exists if set
+      if (response.data.activeAuctionId) {
+        try {
+          const auctionResponse = await axios.get(`${API}/auction/${response.data.activeAuctionId}`);
+          if (auctionResponse.data.auction && auctionResponse.data.auction.status !== 'completed') {
+            console.log('Active auction verified:', response.data.activeAuctionId);
+            setLeague(prev => ({ ...prev, status: 'active' }));
+          }
+        } catch (auctionError) {
+          // Auction doesn't exist anymore, clear activeAuctionId
+          console.log('Auction no longer exists, clearing activeAuctionId');
+          setLeague(prev => ({ ...prev, activeAuctionId: null }));
         }
-      } catch (auctionError) {
-        console.error("Error checking for active auction:", auctionError);
       }
       
       // Load sport information based on league's sportKey
