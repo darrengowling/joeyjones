@@ -241,9 +241,9 @@ export default function CreateCompetition() {
             </div>
           </div>
 
-          {/* Managers & Budget Grid */}
+          {/* Managers Grid - Min and Max */}
           <div className="grid grid-cols-2 gap-4">
-            {/* Managers */}
+            {/* Min Managers */}
             <div 
               className="p-5 space-y-3 rounded-2xl"
               style={{ 
@@ -255,12 +255,12 @@ export default function CreateCompetition() {
                 className="block text-[11px] font-extrabold uppercase tracking-widest"
                 style={{ color: '#06B6D4' }}
               >
-                Managers
+                Min Managers
               </label>
               <div className="flex items-center justify-between">
                 <button
                   type="button"
-                  onClick={() => adjustManagers(-1)}
+                  onClick={() => setForm({ ...form, minManagers: Math.max(2, form.minManagers - 1) })}
                   className="w-8 h-8 rounded-lg flex items-center justify-center active:bg-white/10 transition-colors"
                   style={{ 
                     background: 'rgba(255,255,255,0.05)',
@@ -269,10 +269,10 @@ export default function CreateCompetition() {
                 >
                   <span className="material-symbols-outlined text-xl" style={{ color: '#06B6D4' }}>remove</span>
                 </button>
-                <span className="text-xl font-black text-white">{form.maxManagers}</span>
+                <span className="text-xl font-black text-white">{form.minManagers}</span>
                 <button
                   type="button"
-                  onClick={() => adjustManagers(1)}
+                  onClick={() => setForm({ ...form, minManagers: Math.min(form.maxManagers, form.minManagers + 1) })}
                   className="w-8 h-8 rounded-lg flex items-center justify-center active:bg-white/10 transition-colors"
                   style={{ 
                     background: 'rgba(255,255,255,0.05)',
@@ -284,7 +284,7 @@ export default function CreateCompetition() {
               </div>
             </div>
 
-            {/* Budget */}
+            {/* Max Managers */}
             <div 
               className="p-5 space-y-3 rounded-2xl"
               style={{ 
@@ -296,12 +296,19 @@ export default function CreateCompetition() {
                 className="block text-[11px] font-extrabold uppercase tracking-widest"
                 style={{ color: '#06B6D4' }}
               >
-                Budget
+                Max Managers
               </label>
               <div className="flex items-center justify-between">
                 <button
                   type="button"
-                  onClick={() => adjustBudget(-50)}
+                  onClick={() => {
+                    const newMax = Math.max(2, form.maxManagers - 1);
+                    setForm({ 
+                      ...form, 
+                      maxManagers: newMax,
+                      minManagers: Math.min(form.minManagers, newMax)
+                    });
+                  }}
                   className="w-8 h-8 rounded-lg flex items-center justify-center active:bg-white/10 transition-colors"
                   style={{ 
                     background: 'rgba(255,255,255,0.05)',
@@ -310,13 +317,10 @@ export default function CreateCompetition() {
                 >
                   <span className="material-symbols-outlined text-xl" style={{ color: '#06B6D4' }}>remove</span>
                 </button>
-                <div className="flex items-center">
-                  <span className="font-black text-lg mr-1" style={{ color: '#06B6D4' }}>£</span>
-                  <span className="text-xl font-black text-white">{budgetDisplay}M</span>
-                </div>
+                <span className="text-xl font-black text-white">{form.maxManagers}</span>
                 <button
                   type="button"
-                  onClick={() => adjustBudget(50)}
+                  onClick={() => setForm({ ...form, maxManagers: Math.min(20, form.maxManagers + 1) })}
                   className="w-8 h-8 rounded-lg flex items-center justify-center active:bg-white/10 transition-colors"
                   style={{ 
                     background: 'rgba(255,255,255,0.05)',
@@ -327,6 +331,51 @@ export default function CreateCompetition() {
                 </button>
               </div>
             </div>
+          </div>
+
+          {/* Budget */}
+          <div 
+            className="p-5 space-y-3 rounded-2xl"
+            style={{ 
+              background: '#0F1624',
+              border: '1px solid rgba(255, 255, 255, 0.08)',
+            }}
+          >
+            <label 
+              className="block text-[11px] font-extrabold uppercase tracking-widest"
+              style={{ color: '#06B6D4' }}
+            >
+              Budget
+            </label>
+            <div className="flex items-center justify-between">
+              <button
+                type="button"
+                onClick={() => adjustBudget(-10)}
+                className="w-10 h-10 rounded-lg flex items-center justify-center active:bg-white/10 transition-colors"
+                style={{ 
+                  background: 'rgba(255,255,255,0.05)',
+                  border: '1px solid rgba(255,255,255,0.05)',
+                }}
+              >
+                <span className="material-symbols-outlined text-xl" style={{ color: '#06B6D4' }}>remove</span>
+              </button>
+              <div className="flex items-center">
+                <span className="font-black text-xl mr-1" style={{ color: '#06B6D4' }}>£</span>
+                <span className="text-2xl font-black text-white">{budgetDisplay}M</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => adjustBudget(10)}
+                className="w-10 h-10 rounded-lg flex items-center justify-center active:bg-white/10 transition-colors"
+                style={{ 
+                  background: 'rgba(255,255,255,0.05)',
+                  border: '1px solid rgba(255,255,255,0.05)',
+                }}
+              >
+                <span className="material-symbols-outlined text-xl" style={{ color: '#06B6D4' }}>add</span>
+              </button>
+            </div>
+            <p className="text-[10px] text-slate-500 text-center">Adjust in £10m increments</p>
           </div>
 
           {/* Teams per Manager */}
