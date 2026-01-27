@@ -97,23 +97,8 @@ export default function CreateLeague() {
       }
       
       const response = await axios.post(`${API}/leagues`, leagueData);
-      const newLeague = response.data;
-      
-      // Auto-join the commissioner as first participant
-      try {
-        await axios.post(`${API}/leagues/${newLeague.id}/join`, {
-          inviteToken: newLeague.inviteToken,
-          userId: user.id,
-          userName: user.name,
-          userEmail: user.email,
-        });
-      } catch (joinError) {
-        // If already joined or other error, continue anyway
-        console.log("Commissioner auto-join:", joinError.response?.data?.message || "Already joined");
-      }
-      
       alert("League created successfully!");
-      navigate(`/league/${newLeague.id}`);
+      navigate(`/league/${response.data.id}`);
     } catch (e) {
       console.error("Error creating league:", e);
       alert("Error creating league");
