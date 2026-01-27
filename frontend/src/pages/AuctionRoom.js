@@ -1507,7 +1507,8 @@ function AuctionRoom() {
                   {auction?.status === "completed" && (
                     <button
                       onClick={() => navigate("/app/my-competitions")}
-                      className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition font-semibold"
+                      className="px-6 py-3 rounded-xl font-bold transition"
+                      style={{ background: '#00F0FF', color: '#0B101B' }}
                       data-testid="go-to-my-competitions"
                     >
                       Go to My Competitions →
@@ -1518,27 +1519,27 @@ function AuctionRoom() {
             </div>
 
             {/* Clubs Overview */}
-            <div className="app-card bg-white rounded-lg shadow-lg p-4">
-              <h3 className="h2 text-lg font-bold mb-3 text-gray-900">🏆 {uiHints.assetPlural} Available</h3>
+            <div className="rounded-xl p-4" style={{ background: '#151C2C', border: '1px solid rgba(255,255,255,0.1)' }}>
+              <h3 className="text-lg font-bold mb-3 text-white">🏆 {uiHints.assetPlural} Available</h3>
               
               {/* Summary Stats */}
-              <div className="stack-md">
+              <div className="mb-4">
                 <div className="grid grid-cols-2 gap-2 text-sm">
-                  <div className="chip bg-blue-50 p-2 rounded">
-                    <div className="font-semibold text-blue-800">Total</div>
-                    <div className="text-blue-600">{clubs.length}</div>
+                  <div className="p-2 rounded-lg" style={{ background: 'rgba(0, 240, 255, 0.1)' }}>
+                    <div className="font-semibold" style={{ color: '#00F0FF' }}>Total</div>
+                    <div className="text-white">{clubs.length}</div>
                   </div>
-                  <div className="chip bg-green-50 p-2 rounded">
-                    <div className="font-semibold text-green-800">✅ Sold</div>
-                    <div className="text-green-600">{clubs.filter(c => c.status === 'sold').length}</div>
+                  <div className="p-2 rounded-lg" style={{ background: 'rgba(16, 185, 129, 0.1)' }}>
+                    <div className="font-semibold" style={{ color: '#10B981' }}>✅ Sold</div>
+                    <div className="text-white">{clubs.filter(c => c.status === 'sold').length}</div>
                   </div>
-                  <div className="chip bg-yellow-50 p-2 rounded">
-                    <div className="font-semibold text-yellow-800">🔥 Current</div>
-                    <div className="text-yellow-600">{clubs.filter(c => c.status === 'current').length}</div>
+                  <div className="p-2 rounded-lg" style={{ background: 'rgba(255, 138, 0, 0.1)' }}>
+                    <div className="font-semibold" style={{ color: '#FF8A00' }}>🔥 Current</div>
+                    <div className="text-white">{clubs.filter(c => c.status === 'current').length}</div>
                   </div>
-                  <div className="chip bg-gray-50 p-2 rounded">
-                    <div className="font-semibold text-gray-800">⏳ Remaining</div>
-                    <div className="text-gray-600">{clubs.filter(c => c.status === 'upcoming').length}</div>
+                  <div className="p-2 rounded-lg" style={{ background: 'rgba(255,255,255,0.05)' }}>
+                    <div className="font-semibold text-white/60">⏳ Remaining</div>
+                    <div className="text-white">{clubs.filter(c => c.status === 'upcoming').length}</div>
                   </div>
                 </div>
               </div>
@@ -1546,11 +1547,11 @@ function AuctionRoom() {
               {/* Club List */}
               <div className="max-h-[500px] overflow-y-auto space-y-1">
                 {clubs.map((club) => {
-                  const statusColors = {
-                    current: "bg-yellow-100 border-yellow-300 text-yellow-800",
-                    upcoming: "bg-blue-50 border-blue-200 text-blue-800",
-                    sold: "bg-green-50 border-green-200 text-green-800",
-                    unsold: "bg-red-50 border-red-200 text-red-800"
+                  const statusStyles = {
+                    current: { background: 'rgba(255, 138, 0, 0.1)', border: '1px solid rgba(255, 138, 0, 0.3)', color: '#FF8A00' },
+                    upcoming: { background: 'rgba(0, 240, 255, 0.05)', border: '1px solid rgba(0, 240, 255, 0.1)', color: '#00F0FF' },
+                    sold: { background: 'rgba(16, 185, 129, 0.1)', border: '1px solid rgba(16, 185, 129, 0.2)', color: '#10B981' },
+                    unsold: { background: 'rgba(255, 77, 77, 0.1)', border: '1px solid rgba(255, 77, 77, 0.2)', color: '#FF4D4D' }
                   };
                   
                   const statusIcons = {
@@ -1560,29 +1561,32 @@ function AuctionRoom() {
                     unsold: "❌"
                   };
                   
+                  const style = statusStyles[club.status] || statusStyles.upcoming;
+                  
                   return (
                     <div
                       key={club.id}
-                      className={`p-2 rounded-lg border text-xs ${statusColors[club.status] || 'bg-gray-50 border-gray-200'}`}
+                      className="p-2 rounded-lg text-xs"
+                      style={style}
                     >
                       <div className="flex justify-between items-start">
                         <div className="flex-1 min-w-0">
-                          <div className="font-semibold truncate">{club.name}</div>
+                          <div className="font-semibold truncate text-white">{club.name}</div>
                           {/* Cricket: Show franchise first, then nationality */}
                           {sport?.key === "cricket" && club.meta?.franchise && (
-                            <div className="text-xs text-cyan-600 font-medium truncate">{club.meta.franchise}</div>
+                            <div className="text-xs font-medium truncate" style={{ color: '#00F0FF' }}>{club.meta.franchise}</div>
                           )}
                           {/* Football: Show country */}
                           {sport?.key === "football" && club.country && (
-                            <div className="text-xs opacity-75">{club.country}</div>
+                            <div className="text-xs text-white/50">{club.country}</div>
                           )}
                           {/* Cricket: Show nationality */}
                           {sport?.key === "cricket" && club.meta?.nationality && (
-                            <div className="text-xs opacity-75">{club.meta.nationality}</div>
+                            <div className="text-xs text-white/50">{club.meta.nationality}</div>
                           )}
                           {/* Other sports: Show country if available */}
                           {sport?.key !== "football" && sport?.key !== "cricket" && club.country && (
-                            <div className="text-xs opacity-75">{club.country}</div>
+                            <div className="text-xs text-white/50">{club.country}</div>
                           )}
                         </div>
                         <div className="ml-2 flex flex-col items-end">
@@ -1591,7 +1595,7 @@ function AuctionRoom() {
                             {/* Hide lot number to keep draw order secret */}
                           </div>
                           {club.status === 'sold' && club.winningBid && (
-                            <div className="text-xs font-semibold">
+                            <div className="text-xs font-semibold" style={{ color: '#10B981' }}>
                               {formatCurrency(club.winningBid)}
                             </div>
                           )}
