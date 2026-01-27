@@ -1218,6 +1218,8 @@ const Home = () => {
 export default function App() {
   return (
     <BrowserRouter>
+      {/* Desktop max-width container - centers app like a phone screen on larger displays */}
+      <div className="max-w-md mx-auto min-h-screen relative" style={{ background: '#0B101B' }}>
       <Toaster 
         position="top-right"
         containerStyle={{
