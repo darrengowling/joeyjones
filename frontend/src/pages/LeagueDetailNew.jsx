@@ -847,6 +847,7 @@ export default function LeagueDetailNew() {
               </div>
             )}
           </div>
+          </div>
         </div>
       )}
 
