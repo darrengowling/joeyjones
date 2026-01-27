@@ -82,6 +82,7 @@ Productive session focused on completing the Stitch Technical Asset Spec impleme
 | `frontend/src/index.css` | Modified | Added bidPop animation keyframes |
 | `frontend/src/pages/LeagueDetail.js` | Modified | Fixed 404 error on auction check |
 | `frontend/src/pages/LeagueDetailStitched.jsx` | Modified | Fixed 404 error + tab alignment |
+| `frontend/src/pages/ClubsList.js` | Modified | Added TeamCrest for team logos |
 
 ---
 
