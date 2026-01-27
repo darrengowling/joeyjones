@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { formatCurrency, parseCurrencyInput } from "../utils/currency";
+import { formatCurrency } from "../utils/currency";
+import BottomNav from "../components/BottomNav";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
@@ -17,16 +18,15 @@ export default function CreateLeague() {
   const [assetSearchTerm, setAssetSearchTerm] = useState("");
   const [form, setForm] = useState({
     name: "",
-    sportKey: "football", // Default to football
-    competitionCode: "", // EPL, UCL, AFCON for football; IPL, CUSTOM for cricket
-    budget: 500000000, // £500m default budget
+    sportKey: "football",
+    competitionCode: "",
+    budget: 500000000,
     minManagers: 2,
     maxManagers: 12,
     clubSlots: 3,
   });
-  const [budgetDisplay, setBudgetDisplay] = useState("500"); // Display in millions
+  const [budgetDisplay, setBudgetDisplay] = useState("500");
 
-  // Set page title
   useEffect(() => {
     document.title = "Create Competition | Sport X";
   }, []);
@@ -42,7 +42,6 @@ export default function CreateLeague() {
   }, [navigate]);
 
   useEffect(() => {
-    // Fetch available sports
     const fetchSports = async () => {
       try {
         const response = await axios.get(`${API}/sports`);
@@ -51,23 +50,19 @@ export default function CreateLeague() {
         console.error("Error fetching sports:", error);
       }
     };
-    
     fetchSports();
   }, []);
 
   useEffect(() => {
-    // Fetch available assets when sport changes (if feature enabled)
     if (FEATURE_ASSET_SELECTION) {
       const fetchAssets = async () => {
         try {
-          // Use unified /clubs endpoint for all sports
           const response = await axios.get(`${API}/clubs?sportKey=${form.sportKey}`);
           setAvailableAssets(response.data);
         } catch (error) {
           console.error("Error fetching assets:", error);
         }
       };
-      
       fetchAssets();
     }
   }, [form.sportKey]);
@@ -79,7 +74,6 @@ export default function CreateLeague() {
       return;
     }
 
-    // Validation: If team mode is "select" and no teams selected
     if (FEATURE_ASSET_SELECTION && teamMode === "select" && selectedAssets.length === 0) {
       alert("Please select at least one team for the auction, or choose 'Include all teams'");
       return;
@@ -91,7 +85,6 @@ export default function CreateLeague() {
         commissionerId: user.id,
       };
       
-      // Only include assetsSelected if feature enabled and teams are selected
       if (FEATURE_ASSET_SELECTION && teamMode === "select" && selectedAssets.length > 0) {
         leagueData.assetsSelected = selectedAssets;
       }
@@ -106,55 +99,81 @@ export default function CreateLeague() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 py-8">
-      <div className="container-narrow mx-auto px-4">
-        <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-lg p-8 app-card">
-          <button
-            onClick={() => navigate("/")}
-            className="btn btn-secondary text-blue-600 hover:underline mb-4"
-          >
-            ← Back to Home
-          </button>
+    <div className="min-h-screen" style={{ background: '#0B101B', paddingBottom: '100px' }}>
+      {/* Header */}
+      <header 
+        className="fixed top-0 left-0 right-0 z-40 px-4 py-4 flex items-center justify-between"
+        style={{
+          background: 'rgba(11, 16, 27, 0.95)',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
+        }}
+      >
+        <button
+          onClick={() => navigate("/")}
+          className="flex items-center gap-2 text-white/60 hover:text-white transition-colors"
+        >
+          <span>←</span>
+          <span className="text-xl font-black tracking-tighter">
+            SPORT <span style={{ color: '#06B6D4' }}>X</span>
+          </span>
+        </button>
+      </header>
 
-          <div className="text-xs uppercase tracking-wide text-gray-500 mb-1">Create Competition</div>
-          <h1 className="h1 text-3xl font-bold mb-6 text-gray-900">🏆 Create Your Competition</h1>
-          <p className="subtle text-gray-600 mb-6">Build your peer-to-peer strategic arena where skill and tactics determine victory</p>
+      {/* Main Content */}
+      <div className="pt-20 px-4">
+        <div className="max-w-2xl mx-auto">
+          <div className="text-xs uppercase tracking-widest text-white/40 mb-1">Create Competition</div>
+          <h1 className="text-2xl font-bold text-white mb-2">🏆 Create Your Competition</h1>
+          <p className="text-white/60 text-sm mb-6">Build your peer-to-peer strategic arena where skill and tactics determine victory</p>
 
-          <form onSubmit={handleSubmit} className="stack-lg space-y-6">
-            <div>
-              <label className="block text-gray-700 mb-2 font-semibold">League Name</label>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* League Name */}
+            <div 
+              className="rounded-xl p-4"
+              style={{ background: '#151C2C', border: '1px solid rgba(255, 255, 255, 0.1)' }}
+            >
+              <label className="block text-white/60 mb-2 text-sm font-semibold">League Name</label>
               <input
                 type="text"
-                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-3 rounded-xl text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-[#00F0FF]"
+                style={{ background: '#0B101B', border: '1px solid rgba(255, 255, 255, 0.1)' }}
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
+                placeholder="Enter league name..."
                 required
                 data-testid="league-name-input"
               />
             </div>
 
-            <div>
-              <label className="block text-gray-700 mb-2 font-semibold">Sport</label>
+            {/* Sport Selection */}
+            <div 
+              className="rounded-xl p-4"
+              style={{ background: '#151C2C', border: '1px solid rgba(255, 255, 255, 0.1)' }}
+            >
+              <label className="block text-white/60 mb-2 text-sm font-semibold">Sport</label>
               <select
-                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-3 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-[#00F0FF]"
+                style={{ background: '#0B101B', border: '1px solid rgba(255, 255, 255, 0.1)' }}
                 value={form.sportKey}
                 onChange={(e) => setForm({ ...form, sportKey: e.target.value })}
                 data-testid="create-sport-select"
               >
-                <option value="football">Football</option>
+                <option value="football">⚽ Football</option>
                 {sports.find(s => s.key === 'cricket') && (
-                  <option value="cricket">Cricket</option>
+                  <option value="cricket">🏏 Cricket</option>
                 )}
               </select>
-              <p className="text-sm text-gray-500 mt-1">
-                Choose the sport for your competition
-              </p>
+              <p className="text-xs text-white/40 mt-2">Choose the sport for your competition</p>
             </div>
 
-            <div>
-              <label className="block text-gray-700 mb-2 font-semibold">
-                Strategic Budget per Manager
-              </label>
+            {/* Budget */}
+            <div 
+              className="rounded-xl p-4"
+              style={{ background: '#151C2C', border: '1px solid rgba(255, 255, 255, 0.1)' }}
+            >
+              <label className="block text-white/60 mb-2 text-sm font-semibold">Strategic Budget per Manager</label>
               <div className="flex items-center gap-2">
                 <button
                   type="button"
@@ -164,14 +183,16 @@ export default function CreateLeague() {
                     setForm({ ...form, budget: newMillions * 1000000 });
                     setBudgetDisplay(newMillions.toString());
                   }}
-                  className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg font-bold text-xl"
+                  className="w-12 h-12 rounded-xl font-bold text-xl text-white transition-colors"
+                  style={{ background: 'rgba(255, 255, 255, 0.1)' }}
                 >
                   −
                 </button>
                 <div className="flex-1 relative">
                   <input
                     type="text"
-                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-center font-semibold text-lg"
+                    className="w-full px-4 py-3 rounded-xl text-white text-center font-semibold text-lg focus:outline-none focus:ring-2 focus:ring-[#00F0FF]"
+                    style={{ background: '#0B101B', border: '1px solid rgba(255, 255, 255, 0.1)' }}
                     value={budgetDisplay}
                     onChange={(e) => {
                       const value = e.target.value.replace(/[^0-9]/g, '');
@@ -183,7 +204,7 @@ export default function CreateLeague() {
                     required
                     data-testid="league-budget-input"
                   />
-                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 font-semibold">m</span>
+                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-white/60 font-semibold">m</span>
                 </div>
                 <button
                   type="button"
@@ -193,51 +214,63 @@ export default function CreateLeague() {
                     setForm({ ...form, budget: newMillions * 1000000 });
                     setBudgetDisplay(newMillions.toString());
                   }}
-                  className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg font-bold text-xl"
+                  className="w-12 h-12 rounded-xl font-bold text-xl text-white transition-colors"
+                  style={{ background: 'rgba(255, 255, 255, 0.1)' }}
                 >
                   +
                 </button>
               </div>
-              <p className="text-sm text-gray-500 mt-1">
-                Current: {formatCurrency(form.budget)} (adjust in £10m increments)
-              </p>
+              <p className="text-xs text-white/40 mt-2">Current: {formatCurrency(form.budget)} (adjust in £10m increments)</p>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-gray-700 mb-2 font-semibold">Min Managers</label>
-                <input
-                  type="number"
-                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  value={form.minManagers}
-                  onChange={(e) => setForm({ ...form, minManagers: Number(e.target.value) })}
-                  min="2"
-                  required
-                  data-testid="league-min-managers-input"
-                />
-              </div>
-
-              <div>
-                <label className="block text-gray-700 mb-2 font-semibold">Max Managers</label>
-                <input
-                  type="number"
-                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  value={form.maxManagers}
-                  onChange={(e) => setForm({ ...form, maxManagers: Number(e.target.value) })}
-                  min="2"
-                  required
-                  data-testid="league-max-managers-input"
-                />
+            {/* Manager Settings */}
+            <div 
+              className="rounded-xl p-4"
+              style={{ background: '#151C2C', border: '1px solid rgba(255, 255, 255, 0.1)' }}
+            >
+              <label className="block text-white/60 mb-3 text-sm font-semibold">Manager Settings</label>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-white/40 mb-1 text-xs">Min Managers</label>
+                  <input
+                    type="number"
+                    className="w-full px-4 py-3 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-[#00F0FF]"
+                    style={{ background: '#0B101B', border: '1px solid rgba(255, 255, 255, 0.1)' }}
+                    value={form.minManagers}
+                    onChange={(e) => setForm({ ...form, minManagers: Number(e.target.value) })}
+                    min="2"
+                    required
+                    data-testid="league-min-managers-input"
+                  />
+                </div>
+                <div>
+                  <label className="block text-white/40 mb-1 text-xs">Max Managers</label>
+                  <input
+                    type="number"
+                    className="w-full px-4 py-3 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-[#00F0FF]"
+                    style={{ background: '#0B101B', border: '1px solid rgba(255, 255, 255, 0.1)' }}
+                    value={form.maxManagers}
+                    onChange={(e) => setForm({ ...form, maxManagers: Number(e.target.value) })}
+                    min="2"
+                    required
+                    data-testid="league-max-managers-input"
+                  />
+                </div>
               </div>
             </div>
 
-            <div>
-              <label className="block text-gray-700 mb-2 font-semibold">
+            {/* Assets per Manager */}
+            <div 
+              className="rounded-xl p-4"
+              style={{ background: '#151C2C', border: '1px solid rgba(255, 255, 255, 0.1)' }}
+            >
+              <label className="block text-white/60 mb-2 text-sm font-semibold">
                 {sports.find(s => s.key === form.sportKey)?.uiHints.assetPlural || "Assets"} per Manager
               </label>
               <input
                 type="number"
-                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-3 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-[#00F0FF]"
+                style={{ background: '#0B101B', border: '1px solid rgba(255, 255, 255, 0.1)' }}
                 value={form.clubSlots}
                 onChange={(e) => setForm({ ...form, clubSlots: Number(e.target.value) })}
                 min="1"
@@ -248,12 +281,15 @@ export default function CreateLeague() {
 
             {/* Team Selection (Feature Flag) */}
             {FEATURE_ASSET_SELECTION && (
-              <div className="border-t pt-4">
-                <label className="block text-gray-700 mb-3 font-semibold">Team Selection</label>
+              <div 
+                className="rounded-xl p-4"
+                style={{ background: '#151C2C', border: '1px solid rgba(255, 255, 255, 0.1)' }}
+              >
+                <label className="block text-white/60 mb-3 text-sm font-semibold">Team Selection</label>
                 
                 {/* Radio Group */}
                 <div className="space-y-2 mb-4">
-                  <label className="flex items-center space-x-2 cursor-pointer">
+                  <label className="flex items-center space-x-3 cursor-pointer p-2 rounded-lg hover:bg-white/5">
                     <input
                       type="radio"
                       name="teamMode"
@@ -264,12 +300,13 @@ export default function CreateLeague() {
                         setSelectedAssets([]);
                       }}
                       className="w-4 h-4"
+                      style={{ accentColor: '#00F0FF' }}
                       data-testid="rules-team-mode-include-all"
                     />
-                    <span>Include all teams</span>
+                    <span className="text-white">Include all teams</span>
                   </label>
                   
-                  <label className="flex items-center space-x-2 cursor-pointer">
+                  <label className="flex items-center space-x-3 cursor-pointer p-2 rounded-lg hover:bg-white/5">
                     <input
                       type="radio"
                       name="teamMode"
@@ -277,21 +314,26 @@ export default function CreateLeague() {
                       checked={teamMode === "select"}
                       onChange={(e) => setTeamMode(e.target.value)}
                       className="w-4 h-4"
+                      style={{ accentColor: '#00F0FF' }}
                       data-testid="rules-team-mode-select"
                     />
-                    <span>Select teams for auction</span>
+                    <span className="text-white">Select teams for auction</span>
                   </label>
                 </div>
 
                 {/* Team Checklist (only visible when "select" mode) */}
                 {teamMode === "select" && (
-                  <div className="border rounded-lg p-4 bg-gray-50">
+                  <div 
+                    className="rounded-xl p-4"
+                    style={{ background: 'rgba(0, 0, 0, 0.3)', border: '1px solid rgba(255, 255, 255, 0.05)' }}
+                  >
                     {/* Competition Filter for Football */}
                     {form.sportKey === "football" && (
-                      <div className="mb-3">
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Filter by Competition</label>
+                      <div className="mb-4">
+                        <label className="block text-white/40 mb-2 text-xs font-semibold">Filter by Competition</label>
                         <select
-                          className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="w-full px-4 py-3 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-[#00F0FF]"
+                          style={{ background: '#0B101B', border: '1px solid rgba(255, 255, 255, 0.1)' }}
                           onChange={async (e) => {
                             const filter = e.target.value;
                             try {
@@ -304,7 +346,6 @@ export default function CreateLeague() {
                                 setForm({ ...form, competitionCode: filter });
                               }
                               setAvailableAssets(response.data);
-                              // Auto-select all teams in filtered view
                               if (filter !== "all") {
                                 setSelectedAssets(response.data.map(t => t.id));
                               }
@@ -323,19 +364,18 @@ export default function CreateLeague() {
 
                     {/* Competition Filter for Cricket */}
                     {form.sportKey === "cricket" && (
-                      <div className="mb-3">
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Competition Type</label>
+                      <div className="mb-4">
+                        <label className="block text-white/40 mb-2 text-xs font-semibold">Competition Type</label>
                         <select
-                          className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                          className="w-full px-4 py-3 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-[#00F0FF]"
+                          style={{ background: '#0B101B', border: '1px solid rgba(255, 255, 255, 0.1)' }}
                           onChange={async (e) => {
                             const filter = e.target.value;
                             try {
                               if (filter === "IPL") {
-                                // Fetch 11 players per IPL franchise (110 total)
                                 const response = await axios.get(`${API}/assets?sportKey=cricket&pageSize=300`);
                                 const allPlayers = response.data.assets || [];
                                 
-                                // Group by franchise and take first 11 from each
                                 const franchises = {};
                                 allPlayers.forEach(p => {
                                   const franchise = p.meta?.franchise;
@@ -347,14 +387,11 @@ export default function CreateLeague() {
                                   }
                                 });
                                 
-                                // Flatten to get 110 players (11 per team)
                                 const iplPlayers = Object.values(franchises).flat();
                                 setAvailableAssets(iplPlayers);
                                 setSelectedAssets(iplPlayers.map(p => p.id));
-                                // Store competition code for the league
                                 setForm({ ...form, competitionCode: "IPL" });
                               } else if (filter === "CUSTOM") {
-                                // Custom - show all players but select none
                                 const response = await axios.get(`${API}/assets?sportKey=cricket&pageSize=300`);
                                 setAvailableAssets(response.data.assets || []);
                                 setSelectedAssets([]);
@@ -367,20 +404,22 @@ export default function CreateLeague() {
                           data-testid="cricket-competition-select"
                         >
                           <option value="">-- Select Competition Type --</option>
-                          <option value="IPL">🏏 IPL (Full Squads - 110 players, 11 per team)</option>
-                          <option value="CUSTOM">🎯 Custom Selection (build your own)</option>
+                          <option value="IPL">🏏 IPL (Full Squads - 110 players)</option>
+                          <option value="CUSTOM">🎯 Custom Selection</option>
                         </select>
-                        <p className="text-xs text-gray-500 mt-1">
-                          IPL: Auto-selects 11 players from each franchise. Custom: Start empty, add players on competition page.
+                        <p className="text-xs text-white/40 mt-2">
+                          IPL: Auto-selects 11 players from each franchise. Custom: Build your own.
                         </p>
                       </div>
                     )}
                     
+                    {/* Search and Actions */}
                     <div className="mb-3 flex gap-2">
                       <input
                         type="text"
                         placeholder="Search teams..."
-                        className="flex-1 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="flex-1 px-4 py-2 rounded-xl text-white placeholder-white/40 text-sm focus:outline-none focus:ring-2 focus:ring-[#00F0FF]"
+                        style={{ background: '#0B101B', border: '1px solid rgba(255, 255, 255, 0.1)' }}
                         value={assetSearchTerm}
                         onChange={(e) => setAssetSearchTerm(e.target.value)}
                       />
@@ -392,26 +431,32 @@ export default function CreateLeague() {
                           );
                           setSelectedAssets(filtered.map(a => a.id));
                         }}
-                        className="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-semibold"
+                        className="px-3 py-2 rounded-xl text-sm font-semibold"
+                        style={{ background: '#00F0FF', color: '#0B101B' }}
                       >
                         Select All
                       </button>
                       <button
                         type="button"
                         onClick={() => setSelectedAssets([])}
-                        className="px-3 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 text-sm font-semibold"
+                        className="px-3 py-2 rounded-xl text-sm font-semibold"
+                        style={{ background: 'rgba(255, 255, 255, 0.1)', color: 'white' }}
                       >
                         Clear
                       </button>
                     </div>
                     
-                    <div className="max-h-64 overflow-y-auto space-y-2" data-testid="rules-team-checklist">
+                    {/* Team List */}
+                    <div className="max-h-64 overflow-y-auto space-y-1" data-testid="rules-team-checklist">
                       {availableAssets
                         .filter(asset => 
                           asset.name.toLowerCase().includes(assetSearchTerm.toLowerCase())
                         )
                         .map(asset => (
-                          <label key={asset.id} className="flex items-center space-x-2 cursor-pointer hover:bg-gray-100 p-2 rounded">
+                          <label 
+                            key={asset.id} 
+                            className="flex items-center space-x-3 cursor-pointer p-2 rounded-lg hover:bg-white/5"
+                          >
                             <input
                               type="checkbox"
                               checked={selectedAssets.includes(asset.id)}
@@ -423,18 +468,20 @@ export default function CreateLeague() {
                                 }
                               }}
                               className="w-4 h-4"
+                              style={{ accentColor: '#00F0FF' }}
                             />
                             <div className="flex-1">
-                              <span className="font-medium">{asset.name}</span>
-                              {/* Display nationality for cricket players */}
+                              <span className="font-medium text-white">{asset.name}</span>
                               {form.sportKey === "cricket" && asset.meta?.nationality && (
-                                <span className="ml-2 text-xs text-gray-600 bg-gray-200 px-2 py-0.5 rounded">
+                                <span 
+                                  className="ml-2 text-xs px-2 py-0.5 rounded"
+                                  style={{ background: 'rgba(0, 240, 255, 0.2)', color: '#00F0FF' }}
+                                >
                                   {asset.meta.nationality}
                                 </span>
                               )}
-                              {/* Display role for cricket players */}
                               {form.sportKey === "cricket" && asset.meta?.role && (
-                                <span className="ml-1 text-xs text-gray-500">
+                                <span className="ml-1 text-xs text-white/40">
                                   ({asset.meta.role})
                                 </span>
                               )}
@@ -443,17 +490,19 @@ export default function CreateLeague() {
                         ))}
                     </div>
                     
-                    <div className="mt-3 text-sm text-gray-600">
-                      Selected: {selectedAssets.length} / {availableAssets.length} teams
+                    <div className="mt-3 text-sm text-white/60">
+                      Selected: <span style={{ color: '#00F0FF' }}>{selectedAssets.length}</span> / {availableAssets.length} teams
                     </div>
                   </div>
                 )}
               </div>
             )}
 
+            {/* Submit Button */}
             <button
               type="submit"
-              className="btn btn-primary w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 font-semibold text-lg"
+              className="w-full py-4 rounded-xl font-bold text-lg transition-all hover:scale-[1.02]"
+              style={{ background: 'linear-gradient(135deg, #06B6D4, #0891B2)', color: 'white' }}
               data-testid="create-league-submit"
             >
               Create Competition
@@ -461,6 +510,9 @@ export default function CreateLeague() {
           </form>
         </div>
       </div>
+
+      {/* Bottom Navigation */}
+      <BottomNav onFabClick={() => navigate('/create-competition')} />
     </div>
   );
 }
