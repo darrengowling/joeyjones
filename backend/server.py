@@ -1,6 +1,7 @@
 from fastapi import FastAPI, APIRouter, HTTPException, UploadFile, File, Depends, Request, Response, Query, Body
 from fastapi.responses import JSONResponse, FileResponse
 from fastapi.encoders import jsonable_encoder
+from pydantic import BaseModel
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
