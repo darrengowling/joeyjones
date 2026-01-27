@@ -714,7 +714,7 @@ export default function CompetitionDashboard() {
     if (loading && !standings) {
       return (
         <div className="text-center py-8">
-          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+          <div className="w-8 h-8 border-4 border-[#00F0FF] border-t-transparent rounded-full animate-spin mx-auto"></div>
         </div>
       );
     }
@@ -724,100 +724,114 @@ export default function CompetitionDashboard() {
     const isCricket = standings.sportKey === "cricket";
 
     return (
-      <div className="bg-white rounded-lg shadow overflow-hidden">
+      <div 
+        className="rounded-xl overflow-hidden"
+        style={{ background: '#151C2C', border: '1px solid rgba(255, 255, 255, 0.1)' }}
+      >
         <div className="overflow-x-auto" data-testid="table-grid">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+          <table className="min-w-full">
+            <thead style={{ background: 'rgba(0, 0, 0, 0.3)' }}>
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-4 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">
                   Rank
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-4 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">
                   Manager
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-4 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">
                   Points
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-4 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">
                   {isCricket ? "Runs" : "Goals"}
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-4 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">
                   {isCricket ? "Wickets" : "Wins"}
                 </th>
                 {!isCricket && (
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-4 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">
                     Draws
                   </th>
                 )}
                 {isCricket && (
                   <>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-4 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">
                       Catches
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-4 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">
                       Stumpings
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-4 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">
                       Run Outs
                     </th>
                   </>
                 )}
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-4 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">
                   {uiHints.assetPlural}
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody>
               {standings.table.map((entry, index) => (
                 <tr
                   key={entry.userId}
                   data-testid={`table-row-${entry.userId}`}
-                  className={entry.userId === user?.id ? "bg-blue-50" : ""}
+                  style={{ 
+                    background: entry.userId === user?.id ? 'rgba(0, 240, 255, 0.1)' : 'transparent',
+                    borderBottom: '1px solid rgba(255, 255, 255, 0.05)'
+                  }}
                 >
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                  <td className="px-4 py-3 whitespace-nowrap text-sm font-medium text-white">
                     {index + 1}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-4 py-3 whitespace-nowrap">
                     <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs font-bold">
+                      <div 
+                        className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold"
+                        style={{ background: entry.userId === user?.id ? '#00F0FF' : 'rgba(255, 255, 255, 0.2)', color: entry.userId === user?.id ? '#0B101B' : 'white' }}
+                      >
                         {entry.displayName.charAt(0).toUpperCase()}
                       </div>
-                      <span className="text-sm font-medium text-gray-900">
+                      <span className="text-sm font-medium text-white">
                         {entry.displayName}
                         {entry.userId === user?.id && (
-                          <span className="ml-2 text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">You</span>
+                          <span 
+                            className="ml-2 text-xs px-2 py-0.5 rounded-full"
+                            style={{ background: 'rgba(0, 240, 255, 0.3)', color: '#00F0FF' }}
+                          >
+                            You
+                          </span>
                         )}
                       </span>
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">
+                  <td className="px-4 py-3 whitespace-nowrap text-sm font-bold" style={{ color: '#00F0FF' }}>
                     {entry.points.toFixed(1)}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <td className="px-4 py-3 whitespace-nowrap text-sm text-white/60">
                     {isCricket ? entry.tiebreakers.runs : entry.tiebreakers.goals}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <td className="px-4 py-3 whitespace-nowrap text-sm text-white/60">
                     {isCricket ? entry.tiebreakers.wickets : entry.tiebreakers.wins}
                   </td>
                   {!isCricket && (
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <td className="px-4 py-3 whitespace-nowrap text-sm text-white/60">
                       {entry.tiebreakers.draws || 0}
                     </td>
                   )}
                   {isCricket && (
                     <>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <td className="px-4 py-3 whitespace-nowrap text-sm text-white/60">
                         {entry.tiebreakers.catches || 0}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <td className="px-4 py-3 whitespace-nowrap text-sm text-white/60">
                         {entry.tiebreakers.stumpings || 0}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <td className="px-4 py-3 whitespace-nowrap text-sm text-white/60">
                         {entry.tiebreakers.runOuts || 0}
                       </td>
                     </>
                   )}
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <td className="px-4 py-3 whitespace-nowrap text-sm text-white/60">
                     {entry.assetsOwned.length}
                   </td>
                 </tr>
@@ -827,7 +841,7 @@ export default function CompetitionDashboard() {
         </div>
 
         {standings.table.length === 0 && (
-          <div className="text-center py-8 text-gray-500">
+          <div className="text-center py-8 text-white/40">
             No standings data available yet.
           </div>
         )}
