@@ -285,7 +285,7 @@ Home screen HTML at: `/tmp/stitch_code/code.html`
 
 ### Modified Files This Session
 - `/app/frontend/src/index.css` (font imports)
-- `/app/frontend/src/App.js` (routes added, LeagueDetailStitched import)
+- `/app/frontend/src/App.js` (routes added, LeagueDetailStitched, AuctionRoomStitched imports)
 - `/app/frontend/src/pages/AuctionRoom.js` (auction complete, franchise display)
 - `/app/backend/server.py` (DB optimizations)
 
