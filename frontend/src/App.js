@@ -540,7 +540,7 @@ const Home = () => {
                     
                     <div className="flex flex-wrap items-center gap-2 mb-3">
                       <span className="text-sm text-[#10B981] font-medium">Your Token:</span>
-                      <code className="bg-white px-3 py-1.5 rounded font-mono text-sm border border-[#10B981]/20">
+                      <code className="bg-[#10B981]/20 px-3 py-1.5 rounded font-mono text-sm border border-[#10B981]/20">
                         {magicToken}
                       </code>
                       <button
@@ -936,7 +936,7 @@ const Home = () => {
       )}
 
       {/* Header */}
-      <div className="bg-white shadow-md app-header">
+      <div className="app-header">
         <div className="container-narrow mx-auto px-4 py-4 flex justify-between items-center">
           <span data-testid="nav-brand" className="h2 text-lg md:text-2xl">Sport X</span>
           {user ? (
@@ -1057,7 +1057,7 @@ const Home = () => {
             </div>
             <button
               onClick={() => navigate("/app/my-competitions")}
-              className="bg-white text-[#00F0FF] px-4 py-2 rounded-lg font-semibold hover:bg-white/10 transition-colors"
+              className="bg-[#00F0FF]/10 text-[#00F0FF] px-4 py-2 rounded-lg font-semibold hover:bg-white/10 transition-colors"
             >
               View My Competitions
             </button>
@@ -1067,7 +1067,7 @@ const Home = () => {
 
       {/* Main Content */}
       <div className="container-narrow mx-auto px-4 py-8">
-        <div className="bg-white rounded-lg shadow-lg p-8">
+        <div className="rounded-2xl p-8">
           <h2 className="h1 text-3xl font-bold mb-6 text-white">Welcome to Sport X</h2>
           <p className="h2 text-lg font-semibold text-white mb-2">Sports Gaming with Friends. No Gambling. All Game.</p>
           <p className="subtle text-white/60 mb-8">
@@ -1090,7 +1090,7 @@ const Home = () => {
                   setShowJoinLeagueDialog(true);
                 }
               }}
-              className="bg-white text-cyan-500 border-2 border-cyan-500 px-6 py-4 text-lg font-bold rounded-xl transition-all duration-200 hover:bg-cyan-50 hover:scale-[1.02] active:scale-[0.98]"
+              className="bg-[#151C2C] text-[#00F0FF] border-2 border-cyan-500 px-6 py-4 text-lg font-bold rounded-xl transition-all duration-200 hover:bg-[#00F0FF]/20 hover:scale-[1.02] active:scale-[0.98]"
               data-testid="join-league-button"
             >
               Join the Competition
@@ -1098,7 +1098,7 @@ const Home = () => {
             {/* TODO: Potentially delete altogether if no purpose - just navigates to /clubs browse page */}
             <button
               onClick={() => navigate("/clubs")}
-              className="bg-white text-cyan-500 border-2 border-cyan-500 px-6 py-4 text-lg font-bold rounded-xl transition-all duration-200 hover:bg-cyan-50 hover:scale-[1.02] active:scale-[0.98]"
+              className="bg-[#151C2C] text-[#00F0FF] border-2 border-cyan-500 px-6 py-4 text-lg font-bold rounded-xl transition-all duration-200 hover:bg-[#00F0FF]/20 hover:scale-[1.02] active:scale-[0.98]"
               data-testid="view-clubs-button"
             >
               Explore Available Teams/Players
@@ -1116,7 +1116,7 @@ const Home = () => {
             {leagues.length === 0 ? (
               <div className="text-center py-8 bg-white/5 rounded-lg">
                 <p className="text-white/40 text-lg">🏆 No competitions yet</p>
-                <p className="text-gray-400 text-sm mt-2">Create your strategic arena to get started!</p>
+                <p className="text-white/40 text-sm mt-2">Create your strategic arena to get started!</p>
               </div>
             ) : (
               <div className="overflow-x-auto pb-4">
@@ -1129,14 +1129,14 @@ const Home = () => {
                     return (
                       <div
                         key={league.id}
-                        className="flex-shrink-0 w-72 border rounded-lg p-4 hover:shadow-md transition-all duration-200 cursor-pointer app-card bg-white hover:bg-white/5"
+                        className="flex-shrink-0 w-72 border rounded-lg p-4 hover:shadow-md transition-all duration-200 cursor-pointer app-card"
                         onClick={() => navigate(`/league/${league.id}`)}
                         data-testid={`league-card-${league.id}`}
                       >
                         <div className="flex items-start justify-between mb-3">
                           <div className="flex items-center space-x-2">
                             <span className="text-lg">{sportIcon}</span>
-                            <span className="chip bg-blue-100 text-[#00F0FF] px-2 py-1 rounded text-xs font-medium">
+                            <span className="chip bg-[#00F0FF]/20 text-[#00F0FF] px-2 py-1 rounded text-xs font-medium">
                               {sportName}
                             </span>
                           </div>
@@ -1201,7 +1201,7 @@ const Home = () => {
                     className="flex-shrink-0 w-72 border-2 border-dashed border-white/20 rounded-lg p-4 hover:border-blue-400 hover:bg-[#00F0FF]/10 transition-all duration-200 cursor-pointer flex flex-col items-center justify-center text-center"
                     onClick={handleCreateCompetition}
                   >
-                    <div className="text-4xl mb-3 text-gray-400">+</div>
+                    <div className="text-4xl mb-3 text-white/40">+</div>
                     <h4 className="text-lg font-semibold text-white/80 mb-2">Create New Competition</h4>
                     <p className="text-sm text-white/40">Start your own strategic arena</p>
                   </div>
