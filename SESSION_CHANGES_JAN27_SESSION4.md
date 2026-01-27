@@ -21,15 +21,17 @@ Productive session focused on completing the Stitch Technical Asset Spec impleme
 | Team icons | Emoji (⚽🏏) | TeamCrest component |
 | Bid animation | None | Scale 10% pop on new bid |
 
-### 2. Football-Data.org Crests Integration
+### 2. TeamCrest Component with Placeholder System
 **Files:** `components/TeamCrest.jsx`, `pages/AuctionRoom.js`, `pages/ClubsList.js`
 
-- Integrated real team crests from Football-Data.org API
-- URL pattern: `https://crests.football-data.org/{apiFootballId}.svg`
-- Automatic fallback to placeholder SVG when crest unavailable
+- Created TeamCrest component with placeholder SVG shield icons
+- Football-Data.org crest integration **DISABLED** - apiFootballId values in DB are incorrect (showing wrong crests)
+- Infrastructure ready to re-enable when correct team IDs are sourced
 - Supports variants: small (32px), thumbnail (48px), medium (64px), large (96px), watermark (300px)
 - Cricket teams use sport-specific placeholder icon
 - **Added to both Auction Room AND ClubsList (Research Hub) pages**
+
+**TODO:** Source correct Football-Data.org team IDs and update database, then re-enable crest fetching in TeamCrest.jsx
 
 ### 3. Bug Fix: Auction End Navigation
 **File:** `AuctionRoom.js`
