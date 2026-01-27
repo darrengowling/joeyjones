@@ -1365,8 +1365,10 @@ function AuctionRoom() {
             <button
               key={amount}
               onClick={() => {
-                const currentInputValue = parseFloat(bidAmount) || 0;
-                const newBid = currentInputValue + amount;
+                // Add increment to CURRENT BID (not to input value)
+                // This makes it easy to outbid: +£1m on £32m = £33m
+                const currentBidInMillions = (currentBid || 0) / 1000000;
+                const newBid = currentBidInMillions + amount;
                 setBidAmount(newBid.toString());
                 // Haptic feedback
                 if (navigator.vibrate) navigator.vibrate(50);
