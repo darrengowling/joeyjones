@@ -172,10 +172,11 @@ Home screen HTML at: `/tmp/stitch_code/code.html`
 - `/app/frontend/src/styles/design-system.css`
 - `/app/frontend/src/components/BottomNav.jsx`
 - `/app/frontend/src/pages/DesignPreview.jsx`
+- `/app/frontend/src/pages/HomePage.jsx`
 
 ### Modified Files This Session
 - `/app/frontend/src/index.css` (font imports)
-- `/app/frontend/src/App.js` (route added, button fixes)
+- `/app/frontend/src/App.js` (routes added, button fixes)
 - `/app/frontend/src/pages/AuctionRoom.js` (auction complete, franchise display)
 - `/app/backend/server.py` (DB optimizations)
 
