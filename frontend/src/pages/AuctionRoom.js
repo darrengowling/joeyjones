@@ -843,16 +843,17 @@ function AuctionRoom() {
   // If auction doesn't exist (e.g., after reset), show message and navigation
   if (!auction && !loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 flex items-center justify-center p-4">
-        <div className="bg-white rounded-lg shadow-xl p-8 max-w-md text-center">
+      <div className="min-h-screen flex items-center justify-center p-4" style={{ background: '#0B101B' }}>
+        <div className="rounded-2xl p-8 max-w-md text-center" style={{ background: '#151C2C', border: '1px solid rgba(255,255,255,0.1)' }}>
           <div className="text-6xl mb-4">🔄</div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Auction Has Been Reset</h2>
-          <p className="text-gray-600 mb-6">
+          <h2 className="text-2xl font-bold text-white mb-4">Auction Has Been Reset</h2>
+          <p className="text-white/60 mb-6">
             The commissioner has reset this auction. Please wait on the competition page for the commissioner to restart the auction.
           </p>
           <button
             onClick={() => navigate(-1)}
-            className="px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition"
+            className="px-6 py-3 rounded-xl font-bold text-black transition"
+            style={{ background: '#00F0FF' }}
           >
             Return to Competition Page
           </button>
