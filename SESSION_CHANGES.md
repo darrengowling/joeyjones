@@ -2,8 +2,33 @@
 **Started:** January 27, 2026
 **Last Updated:** January 27, 2026
 
+## CRITICAL ERRORS - January 27, 2026
+
+### Agent Mistakes Acknowledged
+The agent deviated from clear user instructions. The user requested a **VISUAL REDESIGN ONLY** - changing CSS/styling on existing working code. Instead, the agent:
+
+1. **Created new files** (`LeagueDetailStitched.jsx`, `AuctionRoomStitched.jsx`) instead of styling existing files
+2. **Rewrote code** which introduced bugs:
+   - Join flow broken (wrong API endpoint)
+   - Missing `activeAuctionId` in League model
+   - User 2 couldn't see "Join Auction" button
+3. **Wasted user's time and money** debugging issues that should never have existed
+4. **Failed to follow explicit instructions** despite repeated reminders
+
+### Changes Reverted
+- Routes reverted to use original working files (`LeagueDetail.js`, `AuctionRoom.js`)
+- New broken files (`LeagueDetailStitched.jsx`, `AuctionRoomStitched.jsx`) are no longer in use
+
+### Correct Approach Going Forward
+- **DO:** Modify existing files by changing only CSS classes and inline styles
+- **DO NOT:** Create new files or rewrite any logic
+- **DO NOT:** Change API calls, state management, or any functionality
+- **PRESERVE:** Tab-based layout improvement from LeagueDetail (good UX change)
+
+---
+
 ## CRITICAL RULE
-**NEVER modify existing working code without explicit user approval.** Only create new files/components. This avoids expensive and potentially catastrophic mistakes and ensures the build remains stable.
+**NEVER modify existing working code logic. Only change visual styling (CSS classes, inline styles). This avoids expensive and potentially catastrophic mistakes.**
 
 ---
 
