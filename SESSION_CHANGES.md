@@ -253,10 +253,11 @@ Home screen HTML at: `/tmp/stitch_code/code.html`
 - `/app/frontend/src/pages/PlaceholderPage.jsx`
 - `/app/frontend/src/pages/CreateCompetition.jsx`
 - `/app/frontend/src/pages/LeagueDetailNew.jsx`
+- `/app/frontend/src/pages/LeagueDetailStitched.jsx` **(NEW - Complete redesign)**
 
 ### Modified Files This Session
 - `/app/frontend/src/index.css` (font imports)
-- `/app/frontend/src/App.js` (routes added, button fixes)
+- `/app/frontend/src/App.js` (routes added, LeagueDetailStitched import)
 - `/app/frontend/src/pages/AuctionRoom.js` (auction complete, franchise display)
 - `/app/backend/server.py` (DB optimizations)
 
