@@ -1023,43 +1023,43 @@ function AuctionRoom() {
   }
 
   return (
-    <div className="h-screen flex flex-col bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 overflow-hidden">
+    <div className="h-screen flex flex-col overflow-hidden" style={{ background: '#0B101B' }}>
       {/* Header Section - Fixed */}
       <div className="flex-shrink-0 px-2 sm:px-4 pt-4 pb-2">
         <div className="max-w-6xl mx-auto w-full">
           {/* Breadcrumb Navigation */}
-          <div className="flex items-center gap-2 text-sm text-white mb-4">
-            <button onClick={() => navigate("/")} className="hover:underline">Home</button>
+          <div className="flex items-center gap-2 text-sm text-white/60 mb-4">
+            <button onClick={() => navigate("/")} className="hover:text-white">Home</button>
             <span>›</span>
-            <button onClick={() => navigate("/app/my-competitions")} className="hover:underline">My Competitions</button>
+            <button onClick={() => navigate("/app/my-competitions")} className="hover:text-white">My Competitions</button>
             <span>›</span>
             {league && (
               <>
-                <button onClick={() => navigate(`/league/${league.id}`)} className="hover:underline">{league.name}</button>
+                <button onClick={() => navigate(`/league/${league.id}`)} className="hover:text-white">{league.name}</button>
                 <span>›</span>
               </>
             )}
-            <span className="font-semibold">Auction Room</span>
+            <span className="font-semibold text-white">Auction Room</span>
           </div>
 
           {/* Prompt G: Top strip with league info and progress */}
           {league && auction && (
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-2 mb-4">
+            <div className="rounded-xl p-3 mb-4" style={{ background: '#151C2C', border: '1px solid rgba(255,255,255,0.1)' }}>
               <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
-                <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
                   <div className="whitespace-nowrap">
-                    <span className="text-xs font-medium text-blue-800">League:</span>
-                    <span className="text-xs text-blue-600 ml-1">{league.name}</span>
+                    <span className="text-xs font-medium text-white/40">League:</span>
+                    <span className="text-xs text-white ml-1">{league.name}</span>
                   </div>
                   <div className="whitespace-nowrap">
-                    <span className="text-xs font-medium text-blue-800">Progress:</span>
-                    <span className="text-xs text-blue-600 ml-1">
+                    <span className="text-xs font-medium text-white/40">Progress:</span>
+                    <span className="text-xs ml-1" style={{ color: '#00F0FF' }}>
                       Lot {auction.currentLot || 0} / {auction.clubQueue?.length || 0}
                     </span>
                   </div>
                   <div className="w-full sm:w-auto">
-                    <span className="text-xs font-medium text-blue-800">Managers with slots left:</span>
-                    <span className="text-xs text-blue-600 ml-1 break-words">
+                    <span className="text-xs font-medium text-white/40">Managers with slots left:</span>
+                    <span className="text-xs text-white/80 ml-1 break-words">
                       {participants.filter(p => (p.clubsWon?.length || 0) < (league.clubSlots || 3)).map(p => {
                         const slotsLeft = (league.clubSlots || 3) - (p.clubsWon?.length || 0);
                         return `${p.userName}=${slotsLeft}`;
@@ -1068,8 +1068,13 @@ function AuctionRoom() {
                   </div>
                 </div>
                 {auction.status === "completed" && (
-                  <div className="bg-green-100 text-green-800 px-2 py-0.5 rounded text-xs font-medium whitespace-nowrap">
+                  <div className="px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap" style={{ background: 'rgba(16, 185, 129, 0.2)', color: '#10B981' }}>
                     ✅ Auction Complete
+                  </div>
+                )}
+                {auction.status === "paused" && (
+                  <div className="px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap" style={{ background: 'rgba(255, 138, 0, 0.2)', color: '#FF8A00' }}>
+                    ⏸️ PAUSED
                   </div>
                 )}
               </div>
