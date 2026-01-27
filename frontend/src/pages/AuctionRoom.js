@@ -1603,7 +1603,7 @@ function AuctionRoom() {
                       </div>
                       
                       {club.status === 'sold' && club.winner && (
-                        <div className="text-xs mt-1 opacity-75">
+                        <div className="text-xs mt-1 text-white/50">
                           Won by {club.winner}
                         </div>
                       )}
@@ -1612,7 +1612,7 @@ function AuctionRoom() {
                 })}
               </div>
 
-              <div className="mt-4 text-xs text-gray-500 space-y-1 border-t pt-3">
+              <div className="mt-4 text-xs text-white/40 space-y-1 border-t border-white/10 pt-3">
                 <p>🔥 Current lot • ⏳ Upcoming • ✅ Sold • ❌ Unsold</p>
                 <p>Order is randomized - use for strategy only</p>
               </div>
