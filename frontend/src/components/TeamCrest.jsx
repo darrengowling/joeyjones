@@ -51,15 +51,19 @@ const PlaceholderShield = ({ size = 48, color = '#94A3B8', className = '' }) => 
   </svg>
 );
 
-// Cricket-specific placeholder icon
+// Cricket/Player placeholder icon - simple person silhouette
 const CricketIcon = ({ size = 48, color = '#94A3B8' }) => (
   <svg width={size} height={size} viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-    {/* Cricket bat */}
-    <rect x="20" y="8" width="8" height="28" rx="2" stroke={color} strokeWidth="2" fill="none" />
-    <rect x="22" y="36" width="4" height="8" fill={color} fillOpacity="0.5" />
-    {/* Ball */}
-    <circle cx="36" cy="14" r="6" stroke={color} strokeWidth="2" fill="none" />
-    <path d="M33 11C35 13 37 15 39 17" stroke={color} strokeWidth="1.5" />
+    {/* Head */}
+    <circle cx="24" cy="14" r="8" stroke={color} strokeWidth="2" fill="none" />
+    {/* Body */}
+    <path 
+      d="M12 44V36C12 30.477 16.477 26 22 26H26C31.523 26 36 30.477 36 36V44" 
+      stroke={color} 
+      strokeWidth="2" 
+      strokeLinecap="round"
+      fill="none"
+    />
   </svg>
 );
 
