@@ -1104,21 +1104,16 @@ function AuctionRoom() {
       </div>
 
       {/* ========== HERO SECTION (Flexible ~40%) ========== */}
-      <div className="flex-1 flex flex-col items-center justify-center relative px-6 overflow-hidden">
+      <div className="flex-1 flex flex-col items-center justify-center relative px-4 overflow-hidden">
         
         {/* Team Crest Watermark Background */}
         {currentClub && (
-          <div 
-            className="absolute inset-0 flex items-center justify-center pointer-events-none"
-            style={{ opacity: 0.08 }}
-          >
-            <div 
-              className="text-[200px] animate-pulse"
-              style={{ animationDuration: '3s' }}
-            >
-              {sport?.key === 'cricket' ? '🏏' : '⚽'}
-            </div>
-          </div>
+          <TeamCrest 
+            clubId={currentClub.id}
+            name={currentClub.name}
+            sportKey={sport?.key || 'football'}
+            variant="watermark"
+          />
         )}
 
         {/* Countdown Overlay Between Lots */}
