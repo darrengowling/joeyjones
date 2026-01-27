@@ -135,11 +135,27 @@ Routes updated in App.js:
 - Fixed header on HomePage (changed from sticky to fixed)
 - Added proper padding-top to account for fixed header
 
+### Step 7: Create Competition Page ✅
+**File Created:** `/app/frontend/src/pages/CreateCompetition.jsx`
+**Route Added:** `/create-competition`
+
+Stitch-styled create competition page with:
+- Dark theme with gradient overlay
+- Progress indicator (step 1 of 3)
+- Competition Identity card (name, sport select)
+- Managers and Budget stepper controls
+- Teams per Manager control
+- Private Competition toggle
+- Fixed CTA button
+- BottomNav integration
+
+HomePage updated to navigate to `/create-competition` instead of `/create-league`.
+
 ---
 
 ## Pending Work (Next Steps)
 
-### Step 7: Create Competition Page/Modal (NEXT)
+### Step 8: Auction Lobby (NEXT)
 Apply Stitch sign-in design (keeping magic links, just styling)
 
 ### Step 6: Create Competition Modal
