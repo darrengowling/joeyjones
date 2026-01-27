@@ -113,10 +113,9 @@
 
 ## Next Steps (Priority Order)
 
-1. **User Testing** - User will test AuctionRoom styling
-2. **MyCompetitions.js Redesign** - Apply Stitch styling (visual-only)
-3. **ClubsList.js Redesign** - Apply Stitch styling (visual-only)
-4. **"Pass This Round" Functionality** - Implement actual feature (future)
+1. **ClubsList.js Redesign** - Apply Stitch styling (visual-only) - NEXT
+2. **Detailed UX Improvements** - Match final vision for auction screen (team logos row, larger timer pill, etc.)
+3. **"Pass This Round" Functionality** - Implement actual feature (future)
 
 ---
 
