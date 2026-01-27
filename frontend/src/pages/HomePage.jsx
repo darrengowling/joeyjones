@@ -401,11 +401,11 @@ const HomePage = () => {
               </div>
               <div className="space-y-2">
                 <p className="font-black text-white uppercase tracking-tight text-lg">
-                  {user ? 'No Active Competitions' : 'Sign In to View Your Leagues'}
+                  {user ? 'No Active Competitions' : 'Sign In to View Your Competitions'}
                 </p>
-                <p className="text-xs text-slate-400 font-semibold max-w-[240px] mx-auto leading-relaxed uppercase tracking-wider">
+                <p className="text-xs text-slate-400 font-semibold max-w-[240px] mx-auto leading-relaxed">
                   {user 
-                    ? "You haven't joined any leagues yet. Start your strategic journey today."
+                    ? "You haven't joined any competitions yet. Create or join one to get started."
                     : "Sign in to create or join competitions and track your progress."
                   }
                 </p>
@@ -419,7 +419,7 @@ const HomePage = () => {
                   color: '#06B6D4',
                 }}
               >
-                {user ? 'Start Your First League' : 'Sign In'}
+                {user ? 'Join a Competition' : 'Sign In'}
               </button>
             </div>
           ) : (
