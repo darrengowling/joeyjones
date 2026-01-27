@@ -226,6 +226,7 @@ Home screen HTML at: `/tmp/stitch_code/code.html`
 - `/app/frontend/src/pages/HomePage.jsx`
 - `/app/frontend/src/pages/PlaceholderPage.jsx`
 - `/app/frontend/src/pages/CreateCompetition.jsx`
+- `/app/frontend/src/pages/LeagueDetailNew.jsx`
 
 ### Modified Files This Session
 - `/app/frontend/src/index.css` (font imports)
