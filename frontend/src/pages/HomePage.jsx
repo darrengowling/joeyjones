@@ -168,7 +168,7 @@ const HomePage = () => {
     if (!user) {
       setShowAuthModal(true);
     } else {
-      navigate('/create-league');
+      navigate('/create-competition');
     }
   };
 
