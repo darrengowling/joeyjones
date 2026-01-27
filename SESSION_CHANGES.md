@@ -197,7 +197,7 @@ Browse teams/players page redesign
 
 ## Completed Work - January 27, 2026 (Session 2)
 
-### League Detail Page Complete Redesign
+### League Detail Page Complete Redesign ✅ USER TESTED & APPROVED
 **File Created:** `/app/frontend/src/pages/LeagueDetailStitched.jsx`
 **Route:** `/league/:leagueId` (new Stitch design)
 **Old version:** `/league-old/:leagueId` (preserved for rollback)
@@ -209,15 +209,15 @@ Full visual redesign of the 1565-line LeagueDetail.js with:
 - Breadcrumb navigation
 - Status card (Budget, Clubs Each, Bid Timer, Anti-Snipe)
 - Invite section with copy/share buttons
-- Tab navigation (Overview, Managers, Teams/Players, Fixtures)
+- Tab navigation (Overview, Managers, Teams/Players, Fixtures) - IMPROVED mobile UX
 - Commissioner actions section (Manage Teams, Import Fixtures, Start Auction)
 - Cricket scoring configuration (preserved)
 - Standings table with styling
-- Full-screen Manage Assets modal
+- Full-screen Manage Assets modal with select/deselect, filters, save
 - All fixtures functionality (upcoming/completed)
 - BottomNav integration
 
-**CRITICAL:** This is a VISUAL-ONLY redesign. All functionality matches the original exactly.
+**USER VERIFIED:** Team selection and fixture import working correctly (Jan 27, 2026)
 
 ---
 
