@@ -280,7 +280,8 @@ Home screen HTML at: `/tmp/stitch_code/code.html`
 - `/app/frontend/src/pages/PlaceholderPage.jsx`
 - `/app/frontend/src/pages/CreateCompetition.jsx`
 - `/app/frontend/src/pages/LeagueDetailNew.jsx`
-- `/app/frontend/src/pages/LeagueDetailStitched.jsx` **(NEW - Complete redesign)**
+- `/app/frontend/src/pages/LeagueDetailStitched.jsx` **(Complete redesign)**
+- `/app/frontend/src/pages/AuctionRoomStitched.jsx` **(NEW - Complete redesign)**
 
 ### Modified Files This Session
 - `/app/frontend/src/index.css` (font imports)
