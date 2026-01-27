@@ -192,6 +192,26 @@ Browse teams/players page redesign
 
 ---
 
+## BUGS INTRODUCED BY PREVIOUS REDESIGN (Fixed Jan 27, 2026)
+
+### BUG: Join Competition via Invite Token - "Method Not Allowed"
+**Root Cause:** When `HomePage.jsx` was created during the Stitch redesign, the previous agent changed the API integration logic (NOT visual-only):
+
+**OLD (working) flow in App.js:**
+1. `GET /api/leagues/by-token/{token}` - find league by token
+2. `POST /api/leagues/{league_id}/join` - join with known league ID
+
+**NEW (broken) flow in HomePage.jsx:**
+1. `POST /api/leagues/join` - single call with just token (endpoint didn't exist!)
+
+**Fix Applied:**
+- Added new endpoint `POST /api/leagues/join` to `/app/backend/server.py`
+- This endpoint looks up the league by token and joins in one call
+
+**LESSON:** This is exactly why "visual-only redesign" must be enforced strictly. The previous agent inadvertently changed functionality when creating HomePage.jsx.
+
+---
+
 ## Completed Work - January 27, 2026 (Session 2)
 
 ### Auction Room Complete Redesign ⏳ PENDING USER TEST
