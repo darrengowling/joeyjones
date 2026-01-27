@@ -719,10 +719,8 @@ function AuctionRoom() {
         const errorMsg = e.response?.data?.detail || `Server error: ${e.response.status}`;
         toast.error(errorMsg);
         
-        // Reset input to current bid if user tried to outbid themselves
-        if (errorMsg.includes("already the highest bidder") && currentBid) {
-          setBidAmount((currentBid / 1000000).toString());
-        }
+        // Clear input on error - user can re-enter if needed
+        setBidAmount("");
       } else if (e.request) {
         // Request made but no response
         toast.error("No response from server. Check your connection.");
