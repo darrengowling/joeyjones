@@ -317,13 +317,13 @@ export default function CompetitionDashboard() {
   const getStatusChipStyle = (status) => {
     switch (status) {
       case "auction_live":
-        return "bg-green-100 text-green-800 border-green-300";
+        return { background: 'rgba(239, 68, 68, 0.2)', color: '#EF4444', border: '1px solid rgba(239, 68, 68, 0.3)' };
       case "auction_complete":
-        return "bg-blue-100 text-blue-800 border-blue-300";
+        return { background: 'rgba(16, 185, 129, 0.2)', color: '#10B981', border: '1px solid rgba(16, 185, 129, 0.3)' };
       case "pre_auction":
-        return "bg-yellow-100 text-yellow-800 border-yellow-300";
+        return { background: 'rgba(245, 158, 11, 0.2)', color: '#F59E0B', border: '1px solid rgba(245, 158, 11, 0.3)' };
       default:
-        return "bg-gray-100 text-gray-800 border-gray-300";
+        return { background: 'rgba(255, 255, 255, 0.1)', color: 'rgba(255, 255, 255, 0.6)', border: '1px solid rgba(255, 255, 255, 0.2)' };
     }
   };
 
