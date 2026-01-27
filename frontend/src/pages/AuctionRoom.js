@@ -1002,16 +1002,18 @@ function AuctionRoom() {
   // Prompt C: Soft guard - render message instead of redirecting
   if (!user) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 py-8 flex items-center justify-center">
+      <div className="min-h-screen py-8 flex items-center justify-center" style={{ background: '#0B101B' }}>
         <div 
           data-testid="auth-required" 
-          className="bg-white rounded-lg shadow-xl p-8 max-w-md text-center"
+          className="rounded-2xl p-8 max-w-md text-center"
+          style={{ background: '#151C2C', border: '1px solid rgba(255,255,255,0.1)' }}
         >
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Authentication Required</h2>
-          <p className="text-gray-600 mb-6">Please sign in to access the auction room.</p>
+          <h2 className="text-2xl font-bold text-white mb-4">Authentication Required</h2>
+          <p className="text-white/60 mb-6">Please sign in to access the auction room.</p>
           <button
             onClick={() => navigate("/")}
-            className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition"
+            className="px-6 py-3 rounded-xl text-black font-bold transition"
+            style={{ background: '#00F0FF' }}
           >
             Go to Home
           </button>
