@@ -233,10 +233,12 @@ Home screen HTML at: `/tmp/stitch_code/code.html`
 
 ## Important Notes for Next Agent
 
-1. **Design system is ready** - Use CSS variables from `design-system.css`
-2. **BottomNav is ready** - Just import and add to pages
-3. **Don't modify old home page incrementally** - Build new HomePage.jsx and replace
-4. **Stitch HTML is reference only** - Convert to React, don't copy paste
-5. **Test on mobile viewport** - 390x844 (iPhone 14 Pro)
-6. **Material Symbols icons** - Already imported, use `<span className="material-symbols-outlined">icon_name</span>`
-7. **User's Stitch designs uploaded** - Check artifact URLs in handoff for zip files
+1. **CRITICAL: Never modify existing working code without explicit user approval**
+2. **Design system is ready** - Use CSS variables from `design-system.css`
+3. **BottomNav is ready** - Just import and add to pages
+4. **Don't modify old pages** - Build new components and swap routes
+5. **Stitch HTML is reference only** - Convert to React, don't copy paste
+6. **Test on mobile viewport** - 390x844 (iPhone 14 Pro)
+7. **Material Symbols icons** - Already imported, use `<span className="material-symbols-outlined">icon_name</span>`
+8. **This is a VISUAL REDESIGN only** - All functionality must match existing pages exactly
+9. **User's Stitch designs uploaded** - Check artifact URLs in handoff for zip files
