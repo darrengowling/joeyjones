@@ -165,7 +165,7 @@ Step 6: Test full flow end-to-end
 
 | Issue ID | Page | Summary | Status | Notes |
 |----------|------|---------|--------|-------|
-| UI-001 | CompetitionDashboard | Tab height too low on mobile | 🔴 Open | Tabs (Summary, League Table, Fixtures) appear cramped. Agent unable to reproduce - shows correctly in preview but user sees issue on same URL. May be browser/cache related or CSS specificity issue. |
+| UI-001 | CompetitionDashboard | Tab height/centering issue on mobile | 🔴 Open | Tabs (Summary, League Table, Fixtures) appear cramped with text not vertically centered. Multiple fix attempts (py-5, h-14, inline styles with height:56px + flex centering) all show correctly in agent's preview but DO NOT appear on user's browser even after hard refresh. Suspected infrastructure/CDN caching bug - changes in code are confirmed but not being served to user. |
 
 ---
 
