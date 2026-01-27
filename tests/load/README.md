@@ -5,7 +5,7 @@
 ### Scenario 1: 150 Users, Single Auction (Worst Case)
 ```bash
 locust -f /app/tests/load/locustfile.py \
-  --host=https://fantasy-sports-uk.preview.emergentagent.com \
+  --host=https://uxoverhaul-1.preview.emergentagent.com \
   --users=150 \
   --spawn-rate=10 \
   --run-time=10m \
@@ -17,7 +17,7 @@ locust -f /app/tests/load/locustfile.py \
 ### Scenario 2: 50 Users per Auction, 3 Concurrent Auctions (Realistic)
 ```bash
 locust -f /app/tests/load/locustfile.py \
-  --host=https://fantasy-sports-uk.preview.emergentagent.com \
+  --host=https://uxoverhaul-1.preview.emergentagent.com \
   --users=150 \
   --spawn-rate=15 \
   --run-time=15m \
@@ -29,7 +29,7 @@ locust -f /app/tests/load/locustfile.py \
 ### Scenario 3: 2-Hour Endurance Test (Stability)
 ```bash
 locust -f /app/tests/load/locustfile.py \
-  --host=https://fantasy-sports-uk.preview.emergentagent.com \
+  --host=https://uxoverhaul-1.preview.emergentagent.com \
   --users=100 \
   --spawn-rate=5 \
   --run-time=2h \
@@ -41,7 +41,7 @@ locust -f /app/tests/load/locustfile.py \
 ### Scenario 4: Gradual Ramp-Up (Performance Profiling)
 ```bash
 locust -f /app/tests/load/locustfile.py \
-  --host=https://fantasy-sports-uk.preview.emergentagent.com \
+  --host=https://uxoverhaul-1.preview.emergentagent.com \
   --users=200 \
   --spawn-rate=2 \
   --run-time=30m \
@@ -53,7 +53,7 @@ locust -f /app/tests/load/locustfile.py \
 ### Scenario 5: Spike Test (Sudden Load)
 ```bash
 locust -f /app/tests/load/locustfile.py \
-  --host=https://fantasy-sports-uk.preview.emergentagent.com \
+  --host=https://uxoverhaul-1.preview.emergentagent.com \
   --users=300 \
   --spawn-rate=50 \
   --run-time=5m \
@@ -67,7 +67,7 @@ locust -f /app/tests/load/locustfile.py \
 Start Locust web interface:
 ```bash
 locust -f /app/tests/load/locustfile.py \
-  --host=https://fantasy-sports-uk.preview.emergentagent.com \
+  --host=https://uxoverhaul-1.preview.emergentagent.com \
   --web-host=0.0.0.0 \
   --web-port=8089
 ```

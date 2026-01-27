@@ -184,7 +184,7 @@ After deploying to production:
 
 **Frontend `.env` (Preview):**
 ```env
-REACT_APP_BACKEND_URL=https://fantasy-sports-uk.preview.emergentagent.com
+REACT_APP_BACKEND_URL=https://uxoverhaul-1.preview.emergentagent.com
 REACT_APP_BUILD_HASH=1363bfb
 ```
 
@@ -202,11 +202,11 @@ REACT_APP_BUILD_HASH=<current-commit-hash>
 
 1. **Start auction in preview:**
    ```
-   https://fantasy-sports-uk.preview.emergentagent.com
+   https://uxoverhaul-1.preview.emergentagent.com
    ```
 
 2. **Check debug footer shows:**
-   - Backend: `https://fantasy-sports-uk.preview.emergentagent.com`
+   - Backend: `https://uxoverhaul-1.preview.emergentagent.com`
    - Socket: `/api/socket.io`
 
 3. **Verify Socket.IO connection:**

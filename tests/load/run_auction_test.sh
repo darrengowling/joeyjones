@@ -15,7 +15,7 @@ if [ -z "$TEST_AUCTION_ID" ]; then
     echo ""
     echo "You need to create a test auction first:"
     echo ""
-    echo "1. Go to: https://fantasy-sports-uk.preview.emergentagent.com"
+    echo "1. Go to: https://uxoverhaul-1.preview.emergentagent.com"
     echo "2. Create a test league (or use existing)"
     echo "3. Start an auction"
     echo "4. Copy the auction ID from the URL"
@@ -98,7 +98,7 @@ echo ""
 cd /app/tests/load
 
 locust -f auction_socketio_test.py \
-    --host=https://fantasy-sports-uk.preview.emergentagent.com \
+    --host=https://uxoverhaul-1.preview.emergentagent.com \
     --users=$USERS \
     --spawn-rate=$SPAWN_RATE \
     --run-time=$RUN_TIME \

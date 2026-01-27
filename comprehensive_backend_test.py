@@ -13,7 +13,7 @@ import io
 from datetime import datetime, timezone
 
 # Backend URL from frontend/.env
-BACKEND_URL = "https://fantasy-sports-uk.preview.emergentagent.com/api"
+BACKEND_URL = "https://uxoverhaul-1.preview.emergentagent.com/api"
 
 class BackendTester:
     def __init__(self):
@@ -454,7 +454,7 @@ class BackendTester:
         
         try:
             # Test Socket.IO endpoint accessibility
-            response = requests.get(f"https://fantasy-sports-uk.preview.emergentagent.com/api/socket.io/")
+            response = requests.get(f"https://uxoverhaul-1.preview.emergentagent.com/api/socket.io/")
             # Socket.IO typically returns specific responses, we just want to ensure the path is configured
             if response.status_code in [200, 400, 404]:  # Any response indicates the path is configured
                 self.log_test("socket_io", "path_configuration", True, 
