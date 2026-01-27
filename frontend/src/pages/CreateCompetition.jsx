@@ -438,7 +438,7 @@ export default function CreateCompetition() {
       </main>
 
       {/* Fixed CTA Button */}
-      <div className="fixed bottom-28 left-0 right-0 px-6 z-40">
+      <div className="fixed bottom-28 left-1/2 -translate-x-1/2 w-full max-w-md px-6 z-40">
         <button
           onClick={handleSubmit}
           disabled={loading || !form.name.trim()}
