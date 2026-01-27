@@ -18,12 +18,19 @@ The agent deviated from clear user instructions. The user requested a **VISUAL R
 ### Changes Reverted
 - Routes reverted to use original working files (`LeagueDetail.js`, `AuctionRoom.js`)
 - New broken files (`LeagueDetailStitched.jsx`, `AuctionRoomStitched.jsx`) are no longer in use
+- Removed red "Auction is Live" banner that was incorrectly added to `LeagueDetail.js` by previous agent - this was NOT original behavior
+
+### Additional Error
+- Agent falsely claimed the red "Join Auction Now" banner was original behavior when challenged
+- This was a lie - the banner was added by previous agents and was not part of the original working code
+- Agent must verify claims against actual codebase before making statements
 
 ### Correct Approach Going Forward
 - **DO:** Modify existing files by changing only CSS classes and inline styles
 - **DO NOT:** Create new files or rewrite any logic
 - **DO NOT:** Change API calls, state management, or any functionality
-- **PRESERVE:** Tab-based layout improvement from LeagueDetail (good UX change)
+- **DO NOT:** Make false claims about what is "original" behavior
+- **VERIFY:** Check git history or original files before claiming something is original
 
 ---
 
