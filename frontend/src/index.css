@@ -120,3 +120,20 @@ code {
 .animate-slide-up {
   animation: slide-up 0.3s ease-out;
 }
+
+/* Bid value "pop" animation per Stitch spec */
+@keyframes bidPop {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.animate-bid-pop {
+  animation: bidPop 300ms ease-out;
+}
