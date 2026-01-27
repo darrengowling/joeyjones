@@ -181,16 +181,13 @@ Stitch-styled league detail page with all original functionality:
 
 ## Pending Work (Next Steps)
 
-### Step 9: Auction Lobby/Room (NEXT)
-Apply Stitch design to AuctionRoom.js - the main auction screen with timer, bids, etc.
+### Step 9: Auction Room ✅ COMPLETE (pending user test)
+Applied Stitch design to AuctionRoom.js - includes waiting room + live auction
 
-### Step 10: AuctionLobby
-Pre-auction waiting room with manager list
-
-### Step 11: MyCompetitions
+### Step 10: MyCompetitions (NEXT)
 My Competitions page redesign
 
-### Step 12: ClubsList (Research Hub)
+### Step 11: ClubsList (Research Hub)
 Browse teams/players page redesign
 
 ---
