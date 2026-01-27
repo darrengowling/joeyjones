@@ -1288,7 +1288,7 @@ export default function LeagueDetailStitched() {
                   Auction is Live!
                 </p>
                 <p className="text-xs mt-1" style={{ color: 'var(--text-secondary, rgba(255,255,255,0.6))' }}>
-                  Click "Go to Auction" to join the bidding and compete for {uiHints.assetPlural.toLowerCase()}.
+                  Click &quot;Go to Auction&quot; to join the bidding and compete for {uiHints.assetPlural.toLowerCase()}.
                 </p>
               </div>
             )}
