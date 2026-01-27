@@ -325,6 +325,9 @@ Akeal Hosein, Cooper Connolly, Varun Chakravarthy, etc.
 | 3 | Sticky tabs on mobile | 1 hr | 🟡 Med | ⏸️ Attempted - needs proper testing environment to implement |
 | 4 | Collapsible sections in LeagueDetail | 2 hrs | 🟢 Low | Less scrolling |
 | 5 | ~~Cricket bat icons for football teams~~ | 15 min | 🟢 Low | ✅ Fixed (Jan 17) - Removed fallback icons; teams now show flag if available, otherwise just country name |
+|| 6 | **Multi-device responsive optimization** | 4 hrs | 🟡 Med | Consistent UX across iPhone, Samsung, Pixel. Currently optimized for 390px (iPhone). Samsung Galaxy A16 (412px, 20:9 aspect) and other devices may show layout differences. Add explicit breakpoints and min/max heights for key sections. |
+|| 7 | **Emoji audit & replacement** | 2 hrs | 🟢 Low | Replace emojis with Material Symbols for consistent rendering and faster load (emojis can show text fallback briefly). Pages: AuctionRoom, Help, etc. |
+|| 8 | **Team crest integration** | 4 hrs | 🟡 Med | Source correct Football-Data.org team IDs and update database. Re-enable crest fetching in TeamCrest.jsx. Current apiFootballId values are incorrect. |
 
 ### Infrastructure
 
