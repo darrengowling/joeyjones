@@ -92,7 +92,7 @@ const Help = () => {
             <button onClick={() => toggleSection('getting-started')} className="text-left px-4 py-2 bg-[#00F0FF]/10 hover:bg-[#00F0FF]/20 rounded-lg text-[#00F0FF]/80 font-medium transition-colors">
               🚀 Getting Started
             </button>
-            <button onClick={() => toggleSection('updates')} className="text-left px-4 py-2 bg-gradient-to-r from-blue-50 to-purple-50 hover:from-blue-100 hover:to-purple-100 rounded-lg text-[#A78BFA] font-medium transition-colors border border-[#A78BFA]/20">
+            <button onClick={() => toggleSection('updates')} className="text-left px-4 py-2 bg-[#A78BFA]/10 hover:bg-[#A78BFA]/20 rounded-lg text-[#A78BFA] font-medium transition-colors border border-[#A78BFA]/20">
               ✨ Recent Updates & New Features
             </button>
             <button onClick={() => toggleSection('admin-create')} className="text-left px-4 py-2 bg-[#A78BFA]/10 hover:bg-[#A78BFA]/20 rounded-lg text-[#A78BFA] font-medium transition-colors">
@@ -292,7 +292,7 @@ const Help = () => {
         {/* New Features & Updates */}
         <Section id="updates" title="Recent Updates & New Features" icon="✨">
           <div className="space-y-6">
-            <div className="bg-gradient-to-r from-blue-50 to-purple-50 border border-[#00F0FF]/20 rounded-lg p-4 mb-4">
+            <div className="bg-[#A78BFA]/10 border border-[#00F0FF]/20 rounded-lg p-4 mb-4">
               <h4 className="text-lg font-semibold text-white mb-2">🎉 Latest Enhancements</h4>
               <p className="text-white/80 text-sm mb-3">
                 We've added several new features and improvements to enhance your competition experience!
