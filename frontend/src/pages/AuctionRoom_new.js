@@ -1,0 +1,1380 @@
+import { useState, useEffect, useRef, useMemo, useCallback, memo } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { useAuctionClock } from "../hooks/useAuctionClock";
+import { useSocketRoom } from "../hooks/useSocketRoom";
+import { formatCurrency, parseCurrencyInput, isValidCurrencyInput } from "../utils/currency";
+import { debounceSocketEvent } from "../utils/performance";
+import { debugLogger } from "../utils/debugLogger";
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const API = `${BACKEND_URL}/api`;
+
+// Memoized sub-components for better performance (Production Hardening Day 11)
+const BidHistoryItem = memo(({ bid, isWinning }) => (
+  <div 
+    className={`p-3 rounded-xl ${isWinning ? 'bg-[#00F0FF]/20 border-l-4 border-[#00F0FF]' : 'bg-white/5 border-l-4 border-white/10'}`}
+  >
+    <div className="flex justify-between items-center">
+      <span className="font-medium text-white">{bid.userName || 'Anonymous'}</span>
+      <span className="font-bold text-[#00F0FF]">{formatCurrency(bid.amount)}</span>
+    </div>
+    <span className="text-xs text-white/40">{new Date(bid.createdAt).toLocaleTimeString()}</span>
+  </div>
+));
+
+BidHistoryItem.displayName = 'BidHistoryItem';
+
+function AuctionRoom() {
+  const { auctionId } = useParams();
+  const navigate = useNavigate();
+  const [user, setUser] = useState(null);
+  const [auction, setAuction] = useState(null);
+  const [clubs, setClubs] = useState([]);
+  const [currentClub, setCurrentClub] = useState(null);
+  const [bids, setBids] = useState([]);
+  const [bidAmount, setBidAmount] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [selectedClubForLot, setSelectedClubForLot] = useState(null);
+  const [league, setLeague] = useState(null);
+  const [participants, setParticipants] = useState([]);
+  const [participantCount, setParticipantCount] = useState(0); // Prompt A: Server-authoritative count
+  const [currentLotId, setCurrentLotId] = useState(null);
+  const [sport, setSport] = useState(null);
+  const [uiHints, setUiHints] = useState({ assetLabel: "Club", assetPlural: "Clubs" }); // Default to football
+  const [currentBid, setCurrentBid] = useState(null);
+  const [currentBidder, setCurrentBidder] = useState(null);
+  const [bidSequence, setBidSequence] = useState(0);
+  const [countdown, setCountdown] = useState(null); // For 3-second pause between lots
+  const [timerSettings, setTimerSettings] = useState({ timerSeconds: 30, antiSnipeSeconds: 10 }); // Everton Bug Fix 3
+  const [nextFixture, setNextFixture] = useState(null); // Next fixture for current club
+  const [isSubmittingBid, setIsSubmittingBid] = useState(false); // Prevent double-submission
+
+  // Use shared socket room hook
+  const { socket, connected, ready, listenerCount } = useSocketRoom('auction', auctionId, { user });
+
+  // Use the new auction clock hook with socket from useSocketRoom
+  const { remainingMs } = useAuctionClock(socket, currentLotId, auction?.status);
+
+  // Prompt E: Polling fallback for waiting room (top-level hook, conditional inside)
+  useEffect(() => {
+    if (auction?.status === "waiting") {
+      console.log("⏳ Starting waiting room polling (every 2s)");
+      const pollInterval = setInterval(() => {
+        console.log("🔄 Polling auction status from waiting room...");
+        loadAuction();
+      }, 2000);
+
+      return () => {
+        console.log("🛑 Stopping waiting room polling");
+        clearInterval(pollInterval);
+      };
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [auction?.status]);
+
+  // Set page title
+  useEffect(() => {
+    document.title = `Auction Room | Sport X`;
+  }, []);
+
+  // Initial setup: load user and data
+  useEffect(() => {
+    const savedUser = localStorage.getItem("user");
+    if (savedUser) {
+      const userData = JSON.parse(savedUser);
+      setUser(userData);
+    }
+    // Prompt C: No hard redirect - will show soft guard below if no user
+
+    loadAuction();
+    loadClubs();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [auctionId]);
+
+  // Socket event handlers - single useEffect with proper cleanup
+  useEffect(() => {
+    if (!user) return;
+
+    console.log(`🎧 [AuctionRoom] Setting up socket listeners (Count: ${listenerCount})`);
+    
+    // Prompt D: Join auction room on connect
+    socket.emit('join_auction', { auctionId, userId: user.id }, (ack) => {
+      if (ack && ack.ok) {
+        console.log(`✅ Joined auction room: ${ack.room}, size: ${ack.roomSize}`);
+      }
+    });
+
+    // Prompt E: Handle auction_snapshot for late joiners (replaces sync_state)
+    const onAuctionSnapshot = (data) => {
+      debugLogger.logSocketEvent('auction_snapshot', data);
+      console.log("📸 Auction snapshot received:", data);
+      
+      // Hydrate full state from snapshot
+      if (data.status) setAuction(prev => ({ ...prev, status: data.status }));
+      if (data.currentClub) setCurrentClub(data.currentClub);
+      if (data.currentBid !== undefined) setCurrentBid(data.currentBid);
+      if (data.currentBidder) setCurrentBidder(data.currentBidder);
+      if (data.seq !== undefined) setBidSequence(data.seq);
+      if (data.participants) setParticipants(data.participants);
+      if (data.currentBids) setBids(data.currentBids);
+      if (data.timer && data.timer.lotId) setCurrentLotId(data.timer.lotId);
+      
+      console.log("✅ State hydrated from auction_snapshot");
+    };
+
+    // Handle sync_state (legacy) - same as auction_snapshot
+    const onSyncState = (data) => {
+      debugLogger.logSocketEvent('sync_state', data);
+      console.log("Received sync state:", data);
+      if (data.currentClub) {
+        setCurrentClub(data.currentClub);
+      }
+      if (data.currentBids) {
+        setBids(data.currentBids);
+      }
+      if (data.participants) {
+        setParticipants(data.participants);
+      }
+      if (data.currentBid !== undefined) {
+        setCurrentBid(data.currentBid);
+      }
+      if (data.currentBidder) {
+        setCurrentBidder(data.currentBidder);
+      }
+      if (data.seq !== undefined) {
+        setBidSequence(data.seq);
+      }
+      if (data.auction && data.auction.currentLotId) {
+        setCurrentLotId(data.auction.currentLotId);
+      }
+      console.log("✅ Sync state processed");
+    };
+
+    // Handle bid_placed (adds to bid history)
+    // PERF FIX: Removed loadAuction() and loadClubs() - these caused 2 HTTP GETs per bid per client
+    // Trust socket events as source of truth; resync only on reconnect or seq gap
+    const onBidPlaced = (data) => {
+      debugLogger.logSocketEvent('bid_placed', data);
+      const receiveTime = performance.now();
+      console.log("📥 bid_placed received:", {
+        ...data,
+        receiveTime: new Date().toISOString(),
+        latencyMs: data.serverTime ? (Date.now() - new Date(data.serverTime).getTime()) : 'N/A'
+      });
+      setBids((prev) => [data.bid, ...prev]);
+      // Note: Full reload removed for performance - bid_update handles UI state
+    };
+
+    // Handle bid_update (updates current bid display) - prevents stale updates
+    const onBidUpdate = (data) => {
+      debugLogger.logSocketEvent('bid_update', data);
+      const receiveTime = performance.now();
+      const serverLatency = data.serverTime ? (Date.now() - new Date(data.serverTime).getTime()) : null;
+      
+      console.log("🔔 bid_update received:", {
+        seq: data.seq,
+        amount: data.amount,
+        bidder: data.bidder?.displayName,
+        receiveTime: new Date().toISOString(),
+        serverLatencyMs: serverLatency
+      });
+      
+      // PERF FIX: Detect seq gaps (missed events) - trigger resync if gap > 1
+      const seqGap = data.seq - bidSequence;
+      if (seqGap > 1) {
+        console.warn(`⚠️ Seq gap detected: expected ${bidSequence + 1}, got ${data.seq}. Resyncing...`);
+        loadAuction();
+      }
+      
+      // Only accept bid updates with seq >= current seq (prevents stale updates)
+      if (data.seq >= bidSequence) {
+        console.log(`✅ Applying bid update: ${formatCurrency(data.amount)} by ${data.bidder?.displayName} (seq: ${data.seq}, latency: ${serverLatency}ms)`);
+        setCurrentBid(data.amount);
+        setCurrentBidder(data.bidder);
+        setBidSequence(data.seq);
+        
+        // PERF INSTRUMENTATION: Log render timing
+        requestAnimationFrame(() => {
+          const renderTime = performance.now();
+          console.log(`🎨 bid_update rendered: totalMs=${Math.round(renderTime - receiveTime)}`);
+        });
+      } else {
+        console.log(`⚠️ Ignoring stale bid update: seq=${data.seq}, current=${bidSequence}`);
+      }
+    };
+
+    // Handle lot_started (new club on auction block)
+    const onLotStarted = (data) => {
+      debugLogger.logSocketEvent('lot_started', data);
+      console.log("🚀 Lot started:", data);
+      
+      if (data.isUnsoldRetry) {
+        toast(`🔄 Re-offering unsold ${uiHints.assetLabel.toLowerCase()}: ${data.club.name}!`, { duration: 4000 });
+      }
+      
+      // Prompt E: Load auction to transition from waiting to active
+      loadAuction();
+      
+      setCurrentClub(data.club);
+      if (data.timer && data.timer.lotId) {
+        setCurrentLotId(data.timer.lotId);
+      }
+      
+      // Clear bid state when new lot starts
+      setCurrentBid(null);
+      setCurrentBidder(null);
+      setBidSequence(0);
+      console.log("✅ Cleared bid state for new lot");
+    };
+
+    // Handle sold event
+    const onSold = (data) => {
+      debugLogger.logSocketEvent('sold', data);
+      console.log("=== SOLD EVENT RECEIVED ===");
+      console.log("  clubId:", data.clubId);
+      console.log("  clubName:", data.clubName);
+      console.log("  unsold:", data.unsold);
+      console.log("  winningBid:", data.winningBid);
+      
+      const playerName = data.clubName || `Unknown ${uiHints.assetLabel.toLowerCase()}`;
+      
+      if (data.unsold) {
+        toast.error(`${playerName} went unsold and will be offered again later.`);
+      } else {
+        const winnerName = data.winningBid ? data.winningBid.userName : "Unknown";
+        const amount = data.winningBid ? formatCurrency(data.winningBid.amount) : "";
+        toast.success(`${playerName} sold to ${winnerName} for ${amount}!`, { duration: 4000 });
+        
+        // CRITICAL FIX: Immediately update club status to 'sold' in local state
+        // DON'T reload clubs - rely on this update to avoid race conditions
+        if (data.clubId && data.winningBid) {
+          console.log(`✅ Marking ${uiHints.assetLabel.toLowerCase()} ${data.clubId} as sold to ${winnerName}`);
+          setClubs(prevClubs => {
+            const updated = prevClubs.map(club => 
+              club.id === data.clubId 
+                ? { ...club, status: 'sold', winner: winnerName, winningBid: data.winningBid.amount }
+                : club
+            );
+            const soldCount = updated.filter(c => c.status === 'sold').length;
+            console.log(`📊 Current sold count: ${soldCount}/${updated.length}`);
+            return updated;
+          });
+        }
+      }
+      
+      setCurrentClub(null);
+      setBidAmount("");
+      setCurrentBid(null);
+      setCurrentBidder(null);
+      if (data.participants) {
+        setParticipants(data.participants);
+      }
+      loadAuction();
+      // REMOVED: loadClubs() - we trust the sold event data instead of reloading
+    };
+
+    // Handle anti-snipe event
+    const onAntiSnipe = (data) => {
+      debugLogger.logSocketEvent('anti_snipe', data);
+      console.log("Anti-snipe triggered:", data);
+      toast("🔥 Anti-snipe! Timer extended!", { duration: 3000, icon: '⏱️' });
+    };
+
+    // Handle auction_complete event
+    const onAuctionComplete = (data) => {
+      debugLogger.logSocketEvent('auction_complete', data);
+      console.log("Auction complete:", data);
+      console.log("Final club ID:", data.finalClubId);
+      console.log("Final winning bid:", data.finalWinningBid);
+      
+      // Update participants with final state
+      if (data.participants) {
+        setParticipants(data.participants);
+      }
+      
+      // CRITICAL FIX: Update final club status immediately and DON'T reload clubs
+      // Reloading causes race condition - trust the event data
+      if (data.finalClubId && data.finalWinningBid) {
+        console.log("✅ Updating final club status to 'sold' (no reload)");
+        setClubs(prevClubs => {
+          const updated = prevClubs.map(club => 
+            club.id === data.finalClubId 
+              ? { ...club, status: 'sold', winner: data.finalWinningBid.userName, winningBid: data.finalWinningBid.amount }
+              : club
+          );
+          const soldCount = updated.filter(c => c.status === 'sold').length;
+          console.log(`📊 Clubs after final update: ${soldCount} sold out of ${updated.length} total`);
+          return updated;
+        });
+        
+        // Clear current bid if it's the final club
+        if (currentClub?.id === data.finalClubId) {
+          setCurrentBid(null);
+          setCurrentBidder(null);
+        }
+        
+        // Only reload auction status, NOT clubs (to preserve our manual update)
+        loadAuction();
+      } else {
+        // No final club info, reload everything
+        loadAuction();
+        loadClubs();
+      }
+      
+      toast.success(data.message || `Auction complete! All ${uiHints.assetPlural.toLowerCase()} have been auctioned.`, { duration: 5000 });
+    };
+
+    // Handle auction_paused event
+    const onAuctionPaused = (data) => {
+      debugLogger.logSocketEvent('auction_paused', data);
+      console.log("Auction paused:", data);
+      toast(`⏸️ ${data.message}`, { duration: 4000, icon: '⏸️' });
+      loadAuction();
+    };
+
+    // Handle auction_resumed event
+    const onAuctionResumed = (data) => {
+      debugLogger.logSocketEvent('auction_resumed', data);
+      console.log("Auction resumed:", data);
+      toast(`▶️ ${data.message}`, { duration: 4000, icon: '▶️' });
+      loadAuction();
+    };
+
+    // Handle auction_deleted event - CRITICAL for stuck users
+    const onAuctionDeleted = (data) => {
+      debugLogger.logSocketEvent('auction_deleted', data);
+      console.log("🗑️ Auction deleted by commissioner:", data);
+      toast.error(data.message || "Auction has been deleted by the commissioner", { duration: 5000 });
+      
+      // Clear any countdown overlay
+      setCountdown(null);
+      
+      // Navigate back to home after short delay
+      setTimeout(() => {
+        navigate('/');
+      }, 2000);
+    };
+
+    // Prompt A: Handle participants_changed for live count updates
+    const onParticipantsChanged = (data) => {
+      debugLogger.logSocketEvent('participants_changed', data);
+      console.log("👥 Participants changed:", data);
+      
+      // Re-fetch participants from API to get latest data
+      if (auction?.leagueId) {
+        loadParticipants();
+      }
+    };
+
+    // Register all event listeners
+    socket.on('auction_snapshot', onAuctionSnapshot);
+    socket.on('sync_state', onSyncState);  // Legacy support
+    socket.on('bid_placed', onBidPlaced);
+    socket.on('bid_update', onBidUpdate);
+    socket.on('lot_started', onLotStarted);
+    socket.on('sold', onSold);
+    socket.on('anti_snipe', onAntiSnipe);
+    socket.on('auction_complete', onAuctionComplete);
+    socket.on('auction_paused', onAuctionPaused);
+    socket.on('auction_resumed', onAuctionResumed);
+    socket.on('auction_deleted', onAuctionDeleted); // CRITICAL: Handle deletion
+    socket.on('participants_changed', onParticipantsChanged); // Prompt A
+    
+    // PERF FIX: Resync on reconnect - only time we do full reload now
+    const onReconnect = () => {
+      debugLogger.logSocketEvent('reconnect', { timestamp: new Date().toISOString() });
+      console.log('🔄 Socket reconnected - resyncing auction state');
+      loadAuction();
+      loadClubs();
+    };
+    socket.on('connect', onReconnect);
+    
+    // Handle waiting room updates
+    const onWaitingRoomUpdated = (data) => {
+      debugLogger.logSocketEvent('waiting_room_updated', data);
+      console.log('🚪 Waiting room updated:', data.usersInWaitingRoom);
+      setAuction(prev => ({ ...prev, usersInWaitingRoom: data.usersInWaitingRoom }));
+    };
+    socket.on('waiting_room_updated', onWaitingRoomUpdated);
+    
+    // Handle countdown between lots
+    const onNextTeamCountdown = (data) => {
+      debugLogger.logSocketEvent('next_team_countdown', data);
+      console.log('⏱️ Countdown:', data.seconds);
+      if (data.seconds === 0) {
+        // Immediately clear overlay when countdown reaches 0
+        setCountdown(null);
+      } else {
+        setCountdown(data.seconds);
+      }
+    };
+    socket.on('next_team_countdown', onNextTeamCountdown);
+
+    // Cleanup function - remove all listeners
+    return () => {
+      console.log('🧹 [AuctionRoom] Removing socket listeners');
+      socket.off('auction_snapshot', onAuctionSnapshot);
+      socket.off('sync_state', onSyncState);  // Legacy
+      socket.off('bid_placed', onBidPlaced);
+      socket.off('bid_update', onBidUpdate);
+      socket.off('lot_started', onLotStarted);
+      socket.off('sold', onSold);
+      socket.off('anti_snipe', onAntiSnipe);
+      socket.off('auction_complete', onAuctionComplete);
+      socket.off('auction_paused', onAuctionPaused);
+      socket.off('auction_resumed', onAuctionResumed);
+      socket.off('auction_deleted', onAuctionDeleted); // CRITICAL
+      socket.off('participants_changed', onParticipantsChanged); // Prompt A
+      socket.off('connect', onReconnect); // PERF FIX
+      socket.off('waiting_room_updated', onWaitingRoomUpdated);
+      socket.off('next_team_countdown', onNextTeamCountdown);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [auctionId, user, bidSequence, listenerCount]);
+
+  // Pre-fill bid input with current bid amount
+  useEffect(() => {
+    if (!currentClub) {
+      // No active lot, clear the input
+      setBidAmount("");
+      return;
+    }
+
+    if (currentBid && currentBid > 0) {
+      // Show current bid amount in millions (e.g., "5" for £5m)
+      setBidAmount((currentBid / 1000000).toString());
+    } else {
+      // No bids yet, keep input empty
+      setBidAmount("");
+    }
+  }, [currentClub, currentBid]);
+
+
+  // Load next fixture when current club changes
+  useEffect(() => {
+    if (currentClub && currentClub.id) {
+      loadNextFixture(currentClub.id);
+    } else {
+      setNextFixture(null);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentClub]);
+
+
+  // Poll for auction existence when paused (to detect reset without refresh)
+  useEffect(() => {
+    if (!auction || auction.status !== 'paused') {
+      return; // Only poll when paused
+    }
+
+    const checkAuctionExists = async () => {
+      try {
+        await axios.get(`${API}/auction/${auctionId}`);
+        // Auction still exists, do nothing
+      } catch (e) {
+        if (e.response && e.response.status === 404) {
+          console.log("⚠️ Auction deleted while paused - showing reset message");
+          setAuction(null); // Trigger reset message screen
+        }
+      }
+    };
+
+    // Check every 3 seconds while paused
+    const pollInterval = setInterval(checkAuctionExists, 3000);
+
+    return () => clearInterval(pollInterval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [auction?.status, auctionId]);
+
+
+
+  const loadAuction = async () => {
+    try {
+      const response = await axios.get(`${API}/auction/${auctionId}`);
+      console.log("Auction data loaded:", response.data);
+      console.log("Bids from API:", response.data.bids);
+      
+      // Initialize debug logger with auction ID
+      debugLogger.setAuctionId(auctionId);
+      debugLogger.log('auction_start', {
+        status: response.data.auction.status,
+        currentLot: response.data.auction.currentLot,
+        existingBids: response.data.bids.length
+      });
+      
+      setAuction(response.data.auction);
+      setBids(response.data.bids);
+      if (response.data.currentClub) {
+        setCurrentClub(response.data.currentClub);
+      }
+      
+      // Set lot ID for timer hook
+      if (response.data.auction.currentLotId) {
+        setCurrentLotId(response.data.auction.currentLotId);
+      }
+
+      // Load league
+      const leagueResponse = await axios.get(`${API}/leagues/${response.data.auction.leagueId}`);
+      setLeague(leagueResponse.data);
+      
+      // Everton Bug Fix 3: Load timer settings from league
+      setTimerSettings({
+        timerSeconds: leagueResponse.data.timerSeconds || 30,
+        antiSnipeSeconds: leagueResponse.data.antiSnipeSeconds || 10
+      });
+      
+      // Load sport information based on league's sportKey
+      if (leagueResponse.data.sportKey) {
+        try {
+          const sportResponse = await axios.get(`${API}/sports/${leagueResponse.data.sportKey}`);
+          setSport(sportResponse.data);
+          setUiHints(sportResponse.data.uiHints);
+        } catch (e) {
+          console.error("Error loading sport info:", e);
+          // Keep default uiHints for clubs
+        }
+      }
+
+      // Prompt A: Load participants with new API format (count + participants array)
+      const participantsResponse = await axios.get(`${API}/leagues/${response.data.auction.leagueId}/participants`);
+      console.log("📊 Participants loaded:", participantsResponse.data);
+      
+      // Set both count and participants from server response
+      setParticipantCount(participantsResponse.data.count || 0);
+      setParticipants(participantsResponse.data.participants || []);
+    } catch (e) {
+      console.error("Error loading auction:", e);
+      
+      // If auction no longer exists (404 - likely reset by commissioner), clear auction state
+      if (e.response && e.response.status === 404) {
+        console.log("⚠️ Auction not found - likely reset by commissioner");
+        setAuction(null); // This will trigger the reset message screen
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loadClubs = async () => {
+    try {
+      const response = await axios.get(`${API}/auction/${auctionId}/clubs`);
+      setClubs(response.data.clubs);
+      console.log("Loaded clubs:", response.data);
+    } catch (error) {
+      console.error("Error loading clubs:", error);
+    }
+  };
+
+  const loadParticipants = async () => {
+    try {
+      if (!auction) return;
+      const leagueId = auction.leagueId;
+      const response = await axios.get(`${API}/leagues/${leagueId}/participants`);
+      
+      // Prompt A: Use new API format with count and participants
+      console.log("📊 Participants refreshed:", response.data);
+      setParticipantCount(response.data.count || 0);
+      setParticipants(response.data.participants || []);
+    } catch (e) {
+      console.error("Error loading participants:", e);
+    }
+  };
+
+  const loadNextFixture = async (clubId) => {
+    try {
+      // Use league ID from auction to filter fixtures by competition
+      const leagueId = auction?.leagueId || league?.id;
+      const url = leagueId 
+        ? `${API}/assets/${clubId}/next-fixture?leagueId=${leagueId}`
+        : `${API}/assets/${clubId}/next-fixture`;
+      
+      const response = await axios.get(url);
+      if (response.data.fixture) {
+        setNextFixture(response.data.fixture);
+        console.log("📅 Next fixture loaded:", response.data.fixture);
+      } else {
+        setNextFixture(null);
+        console.log("📅 No upcoming fixtures for this team");
+      }
+    } catch (error) {
+      console.error("Error loading next fixture:", error);
+      setNextFixture(null); // Fail gracefully
+    }
+  };
+
+
+  const placeBid = async () => {
+    if (!user || !currentClub || !bidAmount) {
+      toast.error("Please enter your strategic bid amount to claim ownership");
+      return;
+    }
+
+    // Parse £m input (e.g., "5m", "£5m", "5")
+    if (!isValidCurrencyInput(bidAmount)) {
+      toast.error("Please enter a valid bid amount (e.g., 5m, £10m, 23m)");
+      return;
+    }
+    
+    const amount = parseCurrencyInput(bidAmount);
+    
+    // Get current state for logging (not validation)
+    const userParticipant = participants.find((p) => p.userId === user.id);
+    const currentBids = bids.filter((b) => b.clubId === currentClub.id);
+    const highestBid = currentBids.length > 0 ? Math.max(...currentBids.map((b) => b.amount)) : 0;
+
+    // Detailed logging for diagnostics
+    const attemptData = {
+      auctionId,
+      clubId: currentClub.id,
+      clubName: currentClub.name,
+      amount,
+      amountFormatted: formatCurrency(amount),
+      userBudget: userParticipant?.budgetRemaining,
+      highestBid,
+      existingBidsCount: currentBids.length,
+      timestamp: new Date().toISOString()
+    };
+    
+    console.log("🔵 bid:attempt", attemptData);
+    debugLogger.log('bid:attempt', attemptData);
+
+    // Prevent double-submission
+    if (isSubmittingBid) {
+      console.log("⚠️ bid:blocked (already submitting)");
+      debugLogger.log('bid:blocked', { reason: 'double_submission' });
+      return;
+    }
+
+    setIsSubmittingBid(true);
+    const startTime = performance.now();
+
+    try {
+      console.log("📤 bid:sent", { auctionId, clubId: currentClub.id, amount });
+      debugLogger.log('bid:sent', { clubId: currentClub.id, amount });
+      
+      const response = await axios.post(`${API}/auction/${auctionId}/bid`, {
+        userId: user.id,
+        clubId: currentClub.id,
+        amount,
+      }, {
+        timeout: 10000 // 10 second timeout
+      });
+      
+      const duration = performance.now() - startTime;
+      
+      // PERF INSTRUMENTATION: Enhanced timing metrics
+      console.log("✅ bid:success", { 
+        auctionId, 
+        clubId: currentClub.id, 
+        amount,
+        tapToAckMs: Math.round(duration),
+        response: response.data 
+      });
+      
+      debugLogger.log('bid:success', { 
+        clubId: currentClub.id, 
+        amount,
+        tapToAckMs: Math.round(duration),
+        response: response.data 
+      });
+      
+      toast.success(`Bid placed: ${formatCurrency(amount)}`);
+      setBidAmount("");
+      
+    } catch (e) {
+      const duration = performance.now() - startTime;
+      const errorData = {
+        auctionId,
+        clubId: currentClub.id,
+        amount,
+        error: e.message,
+        response: e.response?.data,
+        status: e.response?.status,
+        code: e.code,
+        durationMs: Math.round(duration)
+      };
+      
+      console.error("❌ bid:error", errorData);
+      debugLogger.log('bid:error', errorData);
+      
+      // Detailed error handling
+      if (e.code === 'ECONNABORTED' || e.message.includes('timeout')) {
+        toast.error("Bid request timed out. Please try again.");
+      } else if (e.response?.status === 429) {
+        // Rate limit exceeded
+        console.warn("⚠️ evt=bid:rate_limited", {
+          auctionId,
+          clubId: currentClub.id,
+          amount,
+          retryAfter: e.response?.headers?.['retry-after']
+        });
+        debugLogger.log('bid:rate_limited', {
+          clubId: currentClub.id,
+          amount,
+          retryAfter: e.response?.headers?.['retry-after']
+        });
+        const errorMsg = e.response?.data?.detail || "Rate limit exceeded. Please wait a moment and try again.";
+        toast.error(errorMsg, { duration: 5000 });
+      } else if (e.response) {
+        // Server responded with error - show backend message
+        const errorMsg = e.response?.data?.detail || `Server error: ${e.response.status}`;
+        toast.error(errorMsg);
+        
+        // Reset input to current bid if user tried to outbid themselves
+        if (errorMsg.includes("already the highest bidder") && currentBid) {
+          setBidAmount((currentBid / 1000000).toString());
+        }
+      } else if (e.request) {
+        // Request made but no response
+        toast.error("No response from server. Check your connection.");
+      } else {
+        // Something else went wrong
+        toast.error("Failed to place bid. Please try again.");
+      }
+    } finally {
+      setIsSubmittingBid(false);
+    }
+  };
+
+  const startLot = async (clubId) => {
+    try {
+      await axios.post(`${API}/auction/${auctionId}/start-lot/${clubId}`);
+      setSelectedClubForLot(null);
+    } catch (e) {
+      console.error("Error starting lot:", e);
+      alert("Error starting lot");
+    }
+  };
+
+  const completeLot = async () => {
+    try {
+      await axios.post(`${API}/auction/${auctionId}/complete-lot`);
+    } catch (e) {
+      console.error("Error completing lot:", e);
+    }
+  };
+
+  const pauseAuction = async () => {
+    try {
+      const result = await axios.post(`${API}/auction/${auctionId}/pause`);
+      console.log("Auction paused:", result.data);
+    } catch (e) {
+      console.error("Error pausing auction:", e);
+      alert("Error pausing auction: " + (e.response?.data?.detail || e.message));
+    }
+  };
+
+  const resumeAuction = async () => {
+    try {
+      const result = await axios.post(`${API}/auction/${auctionId}/resume`);
+      console.log("Auction resumed:", result.data);
+    } catch (e) {
+      console.error("Error resuming auction:", e);
+      alert("Error resuming auction: " + (e.response?.data?.detail || e.message));
+    }
+  };
+
+
+  const resetAuction = async () => {
+    if (!window.confirm(
+      `Reset this auction? This will:\n` +
+      `• Clear all bids and auction history\n` +
+      `• Reset all participant budgets and rosters\n` +
+      `• Allow you to start a fresh auction\n\n` +
+      `Participants will remain in the league. This action cannot be undone.`
+    )) {
+      return;
+    }
+
+    try {
+      const result = await axios.post(
+        `${API}/leagues/${league?.id}/auction/reset?commissioner_id=${user?.id}`
+      );
+      console.log("Auction reset:", result.data);
+      toast.success("Auction reset successfully! Redirecting to league setup...");
+      
+      // Redirect to Competition Detail Page to start fresh
+      setTimeout(() => {
+        navigate(`/league/${league?.id}`);
+      }, 1500);
+    } catch (e) {
+      console.error("Error resetting auction:", e);
+      const errorMsg = e.response?.data?.detail || "Failed to reset auction. Please try again.";
+      toast.error(errorMsg);
+    }
+  };
+
+
+  const deleteAuction = async () => {
+    if (!window.confirm(
+      `Are you sure you want to delete this auction? This will:\n` +
+      `• Remove all auction data and bids\n` +
+      `• Reset all participant budgets\n` +
+      `• Return the league to ready state\n\n` +
+      `This action cannot be undone.`
+    )) {
+      return;
+    }
+
+    try {
+      const result = await axios.delete(`${API}/auction/${auctionId}`);
+      console.log("Auction deleted:", result.data);
+      alert("Auction deleted successfully!");
+      navigate("/"); // Go back to homepage
+    } catch (e) {
+      console.error("Error deleting auction:", e);
+      alert("Error deleting auction: " + (e.response?.data?.detail || e.message));
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center" style={{ background: '#0B101B' }}>
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-[#00F0FF] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <div className="text-white/60 text-lg">Loading auction...</div>
+        </div>
+      </div>
+    );
+  }
+
+  // If auction doesn't exist (e.g., after reset), show message and navigation
+  if (!auction && !loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center p-4" style={{ background: '#0B101B' }}>
+        <div className="rounded-2xl p-8 max-w-md text-center" style={{ background: '#151C2C', border: '1px solid rgba(255,255,255,0.1)' }}>
+          <div className="text-6xl mb-4">🔄</div>
+          <h2 className="text-2xl font-bold text-white mb-4">Auction Has Been Reset</h2>
+          <p className="text-white/60 mb-6">
+            The commissioner has reset this auction. Please wait on the competition page for the commissioner to restart the auction.
+          </p>
+          <button
+            onClick={() => navigate(-1)}
+            className="px-6 py-3 rounded-xl font-bold text-black transition"
+            style={{ background: '#00F0FF' }}
+          >
+            Return to Competition Page
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  const isCommissioner = league && user && league.commissionerId === user.id;
+
+  // Prompt C: Soft guard - render message instead of redirecting (moved before waiting room check)
+  if (!user) {
+    return (
+      <div className="min-h-screen py-8 flex items-center justify-center" style={{ background: '#0B101B' }}>
+        <div 
+          data-testid="auth-required" 
+          className="rounded-2xl p-8 max-w-md text-center"
+          style={{ background: '#151C2C', border: '1px solid rgba(255,255,255,0.1)' }}
+        >
+          <h2 className="text-2xl font-bold text-white mb-4">Authentication Required</h2>
+          <p className="text-white/60 mb-6">Please sign in to access the auction room.</p>
+          <button
+            onClick={() => navigate("/")}
+            className="px-6 py-3 rounded-xl text-black font-bold transition"
+            style={{ background: '#00F0FF' }}
+          >
+            Go to Home
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Prompt E: Show waiting room if auction status is "waiting"
+  if (auction?.status === "waiting") {
+    const handleBeginAuction = async () => {
+      try {
+        await axios.post(`${API}/auction/${auctionId}/begin`, null, {
+          headers: {
+            'X-User-ID': user.id
+          }
+        });
+        console.log("✅ Auction begin request sent");
+        // State will update via lot_started event
+      } catch (error) {
+        console.error("Error starting auction:", error);
+        alert(error.response?.data?.detail || "Failed to start auction");
+      }
+    };
+
+    return (
+      <div className="min-h-screen py-8" style={{ background: '#0B101B' }}>
+        <div className="container mx-auto px-4">
+          <div className="max-w-2xl mx-auto">
+            <button
+              onClick={() => navigate("/")}
+              className="text-white/60 hover:text-white mb-4 flex items-center gap-2"
+            >
+              ← Back to Home
+            </button>
+            
+            <div className="rounded-2xl p-8" style={{ background: '#151C2C', border: '1px solid rgba(255,255,255,0.1)' }}>
+              <div className="text-center mb-6">
+                <div className="w-20 h-20 rounded-full mx-auto mb-4 flex items-center justify-center" style={{ background: 'rgba(0, 240, 255, 0.1)' }}>
+                  <span className="text-4xl">⏳</span>
+                </div>
+                <h1 className="text-3xl font-bold text-white mb-2">
+                  Auction Waiting Room
+                </h1>
+                <p className="text-white/60">
+                  {isCommissioner 
+                    ? "Waiting for users to enter waiting room"
+                    : "Waiting for other participants and commissioner to start"}
+                </p>
+              </div>
+
+              {/* Participants List */}
+              <div className="rounded-xl p-4 mb-6" style={{ background: 'rgba(0, 240, 255, 0.1)', border: '1px solid rgba(0, 240, 255, 0.2)' }}>
+                <h3 className="font-bold text-white mb-3">
+                  Participants Ready ({auction?.usersInWaitingRoom?.length || 0})
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {participants
+                    .filter(p => auction?.usersInWaitingRoom?.includes(p.userId))
+                    .map(p => (
+                      <div
+                        key={p.userId}
+                        className="flex items-center gap-2 px-3 py-2 rounded-full"
+                        style={{ background: 'rgba(255,255,255,0.1)' }}
+                      >
+                        <div 
+                          className="w-8 h-8 rounded-full flex items-center justify-center text-black text-sm font-bold"
+                          style={{ background: '#00F0FF' }}
+                        >
+                          {p.userName?.charAt(0).toUpperCase() || '?'}
+                        </div>
+                        <span className="text-sm font-medium text-white">
+                          {p.userName}
+                        </span>
+                        {user && p.userId === user.id && (
+                          <span 
+                            className="text-xs px-2 py-0.5 rounded-full"
+                            style={{ background: 'rgba(0, 240, 255, 0.3)', color: '#00F0FF' }}
+                          >
+                            You
+                          </span>
+                        )}
+                      </div>
+                    ))}
+                  {(!auction?.usersInWaitingRoom || auction.usersInWaitingRoom.length === 0) && (
+                    <div className="text-center text-white/40 py-4 w-full">
+                      {isCommissioner 
+                        ? "Waiting for participants to click 'Enter Auction'..."
+                        : "Waiting for other participants..."}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Commissioner or Participant View */}
+              <div className="text-center">
+                {isCommissioner ? (
+                  <div>
+                    <button
+                      onClick={handleBeginAuction}
+                      className="text-white font-bold py-4 px-8 rounded-xl text-lg shadow-lg transition-all hover:scale-105"
+                      style={{ background: 'linear-gradient(135deg, #10B981, #059669)' }}
+                    >
+                      🚀 Begin Auction
+                    </button>
+                    <p className="text-sm text-white/40 mt-3">
+                      Start when all participants are ready
+                    </p>
+                  </div>
+                ) : (
+                  <div>
+                    <div className="inline-block animate-pulse">
+                      <div className="rounded-full p-4 mb-3" style={{ background: 'rgba(255,255,255,0.1)' }}>
+                        <svg className="w-12 h-12 text-white/40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                      </div>
+                    </div>
+                    <p className="text-lg font-medium text-white/80">
+                      Waiting for commissioner to start...
+                    </p>
+                    <p className="text-sm text-white/40 mt-2">
+                      The auction will begin shortly
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  const currentClubBids = currentClub ? bids.filter((b) => b.clubId === currentClub.id) : [];
+  
+  // Debug logging for bid display
+  if (currentClub) {
+    console.log("Current club ID:", currentClub.id);
+    console.log("All bids:", bids);
+    console.log("Current club bids:", currentClubBids);
+  }
+  const highestBid = currentClubBids.length > 0 ? Math.max(...currentClubBids.map((b) => b.amount)) : 0;
+
+  // Get clubs in auction queue for the horizontal scroll
+  const auctionQueue = auction?.clubQueue || [];
+  const queueClubs = auctionQueue.map(id => clubs.find(c => c.id === id)).filter(Boolean).slice(0, 8);
+
+  // Find current user's participant data
+  const currentUserParticipant = participants.find((p) => p.userId === user?.id);
+  const userRosterCount = currentUserParticipant?.clubsWon?.length || 0;
+  const maxSlots = league?.clubSlots || 3;
+  const userBudgetRemaining = currentUserParticipant?.budgetRemaining || 0;
+
+  return (
+    <div className="h-screen flex flex-col overflow-hidden" style={{ background: '#0B101B' }}>
+      
+      {/* ========== STICKY HEADER (64px) ========== */}
+      <header 
+        className="flex-shrink-0 h-16 px-6 flex items-center justify-between"
+        style={{ 
+          background: 'rgba(15, 23, 42, 0.8)',
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
+          borderBottom: '1px solid rgba(255,255,255,0.1)'
+        }}
+      >
+        {/* User Roster */}
+        <div className="flex items-center gap-2">
+          <span className="text-white/60 text-xs uppercase tracking-wider">User Roster</span>
+          <span className="text-white font-bold">{userRosterCount}/{maxSlots}</span>
+        </div>
+        
+        {/* Live Status */}
+        <div className="flex items-center gap-2">
+          <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div>
+          <span className="text-white text-sm font-semibold uppercase tracking-wider">
+            Live Auction Room {auction?.currentLot ? String(auction.currentLot).padStart(2, '0') : '00'}
+          </span>
+        </div>
+        
+        {/* Budget Left */}
+        <div className="flex items-center gap-2">
+          <span className="text-white/60 text-xs uppercase tracking-wider">Budget Left</span>
+          <span className="text-white font-bold">{formatCurrency(userBudgetRemaining)}</span>
+        </div>
+      </header>
+
+      {/* ========== TEAMS IN AUCTION SCROLL (80px) ========== */}
+      <div 
+        className="flex-shrink-0 h-20 px-6 flex items-center"
+        style={{ background: 'rgba(15, 23, 42, 0.5)', borderBottom: '1px solid rgba(255,255,255,0.05)' }}
+      >
+        <div className="flex-1 overflow-x-auto flex items-center gap-3" style={{ scrollbarWidth: 'none' }}>
+          <span className="text-white/40 text-xs uppercase tracking-wider flex-shrink-0 mr-2">Teams in Auction</span>
+          {queueClubs.map((club, idx) => {
+            const isCurrent = club.id === currentClub?.id;
+            return (
+              <div 
+                key={club.id}
+                className="flex-shrink-0 w-24 h-14 rounded-xl flex flex-col items-center justify-center transition-all"
+                style={{ 
+                  background: isCurrent ? 'rgba(6, 182, 212, 0.2)' : 'rgba(255,255,255,0.05)',
+                  border: isCurrent ? '2px solid #06B6D4' : '1px solid rgba(255,255,255,0.1)'
+                }}
+              >
+                <span className="text-lg">{sport?.key === 'cricket' ? '🏏' : '⚽'}</span>
+                <span className="text-[10px] text-white/80 text-center px-1 truncate w-full">{club.name?.split(' ')[0]}</span>
+              </div>
+            );
+          })}
+        </div>
+        <button className="flex-shrink-0 ml-3 text-xs uppercase tracking-wider" style={{ color: '#06B6D4' }}>
+          View All
+        </button>
+      </div>
+
+      {/* ========== HERO SECTION (Flexible ~40%) ========== */}
+      <div className="flex-1 flex flex-col items-center justify-center relative px-6 overflow-hidden">
+        
+        {/* Team Crest Watermark Background */}
+        {currentClub && (
+          <div 
+            className="absolute inset-0 flex items-center justify-center pointer-events-none"
+            style={{ opacity: 0.08 }}
+          >
+            <div 
+              className="text-[200px] animate-pulse"
+              style={{ animationDuration: '3s' }}
+            >
+              {sport?.key === 'cricket' ? '🏏' : '⚽'}
+            </div>
+          </div>
+        )}
+
+        {/* Countdown Overlay Between Lots */}
+        {countdown !== null && countdown > 0 && (
+          <div className="absolute inset-0 z-50 flex items-center justify-center" style={{ background: 'rgba(11, 16, 27, 0.95)' }}>
+            <div className="text-center">
+              <div className="text-9xl font-black" style={{ color: '#06B6D4', fontFamily: 'Roboto, sans-serif' }}>
+                {countdown}
+              </div>
+              <div className="text-xl text-white/60 mt-4">Next team loading...</div>
+            </div>
+          </div>
+        )}
+
+        {currentClub && auction?.status !== "completed" ? (
+          <div className="relative z-10 text-center w-full max-w-md">
+            {/* Timer - Large Orange */}
+            <div 
+              className="mb-6"
+              style={{ fontFamily: 'Roboto, sans-serif' }}
+            >
+              <div 
+                className="text-7xl font-black tracking-tight"
+                style={{ 
+                  color: auction?.status === 'paused' ? '#FF8A00' : (remainingMs ?? 0) < 10000 ? '#EF4444' : '#EF4444',
+                  textShadow: '0 0 40px rgba(239, 68, 68, 0.4)'
+                }}
+                data-testid="auction-timer"
+              >
+                {(() => {
+                  const s = Math.ceil((remainingMs ?? 0) / 1000);
+                  const mm = String(Math.floor(s / 60)).padStart(2, "0");
+                  const ss = String(s % 60).padStart(2, "0");
+                  return `${mm}:${ss}`;
+                })()}
+              </div>
+              {auction?.status === 'paused' && (
+                <div className="text-sm uppercase tracking-wider mt-1" style={{ color: '#FF8A00' }}>⏸️ Paused</div>
+              )}
+            </div>
+
+            {/* Team Name */}
+            <h2 
+              className="text-3xl font-extrabold text-white mb-1"
+              style={{ fontFamily: 'Inter, sans-serif' }}
+            >
+              {currentClub.name}
+            </h2>
+            
+            {/* Next Match Info */}
+            {nextFixture && (
+              <p className="text-sm mb-6" style={{ color: '#94A3B8', fontFamily: 'Inter, sans-serif' }}>
+                Next Match: {nextFixture.opponent} ({nextFixture.isHome ? 'H' : 'A'})
+              </p>
+            )}
+            {!nextFixture && currentClub.meta?.franchise && (
+              <p className="text-sm mb-6" style={{ color: '#94A3B8' }}>
+                {currentClub.meta.franchise} • {currentClub.meta.role || 'Player'}
+              </p>
+            )}
+            {!nextFixture && !currentClub.meta?.franchise && (
+              <p className="text-sm mb-6" style={{ color: '#94A3B8' }}>
+                {currentClub.country || 'International'}
+              </p>
+            )}
+
+            {/* Current Highest Bid */}
+            <div className="mb-2">
+              <div className="text-xs uppercase tracking-widest mb-1 font-bold" style={{ color: '#06B6D4' }}>
+                Current Highest Bid
+              </div>
+              <div 
+                className="text-5xl font-extrabold transition-transform"
+                style={{ color: '#06B6D4', fontFamily: 'Inter, sans-serif' }}
+                data-testid="current-bid-display"
+              >
+                {currentBid > 0 ? formatCurrency(currentBid) : '£0'}
+              </div>
+              {currentBidder && (
+                <div className="text-sm mt-1" style={{ color: '#06B6D4' }}>
+                  {currentBidder.displayName} leading
+                </div>
+              )}
+              {!currentBidder && currentBid === 0 && (
+                <div className="text-sm mt-1 text-white/40">
+                  No bids yet - be the first!
+                </div>
+              )}
+            </div>
+          </div>
+        ) : auction?.status === "completed" ? (
+          <div className="text-center">
+            <div className="text-8xl mb-4">🎉</div>
+            <h2 className="text-3xl font-bold text-white mb-4">Auction Complete!</h2>
+            <button
+              onClick={() => navigate(league ? `/league/${league.id}` : '/app/my-competitions')}
+              className="px-8 py-3 rounded-xl font-bold"
+              style={{ background: '#06B6D4', color: '#0F172A' }}
+            >
+              View Results
+            </button>
+          </div>
+        ) : (
+          <div className="text-center">
+            <div className="text-6xl mb-4">⏳</div>
+            <h2 className="text-2xl font-bold text-white">Preparing next lot...</h2>
+          </div>
+        )}
+      </div>
+
+      {/* ========== CONTROL PANEL (Sticky Bottom) ========== */}
+      <div 
+        className="flex-shrink-0 px-6 py-4"
+        style={{ 
+          background: 'rgba(15, 23, 42, 0.95)',
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
+          borderTop: '1px solid rgba(255,255,255,0.1)'
+        }}
+      >
+        {/* Active Managers Row */}
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2 overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
+            {participants.slice(0, 6).map((p) => {
+              const isLeading = currentBidder && p.userId === currentBidder.id;
+              const isCurrentUser = user && p.userId === user.id;
+              return (
+                <div key={p.id} className="flex flex-col items-center flex-shrink-0">
+                  <div 
+                    className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold"
+                    style={{ 
+                      background: isCurrentUser ? '#06B6D4' : 'rgba(255,255,255,0.1)',
+                      color: isCurrentUser ? '#0F172A' : 'white',
+                      border: isLeading ? '2px solid #06B6D4' : '2px solid transparent',
+                      boxShadow: isLeading ? '0 0 12px rgba(6, 182, 212, 0.5)' : 'none'
+                    }}
+                  >
+                    {p.userName?.substring(0, 2).toUpperCase() || '??'}
+                  </div>
+                  <span className="text-[10px] text-white/60 mt-1 truncate w-12 text-center">
+                    {p.userName?.split(' ')[0] || 'User'}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+          <div className="flex items-center gap-1 flex-shrink-0">
+            <div className="w-2 h-2 rounded-full bg-green-500"></div>
+            <span className="text-xs text-white/60">{participants.length} Online</span>
+          </div>
+        </div>
+
+        {/* Quick Bid Buttons */}
+        <div className="grid grid-cols-3 gap-3 mb-3">
+          {[1, 5, 10].map((amount) => (
+            <button
+              key={amount}
+              onClick={() => {
+                const currentInputValue = parseFloat(bidAmount) || 0;
+                const newBid = currentInputValue + amount;
+                setBidAmount(newBid.toString());
+                // Haptic feedback
+                if (navigator.vibrate) navigator.vibrate(50);
+              }}
+              disabled={!ready || userRosterCount >= maxSlots}
+              className="h-14 rounded-xl font-bold text-lg transition-all active:scale-95 disabled:opacity-40"
+              style={{ 
+                background: 'rgba(6, 182, 212, 0.1)', 
+                color: '#06B6D4', 
+                border: '1px solid #06B6D4' 
+              }}
+            >
+              +£{amount}m
+            </button>
+          ))}
+        </div>
+
+        {/* Place Bid Button */}
+        {bidAmount && (
+          <button
+            onClick={() => {
+              placeBid();
+              if (navigator.vibrate) navigator.vibrate(50);
+            }}
+            disabled={!ready || isSubmittingBid || userRosterCount >= maxSlots}
+            className="w-full h-14 rounded-xl font-bold text-lg mb-3 transition-all active:scale-95 disabled:opacity-40"
+            style={{ 
+              background: (!ready || isSubmittingBid || userRosterCount >= maxSlots) ? 'rgba(255,255,255,0.1)' : '#06B6D4',
+              color: (!ready || isSubmittingBid || userRosterCount >= maxSlots) ? 'rgba(255,255,255,0.4)' : '#0F172A'
+            }}
+            data-testid="place-bid-button"
+          >
+            {isSubmittingBid ? 'Placing...' : `Place Bid: £${bidAmount}m`}
+          </button>
+        )}
+
+        {/* Pass This Round Button */}
+        <button
+          onClick={() => toast("Pass This Round - Coming soon!", { icon: '⏭️', duration: 2000 })}
+          disabled={userRosterCount >= maxSlots}
+          className="w-full h-12 rounded-xl font-bold transition-all active:scale-95 disabled:opacity-40"
+          style={{ 
+            background: 'rgba(239, 68, 68, 0.1)', 
+            color: '#EF4444', 
+            border: '1px solid #EF4444' 
+          }}
+        >
+          Pass This Round
+        </button>
+
+        {/* Commissioner Controls - Compact */}
+        {isCommissioner && (
+          <div className="flex gap-2 mt-3 pt-3" style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+            {auction?.status === "active" && (
+              <button onClick={pauseAuction} className="flex-1 py-2 rounded-lg text-xs font-medium" style={{ background: 'rgba(255, 138, 0, 0.2)', color: '#FF8A00' }}>
+                ⏸️ Pause
+              </button>
+            )}
+            {auction?.status === "paused" && (
+              <button onClick={resumeAuction} className="flex-1 py-2 rounded-lg text-xs font-medium" style={{ background: 'rgba(16, 185, 129, 0.2)', color: '#10B981' }}>
+                ▶️ Resume
+              </button>
+            )}
+            <button onClick={completeLot} className="flex-1 py-2 rounded-lg text-xs font-medium" style={{ background: 'rgba(255, 77, 77, 0.2)', color: '#FF4D4D' }}>
+              Skip Lot
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* ========== BOTTOM NAV ========== */}
+      <nav 
+        className="flex-shrink-0 h-16 flex items-center justify-around"
+        style={{ background: '#0F172A', borderTop: '1px solid rgba(255,255,255,0.1)' }}
+      >
+        <button className="flex flex-col items-center" style={{ color: '#06B6D4' }}>
+          <span className="text-lg">🔨</span>
+          <span className="text-[10px] uppercase tracking-wider font-semibold">Auction</span>
+        </button>
+        <button className="flex flex-col items-center text-white/40">
+          <span className="text-lg">📊</span>
+          <span className="text-[10px] uppercase tracking-wider">Stats</span>
+        </button>
+        <button 
+          onClick={() => navigate('/create-competition')}
+          className="w-12 h-12 rounded-full flex items-center justify-center -mt-6"
+          style={{ background: '#06B6D4', color: '#0F172A' }}
+        >
+          <span className="text-2xl font-bold">+</span>
+        </button>
+        <button 
+          onClick={() => navigate('/app/my-competitions')}
+          className="flex flex-col items-center text-white/40"
+        >
+          <span className="text-lg">💼</span>
+          <span className="text-[10px] uppercase tracking-wider">Wallet</span>
+        </button>
+        <button className="flex flex-col items-center text-white/40">
+          <span className="text-lg">⚙️</span>
+          <span className="text-[10px] uppercase tracking-wider">Settings</span>
+        </button>
+      </nav>
+    </div>
+  );
+}
+
+export default memo(AuctionRoom);
