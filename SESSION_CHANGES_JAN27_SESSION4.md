@@ -1,7 +1,7 @@
 # Session Changes - January 27, 2026 (Session 4)
 
 ## Session Summary
-Productive session focused on completing the Stitch Technical Asset Spec implementation and several UX fixes. All changes tested and ready for deployment.
+Productive session focused on completing the Stitch Technical Asset Spec implementation, desktop responsiveness, and several UX fixes. All changes tested and ready for deployment.
 
 ---
 
@@ -28,32 +28,51 @@ Productive session focused on completing the Stitch Technical Asset Spec impleme
 - Football-Data.org crest integration **DISABLED** - apiFootballId values in DB are incorrect (showing wrong crests)
 - Infrastructure ready to re-enable when correct team IDs are sourced
 - Supports variants: small (32px), thumbnail (48px), medium (64px), large (96px), watermark (300px)
-- Cricket teams use sport-specific placeholder icon
+- Cricket placeholder changed from bat emoji to person silhouette icon
 - **Added to both Auction Room AND ClubsList (Research Hub) pages**
 
-**TODO:** Source correct Football-Data.org team IDs and update database, then re-enable crest fetching in TeamCrest.jsx
+**TODO:** Source correct Football-Data.org team IDs (and IPL team crests) and update database, then re-enable crest fetching in TeamCrest.jsx
 
-### 3. Bug Fix: Auction End Navigation
+### 3. Desktop Responsiveness - Max-Width Container
+**Files:** `App.js`, `index.css`, `BottomNav.jsx`, `HomePage.jsx`, + multiple page headers
+
+- Added `max-w-md` (448px) container to constrain app width on desktop
+- Centered layout mimics phone screen for explainer videos
+- Dark background (#050810) visible on sides
+- Fixed headers/footers constrained using `left-1/2 -translate-x-1/2 max-w-md`
+- All modals constrained to max-width container
+
+**Pages updated:** HomePage, CreateCompetition, CompetitionDashboard, LeagueDetailStitched, Help, ClubsList, CreateLeague, MyCompetitions, PlaceholderPage
+
+### 4. ClubsList (Browse) Page Improvements
+**File:** `ClubsList.js`
+
+- **Dropdown styling**: Dark theme with cyan border, custom chevron, dark options
+- **Removed emojis** from sport selector dropdown
+- **Cricket player cards**: Changed to stacked layout showing full player names (no truncation)
+- **Empty state**: Replaced emoji with Material Symbol icon
+
+### 5. Bug Fix: Auction End Navigation
 **File:** `AuctionRoom.js`
 
 - Changed button text from "View Results" to "Go to My Competitions →"
 - Fixed navigation to always go to `/app/my-competitions` (was incorrectly going to league detail)
 
-### 4. Bug Fix: 404 Errors on League Detail Pages
+### 6. Bug Fix: 404 Errors on League Detail Pages
 **Files:** `LeagueDetail.js`, `LeagueDetailStitched.jsx`
 
 - Fixed incorrect API call to non-existent `/api/auctions?leagueId=...` endpoint
 - Now correctly uses `/api/auction/{auctionId}` to verify active auctions
 - Eliminates console errors when viewing league pages
 
-### 5. Bug Fix: Tab Pills Alignment
+### 7. Bug Fix: Tab Pills Alignment
 **File:** `LeagueDetailStitched.jsx`
 
 - Fixed inconsistent tab alignment between commissioner and participant views
 - Added `-mx-4 px-4` to extend scroll area to screen edges
 - Tabs now consistently visible and aligned for all users
 
-### 6. Feature: "View All" Teams Modal
+### 8. Feature: "View All" Teams Modal
 **File:** `AuctionRoom.js`
 
 - Added functional modal when clicking "View All" button in teams carousel
