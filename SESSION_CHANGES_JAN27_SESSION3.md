@@ -57,6 +57,7 @@
 - `/app/frontend/src/pages/AuctionRoom.js` - Bug fix for auth check order
 - `/app/frontend/src/pages/MyCompetitions.js` - Stitch design styling
 - `/app/frontend/src/pages/ClubsList.js` - Stitch design styling (Research Hub)
+- `/app/frontend/src/pages/CompetitionDashboard.js` - Stitch design styling (Summary, Table, Fixtures tabs)
 
 ### Important Context Files:
 - `/app/SESSION_CHANGES.md` - Full session history (updated)
