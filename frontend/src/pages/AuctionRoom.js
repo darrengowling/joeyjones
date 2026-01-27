@@ -1349,35 +1349,54 @@ function AuctionRoom() {
         )}
       </div>
 
-      {/* ========== BOTTOM NAV ========== */}
+      {/* ========== BOTTOM NAV (88px per Stitch spec) ========== */}
       <nav 
-        className="flex-shrink-0 h-16 flex items-center justify-around"
-        style={{ background: '#0F172A', borderTop: '1px solid rgba(255,255,255,0.1)' }}
+        className="flex-shrink-0 flex items-center justify-around"
+        style={{ 
+          height: '88px',
+          background: '#0F172A', 
+          borderTop: '1px solid rgba(255,255,255,0.1)' 
+        }}
       >
-        <button className="flex flex-col items-center" style={{ color: '#06B6D4' }}>
-          <span className="text-lg">🔨</span>
+        <button className="flex flex-col items-center gap-1" style={{ color: '#06B6D4' }}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+            <path d="M14 2L4 12L14 22" /><path d="M20 2L10 12L20 22" />
+          </svg>
           <span className="text-[10px] uppercase tracking-wider font-semibold">Auction</span>
         </button>
-        <button className="flex flex-col items-center text-white/40">
-          <span className="text-lg">📊</span>
+        <button className="flex flex-col items-center gap-1 text-white/40">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+            <path d="M3 3V21H21" /><path d="M7 16L11 12L15 16L21 10" />
+          </svg>
           <span className="text-[10px] uppercase tracking-wider">Stats</span>
         </button>
+        {/* Central FAB */}
         <button 
           onClick={() => navigate('/create-competition')}
-          className="w-12 h-12 rounded-full flex items-center justify-center -mt-6"
-          style={{ background: '#06B6D4', color: '#0F172A' }}
+          className="w-16 h-16 rounded-full flex items-center justify-center -mt-8"
+          style={{ 
+            background: '#06B6D4', 
+            boxShadow: '0 0 20px rgba(6, 182, 212, 0.4)'
+          }}
         >
-          <span className="text-2xl font-bold">+</span>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0F172A" strokeWidth="3" strokeLinecap="round">
+            <line x1="12" y1="5" x2="12" y2="19" />
+            <line x1="5" y1="12" x2="19" y2="12" />
+          </svg>
         </button>
         <button 
           onClick={() => navigate('/app/my-competitions')}
-          className="flex flex-col items-center text-white/40"
+          className="flex flex-col items-center gap-1 text-white/40"
         >
-          <span className="text-lg">💼</span>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+            <rect x="2" y="4" width="20" height="16" rx="2" /><path d="M12 8V16M8 12H16" />
+          </svg>
           <span className="text-[10px] uppercase tracking-wider">Wallet</span>
         </button>
-        <button className="flex flex-col items-center text-white/40">
-          <span className="text-lg">⚙️</span>
+        <button className="flex flex-col items-center gap-1 text-white/40">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+            <circle cx="12" cy="12" r="3" /><path d="M12 1V4M12 20V23M4.22 4.22L6.34 6.34M17.66 17.66L19.78 19.78M1 12H4M20 12H23M4.22 19.78L6.34 17.66M17.66 6.34L19.78 4.22" />
+          </svg>
           <span className="text-[10px] uppercase tracking-wider">Settings</span>
         </button>
       </nav>
