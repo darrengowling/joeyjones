@@ -126,11 +126,20 @@ Routes updated in App.js:
 - `/` now shows new `HomePage` (Stitch design)
 - `/old-home` keeps old `Home` component for rollback
 
+### Step 6: Placeholder Page & Header Fix ✅
+**File Created:** `/app/frontend/src/pages/PlaceholderPage.jsx`
+
+- "Coming Soon" page for unimplemented features (/stats, /profile)
+- Includes back arrow, BottomNav, and "Back to Home" button
+- Dynamic page name from URL
+- Fixed header on HomePage (changed from sticky to fixed)
+- Added proper padding-top to account for fixed header
+
 ---
 
 ## Pending Work (Next Steps)
 
-### Step 6: Create Competition Page/Modal (NEXT)
+### Step 7: Create Competition Page/Modal (NEXT)
 Apply Stitch sign-in design (keeping magic links, just styling)
 
 ### Step 6: Create Competition Modal
