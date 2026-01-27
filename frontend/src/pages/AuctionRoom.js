@@ -13,12 +13,14 @@ const API = `${BACKEND_URL}/api`;
 
 // Memoized sub-components for better performance (Production Hardening Day 11)
 const BidHistoryItem = memo(({ bid, isWinning }) => (
-  <div className={`p-3 border-l-4 ${isWinning ? 'border-green-500 bg-green-50' : 'border-gray-300 bg-white'} rounded`}>
+  <div 
+    className={`p-3 rounded-xl ${isWinning ? 'bg-[#00F0FF]/20 border-l-4 border-[#00F0FF]' : 'bg-white/5 border-l-4 border-white/10'}`}
+  >
     <div className="flex justify-between items-center">
-      <span className="font-medium text-gray-900">{bid.userName || 'Anonymous'}</span>
-      <span className="font-bold text-green-600">{formatCurrency(bid.amount)}</span>
+      <span className="font-medium text-white">{bid.userName || 'Anonymous'}</span>
+      <span className="font-bold text-[#00F0FF]">{formatCurrency(bid.amount)}</span>
     </div>
-    <span className="text-xs text-gray-500">{new Date(bid.createdAt).toLocaleTimeString()}</span>
+    <span className="text-xs text-white/40">{new Date(bid.createdAt).toLocaleTimeString()}</span>
   </div>
 ));
 
