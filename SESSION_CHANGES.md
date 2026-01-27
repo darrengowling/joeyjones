@@ -160,11 +160,28 @@ HomePage updated to navigate to `/create-competition` instead of `/create-league
 
 **Important:** This is a visual redesign only - all functionality matches the existing CreateLeague.js exactly.
 
+### Step 8: League Detail Page ✅
+**File Created:** `/app/frontend/src/pages/LeagueDetailNew.jsx`
+**Route:** `/league/:leagueId` (swapped with new design)
+**Old version:** `/league-old/:leagueId`
+
+Stitch-styled league detail page with all original functionality:
+- Dark theme with glassmorphism
+- Fixed header with back navigation
+- Live auction alert banner
+- Status card (status, managers, budget, slots)
+- Invite section with copy button
+- Tab navigation (Overview, Managers, Teams/Players, Fixtures)
+- Commissioner actions (Manage Teams, Import Fixtures, Start Auction)
+- Standings preview
+- Full-screen Manage Assets modal
+- BottomNav integration
+
 ---
 
 ## Pending Work (Next Steps)
 
-### Step 8: Auction Lobby (NEXT)
+### Step 9: Auction Lobby/Room (NEXT)
 Apply Stitch sign-in design (keeping magic links, just styling)
 
 ### Step 6: Create Competition Modal
