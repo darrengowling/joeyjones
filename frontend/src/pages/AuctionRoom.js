@@ -1100,10 +1100,104 @@ function AuctionRoom() {
             );
           })}
         </div>
-        <button className="flex-shrink-0 ml-3 text-xs uppercase tracking-wider" style={{ color: '#06B6D4' }}>
+        <button 
+          onClick={() => setShowAllTeamsModal(true)}
+          className="flex-shrink-0 ml-3 text-xs uppercase tracking-wider font-semibold"
+          style={{ color: '#06B6D4' }}
+          data-testid="view-all-teams-button"
+        >
           View All
         </button>
       </div>
+
+      {/* ========== VIEW ALL TEAMS MODAL ========== */}
+      {showAllTeamsModal && (
+        <div 
+          className="fixed inset-0 z-50 flex items-end justify-center"
+          style={{ background: 'rgba(0,0,0,0.7)' }}
+          onClick={() => setShowAllTeamsModal(false)}
+        >
+          <div 
+            className="w-full max-h-[70vh] rounded-t-3xl overflow-hidden"
+            style={{ background: '#0F172A' }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="sticky top-0 px-4 py-4 flex items-center justify-between" style={{ background: '#0F172A', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+              <h3 className="text-lg font-bold text-white">Teams in Auction</h3>
+              <button 
+                onClick={() => setShowAllTeamsModal(false)}
+                className="w-8 h-8 rounded-full flex items-center justify-center"
+                style={{ background: 'rgba(255,255,255,0.1)' }}
+              >
+                <span className="text-white text-xl">×</span>
+              </button>
+            </div>
+            
+            {/* Teams List */}
+            <div className="overflow-y-auto p-4 space-y-2" style={{ maxHeight: 'calc(70vh - 60px)' }}>
+              {clubs.map((club, idx) => {
+                const isCurrent = club.id === currentClub?.id;
+                const isSold = club.winner && club.winner !== 'unsold';
+                const isUnsold = club.winner === 'unsold';
+                const inQueue = auction?.clubQueue?.includes(club.id);
+                
+                return (
+                  <div 
+                    key={club.id}
+                    className="flex items-center gap-3 p-3 rounded-xl"
+                    style={{ 
+                      background: isCurrent ? 'rgba(6, 182, 212, 0.2)' : 'rgba(255,255,255,0.05)',
+                      border: isCurrent ? '2px solid #06B6D4' : '1px solid rgba(255,255,255,0.1)'
+                    }}
+                  >
+                    <TeamCrest 
+                      clubId={club.id}
+                      apiFootballId={club.apiFootballId}
+                      name={club.name} 
+                      sportKey={sport?.key || 'football'} 
+                      variant="thumbnail"
+                      isActive={isCurrent}
+                    />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-white font-semibold truncate">{club.name}</p>
+                      <p className="text-xs text-white/50">
+                        {isCurrent ? 'Currently on the block' : 
+                         isSold ? `Won by ${club.winner}` : 
+                         isUnsold ? 'Went unsold' :
+                         inQueue ? `#${auction?.clubQueue?.indexOf(club.id) + 1} in queue` : 
+                         'Not in queue'}
+                      </p>
+                    </div>
+                    <div className="flex-shrink-0">
+                      {isCurrent && (
+                        <span className="px-2 py-1 rounded-full text-[10px] font-bold uppercase" style={{ background: '#06B6D4', color: '#0F172A' }}>
+                          Live
+                        </span>
+                      )}
+                      {isSold && (
+                        <span className="px-2 py-1 rounded-full text-[10px] font-bold uppercase" style={{ background: 'rgba(16, 185, 129, 0.2)', color: '#10B981' }}>
+                          Sold
+                        </span>
+                      )}
+                      {isUnsold && (
+                        <span className="px-2 py-1 rounded-full text-[10px] font-bold uppercase" style={{ background: 'rgba(239, 68, 68, 0.2)', color: '#EF4444' }}>
+                          Unsold
+                        </span>
+                      )}
+                      {!isCurrent && !isSold && !isUnsold && inQueue && (
+                        <span className="px-2 py-1 rounded-full text-[10px] font-bold uppercase" style={{ background: 'rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.6)' }}>
+                          Pending
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ========== HERO SECTION (Flexible ~40%) ========== */}
       <div className="flex-1 flex flex-col items-center justify-center relative px-4 overflow-hidden">
