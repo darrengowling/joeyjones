@@ -1022,357 +1022,604 @@ function AuctionRoom() {
   }
   const highestBid = currentClubBids.length > 0 ? Math.max(...currentClubBids.map((b) => b.amount)) : 0;
 
-  // Get clubs in auction queue for the horizontal scroll
-  const auctionQueue = auction?.clubQueue || [];
-  const queueClubs = auctionQueue.map(id => clubs.find(c => c.id === id)).filter(Boolean).slice(0, 8);
-
-  // Find current user's participant data
-  const currentUserParticipant = participants.find((p) => p.userId === user?.id);
-  const userRosterCount = currentUserParticipant?.clubsWon?.length || 0;
-  const maxSlots = league?.clubSlots || 3;
-  const userBudgetRemaining = currentUserParticipant?.budgetRemaining || 0;
-
   return (
     <div className="h-screen flex flex-col overflow-hidden" style={{ background: '#0B101B' }}>
-      
-      {/* ========== STICKY HEADER (64px) ========== */}
-      <header 
-        className="flex-shrink-0 h-16 px-6 flex items-center justify-between"
-        style={{ 
-          background: 'rgba(15, 23, 42, 0.8)',
-          backdropFilter: 'blur(12px)',
-          WebkitBackdropFilter: 'blur(12px)',
-          borderBottom: '1px solid rgba(255,255,255,0.1)'
-        }}
-      >
-        {/* User Roster */}
-        <div className="flex items-center gap-2">
-          <span className="text-white/60 text-xs uppercase tracking-wider">User Roster</span>
-          <span className="text-white font-bold">{userRosterCount}/{maxSlots}</span>
-        </div>
-        
-        {/* Live Status */}
-        <div className="flex items-center gap-2">
-          <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div>
-          <span className="text-white text-sm font-semibold uppercase tracking-wider">
-            Live Auction Room {auction?.currentLot ? String(auction.currentLot).padStart(2, '0') : '00'}
-          </span>
-        </div>
-        
-        {/* Budget Left */}
-        <div className="flex items-center gap-2">
-          <span className="text-white/60 text-xs uppercase tracking-wider">Budget Left</span>
-          <span className="text-white font-bold">{formatCurrency(userBudgetRemaining)}</span>
-        </div>
-      </header>
-
-      {/* ========== TEAMS IN AUCTION SCROLL (80px) ========== */}
-      <div 
-        className="flex-shrink-0 h-20 px-6 flex items-center"
-        style={{ background: 'rgba(15, 23, 42, 0.5)', borderBottom: '1px solid rgba(255,255,255,0.05)' }}
-      >
-        <div className="flex-1 overflow-x-auto flex items-center gap-3" style={{ scrollbarWidth: 'none' }}>
-          <span className="text-white/40 text-xs uppercase tracking-wider flex-shrink-0 mr-2">Teams in Auction</span>
-          {queueClubs.map((club, idx) => {
-            const isCurrent = club.id === currentClub?.id;
-            return (
-              <div 
-                key={club.id}
-                className="flex-shrink-0 w-24 h-14 rounded-xl flex flex-col items-center justify-center transition-all"
-                style={{ 
-                  background: isCurrent ? 'rgba(6, 182, 212, 0.2)' : 'rgba(255,255,255,0.05)',
-                  border: isCurrent ? '2px solid #06B6D4' : '1px solid rgba(255,255,255,0.1)'
-                }}
-              >
-                <span className="text-lg">{sport?.key === 'cricket' ? '🏏' : '⚽'}</span>
-                <span className="text-[10px] text-white/80 text-center px-1 truncate w-full">{club.name?.split(' ')[0]}</span>
-              </div>
-            );
-          })}
-        </div>
-        <button className="flex-shrink-0 ml-3 text-xs uppercase tracking-wider" style={{ color: '#06B6D4' }}>
-          View All
-        </button>
-      </div>
-
-      {/* ========== HERO SECTION (Flexible ~40%) ========== */}
-      <div className="flex-1 flex flex-col items-center justify-center relative px-6 overflow-hidden">
-        
-        {/* Team Crest Watermark Background */}
-        {currentClub && (
-          <div 
-            className="absolute inset-0 flex items-center justify-center pointer-events-none"
-            style={{ opacity: 0.08 }}
-          >
-            <div 
-              className="text-[200px] animate-pulse"
-              style={{ animationDuration: '3s' }}
-            >
-              {sport?.key === 'cricket' ? '🏏' : '⚽'}
-            </div>
-          </div>
-        )}
-
-        {/* Countdown Overlay Between Lots */}
-        {countdown !== null && countdown > 0 && (
-          <div className="absolute inset-0 z-50 flex items-center justify-center" style={{ background: 'rgba(11, 16, 27, 0.95)' }}>
-            <div className="text-center">
-              <div className="text-9xl font-black" style={{ color: '#06B6D4', fontFamily: 'Roboto, sans-serif' }}>
-                {countdown}
-              </div>
-              <div className="text-xl text-white/60 mt-4">Next team loading...</div>
-            </div>
-          </div>
-        )}
-
-        {currentClub && auction?.status !== "completed" ? (
-          <div className="relative z-10 text-center w-full max-w-md">
-            {/* Timer - Large Orange */}
-            <div 
-              className="mb-6"
-              style={{ fontFamily: 'Roboto, sans-serif' }}
-            >
-              <div 
-                className="text-7xl font-black tracking-tight"
-                style={{ 
-                  color: auction?.status === 'paused' ? '#FF8A00' : (remainingMs ?? 0) < 10000 ? '#EF4444' : '#EF4444',
-                  textShadow: '0 0 40px rgba(239, 68, 68, 0.4)'
-                }}
-                data-testid="auction-timer"
-              >
-                {(() => {
-                  const s = Math.ceil((remainingMs ?? 0) / 1000);
-                  const mm = String(Math.floor(s / 60)).padStart(2, "0");
-                  const ss = String(s % 60).padStart(2, "0");
-                  return `${mm}:${ss}`;
-                })()}
-              </div>
-              {auction?.status === 'paused' && (
-                <div className="text-sm uppercase tracking-wider mt-1" style={{ color: '#FF8A00' }}>⏸️ Paused</div>
-              )}
-            </div>
-
-            {/* Team Name */}
-            <h2 
-              className="text-3xl font-extrabold text-white mb-1"
-              style={{ fontFamily: 'Inter, sans-serif' }}
-            >
-              {currentClub.name}
-            </h2>
-            
-            {/* Next Match Info */}
-            {nextFixture && (
-              <p className="text-sm mb-6" style={{ color: '#94A3B8', fontFamily: 'Inter, sans-serif' }}>
-                Next Match: {nextFixture.opponent} ({nextFixture.isHome ? 'H' : 'A'})
-              </p>
+      {/* Header Section - Fixed */}
+      <div className="flex-shrink-0 px-2 sm:px-4 pt-4 pb-2">
+        <div className="max-w-6xl mx-auto w-full">
+          {/* Breadcrumb Navigation */}
+          <div className="flex items-center gap-2 text-sm text-white/60 mb-4">
+            <button onClick={() => navigate("/")} className="hover:text-white">Home</button>
+            <span>›</span>
+            <button onClick={() => navigate("/app/my-competitions")} className="hover:text-white">My Competitions</button>
+            <span>›</span>
+            {league && (
+              <>
+                <button onClick={() => navigate(`/league/${league.id}`)} className="hover:text-white">{league.name}</button>
+                <span>›</span>
+              </>
             )}
-            {!nextFixture && currentClub.meta?.franchise && (
-              <p className="text-sm mb-6" style={{ color: '#94A3B8' }}>
-                {currentClub.meta.franchise} • {currentClub.meta.role || 'Player'}
-              </p>
-            )}
-            {!nextFixture && !currentClub.meta?.franchise && (
-              <p className="text-sm mb-6" style={{ color: '#94A3B8' }}>
-                {currentClub.country || 'International'}
-              </p>
-            )}
+            <span className="font-semibold text-white">Auction Room</span>
+          </div>
 
-            {/* Current Highest Bid */}
-            <div className="mb-2">
-              <div className="text-xs uppercase tracking-widest mb-1 font-bold" style={{ color: '#06B6D4' }}>
-                Current Highest Bid
-              </div>
-              <div 
-                className="text-5xl font-extrabold transition-transform"
-                style={{ color: '#06B6D4', fontFamily: 'Inter, sans-serif' }}
-                data-testid="current-bid-display"
-              >
-                {currentBid > 0 ? formatCurrency(currentBid) : '£0'}
-              </div>
-              {currentBidder && (
-                <div className="text-sm mt-1" style={{ color: '#06B6D4' }}>
-                  {currentBidder.displayName} leading
-                </div>
-              )}
-              {!currentBidder && currentBid === 0 && (
-                <div className="text-sm mt-1 text-white/40">
-                  No bids yet - be the first!
-                </div>
-              )}
-            </div>
-          </div>
-        ) : auction?.status === "completed" ? (
-          <div className="text-center">
-            <div className="text-8xl mb-4">🎉</div>
-            <h2 className="text-3xl font-bold text-white mb-4">Auction Complete!</h2>
-            <button
-              onClick={() => navigate(league ? `/league/${league.id}` : '/app/my-competitions')}
-              className="px-8 py-3 rounded-xl font-bold"
-              style={{ background: '#06B6D4', color: '#0F172A' }}
-            >
-              View Results
-            </button>
-          </div>
-        ) : (
-          <div className="text-center">
-            <div className="text-6xl mb-4">⏳</div>
-            <h2 className="text-2xl font-bold text-white">Preparing next lot...</h2>
-          </div>
-        )}
-      </div>
-
-      {/* ========== CONTROL PANEL (Sticky Bottom) ========== */}
-      <div 
-        className="flex-shrink-0 px-6 py-4"
-        style={{ 
-          background: 'rgba(15, 23, 42, 0.95)',
-          backdropFilter: 'blur(12px)',
-          WebkitBackdropFilter: 'blur(12px)',
-          borderTop: '1px solid rgba(255,255,255,0.1)'
-        }}
-      >
-        {/* Active Managers Row */}
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2 overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
-            {participants.slice(0, 6).map((p) => {
-              const isLeading = currentBidder && p.userId === currentBidder.id;
-              const isCurrentUser = user && p.userId === user.id;
-              return (
-                <div key={p.id} className="flex flex-col items-center flex-shrink-0">
-                  <div 
-                    className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold"
-                    style={{ 
-                      background: isCurrentUser ? '#06B6D4' : 'rgba(255,255,255,0.1)',
-                      color: isCurrentUser ? '#0F172A' : 'white',
-                      border: isLeading ? '2px solid #06B6D4' : '2px solid transparent',
-                      boxShadow: isLeading ? '0 0 12px rgba(6, 182, 212, 0.5)' : 'none'
-                    }}
-                  >
-                    {p.userName?.substring(0, 2).toUpperCase() || '??'}
+          {/* Prompt G: Top strip with league info and progress */}
+          {league && auction && (
+            <div className="rounded-xl p-3 mb-4" style={{ background: '#151C2C', border: '1px solid rgba(255,255,255,0.1)' }}>
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+                  <div className="whitespace-nowrap">
+                    <span className="text-xs font-medium text-white/40">League:</span>
+                    <span className="text-xs text-white ml-1">{league.name}</span>
                   </div>
-                  <span className="text-[10px] text-white/60 mt-1 truncate w-12 text-center">
-                    {p.userName?.split(' ')[0] || 'User'}
+                  <div className="whitespace-nowrap">
+                    <span className="text-xs font-medium text-white/40">Progress:</span>
+                    <span className="text-xs ml-1" style={{ color: '#00F0FF' }}>
+                      Lot {auction.currentLot || 0} / {auction.clubQueue?.length || 0}
+                    </span>
+                  </div>
+                  <div className="w-full sm:w-auto">
+                    <span className="text-xs font-medium text-white/40">Managers with slots left:</span>
+                    <span className="text-xs text-white/80 ml-1 break-words">
+                      {participants.filter(p => (p.clubsWon?.length || 0) < (league.clubSlots || 3)).map(p => {
+                        const slotsLeft = (league.clubSlots || 3) - (p.clubsWon?.length || 0);
+                        return `${p.userName}=${slotsLeft}`;
+                      }).join(', ') || 'None'}
+                    </span>
+                  </div>
+                </div>
+                {auction.status === "completed" && (
+                  <div className="px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap" style={{ background: 'rgba(16, 185, 129, 0.2)', color: '#10B981' }}>
+                    ✅ Auction Complete
+                  </div>
+                )}
+                {auction.status === "paused" && (
+                  <div className="px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap" style={{ background: 'rgba(255, 138, 0, 0.2)', color: '#FF8A00' }}>
+                    ⏸️ PAUSED
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Content Section - Scrollable */}
+      <div className="flex-1 overflow-y-auto overflow-x-hidden px-2 sm:px-4 pb-4">
+        <div className="max-w-6xl mx-auto w-full">
+          {/* Auction Header */}
+          <div className="rounded-xl p-3 sm:p-4 mb-4" style={{ background: '#151C2C', border: '1px solid rgba(255,255,255,0.1)' }}>
+            <div className="flex flex-col gap-3">
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
+                <div className="min-w-0 flex-1">
+                  <div className="flex flex-wrap items-center gap-2 max-w-full">
+                    <h1 className="text-lg sm:text-2xl font-bold text-white truncate min-w-0 flex-shrink">
+                      {league ? league.name : "Strategic Competition Arena"}
+                    </h1>
+                    {league?.sportKey && (
+                      <span className="px-2 py-0.5 text-xs rounded whitespace-nowrap flex-shrink-0 capitalize" style={{ background: 'rgba(0, 240, 255, 0.2)', color: '#00F0FF' }}>
+                        {league.sportKey}
+                      </span>
+                    )}
+                    {auction?.status === "paused" && (
+                      <span className="px-2 py-0.5 text-xs rounded whitespace-nowrap flex-shrink-0" style={{ background: 'rgba(255, 138, 0, 0.2)', color: '#FF8A00' }}>
+                        ⏸️ PAUSED
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-xs sm:text-sm text-white/40 mt-1">
+                    Lot #{auction?.currentLot || 0}
+                  </p>
+                </div>
+              </div>
+              
+              {/* Commissioner Controls */}
+              {isCommissioner && (
+                <div className="flex flex-wrap gap-2">
+                  {auction?.status === "active" && (
+                    <button
+                      onClick={pauseAuction}
+                      className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg text-sm font-medium"
+                      style={{ background: 'rgba(255, 138, 0, 0.2)', color: '#FF8A00' }}
+                      title="Pause Auction"
+                    >
+                      ⏸️ Pause
+                    </button>
+                  )}
+                  
+                  {auction?.status === "paused" && (
+                    <button
+                      onClick={resumeAuction}
+                      className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg text-sm font-medium"
+                      style={{ background: 'rgba(16, 185, 129, 0.2)', color: '#10B981' }}
+                      title="Resume Auction"
+                    >
+                      ▶️ Resume
+                    </button>
+                  )}
+                  
+                  {(auction?.status === "paused" || auction?.status === "completed") && (
+                    <button
+                      onClick={resetAuction}
+                      className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg text-sm font-medium"
+                      style={{ background: 'rgba(255, 138, 0, 0.2)', color: '#FF8A00' }}
+                      title="Reset Auction"
+                    >
+                      🔄 Reset
+                    </button>
+                  )}
+                  
+                  <button
+                    onClick={completeLot}
+                    className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg text-sm font-medium"
+                    style={{ background: 'rgba(255, 77, 77, 0.2)', color: '#FF4D4D' }}
+                    title="Complete Current Lot"
+                  >
+                    Complete Lot
+                  </button>
+                  
+                  <button
+                    onClick={deleteAuction}
+                    className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg text-sm font-medium"
+                    style={{ background: 'rgba(255, 77, 77, 0.3)', color: '#FF4D4D' }}
+                    title="Delete Entire Auction"
+                  >
+                    🗑️ Delete Auction
+                  </button>
+                </div>
+              )}
+              
+              {/* Debug Tools - Available for all users */}
+              {auction && (
+                <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+                  <button
+                    onClick={async () => {
+                      try {
+                        debugLogger.log('report_submitted', {
+                          auctionStatus: auction?.status,
+                          totalBids: bids.length
+                        });
+                        toast("Submitting report...", { duration: 2000 });
+                        const result = await debugLogger.submitReport();
+                        toast.success(`Report submitted! Reference: ${result.referenceId}`, { duration: 8000 });
+                      } catch (e) {
+                        console.error("Report submission error:", e);
+                        toast.error("Failed to submit report. Please try again.");
+                      }
+                    }}
+                    className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg text-sm font-medium"
+                    style={{ background: 'rgba(255, 138, 0, 0.2)', color: '#FF8A00' }}
+                    title="Report an issue - submits debug info to support team"
+                  >
+                    🚨 Report Issue
+                  </button>
+                  <span className="text-xs text-white/40">
+                    Stats: {debugLogger.getStats().totalAttempts} attempts, {debugLogger.getStats().totalSuccesses} successes
                   </span>
                 </div>
-              );
-            })}
+              )}
+            </div>
           </div>
-          <div className="flex items-center gap-1 flex-shrink-0">
-            <div className="w-2 h-2 rounded-full bg-green-500"></div>
-            <span className="text-xs text-white/60">{participants.length} Online</span>
+
+          {/* Participant Budgets - Horizontal Scroll */}
+          <div className="rounded-xl p-3 mb-4" style={{ background: '#151C2C', border: '1px solid rgba(255,255,255,0.1)' }}>
+            <h2 className="text-lg font-bold mb-2 text-white">Manager Budgets</h2>
+            <div className="flex gap-3 overflow-x-auto pb-2" style={{scrollbarWidth: 'thin'}}>
+              {participants.map((p) => {
+                const isCurrentUser = user && p.userId === user.id;
+                return (
+                  <div
+                    key={p.id}
+                    className="flex-shrink-0 w-32 sm:w-40 py-2 px-2.5 sm:p-3 rounded-lg"
+                    style={{ 
+                      background: isCurrentUser ? 'rgba(0, 240, 255, 0.1)' : 'rgba(255,255,255,0.05)',
+                      border: isCurrentUser ? '2px solid #00F0FF' : '1px solid rgba(255,255,255,0.1)'
+                    }}
+                  >
+                    <div className="font-semibold text-white text-[10px] sm:text-xs mb-1 truncate break-any line-clamp-2">
+                      {p.userName} {isCurrentUser && "(You)"}
+                    </div>
+                    <div className="space-y-0.5 sm:space-y-1">
+                      <div className="text-sm sm:text-lg font-bold truncate" style={{ color: '#00F0FF' }}>
+                        {formatCurrency(p.budgetRemaining)}
+                      </div>
+                      <div className="text-[10px] sm:text-xs text-white/40 truncate">
+                        Spent: {formatCurrency(p.totalSpent)}
+                      </div>
+                      <div className="text-[10px] sm:text-xs text-white/40 whitespace-nowrap">
+                        🏆 {uiHints.assetPlural}: {p.clubsWon.length}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            {/* Current Lot */}
+            <div className="lg:col-span-2 rounded-xl p-4" style={{ background: '#151C2C', border: '1px solid rgba(255,255,255,0.1)' }}>
+              {currentClub && auction?.status !== "completed" ? (
+                <div>
+                  <h2 className="text-2xl font-bold mb-4 text-white">🔥 Current {uiHints.assetLabel} Ownership</h2>
+                  
+                  {/* Countdown Overlay Between Lots */}
+                  {countdown !== null && countdown > 0 && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: 'rgba(11, 16, 27, 0.95)' }}>
+                      <div className="rounded-2xl p-12 text-center" style={{ background: '#151C2C', border: '1px solid rgba(0, 240, 255, 0.3)', boxShadow: '0 0 60px rgba(0, 240, 255, 0.2)' }}>
+                        <div className="text-8xl font-bold mb-4" style={{ color: '#00F0FF', textShadow: '0 0 30px rgba(0, 240, 255, 0.5)' }}>
+                          {countdown}
+                        </div>
+                        <div className="text-2xl text-white">
+                          Next team in {countdown}...
+                        </div>
+                        <div className="text-sm text-white/40 mt-2">
+                          Get ready to bid
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Compact Timer + Team + Current Bid */}
+                  <div className="rounded-xl p-4 mb-3" style={{ background: '#0B101B', border: '1px solid rgba(255,255,255,0.1)' }}>
+                    <div className="flex items-center justify-between gap-4 mb-3">
+                      {/* Team/Player Name */}
+                      <div className="flex-1 min-w-0">
+                        <h3 className="text-2xl font-bold text-white truncate">{currentClub.name}</h3>
+                        {/* Franchise/Team for cricket players */}
+                        {currentClub.meta?.franchise && (
+                          <div className="text-sm font-medium" style={{ color: '#00F0FF' }}>
+                            {currentClub.meta.franchise}
+                          </div>
+                        )}
+                        {/* Next Fixture - Inline */}
+                        {nextFixture && (
+                          <div className="text-xs text-white/40 mt-1">
+                            Next: {nextFixture.opponent} ({nextFixture.isHome ? 'H' : 'A'})
+                          </div>
+                        )}
+                      </div>
+                      
+                      {/* Timer */}
+                      <div className="text-center">
+                        <div className="text-5xl font-bold" style={{ textShadow: '0 0 20px rgba(255, 138, 0, 0.5)' }}>
+                          {(() => {
+                            const s = Math.ceil((remainingMs ?? 0) / 1000);
+                            const mm = String(Math.floor(s / 60)).padStart(2, "0");
+                            const ss = String(s % 60).padStart(2, "0");
+                            const warn = (remainingMs ?? 0) < 10000;
+                            const isPaused = auction?.status === 'paused';
+                            return (
+                              <span 
+                                data-testid="auction-timer" 
+                                style={{ 
+                                  color: isPaused ? '#FF8A00' : warn ? '#FF4D4D' : '#FF8A00'
+                                }}
+                              >
+                                {mm}:{ss}
+                                {isPaused && ' ⏸️'}
+                              </span>
+                            );
+                          })()}
+                        </div>
+                        <div className="text-xs text-white/40">
+                          {auction?.status === 'paused' ? 'PAUSED' : 'Time Left'}
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* Current Bid or No Bids */}
+                    <div className="border-t border-white/10 pt-3">
+                      {currentBid > 0 && currentBidder ? (
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                          <div className="text-center sm:text-left">
+                            <div className="text-xs text-white/40">Current Bid</div>
+                            <div className="text-3xl sm:text-2xl font-bold" style={{ color: '#00F0FF' }}>{formatCurrency(currentBid)}</div>
+                          </div>
+                          <div className="flex items-center gap-2 justify-center sm:justify-end">
+                            <div className="w-8 h-8 rounded-full flex items-center justify-center text-black font-bold text-sm" style={{ background: '#00F0FF' }}>
+                              {currentBidder.displayName.charAt(0).toUpperCase()}
+                            </div>
+                            <div className="text-sm text-white/80">{currentBidder.displayName}</div>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="text-center">
+                          <div className="text-sm text-white/60">💰 No bids yet - Be the first!</div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  
+                  {/* Team Metadata */}
+                  <div className="rounded-lg p-3 mb-3" style={{ background: 'rgba(255,255,255,0.05)' }}>
+                    {/* Football: Show country and UEFA ID */}
+                    {sport?.key === "football" && (
+                      <div className="flex items-center gap-3 text-sm">
+                        <span className="text-white/60">{currentClub.country}</span>
+                        {currentClub.uefaId && (
+                          <span className="text-white/40">UEFA ID: {currentClub.uefaId}</span>
+                        )}
+                      </div>
+                    )}
+                    
+                    {/* Cricket: Show nationality and role */}
+                    {sport?.key === "cricket" && currentClub.meta && (
+                      <div className="flex flex-wrap items-center gap-2 text-sm">
+                        {currentClub.meta.nationality && (
+                          <span className="px-2 py-1 rounded text-xs font-semibold" style={{ background: 'rgba(16, 185, 129, 0.2)', color: '#10B981' }}>
+                            {currentClub.meta.nationality}
+                          </span>
+                        )}
+                        {currentClub.meta.role && (
+                          <span className="text-white/60">Role: {currentClub.meta.role}</span>
+                        )}
+                        {currentClub.meta.bowling && (
+                          <span className="text-white/40">Bowling: {currentClub.meta.bowling}</span>
+                        )}
+                      </div>
+                    )}
+                    
+                    {/* Fallback for other sports */}
+                    {sport?.key !== "football" && sport?.key !== "cricket" && currentClub.country && (
+                      <div className="text-sm text-white/60">{currentClub.country}</div>
+                    )}
+                  </div>
+
+                  {/* Bid Input with Quick Buttons */}
+                  <div>
+                    {/* Quick Bid Buttons - Updated to +1, +5, +10, +50 */}
+                    <div className="grid grid-cols-4 gap-2 mb-3">
+                      {[1, 5, 10, 50].map((amount) => (
+                        <button
+                          key={amount}
+                          onClick={() => {
+                            // Add to the current input value (in millions), not the auction's currentBid
+                            const currentInputValue = parseFloat(bidAmount) || 0;
+                            const newBid = currentInputValue + amount;
+                            setBidAmount(newBid.toString());
+                          }}
+                          disabled={!ready}
+                          className="px-3 py-3 rounded-xl text-sm font-bold transition-all hover:scale-105 disabled:opacity-50"
+                          style={{ background: 'rgba(0, 240, 255, 0.1)', color: '#00F0FF', border: '1px solid rgba(0, 240, 255, 0.3)' }}
+                        >
+                          +£{amount}m
+                        </button>
+                      ))}
+                    </div>
+                    
+                    {/* Pass This Round Button - Placeholder */}
+                    <button
+                      onClick={() => toast("Pass This Round - Coming soon!", { icon: '⏭️', duration: 2000 })}
+                      className="w-full py-3 rounded-xl text-sm font-bold mb-3 transition-all"
+                      style={{ background: 'rgba(255, 77, 77, 0.1)', color: '#FF4D4D', border: '1px solid rgba(255, 77, 77, 0.3)' }}
+                    >
+                      ⏭️ Pass This Round
+                    </button>
+                    
+                    <div className="flex flex-col sm:flex-row gap-2 mb-2">
+                      <input
+                        type="text"
+                        readOnly
+                        placeholder="Use buttons above"
+                        className="w-full sm:flex-1 px-3 py-3 rounded-xl text-[16px] cursor-default text-white"
+                        style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)' }}
+                        value={bidAmount ? `£${bidAmount}m` : ""}
+                        disabled={!ready}
+                        data-testid="bid-amount-input"
+                      />
+                      <button
+                        onClick={placeBid}
+                        disabled={!ready || isSubmittingBid || participants.find((p) => p.userId === user?.id)?.clubsWon?.length >= (league?.clubSlots || 3)}
+                        className="w-full sm:w-auto px-6 py-3 sm:py-2 rounded-xl font-bold text-base transition-all"
+                        style={{ 
+                          background: (!ready || isSubmittingBid || participants.find((p) => p.userId === user?.id)?.clubsWon?.length >= (league?.clubSlots || 3))
+                            ? 'rgba(255,255,255,0.1)' 
+                            : '#00F0FF',
+                          color: (!ready || isSubmittingBid || participants.find((p) => p.userId === user?.id)?.clubsWon?.length >= (league?.clubSlots || 3))
+                            ? 'rgba(255,255,255,0.4)'
+                            : '#0B101B',
+                          cursor: (!ready || isSubmittingBid || participants.find((p) => p.userId === user?.id)?.clubsWon?.length >= (league?.clubSlots || 3))
+                            ? 'not-allowed'
+                            : 'pointer'
+                        }}
+                        data-testid="place-bid-button"
+                        title={
+                          !ready 
+                            ? "Loading auction state..." 
+                            : isSubmittingBid
+                              ? "Placing bid..."
+                            : participants.find((p) => p.userId === user?.id)?.clubsWon?.length >= (league?.clubSlots || 3) 
+                              ? "Roster full" 
+                              : ""
+                        }
+                      >
+                        {!ready 
+                          ? "Loading..." 
+                          : isSubmittingBid
+                            ? "Placing..."
+                          : participants.find((p) => p.userId === user?.id)?.clubsWon?.length >= (league?.clubSlots || 3) 
+                            ? "Roster Full" 
+                            : "Place Bid"
+                        }
+                      </button>
+                    </div>
+                    {participants.find((p) => p.userId === user?.id) && (
+                      <div className="text-sm text-white/60 space-y-1">
+                        <p>
+                          Your strategic budget remaining: <span style={{ color: '#00F0FF' }}>{formatCurrency(participants.find((p) => p.userId === user.id).budgetRemaining)}</span>
+                        </p>
+                        <p className="flex items-center">
+                          <span>Roster:</span>
+                          <span className="ml-1 font-medium text-white">
+                            {participants.find((p) => p.userId === user.id).clubsWon?.length || 0} / {league?.clubSlots || 3}
+                          </span>
+                          <span className="ml-2">
+                            {participants.find((p) => p.userId === user.id).clubsWon?.length >= (league?.clubSlots || 3) 
+                              ? '🔒 Full' 
+                              : '📍 Active'
+                            }
+                          </span>
+                        </p>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Bid History for Current Club */}
+                  <div className="mt-6">
+                    <h4 className="font-semibold text-white mb-3">Bid History</h4>
+                    <div className="max-h-64 overflow-y-auto">
+                      {currentClubBids.length === 0 ? (
+                        <p className="text-white/40">No bids yet</p>
+                      ) : (
+                        <div className="space-y-2">
+                          {currentClubBids
+                            .sort((a, b) => b.amount - a.amount)
+                            .map((bid) => (
+                              <div
+                                key={bid.id}
+                                className="flex justify-between items-center p-3 rounded-lg"
+                                style={{ background: 'rgba(255,255,255,0.05)' }}
+                              >
+                                <span className="font-semibold text-white">{bid.userName}</span>
+                                <span className="font-bold" style={{ color: '#00F0FF' }}>{formatCurrency(bid.amount)}</span>
+                              </div>
+                            ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="mt-6 p-3 rounded-lg text-sm" style={{ background: 'rgba(255, 138, 0, 0.1)', border: '1px solid rgba(255, 138, 0, 0.2)', color: '#FF8A00' }}>
+                    ⏱️ Ownership opportunity will auto-complete when timer expires. Next team will load automatically for strategic bidding.
+                  </div>
+                </div>
+              ) : (
+                <div className="text-center py-12">
+                  <div className="text-6xl mb-4">{auction?.status === "completed" ? "🎉" : "⏳"}</div>
+                  <h2 className="text-2xl font-bold text-white mb-4">
+                    {auction?.status === "completed" ? "Auction Complete!" : "Preparing Next Strategic Opportunity..."}
+                  </h2>
+                  <p className="text-white/60 mb-6">
+                    {auction?.status === "completed" 
+                      ? `All ${uiHints.assetPlural.toLowerCase()} have been auctioned.` 
+                      : `${uiHints.assetPlural} auto-load in random order. Next ${uiHints.assetLabel.toLowerCase()} starting soon...`}
+                  </p>
+                  {auction?.status === "completed" && (
+                    <button
+                      onClick={() => navigate("/app/my-competitions")}
+                      className="px-6 py-3 rounded-xl font-bold transition"
+                      style={{ background: '#00F0FF', color: '#0B101B' }}
+                      data-testid="go-to-my-competitions"
+                    >
+                      Go to My Competitions →
+                    </button>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Clubs Overview */}
+            <div className="rounded-xl p-4" style={{ background: '#151C2C', border: '1px solid rgba(255,255,255,0.1)' }}>
+              <h3 className="text-lg font-bold mb-3 text-white">🏆 {uiHints.assetPlural} Available</h3>
+              
+              {/* Summary Stats */}
+              <div className="mb-4">
+                <div className="grid grid-cols-2 gap-2 text-sm">
+                  <div className="p-2 rounded-lg" style={{ background: 'rgba(0, 240, 255, 0.1)' }}>
+                    <div className="font-semibold" style={{ color: '#00F0FF' }}>Total</div>
+                    <div className="text-white">{clubs.length}</div>
+                  </div>
+                  <div className="p-2 rounded-lg" style={{ background: 'rgba(16, 185, 129, 0.1)' }}>
+                    <div className="font-semibold" style={{ color: '#10B981' }}>✅ Sold</div>
+                    <div className="text-white">{clubs.filter(c => c.status === 'sold').length}</div>
+                  </div>
+                  <div className="p-2 rounded-lg" style={{ background: 'rgba(255, 138, 0, 0.1)' }}>
+                    <div className="font-semibold" style={{ color: '#FF8A00' }}>🔥 Current</div>
+                    <div className="text-white">{clubs.filter(c => c.status === 'current').length}</div>
+                  </div>
+                  <div className="p-2 rounded-lg" style={{ background: 'rgba(255,255,255,0.05)' }}>
+                    <div className="font-semibold text-white/60">⏳ Remaining</div>
+                    <div className="text-white">{clubs.filter(c => c.status === 'upcoming').length}</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Club List */}
+              <div className="max-h-[500px] overflow-y-auto space-y-1">
+                {clubs.map((club) => {
+                  const statusStyles = {
+                    current: { background: 'rgba(255, 138, 0, 0.1)', border: '1px solid rgba(255, 138, 0, 0.3)', color: '#FF8A00' },
+                    upcoming: { background: 'rgba(0, 240, 255, 0.05)', border: '1px solid rgba(0, 240, 255, 0.1)', color: '#00F0FF' },
+                    sold: { background: 'rgba(16, 185, 129, 0.1)', border: '1px solid rgba(16, 185, 129, 0.2)', color: '#10B981' },
+                    unsold: { background: 'rgba(255, 77, 77, 0.1)', border: '1px solid rgba(255, 77, 77, 0.2)', color: '#FF4D4D' }
+                  };
+                  
+                  const statusIcons = {
+                    current: "🔥",
+                    upcoming: "⏳",
+                    sold: "✅",
+                    unsold: "❌"
+                  };
+                  
+                  const style = statusStyles[club.status] || statusStyles.upcoming;
+                  
+                  return (
+                    <div
+                      key={club.id}
+                      className="p-2 rounded-lg text-xs"
+                      style={style}
+                    >
+                      <div className="flex justify-between items-start">
+                        <div className="flex-1 min-w-0">
+                          <div className="font-semibold truncate text-white">{club.name}</div>
+                          {/* Cricket: Show franchise first, then nationality */}
+                          {sport?.key === "cricket" && club.meta?.franchise && (
+                            <div className="text-xs font-medium truncate" style={{ color: '#00F0FF' }}>{club.meta.franchise}</div>
+                          )}
+                          {/* Football: Show country */}
+                          {sport?.key === "football" && club.country && (
+                            <div className="text-xs text-white/50">{club.country}</div>
+                          )}
+                          {/* Cricket: Show nationality */}
+                          {sport?.key === "cricket" && club.meta?.nationality && (
+                            <div className="text-xs text-white/50">{club.meta.nationality}</div>
+                          )}
+                          {/* Other sports: Show country if available */}
+                          {sport?.key !== "football" && sport?.key !== "cricket" && club.country && (
+                            <div className="text-xs text-white/50">{club.country}</div>
+                          )}
+                        </div>
+                        <div className="ml-2 flex flex-col items-end">
+                          <div className="flex items-center gap-1">
+                            <span>{statusIcons[club.status]}</span>
+                            {/* Hide lot number to keep draw order secret */}
+                          </div>
+                          {club.status === 'sold' && club.winningBid && (
+                            <div className="text-xs font-semibold" style={{ color: '#10B981' }}>
+                              {formatCurrency(club.winningBid)}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      
+                      {club.status === 'sold' && club.winner && (
+                        <div className="text-xs mt-1 text-white/50">
+                          Won by {club.winner}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div className="mt-4 text-xs text-white/40 space-y-1 border-t border-white/10 pt-3">
+                <p>🔥 Current lot • ⏳ Upcoming • ✅ Sold • ❌ Unsold</p>
+                <p>Order is randomized - use for strategy only</p>
+              </div>
+            </div>
           </div>
         </div>
-
-        {/* Quick Bid Buttons */}
-        <div className="grid grid-cols-3 gap-3 mb-3">
-          {[1, 5, 10].map((amount) => (
-            <button
-              key={amount}
-              onClick={() => {
-                const currentInputValue = parseFloat(bidAmount) || 0;
-                const newBid = currentInputValue + amount;
-                setBidAmount(newBid.toString());
-                // Haptic feedback
-                if (navigator.vibrate) navigator.vibrate(50);
-              }}
-              disabled={!ready || userRosterCount >= maxSlots}
-              className="h-14 rounded-xl font-bold text-lg transition-all active:scale-95 disabled:opacity-40"
-              style={{ 
-                background: 'rgba(6, 182, 212, 0.1)', 
-                color: '#06B6D4', 
-                border: '1px solid #06B6D4' 
-              }}
-            >
-              +£{amount}m
-            </button>
-          ))}
-        </div>
-
-        {/* Place Bid Button */}
-        {bidAmount && (
-          <button
-            onClick={() => {
-              placeBid();
-              if (navigator.vibrate) navigator.vibrate(50);
-            }}
-            disabled={!ready || isSubmittingBid || userRosterCount >= maxSlots}
-            className="w-full h-14 rounded-xl font-bold text-lg mb-3 transition-all active:scale-95 disabled:opacity-40"
-            style={{ 
-              background: (!ready || isSubmittingBid || userRosterCount >= maxSlots) ? 'rgba(255,255,255,0.1)' : '#06B6D4',
-              color: (!ready || isSubmittingBid || userRosterCount >= maxSlots) ? 'rgba(255,255,255,0.4)' : '#0F172A'
-            }}
-            data-testid="place-bid-button"
-          >
-            {isSubmittingBid ? 'Placing...' : `Place Bid: £${bidAmount}m`}
-          </button>
-        )}
-
-        {/* Pass This Round Button */}
-        <button
-          onClick={() => toast("Pass This Round - Coming soon!", { icon: '⏭️', duration: 2000 })}
-          disabled={userRosterCount >= maxSlots}
-          className="w-full h-12 rounded-xl font-bold transition-all active:scale-95 disabled:opacity-40"
-          style={{ 
-            background: 'rgba(239, 68, 68, 0.1)', 
-            color: '#EF4444', 
-            border: '1px solid #EF4444' 
-          }}
-        >
-          Pass This Round
-        </button>
-
-        {/* Commissioner Controls - Compact */}
-        {isCommissioner && (
-          <div className="flex gap-2 mt-3 pt-3" style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-            {auction?.status === "active" && (
-              <button onClick={pauseAuction} className="flex-1 py-2 rounded-lg text-xs font-medium" style={{ background: 'rgba(255, 138, 0, 0.2)', color: '#FF8A00' }}>
-                ⏸️ Pause
-              </button>
-            )}
-            {auction?.status === "paused" && (
-              <button onClick={resumeAuction} className="flex-1 py-2 rounded-lg text-xs font-medium" style={{ background: 'rgba(16, 185, 129, 0.2)', color: '#10B981' }}>
-                ▶️ Resume
-              </button>
-            )}
-            <button onClick={completeLot} className="flex-1 py-2 rounded-lg text-xs font-medium" style={{ background: 'rgba(255, 77, 77, 0.2)', color: '#FF4D4D' }}>
-              Skip Lot
-            </button>
-          </div>
-        )}
       </div>
-
-      {/* ========== BOTTOM NAV ========== */}
-      <nav 
-        className="flex-shrink-0 h-16 flex items-center justify-around"
-        style={{ background: '#0F172A', borderTop: '1px solid rgba(255,255,255,0.1)' }}
-      >
-        <button className="flex flex-col items-center" style={{ color: '#06B6D4' }}>
-          <span className="text-lg">🔨</span>
-          <span className="text-[10px] uppercase tracking-wider font-semibold">Auction</span>
-        </button>
-        <button className="flex flex-col items-center text-white/40">
-          <span className="text-lg">📊</span>
-          <span className="text-[10px] uppercase tracking-wider">Stats</span>
-        </button>
-        <button 
-          onClick={() => navigate('/create-competition')}
-          className="w-12 h-12 rounded-full flex items-center justify-center -mt-6"
-          style={{ background: '#06B6D4', color: '#0F172A' }}
-        >
-          <span className="text-2xl font-bold">+</span>
-        </button>
-        <button 
-          onClick={() => navigate('/app/my-competitions')}
-          className="flex flex-col items-center text-white/40"
-        >
-          <span className="text-lg">💼</span>
-          <span className="text-[10px] uppercase tracking-wider">Wallet</span>
-        </button>
-        <button className="flex flex-col items-center text-white/40">
-          <span className="text-lg">⚙️</span>
-          <span className="text-[10px] uppercase tracking-wider">Settings</span>
-        </button>
-      </nav>
     </div>
   );
 }
