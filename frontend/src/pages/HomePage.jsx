@@ -291,7 +291,7 @@ const HomePage = () => {
             data-testid="join-competition-btn"
           >
             <span>Join the Competition</span>
-            <span className="material-symbols-outlined text-xl">rocket_launch</span>
+            <span className="material-symbols-outlined text-xl">arrow_forward</span>
           </button>
         </section>
 
