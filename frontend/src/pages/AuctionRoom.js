@@ -1087,7 +1087,8 @@ function AuctionRoom() {
                 }}
               >
                 <TeamCrest 
-                  clubId={club.id} 
+                  clubId={club.id}
+                  apiFootballId={club.apiFootballId}
                   name={club.name} 
                   sportKey={sport?.key || 'football'} 
                   variant="small"
@@ -1110,6 +1111,7 @@ function AuctionRoom() {
         {currentClub && (
           <TeamCrest 
             clubId={currentClub.id}
+            apiFootballId={currentClub.apiFootballId}
             name={currentClub.name}
             sportKey={sport?.key || 'football'}
             variant="watermark"
