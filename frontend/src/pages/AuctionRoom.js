@@ -1036,10 +1036,11 @@ function AuctionRoom() {
   return (
     <div className="h-screen flex flex-col overflow-hidden" style={{ background: '#0B101B' }}>
       
-      {/* ========== STICKY HEADER (64px) ========== */}
+      {/* ========== STICKY HEADER (84px per Stitch spec) ========== */}
       <header 
-        className="flex-shrink-0 h-16 px-6 flex items-center justify-between"
+        className="flex-shrink-0 px-4 flex items-center justify-between"
         style={{ 
+          height: '84px',
           background: 'rgba(15, 23, 42, 0.8)',
           backdropFilter: 'blur(12px)',
           WebkitBackdropFilter: 'blur(12px)',
