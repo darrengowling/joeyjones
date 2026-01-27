@@ -332,18 +332,6 @@ export default function ClubsList() {
                 )}
               </div>
             ))}
-                            </span>
-                          )}
-                        </div>
-                        {asset.meta.franchise && (
-                          <p className="text-sm" style={{ color: '#A78BFA' }}>{asset.meta.franchise}</p>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            ))}
           </div>
 
           {filteredAssets.length === 0 && currentAssets.length > 0 && (
@@ -351,8 +339,8 @@ export default function ClubsList() {
               className="rounded-xl p-12 text-center"
               style={{ background: '#151C2C', border: '1px solid rgba(255, 255, 255, 0.1)' }}
             >
-              <div className="text-6xl mb-4">
-                {selectedSport === 'football' ? '⚽' : '🏏'}
+              <div className="text-4xl mb-4 text-white/20">
+                <span className="material-symbols-outlined" style={{ fontSize: '48px' }}>search_off</span>
               </div>
               <p className="text-white font-semibold mb-2">
                 No {currentSport?.uiHints.assetPlural.toLowerCase() || 'assets'} found
