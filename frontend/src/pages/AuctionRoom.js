@@ -981,10 +981,11 @@ function AuctionRoom() {
                   <div>
                     <button
                       onClick={handleBeginAuction}
-                      className="text-white font-bold py-4 px-8 rounded-xl text-lg shadow-lg transition-all hover:scale-105"
+                      className="text-white font-bold py-4 px-8 rounded-xl text-lg shadow-lg transition-all hover:scale-105 flex items-center justify-center gap-2 mx-auto"
                       style={{ background: 'linear-gradient(135deg, #10B981, #059669)' }}
                     >
-                      🚀 Begin Auction
+                      <span className="material-symbols-outlined">play_arrow</span>
+                      Begin Auction
                     </button>
                     <p className="text-sm text-white/40 mt-3">
                       Start when all participants are ready
@@ -994,12 +995,10 @@ function AuctionRoom() {
                   <div>
                     <div className="inline-block animate-pulse">
                       <div className="rounded-full p-4 mb-3" style={{ background: 'rgba(255,255,255,0.1)' }}>
-                        <svg className="w-12 h-12 text-white/40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
+                        <span className="material-symbols-outlined text-5xl text-white/40">schedule</span>
                       </div>
                     </div>
-                    <p className="text-lg font-medium text-white/80">
+                    <p className="text-lg font-semibold text-white/80">
                       Waiting for commissioner to start...
                     </p>
                     <p className="text-sm text-white/40 mt-2">
