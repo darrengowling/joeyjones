@@ -210,7 +210,7 @@ const HomePage = () => {
     >
       {/* Header */}
       <header 
-        className="fixed top-0 left-0 right-0 z-40 px-6 py-5 flex items-center justify-between"
+        className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-md z-40 px-6 py-5 flex items-center justify-between"
         style={{
           background: 'rgba(15, 23, 42, 0.95)',
           backdropFilter: 'blur(20px)',
