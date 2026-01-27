@@ -9,6 +9,7 @@ import { clearSocketUser } from "./utils/socket";
 
 // Lazy load route components for better performance (Production Hardening Day 11)
 const CreateLeague = lazy(() => import("./pages/CreateLeague"));
+const CreateCompetition = lazy(() => import("./pages/CreateCompetition"));
 const ClubsList = lazy(() => import("./pages/ClubsList"));
 const LeagueDetail = lazy(() => import("./pages/LeagueDetail"));
 const AuctionRoom = lazy(() => import("./pages/AuctionRoom"));
