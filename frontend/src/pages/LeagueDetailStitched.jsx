@@ -841,7 +841,7 @@ export default function LeagueDetailStitched() {
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex justify-start gap-2 mb-6 overflow-x-auto pb-2 scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+        <div className="flex justify-start gap-2 mb-6 overflow-x-auto pb-2 -mx-4 px-4" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
           {['overview', 'managers', uiHints.assetPlural.toLowerCase(), 'fixtures'].map((tab) => (
             <button
               key={tab}
