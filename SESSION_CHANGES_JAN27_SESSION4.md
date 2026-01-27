@@ -85,12 +85,17 @@ Productive session focused on completing the Stitch Technical Asset Spec impleme
 - Bottom sheet style modal with dark theme
 - **Important:** List is sorted alphabetically to hide queue order (preserves strategic gameplay)
 
-### 7. Verification: Auction Randomization
+### 9. Verification: Auction Randomization
 **Confirmed existing behavior is correct:**
 - `random.shuffle()` randomizes team order when auction starts
 - Queue order is intentionally hidden from users
 - Users can see WHICH teams are in auction, but NOT the order
 - This preserves strategic budget management gameplay
+
+### 10. Emoji Removal
+- Removed rocket emoji from "Join the Competition" button (HomePage.jsx)
+- Removed football/cricket emojis from sport dropdown (ClubsList.js)
+- Replaced cricket bat icon with person silhouette (TeamCrest.jsx)
 
 ---
 
@@ -98,24 +103,35 @@ Productive session focused on completing the Stitch Technical Asset Spec impleme
 
 | File | Change Type | Description |
 |------|-------------|-------------|
+| `frontend/src/App.js` | Modified | Added max-w-md container for desktop |
+| `frontend/src/index.css` | Modified | Added bidPop animation, dark body background |
+| `frontend/src/components/BottomNav.jsx` | Modified | Constrained to max-width container |
+| `frontend/src/components/TeamCrest.jsx` | **New** | Placeholder SVG system, person icon for cricket |
 | `frontend/src/pages/AuctionRoom.js` | Modified | Phase 1 layout, View All modal, navigation fix |
-| `frontend/src/components/TeamCrest.jsx` | **New** | Placeholder SVG system + Football-Data.org integration |
-| `frontend/src/index.css` | Modified | Added bidPop animation keyframes |
+| `frontend/src/pages/HomePage.jsx` | Modified | Header constrained, rocket emoji removed |
+| `frontend/src/pages/ClubsList.js` | Modified | Dropdown styling, cricket card layout, emojis removed |
 | `frontend/src/pages/LeagueDetail.js` | Modified | Fixed 404 error on auction check |
-| `frontend/src/pages/LeagueDetailStitched.jsx` | Modified | Fixed 404 error + tab alignment |
-| `frontend/src/pages/ClubsList.js` | Modified | Added TeamCrest for team logos |
+| `frontend/src/pages/LeagueDetailStitched.jsx` | Modified | Fixed 404 error, tab alignment, modal constrained |
+| `frontend/src/pages/CreateCompetition.jsx` | Modified | Header constrained to max-width |
+| `frontend/src/pages/CompetitionDashboard.js` | Modified | Header constrained to max-width |
+| `frontend/src/pages/Help.js` | Modified | Header constrained to max-width |
+| `frontend/src/pages/CreateLeague.js` | Modified | Header constrained to max-width |
+| `frontend/src/pages/MyCompetitions.js` | Modified | Header constrained to max-width |
 
 ---
 
 ## Testing Completed
 
-- ✅ Live auction flow tested with real crests loading
+- ✅ Live auction flow tested
 - ✅ View All modal functional with correct status badges
 - ✅ Tab alignment consistent across user types
 - ✅ No console errors on league pages
 - ✅ Navigation to My Competitions working
+- ✅ Desktop max-width container working
+- ✅ All modals constrained properly
+- ✅ ClubsList dropdown styling updated
+- ✅ Cricket player names fully visible
 - ✅ All lint checks passing
-- ✅ Hot reload verified
 
 ---
 
