@@ -1248,7 +1248,8 @@ export default function App() {
       />
       <Suspense fallback={<PageLoader />}>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<HomePage />} />
+          <Route path="/old-home" element={<Home />} />
           <Route path="/create-league" element={<CreateLeague />} />
           <Route path="/clubs" element={<ClubsList />} />
           <Route path="/league/:leagueId" element={<LeagueDetail />} />
@@ -1258,7 +1259,6 @@ export default function App() {
           <Route path="/competitions/:leagueId" element={<CompetitionDashboard />} />
           <Route path="/help" element={<Help />} />
           <Route path="/design-preview" element={<DesignPreview />} />
-          <Route path="/new" element={<HomePage />} />
         </Routes>
       </Suspense>
       <DebugFooter />
