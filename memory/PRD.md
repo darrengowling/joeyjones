@@ -47,6 +47,19 @@ Build a fantasy sports auction platform where users create leagues, bid on teams
 
 ## What's Been Implemented
 
+### Phase 6: UI/UX Redesign - Stitch Design (In Progress - Jan 27, 2026)
+- ✅ Design system CSS (`/app/frontend/src/styles/design-system.css`)
+- ✅ BottomNav component
+- ✅ HomePage (dark theme, glassmorphism)
+- ✅ CreateCompetition page
+- ✅ LeagueDetailStitched.jsx (tabbed layout, verified working)
+- ✅ AuctionRoom.js styling (waiting room + live auction + completed state)
+- ⏳ MyCompetitions.js (NEXT)
+- ⏳ ClubsList.js (Research Hub)
+
+**Bug Fixed (Session 3):**
+- Auth check moved before waiting room render to prevent `user.id` null access crash
+
 ### Phase 1: Core Platform (Complete)
 - User authentication (magic links)
 - League CRUD operations
