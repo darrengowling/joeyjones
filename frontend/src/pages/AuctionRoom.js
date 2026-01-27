@@ -443,15 +443,10 @@ function AuctionRoom() {
       setBidAmount("");
       return;
     }
-
-    if (currentBid && currentBid > 0) {
-      // Show current bid amount in millions (e.g., "5" for £5m)
-      setBidAmount((currentBid / 1000000).toString());
-    } else {
-      // No bids yet, keep input empty
-      setBidAmount("");
-    }
-  }, [currentClub, currentBid]);
+    // When club changes, clear any pending bid input
+    // User must actively click +£1m/+£5m/+£10m to build their bid
+    setBidAmount("");
+  }, [currentClub?.id]); // Only trigger on club change, not on every currentBid update
 
 
   // Load next fixture when current club changes
