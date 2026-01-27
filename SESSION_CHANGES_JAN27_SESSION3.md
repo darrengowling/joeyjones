@@ -76,6 +76,12 @@
 - `/app/frontend/src/pages/MyCompetitions.js` - Stitch design styling
 - `/app/frontend/src/pages/ClubsList.js` - Stitch design styling (Research Hub)
 - `/app/frontend/src/pages/CompetitionDashboard.js` - Stitch design styling (Summary, Table, Fixtures tabs)
+- `/app/frontend/src/pages/CreateLeague.js` - Full Stitch restyle
+- `/app/frontend/src/pages/Help.js` - Full Stitch restyle (757 lines)
+- `/app/frontend/src/App.js` - Stitch styling for modals and wrappers
+- `/app/frontend/src/components/ErrorBoundary.js` - Stitch styling
+- `/app/frontend/src/index.css` - Inter font priority
+- `/app/frontend/tailwind.config.js` - Font family configuration
 
 ### Important Context Files:
 - `/app/SESSION_CHANGES.md` - Full session history (updated)
