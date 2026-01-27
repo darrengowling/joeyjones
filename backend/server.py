@@ -2274,6 +2274,72 @@ async def get_league(league_id: str):
         raise HTTPException(status_code=404, detail="League not found")
     return League(**league)
 
+# Join league by invite token only (no league_id required)
+class JoinByTokenInput(BaseModel):
+    inviteToken: str
+    userId: str
+    userName: Optional[str] = None
+    userEmail: Optional[str] = None
+
+@api_router.post("/leagues/join")
+async def join_league_by_token(input_data: JoinByTokenInput):
+    """Join a league using only the invite token - looks up league automatically"""
+    # Find league by invite token
+    normalized_token = input_data.inviteToken.strip().lower()
+    league = await db.leagues.find_one({
+        "inviteToken": {"$regex": f"^{input_data.inviteToken}$", "$options": "i"}
+    }, {"_id": 0})
+    
+    if not league:
+        raise HTTPException(status_code=404, detail="Invalid invite code. Please check the code and try again.")
+    
+    league_id = league["id"]
+    
+    # Check if already joined
+    existing = await db.league_participants.find_one({
+        "leagueId": league_id,
+        "userId": input_data.userId
+    }, {"_id": 0})
+    if existing:
+        return {"message": "Already joined", "leagueId": league_id, "participant": LeagueParticipant(**existing)}
+    
+    # Check max managers limit
+    participant_count = await db.league_participants.count_documents({"leagueId": league_id})
+    if participant_count >= league["maxManagers"]:
+        raise HTTPException(status_code=400, detail="League is full")
+    
+    # Get user details
+    user = await db.users.find_one({"id": input_data.userId}, {"_id": 0})
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    # Create participant
+    participant = LeagueParticipant(
+        id=str(uuid.uuid4()),
+        leagueId=league_id,
+        userId=input_data.userId,
+        displayName=user.get("displayName") or user.get("email", "").split("@")[0],
+        budgetRemaining=league["budget"],
+        totalSpent=0,
+        clubsWon=[],
+        joinedAt=datetime.now(timezone.utc)
+    )
+    
+    await db.league_participants.insert_one(participant.model_dump())
+    
+    # Emit socket event for real-time update
+    try:
+        room = f"league:{league_id}"
+        await sio.emit('member_joined', {
+            'userId': participant.userId,
+            'displayName': participant.displayName,
+            'joinedAt': participant.joinedAt.isoformat()
+        }, room=room)
+    except Exception as e:
+        print(f"Socket emit error: {e}")
+    
+    return {"message": "Successfully joined!", "leagueId": league_id, "participant": participant}
+
 @api_router.post("/leagues/{league_id}/join")
 async def join_league(league_id: str, participant_input: LeagueParticipantCreate):
     # Verify league exists
