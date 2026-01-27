@@ -160,8 +160,15 @@ export default function ClubsList() {
               <div>
                 <label className="block text-white/60 mb-2 text-sm font-semibold">Sport</label>
                 <select
-                  className="w-full px-4 py-3 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-[#00F0FF]"
-                  style={{ background: '#0B101B', border: '1px solid rgba(255, 255, 255, 0.1)' }}
+                  className="w-full px-4 py-3 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-[#06B6D4] appearance-none cursor-pointer"
+                  style={{ 
+                    background: '#0B101B', 
+                    border: '1px solid #06B6D4',
+                    backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2306B6D4'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
+                    backgroundRepeat: 'no-repeat',
+                    backgroundPosition: 'right 12px center',
+                    backgroundSize: '20px'
+                  }}
                   value={selectedSport}
                   onChange={(e) => {
                     setSelectedSport(e.target.value);
@@ -172,8 +179,8 @@ export default function ClubsList() {
                   data-testid="sport-filter-select"
                 >
                   {sports.map((sport) => (
-                    <option key={sport.key} value={sport.key}>
-                      {sport.key === 'football' ? '⚽' : '🏏'} {sport.name} ({sport.uiHints.assetPlural})
+                    <option key={sport.key} value={sport.key} style={{ background: '#0B101B', color: '#fff' }}>
+                      {sport.name} ({sport.uiHints.assetPlural})
                     </option>
                   ))}
                 </select>
