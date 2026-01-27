@@ -1,15 +1,18 @@
-import { memo } from 'react';
+import { memo, useState } from 'react';
 
 /**
  * TeamCrest Component
  * 
- * Displays team/club crests with fallback to placeholder SVG.
- * Ready for real assets via URL pattern: /assets/clubs/{club_id}/crest.svg
+ * Displays team/club crests from Football-Data.org with fallback to placeholder SVG.
+ * 
+ * Football-Data.org crest URL pattern: https://crests.football-data.org/{apiFootballId}.svg
  * 
  * Sizes:
- * - thumbnail: 48x48px (for lists, auction queue)
+ * - small: 32px (for auction queue)
+ * - thumbnail: 48x48px (for lists)
+ * - medium: 64px
+ * - large: 96px  
  * - watermark: 300px (for hero section background)
- * - avatar: 40px (for manager avatars)
  */
 
 // Default placeholder SVG - a generic shield icon
@@ -48,20 +51,7 @@ const PlaceholderShield = ({ size = 48, color = '#94A3B8', className = '' }) => 
   </svg>
 );
 
-// Sport-specific placeholder icons
-const FootballIcon = ({ size = 48, color = '#94A3B8' }) => (
-  <svg width={size} height={size} viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="24" cy="24" r="20" stroke={color} strokeWidth="2" fill="none" />
-    <path 
-      d="M24 8V16M24 32V40M8 24H16M32 24H40M12 12L18 18M30 30L36 36M12 36L18 30M30 18L36 12" 
-      stroke={color} 
-      strokeWidth="1.5" 
-      strokeLinecap="round"
-    />
-    <circle cx="24" cy="24" r="6" fill={color} fillOpacity="0.3" />
-  </svg>
-);
-
+// Cricket-specific placeholder icon
 const CricketIcon = ({ size = 48, color = '#94A3B8' }) => (
   <svg width={size} height={size} viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
     {/* Cricket bat */}
@@ -76,21 +66,25 @@ const CricketIcon = ({ size = 48, color = '#94A3B8' }) => (
 /**
  * TeamCrest - Main component for displaying team crests
  * 
- * @param {string} clubId - The club/team ID for fetching real assets
- * @param {string} name - Team name (used for alt text and initials fallback)
+ * @param {string} clubId - The club/team ID (internal)
+ * @param {string} apiFootballId - The Football-Data.org team ID for fetching crests
+ * @param {string} name - Team name (used for alt text)
  * @param {string} sportKey - 'football' or 'cricket' for sport-specific placeholders
- * @param {string} variant - 'thumbnail' (48px), 'watermark' (300px), 'small' (32px)
+ * @param {string} variant - 'small' (32px), 'thumbnail' (48px), 'watermark' (300px), etc.
  * @param {boolean} isActive - Whether to show active state glow
  * @param {string} className - Additional CSS classes
  */
 const TeamCrest = memo(({ 
   clubId, 
+  apiFootballId,
   name = 'Team', 
   sportKey = 'football',
   variant = 'thumbnail',
   isActive = false,
   className = ''
 }) => {
+  const [imgError, setImgError] = useState(false);
+  
   // Size based on variant
   const sizes = {
     small: 32,
@@ -104,25 +98,66 @@ const TeamCrest = memo(({
   // Color based on active state
   const color = isActive ? '#06B6D4' : '#94A3B8';
   
+  // Football-Data.org crest URL
+  const crestUrl = apiFootballId ? `https://crests.football-data.org/${apiFootballId}.svg` : null;
+  const hasCrest = crestUrl && !imgError && sportKey === 'football';
+  
   // For watermark variant, return with special styling
   if (variant === 'watermark') {
     return (
       <div 
         className={`absolute inset-0 flex items-center justify-center pointer-events-none ${className}`}
         style={{ 
-          opacity: 0.15,
+          opacity: 0.12,
           filter: 'grayscale(100%) brightness(200%)'
         }}
       >
-        <PlaceholderShield size={size} color="#FFFFFF" />
+        {hasCrest ? (
+          <img 
+            src={crestUrl} 
+            alt={name}
+            width={size}
+            height={size}
+            onError={() => setImgError(true)}
+            style={{ objectFit: 'contain' }}
+          />
+        ) : (
+          <PlaceholderShield size={size} color="#FFFFFF" />
+        )}
       </div>
     );
   }
   
-  // Standard crest display
-  const CrestIcon = sportKey === 'cricket' ? CricketIcon : 
-                    sportKey === 'football' ? FootballIcon : 
-                    PlaceholderShield;
+  // Standard crest display with real image or fallback
+  if (hasCrest) {
+    return (
+      <div 
+        className={`flex items-center justify-center ${className}`}
+        style={{
+          width: size,
+          height: size,
+          filter: isActive ? 'drop-shadow(0 0 8px rgba(6, 182, 212, 0.4))' : 'none',
+          transition: 'filter 200ms ease-out'
+        }}
+        title={name}
+      >
+        <img 
+          src={crestUrl} 
+          alt={name}
+          width={size * 0.85}
+          height={size * 0.85}
+          onError={() => setImgError(true)}
+          style={{ 
+            objectFit: 'contain',
+            filter: isActive ? 'drop-shadow(0 0 4px rgba(6, 182, 212, 0.3))' : 'none'
+          }}
+        />
+      </div>
+    );
+  }
+  
+  // Fallback to placeholder icons
+  const CrestIcon = sportKey === 'cricket' ? CricketIcon : PlaceholderShield;
   
   return (
     <div 
@@ -143,5 +178,5 @@ const TeamCrest = memo(({
 TeamCrest.displayName = 'TeamCrest';
 
 // Export individual icons for direct use
-export { PlaceholderShield, FootballIcon, CricketIcon };
+export { PlaceholderShield, CricketIcon };
 export default TeamCrest;
