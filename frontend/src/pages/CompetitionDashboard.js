@@ -1212,88 +1212,110 @@ export default function CompetitionDashboard() {
 
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen" style={{ background: '#0B101B', paddingBottom: '100px' }}>
       {/* Header */}
-      <div className="bg-white shadow-md">
-        <div className="container-narrow mx-auto px-4 py-4 flex justify-between items-center">
+      <header 
+        className="fixed top-0 left-0 right-0 z-40 px-4 py-4"
+        style={{
+          background: 'rgba(11, 16, 27, 0.95)',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
+        }}
+      >
+        <div className="flex justify-between items-center">
           <div>
             <button
               onClick={() => navigate("/app/my-competitions")}
-              className="text-blue-600 hover:text-blue-800 font-semibold"
+              className="flex items-center gap-2 text-white/60 hover:text-white transition-colors"
             >
-              ← My Competitions
+              <span>←</span>
+              <span className="text-sm font-semibold">My Competitions</span>
             </button>
-            <div className="text-xs uppercase tracking-wide text-gray-500 mt-1">Competition Dashboard</div>
+            <div className="text-xs uppercase tracking-widest text-white/40 mt-1">Competition Dashboard</div>
           </div>
           {user && (
-            <div className="flex items-center gap-4">
-              <button
-                onClick={() => navigate("/")}
-                className="text-gray-600 hover:text-gray-900"
-              >
-                Home
-              </button>
-            </div>
+            <button
+              onClick={() => navigate("/")}
+              className="text-white/60 hover:text-white text-sm"
+            >
+              Home
+            </button>
           )}
         </div>
-      </div>
+      </header>
 
       {/* Main Content */}
-      <div className="container-narrow mx-auto px-4 py-8" data-testid="comp-dashboard">
-        {error && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6 text-red-800">
-            {error}
-          </div>
-        )}
+      <div className="pt-20 px-4" data-testid="comp-dashboard">
+        <div className="max-w-2xl mx-auto">
+          {error && (
+            <div 
+              className="rounded-xl p-4 mb-4"
+              style={{ background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.3)' }}
+            >
+              <p className="text-red-400">{error}</p>
+            </div>
+          )}
 
-        {/* Tabs */}
-        <div className="bg-white rounded-t-lg shadow">
-          <div className="border-b border-gray-200">
-            <nav className="flex -mb-px">
+          {/* Tabs */}
+          <div 
+            className="rounded-t-xl overflow-hidden"
+            style={{ background: '#151C2C', border: '1px solid rgba(255, 255, 255, 0.1)', borderBottom: 'none' }}
+          >
+            <nav className="flex">
               <button
                 data-testid="tab-summary"
                 onClick={() => handleTabChange("summary")}
-                className={`py-4 px-6 text-sm font-semibold border-b-2 transition-colors ${
-                  activeTab === "summary"
-                    ? "border-blue-600 text-blue-600"
-                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                }`}
+                className="py-3 px-4 text-sm font-semibold transition-colors flex-1"
+                style={{ 
+                  borderBottom: activeTab === "summary" ? '2px solid #00F0FF' : '2px solid transparent',
+                  color: activeTab === "summary" ? '#00F0FF' : 'rgba(255, 255, 255, 0.4)',
+                  background: activeTab === "summary" ? 'rgba(0, 240, 255, 0.1)' : 'transparent'
+                }}
               >
                 Summary
               </button>
               <button
                 data-testid="tab-table"
                 onClick={() => handleTabChange("table")}
-                className={`py-4 px-6 text-sm font-semibold border-b-2 transition-colors ${
-                  activeTab === "table"
-                    ? "border-blue-600 text-blue-600"
-                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                }`}
+                className="py-3 px-4 text-sm font-semibold transition-colors flex-1"
+                style={{ 
+                  borderBottom: activeTab === "table" ? '2px solid #00F0FF' : '2px solid transparent',
+                  color: activeTab === "table" ? '#00F0FF' : 'rgba(255, 255, 255, 0.4)',
+                  background: activeTab === "table" ? 'rgba(0, 240, 255, 0.1)' : 'transparent'
+                }}
               >
                 League Table
               </button>
               <button
                 data-testid="tab-fixtures"
                 onClick={() => handleTabChange("fixtures")}
-                className={`py-4 px-6 text-sm font-semibold border-b-2 transition-colors ${
-                  activeTab === "fixtures"
-                    ? "border-blue-600 text-blue-600"
-                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                }`}
+                className="py-3 px-4 text-sm font-semibold transition-colors flex-1"
+                style={{ 
+                  borderBottom: activeTab === "fixtures" ? '2px solid #00F0FF' : '2px solid transparent',
+                  color: activeTab === "fixtures" ? '#00F0FF' : 'rgba(255, 255, 255, 0.4)',
+                  background: activeTab === "fixtures" ? 'rgba(0, 240, 255, 0.1)' : 'transparent'
+                }}
               >
                 Fixtures
               </button>
             </nav>
           </div>
-        </div>
 
-        {/* Tab Content */}
-        <div className="bg-gray-50 rounded-b-lg p-6">
-          {activeTab === "summary" && renderSummaryTab()}
-          {activeTab === "table" && renderLeagueTableTab()}
-          {activeTab === "fixtures" && renderFixturesTab()}
+          {/* Tab Content */}
+          <div 
+            className="rounded-b-xl p-4"
+            style={{ background: 'rgba(255, 255, 255, 0.02)', border: '1px solid rgba(255, 255, 255, 0.1)', borderTop: 'none' }}
+          >
+            {activeTab === "summary" && renderSummaryTab()}
+            {activeTab === "table" && renderLeagueTableTab()}
+            {activeTab === "fixtures" && renderFixturesTab()}
+          </div>
         </div>
       </div>
+
+      {/* Bottom Navigation */}
+      <BottomNav onFabClick={() => navigate('/create-competition')} />
     </div>
   );
 }
