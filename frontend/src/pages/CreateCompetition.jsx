@@ -158,7 +158,7 @@ export default function CreateCompetition() {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* League Identity Card */}
+          {/* Competition Name & Sport Card */}
           <div 
             className="p-6 space-y-6 rounded-2xl"
             style={{ 
@@ -166,23 +166,6 @@ export default function CreateCompetition() {
               border: '1px solid rgba(255, 255, 255, 0.08)',
             }}
           >
-            {/* Card Header */}
-            <div className="flex items-center space-x-4 mb-2">
-              <div 
-                className="w-12 h-12 rounded-xl flex items-center justify-center"
-                style={{ 
-                  background: 'rgba(6, 182, 212, 0.1)',
-                  border: '1px solid rgba(6, 182, 212, 0.2)',
-                }}
-              >
-                <span className="material-symbols-outlined text-2xl" style={{ color: '#06B6D4' }}>trophy</span>
-              </div>
-              <div>
-                <h2 className="text-base font-bold text-white">Competition Identity</h2>
-                <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Configure your arena</p>
-              </div>
-            </div>
-
             {/* Competition Name */}
             <div className="space-y-2">
               <label 
