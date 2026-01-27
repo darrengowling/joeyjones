@@ -104,20 +104,33 @@ Test page showing:
 - Spacing/radius reference
 - BottomNav component
 
+### Step 4: New HomePage ✅
+**File Created:** `/app/frontend/src/pages/HomePage.jsx`
+**Route Added:** `/new` (testing before replacing main `/`)
+
+Full Stitch-styled home page with:
+- Dark navy background (#0F172A)
+- Glassmorphism hero card with cyan glow
+- "Join the Competition" primary CTA with gradient
+- "Create League" and "Browse Markets" action cards
+- "Active Leagues" section with empty state
+- User authentication modal (magic link flow)
+- Join competition modal
+- BottomNav integration
+- Material Symbols icons throughout
+
+**Test URL:** `https://fantasy-sports-uk.preview.emergentagent.com/new`
+
 ---
 
 ## Pending Work (Next Steps)
 
-### Step 4: New Home Page (NEXT)
-Replace current light-themed home with Stitch design:
-- Dark navy background
-- Glassmorphism hero card
-- "Join the Competition" primary CTA
-- "Create League" and "Browse Markets" secondary cards
-- "Active Leagues" section with empty state
-- BottomNav integration
+### Step 5: Swap Home Routes (NEXT)
+Once `/new` is tested and approved:
+- Replace `<Route path="/" element={<Home />} />` with `<Route path="/" element={<HomePage />} />`
+- Keep old Home component temporarily for rollback if needed
 
-### Step 5: Sign In Page
+### Step 6: Sign In Page
 Apply Stitch sign-in design (keeping magic links, just styling)
 
 ### Step 6: Create Competition Modal
