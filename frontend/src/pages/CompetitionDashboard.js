@@ -853,7 +853,7 @@ export default function CompetitionDashboard() {
     if (loading && !fixtures) {
       return (
         <div className="text-center py-8">
-          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+          <div className="w-8 h-8 border-4 border-[#00F0FF] border-t-transparent rounded-full animate-spin mx-auto"></div>
         </div>
       );
     }
@@ -863,37 +863,42 @@ export default function CompetitionDashboard() {
     const hasFixtures = fixtures && fixtures.length > 0;
 
     return (
-      <div className="space-y-6">
-        {/* Commissioner Fixtures & Scores Management - SIMPLIFIED */}
+      <div className="space-y-4">
+        {/* Commissioner Fixtures & Scores Management */}
         {isCommissioner && (
           <>
             {/* PL/CL: API-based Fixtures & Scores */}
             {summary && summary.sportKey === "football" && summary.competitionCode !== 'AFCON' && (
-              <div className="bg-white rounded-lg shadow-md p-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-6">📊 Manage Fixtures & Scores</h3>
+              <div 
+                className="rounded-xl p-4"
+                style={{ background: '#151C2C', border: '1px solid rgba(255, 255, 255, 0.1)' }}
+              >
+                <h3 className="text-lg font-bold text-white mb-4">📊 Manage Fixtures & Scores</h3>
                 
                 {/* Import Fixtures Section */}
-                <div className="mb-6">
+                <div className="mb-4">
                   <div className="flex items-center gap-2 mb-3">
-                    <div className="h-px bg-gray-300 flex-1"></div>
-                    <h4 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">Import Fixtures</h4>
-                    <div className="h-px bg-gray-300 flex-1"></div>
+                    <div className="h-px flex-1" style={{ background: 'rgba(255, 255, 255, 0.1)' }}></div>
+                    <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wide">Import Fixtures</h4>
+                    <div className="h-px flex-1" style={{ background: 'rgba(255, 255, 255, 0.1)' }}></div>
                   </div>
-                  <p className="text-sm text-gray-600 mb-3">Fetch upcoming matches from Football-Data.org</p>
-                  <div className="flex gap-3">
+                  <p className="text-sm text-white/60 mb-3">Fetch upcoming matches from Football-Data.org</p>
+                  <div className="flex gap-2">
                     <button
                       onClick={() => handleImportFixturesFromAPI(7)}
                       disabled={loading}
-                      className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed font-semibold flex-1"
+                      className="px-4 py-2 rounded-lg font-semibold flex-1 text-sm disabled:opacity-50"
+                      style={{ background: '#00F0FF', color: '#0B101B' }}
                     >
-                      {loading ? "Importing..." : "Import Next 7 Days"}
+                      {loading ? "Importing..." : "Next 7 Days"}
                     </button>
                     <button
                       onClick={() => handleImportFixturesFromAPI(30)}
                       disabled={loading}
-                      className="bg-blue-700 text-white px-6 py-2 rounded-lg hover:bg-blue-800 disabled:opacity-50 disabled:cursor-not-allowed font-semibold flex-1"
+                      className="px-4 py-2 rounded-lg font-semibold flex-1 text-sm disabled:opacity-50"
+                      style={{ background: 'rgba(0, 240, 255, 0.2)', color: '#00F0FF' }}
                     >
-                      {loading ? "Importing..." : "Import Next 30 Days"}
+                      {loading ? "Importing..." : "Next 30 Days"}
                     </button>
                   </div>
                 </div>
