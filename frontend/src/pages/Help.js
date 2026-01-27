@@ -746,19 +746,26 @@ const Help = () => {
         </Section>
 
         {/* Support */}
-        <div className="bg-[#151C2C]/10 rounded-lg p-6 mt-8 text-center">
+        <div 
+          className="rounded-xl p-6 mt-8 text-center"
+          style={{ background: '#151C2C', border: '1px solid rgba(255, 255, 255, 0.1)' }}
+        >
           <h3 className="text-xl font-bold text-white mb-3">Need More Help?</h3>
           <p className="text-white/80 mb-4">
             If you have questions not covered in this guide, reach out to your league commissioner or contact support.
           </p>
           <button
             onClick={() => navigate('/')}
-            className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 font-semibold transition-colors"
+            className="px-6 py-3 rounded-xl font-semibold transition-colors"
+            style={{ background: '#00F0FF', color: '#0B101B' }}
           >
             Return to Home
           </button>
         </div>
       </div>
+
+      {/* Bottom Navigation */}
+      <BottomNav onFabClick={() => navigate('/create-competition')} />
     </div>
   );
 };
