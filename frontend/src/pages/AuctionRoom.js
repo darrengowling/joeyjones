@@ -1186,8 +1186,13 @@ function AuctionRoom() {
                 Current Highest Bid
               </div>
               <div 
-                className="text-5xl font-extrabold transition-transform"
-                style={{ color: '#06B6D4', fontFamily: 'Inter, sans-serif' }}
+                className="text-5xl font-extrabold animate-bid-pop"
+                style={{ 
+                  color: '#06B6D4', 
+                  fontFamily: 'Inter, sans-serif',
+                  animation: currentBid > 0 ? 'bidPop 300ms ease-out' : 'none'
+                }}
+                key={currentBid} /* Key change triggers animation */
                 data-testid="current-bid-display"
               >
                 {currentBid > 0 ? formatCurrency(currentBid) : '£0'}
