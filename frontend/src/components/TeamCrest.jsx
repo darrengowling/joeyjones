@@ -153,10 +153,10 @@ const TeamCrest = memo(({
           onError={() => setImgError(true)}
           style={{ 
             objectFit: 'contain',
-            // Cyan glow to tie logos into Sport X brand
+            // White edge (helps dark logos) + Cyan brand glow
             filter: isActive 
-              ? 'drop-shadow(0 0 6px rgba(6, 182, 212, 0.6)) drop-shadow(0 0 12px rgba(6, 182, 212, 0.3))' 
-              : 'drop-shadow(0 0 3px rgba(6, 182, 212, 0.4)) drop-shadow(0 0 6px rgba(6, 182, 212, 0.2))'
+              ? 'drop-shadow(0 0 1px rgba(255,255,255,0.6)) drop-shadow(0 0 6px rgba(6, 182, 212, 0.6)) drop-shadow(0 0 12px rgba(6, 182, 212, 0.3))' 
+              : 'drop-shadow(0 0 1px rgba(255,255,255,0.5)) drop-shadow(0 0 3px rgba(6, 182, 212, 0.4)) drop-shadow(0 0 6px rgba(6, 182, 212, 0.2))'
           }}
         />
       </div>
