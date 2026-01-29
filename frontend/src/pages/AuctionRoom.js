@@ -1442,26 +1442,20 @@ function AuctionRoom() {
         )}
       </div>
 
-      {/* ========== BOTTOM NAV (88px per Stitch spec) ========== */}
+      {/* ========== BOTTOM NAV (64px - icons only) ========== */}
       <nav 
         className="flex-shrink-0 flex items-center justify-around"
         style={{ 
-          height: '88px',
+          height: '64px',
           background: '#0F172A', 
           borderTop: '1px solid rgba(255,255,255,0.1)' 
         }}
       >
-        <button className="flex flex-col items-center gap-1" style={{ color: '#06B6D4' }}>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-            <path d="M14 2L4 12L14 22" /><path d="M20 2L10 12L20 22" />
-          </svg>
-          <span className="text-[10px] uppercase tracking-wider font-semibold">Auction</span>
+        <button className="flex items-center justify-center w-12 h-12" style={{ color: '#06B6D4' }} title="Auction">
+          <span className="material-symbols-outlined text-2xl">gavel</span>
         </button>
-        <button className="flex flex-col items-center gap-1 text-white/40">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-            <path d="M3 3V21H21" /><path d="M7 16L11 12L15 16L21 10" />
-          </svg>
-          <span className="text-[10px] uppercase tracking-wider">Stats</span>
+        <button className="flex items-center justify-center w-12 h-12 text-white/40" title="Stats">
+          <span className="material-symbols-outlined text-2xl">analytics</span>
         </button>
         {/* Central FAB */}
         <button 
@@ -1471,26 +1465,19 @@ function AuctionRoom() {
             background: '#06B6D4', 
             boxShadow: '0 0 20px rgba(6, 182, 212, 0.4)'
           }}
+          title="Create"
         >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0F172A" strokeWidth="3" strokeLinecap="round">
-            <line x1="12" y1="5" x2="12" y2="19" />
-            <line x1="5" y1="12" x2="19" y2="12" />
-          </svg>
+          <span className="material-symbols-outlined text-2xl" style={{ color: '#0F172A' }}>add</span>
         </button>
         <button 
           onClick={() => navigate('/app/my-competitions')}
-          className="flex flex-col items-center gap-1 text-white/40"
+          className="flex items-center justify-center w-12 h-12 text-white/40"
+          title="Wallet"
         >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-            <rect x="2" y="4" width="20" height="16" rx="2" /><path d="M12 8V16M8 12H16" />
-          </svg>
-          <span className="text-[10px] uppercase tracking-wider">Wallet</span>
+          <span className="material-symbols-outlined text-2xl">account_balance_wallet</span>
         </button>
-        <button className="flex flex-col items-center gap-1 text-white/40">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-            <circle cx="12" cy="12" r="3" /><path d="M12 1V4M12 20V23M4.22 4.22L6.34 6.34M17.66 17.66L19.78 19.78M1 12H4M20 12H23M4.22 19.78L6.34 17.66M17.66 6.34L19.78 4.22" />
-          </svg>
-          <span className="text-[10px] uppercase tracking-wider">Settings</span>
+        <button className="flex items-center justify-center w-12 h-12 text-white/40" title="Settings">
+          <span className="material-symbols-outlined text-2xl">settings</span>
         </button>
       </nav>
     </div>
