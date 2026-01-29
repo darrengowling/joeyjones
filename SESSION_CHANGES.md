@@ -98,6 +98,29 @@ Implemented new Stitch-based waiting room design.
 
 ---
 
+### 9. CORS PATCH Method Fix ✅ CRITICAL
+**Issue:** PATCH HTTP method was missing from CORS `allow_methods`, causing all PATCH requests from the browser to be blocked by CORS preflight.
+
+**File:** `/app/backend/server.py` (line ~6737)
+
+**Fix:** Added "PATCH" to allowed methods:
+```python
+allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
+```
+
+**Affected Endpoints:**
+| Endpoint | Purpose | Frontend Usage | Impact |
+|----------|---------|----------------|--------|
+| `PATCH /api/users/{user_id}` | Update user profile | Yes (`Profile.jsx`) | ❌ Blocked until fix |
+| `PATCH /api/admin/assets/{asset_id}` | Update asset data | No (admin/curl only) | ✅ Unaffected |
+| `PATCH /api/fixtures/{fixture_id}/score` | Manual score updates | Potentially | ⚠️ May have been blocked |
+
+**Root Cause:** When the CORS middleware was originally configured, PATCH was omitted from the allowed methods list. This is a common oversight as PATCH is less frequently used than GET/POST/PUT/DELETE.
+
+**Lesson Learned:** Always audit CORS configuration when adding new HTTP methods. Consider using `allow_methods=["*"]` in development or maintaining a checklist of all HTTP methods used.
+
+---
+
 ### 7. Profile Page ✅ NEW
 Implemented user profile page accessible from bottom nav.
 
