@@ -1141,12 +1141,15 @@ function AuctionRoom() {
             <div className="flex flex-col gap-3">
               <button
                 onClick={handleBeginAuction}
+                onMouseDown={() => console.log("🖱️ MOUSE DOWN on button")}
                 data-testid="begin-auction-button"
                 className="w-full font-bold py-4 rounded-xl text-lg transition-all active:scale-[0.98] flex items-center justify-center gap-2"
                 style={{ 
                   background: '#06B6D4',
                   color: '#0F172A',
-                  boxShadow: '0 0 20px rgba(6, 182, 212, 0.4)'
+                  boxShadow: '0 0 20px rgba(6, 182, 212, 0.4)',
+                  position: 'relative',
+                  zIndex: 51
                 }}
               >
                 <span className="tracking-wide uppercase">BEGIN AUCTION</span>
