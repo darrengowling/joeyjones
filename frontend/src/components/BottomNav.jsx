@@ -121,10 +121,11 @@ const NavItem = ({ icon, label, isActive, onClick }) => {
   return (
     <button
       onClick={onClick}
-      className="flex flex-col items-center gap-1 w-16 transition-colors"
+      className="flex flex-col items-center justify-center w-12 h-12 transition-colors"
       style={{
         color: isActive ? '#06B6D4' : 'rgba(255, 255, 255, 0.4)',
       }}
+      title={label}
     >
       <span 
         className="material-symbols-outlined text-2xl"
@@ -133,11 +134,6 @@ const NavItem = ({ icon, label, isActive, onClick }) => {
         }}
       >
         {icon}
-      </span>
-      <span 
-        className="text-[10px] font-bold uppercase tracking-tight"
-      >
-        {label}
       </span>
     </button>
   );
