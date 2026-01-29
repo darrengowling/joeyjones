@@ -295,34 +295,44 @@ export default function ClubsList() {
                     </div>
                   </div>
                 ) : (
-                  /* Cricket: Stacked layout for full player names */
-                  <div>
-                    <h3 className="text-base font-bold text-white mb-2">{asset.name}</h3>
-                    {asset.meta && (
-                      <div className="space-y-2">
-                        <div className="flex flex-wrap gap-2">
-                          {asset.meta.nationality && (
-                            <span 
-                              className="text-xs px-2 py-1 rounded-full"
-                              style={{ background: 'rgba(6, 182, 212, 0.2)', color: '#06B6D4' }}
-                            >
-                              {asset.meta.nationality}
-                            </span>
-                          )}
-                          {asset.meta.role && (
-                            <span 
-                              className="text-xs px-2 py-1 rounded-full"
-                              style={{ background: 'rgba(255, 255, 255, 0.1)', color: 'rgba(255, 255, 255, 0.6)' }}
-                            >
-                              {asset.meta.role}
-                            </span>
+                  /* Cricket: Horizontal layout with IPL team logo */
+                  <div className="flex items-start gap-3">
+                    {asset.meta?.franchise && (
+                      <TeamCrest 
+                        clubId={asset.id}
+                        name={asset.meta.franchise}
+                        sportKey="cricket"
+                        variant="thumbnail"
+                      />
+                    )}
+                    <div className="flex-1">
+                      <h3 className="text-base font-bold text-white mb-1">{asset.name}</h3>
+                      {asset.meta && (
+                        <div className="space-y-1">
+                          <div className="flex flex-wrap gap-2">
+                            {asset.meta.nationality && (
+                              <span 
+                                className="text-xs px-2 py-1 rounded-full"
+                                style={{ background: 'rgba(6, 182, 212, 0.2)', color: '#06B6D4' }}
+                              >
+                                {asset.meta.nationality}
+                              </span>
+                            )}
+                            {asset.meta.role && (
+                              <span 
+                                className="text-xs px-2 py-1 rounded-full"
+                                style={{ background: 'rgba(255, 255, 255, 0.1)', color: 'rgba(255, 255, 255, 0.6)' }}
+                              >
+                                {asset.meta.role}
+                              </span>
+                            )}
+                          </div>
+                          {asset.meta.franchise && (
+                            <p className="text-xs text-white/50">{asset.meta.franchise}</p>
                           )}
                         </div>
-                        {asset.meta.franchise && (
-                          <p className="text-sm" style={{ color: '#A78BFA' }}>{asset.meta.franchise}</p>
-                        )}
-                      </div>
-                    )}
+                      )}
+                    </div>
                   </div>
                 )}
               </div>
