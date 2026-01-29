@@ -1359,8 +1359,8 @@ function AuctionRoom() {
           </div>
         </div>
 
-        {/* Quick Bid Buttons */}
-        <div className="grid grid-cols-3 gap-3 mb-3">
+        {/* Quick Bid Buttons - Two rows */}
+        <div className="grid grid-cols-3 gap-2 mb-2">
           {[1, 5, 10].map((amount) => (
             <button
               key={amount}
@@ -1374,7 +1374,29 @@ function AuctionRoom() {
                 if (navigator.vibrate) navigator.vibrate(50);
               }}
               disabled={!ready || userRosterCount >= maxSlots}
-              className="h-14 rounded-xl font-bold text-lg transition-all active:scale-95 disabled:opacity-40"
+              className="h-12 rounded-xl font-bold text-base transition-all active:scale-95 disabled:opacity-40"
+              style={{ 
+                background: 'rgba(6, 182, 212, 0.1)', 
+                color: '#06B6D4', 
+                border: '1px solid #06B6D4' 
+              }}
+            >
+              +£{amount}m
+            </button>
+          ))}
+        </div>
+        <div className="grid grid-cols-2 gap-2 mb-3">
+          {[20, 50].map((amount) => (
+            <button
+              key={amount}
+              onClick={() => {
+                const currentBidInMillions = (currentBid || 0) / 1000000;
+                const newBid = currentBidInMillions + amount;
+                setBidAmount(newBid.toString());
+                if (navigator.vibrate) navigator.vibrate(50);
+              }}
+              disabled={!ready || userRosterCount >= maxSlots}
+              className="h-12 rounded-xl font-bold text-base transition-all active:scale-95 disabled:opacity-40"
               style={{ 
                 background: 'rgba(6, 182, 212, 0.1)', 
                 color: '#06B6D4', 
