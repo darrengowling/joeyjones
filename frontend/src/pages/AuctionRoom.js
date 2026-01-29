@@ -1463,47 +1463,6 @@ function AuctionRoom() {
           </div>
         )}
       </div>
-
-      {/* ========== BOTTOM NAV (80px - icons only with FAB) ========== */}
-      <nav 
-        className="flex-shrink-0 flex items-center justify-around"
-        style={{ 
-          height: '80px',
-          paddingBottom: '16px',
-          background: '#0F172A', 
-          borderTop: '1px solid rgba(255,255,255,0.1)' 
-        }}
-      >
-        <button className="flex items-center justify-center w-12 h-12" style={{ color: '#06B6D4' }} title="Auction">
-          <span className="material-symbols-outlined text-2xl">gavel</span>
-        </button>
-        <button className="flex items-center justify-center w-12 h-12 text-white/40" title="Stats">
-          <span className="material-symbols-outlined text-2xl">analytics</span>
-        </button>
-        {/* Central FAB */}
-        <button 
-          onClick={() => navigate('/create-competition')}
-          className="w-14 h-14 rounded-full flex items-center justify-center -mt-6"
-          style={{ 
-            background: '#06B6D4', 
-            boxShadow: '0 0 20px rgba(6, 182, 212, 0.4)',
-            border: '4px solid #0F172A'
-          }}
-          title="Create"
-        >
-          <span className="material-symbols-outlined text-2xl" style={{ color: '#0F172A' }}>add</span>
-        </button>
-        <button 
-          onClick={() => navigate('/app/my-competitions')}
-          className="flex items-center justify-center w-12 h-12 text-white/40"
-          title="Wallet"
-        >
-          <span className="material-symbols-outlined text-2xl">account_balance_wallet</span>
-        </button>
-        <button className="flex items-center justify-center w-12 h-12 text-white/40" title="Settings">
-          <span className="material-symbols-outlined text-2xl">settings</span>
-        </button>
-      </nav>
     </div>
   );
 }
