@@ -141,6 +141,32 @@ Implemented user profile page accessible from bottom nav.
 
 ---
 
+### 10. Device/Screen Optimization Audit ⏸️ PAUSED
+
+**Current App Optimization:**
+| Setting | Value | Notes |
+|---------|-------|-------|
+| Primary viewport | 360-448px | Mobile-first, constrained by `max-w-md` |
+| Design approach | Mobile-first | Desktop shows centered mobile layout |
+| Tailwind breakpoints | sm: 360px, md: 768px, lg: 1024px | Custom config |
+
+**Supported Device Range (Top 95%):**
+| Device Type | CSS Viewport | Coverage |
+|-------------|--------------|----------|
+| Small Android | 360px | ~25% |
+| Standard iPhone | 375-390px | ~30% |
+| Large iPhone/Android | 393-430px | ~25% |
+| Tablets | 768px+ | ~15% |
+
+**Status:** Initial audit completed. Paused pending specific user feedback on problematic screens/devices.
+
+**Quick Fix Applied:**
+- Profile page: Changed "Cannot change" to "Locked" with smaller font (`text-[10px]`) and added `truncate` to email to prevent text cramping on narrow screens.
+
+**Next Steps:** Gather user feedback with specific device models and screenshots before implementing targeted fixes.
+
+---
+
 ### 8. Homepage Navigation Fix ✅
 **Issue:** Clicking on a competition from the home page navigated to League Detail (`/league/:id`) instead of Competition Dashboard.
 
