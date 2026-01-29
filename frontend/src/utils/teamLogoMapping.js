@@ -59,11 +59,19 @@ export const footballLogoMapping = {
   "SC Braga": "sc_braga.png",
 };
 
-// IPL Cricket team logos - add mapping when logos are sourced
+// IPL Cricket team logos
 export const cricketLogoMapping = {
-  // "Chennai Super Kings": "csk.png",
-  // "Mumbai Indians": "mi.png",
-  // etc.
+  "Chennai Super Kings": "chennai_super_kings.png",
+  // Add more as you source them:
+  // "Mumbai Indians": "mumbai_indians.png",
+  // "Royal Challengers Bengaluru": "royal_challengers_bengaluru.png",
+  // "Kolkata Knight Riders": "kolkata_knight_riders.png",
+  // "Delhi Capitals": "delhi_capitals.png",
+  // "Rajasthan Royals": "rajasthan_royals.png",
+  // "Sunrisers Hyderabad": "sunrisers_hyderabad.png",
+  // "Punjab Kings": "punjab_kings.png",
+  // "Lucknow Super Giants": "lucknow_super_giants.png",
+  // "Gujarat Titans": "gujarat_titans.png",
 };
 
 // Helper function to get logo path
