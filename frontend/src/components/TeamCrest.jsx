@@ -155,8 +155,8 @@ const TeamCrest = memo(({
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            width: size * 0.95,
-            height: size * 0.95,
+            width: size,
+            height: size,
             borderRadius: '50%',
             background: 'rgba(255, 255, 255, 0.85)',
           }}
@@ -164,8 +164,8 @@ const TeamCrest = memo(({
           <img 
             src={logoPath} 
             alt={name}
-            width={size * 0.75}
-            height={size * 0.75}
+            width={size * 0.65}
+            height={size * 0.65}
             onError={() => setImgError(true)}
             style={{ 
               objectFit: 'contain',
