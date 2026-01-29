@@ -1,11 +1,12 @@
 import { memo, useState } from 'react';
+import { getTeamLogoPath } from '../utils/teamLogoMapping';
 
 /**
  * TeamCrest Component
  * 
- * Displays team/club crests from Football-Data.org with fallback to placeholder SVG.
+ * Displays team/club crests from local assets with fallback to placeholder SVG.
  * 
- * Football-Data.org crest URL pattern: https://crests.football-data.org/{apiFootballId}.svg
+ * Local logo path: /assets/clubs/{sport}/{filename}.png
  * 
  * Sizes:
  * - small: 32px (for auction queue)
@@ -71,16 +72,15 @@ const CricketIcon = ({ size = 48, color = '#94A3B8' }) => (
  * TeamCrest - Main component for displaying team crests
  * 
  * @param {string} clubId - The club/team ID (internal)
- * @param {string} apiFootballId - The Football-Data.org team ID for fetching crests
- * @param {string} name - Team name (used for alt text)
- * @param {string} sportKey - 'football' or 'cricket' for sport-specific placeholders
+ * @param {string} name - Team name (used for logo lookup and alt text)
+ * @param {string} sportKey - 'football' or 'cricket' for sport-specific logos
  * @param {string} variant - 'small' (32px), 'thumbnail' (48px), 'watermark' (300px), etc.
  * @param {boolean} isActive - Whether to show active state glow
  * @param {string} className - Additional CSS classes
  */
 const TeamCrest = memo(({ 
   clubId, 
-  apiFootballId,
+  apiFootballId, // Kept for backwards compatibility but not used
   name = 'Team', 
   sportKey = 'football',
   variant = 'thumbnail',
@@ -102,12 +102,9 @@ const TeamCrest = memo(({
   // Color based on active state
   const color = isActive ? '#06B6D4' : '#94A3B8';
   
-  // Football-Data.org crest URL - DISABLED until apiFootballId mapping is verified
-  // The current apiFootballId values in the database are incorrect (showing wrong team crests)
-  // TODO: Re-enable when correct team IDs are sourced and verified
-  // const crestUrl = apiFootballId ? `https://crests.football-data.org/${apiFootballId}.svg` : null;
-  const crestUrl = null; // Always use placeholder for now
-  const hasCrest = false; // Disabled until IDs are corrected
+  // Get local logo path from mapping
+  const logoPath = getTeamLogoPath(name, sportKey);
+  const hasLogo = logoPath && !imgError;
   
   // For watermark variant, return with special styling
   if (variant === 'watermark') {
@@ -115,13 +112,13 @@ const TeamCrest = memo(({
       <div 
         className={`absolute inset-0 flex items-center justify-center pointer-events-none ${className}`}
         style={{ 
-          opacity: 0.12,
-          filter: 'grayscale(100%) brightness(200%)'
+          opacity: 0.15,
+          filter: 'grayscale(100%) brightness(180%)'
         }}
       >
-        {hasCrest ? (
+        {hasLogo ? (
           <img 
-            src={crestUrl} 
+            src={logoPath} 
             alt={name}
             width={size}
             height={size}
@@ -136,7 +133,7 @@ const TeamCrest = memo(({
   }
   
   // Standard crest display with real image or fallback
-  if (hasCrest) {
+  if (hasLogo) {
     return (
       <div 
         className={`flex items-center justify-center ${className}`}
@@ -149,10 +146,10 @@ const TeamCrest = memo(({
         title={name}
       >
         <img 
-          src={crestUrl} 
+          src={logoPath} 
           alt={name}
-          width={size * 0.85}
-          height={size * 0.85}
+          width={size * 0.9}
+          height={size * 0.9}
           onError={() => setImgError(true)}
           style={{ 
             objectFit: 'contain',
