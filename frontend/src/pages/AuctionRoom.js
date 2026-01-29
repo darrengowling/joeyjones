@@ -894,110 +894,276 @@ function AuctionRoom() {
       }
     };
 
+    const waitingRoomParticipants = participants.filter(p => 
+      auction?.usersInWaitingRoom?.includes(p.userId)
+    );
+    const totalParticipants = participants.length;
+    const joinedCount = waitingRoomParticipants.length;
+
     return (
-      <div className="min-h-screen py-8" style={{ background: '#0F172A' }}>
-        <div className="container mx-auto px-4">
-          <div className="max-w-2xl mx-auto">
-            <button
+      <div 
+        className="min-h-screen relative overflow-hidden"
+        style={{ 
+          background: '#0F172A',
+          fontFamily: 'Inter, sans-serif'
+        }}
+      >
+        {/* Light Beam Effect */}
+        <div 
+          className="absolute pointer-events-none"
+          style={{
+            top: '-20%',
+            left: '-10%',
+            width: '150%',
+            height: '150%',
+            background: `
+              radial-gradient(circle at 20% 20%, rgba(6, 182, 212, 0.15) 0%, transparent 40%),
+              radial-gradient(circle at 80% 80%, rgba(6, 182, 212, 0.1) 0%, transparent 40%)
+            `,
+            zIndex: 0
+          }}
+        />
+
+        <div className="relative z-10 flex flex-col min-h-screen pb-32 max-w-md mx-auto">
+          {/* Header */}
+          <header className="flex items-center p-4 justify-between">
+            <button 
               onClick={() => navigate("/")}
-              className="text-white/60 hover:text-white mb-4 flex items-center gap-2"
+              className="flex items-center justify-center w-10 h-10 rounded-xl"
+              style={{ 
+                background: 'rgba(255, 255, 255, 0.05)',
+                backdropFilter: 'blur(12px)',
+                border: '1px solid rgba(255, 255, 255, 0.1)'
+              }}
             >
-              ← Back to Home
+              <span className="material-symbols-outlined text-white">chevron_left</span>
             </button>
-            
-            <div className="rounded-2xl p-8" style={{ background: '#151C2C', border: '1px solid rgba(255,255,255,0.1)' }}>
-              <div className="text-center mb-6">
-                <div className="w-20 h-20 rounded-full mx-auto mb-4 flex items-center justify-center" style={{ background: 'rgba(0, 240, 255, 0.1)' }}>
-                  <span className="text-4xl">⏳</span>
+            <h2 className="text-white/40 text-xs font-semibold uppercase tracking-widest leading-tight flex-1 text-center pr-10">
+              No Gambling. All game.
+            </h2>
+          </header>
+
+          {/* Headline Section */}
+          <section className="flex flex-col items-center px-4 pt-4 pb-2">
+            <h1 className="text-white tracking-tight text-3xl font-bold leading-tight text-center uppercase">
+              AUCTION LOBBY
+            </h1>
+            {/* Participant Count Pill */}
+            <div 
+              className="flex items-center gap-2 mt-3 px-4 py-2 rounded-xl"
+              style={{ 
+                background: 'rgba(6, 182, 212, 0.1)',
+                border: '1px solid rgba(6, 182, 212, 0.2)'
+              }}
+            >
+              <span 
+                className="material-symbols-outlined text-xl"
+                style={{ color: '#06B6D4' }}
+              >
+                check_circle
+              </span>
+              <p 
+                className="text-sm font-semibold leading-normal"
+                style={{ color: '#06B6D4' }}
+              >
+                {joinedCount}/{totalParticipants} Managers Joined
+              </p>
+            </div>
+          </section>
+
+          {/* Main Glassmorphic Card */}
+          <main 
+            className="mx-4 mt-6 rounded-xl p-6 relative overflow-hidden"
+            style={{
+              background: 'rgba(255, 255, 255, 0.05)',
+              backdropFilter: 'blur(12px)',
+              WebkitBackdropFilter: 'blur(12px)',
+              border: '1px solid rgba(255, 255, 255, 0.1)'
+            }}
+          >
+            {/* Center Icon - Only for non-commissioner */}
+            {!isCommissioner && (
+              <div className="flex flex-col items-center justify-center mb-8">
+                <div 
+                  className="p-5 rounded-full"
+                  style={{ 
+                    background: 'rgba(6, 182, 212, 0.2)',
+                    filter: 'drop-shadow(0 0 12px rgba(6, 182, 212, 0.6))'
+                  }}
+                >
+                  <span 
+                    className="material-symbols-outlined text-5xl"
+                    style={{ color: '#06B6D4' }}
+                  >
+                    hourglass_empty
+                  </span>
                 </div>
-                <h1 className="text-3xl font-bold text-white mb-2">
-                  Auction Waiting Room
-                </h1>
-                <p className="text-white/60">
-                  {isCommissioner 
-                    ? "Waiting for users to enter waiting room"
-                    : "Waiting for other participants and commissioner to start"}
+                <p className="mt-4 text-white/60 text-sm font-medium">
+                  Waiting for Commissioner to Start
                 </p>
               </div>
+            )}
 
-              {/* Participants List */}
-              <div className="rounded-xl p-4 mb-6" style={{ background: 'rgba(0, 240, 255, 0.1)', border: '1px solid rgba(0, 240, 255, 0.2)' }}>
-                <h3 className="font-bold text-white mb-3">
-                  Participants Ready ({auction?.usersInWaitingRoom?.length || 0})
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                  {participants
-                    .filter(p => auction?.usersInWaitingRoom?.includes(p.userId))
-                    .map(p => (
-                      <div
-                        key={p.userId}
-                        className="flex items-center gap-2 px-3 py-2 rounded-full"
-                        style={{ background: 'rgba(255,255,255,0.1)' }}
-                      >
-                        <div 
-                          className="w-8 h-8 rounded-full flex items-center justify-center text-black text-sm font-bold"
-                          style={{ background: '#00F0FF' }}
-                        >
-                          {p.userName?.charAt(0).toUpperCase() || '?'}
-                        </div>
-                        <span className="text-sm font-medium text-white">
-                          {p.userName}
-                        </span>
-                        {user && p.userId === user.id && (
-                          <span 
-                            className="text-xs px-2 py-0.5 rounded-full"
-                            style={{ background: 'rgba(0, 240, 255, 0.3)', color: '#00F0FF' }}
-                          >
-                            You
-                          </span>
-                        )}
-                      </div>
-                    ))}
-                  {(!auction?.usersInWaitingRoom || auction.usersInWaitingRoom.length === 0) && (
-                    <div className="text-center text-white/40 py-4 w-full">
-                      {isCommissioner 
-                        ? "Waiting for participants to click 'Enter Auction'..."
-                        : "Waiting for other participants..."}
-                    </div>
-                  )}
+            {/* Commissioner Header */}
+            {isCommissioner && (
+              <div className="flex flex-col items-center justify-center mb-6">
+                <div 
+                  className="p-4 rounded-full mb-3"
+                  style={{ 
+                    background: 'rgba(16, 185, 129, 0.2)',
+                    filter: 'drop-shadow(0 0 12px rgba(16, 185, 129, 0.6))'
+                  }}
+                >
+                  <span 
+                    className="material-symbols-outlined text-4xl"
+                    style={{ color: '#10B981' }}
+                  >
+                    shield_person
+                  </span>
                 </div>
+                <p className="text-white/60 text-sm font-medium">
+                  You are the Commissioner
+                </p>
               </div>
+            )}
 
-              {/* Commissioner or Participant View */}
-              <div className="text-center">
-                {isCommissioner ? (
-                  <div>
-                    <button
-                      onClick={handleBeginAuction}
-                      className="text-white font-bold py-4 px-8 rounded-xl text-lg shadow-lg transition-all hover:scale-105 flex items-center justify-center gap-2 mx-auto"
-                      style={{ background: 'linear-gradient(135deg, #10B981, #059669)' }}
-                    >
-                      <span className="material-symbols-outlined">play_arrow</span>
-                      Begin Auction
-                    </button>
-                    <p className="text-sm text-white/40 mt-3">
-                      Start when all participants are ready
-                    </p>
-                  </div>
-                ) : (
-                  <div>
-                    <div className="inline-block animate-pulse">
-                      <div className="rounded-full p-4 mb-3" style={{ background: 'rgba(255,255,255,0.1)' }}>
-                        <span className="material-symbols-outlined text-5xl text-white/40">schedule</span>
+            {/* Participant Grid */}
+            <div className="grid grid-cols-3 sm:grid-cols-4 gap-4">
+              {waitingRoomParticipants.map((p) => {
+                const isCurrentUser = user && p.userId === user.id;
+                return (
+                  <div key={p.userId} className="flex flex-col items-center gap-2">
+                    <div className="relative">
+                      {/* Avatar Circle */}
+                      <div 
+                        className="w-12 h-12 rounded-full flex items-center justify-center text-sm font-bold"
+                        style={{ 
+                          background: isCurrentUser ? '#06B6D4' : 'rgba(6, 182, 212, 0.2)',
+                          color: isCurrentUser ? '#0F172A' : '#06B6D4',
+                          border: '2px solid rgba(6, 182, 212, 0.3)'
+                        }}
+                      >
+                        {p.userName?.charAt(0).toUpperCase() || '?'}
                       </div>
+                      {/* Status Dot */}
+                      <div 
+                        className="absolute bottom-0 right-0 w-3 h-3 rounded-full"
+                        style={{ 
+                          background: '#06B6D4',
+                          boxShadow: '0 0 8px #06B6D4',
+                          border: '2px solid #0F172A'
+                        }}
+                      />
                     </div>
-                    <p className="text-lg font-semibold text-white/80">
-                      Waiting for commissioner to start...
+                    <p className="text-xs font-medium text-white/90 text-center truncate w-full">
+                      {p.userName?.split(' ')[0] || 'Unknown'}
                     </p>
-                    <p className="text-sm text-white/40 mt-2">
-                      The auction will begin shortly
-                    </p>
+                    <span 
+                      className="text-[9px] font-bold uppercase tracking-tight"
+                      style={{ color: '#06B6D4' }}
+                    >
+                      {isCurrentUser ? 'You' : 'Ready'}
+                    </span>
                   </div>
-                )}
-              </div>
+                );
+              })}
+
+              {/* Empty State or "More" placeholder */}
+              {waitingRoomParticipants.length === 0 && (
+                <div className="col-span-full text-center py-8">
+                  <span className="material-symbols-outlined text-4xl text-white/20 mb-2">group</span>
+                  <p className="text-white/40 text-sm">
+                    {isCommissioner 
+                      ? "Waiting for participants to enter..."
+                      : "Waiting for others to join..."}
+                  </p>
+                </div>
+              )}
+
+              {/* Show remaining count if some haven't joined */}
+              {waitingRoomParticipants.length > 0 && joinedCount < totalParticipants && (
+                <div className="flex flex-col items-center gap-2 opacity-50">
+                  <div 
+                    className="w-12 h-12 rounded-full flex items-center justify-center"
+                    style={{ 
+                      background: 'rgba(255, 255, 255, 0.1)',
+                      border: '2px dashed rgba(255, 255, 255, 0.2)'
+                    }}
+                  >
+                    <span className="material-symbols-outlined text-sm text-white/40">more_horiz</span>
+                  </div>
+                  <p className="text-xs font-medium text-white/40">
+                    {totalParticipants - joinedCount} More...
+                  </p>
+                </div>
+              )}
             </div>
-          </div>
+          </main>
         </div>
+
+        {/* Fixed Bottom Action Area */}
+        <div 
+          className="fixed bottom-0 left-0 right-0 p-4 pb-8 max-w-md mx-auto"
+          style={{
+            background: 'linear-gradient(to top, #0F172A 60%, transparent)'
+          }}
+        >
+          {isCommissioner ? (
+            <div className="flex flex-col gap-3">
+              <button
+                onClick={handleBeginAuction}
+                className="w-full font-bold py-4 rounded-xl text-lg transition-all active:scale-[0.98] flex items-center justify-center gap-2"
+                style={{ 
+                  background: '#06B6D4',
+                  color: '#0F172A',
+                  boxShadow: '0 0 20px rgba(6, 182, 212, 0.4)'
+                }}
+              >
+                <span className="tracking-wide uppercase">BEGIN AUCTION</span>
+                <span className="material-symbols-outlined font-bold">play_arrow</span>
+              </button>
+              <p className="text-center text-white/40 text-xs">
+                Start when all participants are ready
+              </p>
+            </div>
+          ) : (
+            <div className="flex flex-col items-center gap-3">
+              {/* Pulsing Waiting Indicator */}
+              <div 
+                className="w-full py-4 rounded-xl flex items-center justify-center gap-3"
+                style={{ 
+                  background: 'rgba(6, 182, 212, 0.1)',
+                  border: '1px solid rgba(6, 182, 212, 0.2)',
+                  animation: 'pulse 2s infinite'
+                }}
+              >
+                <span 
+                  className="material-symbols-outlined text-2xl animate-spin"
+                  style={{ color: '#06B6D4', animationDuration: '3s' }}
+                >
+                  progress_activity
+                </span>
+                <span 
+                  className="font-semibold tracking-wide"
+                  style={{ color: '#06B6D4' }}
+                >
+                  Waiting for Host...
+                </span>
+              </div>
+              <p className="text-white/40 text-xs">
+                The auction will begin shortly
+              </p>
+            </div>
+          )}
+        </div>
+
+        {/* Pulse Animation Keyframes */}
+        <style>{`
+          @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(6, 182, 212, 0.4); }
+            50% { box-shadow: 0 0 0 8px rgba(6, 182, 212, 0); }
+          }
+        `}</style>
       </div>
     );
   }
