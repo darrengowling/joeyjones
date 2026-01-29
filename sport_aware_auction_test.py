@@ -17,8 +17,8 @@ from datetime import datetime, timezone
 from typing import Dict, List, Optional
 
 # Configuration
-BASE_URL = "https://stitch-fantasy.preview.emergentagent.com/api"
-SOCKET_URL = "https://stitch-fantasy.preview.emergentagent.com"
+BASE_URL = "https://sportcrest.preview.emergentagent.com/api"
+SOCKET_URL = "https://sportcrest.preview.emergentagent.com"
 SOCKET_PATH = "/api/socket.io"
 
 class SportAwareAuctionTester:

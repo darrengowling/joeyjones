@@ -10,7 +10,7 @@ fi
 
 LEAGUE_ID=$1
 CSV_FILE=$2
-API_URL="https://stitch-fantasy.preview.emergentagent.com/api"
+API_URL="https://sportcrest.preview.emergentagent.com/api"
 
 echo "📊 Uploading match scores..."
 echo "League ID: $LEAGUE_ID"

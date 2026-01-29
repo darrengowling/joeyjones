@@ -13,7 +13,7 @@ This guide covers load testing the most critical path in the system: real-time a
 **1. Create a Test Auction**:
 ```bash
 # Go to your app
-https://stitch-fantasy.preview.emergentagent.com
+https://sportcrest.preview.emergentagent.com
 
 # Steps:
 1. Sign in

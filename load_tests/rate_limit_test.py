@@ -13,7 +13,7 @@ from collections import defaultdict
 import sys
 
 # Configuration
-BASE_URL = "https://stitch-fantasy.preview.emergentagent.com/api"
+BASE_URL = "https://sportcrest.preview.emergentagent.com/api"
 CONCURRENT_USERS = 10
 TEST_DURATION_SECONDS = 120  # 2 minutes
 REQUEST_DELAY = 0.5  # 500ms between requests per user
