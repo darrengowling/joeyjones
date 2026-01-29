@@ -1435,6 +1435,9 @@ function AuctionRoom() {
             <button onClick={completeLot} className="flex-1 py-2 rounded-lg text-xs font-medium flex items-center justify-center gap-1" style={{ background: 'rgba(255, 77, 77, 0.2)', color: '#FF4D4D' }}>
               <span className="material-symbols-outlined text-sm">skip_next</span> Skip
             </button>
+            <button onClick={deleteAuction} className="flex-1 py-2 rounded-lg text-xs font-medium flex items-center justify-center gap-1" style={{ background: 'rgba(239, 68, 68, 0.2)', color: '#EF4444' }}>
+              <span className="material-symbols-outlined text-sm">delete</span> End
+            </button>
           </div>
         )}
       </div>
