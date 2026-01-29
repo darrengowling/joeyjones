@@ -152,6 +152,40 @@ Step 6: Test full flow end-to-end
 | 1 | ~~**Bidder status indicator**~~ | 2 hrs | 🟢 Low | ✅ High | ❌ Considered - not needed. Current bidder name next to bid is sufficient |
 | 2 | ~~**Current bid label**~~ | 30 min | 🟢 Low | ✅ High | ⏸️ Review - already visible in main bid display |
 
+### Device/Screen Responsive Audit ⏸️ PAUSED
+
+**Status:** Initial audit completed Jan 29. Paused pending user feedback.
+
+**Current App Optimization:**
+| Setting | Value |
+|---------|-------|
+| Primary viewport | 360-448px (mobile-first, `max-w-md` container) |
+| Tailwind breakpoints | sm: 360px, md: 768px, lg: 1024px |
+| Design approach | Mobile-first; desktop shows centered mobile layout |
+
+**Target Devices (Top 95%):**
+| Device Type | CSS Viewport | Share |
+|-------------|--------------|-------|
+| Small Android | 360px | ~25% |
+| Standard iPhone (12-15) | 375-390px | ~30% |
+| Large phones (Plus/Max) | 393-430px | ~25% |
+| Tablets | 768px+ | ~15% |
+
+**Identified Potential Issues (from code audit):**
+| Component | Issue | Priority |
+|-----------|-------|----------|
+| Commissioner Controls | 4 buttons in single row may overflow at 360px | 🟡 Medium |
+| Quick Bid Buttons | 3-col grid may be tight at 360px | 🟡 Medium |
+| Waiting Room Grid | grid-cols-3 at 360px = ~100px per avatar | 🟢 Low |
+
+**Quick Fixes Applied:**
+- Profile page: "Cannot change" → "Locked" (smaller text, email truncation)
+
+**Next Steps:**
+1. Gather specific user feedback (device model + screenshot + issue)
+2. Implement targeted fixes based on real-world reports
+3. Consider BrowserStack testing for edge cases
+
 ### Monitoring Items (Watch During Pilot)
 
 | Issue ID | Summary | Watch For |
