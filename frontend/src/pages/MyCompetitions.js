@@ -205,7 +205,7 @@ export default function MyCompetitions() {
   };
 
   return (
-    <div className="min-h-screen" style={{ background: '#0B101B', paddingBottom: '100px' }}>
+    <div className="min-h-screen" style={{ background: '#0F172A', paddingBottom: '100px' }}>
       {/* Header */}
       <header 
         className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-md z-40 px-4 py-4 flex items-center justify-between"
@@ -252,7 +252,7 @@ export default function MyCompetitions() {
               <button
                 onClick={() => loadCompetitions(user.id)}
                 className="mt-4 px-4 py-2 rounded-lg font-semibold transition"
-                style={{ background: '#00F0FF', color: '#0B101B' }}
+                style={{ background: '#00F0FF', color: '#0F172A' }}
               >
                 Retry
               </button>
@@ -274,7 +274,7 @@ export default function MyCompetitions() {
                 <button
                   onClick={() => navigate("/")}
                   className="px-6 py-3 rounded-xl font-bold transition"
-                  style={{ background: '#00F0FF', color: '#0B101B' }}
+                  style={{ background: '#00F0FF', color: '#0F172A' }}
                 >
                   Create League
                 </button>
@@ -441,7 +441,7 @@ export default function MyCompetitions() {
                           data-testid="comp-view-btn"
                           onClick={() => navigate(`/competitions/${comp.leagueId}`)}
                           className="flex-1 py-2 rounded-xl font-semibold text-sm transition"
-                          style={{ background: '#00F0FF', color: '#0B101B' }}
+                          style={{ background: '#00F0FF', color: '#0F172A' }}
                         >
                           Dashboard
                         </button>

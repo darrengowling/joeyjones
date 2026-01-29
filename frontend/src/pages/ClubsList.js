@@ -108,7 +108,7 @@ export default function ClubsList() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: '#0B101B' }}>
+      <div className="min-h-screen flex items-center justify-center" style={{ background: '#0F172A' }}>
         <div className="text-center">
           <div className="w-12 h-12 border-4 border-[#00F0FF] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <p className="text-white/60">Loading sports assets...</p>
@@ -118,7 +118,7 @@ export default function ClubsList() {
   }
 
   return (
-    <div className="min-h-screen" style={{ background: '#0B101B', paddingBottom: '100px' }}>
+    <div className="min-h-screen" style={{ background: '#0F172A', paddingBottom: '100px' }}>
       {/* Header */}
       <header 
         className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-md z-40 px-4 py-4 flex items-center justify-between"
@@ -162,7 +162,7 @@ export default function ClubsList() {
                 <select
                   className="w-full px-4 py-3 pr-10 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-[#06B6D4] appearance-none cursor-pointer"
                   style={{ 
-                    background: '#0B101B', 
+                    background: '#0F172A', 
                     border: '1px solid #06B6D4',
                     backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2306B6D4'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
                     backgroundRepeat: 'no-repeat',
@@ -179,7 +179,7 @@ export default function ClubsList() {
                   data-testid="sport-filter-select"
                 >
                   {sports.map((sport) => (
-                    <option key={sport.key} value={sport.key} style={{ background: '#0B101B', color: '#fff' }}>
+                    <option key={sport.key} value={sport.key} style={{ background: '#0F172A', color: '#fff' }}>
                       {sport.name}
                     </option>
                   ))}
@@ -191,7 +191,7 @@ export default function ClubsList() {
                   type="text"
                   placeholder={`Search ${currentSport?.uiHints.assetPlural.toLowerCase() || 'assets'}...`}
                   className="w-full px-4 py-3 rounded-xl text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-[#00F0FF]"
-                  style={{ background: '#0B101B', border: '1px solid rgba(255, 255, 255, 0.1)' }}
+                  style={{ background: '#0F172A', border: '1px solid rgba(255, 255, 255, 0.1)' }}
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   data-testid="asset-search-input"
@@ -207,7 +207,7 @@ export default function ClubsList() {
                   <select
                     className="w-full px-4 py-3 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-[#06B6D4] appearance-none cursor-pointer"
                     style={{ 
-                      background: '#0B101B', 
+                      background: '#0F172A', 
                       border: '1px solid rgba(255, 255, 255, 0.2)',
                       backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2306B6D4'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
                       backgroundRepeat: 'no-repeat',
@@ -218,9 +218,9 @@ export default function ClubsList() {
                     onChange={(e) => setSelectedFranchise(e.target.value)}
                     data-testid="franchise-filter-select"
                   >
-                    <option value="all" style={{ background: '#0B101B', color: '#fff' }}>All Teams ({franchises.length})</option>
+                    <option value="all" style={{ background: '#0F172A', color: '#fff' }}>All Teams ({franchises.length})</option>
                     {franchises.map((franchise) => (
-                      <option key={franchise} value={franchise} style={{ background: '#0B101B', color: '#fff' }}>
+                      <option key={franchise} value={franchise} style={{ background: '#0F172A', color: '#fff' }}>
                         {franchise} ({currentAssets.filter(a => a.meta?.franchise === franchise).length})
                       </option>
                     ))}
@@ -231,7 +231,7 @@ export default function ClubsList() {
                   <select
                     className="w-full px-4 py-3 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-[#06B6D4] appearance-none cursor-pointer"
                     style={{ 
-                      background: '#0B101B', 
+                      background: '#0F172A', 
                       border: '1px solid rgba(255, 255, 255, 0.2)',
                       backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2306B6D4'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
                       backgroundRepeat: 'no-repeat',
@@ -242,9 +242,9 @@ export default function ClubsList() {
                     onChange={(e) => setSelectedRole(e.target.value)}
                     data-testid="role-filter-select"
                   >
-                    <option value="all" style={{ background: '#0B101B', color: '#fff' }}>All Roles</option>
+                    <option value="all" style={{ background: '#0F172A', color: '#fff' }}>All Roles</option>
                     {roles.map((role) => (
-                      <option key={role} value={role} style={{ background: '#0B101B', color: '#fff' }}>
+                      <option key={role} value={role} style={{ background: '#0F172A', color: '#fff' }}>
                         {role} ({currentAssets.filter(a => a.meta?.role === role).length})
                       </option>
                     ))}

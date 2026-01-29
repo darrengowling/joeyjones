@@ -821,7 +821,7 @@ function AuctionRoom() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: '#0B101B' }}>
+      <div className="min-h-screen flex items-center justify-center" style={{ background: '#0F172A' }}>
         <div className="text-center">
           <div className="w-12 h-12 border-4 border-[#00F0FF] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <div className="text-white/60 text-lg">Loading auction...</div>
@@ -833,7 +833,7 @@ function AuctionRoom() {
   // If auction doesn't exist (e.g., after reset), show message and navigation
   if (!auction && !loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4" style={{ background: '#0B101B' }}>
+      <div className="min-h-screen flex items-center justify-center p-4" style={{ background: '#0F172A' }}>
         <div className="rounded-2xl p-8 max-w-md text-center" style={{ background: '#151C2C', border: '1px solid rgba(255,255,255,0.1)' }}>
           <div className="text-6xl mb-4">🔄</div>
           <h2 className="text-2xl font-bold text-white mb-4">Auction Has Been Reset</h2>
@@ -857,7 +857,7 @@ function AuctionRoom() {
   // Prompt C: Soft guard - render message instead of redirecting (moved before waiting room check)
   if (!user) {
     return (
-      <div className="min-h-screen py-8 flex items-center justify-center" style={{ background: '#0B101B' }}>
+      <div className="min-h-screen py-8 flex items-center justify-center" style={{ background: '#0F172A' }}>
         <div 
           data-testid="auth-required" 
           className="rounded-2xl p-8 max-w-md text-center"
@@ -895,7 +895,7 @@ function AuctionRoom() {
     };
 
     return (
-      <div className="min-h-screen py-8" style={{ background: '#0B101B' }}>
+      <div className="min-h-screen py-8" style={{ background: '#0F172A' }}>
         <div className="container mx-auto px-4">
           <div className="max-w-2xl mx-auto">
             <button
@@ -1022,7 +1022,7 @@ function AuctionRoom() {
   const userBudgetRemaining = currentUserParticipant?.budgetRemaining || 0;
 
   return (
-    <div className="h-screen flex flex-col overflow-hidden" style={{ background: '#0B101B' }}>
+    <div className="h-screen flex flex-col overflow-hidden" style={{ background: '#0F172A' }}>
       
       {/* ========== STICKY HEADER (84px per Stitch spec) ========== */}
       <header 
