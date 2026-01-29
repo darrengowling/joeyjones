@@ -153,10 +153,10 @@ const TeamCrest = memo(({
           onError={() => setImgError(true)}
           style={{ 
             objectFit: 'contain',
-            // Add subtle white glow to help dark logos (like Spurs) stand out
+            // Stronger white glow to help dark logos (like Spurs, Inter) stand out
             filter: isActive 
-              ? 'drop-shadow(0 0 4px rgba(6, 182, 212, 0.3)) drop-shadow(0 0 1px rgba(255,255,255,0.5))' 
-              : 'drop-shadow(0 0 1px rgba(255,255,255,0.4))'
+              ? 'drop-shadow(0 0 4px rgba(6, 182, 212, 0.3)) drop-shadow(0 0 2px rgba(255,255,255,0.8)) drop-shadow(0 0 4px rgba(255,255,255,0.4))' 
+              : 'drop-shadow(0 0 2px rgba(255,255,255,0.7)) drop-shadow(0 0 4px rgba(255,255,255,0.3))'
           }}
         />
       </div>
