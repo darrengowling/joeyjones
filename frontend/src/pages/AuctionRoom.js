@@ -891,18 +891,6 @@ function AuctionRoom() {
 
   // Prompt E: Show waiting room if auction status is "waiting"
   if (auction?.status === "waiting") {
-    // DEBUG: Log commissioner check values
-    console.log("🔍 COMMISSIONER CHECK:", {
-      league: league,
-      leagueExists: !!league,
-      leagueCommissionerId: league?.commissionerId,
-      user: user,
-      userExists: !!user,
-      userId: user?.id,
-      isCommissioner: isCommissioner,
-      match: league?.commissionerId === user?.id
-    });
-
     const handleBeginAuction = async () => {
       console.log("🚀 BEGIN AUCTION CLICKED");
       console.log("API:", API);
