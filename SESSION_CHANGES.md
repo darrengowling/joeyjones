@@ -94,7 +94,18 @@ Implemented new Stitch-based waiting room design.
 
 ---
 
-### Upcoming: Waiting Room Redesign
+### 6. Deferred: "Pass This Round" Button
+**Status:** UI exists but shows "Coming soon!" toast. Backend not implemented.
+
+**Decision:** Deferred until after pilot testing. Touching core auction logic is too risky at this stage.
+
+**Revisit if:** Users report frustration waiting 30 seconds for unwanted teams to time out during pilot.
+
+**Full analysis documented in:** MASTER_TODO_LIST.md (Deferred Features section)
+
+---
+
+### ~~Upcoming: Waiting Room Redesign~~ ✅ COMPLETED
 Based on Stitch designs, implementing new waiting room views:
 
 **Commissioner View:**
