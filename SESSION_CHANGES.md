@@ -4,6 +4,40 @@
 
 ---
 
+## Design System Refinements - January 29, 2026
+
+### 1. Background Color Standardization ✅
+Standardized all pages to use the deep navy `#0F172A` as per Stitch design spec.
+
+**Files updated:**
+| Page | Before | After |
+|------|--------|-------|
+| AuctionRoom.js | `#0B101B` | `#0F172A` ✅ |
+| ClubsList.js | `#0B101B` | `#0F172A` ✅ |
+| MyCompetitions.js | `#0B101B` | `#0F172A` ✅ |
+| CreateCompetition.jsx | `#070B13` | `#0F172A` ✅ |
+
+### 2. TeamCrest Cyan Glow ✅
+Updated team logo glow effect from white to cyan to align with Sport X brand.
+
+**File updated:** `/app/frontend/src/components/TeamCrest.jsx`
+
+**Implementation:**
+```css
+/* White edge (helps dark logos) + Cyan brand glow */
+filter: 
+  drop-shadow(0 0 1px rgba(255,255,255,0.5))  /* subtle white edge */
+  drop-shadow(0 0 3px rgba(6, 182, 212, 0.4)) /* cyan glow */
+  drop-shadow(0 0 6px rgba(6, 182, 212, 0.2)) /* cyan ambient */
+```
+
+**⚠️ KEEP UNDER REVIEW:** The Tottenham Hotspur logo (dark navy) remains difficult to see on the dark background despite the white edge. Current solution is the best balance found, but may need revisiting if users report visibility issues. Potential future solutions:
+- Increase white edge opacity for specific dark logos
+- Add a light circular background behind very dark logos
+- Request a lighter version of the Spurs logo from source
+
+---
+
 ## IPL Team Logo Integration - January 29, 2026
 
 ### Completed
