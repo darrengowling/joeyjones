@@ -1,0 +1,46 @@
+// Auto-generated mapping of team names to logo files
+// Logos stored in /public/assets/clubs/football/
+
+export const footballLogoMapping = {
+  "Chelsea FC": "chelsea_fc.png",
+  "Nottingham Forest FC": "nottingham_forest.png",
+  "Wolverhampton Wanderers FC": "wolverhampton_wanderers.png",
+  "AFC Ajax": "ajax_amsterdam.png",
+  "Arsenal FC": "arsenal_fc.png",
+  "Atalanta BC": "atalanta_bc.png",
+  "Athletic Club": "athletic_bilbao.png",
+  "Borussia Dortmund": "borussia_dortmund.png",
+  "FC Barcelona": "fc_barcelona.png",
+  "FC Bayern M\u00fcnchen": "bayern_munich.png",
+  "Sport Lisboa e Benfica": "sl_benfica.png",
+  "Eintracht Frankfurt": "eintracht_frankfurt.png",
+  "FC Internazionale Milano": "inter_milan.png",
+  "Juventus FC": "juventus_fc.png",
+  "Bayer 04 Leverkusen": "bayer_04_leverkusen.png",
+  "Liverpool FC": "liverpool_fc.png",
+  "Olympique de Marseille": "celta_de_vigo.png",
+  "AS Monaco FC": "as_monaco.png",
+  "SSC Napoli": "ssc_napoli.png",
+  "Newcastle United FC": "leeds_united.png",
+  "Paris Saint-Germain FC": "paris_fc.png",
+  "PSV": "psv_eindhoven.png",
+  "Real Madrid CF": "real_oviedo.png",
+  "Sporting Clube de Portugal": "sporting_cp.png",
+  "Tottenham Hotspur FC": "tottenham_hotspur.png",
+  "Villarreal CF": "villarreal_cf.png",
+  "Manchester City FC": "manchester_city.png",
+  "Brentford FC": "brentford_fc.png",
+  "Brighton & Hove Albion FC": "brighton_&_hove_albion.png",
+  "Crystal Palace FC": "crystal_palace.png",
+  "Everton FC": "everton_fc.png",
+  "West Ham United FC": "leeds_united.png",
+  "Aston Villa FC": "aston_villa.png",
+  "Manchester United FC": "leeds_united.png",
+  "Fulham FC": "fulham_fc.png",
+  "Burnley FC": "burnley_fc.png",
+  "Leeds United FC": "leeds_united.png",
+  "Sunderland AFC": "afc_bournemouth.png",
+  "AFC Bournemouth": "afc_bournemouth.png"
+};
+
+// Unmatched teams (no logo available): ['Club Atlético de Madrid', 'FK Bodø/Glimt', 'Club Brugge KV', 'FC København', 'Galatasaray SK', 'FK Kairat', 'PAE Olympiakos SFP', 'Qarabağ Ağdam FK', 'SK Slavia Praha', 'Royale Union Saint-Gilloise', 'Paphos FC']
