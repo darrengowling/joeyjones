@@ -1128,6 +1128,7 @@ function AuctionRoom() {
             <div className="flex flex-col gap-3">
               <button
                 onClick={handleBeginAuction}
+                data-testid="begin-auction-button"
                 className="w-full font-bold py-4 rounded-xl text-lg transition-all active:scale-[0.98] flex items-center justify-center gap-2"
                 style={{ 
                   background: '#06B6D4',
