@@ -109,27 +109,29 @@ const TeamCrest = memo(({
   // For watermark variant, return with special styling
   // Shows original logo at low opacity as background watermark
   if (variant === 'watermark') {
+    // Only show watermark if we have a logo
+    if (!hasLogo) {
+      return null;
+    }
+    
     return (
       <div 
         className={`absolute inset-0 flex items-center justify-center pointer-events-none ${className}`}
         style={{ 
-          opacity: 0.15
+          opacity: 0.12
         }}
       >
-        {hasLogo ? (
-          <img 
-            src={logoPath} 
-            alt={name}
-            width={size}
-            height={size}
-            onError={() => setImgError(true)}
-            style={{ 
-              objectFit: 'contain'
-            }}
-          />
-        ) : (
-          <PlaceholderShield size={size} color="#FFFFFF" />
-        )}
+        <img 
+          src={logoPath} 
+          alt={name}
+          width={size}
+          height={size}
+          onError={() => setImgError(true)}
+          style={{ 
+            objectFit: 'contain',
+            filter: 'grayscale(50%) brightness(150%)'
+          }}
+        />
       </div>
     );
   }
