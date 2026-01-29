@@ -1152,7 +1152,7 @@ function AuctionRoom() {
                         {isCurrent ? 'Currently on the block' : 
                          isSold ? `Won by ${club.winner}` : 
                          isUnsold ? 'Went unsold' :
-                         inQueue ? `#${auction?.clubQueue?.indexOf(club.id) + 1} in queue` : 
+                         inQueue ? 'In auction' : 
                          'Not in queue'}
                       </p>
                     </div>
