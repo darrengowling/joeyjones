@@ -175,14 +175,14 @@ const Profile = () => {
               Email
             </label>
             <div 
-              className="flex items-center justify-between px-4 py-3 rounded-xl"
+              className="flex items-center justify-between gap-2 px-4 py-3 rounded-xl"
               style={{
                 background: 'rgba(255, 255, 255, 0.05)',
                 border: '1px solid rgba(255, 255, 255, 0.1)'
               }}
             >
-              <span className="text-white/60">{user.email}</span>
-              <span className="text-xs text-white/30">Cannot change</span>
+              <span className="text-white/60 truncate">{user.email}</span>
+              <span className="text-[10px] text-white/30 flex-shrink-0">Locked</span>
             </div>
           </div>
 
