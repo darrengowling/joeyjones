@@ -92,6 +92,10 @@ Implemented new Stitch-based waiting room design.
 - Deep #0F172A background with light beam effect
 - Glassmorphism cards with backdrop blur
 
+**Bug Fixes Applied:**
+1. **League data race condition** - Added loading guard to ensure `league` data is loaded before rendering waiting room (required for `isCommissioner` check)
+2. **BEGIN AUCTION button not clickable** - Fixed z-index issue where the fixed bottom container was behind other elements. Added `zIndex: 50` to container and `zIndex: 51` to button.
+
 ---
 
 ### 6. Deferred: "Pass This Round" Button
