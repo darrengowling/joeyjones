@@ -161,6 +161,19 @@ Step 6: Test full flow end-to-end
 | ISSUE-020 | Team offered twice | Socket duplication |
 | ISSUE-022 | "Unknown" manager names | Missing userName data |
 
+### Infrastructure/Config Issues
+
+| Issue ID | Summary | Status | Notes |
+|----------|---------|--------|-------|
+| INFRA-001 | **CORS PATCH method missing** | ✅ Fixed Jan 29 | PATCH was missing from `allow_methods` in CORS middleware. All PATCH requests from browser were blocked. **Action:** When adding new HTTP methods, always verify CORS config. |
+
+**PATCH Endpoints Audit (Jan 29, 2026):**
+| Endpoint | Purpose | Called From |
+|----------|---------|-------------|
+| `PATCH /api/users/{user_id}` | Update user profile | Frontend (Profile.jsx) |
+| `PATCH /api/admin/assets/{asset_id}` | Fix asset data | Admin/curl only |
+| `PATCH /api/fixtures/{fixture_id}/score` | Manual score updates | Potentially frontend |
+
 ### UI/UX Bugs (Stitch Redesign)
 
 | Issue ID | Page | Summary | Status | Notes |
