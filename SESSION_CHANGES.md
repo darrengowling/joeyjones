@@ -98,6 +98,37 @@ Implemented new Stitch-based waiting room design.
 
 ---
 
+### 7. Profile Page ✅ NEW
+Implemented user profile page accessible from bottom nav.
+
+**Backend:**
+- Added `PATCH /api/users/{user_id}` endpoint for updating display name
+- Validates name length (2-30 characters)
+- Users can only update their own profile
+
+**Frontend (`/app/frontend/src/pages/Profile.jsx`):**
+- Avatar with user initials
+- Editable display name with Save/Cancel workflow
+- Email display (read-only)
+- Sign-in methods section (Magic Link active, Google "Coming Soon" placeholder)
+- Sign Out button
+- Follows Stitch design system
+
+**Route:** `/profile` (linked from bottom nav Profile icon)
+
+---
+
+### 8. Homepage Navigation Fix ✅
+**Issue:** Clicking on a competition from the home page navigated to League Detail (`/league/:id`) instead of Competition Dashboard.
+
+**Fix:** Changed navigation target from `/league/${league.id}` to `/app/competitions/${league.id}`
+
+**File:** `/app/frontend/src/pages/HomePage.jsx` (line 432)
+
+**Result:** Users now land on the Competition Dashboard where they can access Summary, League Table, Fixtures, etc.
+
+---
+
 ### 6. Deferred: "Pass This Round" Button
 **Status:** UI exists but shows "Coming soon!" toast. Backend not implemented.
 
