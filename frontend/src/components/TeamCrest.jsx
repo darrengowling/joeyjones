@@ -149,7 +149,7 @@ const TeamCrest = memo(({
         }}
         title={name}
       >
-        {/* Glassmorphism Shield - subtle backdrop for dark logos */}
+        {/* Glassmorphism Shield - soft white backdrop for dark logos */}
         <div
           style={{
             display: 'flex',
@@ -158,9 +158,7 @@ const TeamCrest = memo(({
             width: size * 0.95,
             height: size * 0.95,
             borderRadius: '50%',
-            background: 'rgba(255, 255, 255, 0.08)',
-            backdropFilter: 'blur(8px)',
-            WebkitBackdropFilter: 'blur(8px)',
+            background: 'rgba(255, 255, 255, 0.85)',
           }}
         >
           <img 
