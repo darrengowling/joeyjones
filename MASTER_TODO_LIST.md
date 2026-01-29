@@ -180,6 +180,29 @@ Step 6: Test full flow end-to-end
 - Create logo-specific overrides for problematic crests
 - Source alternative logo files that fit circular containers better
 
+### Deferred Features (Revisit Based on Pilot Feedback)
+
+| Feature | Current State | Why Deferred | Revisit When |
+|---------|---------------|--------------|--------------|
+| **"Pass This Round" Button** | UI exists (shows "Coming soon!" toast) | Touches core auction logic - too risky before pilot | If users report frustration waiting for unwanted teams to time out |
+
+**Pass Button - Design Decisions (for future implementation):**
+
+*Proposed Logic:* If all participants pass on a team, auto-complete lot (team goes unsold, move to next).
+
+*Implementation Scope:*
+- Backend: New endpoint `POST /auction/{id}/pass`, track passes per lot, "all passed" check
+- Frontend: Call endpoint, show pass count, disable after passing, reset on new lot  
+- WebSocket: Broadcast `user_passed` event
+- Risk: 🟡 Medium (touches auction flow, needs careful state management)
+- Effort: 2-3 hours
+
+*Open Design Questions:*
+1. Show pass count? (e.g., "4/12 passed") or keep hidden until all pass?
+2. Can user "un-pass" if they change mind?
+3. Can user still bid after passing? (or locked out for that lot)
+4. Does commissioner pass count the same as others?
+
 ---
 
 ## 🟢 POST-PILOT TASKS
