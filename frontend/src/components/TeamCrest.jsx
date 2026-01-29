@@ -113,7 +113,7 @@ const TeamCrest = memo(({
       <div 
         className={`absolute inset-0 flex items-center justify-center pointer-events-none ${className}`}
         style={{ 
-          opacity: 0.12
+          opacity: 0.15
         }}
       >
         {hasLogo ? (
