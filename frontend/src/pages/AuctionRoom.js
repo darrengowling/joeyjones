@@ -892,20 +892,15 @@ function AuctionRoom() {
   // Prompt E: Show waiting room if auction status is "waiting"
   if (auction?.status === "waiting") {
     const handleBeginAuction = async () => {
-      console.log("🚀 BEGIN AUCTION CLICKED");
-      console.log("API:", API);
-      console.log("auctionId:", auctionId);
-      console.log("user.id:", user?.id);
       try {
-        const response = await axios.post(`${API}/auction/${auctionId}/begin`, null, {
+        await axios.post(`${API}/auction/${auctionId}/begin`, null, {
           headers: {
             'X-User-ID': user.id
           }
         });
-        console.log("✅ Auction begin request sent", response.data);
-        // State will update via lot_started event
+        console.log("✅ Auction started");
       } catch (error) {
-        console.error("❌ Error starting auction:", error);
+        console.error("Error starting auction:", error);
         alert(error.response?.data?.detail || "Failed to start auction");
       }
     };
