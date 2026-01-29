@@ -149,20 +149,35 @@ const TeamCrest = memo(({
         }}
         title={name}
       >
-        <img 
-          src={logoPath} 
-          alt={name}
-          width={size * 0.9}
-          height={size * 0.9}
-          onError={() => setImgError(true)}
-          style={{ 
-            objectFit: 'contain',
-            // White edge (helps dark logos) + Cyan brand glow
-            filter: isActive 
-              ? 'drop-shadow(0 0 1px rgba(255,255,255,0.6)) drop-shadow(0 0 6px rgba(6, 182, 212, 0.6)) drop-shadow(0 0 12px rgba(6, 182, 212, 0.3))' 
-              : 'drop-shadow(0 0 1px rgba(255,255,255,0.5)) drop-shadow(0 0 3px rgba(6, 182, 212, 0.4)) drop-shadow(0 0 6px rgba(6, 182, 212, 0.2))'
+        {/* Glassmorphism Shield - subtle backdrop for dark logos */}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: size * 0.95,
+            height: size * 0.95,
+            borderRadius: '50%',
+            background: 'rgba(255, 255, 255, 0.08)',
+            backdropFilter: 'blur(8px)',
+            WebkitBackdropFilter: 'blur(8px)',
           }}
-        />
+        >
+          <img 
+            src={logoPath} 
+            alt={name}
+            width={size * 0.75}
+            height={size * 0.75}
+            onError={() => setImgError(true)}
+            style={{ 
+              objectFit: 'contain',
+              // Subtle cyan glow for brand consistency
+              filter: isActive 
+                ? 'drop-shadow(0 0 4px rgba(6, 182, 212, 0.5))' 
+                : 'drop-shadow(0 0 2px rgba(6, 182, 212, 0.3))'
+            }}
+          />
+        </div>
       </div>
     );
   }
