@@ -429,7 +429,7 @@ const HomePage = () => {
               {leagues.slice(0, 3).map((league) => (
                 <button
                   key={league.id}
-                  onClick={() => navigate(`/league/${league.id}`)}
+                  onClick={() => navigate(`/app/competitions/${league.id}`)}
                   className="w-full p-4 rounded-2xl flex items-center justify-between transition-all active:scale-[0.98] group text-left"
                   style={{
                     background: 'rgba(30, 41, 59, 0.45)',
