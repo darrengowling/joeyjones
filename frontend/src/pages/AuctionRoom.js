@@ -1133,7 +1133,8 @@ function AuctionRoom() {
         <div 
           className="fixed bottom-0 left-0 right-0 p-4 pb-8 max-w-md mx-auto"
           style={{
-            background: 'linear-gradient(to top, #0F172A 60%, transparent)'
+            background: 'linear-gradient(to top, #0F172A 60%, transparent)',
+            zIndex: 50
           }}
         >
           {isCommissioner ? (
