@@ -107,13 +107,13 @@ const TeamCrest = memo(({
   const hasLogo = logoPath && !imgError;
   
   // For watermark variant, return with special styling
-  // Pure white silhouette at 15% opacity - prevents color clash with UI elements
+  // Pure white silhouette - prevents color clash with UI elements
   if (variant === 'watermark') {
     return (
       <div 
         className={`absolute inset-0 flex items-center justify-center pointer-events-none ${className}`}
         style={{ 
-          opacity: 0.15
+          opacity: 0.12
         }}
       >
         {hasLogo ? (
