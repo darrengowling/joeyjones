@@ -1,6 +1,43 @@
 # Session Changes Log - UI/UX Redesign (Stitch)
 **Started:** January 27, 2026
-**Last Updated:** January 27, 2026
+**Last Updated:** January 29, 2026
+
+---
+
+## IPL Team Logo Integration - January 29, 2026
+
+### Completed
+All 10 IPL team logos have been processed and integrated into the app.
+
+**Files added to `/app/frontend/public/assets/clubs/cricket/`:**
+| Team | File | Size | Status |
+|------|------|------|--------|
+| Chennai Super Kings | chennai_super_kings.png | 256x256 | ✅ |
+| Mumbai Indians | mumbai_indians.png | 256x256 | ✅ |
+| Delhi Capitals | delhi_capitals.png | 256x256 | ✅ |
+| Kolkata Knight Riders | kolkata_knight_riders.png | 256x256 | ✅ |
+| Gujarat Titans | gujarat_titans.png | 256x256 | ✅ |
+| Punjab Kings | punjab_kings.png | 256x256 | ✅ |
+| Rajasthan Royals | rajasthan_royals.png | 256x256 | ✅ |
+| Royal Challengers Bengaluru | royal_challengers_bangalore.png | 256x256 | ✅ |
+| Sunrisers Hyderabad | sunrisers_hyderabad.png | 256x256 | ✅ |
+| Lucknow Super Giants | lucknow_super_giants.png | 256x256 | ✅ |
+
+**Mapping file updated:** `/app/frontend/src/utils/teamLogoMapping.js`
+- Added all 10 IPL teams to `cricketLogoMapping` object
+- Added alias for "Royal Challengers Bangalore" → same PNG file
+
+**Process used:**
+1. User provided vector logo zip files (from logobase.net and logoshape.com)
+2. Extracted SVG files using Python zipfile
+3. Converted SVG → PNG using `cairosvg` with 256x256 dimensions and transparent background
+4. Copied to `/app/frontend/public/assets/clubs/cricket/`
+5. Updated mapping in `teamLogoMapping.js`
+
+**Note on CSK logo size:**
+The Chennai Super Kings logo appears visually smaller than others (e.g., Punjab Kings) despite all being 256x256 pixels. This is due to the logo design itself - CSK's lion figure only fills ~30% of the canvas, while Punjab Kings fills ~76%. This is inherent to the source artwork and not a bug.
+
+---
 
 ## CRITICAL ERRORS - January 27, 2026
 
