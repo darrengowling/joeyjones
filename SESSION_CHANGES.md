@@ -21,20 +21,24 @@ Standardized all pages to use the deep navy `#0F172A` as per Stitch design spec.
 | MyCompetitions.js | `#0B101B` | `#0F172A` ✅ |
 | CreateCompetition.jsx | `#070B13` | `#0F172A` ✅ |
 
-#### TeamCrest Glow Effect
-Updated from white to cyan glow with white edge for dark logo visibility.
+#### TeamCrest Glow Effect → Soft White Backdrop
+Multiple iterations to solve dark logo visibility (especially Tottenham):
 
+**Attempts:**
+1. ❌ Cyan Halo - `drop-shadow` insufficient for all-dark logos
+2. ❌ White Silhouette - `brightness(0) invert(1)` had inconsistent rendering
+3. ❌ Glassmorphism Shield (8% white) - Too subtle
+4. ✅ **Soft White Backdrop (85% white)** - Current solution
+
+**Current Implementation:**
 ```css
-filter: 
-  drop-shadow(0 0 1px rgba(255,255,255,0.5))  /* white edge for dark logos */
-  drop-shadow(0 0 3px rgba(6, 182, 212, 0.4)) /* cyan glow */
-  drop-shadow(0 0 6px rgba(6, 182, 212, 0.2)) /* cyan ambient */
+/* Circular white backdrop behind all crests */
+background: rgba(255, 255, 255, 0.85);
+border-radius: 50%;
+/* Logo at 65% of container size */
 ```
 
-**⚠️ KEEP UNDER REVIEW:** Tottenham Hotspur logo (dark navy) remains difficult to see on dark background. Current solution is best balance found. Future options:
-- Increase white edge opacity for specific dark logos
-- Add light circular background behind very dark logos
-- Request lighter version of the Spurs logo
+**⚠️ KNOWN ISSUE (UI-002):** Shield-shaped logos (Fulham, Bournemouth) slightly overflow the circular container. Documented in MASTER_TODO_LIST.md with future options to explore.
 
 #### Hero Watermark Implementation
 Updated watermark to show original logo with slight desaturation at 12% opacity.
