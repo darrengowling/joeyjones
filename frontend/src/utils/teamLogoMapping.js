@@ -64,6 +64,7 @@ export const cricketLogoMapping = {
   "Chennai Super Kings": "chennai_super_kings.png",
   "Mumbai Indians": "mumbai_indians.png",
   "Royal Challengers Bengaluru": "royal_challengers_bangalore.png",
+  "Royal Challengers Bangalore": "royal_challengers_bangalore.png",
   "Kolkata Knight Riders": "kolkata_knight_riders.png",
   "Delhi Capitals": "delhi_capitals.png",
   "Rajasthan Royals": "rajasthan_royals.png",
