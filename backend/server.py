@@ -1612,6 +1612,48 @@ async def get_user(user_id: str):
         raise HTTPException(status_code=404, detail="User not found")
     return User(**user)
 
+@api_router.patch("/users/{user_id}")
+async def update_user_profile(user_id: str, update_data: dict, request: Request):
+    """
+    Update user profile (display name)
+    
+    Accepts: { "name": "New Display Name" }
+    """
+    # Verify the requesting user is updating their own profile
+    requesting_user_id = request.headers.get("X-User-ID")
+    if requesting_user_id != user_id:
+        raise HTTPException(status_code=403, detail="Can only update your own profile")
+    
+    # Find existing user
+    user = await db.users.find_one({"id": user_id}, {"_id": 0})
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    # Build update fields (only allow specific fields to be updated)
+    allowed_fields = {"name"}
+    update_fields = {k: v for k, v in update_data.items() if k in allowed_fields and v}
+    
+    if not update_fields:
+        raise HTTPException(status_code=400, detail="No valid fields to update")
+    
+    # Validate name length
+    if "name" in update_fields:
+        name = update_fields["name"].strip()
+        if len(name) < 2 or len(name) > 30:
+            raise HTTPException(status_code=400, detail="Name must be between 2 and 30 characters")
+        update_fields["name"] = name
+    
+    # Update user
+    await db.users.update_one(
+        {"id": user_id},
+        {"$set": update_fields}
+    )
+    
+    # Return updated user
+    updated_user = await db.users.find_one({"id": user_id}, {"_id": 0})
+    logger.info(f"User {user_id} updated profile: {update_fields}")
+    return updated_user
+
 @api_router.post("/auth/magic-link")
 async def send_magic_link(email_input: dict, request: Request):
     """
