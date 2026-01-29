@@ -71,6 +71,29 @@ Removed text labels from icons, now icon-only with title attributes for accessib
 
 ---
 
+### 5. Waiting Room Redesign ✅
+Implemented new Stitch-based waiting room design.
+
+**Commissioner View:**
+- Light beam effect background
+- "AUCTION LOBBY" title with participant count pill
+- Grid of glassmorphic participant cards with avatars (initials)
+- Glowing cyan status dots for "Ready" state
+- Solid cyan "BEGIN AUCTION" CTA button
+
+**User View:**
+- Same layout but with hourglass icon
+- Pulsing "Waiting for Host..." indicator (no action button)
+- Manages expectations - users can't accidentally tap start
+
+**Shared Elements:**
+- Inter font family
+- 12px border radius consistency
+- Deep #0F172A background with light beam effect
+- Glassmorphism cards with backdrop blur
+
+---
+
 ### Upcoming: Waiting Room Redesign
 Based on Stitch designs, implementing new waiting room views:
 
