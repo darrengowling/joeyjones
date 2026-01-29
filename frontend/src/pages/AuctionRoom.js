@@ -1442,11 +1442,12 @@ function AuctionRoom() {
         )}
       </div>
 
-      {/* ========== BOTTOM NAV (64px - icons only) ========== */}
+      {/* ========== BOTTOM NAV (80px - icons only with FAB) ========== */}
       <nav 
         className="flex-shrink-0 flex items-center justify-around"
         style={{ 
-          height: '64px',
+          height: '80px',
+          paddingBottom: '16px',
           background: '#0F172A', 
           borderTop: '1px solid rgba(255,255,255,0.1)' 
         }}
@@ -1460,7 +1461,7 @@ function AuctionRoom() {
         {/* Central FAB */}
         <button 
           onClick={() => navigate('/create-competition')}
-          className="w-16 h-16 rounded-full flex items-center justify-center -mt-8"
+          className="w-14 h-14 rounded-full flex items-center justify-center -mt-6"
           style={{ 
             background: '#06B6D4', 
             boxShadow: '0 0 20px rgba(6, 182, 212, 0.4)'
