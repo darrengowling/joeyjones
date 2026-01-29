@@ -1464,7 +1464,8 @@ function AuctionRoom() {
           className="w-14 h-14 rounded-full flex items-center justify-center -mt-6"
           style={{ 
             background: '#06B6D4', 
-            boxShadow: '0 0 20px rgba(6, 182, 212, 0.4)'
+            boxShadow: '0 0 20px rgba(6, 182, 212, 0.4)',
+            border: '4px solid #0F172A'
           }}
           title="Create"
         >
