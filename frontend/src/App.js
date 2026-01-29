@@ -1270,7 +1270,7 @@ export default function App() {
           <Route path="/design-preview" element={<DesignPreview />} />
           {/* Placeholder routes for features coming soon */}
           <Route path="/stats" element={<PlaceholderPage />} />
-          <Route path="/profile" element={<PlaceholderPage />} />
+          <Route path="/profile" element={<Profile />} />
         </Routes>
       </Suspense>
       <DebugFooter />
