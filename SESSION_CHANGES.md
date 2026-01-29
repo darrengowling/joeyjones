@@ -4,12 +4,16 @@
 
 ---
 
-## Design System Refinements - January 29, 2026
+## Session 5 Changes - January 29, 2026
 
-### 1. Background Color Standardization ✅
+### 1. IPL Team Logo Integration ✅
+All 10 IPL team logos processed and integrated. See detailed section below.
+
+### 2. Design System Refinements ✅
+
+#### Background Color Standardization
 Standardized all pages to use the deep navy `#0F172A` as per Stitch design spec.
 
-**Files updated:**
 | Page | Before | After |
 |------|--------|-------|
 | AuctionRoom.js | `#0B101B` | `#0F172A` ✅ |
@@ -17,24 +21,70 @@ Standardized all pages to use the deep navy `#0F172A` as per Stitch design spec.
 | MyCompetitions.js | `#0B101B` | `#0F172A` ✅ |
 | CreateCompetition.jsx | `#070B13` | `#0F172A` ✅ |
 
-### 2. TeamCrest Cyan Glow ✅
-Updated team logo glow effect from white to cyan to align with Sport X brand.
+#### TeamCrest Glow Effect
+Updated from white to cyan glow with white edge for dark logo visibility.
 
-**File updated:** `/app/frontend/src/components/TeamCrest.jsx`
-
-**Implementation:**
 ```css
-/* White edge (helps dark logos) + Cyan brand glow */
 filter: 
-  drop-shadow(0 0 1px rgba(255,255,255,0.5))  /* subtle white edge */
+  drop-shadow(0 0 1px rgba(255,255,255,0.5))  /* white edge for dark logos */
   drop-shadow(0 0 3px rgba(6, 182, 212, 0.4)) /* cyan glow */
   drop-shadow(0 0 6px rgba(6, 182, 212, 0.2)) /* cyan ambient */
 ```
 
-**⚠️ KEEP UNDER REVIEW:** The Tottenham Hotspur logo (dark navy) remains difficult to see on the dark background despite the white edge. Current solution is the best balance found, but may need revisiting if users report visibility issues. Potential future solutions:
+**⚠️ KEEP UNDER REVIEW:** Tottenham Hotspur logo (dark navy) remains difficult to see on dark background. Current solution is best balance found. Future options:
 - Increase white edge opacity for specific dark logos
-- Add a light circular background behind very dark logos
-- Request a lighter version of the Spurs logo from source
+- Add light circular background behind very dark logos
+- Request lighter version of the Spurs logo
+
+#### Hero Watermark Implementation
+Updated watermark to show original logo with slight desaturation at 12% opacity.
+```css
+filter: grayscale(50%) brightness(150%)
+opacity: 0.12
+```
+
+### 3. Auction Room UX Improvements ✅
+
+#### Bottom Navigation Removed
+Removed bottom nav bar from auction room entirely - provides a more focused auction experience without navigation distractions.
+
+#### Quick Bid Buttons Extended
+Added +£20m and +£50m buttons for faster large bids.
+
+| Row | Buttons |
+|-----|---------|
+| Row 1 | +£1m, +£5m, +£10m |
+| Row 2 | +£20m, +£50m |
+
+#### Delete/End Auction Restored
+Added "End" button back to commissioner controls.
+
+#### View All Modal - Queue Order Hidden
+Changed from showing "#1 in queue" to just "In auction" - maintains gameplay strategy element of not knowing team order.
+
+### 4. BottomNav Component (Global) ✅
+Removed text labels from icons, now icon-only with title attributes for accessibility.
+
+---
+
+### Upcoming: Waiting Room Redesign
+Based on Stitch designs, implementing new waiting room views:
+
+**Commissioner View:**
+- Grid of glassmorphic participant cards
+- Prominent "BEGIN AUCTION" CTA button
+- Glowing status dots for "Ready" state
+
+**User View:**
+- Pulsing "Waiting for Host..." indicator
+- No start button (manages expectations)
+- Social presence with real-time participant list
+
+**Shared Elements:**
+- Inter/Roboto typography stack
+- 12px border radius consistency
+- Deep #0F172A background
+- Glassmorphism effects
 
 ---
 
