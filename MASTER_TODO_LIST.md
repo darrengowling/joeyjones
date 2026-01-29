@@ -166,6 +166,19 @@ Step 6: Test full flow end-to-end
 | Issue ID | Page | Summary | Status | Notes |
 |----------|------|---------|--------|-------|
 | UI-001 | CompetitionDashboard | Tab height/centering issue on mobile | 🔴 Open | Tabs (Summary, League Table, Fixtures) appear cramped with text not vertically centered. Multiple fix attempts (py-5, h-14, inline styles with height:56px + flex centering) all show correctly in agent's preview but DO NOT appear on user's browser even after hard refresh. Suspected infrastructure/CDN caching bug - changes in code are confirmed but not being served to user. |
+| UI-002 | TeamCrest (all lists) | Dark logos (e.g., Tottenham) hard to see on dark background + shield-shaped logos overflow circular container | 🟡 Partial | **Current solution:** Soft white circular backdrop (`rgba(255,255,255,0.85)`) with logo at 65% size. Works for most logos but shield-shaped crests (Fulham, Bournemouth) still slightly overflow. |
+
+**UI-002 Options Tried:**
+1. ❌ **Cyan Halo** - `drop-shadow` glow around logo. Insufficient for all-dark logos like Spurs (interior remains invisible).
+2. ❌ **White Silhouette** - `brightness(0) invert(1)` filter. Inconsistent rendering, some logos showed placeholders.
+3. ⚠️ **Glassmorphism Shield (8% white)** - Too subtle, Spurs still invisible.
+4. ✅ **Soft White Backdrop (85% white)** - Current solution. Works for dark logos but shield-shaped crests overflow circle.
+
+**UI-002 Future Options to Consider:**
+- Use square/rounded-square backdrop instead of circle to accommodate shield shapes
+- Dynamically detect logo aspect ratio and adjust container shape
+- Create logo-specific overrides for problematic crests
+- Source alternative logo files that fit circular containers better
 
 ---
 
