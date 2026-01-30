@@ -161,17 +161,87 @@ const DARK_LOGOS_NEEDING_BACKDROP = [
 
 ---
 
+### 8. FIFA World Cup 2026 National Teams ✅
+
+**42 national team badges added** for qualified WC2026 teams.
+
+**Location:** `/app/frontend/public/assets/clubs/national_teams/`
+
+**Mapping:** `nationalTeamLogoMapping` in `teamLogoMapping.js`
+
+**Teams by Confederation:**
+| Confederation | Teams |
+|---------------|-------|
+| CAF (Africa) | Algeria, Cabo Verde, Côte d'Ivoire, Egypt, Ghana, Morocco, Senegal, South Africa, Tunisia |
+| AFC (Asia) | Australia, Iran, Japan, Jordan, Qatar, Saudi Arabia, South Korea, Uzbekistan |
+| UEFA (Europe) | Austria, Belgium, Croatia, England, France, Germany, Netherlands, Norway, Portugal, Scotland, Spain, Switzerland |
+| CONCACAF | Canada, Curaçao, Haiti, Mexico, Panama, United States |
+| OFC (Oceania) | New Zealand |
+| CONMEBOL | Argentina, Brazil, Colombia, Ecuador, Paraguay, Uruguay |
+
+**Database:** 42 national team assets seeded with `type: 'national_team'` and `competitionCode: 'WC2026'`
+
+---
+
+### 9. Team Type Filter Added ✅
+
+**Problem:** Clubs and national teams mixed together, hard to browse.
+
+**Solution:** Added "Team Type" dropdown filter on ClubsList page.
+
+**File:** `/app/frontend/src/pages/ClubsList.js`
+
+**Options:**
+- All Teams (105)
+- Clubs Only (63)
+- National Teams Only (42)
+
+---
+
+### 10. Football-Data.org ID Integration ✅
+
+**Problem:** Teams lacked `footballDataId` needed for fixture imports and score updates.
+
+**Solution:** Created script to auto-populate IDs from Football-Data.org API.
+
+**File:** `/app/scripts/populate_football_data_ids.py`
+
+**Coverage:**
+- 63 club teams: ✅ All have `footballDataId`
+- 42 national teams: ✅ All have `footballDataId`
+- **Total: 105/105 = 100% coverage**
+
+**How It Works:**
+1. Script fetches teams from Football-Data.org API (multiple competitions)
+2. Matches by name (fuzzy matching + manual mappings)
+3. Updates `footballDataId` field in database
+4. Can be re-run for new teams
+
+---
+
+### 11. Preview Environment → Production DB ✅
+
+**Change:** Preview environment now connects to production MongoDB Atlas.
+
+**File:** `/app/backend/.env`
+```
+MONGO_URL="mongodb+srv://darts_admin:***@cluster0.edjfwnl.mongodb.net/?appName=Cluster0"
+DB_NAME="sport_x_poc"
+```
+
+**Benefit:** What you test in preview is exactly what you'll see in production.
+
+---
+
 ### Key Findings This Session
 
-#### Two Separate Databases
+#### Database Synchronization ✅ RESOLVED
 | Environment | Database | Teams |
 |-------------|----------|-------|
-| Preview (Emergent) | Local MongoDB | 74 |
-| Production (Railway) | MongoDB Atlas | 63 |
+| Preview (Emergent) | MongoDB Atlas (prod) | 105 |
+| Production (Railway) | MongoDB Atlas (prod) | 105 |
 
-**Issue:** Different data in each environment causes confusion during testing.
-
-**Recommendation:** Consider syncing preview to production DB or using a staging copy. See discussion below.
+**Both environments now use the same database.**
 
 #### Railway API Routing
 External curl requests to production `/api/*` routes return HTML instead of JSON. However, frontend browser requests work fine. This appears to be a Railway nginx/proxy configuration - not blocking users but impacts external API testing.
@@ -180,23 +250,28 @@ External curl requests to production `/api/*` routes return HTML instead of JSON
 
 ### Files Modified This Session
 - `/app/frontend/src/components/TeamCrest.jsx` - Conditional backdrop
-- `/app/frontend/src/utils/teamLogoMapping.js` - Reorganized, standardized names
+- `/app/frontend/src/utils/teamLogoMapping.js` - Reorganized, standardized names, added national teams
+- `/app/frontend/src/pages/ClubsList.js` - Added team type filter
+- `/app/backend/.env` - Changed to production MongoDB
 - `/app/MASTER_TODO_LIST.md` - Major update
 - `/app/SESSION_CHANGES.md` - This file
 
 ### Files Created This Session
 - `/app/scripts/standardize_team_names.py` - DB name standardization
 - `/app/scripts/merge_duplicate_teams.py` - Duplicate cleanup
+- `/app/scripts/populate_football_data_ids.py` - Football-Data.org ID population
 
 ### Assets Added This Session
-**Football logos (7 new PNGs):**
-- `/app/frontend/public/assets/clubs/football/galatasaray.png`
-- `/app/frontend/public/assets/clubs/football/olympiacos.png`
-- `/app/frontend/public/assets/clubs/football/fk_qarabag.png`
-- `/app/frontend/public/assets/clubs/football/fc_kobenhavn.png`
-- `/app/frontend/public/assets/clubs/football/pafos_fc.png`
-- `/app/frontend/public/assets/clubs/football/slavia_prague.png`
-- `/app/frontend/public/assets/clubs/football/union_saint_gilloise.png`
+**Football club logos (16 new PNGs):**
+- galatasaray.png, olympiacos.png, fk_qarabag.png
+- fc_kobenhavn.png, pafos_fc.png, slavia_prague.png, union_saint_gilloise.png
+- celtic_fc.png, rangers_fc.png
+- sturm_graz.png, sparta_prague.png, dinamo_zagreb.png
+- young_boys.png, red_star_belgrade.png, shakhtar_donetsk.png, jagiellonia_bialystok.png
+
+**National team badges (42 PNGs):**
+- Location: `/app/frontend/public/assets/clubs/national_teams/`
+- All FIFA World Cup 2026 qualified teams
 
 ---
 
