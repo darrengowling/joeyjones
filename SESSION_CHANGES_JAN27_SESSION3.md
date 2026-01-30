@@ -134,8 +134,8 @@
 - Status: `waiting`
 
 ### URLs:
-- Frontend: `https://fantasy-ux-pilot.preview.emergentagent.com`
-- Backend API: `https://fantasy-ux-pilot.preview.emergentagent.com/api`
+- Frontend: `https://stitch-dark-theme.preview.emergentagent.com`
+- Backend API: `https://stitch-dark-theme.preview.emergentagent.com/api`
 
 ---
 

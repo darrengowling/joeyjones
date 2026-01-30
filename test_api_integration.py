@@ -7,7 +7,7 @@ import requests
 import json
 import sys
 
-BACKEND_URL = "https://fantasy-ux-pilot.preview.emergentagent.com/api"
+BACKEND_URL = "https://stitch-dark-theme.preview.emergentagent.com/api"
 
 def test_league_creation_with_assets():
     """Test creating a league with assetsSelected via API"""
