@@ -10,24 +10,29 @@
 2. **Teams/Players** - Stored in `assets` collection, NOT `clubs` or `teams`
 3. **Points** - Stored in `league_points` collection, NOT `league_participants`
 4. **Competition names** - Exact match required: "UEFA Champions League", "English Premier League", "Africa Cup of Nations"
+5. **Team logos** - Use `teamLogoMapping.js` for local assets, NOT API URLs
+6. **Football-Data.org** - Teams must have `footballDataId` for fixture imports
 
 ---
 
 ## 📋 Your First 3 Actions
 
 1. **Read** `/app/MASTER_TODO_LIST.md` - The source of truth for all tasks
-2. **Check** what phase we're in: PRE-MIGRATION → PRE-PILOT → POST-PILOT
+2. **Check** what phase we're in: ~~PRE-MIGRATION~~ → **PRE-PILOT** → POST-PILOT
 3. **Ask user** what they want before doing anything
 
 ---
 
-## 🔴 Current Status (January 2026)
+## 🔴 Current Status (January 30, 2026)
 
 | Item | Status |
 |------|--------|
-| **Platform** | Emergent (US-hosted) - migrating to Railway (EU) |
-| **Core Issue** | UK users get ~700ms latency due to US hosting |
-| **Pilot** | 400 UK users - NOT READY until migration complete |
+| **Platform** | Railway EU (MIGRATED ✅) |
+| **Preview DB** | MongoDB Atlas (same as production) |
+| **Production DB** | MongoDB Atlas |
+| **Pilot** | 400 UK users - Final polish phase |
+| **Football Teams** | 63 clubs + 42 national teams = 105 total |
+| **Football-Data.org IDs** | 100% coverage (105/105) |
 | **Auth** | Needs hardening (email delivery, rate limiting) |
 
 ---
@@ -37,11 +42,67 @@
 | File | What It Contains |
 |------|------------------|
 | `/app/MASTER_TODO_LIST.md` | All tasks, priorities, phases |
-| `/app/MIGRATION_PLAN.md` | Railway migration details |
-| `/app/AGENT_ONBOARDING_PROMPT.md` | Full system architecture |
+| `/app/SESSION_CHANGES.md` | Detailed session work log |
 | `/app/backend/server.py` | Main API (~5900 lines - monolithic) |
+| `/app/frontend/src/utils/teamLogoMapping.js` | Team name → logo file mapping |
+| `/app/frontend/src/components/TeamCrest.jsx` | Logo display component |
 | `/app/docs/OPERATIONS_PLAYBOOK.md` | Operational procedures |
-| `/app/tests/multi_league_stress_test.py` | Load testing script |
+
+---
+
+## 🗄️ Database Quick Reference
+
+```
+assets           → Teams (football) and Players (cricket)
+                   - footballDataId: ID for Football-Data.org API
+                   - type: 'national_team' for WC2026 teams
+                   - competitionCode: 'WC2026', 'CL', 'PL', etc.
+leagues          → Competition settings
+league_participants → User budgets, rosters (clubsWon array)
+league_points    → Team/player scores (NOT in league_participants)
+auctions         → Active auction state
+bids             → Bid history
+fixtures         → Match data (status must be "ft" for scoring)
+users            → User accounts
+magic_links      → Auth tokens
+```
+
+---
+
+## 🖼️ Logo System Quick Reference
+
+**Folder structure:**
+```
+/app/frontend/public/assets/clubs/
+├── football/          → Club team logos (63 teams)
+├── cricket/           → IPL team logos (10 teams)
+└── national_teams/    → World Cup 2026 badges (42 teams)
+```
+
+**Mapping file:** `/app/frontend/src/utils/teamLogoMapping.js`
+- `footballLogoMapping` - Club teams
+- `cricketLogoMapping` - IPL teams
+- `nationalTeamLogoMapping` - National teams
+
+**Component:** `/app/frontend/src/components/TeamCrest.jsx`
+- Conditionally adds white backdrop for dark logos (Tottenham, Newcastle, Juventus)
+
+**To add new logos:**
+1. Convert SVG to PNG: `cairosvg input.svg -o output.png -W 256 -H 256`
+2. Copy to appropriate assets folder
+3. Add mapping to `teamLogoMapping.js`
+4. Update `footballDataId` using `/app/scripts/populate_football_data_ids.py`
+
+---
+
+## 🔧 Useful Scripts
+
+| Script | Purpose |
+|--------|---------|
+| `/app/scripts/standardize_team_names.py` | Rename teams to official API names |
+| `/app/scripts/merge_duplicate_teams.py` | Remove duplicate team entries |
+| `/app/scripts/populate_football_data_ids.py` | Add Football-Data.org IDs to all teams |
+| `/app/scripts/seed_railway_poc.py` | Seed football teams for new environment |
 
 ---
 
@@ -51,6 +112,7 @@
 2. **READ before editing** - View files before search_replace
 3. **TEST after changing** - curl, screenshot, or testing agent
 4. **DON'T assume broken** - If something looks wrong, verify with user first
+5. **DON'T save to GitHub** - Until user explicitly approves (triggers Railway auto-deploy)
 
 ---
 
@@ -72,42 +134,13 @@ If you make changes AFTER a save, they WON'T be in GitHub until the next save. T
 
 ---
 
-## 🗄️ Database Quick Reference
-
-```
-assets           → Teams (football) and Players (cricket)
-leagues          → Competition settings
-league_participants → User budgets, rosters (clubsWon array)
-league_points    → Team/player scores (NOT in league_participants)
-auctions         → Active auction state
-bids             → Bid history
-fixtures         → Match data (status must be "ft" for scoring)
-users            → User accounts
-magic_links      → Auth tokens
-```
-
----
-
 ## 📞 If Stuck
 
-1. Check `/app/docs/archive/` for historical context
-2. Search codebase: `grep -r "keyword" /app/backend/`
-3. Ask the user - they know the system
+1. Check `/app/SESSION_CHANGES.md` for recent work
+2. Check `/app/MASTER_TODO_LIST.md` for priorities
+3. Search codebase: `grep -r "keyword" /app/backend/`
+4. Ask the user - they know the system
 
 ---
 
-**Last Updated:** January 24, 2026
-
----
-
-## 🔧 Railway Deployment Fixes (January 2026)
-
-These code fixes were required when deploying to Railway (fresh dependencies):
-
-| Issue | Symptom | Fix |
-|-------|---------|-----|
-| Sentry API changed | `startTransaction is not exported from @sentry/react` | Updated `sentry.js` to use `performance.now()` instead |
-| ESLint 9 breaking changes | `react-hooks/exhaustive-deps rule not found` | Created `.eslintrc.json` with react-hooks plugin |
-| yarn.lock mismatch | `lockfile needs to be updated` | Created `.yarnrc` with `--install.frozen-lockfile false` |
-
-**These fixes are backwards-compatible with Emergent production.**
+**Last Updated:** January 30, 2026
