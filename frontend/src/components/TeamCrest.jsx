@@ -114,6 +114,10 @@ const TeamCrest = memo(({
   const logoPath = getTeamLogoPath(name, sportKey);
   const hasLogo = logoPath && !imgError;
   
+  // Check if this specific logo needs a white backdrop (dark logos)
+  const logoFilename = logoPath ? logoPath.split('/').pop() : '';
+  const needsBackdrop = DARK_LOGOS_NEEDING_BACKDROP.includes(logoFilename);
+  
   // For watermark variant, return with special styling
   // Shows original logo at low opacity as background watermark
   if (variant === 'watermark') {
