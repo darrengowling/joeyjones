@@ -1452,12 +1452,12 @@ export default function LeagueDetailStitched() {
               </div>
             ) : (
               <>
-                {/* Upcoming Fixtures */}
-                {fixtures.filter(f => f.status === 'scheduled').length > 0 && (
+                {/* Upcoming Fixtures - includes scheduled, in_play, live, postponed, etc. */}
+                {fixtures.filter(f => f.status !== 'ft' && f.status !== 'finished').length > 0 && (
                   <div>
                     <h4 className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: 'var(--text-muted, rgba(255,255,255,0.4))' }}>Upcoming Matches</h4>
                     <div className="space-y-2">
-                      {fixtures.filter(f => f.status === 'scheduled').map((fixture) => (
+                      {fixtures.filter(f => f.status !== 'ft' && f.status !== 'finished').map((fixture) => (
                         <div 
                           key={fixture.id}
                           className="p-4 rounded-xl"
