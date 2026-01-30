@@ -74,14 +74,17 @@ export const footballLogoMapping = {
   // Priority 1 - CL 2025/26 Playoff teams
   "Galatasaray SK": "galatasaray.png",
   "Galatasaray": "galatasaray.png",
+  "PAE Olympiakos SFP": "olympiacos.png",
   "Olympiacos FC": "olympiacos.png",
   "Olympiacos": "olympiacos.png",
+  "Qarabağ Ağdam FK": "fk_qarabag.png",
   "FK Qarabag": "fk_qarabag.png",
   "Qarabağ FK": "fk_qarabag.png",
   
   // Priority 2 - CL 2025/26 League Phase teams
   "FC København": "fc_kobenhavn.png",
   "FC Copenhagen": "fc_kobenhavn.png",
+  "Paphos FC": "pafos_fc.png",
   "Pafos FC": "pafos_fc.png",
   "SK Slavia Praha": "slavia_prague.png",
   "Slavia Prague": "slavia_prague.png",
