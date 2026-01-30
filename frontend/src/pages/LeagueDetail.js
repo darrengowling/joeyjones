@@ -1358,11 +1358,11 @@ export default function LeagueDetail() {
                   )}
                   
                   {/* Completed Fixtures */}
-                  {fixtures.filter(f => f.status !== 'scheduled').length > 0 && (
+                  {fixtures.filter(f => f.status === 'ft' || f.status === 'finished').length > 0 && (
                     <div className="mt-6">
                       <h4 className="text-md font-semibold text-gray-700 mb-2">Completed Matches</h4>
                       <div className="space-y-2">
-                        {fixtures.filter(f => f.status !== 'scheduled').map((fixture) => (
+                        {fixtures.filter(f => f.status === 'ft' || f.status === 'finished').map((fixture) => (
                           <div key={fixture.id} className="flex items-center justify-between border border-gray-200 rounded-lg p-4 bg-gray-50">
                             <div className="flex items-center space-x-4 flex-1">
                               <div className={`text-right flex-1 ${fixture.homeTeamInLeague ? 'font-semibold text-blue-600' : 'text-gray-700'}`}>
