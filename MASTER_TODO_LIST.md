@@ -193,8 +193,35 @@ When ready, implement all at once:
 | 4 | Custom scoring rules | 1 week | P3 | Flexibility per tournament |
 | 5 | Email notifications | 1 week | P2 | Invites, reminders |
 | 6 | Payment integration (Stripe) | 2 weeks | P3 | Entry fees |
-| 7 | FIFA World Cup 2026 teams | 2 hrs | P2 | When qualifiers complete |
-| 8 | IPL 2026 Cricbuzz integration | 2 hrs | P2 | When API available |
+
+### 🏆 FIFA World Cup 2026 Setup (P1 - Needed for Pilot)
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Research qualified teams | 🔜 Next | ~35 confirmed, 48 total |
+| 2 | Seed national team assets | ⏳ Pending | After team list finalized |
+| 3 | Source national team logos/flags | ⏳ Pending | 48 logos needed |
+| 4 | Set up WC2026 competition code | ⏳ Pending | New competition in DB |
+| 5 | Test fixture import | ⏳ Pending | Football-Data.org supports WC |
+
+### 🏏 IPL 2026 Setup (P1 - Ready, Waiting for Data)
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | IPL 2026 player assets | ✅ Done | 125 players seeded |
+| 2 | IPL team logos | ✅ Done | All 10 franchises |
+| 3 | Cricbuzz API integration | ✅ Ready | Client working, tested |
+| 4 | IPL 2026 Series ID | ⏳ Waiting | Schedule releases ~Feb/Mar 2026 |
+| 5 | Fixture import test | ⏳ Waiting | After series ID available |
+| 6 | Automated score updates | 🔜 Enhancement | Background job for live scores |
+
+### 📱 Device/Screen Optimization (P0 - Pending User Feedback)
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | Gather user testing feedback | ⏸️ Waiting | User to collect device-specific issues |
+| 2 | Audit responsive breakpoints | ⏳ Pending | After feedback received |
+| 3 | Fix identified issues | ⏳ Pending | Priority based on user reports |
 
 ### Technical Debt
 
