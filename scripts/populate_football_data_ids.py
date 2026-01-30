@@ -123,7 +123,16 @@ def find_best_match(db_name, api_teams):
     best_match = None
     best_score = 0
     
-    # Check direct name mappings first
+    # Check manual ID mappings first
+    if db_name in MANUAL_IDS:
+        manual_id = MANUAL_IDS[db_name]
+        for team in api_teams:
+            if team['id'] == manual_id:
+                return team, 1.0
+        # If not in api_teams, return a synthetic match
+        return {'id': manual_id, 'name': f'Manual: {db_name}'}, 1.0
+    
+    # Check direct name mappings
     if db_name in NAME_MAPPINGS:
         for variant in NAME_MAPPINGS[db_name]:
             for team in api_teams:
