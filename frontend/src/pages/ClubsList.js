@@ -179,6 +179,7 @@ export default function ClubsList() {
                     setSelectedSport(e.target.value);
                     setSelectedFranchise("all");
                     setSelectedRole("all");
+                    setSelectedTeamType("all");
                     setSearchTerm("");
                   }}
                   data-testid="sport-filter-select"
