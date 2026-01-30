@@ -204,6 +204,33 @@ export default function ClubsList() {
               </div>
             </div>
 
+            {/* Football Filters */}
+            {selectedSport === 'football' && (
+              <div className="mt-4 pt-4" style={{ borderTop: '1px solid rgba(255, 255, 255, 0.1)' }}>
+                <div>
+                  <label className="block text-white/60 mb-2 text-sm font-semibold">Team Type</label>
+                  <select
+                    className="w-full px-4 py-3 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-[#06B6D4] appearance-none cursor-pointer"
+                    style={{ 
+                      background: '#0F172A', 
+                      border: '1px solid rgba(255, 255, 255, 0.2)',
+                      backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2306B6D4'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
+                      backgroundRepeat: 'no-repeat',
+                      backgroundPosition: 'right 12px center',
+                      backgroundSize: '20px'
+                    }}
+                    value={selectedTeamType}
+                    onChange={(e) => setSelectedTeamType(e.target.value)}
+                    data-testid="team-type-filter-select"
+                  >
+                    <option value="all" style={{ background: '#0F172A', color: '#fff' }}>All Teams</option>
+                    <option value="clubs" style={{ background: '#0F172A', color: '#fff' }}>Club Teams</option>
+                    <option value="national" style={{ background: '#0F172A', color: '#fff' }}>National Teams</option>
+                  </select>
+                </div>
+              </div>
+            )}
+
             {/* Cricket Filters */}
             {selectedSport === 'cricket' && (
               <div className="grid md:grid-cols-2 gap-4 mt-4 pt-4" style={{ borderTop: '1px solid rgba(255, 255, 255, 0.1)' }}>
