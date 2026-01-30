@@ -1,6 +1,6 @@
 # Session Changes Log - UI/UX Redesign (Stitch)
 **Started:** January 27, 2026
-**Last Updated:** January 30, 2026
+**Last Updated:** January 30, 2026 (End of Session 6)
 
 ---
 
@@ -23,8 +23,18 @@
 | SK Slavia Praha | slavia_prague.png | ✅ Added |
 | Royale Union Saint-Gilloise | union_saint_gilloise.png | ✅ Added |
 
-**Quick Wins (files existed, added mappings):**
-- Girona FC, Stade Brestois 29, Bologna FC 1909
+**Additional CL Teams:**
+| Team | File | Status |
+|------|------|--------|
+| Celtic FC | celtic_fc.png | ✅ Added |
+| Rangers FC | rangers_fc.png | ✅ Added |
+| SK Sturm Graz | sturm_graz.png | ✅ Added |
+| AC Sparta Praha | sparta_prague.png | ✅ Added |
+| GNK Dinamo Zagreb | dinamo_zagreb.png | ✅ Added |
+| BSC Young Boys | young_boys.png | ✅ Added |
+| FK Crvena Zvezda | red_star_belgrade.png | ✅ Added |
+| FC Shakhtar Donetsk | shakhtar_donetsk.png | ✅ Added |
+| Jagiellonia Białystok | jagiellonia_bialystok.png | ✅ Added |
 
 **Process:** SVG → PNG conversion using `cairosvg` at 256x256px
 
