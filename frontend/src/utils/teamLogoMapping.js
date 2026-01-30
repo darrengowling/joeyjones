@@ -57,6 +57,14 @@ export const footballLogoMapping = {
   "Olympique Lyon": "olympique_lyon.png",
   "OGC Nice": "ogc_nice.png",
   "SC Braga": "sc_braga.png",
+  
+  // Champions League 2025/26 - Added Jan 30
+  "Club Atlético de Madrid": "atletico_madrid.png",
+  "Atlético Madrid": "atletico_madrid.png",
+  "FK Bodø/Glimt": "bodo_glimt.png",
+  "Bodø/Glimt": "bodo_glimt.png",
+  "Club Brugge KV": "club_brugge.png",
+  "Club Brugge": "club_brugge.png",
 };
 
 // IPL Cricket team logos
