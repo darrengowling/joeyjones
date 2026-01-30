@@ -1,187 +1,129 @@
-# Sport X Fantasy Auction Platform - PRD
+# Sport X Platform - Product Requirements Document
 
----
-## ⚠️ AGENT: READ THIS SECTION FIRST
-
-**Before doing ANYTHING, read these files:**
-1. `/app/MASTER_TODO_LIST.md` - Current tasks and priorities
-2. `/app/AGENT_START_HERE.md` - Quick reference and gotchas
-3. `/app/POC_RAILWAY_DEPLOYMENT.md` - Railway migration POC results
-
-**Current Status (Jan 27, 2026):** ✅ UI/UX REDESIGN COMPLETE - Stitch design fully implemented, live user testing in progress
-
-**Critical gotchas:**
-- Teams/Players are in `assets` collection (NOT `clubs` or `teams`)
-- Points are in `league_points` collection (NOT `league_participants`)
-- Auth magic link returns token in response - needs email delivery for production
-- Competition names must be exact: "UEFA Champions League", "English Premier League", "Africa Cup of Nations"
-- `competitions` field must be array: `["UEFA Champions League"]` not `"UEFA Champions League"`
-
-**Ask user for approval before implementing anything.**
+**Last Updated:** January 30, 2026  
+**Status:** PRE-PILOT (Railway EU Deployed)
 
 ---
 
 ## Original Problem Statement
-Build a fantasy sports auction platform where users create leagues, bid on teams/clubs in real-time auctions, and compete based on team performance scores.
 
-## User Personas
-1. **Commissioners** - Create and manage leagues, configure auction settings, start/stop auctions
-2. **Managers** - Join leagues, participate in auctions, build team rosters via bidding
-3. **Spectators** - Watch live auctions (view-only)
+Build a fantasy sports auction platform for UK-based users with:
+1. Real-time auction functionality for multiple users
+2. Support for football (club teams + national teams) and cricket (IPL)
+3. Low latency (<500ms p99) for UK users
+4. Premium dark-theme UI ("Stitch" design)
 
-## Core Requirements
-- Real-time auction bidding via Socket.IO
-- Multi-sport support (Football, Cricket, Reality TV planned)
-- League management with invite tokens
-- Anti-snipe timer extension for last-second bids
-- Score updates from external APIs (Football-Data.org, Cricbuzz)
-- Magic link authentication (passwordless)
+---
 
-## Technology Stack
-- **Frontend**: React (port 3000)
-- **Backend**: FastAPI/Python (port 8001)
-- **Database**: MongoDB Atlas (M0 free for POC, M2 recommended for production)
-- **Real-time**: Socket.IO with WebSocket-only transport
-- **External APIs**: Football-Data.org, Cricbuzz (via RapidAPI)
-- **Hosting**: Railway (EU-West) - validated via POC
+## Current Architecture
+
+### Infrastructure
+- **Hosting:** Railway (EU-West) - migrated from Emergent (US)
+- **Database:** MongoDB Atlas (EU region)
+- **Cache:** Redis Cloud
+- **Target:** 400 UK users pilot
+
+### Tech Stack
+- **Frontend:** React with Stitch dark theme
+- **Backend:** FastAPI (Python)
+- **Real-time:** Socket.IO
+- **APIs:** Football-Data.org, Cricbuzz (RapidAPI)
+
+---
 
 ## What's Been Implemented
 
-### Phase 6: UI/UX Redesign - Stitch Design (COMPLETE - Jan 27, 2026)
-- ✅ Design system CSS (`/app/frontend/src/styles/design-system.css`)
-- ✅ BottomNav component
-- ✅ HomePage (dark theme, glassmorphism)
-- ✅ CreateCompetition page
-- ✅ LeagueDetailStitched.jsx (tabbed layout, verified working)
-- ✅ AuctionRoom.js styling (waiting room + live auction + completed state)
-- ✅ MyCompetitions.js 
-- ✅ ClubsList.js (Research Hub)
-- ✅ CompetitionDashboard.js
-- ✅ CreateLeague.js
-- ✅ Help.js (757 lines restyled)
+### Core Features ✅
+- [x] Real-time auction room with Socket.IO
+- [x] Commissioner and participant roles
+- [x] Budget management and bidding
+- [x] Multiple competition support (CL, PL, WC2026, IPL)
+- [x] Fixture imports and score updates
+- [x] Profile page with username editing
+- [x] Magic link authentication (dev mode)
 
-**Phase 6.1: Stitch Technical Asset Spec (Jan 27, 2026)**
-- ✅ Header height updated to 84px (per Stitch spec)
-- ✅ Bottom nav height updated to 88px (per Stitch spec)
-- ✅ Base grid padding updated to 16px (per Stitch spec)
-- ✅ TeamCrest placeholder SVG component created (`/app/frontend/src/components/TeamCrest.jsx`)
-- ✅ Team watermark background (12% opacity)
-- ✅ SVG nav icons (replaced emoji with proper SVGs)
-- ✅ FAB with cyan glow effect
-- ✅ Bid value "pop" animation (scale 10% on new bid)
-- ✅ Football-Data.org crests integration (real team logos)
-- ✅ "View All" teams modal in auction room
+### UI/UX (Stitch Redesign) ✅
+- [x] Dark theme (#0F172A background)
+- [x] Redesigned waiting room (commissioner/user views)
+- [x] Transparent logo backgrounds with conditional backdrop
+- [x] Team type filter (Clubs vs National Teams)
+- [x] Mobile-first responsive design
 
-**Bug Fixes (Session 4 - Jan 27, 2026):**
-- ✅ Fixed auction end navigation (now goes to My Competitions)
-- ✅ Fixed 404 errors on league detail pages (wrong API endpoint)
-- ✅ Fixed tab alignment inconsistency between commissioner/participant views
+### Team Assets ✅
+- [x] 63 football club teams with logos
+- [x] 42 FIFA World Cup 2026 national teams with badges
+- [x] 10 IPL cricket teams with logos
+- [x] 125 IPL players with roles
+- [x] All teams have Football-Data.org IDs (100% coverage)
 
-**Verified Working:**
-- ✅ Auction queue randomization (random.shuffle on start)
-- ✅ Queue order hidden from users (alphabetical sort preserves strategy)
+### Database ✅
+- [x] Standardized team names (official API format)
+- [x] Merged duplicate entries
+- [x] Preview environment connected to production DB
 
-**Pending for Phase 6.1:**
-- ⏳ Dynamic background shift to team color (needs team color data in DB)
+---
 
-**Bug Fixed (Session 3):**
-- Auth check moved before waiting room render to prevent `user.id` null access crash
+## Backlog (Prioritized)
 
-### Phase 1: Core Platform (Complete)
-- User authentication (magic links)
-- League CRUD operations
-- Real-time auction engine with bidding
-- Anti-snipe timer mechanism
-- Socket.IO real-time updates
-- Football competition support (UCL, Premier League, etc.)
-- Cricket competition support (IPL)
+### P0 - Pending User Feedback
+- [ ] Device/Screen responsive audit (waiting for specific feedback)
 
-### Phase 2: Documentation Overhaul (Complete - Jan 2026)
-- Restructured docs into `/app/docs/` directory
-- Created API_REFERENCE.md, DATABASE_SCHEMA.md, ENV_VARIABLES.md
-- Archived 196 obsolete markdown files
-- Created Pick TV onboarding documents
+### P1 - Needed for Pilot
+- [ ] Authentication hardening (SendGrid for emails)
+- [ ] Remaining WC2026 qualifiers (6 playoff spots)
+- [ ] IPL 2026 fixture import (when schedule released)
 
-### Phase 3: Bug Fixes (Complete - Jan 2026)
-- ISSUE-027: Fixed fixture score import bug (historical scores applied to future matches)
-- Added admin reset endpoints for fixture data correction
-- Fixed AFCON 2025 fixtures with qualified knockout teams
+### P2 - Post-Pilot Enhancements
+- [ ] "Pass This Round" auction feature
+- [ ] Dynamic team colors in auction room
+- [ ] Manual score entry UI
+- [ ] Auction history tab
+- [ ] Email notifications
 
-### Phase 4: Testing Infrastructure (Complete - Jan 2026)
-- Created Python stress test script: `/app/tests/auction_stress_test.py`
-- Supports hot-lot, full-auction, and race-condition test modes
-- Fixed Socket.IO event handling to match server events
-- Validates: bid throughput, Socket.IO latency, anti-snipe triggers, race conditions
-- Test results: 56.7% bid success rate (expected for competitive bidding), p99 latency 13ms
+### P3 - Future
+- [ ] Payment integration (Stripe)
+- [ ] server.py refactoring
+- [ ] Mobile app (Capacitor wrapper)
 
-### Phase 5: Railway POC (Complete - Jan 24, 2026)
-- ✅ Backend deploys successfully on Railway (EU-West Amsterdam)
-- ✅ Frontend deploys successfully (static build)
-- ✅ WebSocket-only transport works (no sticky sessions needed)
-- ✅ MongoDB Atlas (M0, Ireland) connects
-- ✅ Full auction flow completes end-to-end
-- ✅ 100% bid success rate (32/32 bids)
-- ✅ ~480ms average latency (vs ~700ms on Emergent)
-- ✅ Socket.IO events working (112 events received)
-
-**POC Fixes Applied:**
-- Sentry v10 API change (`startTransaction` removed)
-- ESLint 9 configuration for react-hooks
-- yarn frozen-lockfile override
-- `competitions` field as array in seed data
-
-## P0/P1/P2 Features Remaining
-
-### P0 (Critical)
-- [x] ~~Railway POC~~ ✅ COMPLETED
-- [ ] Upgrade MongoDB Atlas to M2 (London region)
-- [ ] Upgrade Railway to paid tier (London region)
-- [ ] Run full 400-user stress test on Railway
-- [ ] Code refactor: Break `server.py` into routes/services structure
-
-### P1 (High Priority)
-- [ ] Authentication hardening (SendGrid email delivery)
-- [ ] ISSUE-002: Fix Commissioner Auth Checks
-- [ ] UI Improvements: Bidder Status, Team Count, Current Bid Label, Sticky Tabs
-- [ ] ISSUE-026: Scalable Fixture Template Management
-- [ ] Reality TV Market Expansion (technical spec exists)
-
-### P2 (Medium Priority)
-- [ ] ISSUE-016: Roster Not Updating (monitoring)
-- [ ] ISSUE-019: "Couldn't Place Bid" (monitoring)
-- [ ] ISSUE-020: "United Offered 2 Times" (monitoring)
-- [ ] ISSUE-022: "Unknown" Manager Names (monitoring)
+---
 
 ## Key Files Reference
-- `/app/backend/server.py` - Main API (monolith, needs refactoring)
-- `/app/tests/railway_stress_test.py` - Railway POC stress test (working)
-- `/app/tests/multi_league_stress_test.py` - Multi-league stress test
-- `/app/scripts/seed_railway_poc.py` - Seed script for Railway POC
-- `/app/POC_RAILWAY_DEPLOYMENT.md` - Railway POC results and learnings
-- `/app/MASTER_TODO_LIST.md` - Canonical task tracker
-- `/app/docs/` - Structured documentation
 
-## Stress Test Scripts
+| File | Purpose |
+|------|---------|
+| `/app/MASTER_TODO_LIST.md` | All tasks, priorities, phases |
+| `/app/SESSION_CHANGES.md` | Detailed session work log |
+| `/app/AGENT_START_HERE.md` | Quick reference for agents |
+| `/app/frontend/src/utils/teamLogoMapping.js` | Team → logo mapping |
+| `/app/scripts/populate_football_data_ids.py` | Football-Data.org ID script |
 
-### Railway POC Stress Test (Jan 24, 2026)
-```bash
-# Install dependencies
-pip install "python-socketio[asyncio_client]" aiohttp
+---
 
-# Run against Railway
-python /app/tests/railway_stress_test.py --leagues 1 --url https://joeyjones-production.up.railway.app
+## Database Schema
 
-# Results: 100% success, 483ms avg latency, 112 socket events
+```
+assets           → Teams (football) + Players (cricket)
+                   - footballDataId: API ID
+                   - type: 'national_team' | null
+                   - competitionCode: 'WC2026', 'CL', etc.
+leagues          → Competition settings
+league_participants → User budgets, rosters
+league_points    → Team/player scores
+auctions         → Active auction state
+fixtures         → Match data
+users            → User accounts
 ```
 
-### Multi-League Stress Test
-```bash
-python multi_league_stress_test.py --leagues 20 --users 8 --teams 4 --url https://YOUR-PRODUCTION-URL
-```
+---
 
-## Important Notes
-- **Railway requires WebSocket-only**: `transports: ['websocket'], upgrade: false` in Socket.IO client
-- **GitHub Sync**: "Save to GitHub" may not commit all files - verify in browser
-- **CI=true**: Railway treats ESLint warnings as errors - fix warnings or add disable comments
-- **Auction activation**: After creating auction, call `/api/auction/{id}/begin` to start
-- **MongoDB data**: `competitions` field must be array, not string
+## Credentials (Test)
+
+- **Test User:** darren.gowling@gmail.com
+- **MongoDB:** MongoDB Atlas (sport_x_poc database)
+- **Football-Data.org:** API token in .env
+- **Cricbuzz:** RapidAPI key in .env
+
+---
+
+**Document Version:** 2.0  
+**Maintained By:** Development Team
