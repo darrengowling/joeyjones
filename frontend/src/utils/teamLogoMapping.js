@@ -164,6 +164,73 @@ export const footballLogoMapping = {
   "Girona": "girona_fc.png",
 };
 
+// =============================================================================
+// FIFA WORLD CUP 2026 - NATIONAL TEAMS
+// Logos stored in /public/assets/clubs/national_teams/
+// =============================================================================
+
+export const nationalTeamLogoMapping = {
+  // Africa (CAF)
+  "Algeria": "algeria.png",
+  "Cabo Verde": "cabo-verde.png",
+  "Cape Verde": "cabo-verde.png",
+  "Côte d'Ivoire": "cote-d-ivoire.png",
+  "Ivory Coast": "cote-d-ivoire.png",
+  "Egypt": "egypt.png",
+  "Ghana": "ghana.png",
+  "Morocco": "morocco.png",
+  "Senegal": "senegal.png",
+  "South Africa": "south-africa.png",
+  "Tunisia": "tunisia.png",
+  
+  // Asia (AFC)
+  "Australia": "australia.png",
+  "Iran": "iran.png",
+  "Japan": "japan.png",
+  "Jordan": "jordan.png",
+  "Qatar": "qatar.png",
+  "Saudi Arabia": "saudi-arabia.png",
+  "South Korea": "south-korea.png",
+  "Korea Republic": "south-korea.png",
+  "Uzbekistan": "uzbekistan.png",
+  
+  // Europe (UEFA)
+  "Austria": "austria.png",
+  "Belgium": "belgium.png",
+  "Croatia": "croatia.png",
+  "England": "england.png",
+  "France": "france.png",
+  "Germany": "germany.png",
+  "Netherlands": "dutch.png",
+  "Holland": "dutch.png",
+  "Norway": "norway.png",
+  "Portugal": "portuguese.png",
+  "Scotland": "scotland.png",
+  "Spain": "spain.png",
+  "Switzerland": "switzerland.png",
+  
+  // North/Central America & Caribbean (CONCACAF)
+  "Canada": "canada.png",
+  "Curaçao": "curacao.png",
+  "Curacao": "curacao.png",
+  "Haiti": "haiti.png",
+  "Mexico": "mexico.png",
+  "Panama": "panama.png",
+  "United States": "usa.png",
+  "USA": "usa.png",
+  
+  // Oceania (OFC)
+  "New Zealand": "new-zealand.png",
+  
+  // South America (CONMEBOL)
+  "Argentina": "argentina.png",
+  "Brazil": "brazil.png",
+  "Colombia": "colombia.png",
+  "Ecuador": "ecuador.png",
+  "Paraguay": "paraguay.png",
+  "Uruguay": "uruguay.png",
+};
+
 // Cricket IPL team mapping
 export const cricketLogoMapping = {
   "Chennai Super Kings": "chennai_super_kings.png",
