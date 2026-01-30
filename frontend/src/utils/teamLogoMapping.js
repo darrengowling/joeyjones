@@ -78,6 +78,15 @@ export const footballLogoMapping = {
   "Olympiacos": "olympiacos.png",
   "FK Qarabag": "fk_qarabag.png",
   "Qarabağ FK": "fk_qarabag.png",
+  
+  // Priority 2 - CL 2025/26 League Phase teams
+  "FC København": "fc_kobenhavn.png",
+  "FC Copenhagen": "fc_kobenhavn.png",
+  "Pafos FC": "pafos_fc.png",
+  "SK Slavia Praha": "slavia_prague.png",
+  "Slavia Prague": "slavia_prague.png",
+  "Royale Union Saint-Gilloise": "union_saint_gilloise.png",
+  "Union Saint-Gilloise": "union_saint_gilloise.png",
 };
 
 // IPL Cricket team logos
