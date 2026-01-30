@@ -1,6 +1,192 @@
 # Session Changes Log - UI/UX Redesign (Stitch)
 **Started:** January 27, 2026
-**Last Updated:** January 29, 2026
+**Last Updated:** January 30, 2026
+
+---
+
+## Session 6 Changes - January 30, 2026
+
+### 1. UEFA Champions League 2025/26 Logo Integration ✅
+
+**Priority 1 Teams (Playoffs):**
+| Team | File | Status |
+|------|------|--------|
+| Galatasaray SK | galatasaray.png | ✅ Added |
+| PAE Olympiakos SFP | olympiacos.png | ✅ Added |
+| Qarabağ Ağdam FK | fk_qarabag.png | ✅ Added |
+
+**Priority 2 Teams (League Phase):**
+| Team | File | Status |
+|------|------|--------|
+| FC København | fc_kobenhavn.png | ✅ Added |
+| Paphos FC | pafos_fc.png | ✅ Added |
+| SK Slavia Praha | slavia_prague.png | ✅ Added |
+| Royale Union Saint-Gilloise | union_saint_gilloise.png | ✅ Added |
+
+**Quick Wins (files existed, added mappings):**
+- Girona FC, Stade Brestois 29, Bologna FC 1909
+
+**Process:** SVG → PNG conversion using `cairosvg` at 256x256px
+
+---
+
+### 2. TeamCrest Logo Backdrop Fix ✅
+
+**Problem:** All logos had white circular backdrop, making them look worse than transparent originals.
+
+**Solution:** Conditional backdrop - only dark logos get white background.
+
+**File:** `/app/frontend/src/components/TeamCrest.jsx`
+
+```javascript
+const DARK_LOGOS_NEEDING_BACKDROP = [
+  'tottenham_hotspur.png',  // Dark navy blue
+  'newcastle_united.png',   // Black and white stripes  
+  'juventus_fc.png',        // Black "J" logo
+];
+```
+
+**Result:**
+- ✅ Most logos display with transparent background (clean look)
+- ✅ Dark logos (Tottenham, Newcastle, Juventus) get white backdrop (legible)
+- ✅ IPL cricket logos now display beautifully without backdrop
+
+---
+
+### 3. Production Database Standardization ✅
+
+**Problem:** Production DB (Railway/MongoDB Atlas) had short team names that didn't match logo mappings.
+
+**Root Cause:** `seed_railway_poc.py` used short names like "Real Madrid" while logo mapping used official API names like "Real Madrid CF".
+
+**Solution:** Created and ran standardization script.
+
+**File:** `/app/scripts/standardize_team_names.py`
+
+**Teams Renamed (21):**
+| Before | After |
+|--------|-------|
+| Real Madrid | Real Madrid CF |
+| Barcelona | FC Barcelona |
+| Atlético Madrid | Club Atlético de Madrid |
+| Athletic Bilbao | Athletic Club |
+| Manchester City | Manchester City FC |
+| Arsenal | Arsenal FC |
+| Liverpool | Liverpool FC |
+| Aston Villa | Aston Villa FC |
+| Bayer Leverkusen | Bayer 04 Leverkusen |
+| Bayern Munich | FC Bayern München |
+| Inter Milan | FC Internazionale Milano |
+| Juventus | Juventus FC |
+| Paris Saint-Germain | Paris Saint-Germain FC |
+| AS Monaco | AS Monaco FC |
+| Brest | Stade Brestois 29 |
+| Benfica | Sport Lisboa e Benfica |
+| Sporting CP | Sporting Clube de Portugal |
+| Feyenoord | Feyenoord Rotterdam |
+| Club Brugge | Club Brugge KV |
+| Union Saint-Gilloise | Royale Union Saint-Gilloise |
+| FC Copenhagen | FC København |
+
+---
+
+### 4. Missing Teams Added to Production DB ✅
+
+**New Teams (11):**
+| Team | Country | League |
+|------|---------|--------|
+| SSC Napoli | Italy | Serie A |
+| AS Roma | Italy | Serie A |
+| SS Lazio | Italy | Serie A |
+| Olympique de Marseille | France | Ligue 1 |
+| Olympique Lyon | France | Ligue 1 |
+| LOSC Lille | France | Ligue 1 |
+| AFC Ajax | Netherlands | Eredivisie |
+| FK Bodø/Glimt | Norway | CL 2025/26 |
+| PAE Olympiakos SFP | Greece | CL 2025/26 |
+| Qarabağ Ağdam FK | Azerbaijan | CL 2025/26 |
+| SK Slavia Praha | Czech Republic | CL 2025/26 |
+
+---
+
+### 5. Duplicate Teams Merged ✅
+
+**Problem:** Teams in both PL and CL had separate DB entries, causing duplicates.
+
+**Solution:** Merged entries, combining `competitions` arrays.
+
+**File:** `/app/scripts/merge_duplicate_teams.py`
+
+**Teams Merged (4):**
+| Team | Competitions After Merge |
+|------|-------------------------|
+| Arsenal FC | ['English Premier League', 'UEFA Champions League'] |
+| Liverpool FC | ['English Premier League', 'UEFA Champions League'] |
+| Manchester City FC | ['English Premier League', 'UEFA Champions League'] |
+| Aston Villa FC | ['English Premier League', 'UEFA Champions League'] |
+
+**Final Production DB Count:** 63 unique football teams
+
+---
+
+### 6. Logo Mapping Reorganized ✅
+
+**File:** `/app/frontend/src/utils/teamLogoMapping.js`
+
+- Organized by league (Premier League, La Liga, Bundesliga, etc.)
+- Primary entries use official Football-Data.org API names
+- Backward compatibility section for short names (transition period)
+- Clear comments for future maintenance
+
+---
+
+### 7. Documentation Updates ✅
+
+**MASTER_TODO_LIST.md:**
+- Updated phase: PRE-MIGRATION → POST-MIGRATION / PRE-PILOT
+- Marked Railway migration as complete
+- Added Stitch redesign completion
+- Added logo integration work
+- Reorganized priorities
+
+---
+
+### Key Findings This Session
+
+#### Two Separate Databases
+| Environment | Database | Teams |
+|-------------|----------|-------|
+| Preview (Emergent) | Local MongoDB | 74 |
+| Production (Railway) | MongoDB Atlas | 63 |
+
+**Issue:** Different data in each environment causes confusion during testing.
+
+**Recommendation:** Consider syncing preview to production DB or using a staging copy. See discussion below.
+
+#### Railway API Routing
+External curl requests to production `/api/*` routes return HTML instead of JSON. However, frontend browser requests work fine. This appears to be a Railway nginx/proxy configuration - not blocking users but impacts external API testing.
+
+---
+
+### Files Modified This Session
+- `/app/frontend/src/components/TeamCrest.jsx` - Conditional backdrop
+- `/app/frontend/src/utils/teamLogoMapping.js` - Reorganized, standardized names
+- `/app/MASTER_TODO_LIST.md` - Major update
+- `/app/SESSION_CHANGES.md` - This file
+
+### Files Created This Session
+- `/app/scripts/standardize_team_names.py` - DB name standardization
+- `/app/scripts/merge_duplicate_teams.py` - Duplicate cleanup
+
+### Assets Added This Session
+**Football logos (7 new PNGs):**
+- `/app/frontend/public/assets/clubs/football/galatasaray.png`
+- `/app/frontend/public/assets/clubs/football/olympiacos.png`
+- `/app/frontend/public/assets/clubs/football/fk_qarabag.png`
+- `/app/frontend/public/assets/clubs/football/fc_kobenhavn.png`
+- `/app/frontend/public/assets/clubs/football/pafos_fc.png`
+- `/app/frontend/public/assets/clubs/football/slavia_prague.png`
+- `/app/frontend/public/assets/clubs/football/union_saint_gilloise.png`
 
 ---
 
