@@ -150,6 +150,47 @@ const TeamCrest = memo(({
   
   // Standard crest display with real image or fallback
   if (hasLogo) {
+    // For dark logos, render with white backdrop
+    if (needsBackdrop) {
+      return (
+        <div 
+          className={`flex items-center justify-center ${className}`}
+          style={{
+            width: size,
+            height: size,
+            filter: isActive ? 'drop-shadow(0 0 8px rgba(6, 182, 212, 0.4))' : 'none',
+            transition: 'filter 200ms ease-out'
+          }}
+          title={name}
+        >
+          {/* White circular backdrop for dark logos only */}
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: size,
+              height: size,
+              borderRadius: '50%',
+              background: 'rgba(255, 255, 255, 0.85)',
+            }}
+          >
+            <img 
+              src={logoPath} 
+              alt={name}
+              width={size * 0.65}
+              height={size * 0.65}
+              onError={() => setImgError(true)}
+              style={{ 
+                objectFit: 'contain',
+              }}
+            />
+          </div>
+        </div>
+      );
+    }
+    
+    // For all other logos, render with transparent background (clean look)
     return (
       <div 
         className={`flex items-center justify-center ${className}`}
@@ -161,33 +202,16 @@ const TeamCrest = memo(({
         }}
         title={name}
       >
-        {/* Glassmorphism Shield - soft white backdrop for dark logos */}
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: size,
-            height: size,
-            borderRadius: '50%',
-            background: 'rgba(255, 255, 255, 0.85)',
+        <img 
+          src={logoPath} 
+          alt={name}
+          width={size}
+          height={size}
+          onError={() => setImgError(true)}
+          style={{ 
+            objectFit: 'contain',
           }}
-        >
-          <img 
-            src={logoPath} 
-            alt={name}
-            width={size * 0.65}
-            height={size * 0.65}
-            onError={() => setImgError(true)}
-            style={{ 
-              objectFit: 'contain',
-              // Subtle cyan glow for brand consistency
-              filter: isActive 
-                ? 'drop-shadow(0 0 4px rgba(6, 182, 212, 0.5))' 
-                : 'drop-shadow(0 0 2px rgba(6, 182, 212, 0.3))'
-            }}
-          />
-        </div>
+        />
       </div>
     );
   }
