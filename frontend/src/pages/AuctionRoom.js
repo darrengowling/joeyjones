@@ -1242,18 +1242,19 @@ function AuctionRoom() {
         className="flex-shrink-0 h-20 px-4 flex items-center"
         style={{ background: 'rgba(15, 23, 42, 0.5)', borderBottom: '1px solid rgba(255,255,255,0.05)' }}
       >
-        <div className="flex-1 overflow-x-auto flex items-center gap-3" style={{ scrollbarWidth: 'none' }}>
-          <span className="text-white/40 text-xs uppercase tracking-wider flex-shrink-0 mr-2">Teams in Auction</span>
+        <div className="flex-1 overflow-x-auto flex items-center gap-2" style={{ scrollbarWidth: 'none' }}>
+          <span className="text-white/40 text-xs uppercase tracking-wider flex-shrink-0 mr-2">Teams</span>
           {queueClubs.map((club, idx) => {
             const isCurrent = club.id === currentClub?.id;
             return (
               <div 
                 key={club.id}
-                className="flex-shrink-0 w-24 h-14 rounded-xl flex flex-col items-center justify-center transition-all"
+                className="flex-shrink-0 w-14 h-14 rounded-lg flex items-center justify-center transition-all"
                 style={{ 
                   background: isCurrent ? 'rgba(6, 182, 212, 0.2)' : 'rgba(255,255,255,0.05)',
                   border: isCurrent ? '2px solid #06B6D4' : '1px solid rgba(255,255,255,0.1)'
                 }}
+                title={club.name}
               >
                 <TeamCrest 
                   clubId={club.id}
@@ -1263,7 +1264,6 @@ function AuctionRoom() {
                   variant="small"
                   isActive={isCurrent}
                 />
-                <span className="text-[10px] text-white/80 text-center px-1 truncate w-full">{club.name?.split(' ')[0]}</span>
               </div>
             );
           })}
