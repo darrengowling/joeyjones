@@ -93,8 +93,12 @@ export default function ClubsList() {
     const matchesSearch = asset.name.toLowerCase().includes(searchTerm.toLowerCase());
     
     if (selectedSport === 'football') {
-      // For football, we can still filter by country if needed
-      return matchesSearch;
+      // Filter by team type (clubs vs national teams)
+      const isNationalTeam = asset.type === 'national_team' || asset.competitionCode === 'WC2026';
+      const matchesTeamType = selectedTeamType === 'all' 
+        || (selectedTeamType === 'clubs' && !isNationalTeam)
+        || (selectedTeamType === 'national' && isNationalTeam);
+      return matchesSearch && matchesTeamType;
     } else if (selectedSport === 'cricket') {
       // Filter by franchise dropdown
       const matchesFranchise = selectedFranchise === 'all' || asset.meta?.franchise === selectedFranchise;
