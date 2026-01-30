@@ -75,6 +75,31 @@ NAME_MAPPINGS = {
     'Netherlands': ['Netherlands', 'Holland'],
 }
 
+# Manual ID mappings for teams that can't be matched automatically
+# These IDs are from Football-Data.org API
+MANUAL_IDS = {
+    'Celtic FC': 732,           # Celtic FC (Scotland)
+    'Celtic': 732,              # Celtic FC (Scotland)
+    'Rangers FC': 741,          # Rangers FC (Scotland)
+    'Rangers': 741,             # Rangers FC (Scotland)
+    'PSV': 674,                 # PSV Eindhoven
+    'PSV Eindhoven': 674,       # PSV Eindhoven  
+    'Sturm Graz': 2020,         # SK Sturm Graz (may need verification)
+    'SK Sturm Graz': 2020,
+    'Sparta Prague': 7888,      # AC Sparta Praha
+    'AC Sparta Praha': 7888,
+    'Dinamo Zagreb': 738,       # GNK Dinamo Zagreb
+    'GNK Dinamo Zagreb': 738,
+    'Young Boys': 1880,         # BSC Young Boys
+    'BSC Young Boys': 1880,
+    'Red Star Belgrade': 7455,  # FK Crvena Zvezda
+    'FK Crvena Zvezda': 7455,
+    'Shakhtar Donetsk': 660,    # FC Shakhtar Donetsk
+    'FC Shakhtar Donetsk': 660,
+    'Jagiellonia Białystok': 7874,  # Polish club
+    'LOSC Lille': 521,          # Lille OSC
+}
+
 
 def normalize_name(name):
     """Normalize team name for comparison"""
