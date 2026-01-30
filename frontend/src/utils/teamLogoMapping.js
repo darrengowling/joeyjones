@@ -79,6 +79,12 @@ export const footballLogoMapping = {
   "Club Brugge KV": "club_brugge.png",
   "Royale Union Saint-Gilloise": "union_saint_gilloise.png",
   
+  // === SCOTLAND (SPFL) ===
+  "Celtic FC": "celtic_fc.png",
+  "Celtic": "celtic_fc.png",
+  "Rangers FC": "rangers_fc.png",
+  "Rangers": "rangers_fc.png",
+  
   // === UEFA CHAMPIONS LEAGUE 2025/26 (Additional Teams) ===
   "FK Bodø/Glimt": "bodo_glimt.png",
   "Galatasaray SK": "galatasaray.png",
