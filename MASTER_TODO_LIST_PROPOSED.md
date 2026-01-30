@@ -1,0 +1,308 @@
+# Master TODO List - Sport X Platform
+
+**Last Updated:** January 30, 2026  
+**Purpose:** Single source of truth for all work items organized by deployment phase  
+**Current Status:** POST-MIGRATION / PRE-PILOT (Railway EU-West Live)
+
+---
+
+## 📍 CURRENT SITUATION SUMMARY
+
+| Aspect | Status |
+|--------|--------|
+| **Platform** | Railway (EU-West) ✅ MIGRATED mid-January 2026 |
+| **Development** | Emergent (for agent-assisted development) |
+| **Database** | MongoDB Atlas (EU region) |
+| **Cache** | Redis Cloud (256 connections) |
+| **Pilot Target** | 400 UK users |
+| **Current Phase** | 🟡 PRE-PILOT - Final polish and testing |
+
+---
+
+## 🚦 TASK PHASES OVERVIEW
+
+| Phase | Focus | Status |
+|-------|-------|--------|
+| ~~🔴 PRE-MIGRATION~~ | ~~Prep work before Railway migration~~ | ✅ COMPLETE |
+| **🟡 PRE-PILOT** | Work after migration, before 400-user pilot | **CURRENT** |
+| 🟢 POST-PILOT | Enhancements after successful pilot | Pending |
+| 🔵 FUTURE | Long-term roadmap items | Backlog |
+
+---
+
+## ✅ COMPLETED - RAILWAY MIGRATION (January 2026)
+
+*All pre-migration tasks completed*
+
+| # | Task | Status | Date |
+|---|------|--------|------|
+| 1 | Railway account setup | ✅ Done | Mid-Jan 2026 |
+| 2 | MongoDB Atlas EU cluster | ✅ Done | Mid-Jan 2026 |
+| 3 | Redis Cloud configuration | ✅ Done | Mid-Jan 2026 |
+| 4 | `/health` endpoint | ✅ Done | Jan 16 |
+| 5 | Environment variable audit | ✅ Done | Jan 16 |
+| 6 | CORS config for Railway | ✅ Done | Mid-Jan 2026 |
+| 7 | Data migration | ✅ Done | Mid-Jan 2026 |
+
+**Latency improvement:** UK users now have optimal latency via EU-West hosting.
+
+---
+
+## ✅ COMPLETED - STITCH UI/UX REDESIGN (January 2026)
+
+*Full visual redesign to premium dark theme*
+
+| # | Component | Status | Date |
+|---|-----------|--------|------|
+| 1 | Design System CSS (`design-system.css`) | ✅ Done | Jan 27 |
+| 2 | BottomNav component | ✅ Done | Jan 27 |
+| 3 | HomePage redesign | ✅ Done | Jan 27 |
+| 4 | CreateCompetition page | ✅ Done | Jan 27 |
+| 5 | LeagueDetail/CompetitionDashboard | ✅ Done | Jan 27 |
+| 6 | AuctionRoom (waiting room + live auction) | ✅ Done | Jan 27-29 |
+| 7 | Profile page (NEW) | ✅ Done | Jan 29 |
+| 8 | Waiting room redesign (commissioner + user views) | ✅ Done | Jan 29 |
+| 9 | Background color standardization (#0F172A) | ✅ Done | Jan 29 |
+| 10 | TeamCrest soft white backdrop | ✅ Done | Jan 29 |
+
+**Design tokens:** Inter font, #0F172A navy background, #06B6D4 cyan accent, 12px radius
+
+---
+
+## ✅ COMPLETED - TEAM LOGO INTEGRATION (January 2026)
+
+### IPL Cricket (10 teams) - Jan 29
+All logos at 256x256px in `/app/frontend/public/assets/clubs/cricket/`
+
+### UEFA Champions League 2025/26 - Jan 30
+| Priority | Teams Added | Status |
+|----------|-------------|--------|
+| P1 (Playoffs) | Galatasaray SK, PAE Olympiakos SFP, Qarabağ Ağdam FK | ✅ Done |
+| P2 (League Phase) | FC København, Paphos FC, SK Slavia Praha, Royale Union Saint-Gilloise | ✅ Done |
+| Quick wins | Girona FC, Stade Brestois 29, Bologna FC 1909, Club Atlético de Madrid, FK Bodø/Glimt, Club Brugge KV | ✅ Done |
+
+**Mapping file:** `/app/frontend/src/utils/teamLogoMapping.js`  
+**Assets folder:** `/app/frontend/public/assets/clubs/football/`
+
+---
+
+## 🟡 PRE-PILOT TASKS (CURRENT PHASE)
+
+*Tasks to complete before inviting 400 users*
+
+### Critical - Must Have for Pilot
+
+| # | Task | Effort | Status | Notes |
+|---|------|--------|--------|-------|
+| 1 | ~~Stress test on Railway~~ | 2 hrs | ⏸️ User testing | User performing multi-user auction testing |
+| 2 | **Authentication hardening** | 1 day | ⏸️ Deferred | Waiting for SendGrid setup |
+| 3 | ~~Sentry monitoring~~ | 30 min | ✅ Done | Jan 17 - DSN configured |
+| 4 | **Database backup verification** | 1 hr | ❓ Pending | Verify MongoDB Atlas backups configured |
+| 5 | **Verify all core flows** | 2 hrs | 🔄 Ongoing | User testing in progress |
+| 6 | **Update Operations Playbook** | 1 hr | ❓ Pending | Update for Railway |
+
+### 🔐 Authentication Hardening (Deferred)
+
+**Current State:** Magic-link returns token in response (dev mode)  
+**Required State:** Real email delivery + production security  
+**Blocked on:** SendGrid/Resend account setup
+
+When ready, implement all at once:
+1. Email delivery (SendGrid/Resend)
+2. Remove dev token exposure from response
+3. Rate limiting on auth (3/hour/email)
+4. Single-use token enforcement
+5. Test full flow end-to-end
+
+**Estimated effort:** 1 day
+
+---
+
+### High Priority - Should Have
+
+| # | Task | Effort | Status | Benefit |
+|---|------|--------|--------|---------|
+| 1 | DB Call Caching | 2 hrs | ⏸️ Reverted | Attempted Jan 16 - bug found |
+| 2 | Commissioner auth checks | 1 hr | ❓ Pending | Security |
+| 3 | Frontend performance audit | 2 days | ❓ Pending | React.memo, debounce |
+
+### Device/Screen Responsive Audit ⏸️ PAUSED
+
+**Status:** Initial audit completed Jan 29. Paused pending user feedback.
+
+| Setting | Value |
+|---------|-------|
+| Primary viewport | 360-448px (mobile-first) |
+| Design approach | Mobile-first; desktop shows centered layout |
+
+**Next steps:** Gather specific user feedback (device + screenshot + issue)
+
+---
+
+### UI/UX Bugs
+
+| Issue ID | Page | Summary | Status | Notes |
+|----------|------|---------|--------|-------|
+| UI-001 | CompetitionDashboard | Tab height/centering on mobile | 🔴 BLOCKED | Multiple fix attempts failed. Suspected caching issue. |
+| UI-002 | TeamCrest | Shield-shaped logos overflow circular container | 🟡 PARTIAL | Soft white backdrop works for most. Fulham/Bournemouth overflow. |
+
+**UI-001:** Do not attempt further fixes until user provides specific reproduction steps.  
+**UI-002:** Paused per user request ("wasting too much time on this!")
+
+---
+
+### Deferred Features (Pre-Pilot Risk)
+
+| Feature | Current State | Why Deferred | Revisit When |
+|---------|---------------|--------------|--------------|
+| **"Pass This Round" Button** | UI shows "Coming soon!" toast | Touches core auction logic | Post-pilot, if users report frustration |
+| **Dynamic team colors** | Not implemented | Complexity before pilot | Post-pilot |
+
+---
+
+### Infrastructure Issues
+
+| Issue ID | Summary | Status | Notes |
+|----------|---------|--------|-------|
+| INFRA-001 | CORS PATCH method | ✅ Fixed Jan 29 | Added PATCH to allow_methods |
+
+---
+
+### Monitoring Items (Watch During Pilot)
+
+| Issue ID | Summary | Watch For |
+|----------|---------|-----------|
+| ISSUE-016 | Roster not updating | Race conditions at 7+ users |
+| ISSUE-019 | "Couldn't place bid" | False reports (roster full) |
+| ISSUE-020 | Team offered twice | Socket duplication |
+| ISSUE-022 | "Unknown" manager names | Missing userName data |
+
+---
+
+## 🟢 POST-PILOT TASKS
+
+*Enhancements after successful 400-user pilot*
+
+### New Features
+
+| # | Feature | Effort | Priority | Notes |
+|---|---------|--------|----------|-------|
+| 1 | "Pass This Round" functionality | 2-3 hrs | P1 | If users request |
+| 2 | Manual score entry UI | 4 hrs | P2 | Commissioners fix scores |
+| 3 | Auction history tab | 4 hrs | P2 | Review all bids |
+| 4 | Custom scoring rules | 1 week | P3 | Flexibility per tournament |
+| 5 | Email notifications | 1 week | P2 | Invites, reminders |
+| 6 | Payment integration (Stripe) | 2 weeks | P3 | Entry fees |
+| 7 | FIFA World Cup 2026 teams | 2 hrs | P2 | When qualifiers complete |
+| 8 | IPL 2026 Cricbuzz integration | 2 hrs | P2 | When API available |
+
+### Technical Debt
+
+| # | Task | Effort | Priority | Notes |
+|---|------|--------|----------|-------|
+| 1 | Refactor server.py (5,900+ lines) | 1-2 weeks | P2 | Maintainability |
+| 2 | Fixture import - use externalId | 4 hrs | P3 | Reliability |
+| 3 | Consolidate socket events | 4 hrs | P3 | Simpler client |
+| 4 | Socket.IO bidding (replace HTTP) | 1 week | P3 | Faster mobile |
+| 5 | E2E test suite expansion | 4-5 days | P2 | Regression coverage |
+
+### Mobile App Strategy 📱
+
+| Phase | Approach | Trigger |
+|-------|----------|---------|
+| Current | Mobile-responsive web | ✅ Done |
+| Post-Pilot | Capacitor wrapper | Users want "real" app |
+| Scale | React Native | If Capacitor insufficient |
+
+---
+
+## 🔵 FUTURE / BACKLOG
+
+### Multi-Region Expansion
+
+| Region | Trigger | Action |
+|--------|---------|--------|
+| US | 100+ active US users | US Railway deployment |
+| India | 100+ active India users | Asia deployment |
+| Europe | Current | ✅ EU-West serves all |
+
+### Advanced Features
+
+- Native mobile apps (React Native)
+- Real-time leaderboards
+- Social features (chat, forums)
+- Tournament brackets
+- Third-party API
+
+---
+
+## ✅ RECENTLY RESOLVED
+
+| # | Issue | Summary | Solution | Date |
+|---|-------|---------|----------|------|
+| 1 | Railway migration | EU-West hosting | Full migration complete | Mid-Jan 2026 |
+| 2 | Stitch redesign | Dark theme UI/UX | Complete visual overhaul | Jan 27-29, 2026 |
+| 3 | IPL logos | All 10 team crests | Local assets + mapping | Jan 29, 2026 |
+| 4 | CL 2025/26 logos | P1 + P2 teams | Local assets + mapping | Jan 30, 2026 |
+| 5 | CORS PATCH | Method not allowed | Added to allow_methods | Jan 29, 2026 |
+| 6 | Profile page | User can't change name | New page + PATCH endpoint | Jan 29, 2026 |
+| 7 | Waiting room | Needed redesign | Commissioner/user views | Jan 29, 2026 |
+| 8 | Sentry monitoring | Backend error tracking | Configured DSN | Jan 17, 2026 |
+| 9 | Redis limits | Connection exhaustion | Upgraded to Essentials | Jan 2026 |
+
+---
+
+## ⚠️ KNOWN LIMITATIONS
+
+| Area | Limitation | Workaround |
+|------|------------|------------|
+| Bulk delete | 30+ leagues times out | Delete in batches of 5-10 |
+| Shield logos | Overflow circular container | Documented in UI-002 |
+
+---
+
+## 📁 KEY FILES REFERENCE
+
+| File | Purpose |
+|------|---------|
+| `/app/frontend/src/utils/teamLogoMapping.js` | Team name → logo file mapping |
+| `/app/frontend/public/assets/clubs/` | Logo PNG files (football/, cricket/) |
+| `/app/frontend/src/components/TeamCrest.jsx` | Logo display component |
+| `/app/backend/server.py` | Main API (monolithic) |
+| `/app/SESSION_CHANGES.md` | Detailed session work log |
+| `/app/AGENT_START_HERE.md` | Quick reference for agents |
+
+### Database Collections
+
+| Collection | Purpose | Key Fields |
+|------------|---------|------------|
+| `assets` | Teams (football) / Players (cricket) | `name`, `sportKey`, `competitionShort` |
+| `leagues` | Competition settings | `id`, `name`, `sport` |
+| `league_participants` | User budgets, rosters | `clubsWon` array |
+| `league_points` | Team/player scores | NOT in league_participants |
+| `auctions` | Active auction state | `status`, `currentLot` |
+| `users` | User accounts | `email`, `displayName` |
+
+---
+
+## 🎯 IMMEDIATE NEXT ACTIONS
+
+1. ✅ ~~CL 2025/26 logo integration~~ - Complete
+2. 🔄 **User:** Continue multi-user auction testing
+3. ⏸️ **User:** Set up SendGrid for auth hardening (when ready)
+4. ⏸️ **User:** Verify MongoDB Atlas backups configured
+5. 📝 **User:** Report any pilot blocking issues
+
+---
+
+**Document Version:** 4.0  
+**Last Updated:** January 30, 2026
+
+### Change Log
+
+| Version | Date | Changes |
+|---------|------|---------|
+| 4.0 | Jan 30, 2026 | Major update: Marked Railway migration complete; Added Stitch redesign completion; Added logo integration; Updated phase to PRE-PILOT; Reorganized priorities |
+| 3.0 | Jan 16, 2026 | Complete reorganization by phase; Added mobile strategy |
+| 2.1 | Dec 21, 2025 | Added stress test findings |
+| 2.0 | Dec 2025 | Initial comprehensive list |
