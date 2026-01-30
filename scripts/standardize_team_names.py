@@ -156,14 +156,45 @@ async def standardize_names():
                 already_standard_count += 1
             # Team doesn't exist with either name - skip silently
     
-    print(f"\n📊 Summary:")
+    print(f"\n📊 Standardization Summary:")
     print(f"   Updated: {updated_count}")
     print(f"   Already standard: {already_standard_count}")
     print(f"   Skipped: {skipped_count}")
     
+    # Now add missing teams
+    print("\n➕ Adding missing teams...\n")
+    added_count = 0
+    
+    for team_data in TEAMS_TO_ADD:
+        # Check if team already exists
+        existing = await db.assets.find_one({"name": team_data["name"], "sportKey": "football"})
+        if existing:
+            print(f"   ⏭️  '{team_data['name']}' - already exists")
+            continue
+        
+        # Create new team asset
+        import uuid
+        new_asset = {
+            "id": str(uuid.uuid4()),
+            "name": team_data["name"],
+            "country": team_data["country"],
+            "sportKey": "football",
+            "competitionCode": "CL",
+            "competitionShort": team_data.get("league", ""),
+            "competitions": ["UEFA Champions League", team_data.get("league", "")],
+            "type": "team",
+        }
+        
+        await db.assets.insert_one(new_asset)
+        print(f"   ✅ Added '{team_data['name']}' ({team_data['country']})")
+        added_count += 1
+    
+    print(f"\n📊 Teams Added: {added_count}")
+    
     # Show final state
     print("\n📋 Final team names:")
     teams = await db.assets.find({"sportKey": "football"}).sort("name", 1).to_list(length=100)
+    print(f"   Total: {len(teams)} teams")
     for team in teams:
         print(f"   • {team['name']}")
     
