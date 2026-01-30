@@ -249,15 +249,30 @@ export const cricketLogoMapping = {
 /**
  * Get the local logo path for a team
  * @param {string} teamName - The team name to look up
- * @param {string} sport - 'football' or 'cricket'
+ * @param {string} sport - 'football', 'cricket', or 'national'
  * @returns {string|null} - The path to the logo or null if not found
  */
 export const getTeamLogoPath = (teamName, sport = 'football') => {
-  const mapping = sport === 'cricket' ? cricketLogoMapping : footballLogoMapping;
-  const logoFile = mapping[teamName];
-  
-  if (logoFile) {
-    return `/assets/clubs/${sport}/${logoFile}`;
+  // For cricket, check cricket mapping
+  if (sport === 'cricket') {
+    const logoFile = cricketLogoMapping[teamName];
+    if (logoFile) {
+      return `/assets/clubs/cricket/${logoFile}`;
+    }
+    return null;
   }
+  
+  // For football, check club mapping first
+  const clubLogo = footballLogoMapping[teamName];
+  if (clubLogo) {
+    return `/assets/clubs/football/${clubLogo}`;
+  }
+  
+  // Then check national teams (for World Cup etc.)
+  const nationalLogo = nationalTeamLogoMapping[teamName];
+  if (nationalLogo) {
+    return `/assets/clubs/national_teams/${nationalLogo}`;
+  }
+  
   return null;
 };
