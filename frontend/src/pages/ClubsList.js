@@ -18,6 +18,7 @@ export default function ClubsList() {
   const [selectedSport, setSelectedSport] = useState("football");
   const [selectedFranchise, setSelectedFranchise] = useState("all");
   const [selectedRole, setSelectedRole] = useState("all");
+  const [selectedTeamType, setSelectedTeamType] = useState("all"); // New: clubs vs national teams
 
   // Set page title
   useEffect(() => {
