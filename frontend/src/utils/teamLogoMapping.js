@@ -65,6 +65,19 @@ export const footballLogoMapping = {
   "Bodø/Glimt": "bodo_glimt.png",
   "Club Brugge KV": "club_brugge.png",
   "Club Brugge": "club_brugge.png",
+  
+  // Quick wins - files already existed
+  "Girona FC": "girona_fc.png",
+  "Stade Brestois 29": "stade_brestois_29.png",
+  "Bologna FC 1909": "bologna_fc_1909.png",
+  
+  // Priority 1 - CL 2025/26 Playoff teams
+  "Galatasaray SK": "galatasaray.png",
+  "Galatasaray": "galatasaray.png",
+  "Olympiacos FC": "olympiacos.png",
+  "Olympiacos": "olympiacos.png",
+  "FK Qarabag": "fk_qarabag.png",
+  "Qarabağ FK": "fk_qarabag.png",
 };
 
 // IPL Cricket team logos
