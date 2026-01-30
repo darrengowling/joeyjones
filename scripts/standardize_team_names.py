@@ -85,6 +85,28 @@ NAME_STANDARDIZATION_MAP = {
     "Slavia Prague": "SK Slavia Praha",
 }
 
+# Teams to add if they don't exist in the database
+TEAMS_TO_ADD = [
+    # Italy - Serie A
+    {"name": "SSC Napoli", "country": "Italy", "league": "Serie A"},
+    {"name": "AS Roma", "country": "Italy", "league": "Serie A"},
+    {"name": "SS Lazio", "country": "Italy", "league": "Serie A"},
+    
+    # France - Ligue 1
+    {"name": "Olympique de Marseille", "country": "France", "league": "Ligue 1"},
+    {"name": "Olympique Lyon", "country": "France", "league": "Ligue 1"},
+    {"name": "LOSC Lille", "country": "France", "league": "Ligue 1"},
+    
+    # Netherlands - Eredivisie
+    {"name": "AFC Ajax", "country": "Netherlands", "league": "Eredivisie"},
+    
+    # CL 2025/26 Teams
+    {"name": "FK Bodø/Glimt", "country": "Norway", "league": "Eliteserien"},
+    {"name": "PAE Olympiakos SFP", "country": "Greece", "league": "Super League Greece"},
+    {"name": "Qarabağ Ağdam FK", "country": "Azerbaijan", "league": "Premier League (Azerbaijan)"},
+    {"name": "SK Slavia Praha", "country": "Czech Republic", "league": "Czech First League"},
+]
+
 
 async def standardize_names():
     print(f"Connecting to MongoDB...")
