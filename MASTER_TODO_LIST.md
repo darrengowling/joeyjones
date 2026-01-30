@@ -74,15 +74,37 @@
 ### IPL Cricket (10 teams) - Jan 29
 All logos at 256x256px in `/app/frontend/public/assets/clubs/cricket/`
 
-### UEFA Champions League 2025/26 - Jan 30
+### UEFA Champions League 2025/26 - Jan 30 ✅ COMPLETE
 | Priority | Teams Added | Status |
 |----------|-------------|--------|
 | P1 (Playoffs) | Galatasaray SK, PAE Olympiakos SFP, Qarabağ Ağdam FK | ✅ Done |
 | P2 (League Phase) | FC København, Paphos FC, SK Slavia Praha, Royale Union Saint-Gilloise | ✅ Done |
+| Scottish | Celtic FC, Rangers FC | ✅ Done |
+| Eastern European | Dinamo Zagreb, Shakhtar, Red Star Belgrade, Jagiellonia | ✅ Done |
+| Central European | Sturm Graz, Sparta Prague, Young Boys | ✅ Done |
 | Quick wins | Girona FC, Stade Brestois 29, Bologna FC 1909, Club Atlético de Madrid, FK Bodø/Glimt, Club Brugge KV | ✅ Done |
 
+### FIFA World Cup 2026 - Jan 30 ✅ COMPLETE
+| Confederation | Teams | Status |
+|---------------|-------|--------|
+| CAF (Africa) | Algeria, Cabo Verde, Côte d'Ivoire, Egypt, Ghana, Morocco, Senegal, South Africa, Tunisia | ✅ Done |
+| AFC (Asia) | Australia, Iran, Japan, Jordan, Qatar, Saudi Arabia, South Korea, Uzbekistan | ✅ Done |
+| UEFA (Europe) | Austria, Belgium, Croatia, England, France, Germany, Netherlands, Norway, Portugal, Scotland, Spain, Switzerland | ✅ Done |
+| CONCACAF | Canada, Curaçao, Haiti, Mexico, Panama, United States | ✅ Done |
+| OFC (Oceania) | New Zealand | ✅ Done |
+| CONMEBOL | Argentina, Brazil, Colombia, Ecuador, Paraguay, Uruguay | ✅ Done |
+
+**Total: 42 national teams with badges and Football-Data.org IDs**
+
+**Assets folder:** `/app/frontend/public/assets/clubs/national_teams/`
+**Mapping:** `nationalTeamLogoMapping` in `teamLogoMapping.js`
+
+### Football-Data.org Integration - Jan 30 ✅ COMPLETE
+- All 105 teams have `footballDataId` for fixture imports and score updates
+- Script created: `/app/scripts/populate_football_data_ids.py`
+
 **Mapping file:** `/app/frontend/src/utils/teamLogoMapping.js`  
-**Assets folder:** `/app/frontend/public/assets/clubs/football/`
+**Football assets folder:** `/app/frontend/public/assets/clubs/football/`
 
 ---
 
