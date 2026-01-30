@@ -85,6 +85,21 @@ export const footballLogoMapping = {
   "Rangers FC": "rangers_fc.png",
   "Rangers": "rangers_fc.png",
   
+  // === OTHER EUROPEAN LEAGUES ===
+  "SK Sturm Graz": "sturm_graz.png",
+  "Sturm Graz": "sturm_graz.png",
+  "AC Sparta Praha": "sparta_prague.png",
+  "Sparta Prague": "sparta_prague.png",
+  "GNK Dinamo Zagreb": "dinamo_zagreb.png",
+  "Dinamo Zagreb": "dinamo_zagreb.png",
+  "BSC Young Boys": "young_boys.png",
+  "Young Boys": "young_boys.png",
+  "FK Crvena Zvezda": "red_star_belgrade.png",
+  "Red Star Belgrade": "red_star_belgrade.png",
+  "FC Shakhtar Donetsk": "shakhtar_donetsk.png",
+  "Shakhtar Donetsk": "shakhtar_donetsk.png",
+  "Jagiellonia Białystok": "jagiellonia_bialystok.png",
+  
   // === UEFA CHAMPIONS LEAGUE 2025/26 (Additional Teams) ===
   "FK Bodø/Glimt": "bodo_glimt.png",
   "Galatasaray SK": "galatasaray.png",
