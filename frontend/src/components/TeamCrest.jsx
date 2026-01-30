@@ -57,6 +57,7 @@ const PlaceholderShield = ({ size = 48, color = '#94A3B8', className = '' }) => 
 const DARK_LOGOS_NEEDING_BACKDROP = [
   'tottenham_hotspur.png',  // Dark navy blue
   'newcastle_united.png',   // Black and white stripes
+  'juventus_fc.png',        // Black "J" logo
   // Add more as needed - keep this list minimal
 ];
 
