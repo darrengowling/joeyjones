@@ -9,7 +9,7 @@ import json
 from datetime import datetime
 
 # Backend URL from frontend/.env
-BACKEND_URL = "https://sportcrest.preview.emergentagent.com/api"
+BACKEND_URL = "https://fantasy-ux-pilot.preview.emergentagent.com/api"
 
 class MongoSerializationTester:
     def __init__(self):

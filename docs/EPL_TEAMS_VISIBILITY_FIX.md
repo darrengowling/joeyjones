@@ -96,7 +96,7 @@ Added all 20 EPL teams to the `clubs` collection:
 
 **Endpoint Test:**
 ```bash
-curl https://sportcrest.preview.emergentagent.com/api/clubs
+curl https://fantasy-ux-pilot.preview.emergentagent.com/api/clubs
 ```
 
 **Results:**

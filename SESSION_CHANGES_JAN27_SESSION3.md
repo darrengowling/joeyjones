@@ -134,8 +134,8 @@
 - Status: `waiting`
 
 ### URLs:
-- Frontend: `https://sportcrest.preview.emergentagent.com`
-- Backend API: `https://sportcrest.preview.emergentagent.com/api`
+- Frontend: `https://fantasy-ux-pilot.preview.emergentagent.com`
+- Backend API: `https://fantasy-ux-pilot.preview.emergentagent.com/api`
 
 ---
 

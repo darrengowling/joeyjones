@@ -9,7 +9,7 @@ PRODUCTION:
 
 PREVIEW:
   - Main JS: bundle.js (development build)
-  - Backend URL configured: https://sportcrest.preview.emergentagent.com
+  - Backend URL configured: https://fantasy-ux-pilot.preview.emergentagent.com
 
 === BACKEND SERVER ANALYSIS ===
 
