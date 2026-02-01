@@ -61,6 +61,17 @@ const DARK_LOGOS_NEEDING_BACKDROP = [
   // Add more as needed - keep this list minimal
 ];
 
+// Logos that need special treatment in watermark mode (very dark or red logos)
+// These get inverted to white for better visibility as watermarks
+const DARK_LOGOS_FOR_WATERMARK = [
+  'tottenham_hotspur.png',   // Dark navy blue - nearly invisible
+  'nottingham_forest.png',   // Dark red - very faint
+  'liverpool_fc.png',        // Dark red - very faint
+  'newcastle_united.png',    // Black/white - can be faint
+  'juventus_fc.png',         // Black - invisible
+  'ac_milan.png',            // Red/black - can be faint
+];
+
 // Cricket/Player placeholder icon - simple person silhouette
 const CricketIcon = ({ size = 48, color = '#94A3B8' }) => (
   <svg width={size} height={size} viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
