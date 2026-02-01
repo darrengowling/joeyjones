@@ -1333,9 +1333,9 @@ function AuctionRoom() {
               </button>
             </div>
             
-            {/* Teams List */}
+            {/* Teams List - using shuffled order to hide auction sequence */}
             <div className="overflow-y-auto p-4 space-y-2" style={{ maxHeight: 'calc(70vh - 60px)' }}>
-              {clubs.map((club, idx) => {
+              {shuffledClubsForModal.map((club, idx) => {
                 const isCurrent = club.id === currentClub?.id;
                 const isSold = club.winner && club.winner !== 'unsold';
                 const isUnsold = club.winner === 'unsold';
