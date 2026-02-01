@@ -1213,6 +1213,20 @@ function AuctionRoom() {
     return clubsInQueue.slice(0, 8);
   }, [auctionQueue, clubs, auctionId]);
 
+  // Shuffled clubs list for "View All" modal - hides auction order
+  const shuffledClubsForModal = useMemo(() => {
+    if (clubs.length > 0 && auctionId) {
+      const seed = auctionId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+      const shuffled = [...clubs];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(((seed * (i + 1)) % 1000) / 1000 * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      return shuffled;
+    }
+    return clubs;
+  }, [clubs, auctionId]);
+
   // Find current user's participant data
   const currentUserParticipant = participants.find((p) => p.userId === user?.id);
   const userRosterCount = currentUserParticipant?.clubsWon?.length || 0;
