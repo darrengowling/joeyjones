@@ -3431,12 +3431,13 @@ async def import_fixtures_from_api(
             'countChanged': fixtures_imported + fixtures_updated
         }, room=f"league:{league_id}")
         
-        logger.info(f"Fixture import complete: {fixtures_imported} new, {fixtures_updated} updated")
+        logger.info(f"Fixture import complete: {fixtures_imported} new, {fixtures_updated} updated, {fixtures_skipped} skipped (already completed)")
         
         return {
-            "message": f"Successfully imported {fixtures_imported} new fixtures and updated {fixtures_updated} existing fixtures",
+            "message": f"Successfully imported {fixtures_imported} new fixtures and updated {fixtures_updated} existing fixtures ({fixtures_skipped} completed matches skipped)",
             "fixturesImported": fixtures_imported,
             "fixturesUpdated": fixtures_updated,
+            "fixturesSkipped": fixtures_skipped,
             "teamsChecked": len(team_external_ids),
             "apiRequestsRemaining": client.get_requests_remaining()
         }
