@@ -1196,36 +1196,24 @@ function AuctionRoom() {
   // IMPORTANT: Shuffle the display order so users can't determine auction sequence
   // The shuffle is seeded by auction ID so it's consistent during the session but random per auction
   const auctionQueue = auction?.clubQueue || [];
-  const queueClubs = useMemo(() => {
-    const clubsInQueue = auctionQueue.map(id => clubs.find(c => c.id === id)).filter(Boolean);
-    
-    // Seeded shuffle based on auction ID - consistent within session but hides real order
-    if (clubsInQueue.length > 0 && auctionId) {
-      // Create a simple seeded random using auction ID
-      const seed = auctionId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-      const shuffled = [...clubsInQueue];
-      for (let i = shuffled.length - 1; i > 0; i--) {
-        const j = Math.floor(((seed * (i + 1)) % 1000) / 1000 * (i + 1));
-        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-      }
-      return shuffled.slice(0, 8);
+  
+  // Seeded shuffle function - consistent within session but hides real order
+  const seededShuffle = (arr) => {
+    if (!arr.length || !auctionId) return arr;
+    const seed = auctionId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    const shuffled = [...arr];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(((seed * (i + 1)) % 1000) / 1000 * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
     }
-    return clubsInQueue.slice(0, 8);
-  }, [auctionQueue, clubs, auctionId]);
+    return shuffled;
+  };
+  
+  const clubsInQueue = auctionQueue.map(id => clubs.find(c => c.id === id)).filter(Boolean);
+  const queueClubs = seededShuffle(clubsInQueue).slice(0, 8);
 
   // Shuffled clubs list for "View All" modal - hides auction order
-  const shuffledClubsForModal = useMemo(() => {
-    if (clubs.length > 0 && auctionId) {
-      const seed = auctionId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-      const shuffled = [...clubs];
-      for (let i = shuffled.length - 1; i > 0; i--) {
-        const j = Math.floor(((seed * (i + 1)) % 1000) / 1000 * (i + 1));
-        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-      }
-      return shuffled;
-    }
-    return clubs;
-  }, [clubs, auctionId]);
+  const shuffledClubsForModal = seededShuffle(clubs);
 
   // Find current user's participant data
   const currentUserParticipant = participants.find((p) => p.userId === user?.id);
