@@ -138,11 +138,23 @@ const TeamCrest = memo(({
       return null;
     }
     
+    // Check if this logo needs special watermark treatment (dark logos)
+    const needsWatermarkBoost = DARK_LOGOS_FOR_WATERMARK.includes(logoFilename);
+    
+    // Dark logos get inverted to white and higher brightness for visibility
+    // Regular logos get standard grayscale treatment
+    const watermarkFilter = needsWatermarkBoost 
+      ? 'invert(1) brightness(200%)' 
+      : 'grayscale(50%) brightness(150%)';
+    
+    // Dark logos also need slightly higher opacity since inversion changes the visual weight
+    const watermarkOpacity = needsWatermarkBoost ? 0.15 : 0.12;
+    
     return (
       <div 
         className={`absolute inset-0 flex items-center justify-center pointer-events-none ${className}`}
         style={{ 
-          opacity: 0.12
+          opacity: watermarkOpacity
         }}
       >
         <img 
@@ -153,7 +165,7 @@ const TeamCrest = memo(({
           onError={() => setImgError(true)}
           style={{ 
             objectFit: 'contain',
-            filter: 'grayscale(50%) brightness(150%)'
+            filter: watermarkFilter
           }}
         />
       </div>
