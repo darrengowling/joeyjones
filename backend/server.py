@@ -3323,7 +3323,8 @@ async def import_fixtures_from_api(
         fixtures_updated = 0
         
         # Statuses that indicate a match is already finished - skip these
-        COMPLETED_STATUSES = ["FT", "AET", "PEN", "AWD", "WO"]  # Full Time, After Extra Time, Penalties, Awarded, Walkover
+        # Note: Football-Data.org client returns lowercase statuses (ft, aet, pen, etc.)
+        COMPLETED_STATUSES = ["ft", "aet", "pen", "awd", "wo", "FT", "AET", "PEN", "AWD", "WO"]  # Both cases for safety
         fixtures_skipped = 0
         
         for api_fixture in api_fixtures:
@@ -3339,7 +3340,7 @@ async def import_fixtures_from_api(
                 status = api_fixture["fixture"]["status"]["short"]
                 
                 # Skip already completed fixtures - only import future/scheduled matches
-                if status in COMPLETED_STATUSES:
+                if status.lower() in ["ft", "aet", "pen", "awd", "wo"]:
                     logger.info(f"Skipping completed fixture: {home_team_name} vs {away_team_name} (status: {status})")
                     fixtures_skipped += 1
                     continue
