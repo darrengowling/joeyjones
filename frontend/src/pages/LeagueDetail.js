@@ -257,7 +257,7 @@ export default function LeagueDetail() {
       const response = await axios.post(`${API}/fixtures/update-scores`);
       
       if (response.data.updated > 0) {
-        toast.success(`Updated ${response.data.updated} match results! Refresh to see scores.`);
+        toast.success("Scores successfully updated");
         // Reload fixtures to show updated scores
         await loadFixtures();
       } else {
