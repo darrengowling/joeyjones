@@ -201,12 +201,10 @@ export default function CompetitionDashboard() {
       const response = await axios.post(`${API}/fixtures/update-scores`);
       
       if (response.data.updated > 0) {
-        toast.success(`Updated ${response.data.updated} match results! Calculating league points...`);
-        
         // Step 2: Trigger score recompute automatically
         try {
           await axios.post(`${API}/leagues/${leagueId}/score/recompute`);
-          toast.success("League standings updated successfully!");
+          toast.success("Scores successfully updated");
         } catch (recomputeError) {
           console.error("Error recomputing scores:", recomputeError);
           toast.warning("Scores updated but league calculation failed. Please refresh the page.");
