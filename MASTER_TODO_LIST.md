@@ -341,20 +341,25 @@ When ready, implement all at once:
 ## 🎯 IMMEDIATE NEXT ACTIONS
 
 1. ✅ ~~CL 2025/26 logo integration~~ - Complete
-2. 🔄 **User:** Continue multi-user auction testing
-3. ⏸️ **User:** Set up SendGrid for auth hardening (when ready)
-4. ⏸️ **User:** Verify MongoDB Atlas backups configured
-5. 📝 **User:** Report any pilot blocking issues
+2. ✅ ~~Fixture import skip completed matches~~ - Complete
+3. ✅ ~~Auction carousel order randomization~~ - Complete
+4. ✅ ~~Dark logo watermark visibility~~ - Complete
+5. ✅ ~~Help page Stitch standardization~~ - Complete
+6. 🔄 **User:** Continue multi-user auction testing / stress testing
+7. ⏸️ **User:** Set up SendGrid for auth hardening (when ready)
+8. ⏸️ **User:** Verify MongoDB Atlas backups configured
+9. 📝 **User:** Report any pilot blocking issues
 
 ---
 
-**Document Version:** 4.0  
-**Last Updated:** January 30, 2026
+**Document Version:** 4.1  
+**Last Updated:** February 1, 2026
 
 ### Change Log
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 4.1 | Feb 1, 2026 | Added Session 7 fixes: fixture import filter, carousel shuffle, dark watermarks, Help page standardization |
 | 4.0 | Jan 30, 2026 | Major update: Marked Railway migration complete; Added Stitch redesign completion; Added logo integration; Updated phase to PRE-PILOT; Reorganized priorities |
 | 3.0 | Jan 16, 2026 | Complete reorganization by phase; Added mobile strategy |
 | 2.1 | Dec 21, 2025 | Added stress test findings |
