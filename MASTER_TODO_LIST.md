@@ -298,6 +298,10 @@ When ready, implement all at once:
 | 7 | Waiting room | Needed redesign | Commissioner/user views | Jan 29, 2026 |
 | 8 | Sentry monitoring | Backend error tracking | Configured DSN | Jan 17, 2026 |
 | 9 | Redis limits | Connection exhaustion | Upgraded to Essentials | Jan 2026 |
+| 10 | Fixture import bug | Completed matches imported | Added status filter to skip FT matches | Feb 1, 2026 |
+| 11 | Auction carousel order | Revealed auction sequence | Seeded shuffle for display | Feb 1, 2026 |
+| 12 | Dark logo watermarks | Invisible on dark bg | Invert filter for dark logos | Feb 1, 2026 |
+| 13 | Help page styling | Emojis/colorful text | Standardized to Stitch design | Feb 1, 2026 |
 
 ---
 
