@@ -1,6 +1,114 @@
 # Session Changes Log - UI/UX Redesign (Stitch)
 **Started:** January 27, 2026
-**Last Updated:** January 30, 2026 (End of Session 6)
+**Last Updated:** February 1, 2026 (End of Session 7)
+
+---
+
+## Session 7 Changes - February 1, 2026
+
+### 1. Fixture Import - Skip Completed Matches ✅
+
+**Problem:** When importing fixtures on the same day as matches, completed matches (status "FT") were being imported. This caused issues where match results from before the auction affected league standings incorrectly.
+
+**Solution:** Added filter to skip fixtures with completed statuses during import.
+
+**File:** `/app/backend/server.py` (lines ~3325-3345)
+
+**Technical Details:**
+- Added status filter: `["ft", "aet", "pen", "awd", "wo"]` (lowercase, matching Football-Data.org client output)
+- Uses `status.lower()` comparison for safety
+- Response now includes `fixturesSkipped` count for visibility
+- Log message shows each skipped fixture
+
+**Result:** Only future/scheduled fixtures are imported. Commissioners see "X completed matches skipped" in the response.
+
+---
+
+### 2. Auction Carousel - Team Order Randomization ✅
+
+**Problem:** The team carousel at the top of the auction room displayed teams in their actual auction queue order, revealing the sequence in which teams would be presented. This undermined the strategic gameplay element of randomized team order.
+
+**Solution:** Implemented seeded shuffle for display order in both the carousel and "View All" modal.
+
+**File:** `/app/frontend/src/pages/AuctionRoom.js` (lines ~1195-1228)
+
+**Technical Details:**
+- Created `seededShuffle()` function using auction ID as seed
+- Shuffle is deterministic per auction (consistent during session)
+- Different auctions have different display orders
+- Both `queueClubs` (carousel) and `shuffledClubsForModal` (View All) use shuffled order
+- Actual auction order (`clubQueue`) remains unchanged on backend
+
+**Result:** Users can see which teams are available but cannot determine the auction sequence.
+
+---
+
+### 3. Dark Logo Watermark Visibility Fix ✅
+
+**Problem:** Dark-colored team logos (Tottenham, Liverpool, Nottingham Forest) were nearly invisible as watermarks in the auction room hero section due to low opacity and inadequate brightness filter on the dark navy background.
+
+**Solution:** Added special watermark treatment for dark logos using inversion filter.
+
+**File:** `/app/frontend/src/components/TeamCrest.jsx` (lines ~63-72, 124-150)
+
+**Technical Details:**
+- Created `DARK_LOGOS_FOR_WATERMARK` list for logos needing special treatment
+- Dark logos get: `filter: 'invert(1) brightness(200%)'` and `opacity: 0.15`
+- Regular logos keep: `filter: 'grayscale(50%) brightness(150%)'` and `opacity: 0.12`
+- Logos affected: `tottenham_hotspur.png`, `liverpool_fc.png`, `nottingham_forest.png`, `newcastle_united.png`, `juventus_fc.png`, `ac_milan.png`
+
+**Result:** Dark logos now appear as visible light/white watermarks against the dark background.
+
+---
+
+### 4. Help Page Standardization ✅
+
+**Problem:** Help page used emojis and colorful text that didn't match the Stitch design system used throughout the rest of the app.
+
+**Solution:** Complete visual overhaul to match master design format.
+
+**File:** `/app/frontend/src/pages/Help.js` (complete rewrite)
+
+**Changes Made:**
+- Removed all emojis (🚀, 👑, 👥, 📊, 🎯, 🧭, ❓, 💡, ⚠️, ✨, etc.)
+- Removed colorful text (cyan, purple, green, yellow, orange variations)
+- Standardized backgrounds to `#0F172A` (navy) and `#151C2C` (cards)
+- Text now uses white with opacity variations (`text-white/80`, `text-white/60`)
+- Accent color limited to cyan `#06B6D4` for key highlights only
+- Warning boxes use subtle amber tint
+- Removed colorful Quick Navigation grid
+- Content preserved unchanged
+
+**Result:** Help page now matches the Stitch design system used throughout the app.
+
+---
+
+### 5. Stress Test Results Reviewed ✅
+
+**Test Configuration:** 25 leagues, 8 users per league (200 concurrent users)
+
+**Results:**
+| Metric | Value | Assessment |
+|--------|-------|------------|
+| Success Rate | 88.3% (2202/2494 bids) | Acceptable (failures due to budget/outbid) |
+| p50 Latency | 1951ms | Noticeable but okay |
+| p95 Latency | 2906ms | High tail latency |
+| Anti-snipe Buffer | 7912ms | Excellent (7.9s safety margin) |
+
+**Conclusion:** System approved for pilot. Bid lag less pronounced in production than preview environment. Anti-snipe system has excellent safety margin.
+
+---
+
+### Files Modified This Session
+
+| File | Change |
+|------|--------|
+| `/app/backend/server.py` | Fixture import filter for completed matches |
+| `/app/frontend/src/pages/AuctionRoom.js` | Seeded shuffle for carousel/modal display |
+| `/app/frontend/src/components/TeamCrest.jsx` | Dark logo watermark treatment |
+| `/app/frontend/src/pages/Help.js` | Complete Stitch design standardization |
+| `/app/SESSION_CHANGES.md` | This update |
+| `/app/MASTER_TODO_LIST.md` | Updated with completed items |
 
 ---
 
