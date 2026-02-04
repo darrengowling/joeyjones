@@ -1,6 +1,6 @@
 # Master TODO List - Sport X Platform
 
-**Last Updated:** January 30, 2026  
+**Last Updated:** February 2, 2026  
 **Purpose:** Single source of truth for all work items organized by deployment phase  
 **Current Status:** POST-MIGRATION / PRE-PILOT (Railway EU-West Live)
 
@@ -16,6 +16,8 @@
 | **Cache** | Redis Cloud (256 connections) |
 | **Pilot Target** | 400 UK users |
 | **Current Phase** | 🟡 PRE-PILOT - Final polish and testing |
+| **CORS** | ✅ Configured (explicit origin) |
+| **Monitoring** | ⚠️ Recommended (UptimeRobot) |
 
 ---
 
