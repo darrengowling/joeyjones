@@ -1,6 +1,136 @@
 # Session Changes Log - UI/UX Redesign (Stitch)
 **Started:** January 27, 2026
-**Last Updated:** February 1, 2026 (End of Session 7)
+**Last Updated:** February 2, 2026 (End of Session 7 - Continued)
+
+---
+
+## Session 7 Changes (Continued) - February 2, 2026
+
+### 6. CORS Configuration Fix ✅
+
+**Problem:** Production CORS was set to wildcard `*` which doesn't work properly with `allow_credentials=True` per CORS specification.
+
+**Solution:** Updated Railway backend environment variable.
+
+**Change:** `CORS_ORIGINS=*` → `CORS_ORIGINS=https://energetic-victory-production-4b19.up.railway.app`
+
+**Result:** Proper CORS security; explicit origin allows credentials to work correctly.
+
+---
+
+### 7. MongoDB Connection Recovery (Production Incident) ✅
+
+**Problem:** Production app showed "Sports data failed to load" - MongoDB Atlas connection timed out.
+
+**Root Cause:** Railway container network hiccup caused stale database connections.
+
+**Immediate Fix:** Restarted Railway backend service to establish fresh connections.
+
+**Future Prevention Recommendations:**
+- UptimeRobot monitoring on `/api/health` endpoint
+- MongoDB Atlas alerts for connection issues
+- Consider Railway Pro tier ($20/mo) for SLA guarantees
+- Implement auto-reconnection logic (pending)
+
+---
+
+### 8. "My Competitions" Loading State UX Fix ✅
+
+**Problem:** Home page showed "No Active Competitions" while data was loading, causing user confusion.
+
+**Solution:** Added loading state with spinner.
+
+**File:** `/app/frontend/src/pages/HomePage.jsx`
+
+**Changes:**
+- Added `leaguesLoading` state variable
+- Show spinner with "Loading competitions..." during API call
+- Only show empty state after loading completes
+
+---
+
+### 9. "My Competitions" Performance Optimization ✅
+
+**Problem:** Loading competitions took 6+ seconds due to N+1 query pattern (30+ database queries).
+
+**Solution:** Refactored `/api/me/competitions` endpoint to use batched queries.
+
+**File:** `/app/backend/server.py` (endpoint at line ~2541)
+
+**Before (N+1 pattern):**
+```
+- 1 query: Get user's league participations
+- 1 query: Get leagues
+- N queries: Get auction per league
+- M queries: Get bids per asset
+- M queries: Get asset details per asset
+- N queries: Count participants per league
+- N queries: Get next fixture per league
+= ~30+ queries for 20 competitions
+```
+
+**After (Batched):**
+```
+- Query 1: Get all participations
+- Query 2: Get all leagues (batch)
+- Query 3: Get all auctions (batch)
+- Query 4: Get all assets (batch)
+- Query 5: Get all winning bids (batch)
+- Query 6: Aggregate participant counts (batch)
+- Query 7: Aggregate next fixtures (batch)
+= 7 queries regardless of competition count
+```
+
+**Performance Result:**
+| Metric | Before | After |
+|--------|--------|-------|
+| Time (22 competitions) | ~6 seconds | **< 1 second** |
+| DB Queries | 30+ (scaled) | 7 (fixed) |
+
+---
+
+### 10. Score Update Toast Simplification ✅
+
+**Problem:** Toast showed "Updated 66 fixtures" which was confusing (counted all leagues, not just current).
+
+**Solution:** Changed to simple "Scores successfully updated" message.
+
+**Files Modified:**
+- `/app/frontend/src/pages/CompetitionDashboard.js`
+- `/app/frontend/src/pages/LeagueDetail.js`
+- `/app/frontend/src/pages/LeagueDetailStitched.jsx`
+
+---
+
+### Files Modified This Session (Continued)
+
+| File | Change |
+|------|--------|
+| `/app/frontend/src/pages/HomePage.jsx` | Loading state + removed N+1 frontend calls |
+| `/app/backend/server.py` | Batched queries for /me/competitions |
+| `/app/frontend/src/pages/CompetitionDashboard.js` | Simplified toast |
+| `/app/frontend/src/pages/LeagueDetail.js` | Simplified toast |
+| `/app/frontend/src/pages/LeagueDetailStitched.jsx` | Simplified toast |
+
+---
+
+### Production Configuration Changes
+
+| Service | Variable | Old Value | New Value |
+|---------|----------|-----------|-----------|
+| Railway Backend | `CORS_ORIGINS` | `*` | `https://energetic-victory-production-4b19.up.railway.app` |
+
+---
+
+### Pending Items
+
+1. **Ford Overoad League Fix** - Awaiting user confirmation on team/bid mapping:
+   - `c6c08c41...` (£228m) → Liverpool or Man City?
+   - `b479ebdb...` (£157m) → Liverpool or Man City?
+   - `c50c84c2...` (£108m) → Arsenal or Aston Villa?
+   - `40ccabc3...` (£26m) → Arsenal or Aston Villa?
+
+2. **Auto-Reconnection Logic** - Recommended but not yet implemented
 
 ---
 
