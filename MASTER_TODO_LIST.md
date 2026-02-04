@@ -304,6 +304,10 @@ When ready, implement all at once:
 | 11 | Auction carousel order | Revealed auction sequence | Seeded shuffle for display | Feb 1, 2026 |
 | 12 | Dark logo watermarks | Invisible on dark bg | Invert filter for dark logos | Feb 1, 2026 |
 | 13 | Help page styling | Emojis/colorful text | Standardized to Stitch design | Feb 1, 2026 |
+| 14 | CORS wildcard fix | `*` doesn't work with credentials | Explicit origin in Railway env | Feb 2, 2026 |
+| 15 | My Competitions loading | Showed "no competitions" while loading | Added spinner loading state | Feb 2, 2026 |
+| 16 | My Competitions perf | 6s load time (N+1 queries) | Batched to 7 queries, <1s | Feb 2, 2026 |
+| 17 | Score update toast | Showed confusing fixture count | Simplified to "Scores updated" | Feb 2, 2026 |
 
 ---
 
