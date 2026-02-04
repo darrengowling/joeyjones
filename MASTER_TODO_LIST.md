@@ -351,20 +351,33 @@ When ready, implement all at once:
 3. ✅ ~~Auction carousel order randomization~~ - Complete
 4. ✅ ~~Dark logo watermark visibility~~ - Complete
 5. ✅ ~~Help page Stitch standardization~~ - Complete
-6. 🔄 **User:** Continue multi-user auction testing / stress testing
-7. ⏸️ **User:** Set up SendGrid for auth hardening (when ready)
-8. ⏸️ **User:** Verify MongoDB Atlas backups configured
-9. 📝 **User:** Report any pilot blocking issues
+6. ✅ ~~CORS explicit origin configuration~~ - Complete
+7. ✅ ~~My Competitions performance optimization~~ - Complete (6s → <1s)
+8. 🔄 **User:** Set up UptimeRobot monitoring on `/api/health`
+9. ⏸️ **User:** Set up SendGrid for auth hardening (when ready)
+10. ⏸️ **User:** Verify MongoDB Atlas backups configured
+11. 📝 **Pending:** Ford Overoad league fix (awaiting team confirmation)
+12. 📝 **Recommended:** Implement DB auto-reconnection logic
 
 ---
 
-**Document Version:** 4.1  
-**Last Updated:** February 1, 2026
+## 🚀 PERFORMANCE OPTIMIZATIONS COMPLETED
+
+| Area | Before | After | Improvement |
+|------|--------|-------|-------------|
+| My Competitions load | ~6 seconds | <1 second | **6x faster** |
+| DB queries (20 comps) | 30+ queries | 7 queries | **4x fewer** |
+
+---
+
+**Document Version:** 4.2  
+**Last Updated:** February 2, 2026
 
 ### Change Log
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 4.2 | Feb 2, 2026 | Added CORS fix, My Competitions optimization (6s→<1s), loading state, toast fix, production incident notes |
 | 4.1 | Feb 1, 2026 | Added Session 7 fixes: fixture import filter, carousel shuffle, dark watermarks, Help page standardization |
 | 4.0 | Jan 30, 2026 | Major update: Marked Railway migration complete; Added Stitch redesign completion; Added logo integration; Updated phase to PRE-PILOT; Reorganized priorities |
 | 3.0 | Jan 16, 2026 | Complete reorganization by phase; Added mobile strategy |
