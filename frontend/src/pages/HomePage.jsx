@@ -17,6 +17,7 @@ const HomePage = () => {
   // User state
   const [user, setUser] = useState(null);
   const [leagues, setLeagues] = useState([]);
+  const [leaguesLoading, setLeaguesLoading] = useState(false);
   
   // Modal states
   const [showAuthModal, setShowAuthModal] = useState(false);
