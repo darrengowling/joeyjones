@@ -65,19 +65,22 @@ const HomePage = () => {
         params: { userId: user.id }
       });
       
-      // Get full details for each league
-      const leaguesWithDetails = await Promise.all(
-        response.data.map(async (comp) => {
-          try {
-            const leagueResponse = await axios.get(`${API}/leagues/${comp.leagueId}`);
-            return leagueResponse.data;
-          } catch (err) {
-            return null;
-          }
-        })
-      );
+      // The /me/competitions endpoint already returns full league details
+      // Transform to match the expected league structure
+      const leagues = response.data.map(comp => ({
+        id: comp.leagueId,
+        name: comp.name,
+        sportKey: comp.sportKey,
+        status: comp.status === 'auction_live' ? 'auction_live' : 
+                comp.status === 'auction_complete' ? 'completed' : 'pending',
+        commissionerId: comp.isCommissioner ? user.id : null,
+        activeAuctionId: comp.activeAuctionId,
+        managersCount: comp.managersCount,
+        timerSeconds: comp.timerSeconds,
+        antiSnipeSeconds: comp.antiSnipeSeconds,
+      }));
       
-      setLeagues(leaguesWithDetails.filter(l => l !== null));
+      setLeagues(leagues);
     } catch (e) {
       console.error('Error loading leagues:', e);
     } finally {
