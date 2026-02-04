@@ -59,6 +59,7 @@ const HomePage = () => {
   }, [user]);
 
   const loadUserLeagues = async () => {
+    setLeaguesLoading(true);
     try {
       const response = await axios.get(`${API}/me/competitions`, {
         params: { userId: user.id }
@@ -79,6 +80,8 @@ const HomePage = () => {
       setLeagues(leaguesWithDetails.filter(l => l !== null));
     } catch (e) {
       console.error('Error loading leagues:', e);
+    } finally {
+      setLeaguesLoading(false);
     }
   };
 
