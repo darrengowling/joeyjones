@@ -375,7 +375,19 @@ const HomePage = () => {
             )}
           </div>
 
-          {leagues.length === 0 ? (
+          {leaguesLoading ? (
+            /* Loading State */
+            <div 
+              className="rounded-3xl p-10 flex flex-col items-center justify-center text-center space-y-4"
+              style={{
+                background: 'rgba(30, 41, 59, 0.45)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+              }}
+            >
+              <div className="w-8 h-8 border-2 border-cyan-500 border-t-transparent rounded-full animate-spin"></div>
+              <p className="text-xs text-slate-400 font-semibold uppercase tracking-widest">Loading competitions...</p>
+            </div>
+          ) : leagues.length === 0 ? (
             /* Empty State */
             <div 
               className="rounded-3xl p-10 flex flex-col items-center justify-center text-center space-y-6"
