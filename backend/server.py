@@ -2540,60 +2540,111 @@ async def get_league_members(league_id: str):
 
 @api_router.get("/me/competitions")
 async def get_my_competitions(userId: str):
-    """Get all competitions for a user - Prompt 6: Feature flag protected"""
+    """Get all competitions for a user - OPTIMIZED with batched queries"""
     # Prompt 6: Feature flag check
     if not FEATURE_MY_COMPETITIONS:
         raise HTTPException(status_code=404, detail="Feature not available")
     
-    # Find all leagues where user is a participant
+    # BATCH QUERY 1: Find all leagues where user is a participant
     participants = await db.league_participants.find({"userId": userId}, {"_id": 0}).to_list(100)
     league_ids = [p["leagueId"] for p in participants]
     
     if not league_ids:
         return []
     
-    # Get league details
-    leagues = await db.leagues.find({"id": {"$in": league_ids}}).to_list(100)
+    # Create a lookup map for participant data
+    participant_map = {p["leagueId"]: p for p in participants}
     
+    # BATCH QUERY 2: Get all leagues at once
+    leagues = await db.leagues.find({"id": {"$in": league_ids}}, {"_id": 0}).to_list(100)
+    league_map = {l["id"]: l for l in leagues}
+    
+    # BATCH QUERY 3: Get all auctions for these leagues at once
+    auctions = await db.auctions.find({"leagueId": {"$in": league_ids}}, {"_id": 0}).to_list(100)
+    auction_map = {a["leagueId"]: a for a in auctions}
+    
+    # Collect all asset IDs across all participants
+    all_asset_ids = []
+    for p in participants:
+        all_asset_ids.extend(p.get("clubsWon", []))
+    all_asset_ids = list(set(all_asset_ids))  # Deduplicate
+    
+    # BATCH QUERY 4: Get all assets at once
+    assets = await db.assets.find({"id": {"$in": all_asset_ids}}, {"_id": 0}).to_list(500) if all_asset_ids else []
+    asset_map = {a["id"]: a for a in assets}
+    
+    # BATCH QUERY 5: Get all winning bids for user's assets at once
+    auction_ids = [a["id"] for a in auctions if a]
+    winning_bids = await db.bids.find({
+        "auctionId": {"$in": auction_ids},
+        "clubId": {"$in": all_asset_ids},
+        "userId": userId
+    }, {"_id": 0}).to_list(500) if all_asset_ids and auction_ids else []
+    
+    # Create bid lookup: (auctionId, clubId) -> highest bid
+    bid_map = {}
+    for bid in winning_bids:
+        key = (bid["auctionId"], bid["clubId"])
+        if key not in bid_map or bid["amount"] > bid_map[key]["amount"]:
+            bid_map[key] = bid
+    
+    # BATCH QUERY 6: Get participant counts using aggregation
+    participant_counts = await db.league_participants.aggregate([
+        {"$match": {"leagueId": {"$in": league_ids}}},
+        {"$group": {"_id": "$leagueId", "count": {"$sum": 1}}}
+    ]).to_list(100)
+    count_map = {pc["_id"]: pc["count"] for pc in participant_counts}
+    
+    # BATCH QUERY 7: Get next fixtures for all leagues at once
+    now_iso = datetime.now(timezone.utc).isoformat()
+    next_fixtures = await db.fixtures.aggregate([
+        {"$match": {
+            "leagueId": {"$in": league_ids},
+            "startsAt": {"$gte": now_iso},
+            "status": "scheduled"
+        }},
+        {"$sort": {"startsAt": 1}},
+        {"$group": {
+            "_id": "$leagueId",
+            "nextFixture": {"$first": "$$ROOT"}
+        }}
+    ]).to_list(100)
+    fixture_map = {nf["_id"]: nf["nextFixture"] for nf in next_fixtures}
+    
+    # Now assemble the response using the cached data (no more DB calls)
     competitions = []
-    for league in leagues:
-        # Determine league status
-        auction = await db.auctions.find_one({"leagueId": league["id"]}, {"_id": 0})
+    for league_id in league_ids:
+        league = league_map.get(league_id)
+        if not league:
+            continue
+            
+        auction = auction_map.get(league_id)
+        participant = participant_map.get(league_id)
+        
+        # Determine status
         if not auction:
             status = "pre_auction"
-        elif auction["status"] == "active":
+        elif auction.get("status") == "active":
             status = "auction_live"
         else:
             status = "auction_complete"
         
-        # Get user's assets for this league with full details (name, price)
-        participant = next((p for p in participants if p["leagueId"] == league["id"]), None)
+        # Build assets owned list from cached data
         asset_ids = participant.get("clubsWon", []) if participant else []
+        sport_key = league.get("sportKey", "football")
         
-        # Enrich with team names and prices from bids
         assets_owned = []
         for asset_id in asset_ids:
-            # Get the winning bid for this asset
-            winning_bid = await db.bids.find_one({
-                "auctionId": auction["id"] if auction else None,
-                "clubId": asset_id,
-                "userId": userId
-            }, sort=[("amount", -1)])
+            asset = asset_map.get(asset_id)
             
-            # Get asset details - query correct collection based on sport
-            sport_key = league.get("sportKey", "football")
-            if sport_key == "football":
-                asset = await db.assets.find_one({"id": asset_id}, {"_id": 0})
-            else:
-                # For cricket and other sports, use assets collection
-                asset = await db.assets.find_one({"id": asset_id}, {"_id": 0})
+            # Get winning bid from cache
+            bid_key = (auction["id"], asset_id) if auction else (None, asset_id)
+            winning_bid = bid_map.get(bid_key)
             
             if asset:
-                # Get name from appropriate field based on sport
                 if sport_key == "football":
                     asset_name = asset.get("clubName") or asset.get("name", "Unknown Team")
                 else:
-                    # For cricket, use playerName
                     asset_name = asset.get("playerName") or asset.get("name", "Unknown Player")
                 
                 assets_owned.append({
@@ -2602,7 +2653,6 @@ async def get_my_competitions(userId: str):
                     "price": winning_bid["amount"] if winning_bid else 0
                 })
             else:
-                # Fallback if asset not found
                 fallback_name = "Team" if sport_key == "football" else "Player"
                 assets_owned.append({
                     "id": asset_id,
@@ -2610,26 +2660,19 @@ async def get_my_competitions(userId: str):
                     "price": winning_bid["amount"] if winning_bid else 0
                 })
         
-        # Get manager count
-        manager_count = await db.league_participants.count_documents({"leagueId": league["id"]})
+        # Get cached data
+        manager_count = count_map.get(league_id, 0)
+        next_fixture = fixture_map.get(league_id)
+        next_fixture_at = next_fixture.get("startsAt") if next_fixture else None
         
-        # Get next fixture
-        next_fixture = await db.fixtures.find_one({
-            "leagueId": league["id"],
-            "startsAt": {"$gte": datetime.now(timezone.utc)},
-            "status": "scheduled"
-        }, {"_id": 0}, sort=[("startsAt", 1)])
-        
-        next_fixture_at = next_fixture["startsAt"] if next_fixture else None
-        
-        # Serialize DateTime objects to ISO strings
+        # Serialize DateTime objects
         starts_at = league.get("startsAt")
         starts_at_iso = starts_at.isoformat() if starts_at and isinstance(starts_at, datetime) else starts_at
         
         competitions.append({
             "leagueId": league["id"],
             "name": league["name"],
-            "sportKey": league["sportKey"],
+            "sportKey": league.get("sportKey", "football"),
             "status": status,
             "isCommissioner": league.get("commissionerId") == userId,
             "activeAuctionId": auction.get("id") if auction else None,
@@ -2638,7 +2681,7 @@ async def get_my_competitions(userId: str):
             "timerSeconds": league.get("timerSeconds", 30),
             "antiSnipeSeconds": league.get("antiSnipeSeconds", 10),
             "startsAt": starts_at_iso,
-            "nextFixtureAt": next_fixture_at.isoformat() if next_fixture_at else None
+            "nextFixtureAt": next_fixture_at
         })
     
     return competitions
