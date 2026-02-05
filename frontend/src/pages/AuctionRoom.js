@@ -1425,7 +1425,9 @@ function AuctionRoom() {
               <div className="text-9xl font-black" style={{ color: '#06B6D4', fontFamily: 'Roboto, sans-serif' }}>
                 {countdown}
               </div>
-              <div className="text-xl text-white/60 mt-4">Next team loading...</div>
+              <div className="text-xl text-white/60 mt-4">
+                Next {sport?.key === 'cricket' ? 'player' : 'team'} loading...
+              </div>
             </div>
           </div>
         )}
