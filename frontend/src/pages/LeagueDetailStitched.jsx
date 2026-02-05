@@ -1144,6 +1144,40 @@ export default function LeagueDetailStitched() {
               </div>
             )}
 
+            {/* Football Scoring Display */}
+            {league.sportKey === "football" && (
+              <div 
+                className="p-5 rounded-2xl"
+                style={{ 
+                  background: 'rgba(6, 182, 212, 0.1)',
+                  border: '1px solid rgba(6, 182, 212, 0.2)',
+                }}
+              >
+                <h3 className="font-bold text-sm mb-4" style={{ color: 'var(--text-primary, #fff)' }}>Scoring Rules (Football)</h3>
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="flex justify-between">
+                    <span className="text-xs" style={{ color: 'var(--text-secondary, rgba(255,255,255,0.6))' }}>Win:</span>
+                    <span className="text-xs font-bold" style={{ color: 'var(--text-primary, #fff)' }}>3 pts</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-xs" style={{ color: 'var(--text-secondary, rgba(255,255,255,0.6))' }}>Draw:</span>
+                    <span className="text-xs font-bold" style={{ color: 'var(--text-primary, #fff)' }}>1 pt</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-xs" style={{ color: 'var(--text-secondary, rgba(255,255,255,0.6))' }}>Goal Scored:</span>
+                    <span className="text-xs font-bold" style={{ color: 'var(--text-primary, #fff)' }}>1 pt</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-xs" style={{ color: 'var(--text-secondary, rgba(255,255,255,0.6))' }}>Loss:</span>
+                    <span className="text-xs font-bold" style={{ color: 'var(--text-primary, #fff)' }}>0 pts</span>
+                  </div>
+                </div>
+                <p className="text-xs mt-3" style={{ color: 'var(--text-muted, rgba(255,255,255,0.4))' }}>
+                  Example: A 3-1 win = 3 (win) + 3 (goals) = 6 pts
+                </p>
+              </div>
+            )}
+
             {/* Standings Section (only when auction is active/completed) */}
             {(league.status === "active" || league.status === "completed") && standings.length > 0 && (
               <div 
