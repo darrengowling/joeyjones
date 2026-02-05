@@ -1390,11 +1390,15 @@ function AuctionRoom() {
       <div className="flex-1 flex flex-col items-center justify-center relative px-4 overflow-hidden">
         
         {/* Team Crest Watermark Background */}
+        {/* For cricket, use franchise name for logo lookup; for football, use team name */}
         {currentClub && (
           <TeamCrest 
             clubId={currentClub.id}
             apiFootballId={currentClub.apiFootballId}
-            name={currentClub.name}
+            name={sport?.key === 'cricket' 
+              ? (currentClub.meta?.franchise || currentClub.meta?.team || currentClub.meta?.iplTeam || currentClub.name)
+              : currentClub.name
+            }
             sportKey={sport?.key || 'football'}
             variant="watermark"
           />
