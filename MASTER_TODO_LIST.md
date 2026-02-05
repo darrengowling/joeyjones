@@ -365,22 +365,24 @@ When ready, implement all at once:
 
 ---
 
-## 🚀 PERFORMANCE OPTIMIZATIONS COMPLETED
+## 🚀 PERFORMANCE & RELIABILITY IMPROVEMENTS
 
 | Area | Before | After | Improvement |
 |------|--------|-------|-------------|
 | My Competitions load | ~6 seconds | <1 second | **6x faster** |
 | DB queries (20 comps) | 30+ queries | 7 queries | **4x fewer** |
+| DB connection loss | Manual restart required | Auto-reconnect | **Self-healing** |
 
 ---
 
-**Document Version:** 4.2  
+**Document Version:** 4.3  
 **Last Updated:** February 2, 2026
 
 ### Change Log
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 4.3 | Feb 2, 2026 | Added auto-reconnection logic, Ford Overoad league fix, updated optimization audit |
 | 4.2 | Feb 2, 2026 | Added CORS fix, My Competitions optimization (6s→<1s), loading state, toast fix, production incident notes |
 | 4.1 | Feb 1, 2026 | Added Session 7 fixes: fixture import filter, carousel shuffle, dark watermarks, Help page standardization |
 | 4.0 | Jan 30, 2026 | Major update: Marked Railway migration complete; Added Stitch redesign completion; Added logo integration; Updated phase to PRE-PILOT; Reorganized priorities |
