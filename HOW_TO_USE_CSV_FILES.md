@@ -91,14 +91,14 @@ cd /app/scripts
 ./upload_match_scores.sh YOUR_LEAGUE_ID match_1_scores.csv
 
 # Or direct curl
-curl -X POST "https://stitch-dark-theme.preview.emergentagent.com/api/scoring/YOUR_LEAGUE_ID/ingest" \
+curl -X POST "https://sportauction.preview.emergentagent.com/api/scoring/YOUR_LEAGUE_ID/ingest" \
   -F "file=@match_1_scores.csv"
 ```
 
 #### Step 4: View Updated Leaderboard
 ```bash
 # Via API
-curl "https://stitch-dark-theme.preview.emergentagent.com/api/scoring/YOUR_LEAGUE_ID/leaderboard"
+curl "https://sportauction.preview.emergentagent.com/api/scoring/YOUR_LEAGUE_ID/leaderboard"
 
 # Or in UI (if we add the leaderboard view)
 # Go to dashboard → Standings tab

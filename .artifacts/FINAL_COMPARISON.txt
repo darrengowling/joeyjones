@@ -9,7 +9,7 @@ PRODUCTION:
 
 PREVIEW:
   - Main JS: bundle.js (development build)
-  - Backend URL configured: https://stitch-dark-theme.preview.emergentagent.com
+  - Backend URL configured: https://sportauction.preview.emergentagent.com
 
 === BACKEND SERVER ANALYSIS ===
 

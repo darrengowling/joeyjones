@@ -6,7 +6,7 @@ Test the new clubs overview functionality
 import asyncio
 import aiohttp
 
-BASE_URL = "https://stitch-dark-theme.preview.emergentagent.com/api"
+BASE_URL = "https://sportauction.preview.emergentagent.com/api"
 
 async def test_clubs_overview():
     """Test the clubs overview endpoint"""

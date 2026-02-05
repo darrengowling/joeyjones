@@ -12,7 +12,7 @@ from datetime import datetime, timezone
 from typing import Dict, List, Optional
 
 # Configuration
-BASE_URL = "https://stitch-dark-theme.preview.emergentagent.com/api"
+BASE_URL = "https://sportauction.preview.emergentagent.com/api"
 
 class ServiceLayerTester:
     def __init__(self):

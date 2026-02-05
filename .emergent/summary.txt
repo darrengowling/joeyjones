@@ -1,92 +1,121 @@
 <analysis>**original_problem_statement:**
-The initial project was to stress test a fantasy sports auction platform. The focus has since shifted to a complete UI/UX redesign based on a new Stitch design specification provided by the user. The redesign must be a **visual-only change**, preserving all existing backend functionality, and must be mobile-first. The project is now in a final polishing and asset integration phase to prepare for a user pilot, with recent work focused on integrating all necessary team assets, standardizing database entries, and fixing user-reported UI issues.
+The initial project was to stress test a fantasy sports auction platform. The focus has since shifted to a complete UI/UX redesign based on a Stitch dark theme specification, which is now largely complete. The current phase involves fixing user-reported bugs, improving performance and reliability, and polishing features for a user pilot. The application is a multi-sport platform currently supporting football and cricket.
 
 PRODUCT REQUIREMENTS:
 1.  A scalable application with low latency (<500ms p99).
 2.  A full UI/UX redesign based on the user-provided Stitch design specifications.
 3.  All existing functionality must be preserved during the redesign.
 4.  Robust backend features must be in place for the pilot, including automated fixture and score updates.
+5.  The system must be reliable for pilot testing, with monitoring and self-healing capabilities.
+6.  The platform should be designed to easily accommodate new sports in the future.
 
 **User's preferred language**: English
 
 **what currently exists?**
-The application UI is largely redesigned to the Stitch dark theme. All team logos for IPL and the UEFA Champions League 2025/26 are integrated. 42 FIFA World Cup 2026 national teams have also been seeded into the database with their corresponding logos. A major database standardization task was completed, aligning team names with official API names and populating  for all 105 football assets to ensure reliable fixture/score matching. The preview environment is now synced with the production MongoDB Atlas database, providing a consistent testing environment. A filter to separate Clubs and National Teams has been added to the UI.
+The application is a full-stack platform using React, FastAPI, and MongoDB, with a complete Stitch dark theme UI. It supports both football and cricket auctions. Recent work has significantly improved performance and reliability. The My Competitions page now loads in under 1 second (down from ~15s) due to backend query optimization. A database auto-reconnection manager has been implemented in the backend to self-heal from transient connection issues, mitigating the risk of downtime seen in this session. Multiple user-reported bugs have been fixed, including an issue with fixture imports, incorrect auction carousel ordering, and UI label inconsistencies in the cricket auction room. The cricket functionality has been fleshed out, with player selection bugs fixed and franchise logos now appearing in the auction room.
 
 **Last working item**:
--   **Last item agent was working**: Fixing two user-reported UI issues:
-    1.  The label COMPLETED MATCHES was incorrectly showing for non-finished games. This was fixed in  and .
-    2.  Team logos in the auction carousel were cramped. This was fixed in  by adjusting card dimensions.
--   **Status**: USER VERIFICATION PENDING
+-   **Last item agent was working**: Adding a UI display for football scoring rules on the competition detail page (). The user noted that while cricket scoring rules were visible and editable, the simpler football rules (win/draw/goal points) were not displayed at all. The agent updated the football scoring schema in the database to include goal points and was in the process of adding the corresponding UI elements.
+-   **Status**: IN PROGRESS
 -   **Agent Testing Done**: N
--   **Which testing method agent to use?**: Frontend testing agent. The agent should test the  page to verify the fixture labels and the  page to verify the carousel UI.
--   **User Testing Done**: N (User stated they will deploy and test on production).
+-   **Which testing method agent to use?**: Frontend testing agent or screenshot tool to verify that the football scoring rules are correctly displayed on the  page for football competitions.
+-   **User Testing Done**: N
 
 **All Pending/In progress Issue list**:
--   Issue 1: Bid lag in auction room (P0)
--   Issue 2: Team crest overflow for shield-shaped logos (P2)
--   Issue 3: Incorrect  in the database (P3, BLOCKED)
--   Issue 4:  tab height inconsistency (P3, BLOCKED)
+-   Issue 1: Add Football Scoring Rules to UI (P0)
+-   Issue 2: Bid lag in auction room (P1)
+-   Issue 3: Cricket Auction Carousel Player Names (P2)
+-   Issue 4: Ford Overoad League Fix Verification (P2)
+-   Issue 5: Inefficient player browsing on  (P3)
+-   Issue 6: Sticky tabs on mobile for  (P3)
 
 **Issues Detail**:
--   **Issue 1: Bid lag in auction room**
-    -   **Attempted fixes**: None. Agent recommended the user test on the production (Railway) environment first, as the lag might be specific to the shared preview environment's latency.
+-   **Issue 1: Add Football Scoring Rules to UI**
+    -   **Attempted fixes**: The agent updated the  for football in the  collection to include . The next step is to add the UI rendering logic in .
     -   **Next debug checklist**:
-        1.  Await user confirmation on whether the lag persists in the production environment.
-        2.  If it does, investigate WebSocket event handling in , backend bid processing performance in , and related database queries.
-    -   **Why fix this issue and what will be achieved with the fix?**: This is critical for the core user experience. A smooth, responsive bidding process is essential for the upcoming user pilot.
+        1.  Open .
+        2.  Locate the  function and the associated JSX rendering block (~line 1030).
+        3.  Add a condition to render a simple scoring display for football ().
+        4.  Display the points for Win, Draw, and Goal from .
+    -   **Why fix this issue and what will be achieved with the fix?**: To provide users with clear visibility of the scoring rules for football competitions, improving user experience and transparency.
+    -   **Status**: IN PROGRESS
+    -   **Is recurring issue?**: N
+    -   **Should Test frontend/backend/both after fix?**: Frontend
+    -   **Blocked on other issue**: None
+
+-   **Issue 2: Bid lag in auction room**
+    -   **Attempted fixes**: User tested on production and confirmed it's less pronounced than in preview. The agent recommended monitoring. No code changes made.
+    -   **Why fix this issue and what will be achieved with the fix?**: A smooth, responsive bidding process is critical for the core user experience.
     -   **Status**: USER VERIFICATION PENDING
     -   **Is recurring issue?**: N
     -   **Should Test frontend/backend/both after fix?**: Both
-    -   **Blocked on other issue**: None
 
--   **Issue 2: Team crest overflow for shield-shaped logos**
-    -   **Status**: BLOCKED. The user decided to pause work on this issue. It is documented in . Do not work on this unless instructed.
+-   **Issue 3: Cricket Auction Carousel Player Names**
+    -   **Attempted fixes**: The agent presented several options (first name, surname, initials, etc.) for displaying player identity in the small carousel cards.
+    -   **Next debug checklist**: Await user decision. The user is considering keeping only crests and will consult other users for feedback. If so, the label needs to be changed back from Players to Teams.
+    -   **Status**: USER VERIFICATION PENDING
 
--   **Issue 3: Incorrect  in the database**
-    -   **Status**: BLOCKED. This is awaiting an external database update by the user/DBA and is different from the  which has now been fully populated.
+-   **Issue 4: Ford Overoad League Fix Verification**
+    -   **Attempted fixes**: The agent successfully executed a database script to fix corrupted asset references for this specific league.
+    -   **Next debug checklist**: The user needs to contact the league members to confirm that team names and standings are now displaying correctly.
+    -   **Status**: USER VERIFICATION PENDING
 
--   **Issue 4:  tab height inconsistency**
-    -   **Status**: BLOCKED. The user agreed to move on from this issue. It is documented in .
+-   **Issue 5: Inefficient player browsing on **
+    -   **Status**: NOT STARTED (Carried over from previous handoff)
+
+-   **Issue 6: Sticky tabs on mobile for **
+    -   **Status**: NOT STARTED (Carried over from previous handoff)
 
 **In progress Task List**:
--   None.
+-   **Task 1: Add Football Scoring Rules to UI**
+    -   **Where to resume**: . Implement the JSX to display the football scoring rules, similar to how cricket scoring is displayed but simpler.
+    -   **What will be achieved with this?**: The competition detail page will correctly display the points system for football leagues.
+    -   **Status**: IN PROGRESS
+    -   **Should Test frontend/backend/both after fix?**: Frontend
+    -   **Blocked on something**: None
 
 **Upcoming and Future Tasks**
 -   **Upcoming Tasks:**
-    -   **P0: Device/Screen Responsive Audit**: A high-priority task that is paused and waiting for specific user feedback after they conduct user testing.
-    -   **P1: IPL 2026 Cricbuzz Integration Finalization**: The integration is ready. The next step is to acquire the  for IPL 2026 from Cricbuzz when it's released (typically 1 month pre-season) and test the fixture import.
-    -   **P1: Automated Score Updates**: Implement a cron job or background task to automate fixture score fetching, removing the current manual trigger.
-    -   **P2: Complete FIFA World Cup 2026 Teams**: Add the remaining ~6 national teams and their logos once they are confirmed through playoffs.
--   **Future Tasks (from ):**
-    -   Auth Hardening: Integrate SendGrid for magic links and add Google OAuth.
-    -   Sentry Re-integration for production error monitoring.
-    -   Refactoring the monolithic .
+    -   **P1: IPL 2026 Cricbuzz Integration Finalization**: The integration is ready. Await the  for IPL 2026 from Cricbuzz (typically 1 month pre-season) to test fixture import.
+    -   **P1: Automated Score Updates**: Implement a cron job or background task to automate fixture score fetching.
+    -   **P1: Device/Screen Responsive Audit**: Paused, awaiting user feedback after they conduct user testing.
+    -   **P2: Complete FIFA World Cup 2026 Teams**: Add the remaining ~6 national teams and their logos once confirmed.
+    -   **P2: Optimize  endpoint**: An N+1 query pattern was identified in . This can be optimized by batching asset lookups.
+-   **Future Tasks (from  and conversation):**
+    -   **Auth Hardening**: Integrate SendGrid for magic links and add Google OAuth.
+    -   **Sentry Re-integration**: For production error monitoring.
+    -   **Refactor monolithic **: A long-term technical debt item.
+    -   **Frontend caching (React Query)**: To further improve frontend performance.
+    -   **Multi-Themed Frontends**: Implement the hybrid architecture (single backend, multi-themed frontends via subdomains or paths) as discussed and documented in the roadmap.
 
 **Completed work in this session**
--   **Database Seeding & Standardization**:
-    -   Standardized team names in the production database to official API names (e.g., Real Madrid → Real Madrid CF).
-    -   Seeded 42 FIFA World Cup national teams and 11 missing European clubs into the  collection.
-    -   Merged 4 duplicate team entries, consolidating their  arrays.
--   **API ID Integration**:
-    -   Created a script () and successfully populated the  for all 105 football assets, achieving 100% coverage for reliable API matching.
--   **Team Logo Integration**:
-    -   Added all 16 remaining UEFA Champions League 2025/26 team logos.
-    -   Added logos for 42 FIFA World Cup 2026 national teams.
--   **Environment Sync**:
-    -   Configured the preview environment to use the production MongoDB Atlas database, ensuring data consistency between testing and production.
--   **UI/Feature Enhancements**:
-    -   Implemented a Team Type filter on the Clubs page to separate Clubs from National Teams.
-    -   Modified  to conditionally apply a white backdrop only for specific dark logos, improving legibility.
--   **Bug Fixes**:
-    -   Fixed an issue where IPL players were missing logos due to a filename mismatch for Royal Challengers Bengaluru ( vs. ).
-    -   Corrected a UI bug where the COMPLETED MATCHES label was shown for upcoming fixtures.
-    -   Adjusted the auction carousel card size to prevent team logos from appearing cramped.
--   **Documentation**:
-    -   Updated , , and  with all work performed.
+-   **Reliability & Performance:**
+    -   Diagnosed and resolved a production outage caused by a DB connection timeout.
+    -   Implemented a robust **DB auto-reconnection manager** () to make the backend self-healing from transient network issues.
+    -   Fixed a severe **N+1 query performance issue** on the homepage, reducing the My Competitions load time from ~15 seconds to **under 1 second**.
+    -   Added a loading spinner to the My Competitions section for better UX.
+    -   Fixed production CORS misconfiguration by replacing the wildcard  with an explicit origin URL.
+-   **Bug Fixes:**
+    -   Fixed a logic bug where importing fixtures included already-completed matches from the same day.
+    -   Fixed a critical gameplay issue where the auction carousel revealed the randomized team order. The carousel and View All modal now use a seeded shuffle to hide the sequence.
+    -   Fixed a data corruption issue in the Ford Overoad league by running a targeted database update script.
+    -   Fixed a bug causing a blank page when selecting players for a new cricket/IPL competition.
+    -   Simplified the confusing scores updated toast notification.
+-   **Feature Polish & UI:**
+    -   Fixed faint watermarks for dark logos (e.g., Tottenham, Liverpool) in the auction room.
+    -   Standardized the Help page to match the Stitch design system, removing emojis and inconsistent colors.
+    -   Added IPL franchise logos to the auction room (watermark, carousel, and View All modal).
+    -   Made UI labels in the auction room sport-aware (e.g., Players vs. Teams).
+-   **Data Integrity:**
+    -   Corrected and completed the scoring rules schema for both cricket and football in the database.
+    -   Cleaned the cricket player database, fixing 6 players with incorrect metadata and removing 1 duplicate entry, increasing the available IPL player count from 119 to 124.
+-   **Documentation:**
+    -   Updated , , and .
+    -   Created  to document performance findings.
 
 **Earlier issues found/mentioned but not fixed**
--   Inefficient player browsing on  (shows all players, not a curated list).
--   Sticky tabs on mobile for .
+-   **Issue 1: Inefficient player browsing on ** (shows all players, not a curated list). Not addressed.
+-   **Issue 2: Sticky tabs on mobile for **. Not addressed.
 
 **Known issue recurrence from previous fork**
 -   None.
@@ -95,77 +124,71 @@ The application UI is largely redesigned to the Stitch dark theme. All team logo
 
 
 **Key Technical Concepts**
--   **Database Scripting (Python/Motor)**: Created multiple scripts to perform complex data operations: standardization, seeding, merging duplicates, and populating IDs from an external API ( library for matching).
--   **API Integration (Football-Data.org)**: Populated  for all 105 football assets to enable reliable fixture and score matching.
--   **Conditional Rendering (React)**: Modified  to conditionally apply a CSS class based on a logo's filename, allowing specific UI treatments for dark logos.
--   **Environment Management**: Synced the preview environment with the production database by updating the  file to point to MongoDB Atlas.
+-   **Backend Performance Optimization**: Refactored a critical endpoint () from an N+1 query pattern to a batched query pattern, drastically reducing database round-trips and API response time.
+-   **Database Resilience**: Implemented a  class with exponential backoff and retry logic to handle transient MongoDB connection failures, making the application self-healing.
+-   **CORS Security**: Corrected a production CORS misconfiguration, explaining why  is incompatible with a wildcard  origin and requires explicit domain whitelisting.
+-   **Direct Database Manipulation**: Used Python scripts with the Motor library to perform targeted data correction on the production database for data integrity issues (e.g., Ford Overoad league fix, cricket player metadata).
+-   **Multi-Sport Architecture**: Enhanced the existing multi-sport design by adding sport-aware UI labels, franchise logo support for cricket, and correcting data schemas for different sports.
 
 **key DB schema**
--   ** collection**:
-    -    (string): Standardized to official Football-Data.org names.
-    -    (integer): **NEWLY POPULATED** for all 105 football teams. This is the primary key for matching with the Football-Data.org API.
-    -    (string): Added a  field ('club' or 'national') to distinguish asset categories.
-    -    (array of strings): Merged for teams participating in multiple competitions (e.g., ).
+-   ** collection**: The  for both 'football' and 'cricket' was updated to a more structured format with complete rules and milestones.
+-   ** collection**: Corrected  field for 6 cricket players and removed one duplicate player to ensure data consistency.
+-   ** &  collections**: Manually updated asset ID references in the Ford Overoad league documents to fix data corruption from a previous standardization task.
 
 **changes in tech stack**
 -   None.
 
 **All files of reference**
--   : Script to populate team IDs from Football-Data.org API.
--   : Script to align DB team names with official API names.
--   : Script to clean up duplicate entries in the database.
--   : Contains the new Team Type filter.
--   : Contains the conditional backdrop logic for dark logos.
--   : Contains the corrected fixture status logic.
--   : Contains the updated auction carousel styling.
--   : Now points to the production MongoDB Atlas instance.
--   : The source of truth for all pending/future work.
--   : A detailed log of the work completed.
+-   : New module for resilient database connections.
+-   : Contains optimized endpoints, bug fixes, and integration with the new .
+-   : Location of the major performance fix (N+1 query).
+-   : Contains logic for the randomized carousel and sport-specific UI (cricket/football).
+-   : Main page for displaying competition details, where cricket player loading was fixed and football scoring display needs to be added.
+-   : Source of truth for all pending/future work.
+-   : Documents findings from the performance audit.
+-   : Detailed log of the work completed in this session.
 
 **Areas that need refactoring**:
--   The monolithic  is a long-term candidate for refactoring.
--   The  file contains a backward compatibility section for old team names. This can be removed once the deployed frontend fully relies on the standardized names.
+-   The monolithic  remains a long-term candidate for refactoring.
 
 **key api endpoints**
--   : Identified as the key endpoint for future IPL fixture integration.
--   An issue was noted where external  requests to production API routes (e.g., , ) returned HTML. This appears to be a Railway proxy configuration issue, as in-browser requests function correctly.
+-   : Performance was optimized from ~6s to <1s by fixing an N+1 query problem.
+-   : Logic was fixed to exclude already-completed matches.
+-   : Now integrated with the new  to trigger auto-reconnection attempts on failure.
 
 **Critical Info for New Agent**
--   **DB Sync & Workflow**: The preview environment now uses the **production MongoDB Atlas database**. Be cautious with data-modifying operations. The user's workflow is to test changes in preview, and only use Save to GitHub when 100% ready for production deployment.
--   **API ID Schema**: All 105 football teams now have a . This ID should be the primary key for matching any new logic related to fixtures or scores from Football-Data.org.
--   **Bid Lag Issue**: The user has reported a significant lag during bidding. This is the highest priority issue to follow up on once the user provides feedback from their production testing.
--   **Cricket Integration is Ready**: All assets and API clients for IPL are in place. The final step is to use the correct  from Cricbuzz to import fixtures once the IPL 2026 schedule is announced.
+-   **Production Reliability**: A production outage occurred due to a DB connection timeout. To prevent recurrence, **auto-reconnection logic has been implemented in the backend**. You should not need to manually restart the service for similar transient network issues.
+-   **Performance Optimization**: The user is focused on performance. A major bottleneck on the homepage was fixed, but other potential optimizations are noted in . Be mindful of N+1 query patterns.
+-   **Database Operations**: The agent performed several direct data fixes on the production database. Treat any such operations with extreme care, perform dry runs first, and always get user confirmation before applying.
+-   **Multi-Sport/Theme Strategy**: The user is considering a hybrid architecture for future sports (single backend, multiple themed frontends). This is documented as a future roadmap item and should guide decisions about making the code more modular.
+-   **CORS Configuration**: The production  variable is now correctly set to the explicit frontend URL. A wildcard  will not work because  is true.
 
 **documents and test reports created in this job**
+-   
 -    (heavily updated)
 -    (heavily updated)
--    (updated)
--    (rewritten)
--   
--   
--   
--   
+-    (heavily updated)
 
 **Last 10 User Messages and any pending HUMAN messages**
-1.  **User**: Instructed agent to fix UI issues (label, carousel) and confirmed they will test the bid lag on production. (Last working item)
-2.  **User**: Reported three issues: significant bid lag, an incorrect COMPLETED MATCHES label, and cramped logos in the auction carousel. (Issue is being worked on)
-3.  **User**: Asked for a status update on the IPL/Cricbuzz integration. (Completed)
-4.  **User**: Confirmed the fix for the IPL player logo was working and was ready to proceed. (Completed)
-5.  **User**: Reported that some IPL players were missing their team crests. (Completed)
-6.  **User**: Requested that the agent document all recent database and asset integration work. (Completed)
-7.  **User**: Approved adding missing teams to the database during the standardization process. (Completed)
-8.  **User**: Asked for a list of teams that were in the mapping file but not found in the production database. (Completed)
-9.  **User**: Provided production MongoDB credentials for a dry run of the database standardization script. (Completed)
-10. **User**: Agreed to standardize the database after reviewing the dual-mapping maintenance concerns. (Completed)
+1.  **User**: Confirmed football scoring is simple but should be visible on the create competition page. (Agent is implementing this)
+2.  **User**: Pointed out that cricket scoring rules were showing as 0. (Agent fixed this)
+3.  **User**: Is thinking about the carousel design for cricket players and will get user feedback.
+4.  **User**: Noticed that in the cricket auction, labels still said team instead of player. (Agent fixed this)
+5.  **User**: Pointed out that the cricket auction room was missing franchise logos/watermarks. (Agent fixed this)
+6.  **User**: Asked why only 119 IPL players were showing, not the 125 seeded. (Agent investigated and fixed data inconsistencies)
+7.  **User**: Confirmed the cricket player selection page was working but noted UI issues. (Starting a new thread of fixes)
+8.  **User**: Asked to explore a hybrid architecture (single backend, multi-themed frontends) as a future roadmap item. (Agent documented this)
+9.  **User**: Asked about the feasibility of adding new sports to the app. (Agent provided a detailed breakdown)
+10. **User**: Confirmed the team/amount mappings for the Ford Overoad league fix. (Agent applied the fix)
 
 **Project Health Check:**
--   **Broken**: None. The application is stable.
--   **Mocked**: Magic link authentication (no real emails are sent).
+-   **Broken**: None. The application is stable and more resilient than before.
+-   **Mocked**: Magic link authentication (no real emails are sent via SendGrid yet).
 
 **3rd Party Integrations**
 -   **Railway**: Hosting
 -   **MongoDB Atlas**: Database
--   **Redis Cloud**: Cache
+-   **Redis Cloud**: Cache (for Socket.IO)
 -   **RapidAPI (Cricbuzz)**: Cricket data API for fixtures and scores.
 -   **Football-Data.org**: Football data API for fixtures and scores.
 -   **ImageMagick/CairoSVG**: Used via CLI for image processing.
@@ -178,7 +201,7 @@ The application UI is largely redesigned to the Stitch dark theme. All team logo
 
 **Credentials to test flow:**
 -   **Email**: 
--   **DB Connection**: The preview environment is now connected to the production MongoDB Atlas. Credentials are in .
+-   **DB Connection**: The preview environment is connected to the production MongoDB Atlas. Credentials are in .
 
 **What agent forgot to execute**
--   The agent successfully identified and addressed all user requests and issues during this session. No tasks were forgotten.</analysis>
+-   The agent successfully addressed all user requests and issues during this session. No tasks were forgotten.</analysis>

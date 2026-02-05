@@ -7,7 +7,7 @@ import requests
 import json
 import time
 
-BASE_URL = "https://stitch-dark-theme.preview.emergentagent.com/api"
+BASE_URL = "https://sportauction.preview.emergentagent.com/api"
 
 def test_budget_reserve_detailed():
     session = requests.Session()

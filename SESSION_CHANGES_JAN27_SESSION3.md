@@ -134,8 +134,8 @@
 - Status: `waiting`
 
 ### URLs:
-- Frontend: `https://stitch-dark-theme.preview.emergentagent.com`
-- Backend API: `https://stitch-dark-theme.preview.emergentagent.com/api`
+- Frontend: `https://sportauction.preview.emergentagent.com`
+- Backend API: `https://sportauction.preview.emergentagent.com/api`
 
 ---
 

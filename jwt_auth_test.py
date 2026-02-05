@@ -11,7 +11,7 @@ import time
 from datetime import datetime, timezone
 
 # Backend URL from frontend/.env
-BACKEND_URL = "https://stitch-dark-theme.preview.emergentagent.com/api"
+BACKEND_URL = "https://sportauction.preview.emergentagent.com/api"
 
 class JWTAuthTester:
     def __init__(self):
