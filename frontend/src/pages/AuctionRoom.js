@@ -1302,7 +1302,7 @@ function AuctionRoom() {
         </button>
       </div>
 
-      {/* ========== VIEW ALL TEAMS MODAL ========== */}
+      {/* ========== VIEW ALL TEAMS/PLAYERS MODAL ========== */}
       {showAllTeamsModal && (
         <div 
           className="fixed inset-0 z-50 flex items-end justify-center"
@@ -1316,7 +1316,9 @@ function AuctionRoom() {
           >
             {/* Modal Header */}
             <div className="sticky top-0 px-4 py-4 flex items-center justify-between" style={{ background: '#0F172A', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-              <h3 className="text-lg font-bold text-white">Teams in Auction</h3>
+              <h3 className="text-lg font-bold text-white">
+                {sport?.key === 'cricket' ? 'Players' : 'Teams'} in Auction
+              </h3>
               <button 
                 onClick={() => setShowAllTeamsModal(false)}
                 className="w-8 h-8 rounded-full flex items-center justify-center"
