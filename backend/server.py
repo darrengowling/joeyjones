@@ -6899,4 +6899,7 @@ socket_app = socketio.ASGIApp(
 
 @app.on_event("shutdown")
 async def shutdown_db_client():
-    client.close()
+    if db_manager:
+        await db_manager.close()
+    elif client:
+        client.close()
