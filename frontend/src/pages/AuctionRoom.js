@@ -1344,13 +1344,20 @@ function AuctionRoom() {
                     <TeamCrest 
                       clubId={club.id}
                       apiFootballId={club.apiFootballId}
-                      name={club.name} 
+                      name={sport?.key === 'cricket' 
+                        ? (club.meta?.franchise || club.meta?.team || club.meta?.iplTeam || club.name)
+                        : club.name
+                      }
                       sportKey={sport?.key || 'football'} 
                       variant="thumbnail"
                       isActive={isCurrent}
                     />
                     <div className="flex-1 min-w-0">
                       <p className="text-white font-semibold truncate">{club.name}</p>
+                      {/* For cricket, show franchise name below player name */}
+                      {sport?.key === 'cricket' && (club.meta?.franchise || club.meta?.team) && (
+                        <p className="text-xs text-cyan-400 truncate">{club.meta?.franchise || club.meta?.team}</p>
+                      )}
                       <p className="text-xs text-white/50">
                         {isCurrent ? 'Currently on the block' : 
                          isSold ? `Won by ${club.winner}` : 
