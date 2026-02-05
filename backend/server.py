@@ -113,16 +113,39 @@ else:
 MONGO_URL = os.environ['MONGO_URL']
 DB_NAME = os.environ['DB_NAME']
 
+# Import database manager for resilient connections
+from db_manager import DatabaseManager, init_db_manager, get_db_manager
+
 # Global variables for database connection and services
 client = None
 db = None
+db_manager: DatabaseManager = None
 sport_service = None
 asset_service = None
 
 async def startup_db_client():
-    global client, db, sport_service, asset_service
-    client = AsyncIOMotorClient(MONGO_URL)
-    db = client[DB_NAME]
+    global client, db, db_manager, sport_service, asset_service
+    
+    # Initialize database manager with auto-reconnection
+    db_manager = init_db_manager(
+        mongo_url=MONGO_URL,
+        db_name=DB_NAME,
+        max_retry_attempts=5,
+        initial_retry_delay=1.0,
+        max_retry_delay=30.0,
+        connection_timeout_ms=10000,
+        server_selection_timeout_ms=10000
+    )
+    
+    # Connect with retry logic
+    connected = await db_manager.connect()
+    if not connected:
+        logger.error("❌ Failed to connect to MongoDB after all retry attempts")
+        raise Exception("Database connection failed")
+    
+    # Set global references for backward compatibility
+    client = db_manager.client
+    db = db_manager.db
     
     # Create indexes for My Competitions collections - Prompt 1
     # Note: Index creation is idempotent and safe to run on every startup
