@@ -2072,7 +2072,10 @@ async def get_clubs(
     
     # Competition filtering for cricket
     if sportKey == "cricket" and competition:
-        if competition.upper() == "ASHES":
+        if competition.upper() == "IPL":
+            # Include players with competitionShort IPL
+            query["competitionShort"] = "IPL"
+        elif competition.upper() == "ASHES":
             # Include players with nationality Australia or England
             query["meta.nationality"] = {"$in": ["Australia", "England"]}
         elif competition.upper() == "NZ_ENG":
