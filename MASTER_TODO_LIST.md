@@ -308,6 +308,8 @@ When ready, implement all at once:
 | 15 | My Competitions loading | Showed "no competitions" while loading | Added spinner loading state | Feb 2, 2026 |
 | 16 | My Competitions perf | 6s load time (N+1 queries) | Batched to 7 queries, <1s | Feb 2, 2026 |
 | 17 | Score update toast | Showed confusing fixture count | Simplified to "Scores updated" | Feb 2, 2026 |
+| 18 | Auto-reconnection logic | DB disconnect required manual restart | DatabaseManager with retry | Feb 2, 2026 |
+| 19 | Ford Overoad league fix | 4 teams showing as "Team" | Direct DB update of asset IDs | Feb 2, 2026 |
 
 ---
 
@@ -328,8 +330,10 @@ When ready, implement all at once:
 | `/app/frontend/public/assets/clubs/` | Logo PNG files (football/, cricket/) |
 | `/app/frontend/src/components/TeamCrest.jsx` | Logo display component |
 | `/app/backend/server.py` | Main API (monolithic) |
+| `/app/backend/db_manager.py` | Database connection manager with auto-reconnect |
 | `/app/SESSION_CHANGES.md` | Detailed session work log |
 | `/app/AGENT_START_HERE.md` | Quick reference for agents |
+| `/app/OPTIMIZATION_AUDIT.md` | Performance optimization findings |
 
 ### Database Collections
 
@@ -353,11 +357,11 @@ When ready, implement all at once:
 5. ✅ ~~Help page Stitch standardization~~ - Complete
 6. ✅ ~~CORS explicit origin configuration~~ - Complete
 7. ✅ ~~My Competitions performance optimization~~ - Complete (6s → <1s)
-8. 🔄 **User:** Set up UptimeRobot monitoring on `/api/health`
-9. ⏸️ **User:** Set up SendGrid for auth hardening (when ready)
-10. ⏸️ **User:** Verify MongoDB Atlas backups configured
-11. 📝 **Pending:** Ford Overoad league fix (awaiting team confirmation)
-12. 📝 **Recommended:** Implement DB auto-reconnection logic
+8. ✅ ~~Auto-reconnection logic~~ - Complete (deployed to production)
+9. ✅ ~~Ford Overoad league fix~~ - Complete (awaiting user verification)
+10. 🔄 **User:** Set up UptimeRobot monitoring on `/api/health`
+11. ⏸️ **User:** Set up SendGrid for auth hardening (when ready)
+12. ⏸️ **User:** Verify MongoDB Atlas backups configured
 
 ---
 
