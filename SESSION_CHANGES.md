@@ -96,12 +96,61 @@
 
 ---
 
-### Files Modified This Session (Continued)
+### 11. Auto-Reconnection Logic Implemented ✅
+
+**Problem:** Production outage required manual restart when MongoDB connection was lost. Unacceptable for live pilot.
+
+**Solution:** Created DatabaseManager class with automatic reconnection capabilities.
+
+**New File:** `/app/backend/db_manager.py`
+
+**Features:**
+- Automatic reconnection with exponential backoff (1s → 2s → 4s → up to 30s)
+- Up to 5 retry attempts before giving up
+- Health endpoints trigger auto-reconnection on failure
+- Thread-safe with async lock
+- Graceful shutdown handling
+
+**Changes to:** `/app/backend/server.py`
+- Startup now uses `DatabaseManager` for initial connection
+- Health endpoints (`/health`, `/api/health`) trigger auto-reconnection on failure
+- Logs show: `🔌 MongoDB connection attempt 1/5...` and `✅ MongoDB connected successfully`
+
+**Result:** System will self-heal from transient MongoDB connection issues without manual restart.
+
+---
+
+### 12. Ford Overoad League Database Fix ✅
+
+**Problem:** 4 teams showing as "Team" instead of proper names due to old asset IDs no longer existing after database standardization.
+
+**Root Cause:** League created before team name standardization retained old asset IDs that were replaced during migration.
+
+**Solution:** Direct database update to map old IDs to new standardized IDs.
+
+**Mapping Applied (confirmed by user):**
+| Old ID | Amount | Winner | New Team |
+|--------|--------|--------|----------|
+| `c6c08c41...` | £228m | sarahegordon | Arsenal FC |
+| `b479ebdb...` | £157m | maddiehc123 | Manchester City FC |
+| `c50c84c2...` | £108m | georgeheathcliffcore | Liverpool FC |
+| `40ccabc3...` | £26m | maddiehc123 | Aston Villa FC |
+
+**Collections Updated:**
+- `leagues.assetsSelected` - 4 IDs replaced
+- `league_participants.clubsWon` - 3 participants updated
+
+**Result:** All 20 teams now resolve correctly. Awaiting user verification.
+
+---
+
+### Files Modified This Session (Complete)
 
 | File | Change |
 |------|--------|
 | `/app/frontend/src/pages/HomePage.jsx` | Loading state + removed N+1 frontend calls |
-| `/app/backend/server.py` | Batched queries for /me/competitions |
+| `/app/backend/server.py` | Batched queries for /me/competitions + auto-reconnection |
+| `/app/backend/db_manager.py` | NEW - Database connection manager with auto-reconnect |
 | `/app/frontend/src/pages/CompetitionDashboard.js` | Simplified toast |
 | `/app/frontend/src/pages/LeagueDetail.js` | Simplified toast |
 | `/app/frontend/src/pages/LeagueDetailStitched.jsx` | Simplified toast |
@@ -116,15 +165,12 @@
 
 ---
 
-### Pending Items
+### Database Fixes Applied (Direct to Production)
 
-1. **Ford Overoad League Fix** - Awaiting user confirmation on team/bid mapping:
-   - `c6c08c41...` (£228m) → Liverpool or Man City?
-   - `b479ebdb...` (£157m) → Liverpool or Man City?
-   - `c50c84c2...` (£108m) → Arsenal or Aston Villa?
-   - `40ccabc3...` (£26m) → Arsenal or Aston Villa?
-
-2. **Auto-Reconnection Logic** - Recommended but not yet implemented
+| Fix | Collection | Records Updated |
+|-----|------------|-----------------|
+| Ford Overoad League | `leagues` | 1 document |
+| Ford Overoad League | `league_participants` | 3 documents |
 
 ---
 
