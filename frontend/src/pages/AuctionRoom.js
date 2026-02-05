@@ -1278,7 +1278,10 @@ function AuctionRoom() {
                 <TeamCrest 
                   clubId={club.id}
                   apiFootballId={club.apiFootballId}
-                  name={club.name} 
+                  name={sport?.key === 'cricket' 
+                    ? (club.meta?.franchise || club.meta?.team || club.meta?.iplTeam || club.name)
+                    : club.name
+                  }
                   sportKey={sport?.key || 'football'} 
                   variant="small"
                   isActive={isCurrent}
