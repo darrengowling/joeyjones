@@ -333,15 +333,34 @@ app = FastAPI(lifespan=lifespan)
 async def root_health_check():
     """
     Root-level health check for Kubernetes probes.
-    Returns simple 200 OK if the server is running.
+    Attempts auto-reconnection if database is disconnected.
     """
+    global db, client
+    
     try:
+        # First, try a simple ping
         await db.command("ping")
         return {"status": "healthy", "database": "connected"}
-    except Exception:
+    except Exception as e:
+        # Connection failed - attempt auto-reconnection
+        logger.warning(f"⚠️ Health check failed, attempting reconnection: {e}")
+        
+        if db_manager:
+            reconnected = await db_manager.ensure_connected()
+            if reconnected:
+                # Update global references after reconnection
+                db = db_manager.db
+                client = db_manager.client
+                logger.info("✅ Auto-reconnection successful")
+                return {
+                    "status": "healthy",
+                    "database": "connected",
+                    "reconnected": True
+                }
+        
         return JSONResponse(
             status_code=503,
-            content={"status": "unhealthy", "database": "disconnected"}
+            content={"status": "unhealthy", "database": "disconnected", "error": str(e)}
         )
 
 # Create a router with the /api prefix
@@ -351,9 +370,11 @@ api_router = APIRouter(prefix="/api")
 @api_router.get("/health")
 async def health_check():
     """
-    System health check endpoint
+    System health check endpoint with auto-reconnection.
     Returns 200 (healthy) or 503 (degraded)
     """
+    global db, client
+    
     try:
         # Check database connectivity
         await db.command("ping")
@@ -378,6 +399,21 @@ async def health_check():
         
         return health_status
     except Exception as e:
+        logger.warning(f"⚠️ Health check failed, attempting reconnection: {e}")
+        
+        # Attempt auto-reconnection
+        if db_manager:
+            reconnected = await db_manager.ensure_connected()
+            if reconnected:
+                db = db_manager.db
+                client = db_manager.client
+                logger.info("✅ Auto-reconnection successful during health check")
+                return {
+                    "status": "healthy",
+                    "database": "reconnected",
+                    "timestamp": datetime.now(timezone.utc).isoformat()
+                }
+        
         logger.error(f"Health check failed: {str(e)}")
         return JSONResponse(
             status_code=503,
