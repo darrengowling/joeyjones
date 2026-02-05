@@ -320,23 +320,17 @@ export default function LeagueDetailStitched() {
       if (sportKey === 'cricket') {
         const selectedIds = league?.assetsSelected || [];
         
-        if (selectedIds.length > 0) {
-          const response = await axios.get(`${API}/leagues/${league.id}/assets`);
-          const players = response.data.assets || [];
-          
-          setAvailableAssets(players);
-          setTotalCricketPlayers(players.length);
-          
-          const franchises = [...new Set(players.map(p => p.meta?.franchise).filter(Boolean))].sort();
-          setCricketFranchises(franchises);
-          
-          setSelectedAssetIds(selectedIds);
-        } else {
-          setAvailableAssets([]);
-          setTotalCricketPlayers(0);
-          setCricketFranchises([]);
-          setSelectedAssetIds([]);
-        }
+        // Always load all cricket players for selection, regardless of whether any are already selected
+        const response = await axios.get(`${API}/clubs?sportKey=cricket`);
+        const players = response.data || [];
+        
+        setAvailableAssets(players);
+        setTotalCricketPlayers(players.length);
+        
+        const franchises = [...new Set(players.map(p => p.meta?.franchise || p.meta?.team || p.meta?.iplTeam).filter(Boolean))].sort();
+        setCricketFranchises(franchises);
+        
+        setSelectedAssetIds(selectedIds);
         setCricketTeamFilter('all');
       } else {
         const response = await axios.get(`${API}/clubs?sportKey=${sportKey}`);
