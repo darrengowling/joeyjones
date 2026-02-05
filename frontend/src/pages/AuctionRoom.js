@@ -1256,13 +1256,15 @@ function AuctionRoom() {
         </div>
       </header>
 
-      {/* ========== TEAMS IN AUCTION SCROLL (80px) ========== */}
+      {/* ========== TEAMS/PLAYERS IN AUCTION SCROLL (80px) ========== */}
       <div 
         className="flex-shrink-0 h-20 px-4 flex items-center"
         style={{ background: 'rgba(15, 23, 42, 0.5)', borderBottom: '1px solid rgba(255,255,255,0.05)' }}
       >
         <div className="flex-1 overflow-x-auto flex items-center gap-2" style={{ scrollbarWidth: 'none' }}>
-          <span className="text-white/40 text-xs uppercase tracking-wider flex-shrink-0 mr-2">Teams</span>
+          <span className="text-white/40 text-xs uppercase tracking-wider flex-shrink-0 mr-2">
+            {sport?.key === 'cricket' ? 'Players' : 'Teams'}
+          </span>
           {queueClubs.map((club, idx) => {
             const isCurrent = club.id === currentClub?.id;
             return (
