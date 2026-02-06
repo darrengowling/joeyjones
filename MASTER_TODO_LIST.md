@@ -133,7 +133,7 @@ All logos at 256x256px in `/app/frontend/public/assets/clubs/cricket/`
 
 | # | Task | Effort | Risk | Owner | Notes |
 |---|------|--------|------|-------|-------|
-| 7 | **"About" section on homepage** | 2-3 hrs | Low | Agent | Sport X philosophy & gameplay - content provided |
+| 7 | ~~**"About" section on homepage**~~ | 2-3 hrs | Low | Agent | ✅ DONE - Full content added with cards |
 | 8 | **Google Analytics 4 integration** | 2-3 hrs | Low | Agent | Basic user journey visibility |
 | 9 | **Auction behavior tracking** | 2-4 hrs | Low | Agent | Log bid patterns, timing, amounts to DB |
 | 10 | **Auction results archive** | 3-4 hrs | Low | Agent | Which team, how much paid, winner - persistent record |
@@ -148,7 +148,7 @@ All logos at 256x256px in `/app/frontend/public/assets/clubs/cricket/`
 
 | # | Task | Effort | Risk | Owner | Notes |
 |---|------|--------|------|-------|-------|
-| 15 | **Screen size optimization (Samsung A56)** | 1 day | Med | Agent | Bidding interface obscured on some devices |
+| 15 | ~~**Screen size optimization (Samsung A56)**~~ | 1 day | Med | Agent | ✅ DONE - Compact layout, 100dvh, reduced padding |
 | 16 | **Google OAuth implementation** | 4-6 hrs | Med | Agent | Simpler auth for users, no email delivery needed |
 | 17 | **Magic link email hardening** | 1 day | Med | Agent | SendGrid integration, rate limiting, single-use tokens |
 | 18 | **Time-limited pilot access** | 4-6 hrs | Med | Agent | 2-week access window for controlled pilot |
