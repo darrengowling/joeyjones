@@ -622,7 +622,7 @@ const Help = () => {
               <div className="rounded-lg p-4" style={{ background: 'rgba(245, 158, 11, 0.1)', border: '1px solid rgba(245, 158, 11, 0.2)' }}>
                 <h5 className="font-semibold text-white mb-2">League Detail Page Alert</h5>
                 <p className="text-white/80 mb-2">
-                  When an auction is live and you&apos;re on the league detail page, you&apos;ll see a prominent red alert banner at the top. Click the "Join Auction Now" button to enter immediately.
+                  When an auction is live and you&apos;re on the league detail page, you&apos;ll see a prominent red alert banner at the top. Click the &quot;Join Auction Now&quot; button to enter immediately.
                 </p>
               </div>
             </div>
