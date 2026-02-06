@@ -426,7 +426,7 @@ const Help = () => {
                 <ul className="text-white/70 text-sm space-y-1 list-disc list-inside">
                   <li>Don&apos;t spend all your budget on the first few teams</li>
                   <li>Consider team performance and upcoming fixtures</li>
-                  <li>Watch other managers' budgets to gauge competition</li>
+                  <li>Watch other managers&apos; budgets to gauge competition</li>
                   <li>Anti-snipe timer prevents unfair last-second wins</li>
                   <li>Stay active - auctions move fast with engaged participants</li>
                 </ul>
