@@ -52,6 +52,7 @@ function AuctionRoom() {
   const [nextFixture, setNextFixture] = useState(null); // Next fixture for current club
   const [isSubmittingBid, setIsSubmittingBid] = useState(false); // Prevent double-submission
   const [showAllTeamsModal, setShowAllTeamsModal] = useState(false); // View All teams modal
+  const [showBudgetsModal, setShowBudgetsModal] = useState(false); // Show all user budgets
 
   // Use shared socket room hook
   const { socket, connected, ready, listenerCount } = useSocketRoom('auction', auctionId, { user });
