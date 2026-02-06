@@ -1462,7 +1462,7 @@ function AuctionRoom() {
 
             {/* Team Name */}
             <h2 
-              className="text-3xl font-extrabold text-white mb-1"
+              className="text-2xl sm:text-3xl font-extrabold text-white mb-1"
               style={{ fontFamily: 'Inter, sans-serif' }}
             >
               {currentClub.name}
