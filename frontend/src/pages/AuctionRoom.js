@@ -1549,9 +1549,13 @@ function AuctionRoom() {
           borderTop: '1px solid rgba(255,255,255,0.1)'
         }}
       >
-        {/* Active Managers Row - Compact */}
+        {/* Active Managers Row - Compact & Tappable */}
         <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-2 overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
+          <button 
+            onClick={() => setShowBudgetsModal(true)}
+            className="flex items-center gap-2 overflow-x-auto flex-1 mr-2"
+            style={{ scrollbarWidth: 'none' }}
+          >
             {participants.slice(0, 6).map((p) => {
               const isLeading = currentBidder && p.userId === currentBidder.id;
               const isCurrentUser = user && p.userId === user.id;
@@ -1574,11 +1578,26 @@ function AuctionRoom() {
                 </div>
               );
             })}
-          </div>
-          <div className="flex items-center gap-1 flex-shrink-0">
+            {participants.length > 6 && (
+              <div className="flex flex-col items-center flex-shrink-0">
+                <div 
+                  className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold"
+                  style={{ background: 'rgba(255,255,255,0.1)', color: 'white' }}
+                >
+                  +{participants.length - 6}
+                </div>
+              </div>
+            )}
+          </button>
+          <button 
+            onClick={() => setShowBudgetsModal(true)}
+            className="flex items-center gap-1 flex-shrink-0 px-2 py-1 rounded-lg"
+            style={{ background: 'rgba(255,255,255,0.05)' }}
+          >
             <div className="w-2 h-2 rounded-full bg-green-500"></div>
             <span className="text-xs text-white/60">{participants.length}</span>
-          </div>
+            <span className="material-symbols-outlined text-white/40 text-sm">expand_more</span>
+          </button>
         </div>
 
         {/* Quick Bid Buttons - Two rows of 3 equal buttons */}
