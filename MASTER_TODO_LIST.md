@@ -442,7 +442,7 @@ All logos at 256x256px in `/app/frontend/public/assets/clubs/cricket/`
 
 ## 🎯 IMMEDIATE NEXT ACTIONS
 
-**Phase 1 & 2 Progress (Feb 6, 2026)**
+**Phase 1 & 2 Complete + Auction Reports (Feb 6, 2026)**
 
 ### ✅ Completed Quick Wins (Phase 1)
 1. ✅ **Hide "FE" dev indicator** - Hidden in production builds
@@ -451,8 +451,14 @@ All logos at 256x256px in `/app/frontend/public/assets/clubs/cricket/`
 4. ✅ **"How to Install" Help section** - iOS/Android instructions added
 
 ### ✅ Completed Medium Tasks (Phase 2)
-5. ✅ **"About" section on homepage** - Full content with 4 cards (Who/Why/How/Manifesto)
-6. ✅ **Screen size optimization** - Compact auction room layout for Samsung A56 and similar devices
+5. ✅ **"About" page** - Separate page with header link, full content
+6. ✅ **Screen size optimization** - Compact auction room layout for Samsung A56
+
+### ✅ Completed: Auction Reports System
+7. ✅ **Auto-generate reports** - Reports created automatically when auctions complete
+8. ✅ **Admin-only access** - Only you (darren.gowling@gmail.com) can view reports
+9. ✅ **Profile page integration** - "Auction Reports" section in Profile
+10. ✅ **View & Download** - View details in-app or download as CSV
 
 ### 🟡 User Actions Needed
 7. 🔴 **MongoDB Atlas → Flex** - Critical for backups
