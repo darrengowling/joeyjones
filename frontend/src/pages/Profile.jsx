@@ -494,6 +494,121 @@ const Profile = () => {
         </div>
       </div>
 
+      {/* Report Detail Modal */}
+      {showReportModal && selectedReport && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          style={{ background: 'rgba(0, 0, 0, 0.8)' }}
+          onClick={() => setShowReportModal(false)}
+        >
+          <div 
+            className="w-full max-w-lg max-h-[80vh] overflow-y-auto rounded-2xl p-6"
+            style={{ background: '#1E293B' }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="flex justify-between items-start mb-4">
+              <div>
+                <h2 className="text-white font-bold text-lg">{selectedReport.leagueName}</h2>
+                <p className="text-white/40 text-sm">{formatDate(selectedReport.generatedAt)}</p>
+              </div>
+              <button 
+                onClick={() => setShowReportModal(false)}
+                className="text-white/60 hover:text-white"
+              >
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
+            
+            {/* Summary Stats */}
+            <div className="rounded-xl p-4 mb-4" style={{ background: 'rgba(6, 182, 212, 0.1)' }}>
+              <h3 className="text-cyan-400 text-xs font-semibold uppercase tracking-wider mb-3">Summary</h3>
+              <div className="grid grid-cols-2 gap-3 text-sm">
+                <div><span className="text-white/60">Duration:</span> <span className="text-white">{selectedReport.summary?.durationFormatted || 'N/A'}</span></div>
+                <div><span className="text-white/60">Participants:</span> <span className="text-white">{selectedReport.summary?.totalParticipants}</span></div>
+                <div><span className="text-white/60">Lots:</span> <span className="text-white">{selectedReport.summary?.totalLots}</span></div>
+                <div><span className="text-white/60">Sold:</span> <span className="text-white">{selectedReport.summary?.totalClubsSold}</span></div>
+                <div><span className="text-white/60">Total Bids:</span> <span className="text-white">{selectedReport.summary?.totalBids}</span></div>
+                <div><span className="text-white/60">Avg Bids/Lot:</span> <span className="text-white">{selectedReport.summary?.avgBidsPerLot}</span></div>
+                <div><span className="text-white/60">Total Revenue:</span> <span className="text-cyan-400 font-bold">{formatCurrency(selectedReport.summary?.totalRevenue)}</span></div>
+                <div><span className="text-white/60">Highest Bid:</span> <span className="text-cyan-400 font-bold">{formatCurrency(selectedReport.summary?.highestBid)}</span></div>
+              </div>
+            </div>
+            
+            {/* User Summaries */}
+            <div className="mb-4">
+              <h3 className="text-white/60 text-xs font-semibold uppercase tracking-wider mb-3">User Results</h3>
+              <div className="space-y-2">
+                {selectedReport.userSummaries?.map((userSum, idx) => (
+                  <div 
+                    key={idx}
+                    className="rounded-lg p-3"
+                    style={{ background: 'rgba(255, 255, 255, 0.05)' }}
+                  >
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-white font-semibold">{userSum.userName}</span>
+                      <span className="text-cyan-400 font-bold">{formatCurrency(userSum.totalSpent)}</span>
+                    </div>
+                    <div className="text-white/60 text-xs">
+                      {userSum.teamsWon} teams won • {userSum.totalBidsPlaced} bids • {userSum.winRate}% win rate
+                    </div>
+                    {userSum.teamsWonNames?.length > 0 && (
+                      <div className="text-white/40 text-xs mt-1">
+                        Teams: {userSum.teamsWonNames.join(', ')}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+            
+            {/* Lots Breakdown - Collapsible */}
+            <details className="mb-4">
+              <summary className="text-white/60 text-xs font-semibold uppercase tracking-wider mb-3 cursor-pointer hover:text-white">
+                Lots Breakdown ({selectedReport.lotsBreakdown?.length || 0} lots)
+              </summary>
+              <div className="space-y-1 mt-3 max-h-60 overflow-y-auto">
+                {selectedReport.lotsBreakdown?.map((lot, idx) => (
+                  <div 
+                    key={idx}
+                    className="flex justify-between items-center py-2 px-3 rounded text-sm"
+                    style={{ background: lot.sold ? 'rgba(255, 255, 255, 0.03)' : 'rgba(239, 68, 68, 0.1)' }}
+                  >
+                    <div className="flex items-center gap-2">
+                      <span className="text-white/40 text-xs w-6">#{lot.queuePosition}</span>
+                      <span className={lot.sold ? 'text-white' : 'text-red-400'}>{lot.clubName}</span>
+                    </div>
+                    <div className="text-right">
+                      {lot.sold ? (
+                        <>
+                          <span className="text-cyan-400 font-medium">{formatCurrency(lot.winningBid)}</span>
+                          <span className="text-white/40 text-xs ml-2">{lot.winnerName}</span>
+                        </>
+                      ) : (
+                        <span className="text-red-400 text-xs">Unsold</span>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </details>
+            
+            {/* Download Button */}
+            <button
+              onClick={() => {
+                downloadReportCSV(selectedReport.id, selectedReport.leagueName);
+                setShowReportModal(false);
+              }}
+              className="w-full py-3 rounded-xl font-semibold flex items-center justify-center gap-2"
+              style={{ background: '#06B6D4', color: '#0F172A' }}
+            >
+              <span className="material-symbols-outlined">download</span>
+              Download Full CSV
+            </button>
+          </div>
+        </div>
+      )}
+
       <BottomNav />
     </div>
   );
