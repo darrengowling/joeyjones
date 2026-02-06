@@ -208,9 +208,10 @@ export default function CreateCompetition() {
                   data-testid="competition-sport-select"
                 >
                   <option value="football">PREMIER LEAGUE FOOTBALL</option>
-                  {sports.find(s => s.key === 'cricket') && (
+                  {/* Cricket hidden for pilot - football only */}
+                  {/* {sports.find(s => s.key === 'cricket') && (
                     <option value="cricket">IPL CRICKET</option>
-                  )}
+                  )} */}
                 </select>
                 <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
                   <span className="material-symbols-outlined" style={{ color: '#06B6D4' }}>expand_more</span>
