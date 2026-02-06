@@ -455,23 +455,22 @@ All logos at 256x256px in `/app/frontend/public/assets/clubs/cricket/`
 6. ✅ **Screen size optimization** - Compact auction room layout for Samsung A56 and similar devices
 
 ### 🟡 User Actions Needed
-5. 🔴 **MongoDB Atlas → Flex** - Critical for backups
-6. ❓ **UptimeRobot setup** - External monitoring
-7. ✅ **Provide "About" content** - Content received!
-8. ✅ **Samsung A56 screenshot** - Screenshot received!
-9. ✅ **Auth decision** - Both OAuth + Magic Link
+7. 🔴 **MongoDB Atlas → Flex** - Critical for backups
+8. ❓ **UptimeRobot setup** - External monitoring
+9. ✅ **Provide "About" content** - Content received & implemented
+10. ✅ **Samsung A56 screenshot** - Issue identified & fixed
+11. ✅ **Auth decision** - Both OAuth + Magic Link
 
-### 🟠 Next Phase (Phase 2)
-10. ❓ **"About" section on homepage** - Content ready to implement
-11. ❓ **GA4 integration** - User visibility
-12. ❓ **Auction room enhancements bundle** - Budgets, view all, etc.
-13. ❓ **Screen size fix** - Samsung A56 issue identified
+### 🟠 Next Up (Phase 3)
+12. ❓ **GA4 integration** - User visibility
+13. ❓ **Display other users' budgets** - In auction room
+14. ❓ **"View All" modal enhancements** - Show owner + amount paid
+15. ❓ **Auth implementation** - Both OAuth + Magic Link
 
-### 🔴 Larger Items (Phase 3+)
-14. ❓ **Auth implementation** - Both OAuth + Magic Link
-15. ❓ **Time-limited pilot access** - 4-6 hrs
-16. ❓ **OneSignal push notifications** - 1-2 days (must have)
-17. ❓ **Auto score updates** - 1-2 days (must have)
+### 🔴 Larger Items (Phase 4+)
+16. ❓ **Time-limited pilot access** - 4-6 hrs
+17. ❓ **OneSignal push notifications** - 1-2 days (must have)
+18. ❓ **Auto score updates** - 1-2 days (must have)
 
 ### ✅ Completed
 - ✅ Phase 1 Quick Wins (Feb 6, 2026)
