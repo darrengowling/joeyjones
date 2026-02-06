@@ -81,7 +81,7 @@ const PlaceholderPage = () => {
               Coming Soon
             </h2>
             <p className="text-sm text-slate-400 leading-relaxed">
-              We're working hard to bring you the <span className="text-cyan-400 font-semibold">{formattedName}</span> feature. Stay tuned!
+              We&apos;re working hard to bring you the <span className="text-cyan-400 font-semibold">{formattedName}</span> feature. Stay tuned!
             </p>
           </div>
 
