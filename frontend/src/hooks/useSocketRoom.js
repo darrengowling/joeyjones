@@ -21,7 +21,8 @@ export function useSocketRoom(roomType, roomId, options = {}) {
   const listenerCountRef = useRef(0);
 
   // Create ready promise that resolves after first sync
-  if (!readyPromiseRef.current) {
+  // Using null check pattern as recommended by React
+  if (readyPromiseRef.current === null) {
     readyPromiseRef.current = new Promise((resolve) => {
       readyResolveRef.current = resolve;
     });
