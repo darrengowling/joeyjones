@@ -112,18 +112,41 @@ All logos at 256x256px in `/app/frontend/public/assets/clubs/cricket/`
 
 ## 🟡 PRE-PILOT TASKS (CURRENT PHASE)
 
-*Tasks to complete before inviting 400 users*
+*Tasks to complete before ~200 user charity foundation pilot*
 
-### Critical - Must Have for Pilot
+### 🚨 Critical - Must Have for Pilot
+
+| # | Task | Effort | Status | Owner | Notes |
+|---|------|--------|--------|-------|-------|
+| 1 | **MongoDB Atlas → Flex upgrade** | 30 min | ❓ Pending | User | Critical for backups - Free tier has none |
+| 2 | **Authentication hardening** | 1 day | ⏸️ Deferred | Agent | Waiting for SendGrid setup |
+| 3 | **Google OAuth implementation** | 4-6 hrs | ❓ Pending | Agent | Alternative/complement to magic links |
+| 4 | ~~Sentry monitoring~~ | 30 min | ✅ Done | - | Jan 17 - DSN configured |
+| 5 | **Hide dev indicators** | 15 min | ❓ Pending | Agent | "FE" badge visible in production |
+| 6 | **Verify all core flows** | 2 hrs | 🔄 Ongoing | User | User testing in progress |
+
+### 📊 Analytics & Monitoring
 
 | # | Task | Effort | Status | Notes |
 |---|------|--------|--------|-------|
-| 1 | ~~Stress test on Railway~~ | 2 hrs | ⏸️ User testing | User performing multi-user auction testing |
-| 2 | **Authentication hardening** | 1 day | ⏸️ Deferred | Waiting for SendGrid setup |
-| 3 | ~~Sentry monitoring~~ | 30 min | ✅ Done | Jan 17 - DSN configured |
-| 4 | **Database backup verification** | 1 hr | ❓ Pending | Verify MongoDB Atlas backups configured |
-| 5 | **Verify all core flows** | 2 hrs | 🔄 Ongoing | User testing in progress |
-| 6 | **Update Operations Playbook** | 1 hr | ❓ Pending | Update for Railway |
+| 1 | **Google Analytics 4 integration** | 2-3 hrs | ❓ Pending | Basic user journey visibility |
+| 2 | **Custom event tracking** | 2-4 hrs | ❓ Pending | Auction completed, bids placed, etc. (optional) |
+| 3 | **UptimeRobot on /api/health** | 15 min | ❓ Pending | User action - external monitoring |
+
+### 📱 PWA & User Onboarding
+
+| # | Task | Effort | Status | Notes |
+|---|------|--------|--------|-------|
+| 1 | **"How to Install" Help section** | 30 min | ❓ Pending | Add instructions to Help page |
+| 2 | **Install guide PDF** | Manual | ❓ Pending | Charity partner can distribute to users |
+| 3 | **PWA manifest.json (optional)** | 1-2 hrs | ⏸️ Not urgent | Current "Add to Home Screen" works |
+
+### 📝 Content & Documentation
+
+| # | Task | Effort | Status | Notes |
+|---|------|--------|--------|-------|
+| 1 | **Pre-pilot content review** | TBD | ❓ Pending | To be defined after team meeting |
+| 2 | **Update Operations Playbook** | 1 hr | ❓ Pending | Update for Railway |
 
 ### 🔐 Authentication Hardening (Deferred)
 
@@ -137,8 +160,9 @@ When ready, implement all at once:
 3. Rate limiting on auth (3/hour/email)
 4. Single-use token enforcement
 5. Test full flow end-to-end
+6. **Google OAuth as alternative** (simpler for users, no email delivery needed)
 
-**Estimated effort:** 1 day
+**Estimated effort:** 1-2 days (including OAuth)
 
 ---
 
