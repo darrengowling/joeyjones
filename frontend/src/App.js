@@ -19,6 +19,7 @@ const AuctionRoomStitched = lazy(() => import("./pages/AuctionRoomStitched"));
 const MyCompetitions = lazy(() => import("./pages/MyCompetitions"));
 const CompetitionDashboard = lazy(() => import("./pages/CompetitionDashboard"));
 const Help = lazy(() => import("./pages/Help"));
+const About = lazy(() => import("./pages/About"));
 const DesignPreview = lazy(() => import("./pages/DesignPreview"));
 const HomePage = lazy(() => import("./pages/HomePage"));
 const PlaceholderPage = lazy(() => import("./pages/PlaceholderPage"));
