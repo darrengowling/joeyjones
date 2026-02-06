@@ -690,7 +690,7 @@ const Home = () => {
                     <option value="IPL">🏏 IPL 2026</option>
                   </select>
                   <p className="text-sm text-white/40 mt-2">
-                    125 probable starters pre-selected. Uncheck any you don't need.
+                    125 probable starters pre-selected. Uncheck any you don&apos;t need.
                   </p>
                 </div>
               )}
