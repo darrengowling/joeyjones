@@ -27,7 +27,7 @@ export default function CreateLeague() {
   const [budgetDisplay, setBudgetDisplay] = useState("500");
 
   // Initialize user state from localStorage (runs once on mount)
-  const [user, setUser] = useState(() => {
+  const [user] = useState(() => {
     const savedUser = localStorage.getItem("user");
     return savedUser ? JSON.parse(savedUser) : null;
   });
