@@ -114,7 +114,7 @@ const Help = () => {
             <div>
               <h4 className="text-lg font-semibold text-white mb-3">First Steps After Sign In</h4>
               <ul className="list-disc list-inside space-y-2 text-white/80">
-                <li><strong>Create a Competition:</strong> Start your own league if you're the organizer</li>
+                <li><strong>Create a Competition:</strong> Start your own league if you&apos;re the organizer</li>
                 <li><strong>Join a Competition:</strong> Enter an invite token from a friend</li>
                 <li><strong>Explore Available Teams:</strong> Browse the sports teams available for bidding</li>
               </ul>
@@ -128,7 +128,7 @@ const Help = () => {
             <div>
               <h4 className="text-lg font-semibold text-white mb-3">Add Sport X to Your Home Screen</h4>
               <p className="text-white/80 mb-3">
-                For the best experience, add Sport X to your phone's home screen. This gives you quick access and a full-screen experience without browser bars.
+                For the best experience, add Sport X to your phone&apos;s home screen. This gives you quick access and a full-screen experience without browser bars.
               </p>
               
               <div className="rounded-lg p-4 mb-4" style={{ background: 'rgba(255,255,255,0.05)' }}>
@@ -136,8 +136,8 @@ const Help = () => {
                 <ol className="list-decimal list-inside space-y-2 text-white/80">
                   <li>Open Sport X in <strong>Safari</strong> (not Chrome)</li>
                   <li>Tap the <strong>Share</strong> button (square with arrow pointing up)</li>
-                  <li>Scroll down and tap <strong>"Add to Home Screen"</strong></li>
-                  <li>Tap <strong>"Add"</strong> in the top right corner</li>
+                  <li>Scroll down and tap <strong>&quot;Add to Home Screen&quot;</strong></li>
+                  <li>Tap <strong>&quot;Add&quot;</strong> in the top right corner</li>
                   <li>Sport X will appear on your home screen as an app icon</li>
                 </ol>
               </div>
@@ -147,8 +147,8 @@ const Help = () => {
                 <ol className="list-decimal list-inside space-y-2 text-white/80">
                   <li>Open Sport X in <strong>Chrome</strong></li>
                   <li>Tap the <strong>three dots menu</strong> (top right corner)</li>
-                  <li>Tap <strong>"Add to Home screen"</strong> or <strong>"Install app"</strong></li>
-                  <li>Confirm by tapping <strong>"Add"</strong></li>
+                  <li>Tap <strong>&quot;Add to Home screen&quot;</strong> or <strong>&quot;Install app&quot;</strong></li>
+                  <li>Confirm by tapping <strong>&quot;Add&quot;</strong></li>
                   <li>Sport X will appear in your app drawer and home screen</li>
                 </ol>
               </div>
@@ -174,15 +174,15 @@ const Help = () => {
               <div className="rounded-lg p-4 mb-4" style={{ background: 'rgba(255,255,255,0.05)' }}>
                 <h5 className="font-semibold text-white mb-2">Competition Setup Steps:</h5>
                 <ol className="list-decimal list-inside space-y-2 text-white/80">
-                  <li>Click <strong>"Create Your Competition"</strong> on the homepage</li>
-                  <li>Enter a <strong>competition name</strong> (e.g., "Premier League 2025")</li>
+                  <li>Click <strong>&quot;Create Your Competition&quot;</strong> on the homepage</li>
+                  <li>Enter a <strong>competition name</strong> (e.g., &quot;Premier League 2025&quot;)</li>
                   <li>Select the <strong>sport</strong> (Cricket or Football)</li>
                   <li>Set the <strong>budget</strong> for each manager (default: £500M)</li>
                   <li>Configure <strong>manager slots</strong> (min 2, max 8 participants)</li>
                   <li>Set <strong>club slots</strong> (how many teams each manager can own)</li>
                   <li>Configure <strong>auction timer</strong> (15-120 seconds per bid)</li>
                   <li>Set <strong>anti-snipe time</strong> (0-30 seconds to prevent last-second bids)</li>
-                  <li>Click <strong>"Create Competition"</strong></li>
+                  <li>Click <strong>&quot;Create Competition&quot;</strong></li>
                 </ol>
               </div>
 
@@ -200,7 +200,7 @@ const Help = () => {
 
               <div className="rounded-lg p-4" style={{ background: 'rgba(245, 158, 11, 0.1)', border: '1px solid rgba(245, 158, 11, 0.2)' }}>
                 <p className="text-white/80 text-sm">
-                  <strong>Important:</strong> After creating the competition, you'll receive an <strong>8-character invite token</strong>. Share this with your participants so they can join.
+                  <strong>Important:</strong> After creating the competition, you&apos;ll receive an <strong>8-character invite token</strong>. Share this with your participants so they can join.
                 </p>
               </div>
             </div>
@@ -214,8 +214,8 @@ const Help = () => {
                   You can import upcoming fixtures <em>before</em> starting the auction to help managers make strategic bidding decisions.
                 </p>
                 <ol className="list-decimal list-inside space-y-2 text-white/80">
-                  <li>After selecting your teams, look for the <strong>"Import Fixtures (Optional)"</strong> section on the league detail page</li>
-                  <li>Click <strong>"Import Fixtures"</strong> button</li>
+                  <li>After selecting your teams, look for the <strong>&quot;Import Fixtures (Optional)&quot;</strong> section on the league detail page</li>
+                  <li>Click <strong>&quot;Import Fixtures&quot;</strong> button</li>
                   <li>The system will fetch upcoming matches for your selected teams (next 7 days)</li>
                   <li>During the auction, each team will show their next fixture, helping managers bid strategically</li>
                 </ol>
@@ -229,12 +229,12 @@ const Help = () => {
                 <h5 className="font-semibold text-white mb-2">Auction Control Steps:</h5>
                 <ol className="list-decimal list-inside space-y-2 text-white/80">
                   <li>Wait for all managers to join using the invite token</li>
-                  <li>Navigate to your competition page from "My Competitions"</li>
-                  <li><strong>(Optional)</strong> Import fixtures before starting if you haven't already</li>
-                  <li>Click <strong>"Start Auction"</strong> when ready</li>
+                  <li>Navigate to your competition page from &quot;My Competitions&quot;</li>
+                  <li><strong>(Optional)</strong> Import fixtures before starting if you haven&apos;t already</li>
+                  <li>Click <strong>&quot;Start Auction&quot;</strong> when ready</li>
                   <li>The first team will be nominated for bidding automatically</li>
                   <li>Managers place bids in real-time until timer expires</li>
-                  <li>After each team is won, click <strong>"Next Team"</strong> to continue</li>
+                  <li>After each team is won, click <strong>&quot;Next Team&quot;</strong> to continue</li>
                   <li>Auction concludes when all slots are filled</li>
                 </ol>
               </div>
@@ -249,10 +249,10 @@ const Help = () => {
               <div className="rounded-lg p-4 mb-4" style={{ background: 'rgba(255,255,255,0.05)' }}>
                 <h5 className="font-semibold text-white mb-2">How Fixture Import Works:</h5>
                 <ol className="list-decimal list-inside space-y-2 text-white/80">
-                  <li>Navigate to Competition Dashboard → <strong>"Fixtures"</strong> tab</li>
-                  <li>Click <strong>"Import Fixtures"</strong> (Football) or <strong>"Import Next Fixture"</strong> (Cricket)</li>
+                  <li>Navigate to Competition Dashboard → <strong>&quot;Fixtures&quot;</strong> tab</li>
+                  <li>Click <strong>&quot;Import Fixtures&quot;</strong> (Football) or <strong>&quot;Import Next Fixture&quot;</strong> (Cricket)</li>
                   <li>The system automatically fetches upcoming matches from live sports data APIs</li>
-                  <li>You'll see a confirmation message showing how many fixtures were imported/updated</li>
+                  <li>You&apos;ll see a confirmation message showing how many fixtures were imported/updated</li>
                   <li>Imported fixtures appear with match dates, venues, and competing teams</li>
                 </ol>
               </div>
@@ -260,9 +260,9 @@ const Help = () => {
               <div className="rounded-lg p-4 mb-4" style={{ background: 'rgba(255,255,255,0.05)' }}>
                 <h5 className="font-semibold text-white mb-2">Update Scores (Automatic)</h5>
                 <ol className="list-decimal list-inside space-y-2 text-white/80">
-                  <li>After a real match concludes, go to the <strong>"Fixtures"</strong> tab</li>
+                  <li>After a real match concludes, go to the <strong>&quot;Fixtures&quot;</strong> tab</li>
                   <li>Find the completed match in the fixtures list</li>
-                  <li>Click the <strong>"Update Scores"</strong> button for that fixture</li>
+                  <li>Click the <strong>&quot;Update Scores&quot;</strong> button for that fixture</li>
                   <li>The system automatically fetches live match results and player stats from sports APIs</li>
                   <li>Points are calculated instantly based on the scoring rules</li>
                   <li>Standings update in real-time - participants see changes immediately</li>
@@ -314,7 +314,7 @@ const Help = () => {
                   <li><strong>Reset auction:</strong> Click the Reset button (appears when paused or completed)</li>
                   <li><strong>Confirm reset:</strong> Review what will be reset and confirm the action</li>
                   <li><strong>Automatic cleanup:</strong> All bids are cleared, participant budgets reset, rosters cleared</li>
-                  <li><strong>Start fresh:</strong> Return to Competition Detail Page and click "Begin Strategic Competition" to start a new auction</li>
+                  <li><strong>Start fresh:</strong> Return to Competition Detail Page and click &quot;Begin Strategic Competition&quot; to start a new auction</li>
                 </ol>
               </div>
 
@@ -332,7 +332,7 @@ const Help = () => {
 
               <div className="rounded-lg p-4 mb-4" style={{ background: 'rgba(255,255,255,0.05)' }}>
                 <p className="text-white/80 text-sm mb-2">
-                  <strong>What's Preserved:</strong>
+                  <strong>What&apos;s Preserved:</strong>
                 </p>
                 <ul className="text-white/70 text-sm space-y-1 list-disc list-inside">
                   <li>All participants remain in the league (no re-inviting needed)</li>
@@ -344,7 +344,7 @@ const Help = () => {
 
               <div className="rounded-lg p-4" style={{ background: 'rgba(6, 182, 212, 0.1)', border: '1px solid rgba(6, 182, 212, 0.2)' }}>
                 <p className="text-white/80 text-sm">
-                  <strong>For Participants:</strong> If you're in the auction room when the commissioner resets, you'll automatically see a message within 3 seconds with a button to return to the competition page. Just wait there for the commissioner to restart the auction.
+                  <strong>For Participants:</strong> If you&apos;re in the auction room when the commissioner resets, you&apos;ll automatically see a message within 3 seconds with a button to return to the competition page. Just wait there for the commissioner to restart the auction.
                 </p>
               </div>
             </div>
@@ -358,7 +358,7 @@ const Help = () => {
               <div className="rounded-lg p-4 mb-4" style={{ background: 'rgba(255,255,255,0.05)' }}>
                 <h5 className="font-semibold text-white mb-2">What You'll See:</h5>
                 <ul className="list-disc list-inside space-y-2 text-white/80">
-                  <li><strong>Request counter:</strong> After importing fixtures, you'll see "API requests remaining this minute: X/10"</li>
+                  <li><strong>Request counter:</strong> After importing fixtures, you&apos;ll see &quot;API requests remaining this minute: X/10&quot;</li>
                   <li><strong>Rate limit:</strong> Football-Data.org API allows 10 requests per minute on the free tier</li>
                   <li><strong>Resets automatically:</strong> The counter resets every 60 seconds</li>
                 </ul>
@@ -374,8 +374,8 @@ const Help = () => {
               <div className="rounded-lg p-4" style={{ background: 'rgba(255,255,255,0.05)' }}>
                 <h5 className="font-semibold text-white mb-2">What Changed:</h5>
                 <ul className="list-disc list-inside space-y-2 text-white/80">
-                  <li><strong>Simplified interface:</strong> The "Import Fixtures" button is hidden for AFCON leagues on the Competition Detail Page</li>
-                  <li><strong>CSV-only workflow:</strong> AFCON uses manual CSV uploads for both fixtures and scores (as the primary data API doesn't cover this tournament)</li>
+                  <li><strong>Simplified interface:</strong> The &quot;Import Fixtures&quot; button is hidden for AFCON leagues on the Competition Detail Page</li>
+                  <li><strong>CSV-only workflow:</strong> AFCON uses manual CSV uploads for both fixtures and scores (as the primary data API doesn&apos;t cover this tournament)</li>
                   <li><strong>Clear instructions:</strong> All fixture/score management happens via the Competition Dashboard → Fixtures tab using CSV templates</li>
                 </ul>
               </div>
@@ -389,16 +389,16 @@ const Help = () => {
             <div>
               <h4 className="text-lg font-semibold text-white mb-3">Joining a Competition</h4>
               <p className="text-white/80 mb-3">
-                To join a competition, you'll need an invite token from the commissioner.
+                To join a competition, you&apos;ll need an invite token from the commissioner.
               </p>
               
               <div className="rounded-lg p-4 mb-4" style={{ background: 'rgba(255,255,255,0.05)' }}>
                 <h5 className="font-semibold text-white mb-2">How to Join:</h5>
                 <ol className="list-decimal list-inside space-y-2 text-white/80">
                   <li>Get the <strong>8-character invite token</strong> from your league commissioner</li>
-                  <li>Click <strong>"Join the Competition"</strong> on the homepage</li>
+                  <li>Click <strong>&quot;Join the Competition&quot;</strong> on the homepage</li>
                   <li>Enter the invite token</li>
-                  <li>Click <strong>"Join"</strong> to confirm</li>
+                  <li>Click <strong>&quot;Join&quot;</strong> to confirm</li>
                   <li>Wait for the commissioner to start the auction</li>
                 </ol>
               </div>
@@ -413,7 +413,7 @@ const Help = () => {
                   <li><strong>Wait for auction to start:</strong> The commissioner will begin when all managers are ready</li>
                   <li><strong>View current team:</strong> See the team up for bidding and its base price</li>
                   <li><strong>Monitor your budget:</strong> Keep track of remaining funds for future bids</li>
-                  <li><strong>Place strategic bids:</strong> Click "Place Bid" to increase the current price</li>
+                  <li><strong>Place strategic bids:</strong> Click &quot;Place Bid&quot; to increase the current price</li>
                   <li><strong>Watch the timer:</strong> Bids in the last seconds trigger anti-snipe extension</li>
                   <li><strong>Win teams strategically:</strong> Balance your budget across multiple teams</li>
                 </ol>
@@ -424,7 +424,7 @@ const Help = () => {
                   <strong>Pro Tips:</strong>
                 </p>
                 <ul className="text-white/70 text-sm space-y-1 list-disc list-inside">
-                  <li>Don't spend all your budget on the first few teams</li>
+                  <li>Don&apos;t spend all your budget on the first few teams</li>
                   <li>Consider team performance and upcoming fixtures</li>
                   <li>Watch other managers' budgets to gauge competition</li>
                   <li>Anti-snipe timer prevents unfair last-second wins</li>
@@ -473,8 +473,8 @@ const Help = () => {
               
               <div className="rounded-lg p-4" style={{ background: 'rgba(255,255,255,0.05)' }}>
                 <ol className="list-decimal list-inside space-y-2 text-white/80">
-                  <li>Click <strong>"My Competitions"</strong> in the top navigation</li>
-                  <li>View all competitions you've created or joined</li>
+                  <li>Click <strong>&quot;My Competitions&quot;</strong> in the top navigation</li>
+                  <li>View all competitions you&apos;ve created or joined</li>
                   <li>See current status: Pending, Auction Live, or Completed</li>
                   <li>Click any competition to view its dashboard</li>
                 </ol>
@@ -578,7 +578,7 @@ const Help = () => {
             <div>
               <h4 className="text-lg font-semibold text-white mb-3">Navigating the Platform</h4>
               <p className="text-white/80 mb-4">
-                We've made it easy to move between different areas of the platform. Here's how to find what you need:
+                We&apos;ve made it easy to move between different areas of the platform. Here&apos;s how to find what you need:
               </p>
 
               <div className="rounded-lg p-4 mb-4" style={{ background: 'rgba(255,255,255,0.05)' }}>
@@ -596,20 +596,20 @@ const Help = () => {
               <div className="rounded-lg p-4 mb-4" style={{ background: 'rgba(255,255,255,0.05)' }}>
                 <h5 className="font-semibold text-white mb-2">Returning to Active Auctions</h5>
                 <p className="text-white/80 mb-2">
-                  <strong>Don't miss your auction.</strong> If you navigate away from an auction room:
+                  <strong>Don&apos;t miss your auction.</strong> If you navigate away from an auction room:
                 </p>
                 <ol className="list-decimal list-inside space-y-1 text-white/80 ml-4">
-                  <li>Go to <strong>"My Competitions"</strong> from the top menu</li>
+                  <li>Go to <strong>&quot;My Competitions&quot;</strong> from the top menu</li>
                   <li>Look for the competition with <strong>Auction Live</strong> status</li>
                   <li>Click the pulsing <strong>Join Auction Now</strong> button</li>
-                  <li>You'll be taken directly back to the auction room</li>
+                  <li>You&apos;ll be taken directly back to the auction room</li>
                 </ol>
               </div>
 
               <div className="rounded-lg p-4 mb-4" style={{ background: 'rgba(255,255,255,0.05)' }}>
                 <h5 className="font-semibold text-white mb-2">Breadcrumb Navigation</h5>
                 <p className="text-white/80 mb-2">
-                  In the auction room, you'll see breadcrumbs at the top:
+                  In the auction room, you&apos;ll see breadcrumbs at the top:
                 </p>
                 <p className="font-mono text-sm text-white/60 p-2 rounded border border-white/20 mb-2" style={{ background: 'rgba(0,0,0,0.3)' }}>
                   Home › My Competitions › League Name › Auction Room
@@ -622,7 +622,7 @@ const Help = () => {
               <div className="rounded-lg p-4" style={{ background: 'rgba(245, 158, 11, 0.1)', border: '1px solid rgba(245, 158, 11, 0.2)' }}>
                 <h5 className="font-semibold text-white mb-2">League Detail Page Alert</h5>
                 <p className="text-white/80 mb-2">
-                  When an auction is live and you're on the league detail page, you'll see a prominent red alert banner at the top. Click the "Join Auction Now" button to enter immediately.
+                  When an auction is live and you&apos;re on the league detail page, you&apos;ll see a prominent red alert banner at the top. Click the "Join Auction Now" button to enter immediately.
                 </p>
               </div>
             </div>
@@ -642,7 +642,7 @@ const Help = () => {
             <div className="border-l-4 pl-4" style={{ borderColor: '#06B6D4' }}>
               <h5 className="font-semibold text-white mb-1">Can I change my bid after placing it?</h5>
               <p className="text-white/80 text-sm">
-                No, bids are final once placed. This maintains fairness in the auction. Make sure you're comfortable with the price before bidding.
+                No, bids are final once placed. This maintains fairness in the auction. Make sure you&apos;re comfortable with the price before bidding.
               </p>
             </div>
 
@@ -656,7 +656,7 @@ const Help = () => {
             <div className="border-l-4 pl-4" style={{ borderColor: '#06B6D4' }}>
               <h5 className="font-semibold text-white mb-1">Can I leave a competition after joining?</h5>
               <p className="text-white/80 text-sm">
-                Once the auction starts, you're committed to the competition. Contact your league commissioner if you need to withdraw before the auction begins.
+                Once the auction starts, you&apos;re committed to the competition. Contact your league commissioner if you need to withdraw before the auction begins.
               </p>
             </div>
 
