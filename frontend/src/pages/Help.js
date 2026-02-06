@@ -2,6 +2,31 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import BottomNav from '../components/BottomNav';
 
+// Section component moved outside Help to prevent recreation on each render
+const Section = ({ id, title, children, isOpen, onToggle }) => (
+  <div className="mb-4 border border-white/10 rounded-xl overflow-hidden" style={{ background: '#151C2C' }}>
+    <button
+      onClick={() => onToggle(id)}
+      className="w-full flex items-center justify-between p-4 hover:bg-white/5 transition-colors"
+    >
+      <h3 className="text-lg font-semibold text-white">{title}</h3>
+      <svg
+        className={`w-6 h-6 text-white/60 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+      </svg>
+    </button>
+    {isOpen && (
+      <div className="p-6" style={{ background: 'rgba(0,0,0,0.2)' }}>
+        {children}
+      </div>
+    )}
+  </div>
+);
+
 const Help = () => {
   const navigate = useNavigate();
   const [openSection, setOpenSection] = useState('getting-started');
@@ -14,30 +39,6 @@ const Help = () => {
   const toggleSection = (section) => {
     setOpenSection(openSection === section ? null : section);
   };
-
-  const Section = ({ id, title, children }) => (
-    <div className="mb-4 border border-white/10 rounded-xl overflow-hidden" style={{ background: '#151C2C' }}>
-      <button
-        onClick={() => toggleSection(id)}
-        className="w-full flex items-center justify-between p-4 hover:bg-white/5 transition-colors"
-      >
-        <h3 className="text-lg font-semibold text-white">{title}</h3>
-        <svg
-          className={`w-6 h-6 text-white/60 transition-transform ${openSection === id ? 'rotate-180' : ''}`}
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-        </svg>
-      </button>
-      {openSection === id && (
-        <div className="p-6" style={{ background: 'rgba(0,0,0,0.2)' }}>
-          {children}
-        </div>
-      )}
-    </div>
-  );
 
   return (
     <div className="min-h-screen" style={{ background: '#0F172A', paddingBottom: '100px' }}>
