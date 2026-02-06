@@ -5772,6 +5772,10 @@ async def check_auction_completion(auction_id: str, final_club_id: str = None, f
                 logger.info(f"Created initial standings for league {auction['leagueId']}")
         
         logger.info(f"✅ AUCTION COMPLETED: {auction_id} - {total_clubs_sold} sold, {total_unsold} unsold. Reason: {completion_reason}")
+        
+        # Auto-generate auction report
+        await generate_auction_report(auction_id)
+        
     else:
         logger.info(f"❌ Auction NOT completing: should_complete={should_complete}")
 
