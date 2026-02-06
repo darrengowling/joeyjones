@@ -131,7 +131,7 @@ class ManualAuctionTester:
         }
         await self.db.auctions.insert_one(auction)
         
-        print(f"✅ Created:")
+        print("✅ Created:")
         print(f"   League ID: {league_id}")
         print(f"   Auction ID: {auction_id}")
         print(f"   Users: {[u['name'] for u in users]}")
@@ -166,7 +166,7 @@ class ManualAuctionTester:
         
     async def simulate_lot_completion(self, auction_id, winning_user=None, winning_amount=None):
         """Manually simulate what happens when a lot completes"""
-        print(f"\n⏰ Simulating lot completion...")
+        print("\n⏰ Simulating lot completion...")
         
         auction = await self.db.auctions.find_one({"id": auction_id})
         current_club_id = auction["currentClubId"]
@@ -189,7 +189,7 @@ class ManualAuctionTester:
             )
             print(f"   ✅ Awarded to {winning_user['name']}")
         else:
-            print(f"   ❌ No bids - club unsold")
+            print("   ❌ No bids - club unsold")
             
         # Move to next lot or complete auction
         club_queue = auction["clubQueue"]
@@ -221,11 +221,11 @@ class ManualAuctionTester:
                 {"id": auction["leagueId"]},
                 {"$set": {"status": "completed"}}
             )
-            print(f"   🏁 Auction complete!")
+            print("   🏁 Auction complete!")
             
     async def verify_results(self, expected_results):
         """Verify auction results match expectations"""
-        print(f"\n🔍 Verifying results...")
+        print("\n🔍 Verifying results...")
         
         league = self.test_data["league"]
         participants = await self.db.league_participants.find(

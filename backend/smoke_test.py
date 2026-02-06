@@ -276,7 +276,7 @@ class SmokeTest:
         assert user_b_after["totalSpent"] == 6, "totalSpent should be $6"
         
         log_success(f"User B budget updated: ${initial_budget} → ${user_b_after['budgetRemaining']}")
-        log_success(f"Club assigned to User B")
+        log_success("Club assigned to User B")
         log_success(f"Total spent: ${user_b_after['totalSpent']}")
         
         return True

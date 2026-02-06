@@ -47,9 +47,9 @@ async def migrate_team_names(logger=None):
     
     # Log connection details (mask sensitive parts)
     if 'localhost' in mongo_url:
-        log.info(f"🔍 Connecting to: LOCAL MongoDB (localhost)")
+        log.info("🔍 Connecting to: LOCAL MongoDB (localhost)")
     elif 'mongodb.net' in mongo_url or 'atlas' in mongo_url.lower():
-        log.info(f"🔍 Connecting to: MongoDB ATLAS (production)")
+        log.info("🔍 Connecting to: MongoDB ATLAS (production)")
     else:
         masked_url = mongo_url[:30] + "..." if len(mongo_url) > 30 else mongo_url
         log.info(f"🔍 Connecting to: {masked_url}")

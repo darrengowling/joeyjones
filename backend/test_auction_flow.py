@@ -17,17 +17,17 @@ def simulate_complete_lot(current_lot, total_clubs, unsold_clubs):
         print(f"✓ Next club exists: {next_club_id}")
     elif unsold_clubs > 0:
         next_club_id = "unsold_club"
-        print(f"✓ Unsold club exists to re-auction")
+        print("✓ Unsold club exists to re-auction")
     else:
         next_club_id = None
-        print(f"✗ No more clubs")
+        print("✗ No more clubs")
     
     if next_club_id:
-        print(f"→ Action: Start 3-second countdown → Start next lot")
+        print("→ Action: Start 3-second countdown → Start next lot")
         should_continue = True
         should_complete = False
     else:
-        print(f"→ Action: Call check_auction_completion()")
+        print("→ Action: Call check_auction_completion()")
         should_continue = False
         should_complete = True
     

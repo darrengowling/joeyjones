@@ -18,13 +18,13 @@ if REDIS_URL:
         # Convert rediss:// to redis:// for compatibility (TLS is handled at connection level)
         redis_url = REDIS_URL
         if redis_url.startswith("rediss://"):
-            logger.info(f"🔧 Converting rediss:// to redis:// for AsyncRedisManager compatibility")
+            logger.info("🔧 Converting rediss:// to redis:// for AsyncRedisManager compatibility")
             redis_url = redis_url.replace("rediss://", "redis://", 1)
         
         # Check if URL has valid scheme
         if not redis_url.startswith("redis://"):
             # URL might be missing scheme entirely (e.g., "rediss-12232.c338...")
-            logger.warning(f"⚠️ Redis URL missing scheme, adding redis:// prefix")
+            logger.warning("⚠️ Redis URL missing scheme, adding redis:// prefix")
             redis_url = f"redis://{redis_url}"
         
         logger.info(f"🔧 Initializing Redis manager: {redis_url[:30]}...")
@@ -35,9 +35,9 @@ if REDIS_URL:
         mgr = socketio.AsyncRedisManager(redis_url)
         redis_enabled = True
         
-        logger.info(f"✅ Socket.IO Redis manager created (connection will be verified on first publish)")
-        logger.info(f"⚠️  If you see 'Cannot publish to redis' errors, Redis is unreachable")
-        logger.info(f"⚠️  Check: 1) Redis URL is correct, 2) Network/firewall allows connection, 3) Redis credentials are valid")
+        logger.info("✅ Socket.IO Redis manager created (connection will be verified on first publish)")
+        logger.info("⚠️  If you see 'Cannot publish to redis' errors, Redis is unreachable")
+        logger.info("⚠️  Check: 1) Redis URL is correct, 2) Network/firewall allows connection, 3) Redis credentials are valid")
     except Exception as e:
         logger.error(f"❌ Redis manager initialization failed, falling back to in-memory: {e}")
         logger.error(f"   Redis URL attempted: {redis_url[:50]}...")
@@ -66,14 +66,14 @@ sio = socketio.AsyncServer(
 )
 
 if redis_enabled and mgr:
-    logger.info(f"🚀 Socket.IO server initialized with Redis adapter (multi-pod mode)")
-    logger.warning(f"⚠️  Redis adapter created but actual connectivity will be tested on first message")
-    logger.warning(f"⚠️  If deployment logs show 'Cannot publish to redis' errors:")
-    logger.warning(f"   1. Verify Redis instance is running and accessible")
-    logger.warning(f"   2. Check REDIS_URL format: redis://[user]:[password]@host:port")
-    logger.warning(f"   3. Verify network/firewall allows connection from pods")
-    logger.warning(f"   4. Test Redis connection: redis-cli -u $REDIS_URL ping")
-    logger.warning(f"⚠️  Application will continue with degraded Socket.IO (events won't broadcast across pods)")
+    logger.info("🚀 Socket.IO server initialized with Redis adapter (multi-pod mode)")
+    logger.warning("⚠️  Redis adapter created but actual connectivity will be tested on first message")
+    logger.warning("⚠️  If deployment logs show 'Cannot publish to redis' errors:")
+    logger.warning("   1. Verify Redis instance is running and accessible")
+    logger.warning("   2. Check REDIS_URL format: redis://[user]:[password]@host:port")
+    logger.warning("   3. Verify network/firewall allows connection from pods")
+    logger.warning("   4. Test Redis connection: redis-cli -u $REDIS_URL ping")
+    logger.warning("⚠️  Application will continue with degraded Socket.IO (events won't broadcast across pods)")
 else:
-    logger.info(f"🚀 Socket.IO server initialized with in-memory manager (single-pod mode)")
-    logger.info(f"💡 For production multi-pod deployments, configure REDIS_URL")
+    logger.info("🚀 Socket.IO server initialized with in-memory manager (single-pod mode)")
+    logger.info("💡 For production multi-pod deployments, configure REDIS_URL")

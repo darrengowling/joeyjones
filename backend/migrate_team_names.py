@@ -24,9 +24,9 @@ async def migrate_team_names(logger=None):
     
     # Log connection details (mask sensitive parts)
     if 'localhost' in mongo_url:
-        log(f"🔍 Migration connecting to: LOCAL MongoDB (localhost)")
+        log("🔍 Migration connecting to: LOCAL MongoDB (localhost)")
     elif 'mongodb.net' in mongo_url or 'atlas' in mongo_url.lower():
-        log(f"🔍 Migration connecting to: MongoDB ATLAS (production)")
+        log("🔍 Migration connecting to: MongoDB ATLAS (production)")
     else:
         masked_url = mongo_url[:20] + "..." if len(mongo_url) > 20 else mongo_url
         log(f"🔍 Migration connecting to: {masked_url}")
@@ -186,7 +186,7 @@ async def migrate_team_names(logger=None):
                     print(f"  ⚠️  {old_name} not found")
         
         print("\n" + "=" * 80)
-        print(f"✅ Migration complete!")
+        print("✅ Migration complete!")
         print(f"   Updated: {total_updated}")
         print(f"   Skipped (already correct): {total_skipped}")
         print("=" * 80)
