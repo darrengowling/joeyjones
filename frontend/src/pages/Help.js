@@ -84,7 +84,7 @@ const Help = () => {
         </div>
 
         {/* Getting Started */}
-        <Section id="getting-started" title="Getting Started">
+        <Section id="getting-started" title="Getting Started" isOpen={openSection === 'getting-started'} onToggle={toggleSection}>
           <div className="space-y-6">
             <div>
               <h4 className="text-lg font-semibold text-white mb-3">Account Setup & Sign In</h4>
