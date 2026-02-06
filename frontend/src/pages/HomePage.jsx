@@ -388,7 +388,7 @@ const HomePage = () => {
               <h4 className="font-black text-white uppercase tracking-tight text-sm">Who We Are</h4>
             </div>
             <p className="text-slate-400 text-sm leading-relaxed">
-              Sport X is a premium social auction platform built for the modern sports fan. We've stripped away the noise of gambling to focus on what actually matters: skill, strategy, and pure bragging rights.
+              Sport X is a premium social auction platform built for the modern sports fan. We&apos;ve stripped away the noise of gambling to focus on what actually matters: skill, strategy, and pure bragging rights.
             </p>
           </div>
 
