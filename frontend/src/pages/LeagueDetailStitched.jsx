@@ -650,7 +650,8 @@ export default function LeagueDetailStitched() {
   const canStartAuction = participants.length >= league.minManagers;
   
   // Calculate if there are enough teams selected for all participants' rosters
-  const requiredTeams = participants.length * (league.clubSlots || 1);
+  // Use minManagers (not current participants) to ensure enough teams when full
+  const requiredTeams = (league.minManagers || 2) * (league.clubSlots || 1);
   const selectedTeams = league.assetsSelected?.length || 0;
   const teamShortfall = requiredTeams - selectedTeams;
   const hasEnoughTeams = selectedTeams >= requiredTeams;
