@@ -13,6 +13,13 @@ const Profile = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  
+  // Admin reports state
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [reports, setReports] = useState([]);
+  const [loadingReports, setLoadingReports] = useState(false);
+  const [selectedReport, setSelectedReport] = useState(null);
+  const [showReportModal, setShowReportModal] = useState(false);
 
   useEffect(() => {
     // Load user from localStorage
@@ -21,8 +28,76 @@ const Profile = () => {
       const parsed = JSON.parse(storedUser);
       setUser(parsed);
       setDisplayName(parsed.name || '');
+      
+      // Check if user is admin and load reports
+      checkAdminAndLoadReports(parsed.id);
     }
   }, []);
+  
+  const checkAdminAndLoadReports = async (userId) => {
+    try {
+      const response = await axios.get(`${API}/api/admin/reports`, {
+        headers: { 'X-User-ID': userId }
+      });
+      setIsAdmin(true);
+      setReports(response.data);
+    } catch (err) {
+      // Not admin or error - that's fine, just don't show reports section
+      setIsAdmin(false);
+    }
+  };
+  
+  const loadFullReport = async (reportId) => {
+    setLoadingReports(true);
+    try {
+      const response = await axios.get(`${API}/api/admin/reports/${reportId}`, {
+        headers: { 'X-User-ID': user.id }
+      });
+      setSelectedReport(response.data);
+      setShowReportModal(true);
+    } catch (err) {
+      console.error('Failed to load report:', err);
+    } finally {
+      setLoadingReports(false);
+    }
+  };
+  
+  const downloadReportCSV = async (reportId, leagueName) => {
+    try {
+      const response = await axios.get(`${API}/api/admin/reports/${reportId}/csv`, {
+        headers: { 'X-User-ID': user.id },
+        responseType: 'blob'
+      });
+      
+      // Create download link
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `auction_report_${leagueName.replace(/\s+/g, '_')}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error('Failed to download report:', err);
+    }
+  };
+  
+  const formatCurrency = (amount) => {
+    if (!amount) return '£0';
+    return `£${(amount / 1000000).toFixed(1)}m`;
+  };
+  
+  const formatDate = (dateStr) => {
+    if (!dateStr) return 'N/A';
+    return new Date(dateStr).toLocaleDateString('en-GB', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
 
   const handleSave = async () => {
     if (!displayName.trim()) {
