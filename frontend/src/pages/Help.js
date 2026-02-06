@@ -356,7 +356,7 @@ const Help = () => {
               </p>
               
               <div className="rounded-lg p-4 mb-4" style={{ background: 'rgba(255,255,255,0.05)' }}>
-                <h5 className="font-semibold text-white mb-2">What You'll See:</h5>
+                <h5 className="font-semibold text-white mb-2">What You&apos;ll See:</h5>
                 <ul className="list-disc list-inside space-y-2 text-white/80">
                   <li><strong>Request counter:</strong> After importing fixtures, you&apos;ll see &quot;API requests remaining this minute: X/10&quot;</li>
                   <li><strong>Rate limit:</strong> Football-Data.org API allows 10 requests per minute on the free tier</li>
