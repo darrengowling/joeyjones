@@ -442,7 +442,7 @@ const Help = () => {
         </Section>
 
         {/* Dashboards & Results */}
-        <Section id="dashboards" title="Viewing Dashboards & Results">
+        <Section id="dashboards" title="Viewing Dashboards & Results" isOpen={openSection === 'dashboards'} onToggle={toggleSection}>
           <div className="space-y-6">
             <div>
               <h4 className="text-lg font-semibold text-white mb-3">Competition Dashboard</h4>
