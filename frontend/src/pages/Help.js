@@ -573,7 +573,7 @@ const Help = () => {
         </Section>
 
         {/* Navigation */}
-        <Section id="navigation" title="Navigation & Finding Pages">
+        <Section id="navigation" title="Navigation & Finding Pages" isOpen={openSection === 'navigation'} onToggle={toggleSection}>
           <div className="space-y-6">
             <div>
               <h4 className="text-lg font-semibold text-white mb-3">Navigating the Platform</h4>
