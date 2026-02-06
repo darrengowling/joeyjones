@@ -1579,7 +1579,7 @@ function AuctionRoom() {
           </div>
         </div>
 
-        {/* Quick Bid Buttons - Two rows */}
+        {/* Quick Bid Buttons - Two rows of 3 equal buttons */}
         <div className="grid grid-cols-3 gap-2 mb-2">
           {[1, 5, 10].map((amount) => (
             <button
@@ -1594,7 +1594,7 @@ function AuctionRoom() {
                 if (navigator.vibrate) navigator.vibrate(50);
               }}
               disabled={!ready || userRosterCount >= maxSlots}
-              className="h-12 rounded-xl font-bold text-base transition-all active:scale-95 disabled:opacity-40"
+              className="h-11 rounded-xl font-bold text-base transition-all active:scale-95 disabled:opacity-40"
               style={{ 
                 background: 'rgba(6, 182, 212, 0.1)', 
                 color: '#06B6D4', 
@@ -1605,7 +1605,7 @@ function AuctionRoom() {
             </button>
           ))}
         </div>
-        <div className="grid grid-cols-2 gap-2 mb-3">
+        <div className="grid grid-cols-3 gap-2 mb-3">
           {[20, 50].map((amount) => (
             <button
               key={amount}
@@ -1616,7 +1616,7 @@ function AuctionRoom() {
                 if (navigator.vibrate) navigator.vibrate(50);
               }}
               disabled={!ready || userRosterCount >= maxSlots}
-              className="h-12 rounded-xl font-bold text-base transition-all active:scale-95 disabled:opacity-40"
+              className="h-11 rounded-xl font-bold text-base transition-all active:scale-95 disabled:opacity-40"
               style={{ 
                 background: 'rgba(6, 182, 212, 0.1)', 
                 color: '#06B6D4', 
@@ -1626,6 +1626,19 @@ function AuctionRoom() {
               +£{amount}m
             </button>
           ))}
+          {/* Pass button in same row */}
+          <button
+            onClick={() => toast("Pass This Round - Coming soon!", { duration: 2000 })}
+            disabled={userRosterCount >= maxSlots}
+            className="h-11 rounded-xl font-bold text-base transition-all active:scale-95 disabled:opacity-40"
+            style={{ 
+              background: 'rgba(239, 68, 68, 0.1)', 
+              color: '#EF4444', 
+              border: '1px solid #EF4444' 
+            }}
+          >
+            Pass
+          </button>
         </div>
 
         {/* Place Bid Button */}
