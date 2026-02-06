@@ -1673,7 +1673,10 @@ function AuctionRoom() {
             )}
           </button>
           <button 
-            onClick={() => setShowBudgetsModal(true)}
+            onClick={() => {
+              console.log('🟢 Participant count clicked - opening budgets modal');
+              setShowBudgetsModal(true);
+            }}
             className="flex items-center gap-1 flex-shrink-0 px-2 py-1 rounded-lg"
             style={{ background: 'rgba(255,255,255,0.05)' }}
           >
