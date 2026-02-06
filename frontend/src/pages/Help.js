@@ -273,7 +273,7 @@ const Help = () => {
         </Section>
 
         {/* New Features & Updates */}
-        <Section id="updates" title="Recent Updates & New Features">
+        <Section id="updates" title="Recent Updates & New Features" isOpen={openSection === 'updates'} onToggle={toggleSection}>
           <div className="space-y-6">
             <div>
               <h4 className="text-lg font-semibold text-white mb-3">Commissioner Auction Controls</h4>
