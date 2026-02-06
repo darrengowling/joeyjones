@@ -123,7 +123,7 @@ const Help = () => {
         </Section>
 
         {/* How to Install */}
-        <Section id="install-app" title="Install the App">
+        <Section id="install-app" title="Install the App" isOpen={openSection === 'install-app'} onToggle={toggleSection}>
           <div className="space-y-6">
             <div>
               <h4 className="text-lg font-semibold text-white mb-3">Add Sport X to Your Home Screen</h4>
