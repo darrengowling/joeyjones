@@ -1548,8 +1548,8 @@ function AuctionRoom() {
           borderTop: '1px solid rgba(255,255,255,0.1)'
         }}
       >
-        {/* Active Managers Row */}
-        <div className="flex items-center justify-between mb-4">
+        {/* Active Managers Row - Compact */}
+        <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2 overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
             {participants.slice(0, 6).map((p) => {
               const isLeading = currentBidder && p.userId === currentBidder.id;
@@ -1557,7 +1557,7 @@ function AuctionRoom() {
               return (
                 <div key={p.id} className="flex flex-col items-center flex-shrink-0">
                   <div 
-                    className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold"
+                    className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold"
                     style={{ 
                       background: isCurrentUser ? '#06B6D4' : 'rgba(255,255,255,0.1)',
                       color: isCurrentUser ? '#0F172A' : 'white',
@@ -1567,7 +1567,7 @@ function AuctionRoom() {
                   >
                     {p.userName?.substring(0, 2).toUpperCase() || '??'}
                   </div>
-                  <span className="text-[10px] text-white/60 mt-1 truncate w-12 text-center">
+                  <span className="text-[9px] text-white/60 mt-0.5 truncate w-10 text-center">
                     {p.userName?.split(' ')[0] || 'User'}
                   </span>
                 </div>
@@ -1576,12 +1576,12 @@ function AuctionRoom() {
           </div>
           <div className="flex items-center gap-1 flex-shrink-0">
             <div className="w-2 h-2 rounded-full bg-green-500"></div>
-            <span className="text-xs text-white/60">{participants.length} Online</span>
+            <span className="text-xs text-white/60">{participants.length}</span>
           </div>
         </div>
 
         {/* Quick Bid Buttons - Two rows of 3 equal buttons */}
-        <div className="grid grid-cols-3 gap-2 mb-2">
+        <div className="grid grid-cols-3 gap-1.5 mb-1.5">
           {[1, 5, 10].map((amount) => (
             <button
               key={amount}
@@ -1595,7 +1595,7 @@ function AuctionRoom() {
                 if (navigator.vibrate) navigator.vibrate(50);
               }}
               disabled={!ready || userRosterCount >= maxSlots}
-              className="h-11 rounded-xl font-bold text-base transition-all active:scale-95 disabled:opacity-40"
+              className="h-10 rounded-xl font-bold text-sm transition-all active:scale-95 disabled:opacity-40"
               style={{ 
                 background: 'rgba(6, 182, 212, 0.1)', 
                 color: '#06B6D4', 
@@ -1606,7 +1606,7 @@ function AuctionRoom() {
             </button>
           ))}
         </div>
-        <div className="grid grid-cols-3 gap-2 mb-3">
+        <div className="grid grid-cols-3 gap-1.5 mb-2">
           {[20, 50].map((amount) => (
             <button
               key={amount}
