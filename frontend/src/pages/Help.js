@@ -630,7 +630,7 @@ const Help = () => {
         </Section>
 
         {/* FAQ / Troubleshooting */}
-        <Section id="faq" title="FAQ & Troubleshooting">
+        <Section id="faq" title="FAQ & Troubleshooting" isOpen={openSection === 'faq'} onToggle={toggleSection}>
           <div className="space-y-4">
             <div className="border-l-4 pl-4" style={{ borderColor: '#06B6D4' }}>
               <h5 className="font-semibold text-white mb-1">What happens if I lose internet connection during an auction?</h5>
