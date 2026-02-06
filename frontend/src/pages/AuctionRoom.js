@@ -1617,7 +1617,7 @@ function AuctionRoom() {
                 if (navigator.vibrate) navigator.vibrate(50);
               }}
               disabled={!ready || userRosterCount >= maxSlots}
-              className="h-11 rounded-xl font-bold text-base transition-all active:scale-95 disabled:opacity-40"
+              className="h-10 rounded-xl font-bold text-sm transition-all active:scale-95 disabled:opacity-40"
               style={{ 
                 background: 'rgba(6, 182, 212, 0.1)', 
                 color: '#06B6D4', 
@@ -1631,7 +1631,7 @@ function AuctionRoom() {
           <button
             onClick={() => toast("Pass This Round - Coming soon!", { duration: 2000 })}
             disabled={userRosterCount >= maxSlots}
-            className="h-11 rounded-xl font-bold text-base transition-all active:scale-95 disabled:opacity-40"
+            className="h-10 rounded-xl font-bold text-sm transition-all active:scale-95 disabled:opacity-40"
             style={{ 
               background: 'rgba(239, 68, 68, 0.1)', 
               color: '#EF4444', 
@@ -1650,7 +1650,7 @@ function AuctionRoom() {
               if (navigator.vibrate) navigator.vibrate(50);
             }}
             disabled={!ready || isSubmittingBid || userRosterCount >= maxSlots}
-            className="w-full h-14 rounded-xl font-bold text-lg mb-3 transition-all active:scale-95 disabled:opacity-40"
+            className="w-full h-12 rounded-xl font-bold text-base mb-2 transition-all active:scale-95 disabled:opacity-40"
             style={{ 
               background: (!ready || isSubmittingBid || userRosterCount >= maxSlots) ? 'rgba(255,255,255,0.1)' : '#06B6D4',
               color: (!ready || isSubmittingBid || userRosterCount >= maxSlots) ? 'rgba(255,255,255,0.4)' : '#0F172A'
