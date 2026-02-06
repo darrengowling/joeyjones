@@ -1632,7 +1632,10 @@ function AuctionRoom() {
         {/* Active Managers Row - Compact & Tappable */}
         <div className="flex items-center justify-between mb-3">
           <button 
-            onClick={() => setShowBudgetsModal(true)}
+            onClick={() => {
+              console.log('🔵 Avatar list clicked - opening budgets modal');
+              setShowBudgetsModal(true);
+            }}
             className="flex items-center gap-2 overflow-x-auto flex-1 mr-2"
             style={{ scrollbarWidth: 'none' }}
           >
