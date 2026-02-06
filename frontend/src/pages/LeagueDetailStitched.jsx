@@ -966,7 +966,7 @@ export default function LeagueDetailStitched() {
                     <div>
                       <p className="text-amber-400 font-semibold text-sm">Not enough {uiHints.assetPlural.toLowerCase()}</p>
                       <p className="text-amber-400/70 text-xs mt-1">
-                        {participants.length} {participants.length === 1 ? 'user' : 'users'} × {league.clubSlots} roster slots = {requiredTeams} {uiHints.assetPlural.toLowerCase()} needed.
+                        {league.minManagers} managers × {league.clubSlots} roster slots = {requiredTeams} {uiHints.assetPlural.toLowerCase()} needed.
                         {' '}Select {teamShortfall} more to fill all rosters.
                       </p>
                     </div>
