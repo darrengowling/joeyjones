@@ -2225,7 +2225,7 @@ async def create_league(input: LeagueCreate):
             elif competition_code == "CUSTOM":
                 # CUSTOM: Start with empty selection, user builds team by team
                 input.assetsSelected = []
-                logger.info(f"   ✅ CUSTOM: Starting with empty selection")
+                logger.info("   ✅ CUSTOM: Starting with empty selection")
             
             else:
                 logger.warning(f"   ⚠️ Unknown cricket competition code: {competition_code}")
