@@ -484,7 +484,7 @@ const Help = () => {
         </Section>
 
         {/* Scoring Systems */}
-        <Section id="scoring" title="Scoring Systems">
+        <Section id="scoring" title="Scoring Systems" isOpen={openSection === 'scoring'} onToggle={toggleSection}>
           <div className="space-y-6">
             <div>
               <h4 className="text-lg font-semibold text-white mb-3">How Points Are Calculated</h4>
