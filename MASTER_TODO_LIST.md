@@ -120,10 +120,10 @@ All logos at 256x256px in `/app/frontend/public/assets/clubs/cricket/`
 
 | # | Task | Effort | Risk | Owner | Notes |
 |---|------|--------|------|-------|-------|
-| 1 | **Hide "FE" dev indicator** | 15 min | Low | Agent | Visible in production screenshots |
-| 2 | **Hide cricket for pilot** | 30 min | Low | Agent | Football only - simplify pilot scope |
-| 3 | **"How to Install" Help section** | 30 min | Low | Agent | PWA install instructions |
-| 4 | **Auction button layout optimization** | 1 hr | Low | Agent | 2 rows same-size buttons (Pass/+20m/+50m same as +1/+5/+10) to free space |
+| 1 | ~~**Hide "FE" dev indicator**~~ | 15 min | Low | Agent | ✅ DONE - Hidden in production builds |
+| 2 | ~~**Hide cricket for pilot**~~ | 30 min | Low | Agent | ✅ DONE - Football only |
+| 3 | ~~**"How to Install" Help section**~~ | 30 min | Low | Agent | ✅ DONE - Added iOS/Android instructions |
+| 4 | ~~**Auction button layout optimization**~~ | 1 hr | Low | Agent | ✅ DONE - 2 rows of 3 equal buttons, Pass integrated |
 | 5 | **UptimeRobot on /api/health** | 15 min | Low | User | External uptime monitoring |
 | 6 | **Install guide PDF** | 1 hr | Low | User | Charity partner distributes to users |
 
@@ -133,7 +133,7 @@ All logos at 256x256px in `/app/frontend/public/assets/clubs/cricket/`
 
 | # | Task | Effort | Risk | Owner | Notes |
 |---|------|--------|------|-------|-------|
-| 7 | **"About" section on homepage** | 2-3 hrs | Low | Agent | Sport X philosophy & gameplay - user to provide content |
+| 7 | **"About" section on homepage** | 2-3 hrs | Low | Agent | Sport X philosophy & gameplay - content provided |
 | 8 | **Google Analytics 4 integration** | 2-3 hrs | Low | Agent | Basic user journey visibility |
 | 9 | **Auction behavior tracking** | 2-4 hrs | Low | Agent | Log bid patterns, timing, amounts to DB |
 | 10 | **Auction results archive** | 3-4 hrs | Low | Agent | Which team, how much paid, winner - persistent record |
