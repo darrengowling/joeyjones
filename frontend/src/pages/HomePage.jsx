@@ -230,6 +230,12 @@ const HomePage = () => {
         </h1>
         <div className="flex gap-4 items-center">
           <button 
+            onClick={() => navigate('/about')}
+            className="text-xs font-bold text-slate-400 hover:text-white transition-colors tracking-widest uppercase"
+          >
+            About
+          </button>
+          <button 
             onClick={() => navigate('/help')}
             className="text-xs font-bold text-slate-400 hover:text-white transition-colors tracking-widest uppercase"
           >
