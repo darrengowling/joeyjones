@@ -374,18 +374,31 @@ When ready, implement all at once:
 
 ## 🎯 IMMEDIATE NEXT ACTIONS
 
-1. ✅ ~~CL 2025/26 logo integration~~ - Complete
-2. ✅ ~~Fixture import skip completed matches~~ - Complete
-3. ✅ ~~Auction carousel order randomization~~ - Complete
-4. ✅ ~~Dark logo watermark visibility~~ - Complete
-5. ✅ ~~Help page Stitch standardization~~ - Complete
-6. ✅ ~~CORS explicit origin configuration~~ - Complete
-7. ✅ ~~My Competitions performance optimization~~ - Complete (6s → <1s)
-8. ✅ ~~Auto-reconnection logic~~ - Complete (deployed to production)
-9. ✅ ~~Ford Overoad league fix~~ - Complete (awaiting user verification)
-10. 🔄 **User:** Set up UptimeRobot monitoring on `/api/health`
-11. ⏸️ **User:** Set up SendGrid for auth hardening (when ready)
-12. ⏸️ **User:** Verify MongoDB Atlas backups configured
+**Awaiting team meeting (Feb 6, 2026) to finalize priorities**
+
+### User Actions
+- 🔴 **MongoDB Atlas → Flex** - Critical for backups before pilot
+- 🟡 **UptimeRobot on `/api/health`** - External monitoring
+- 🟡 **SendGrid account setup** - For magic link email delivery
+- 🟡 **Install guide PDF** - For charity partner to distribute
+
+### Agent Actions (Post Team Meeting)
+- 🔴 **Hide "FE" dev indicator** - Visible in production
+- 🟡 **Google Analytics 4** - User journey visibility
+- 🟡 **"How to Install" Help section** - PWA install instructions
+- 🟡 **Auth hardening + OAuth** - When SendGrid ready
+
+### Completed
+1. ✅ ~~Football scoring rules UI~~ - Complete
+2. ✅ ~~CL 2025/26 logo integration~~ - Complete
+3. ✅ ~~Fixture import skip completed matches~~ - Complete
+4. ✅ ~~Auction carousel order randomization~~ - Complete
+5. ✅ ~~Dark logo watermark visibility~~ - Complete
+6. ✅ ~~Help page Stitch standardization~~ - Complete
+7. ✅ ~~CORS explicit origin configuration~~ - Complete
+8. ✅ ~~My Competitions performance optimization~~ - Complete (6s → <1s)
+9. ✅ ~~Auto-reconnection logic~~ - Complete (deployed to production)
+10. ✅ ~~Ford Overoad league fix~~ - Complete (awaiting user verification)
 
 ---
 
@@ -399,13 +412,14 @@ When ready, implement all at once:
 
 ---
 
-**Document Version:** 4.3  
-**Last Updated:** February 2, 2026
+**Document Version:** 4.4  
+**Last Updated:** February 5, 2026
 
 ### Change Log
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 4.4 | Feb 5, 2026 | Added pre-pilot readiness items: GA4, PWA install guide, hide dev indicators, Google OAuth; Reorganized for ~200 user charity pilot |
 | 4.3 | Feb 2, 2026 | Added auto-reconnection logic, Ford Overoad league fix, updated optimization audit |
 | 4.2 | Feb 2, 2026 | Added CORS fix, My Competitions optimization (6s→<1s), loading state, toast fix, production incident notes |
 | 4.1 | Feb 1, 2026 | Added Session 7 fixes: fixture import filter, carousel shuffle, dark watermarks, Help page standardization |
