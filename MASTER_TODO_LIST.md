@@ -442,13 +442,17 @@ All logos at 256x256px in `/app/frontend/public/assets/clubs/cricket/`
 
 ## 🎯 IMMEDIATE NEXT ACTIONS
 
-**Phase 1 Complete (Feb 6, 2026)**
+**Phase 1 & 2 Progress (Feb 6, 2026)**
 
-### ✅ Completed Quick Wins
+### ✅ Completed Quick Wins (Phase 1)
 1. ✅ **Hide "FE" dev indicator** - Hidden in production builds
 2. ✅ **Hide cricket for pilot** - Football only
 3. ✅ **Auction button layout** - 2 rows of 3 equal buttons, Pass integrated
 4. ✅ **"How to Install" Help section** - iOS/Android instructions added
+
+### ✅ Completed Medium Tasks (Phase 2)
+5. ✅ **"About" section on homepage** - Full content with 4 cards (Who/Why/How/Manifesto)
+6. ✅ **Screen size optimization** - Compact auction room layout for Samsung A56 and similar devices
 
 ### 🟡 User Actions Needed
 5. 🔴 **MongoDB Atlas → Flex** - Critical for backups
