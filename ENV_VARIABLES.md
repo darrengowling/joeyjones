@@ -134,7 +134,7 @@ DB_NAME=test_database
 # ... rest auto-configured
 
 # Frontend .env (auto-configured)
-REACT_APP_BACKEND_URL=https://sportauction.preview.emergentagent.com
+REACT_APP_BACKEND_URL=https://fantasy-sports-bid.preview.emergentagent.com
 ```
 
 ### Emergent Production

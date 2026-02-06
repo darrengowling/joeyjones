@@ -7,7 +7,7 @@ import requests
 import json
 import time
 
-BASE_URL = "https://sportauction.preview.emergentagent.com/api"
+BASE_URL = "https://fantasy-sports-bid.preview.emergentagent.com/api"
 
 def test_roster_visibility():
     session = requests.Session()

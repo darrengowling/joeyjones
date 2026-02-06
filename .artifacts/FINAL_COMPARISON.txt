@@ -9,7 +9,7 @@ PRODUCTION:
 
 PREVIEW:
   - Main JS: bundle.js (development build)
-  - Backend URL configured: https://sportauction.preview.emergentagent.com
+  - Backend URL configured: https://fantasy-sports-bid.preview.emergentagent.com
 
 === BACKEND SERVER ANALYSIS ===
 

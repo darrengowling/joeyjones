@@ -134,8 +134,8 @@
 - Status: `waiting`
 
 ### URLs:
-- Frontend: `https://sportauction.preview.emergentagent.com`
-- Backend API: `https://sportauction.preview.emergentagent.com/api`
+- Frontend: `https://fantasy-sports-bid.preview.emergentagent.com`
+- Backend API: `https://fantasy-sports-bid.preview.emergentagent.com/api`
 
 ---
 
