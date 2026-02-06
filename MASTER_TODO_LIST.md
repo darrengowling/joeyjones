@@ -291,7 +291,7 @@ All logos at 256x256px in `/app/frontend/public/assets/clubs/cricket/`
 
 ## 🟢 POST-PILOT TASKS
 
-*Enhancements after successful 400-user pilot*
+*Enhancements after successful pilot*
 
 ### New Features
 
@@ -303,6 +303,12 @@ All logos at 256x256px in `/app/frontend/public/assets/clubs/cricket/`
 | 4 | Custom scoring rules | 1 week | P3 | Flexibility per tournament |
 | 5 | Email notifications | 1 week | P2 | Invites, reminders |
 | 6 | Payment integration (Stripe) | 2 weeks | P3 | Entry fees |
+
+### 🔧 Developer Experience Enhancements
+
+| # | Feature | Effort | Priority | Notes |
+|---|---------|--------|----------|-------|
+| 1 | **Sport toggle via env variable** | 20 min | P2 | `REACT_APP_PILOT_MODE=football|cricket|all` - avoids code changes when switching between football/cricket pilots for different partners |
 
 ### 🏆 FIFA World Cup 2026 Setup (P1 - Needed for Pilot)
 
