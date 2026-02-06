@@ -137,8 +137,8 @@ All logos at 256x256px in `/app/frontend/public/assets/clubs/cricket/`
 | 8 | **Google Analytics 4 integration** | 2-3 hrs | Low | Agent | Basic user journey visibility |
 | 9 | **Auction behavior tracking** | 2-4 hrs | Low | Agent | Log bid patterns, timing, amounts to DB |
 | 10 | **Auction results archive** | 3-4 hrs | Low | Agent | Which team, how much paid, winner - persistent record |
-| 11 | **Display other users' budgets in auction** | 2-3 hrs | Low | Agent | Show remaining budget for all participants |
-| 12 | **"View All" modal enhancements** | 2-3 hrs | Low | Agent | Show who owns each team + amount paid |
+| 11 | ~~**Display other users' budgets in auction**~~ | 2-3 hrs | Low | Agent | ✅ DONE - "All Budgets" modal shows all participants |
+| 12 | ~~**"View All" modal enhancements**~~ | 2-3 hrs | Low | Agent | ✅ DONE - Shows owner + amount paid for sold teams |
 | 13 | **Bidding multiples (multi-tap)** | 3-4 hrs | Med | Agent | Allow stacking +£50m taps for £100m/£150m bids |
 | 14 | **MongoDB Atlas → Flex upgrade** | 30 min | Low | User | Critical for backups - Free tier has none |
 
