@@ -1634,10 +1634,7 @@ function AuctionRoom() {
           <button 
             type="button"
             data-testid="avatar-list-budgets-btn"
-            onClick={() => {
-              console.log('🔵 Avatar list clicked - opening budgets modal');
-              setShowBudgetsModal(true);
-            }}
+            onClick={() => setShowBudgetsModal(true)}
             className="flex items-center gap-2 overflow-x-auto flex-1 mr-2 hover:opacity-80 active:opacity-60 cursor-pointer"
             style={{ scrollbarWidth: 'none' }}
           >
