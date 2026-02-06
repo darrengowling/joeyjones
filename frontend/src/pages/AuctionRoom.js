@@ -1674,6 +1674,7 @@ function AuctionRoom() {
             )}
           </button>
           <button 
+            type="button"
             onClick={() => {
               console.log('🟢 Participant count clicked - opening budgets modal');
               setShowBudgetsModal(true);
