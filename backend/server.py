@@ -2618,11 +2618,11 @@ async def get_my_competitions(userId: str):
     
     # BATCH QUERY 2: Get all leagues at once
     leagues = await db.leagues.find({"id": {"$in": league_ids}}, {"_id": 0}).to_list(100)
-    league_map = {l["id"]: l for l in leagues}
+    league_map = {league["id"]: league for league in leagues}
     
     # BATCH QUERY 3: Get all auctions for these leagues at once
     auctions = await db.auctions.find({"leagueId": {"$in": league_ids}}, {"_id": 0}).to_list(100)
-    auction_map = {a["leagueId"]: a for a in auctions}
+    auction_map = {auction["leagueId"]: auction for auction in auctions}
     
     # Collect all asset IDs across all participants
     all_asset_ids = []
