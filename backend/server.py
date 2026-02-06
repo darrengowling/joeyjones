@@ -5779,6 +5779,233 @@ async def check_auction_completion(auction_id: str, final_club_id: str = None, f
     else:
         logger.info(f"❌ Auction NOT completing: should_complete={should_complete}")
 
+
+async def generate_auction_report(auction_id: str):
+    """Generate and save a comprehensive auction report"""
+    try:
+        auction = await db.auctions.find_one({"id": auction_id}, {"_id": 0})
+        if not auction:
+            logger.error(f"Cannot generate report: Auction {auction_id} not found")
+            return
+        
+        league = await db.leagues.find_one({"id": auction["leagueId"]}, {"_id": 0})
+        if not league:
+            logger.error(f"Cannot generate report: League not found for auction {auction_id}")
+            return
+        
+        # Get all bids for this auction
+        all_bids = await db.bids.find({"auctionId": auction_id}, {"_id": 0}).to_list(10000)
+        
+        # Get participants
+        participants = await db.league_participants.find({"leagueId": auction["leagueId"]}, {"_id": 0}).to_list(100)
+        
+        # Get clubs/assets
+        club_ids = auction.get("clubQueue", [])
+        clubs = await db.assets.find({"id": {"$in": club_ids}}, {"_id": 0}).to_list(100)
+        clubs_map = {c["id"]: c for c in clubs}
+        
+        # Get users for display names
+        user_ids = [p["userId"] for p in participants]
+        users = await db.users.find({"id": {"$in": user_ids}}, {"_id": 0}).to_list(100)
+        users_map = {u["id"]: u for u in users}
+        
+        # Build per-lot breakdown
+        lots_breakdown = []
+        for idx, club_id in enumerate(club_ids):
+            club = clubs_map.get(club_id, {})
+            club_bids = [b for b in all_bids if b.get("clubId") == club_id]
+            
+            # Find winning bid (highest amount for this club)
+            winning_bid = max(club_bids, key=lambda x: x.get("amount", 0)) if club_bids else None
+            
+            lot_data = {
+                "queuePosition": idx + 1,
+                "clubId": club_id,
+                "clubName": club.get("name", "Unknown"),
+                "totalBids": len(club_bids),
+                "winningBid": winning_bid.get("amount", 0) if winning_bid else 0,
+                "winnerId": winning_bid.get("userId") if winning_bid else None,
+                "winnerName": users_map.get(winning_bid.get("userId"), {}).get("displayName", "Unknown") if winning_bid else None,
+                "sold": winning_bid is not None and winning_bid.get("amount", 0) > 0
+            }
+            lots_breakdown.append(lot_data)
+        
+        # Build per-user summary
+        user_summaries = []
+        for participant in participants:
+            user_id = participant["userId"]
+            user = users_map.get(user_id, {})
+            user_bids = [b for b in all_bids if b.get("userId") == user_id]
+            clubs_won = participant.get("clubsWon", [])
+            
+            # Calculate total spent (sum of winning bids)
+            total_spent = 0
+            for club_id in clubs_won:
+                club_bids = [b for b in all_bids if b.get("clubId") == club_id and b.get("userId") == user_id]
+                if club_bids:
+                    max_bid = max(b.get("amount", 0) for b in club_bids)
+                    total_spent += max_bid
+            
+            user_summary = {
+                "userId": user_id,
+                "userName": user.get("displayName", participant.get("userName", "Unknown")),
+                "teamsWon": len(clubs_won),
+                "teamsWonNames": [clubs_map.get(cid, {}).get("name", "Unknown") for cid in clubs_won],
+                "totalBidsPlaced": len(user_bids),
+                "totalSpent": total_spent,
+                "budgetRemaining": participant.get("budgetRemaining", 0),
+                "winRate": round(len(clubs_won) / len(user_bids) * 100, 1) if user_bids else 0
+            }
+            user_summaries.append(user_summary)
+        
+        # Calculate auction-level stats
+        started_at = auction.get("startedAt") or auction.get("createdAt")
+        completed_at = auction.get("completedAt")
+        
+        # Parse timestamps if they're strings
+        if isinstance(started_at, str):
+            started_at = datetime.fromisoformat(started_at.replace('Z', '+00:00'))
+        if isinstance(completed_at, str):
+            completed_at = datetime.fromisoformat(completed_at.replace('Z', '+00:00'))
+        
+        duration_seconds = None
+        if started_at and completed_at:
+            duration_seconds = (completed_at - started_at).total_seconds()
+        
+        total_clubs_sold = sum(1 for lot in lots_breakdown if lot["sold"])
+        total_revenue = sum(lot["winningBid"] for lot in lots_breakdown if lot["sold"])
+        
+        report = {
+            "id": str(uuid4()),
+            "auctionId": auction_id,
+            "leagueId": auction["leagueId"],
+            "leagueName": league.get("name", "Unknown"),
+            "sportKey": league.get("sportKey", "football"),
+            "generatedAt": datetime.now(timezone.utc).isoformat(),
+            "summary": {
+                "startedAt": started_at.isoformat() if started_at else None,
+                "completedAt": completed_at.isoformat() if completed_at else None,
+                "durationSeconds": duration_seconds,
+                "durationFormatted": f"{int(duration_seconds // 60)}m {int(duration_seconds % 60)}s" if duration_seconds else None,
+                "totalParticipants": len(participants),
+                "totalLots": len(club_ids),
+                "totalClubsSold": total_clubs_sold,
+                "totalUnsold": len(club_ids) - total_clubs_sold,
+                "totalBids": len(all_bids),
+                "totalRevenue": total_revenue,
+                "avgBidsPerLot": round(len(all_bids) / len(club_ids), 1) if club_ids else 0,
+                "avgPricePerClub": round(total_revenue / total_clubs_sold, 0) if total_clubs_sold else 0,
+                "highestBid": max((b.get("amount", 0) for b in all_bids), default=0)
+            },
+            "lotsBreakdown": lots_breakdown,
+            "userSummaries": user_summaries
+        }
+        
+        # Save to database
+        await db.auction_reports.insert_one(report)
+        logger.info(f"📊 Auction report generated and saved for auction {auction_id}")
+        
+    except Exception as e:
+        logger.error(f"Error generating auction report for {auction_id}: {str(e)}")
+
+
+@api_router.get("/admin/reports")
+async def list_auction_reports(user: dict = Depends(get_current_user)):
+    """List all auction reports - admin only"""
+    # Check if user is admin
+    if not user.get("isAdmin", False):
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    reports = await db.auction_reports.find(
+        {},
+        {"_id": 0, "id": 1, "auctionId": 1, "leagueId": 1, "leagueName": 1, "sportKey": 1, "generatedAt": 1, "summary": 1}
+    ).sort("generatedAt", -1).to_list(100)
+    
+    return reports
+
+
+@api_router.get("/admin/reports/{report_id}")
+async def get_auction_report(report_id: str, user: dict = Depends(get_current_user)):
+    """Get a specific auction report - admin only"""
+    if not user.get("isAdmin", False):
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    report = await db.auction_reports.find_one({"id": report_id}, {"_id": 0})
+    if not report:
+        raise HTTPException(status_code=404, detail="Report not found")
+    
+    return report
+
+
+@api_router.get("/admin/reports/{report_id}/csv")
+async def download_auction_report_csv(report_id: str, user: dict = Depends(get_current_user)):
+    """Download auction report as CSV - admin only"""
+    if not user.get("isAdmin", False):
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    report = await db.auction_reports.find_one({"id": report_id}, {"_id": 0})
+    if not report:
+        raise HTTPException(status_code=404, detail="Report not found")
+    
+    # Create CSV in memory
+    output = io.StringIO()
+    
+    # Write summary section
+    output.write("AUCTION REPORT\n")
+    output.write(f"League,{report['leagueName']}\n")
+    output.write(f"Sport,{report['sportKey']}\n")
+    output.write(f"Generated,{report['generatedAt']}\n")
+    output.write(f"Duration,{report['summary'].get('durationFormatted', 'N/A')}\n")
+    output.write(f"Total Participants,{report['summary']['totalParticipants']}\n")
+    output.write(f"Total Lots,{report['summary']['totalLots']}\n")
+    output.write(f"Clubs Sold,{report['summary']['totalClubsSold']}\n")
+    output.write(f"Total Revenue,£{report['summary']['totalRevenue'] / 1000000:.1f}m\n")
+    output.write(f"Highest Bid,£{report['summary']['highestBid'] / 1000000:.1f}m\n")
+    output.write("\n")
+    
+    # Write lots breakdown
+    output.write("LOTS BREAKDOWN\n")
+    lots_writer = csv.writer(output)
+    lots_writer.writerow(["Queue Position", "Team", "Total Bids", "Winning Bid (£m)", "Winner", "Sold"])
+    for lot in report.get("lotsBreakdown", []):
+        lots_writer.writerow([
+            lot["queuePosition"],
+            lot["clubName"],
+            lot["totalBids"],
+            f"£{lot['winningBid'] / 1000000:.1f}m" if lot["winningBid"] else "N/A",
+            lot.get("winnerName", "N/A"),
+            "Yes" if lot["sold"] else "No"
+        ])
+    output.write("\n")
+    
+    # Write user summaries
+    output.write("USER SUMMARIES\n")
+    users_writer = csv.writer(output)
+    users_writer.writerow(["User", "Teams Won", "Teams", "Bids Placed", "Total Spent (£m)", "Budget Remaining (£m)", "Win Rate"])
+    for user_sum in report.get("userSummaries", []):
+        users_writer.writerow([
+            user_sum["userName"],
+            user_sum["teamsWon"],
+            ", ".join(user_sum.get("teamsWonNames", [])),
+            user_sum["totalBidsPlaced"],
+            f"£{user_sum['totalSpent'] / 1000000:.1f}m",
+            f"£{user_sum['budgetRemaining'] / 1000000:.1f}m",
+            f"{user_sum['winRate']}%"
+        ])
+    
+    # Return as downloadable CSV
+    csv_content = output.getvalue()
+    output.close()
+    
+    filename = f"auction_report_{report['leagueName'].replace(' ', '_')}_{report['generatedAt'][:10]}.csv"
+    
+    return Response(
+        content=csv_content,
+        media_type="text/csv",
+        headers={"Content-Disposition": f"attachment; filename={filename}"}
+    )
+
+
 @api_router.post("/auction/{auction_id}/pause")
 async def pause_auction(auction_id: str, commissioner_id: str = None):
     """Pause an active auction - only commissioner can do this"""
