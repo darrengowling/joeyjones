@@ -1660,20 +1660,6 @@ function AuctionRoom() {
           </button>
         )}
 
-        {/* Pass This Round Button */}
-        <button
-          onClick={() => toast("Pass This Round - Coming soon!", { duration: 2000 })}
-          disabled={userRosterCount >= maxSlots}
-          className="w-full h-12 rounded-xl font-bold transition-all active:scale-95 disabled:opacity-40"
-          style={{ 
-            background: 'rgba(239, 68, 68, 0.1)', 
-            color: '#EF4444', 
-            border: '1px solid #EF4444' 
-          }}
-        >
-          Pass This Round
-        </button>
-
         {/* Commissioner Controls - Compact */}
         {isCommissioner && (
           <div className="flex gap-2 mt-3 pt-3" style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }}>
