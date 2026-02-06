@@ -648,6 +648,12 @@ export default function LeagueDetailStitched() {
 
   const isCommissioner = user && league.commissionerId === user.id;
   const canStartAuction = participants.length >= league.minManagers;
+  
+  // Calculate if there are enough teams selected for all participants' rosters
+  const requiredTeams = participants.length * (league.clubSlots || 1);
+  const selectedTeams = league.assetsSelected?.length || 0;
+  const teamShortfall = requiredTeams - selectedTeams;
+  const hasEnoughTeams = selectedTeams >= requiredTeams;
 
   // Filter assets for the manage modal
   const getFilteredAssets = () => {
