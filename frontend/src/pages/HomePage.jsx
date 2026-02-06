@@ -498,7 +498,7 @@ const HomePage = () => {
               </div>
               <div className="flex items-center gap-2">
                 <span className="material-symbols-outlined text-sm" style={{ color: '#06B6D4' }}>check_circle</span>
-                <span className="text-white text-sm"><strong>FRIENDS OVER HOUSES</strong> <span className="text-slate-400">— We play against each other, never "the house"</span></span>
+                <span className="text-white text-sm"><strong>FRIENDS OVER HOUSES</strong> <span className="text-slate-400">— We play against each other, never &quot;the house&quot;</span></span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="material-symbols-outlined text-sm" style={{ color: '#06B6D4' }}>check_circle</span>
