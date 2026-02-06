@@ -1491,7 +1491,7 @@ function AuctionRoom() {
                 Current Highest Bid
               </div>
               <div 
-                className="text-5xl font-extrabold animate-bid-pop"
+                className="text-4xl sm:text-5xl font-extrabold animate-bid-pop"
                 style={{ 
                   color: '#06B6D4', 
                   fontFamily: 'Inter, sans-serif',
