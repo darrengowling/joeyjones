@@ -499,19 +499,19 @@ All logos at 256x256px in `/app/frontend/public/assets/clubs/cricket/`
 
 ---
 
-**Document Version:** 4.7  
+**Document Version:** 4.8  
 **Last Updated:** February 6, 2026
 
 ### Change Log
 
 | Version | Date | Changes |
 |---------|------|---------|
-| 4.7 | Feb 6, 2026 | Phase 2 progress: Added "About Sport X" section to homepage, Screen size optimization for auction room (compact layout, 100dvh, reduced padding) |
-| 4.6 | Feb 6, 2026 | Phase 1 Quick Wins complete: Hide FE indicator, hide cricket, auction button layout, install help section |
-| 4.5 | Feb 6, 2026 | Major update post team meeting: Added 20 pre-pilot tasks organized by effort/risk |
-| 4.4 | Feb 5, 2026 | Added pre-pilot readiness items: GA4, PWA install guide, hide dev indicators, Google OAuth |
-| 4.3 | Feb 2, 2026 | Added auto-reconnection logic, Ford Overoad league fix, updated optimization audit |
-| 4.2 | Feb 2, 2026 | Added CORS fix, My Competitions optimization (6s→<1s), loading state, toast fix |
+| 4.8 | Feb 6, 2026 | Added Auction Reports system: auto-generation on completion, admin-only API endpoints, Profile page UI with view/download |
+| 4.7 | Feb 6, 2026 | Phase 2: "About" page (separate page with header link), screen size optimization |
+| 4.6 | Feb 6, 2026 | Phase 1 Quick Wins: Hide FE indicator, hide cricket, auction button layout, install help |
+| 4.5 | Feb 6, 2026 | Post team meeting: 20 pre-pilot tasks organized by effort/risk |
+| 4.4 | Feb 5, 2026 | Pre-pilot readiness items added |
+| 4.3 | Feb 2, 2026 | Auto-reconnection logic, Ford Overoad fix |
 | 4.1 | Feb 1, 2026 | Added Session 7 fixes: fixture import filter, carousel shuffle, dark watermarks, Help page standardization |
 | 4.0 | Jan 30, 2026 | Major update: Marked Railway migration complete; Added Stitch redesign completion; Added logo integration; Updated phase to PRE-PILOT; Reorganized priorities |
 | 3.0 | Jan 16, 2026 | Complete reorganization by phase; Added mobile strategy |
