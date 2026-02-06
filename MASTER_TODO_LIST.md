@@ -470,10 +470,9 @@ All logos at 256x256px in `/app/frontend/public/assets/clubs/cricket/`
 - 🔴 **MongoDB Atlas → Flex** - Critical for backups
 
 ### 🟠 Next Up (Remaining Pre-Pilot)
-- ❓ **Display other users' budgets in auction** - 2-3 hrs
-- ❓ **"View All" modal enhancements** - Show owner + amount paid, 2-3 hrs
 - ❓ **OneSignal push notifications** - 1-2 days (must have)
 - ❓ **Auto score updates cron** - 1-2 days (must have)
+- ❓ **Bidding multiples (multi-tap)** - 3-4 hrs
 - ❓ **Auth (OAuth + Magic Link)** - 1-2 days (deferred for stress testing)
 - ❓ **Time-limited pilot access** - 4-6 hrs (timing TBD with charity)
 
@@ -481,6 +480,8 @@ All logos at 256x256px in `/app/frontend/public/assets/clubs/cricket/`
 - ⏸️ **Google Analytics 4** - Paused, may revisit
 
 ### ✅ Completed
+- ✅ Display other users' budgets in auction (Feb 6, 2026)
+- ✅ "View All" modal enhancements - owner + amount paid (Feb 6, 2026)
 - ✅ Phase 1 Quick Wins (Feb 6, 2026)
 - ✅ Football scoring rules UI
 - ✅ CL 2025/26 logo integration
