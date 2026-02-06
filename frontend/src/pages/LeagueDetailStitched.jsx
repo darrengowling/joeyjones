@@ -893,8 +893,9 @@ export default function LeagueDetailStitched() {
                     </span>
                     <div className="text-left">
                       <p className="font-bold text-sm" style={{ color: 'var(--text-primary, #fff)' }}>Manage {uiHints.assetPlural}</p>
-                      <p className="text-xs" style={{ color: 'var(--text-muted, rgba(255,255,255,0.4))' }}>
-                        {league.assetsSelected?.length || 0} selected for auction
+                      <p className="text-xs" style={{ color: hasEnoughTeams || selectedTeams === 0 ? 'var(--text-muted, rgba(255,255,255,0.4))' : '#FBBF24' }}>
+                        {selectedTeams} selected for auction
+                        {selectedTeams > 0 && !hasEnoughTeams && ` (need ${teamShortfall} more)`}
                       </p>
                     </div>
                   </div>
