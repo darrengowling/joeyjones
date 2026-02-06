@@ -384,7 +384,7 @@ const Help = () => {
         </Section>
 
         {/* For Players */}
-        <Section id="user-join" title="For Players">
+        <Section id="user-join" title="For Players" isOpen={openSection === 'user-join'} onToggle={toggleSection}>
           <div className="space-y-6">
             <div>
               <h4 className="text-lg font-semibold text-white mb-3">Joining a Competition</h4>
