@@ -1674,10 +1674,7 @@ function AuctionRoom() {
           <button 
             type="button"
             data-testid="participant-count-budgets-btn"
-            onClick={() => {
-              console.log('🟢 Participant count clicked - opening budgets modal');
-              setShowBudgetsModal(true);
-            }}
+            onClick={() => setShowBudgetsModal(true)}
             className="flex items-center gap-1 flex-shrink-0 px-2 py-1 rounded-lg hover:opacity-80 active:opacity-60 cursor-pointer"
             style={{ background: 'rgba(255,255,255,0.05)' }}
           >
