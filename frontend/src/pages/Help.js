@@ -163,7 +163,7 @@ const Help = () => {
         </Section>
 
         {/* For Commissioners */}
-        <Section id="admin-create" title="For Commissioners">
+        <Section id="admin-create" title="For Commissioners" isOpen={openSection === 'admin-create'} onToggle={toggleSection}>
           <div className="space-y-6">
             <div>
               <h4 className="text-lg font-semibold text-white mb-3">Creating a Competition</h4>
