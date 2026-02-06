@@ -1435,13 +1435,13 @@ function AuctionRoom() {
 
         {currentClub && auction?.status !== "completed" ? (
           <div className="relative z-10 text-center w-full max-w-md">
-            {/* Timer - Large Orange */}
+            {/* Timer - Large Orange (responsive size) */}
             <div 
-              className="mb-6"
+              className="mb-4"
               style={{ fontFamily: 'Roboto, sans-serif' }}
             >
               <div 
-                className="text-7xl font-black tracking-tight"
+                className="text-5xl sm:text-6xl md:text-7xl font-black tracking-tight"
                 style={{ 
                   color: auction?.status === 'paused' ? '#FF8A00' : (remainingMs ?? 0) < 10000 ? '#EF4444' : '#EF4444',
                   textShadow: '0 0 40px rgba(239, 68, 68, 0.4)'
