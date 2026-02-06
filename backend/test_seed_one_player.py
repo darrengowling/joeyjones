@@ -61,7 +61,7 @@ async def test_seed_one_player():
     
     # Clean up test player
     await db.assets.delete_one({"id": test_player['id']})
-    print(f"\n🗑️  Deleted test player")
+    print("\n🗑️  Deleted test player")
     
     client.close()
     

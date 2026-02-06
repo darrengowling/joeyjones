@@ -145,7 +145,6 @@ class RapidAPIFootballClient:
         Returns:
             List of fixture dictionaries
         """
-        from datetime import datetime, timedelta
         
         # Get recent fixtures and filter by date
         all_fixtures = await self.get_recent_fixtures(league_id)
