@@ -2389,10 +2389,9 @@ class JoinByTokenInput(BaseModel):
 @api_router.post("/leagues/join")
 async def join_league_by_token(input_data: JoinByTokenInput):
     """Join a league using only the invite token - looks up league automatically"""
-    # Find league by invite token
-    normalized_token = input_data.inviteToken.strip().lower()
+    # Find league by invite token (case-insensitive)
     league = await db.leagues.find_one({
-        "inviteToken": {"$regex": f"^{input_data.inviteToken}$", "$options": "i"}
+        "inviteToken": {"$regex": f"^{input_data.inviteToken.strip()}$", "$options": "i"}
     }, {"_id": 0})
     
     if not league:
