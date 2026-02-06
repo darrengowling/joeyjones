@@ -436,31 +436,44 @@ All logos at 256x256px in `/app/frontend/public/assets/clubs/cricket/`
 
 ## 🎯 IMMEDIATE NEXT ACTIONS
 
-**Awaiting team meeting (Feb 6, 2026) to finalize priorities**
+**Post team meeting (Feb 6, 2026) - Prioritization needed**
 
-### User Actions
-- 🔴 **MongoDB Atlas → Flex** - Critical for backups before pilot
-- 🟡 **UptimeRobot on `/api/health`** - External monitoring
-- 🟡 **SendGrid account setup** - For magic link email delivery
-- 🟡 **Install guide PDF** - For charity partner to distribute
+### 🟢 Recommended First (Quick Wins)
+1. ❓ **Hide "FE" dev indicator** - 15 min
+2. ❓ **Hide cricket for pilot** - 30 min  
+3. ❓ **Auction button layout** - 1 hr (frees screen space)
+4. ❓ **"How to Install" Help section** - 30 min
 
-### Agent Actions (Post Team Meeting)
-- 🔴 **Hide "FE" dev indicator** - Visible in production
-- 🟡 **Google Analytics 4** - User journey visibility
-- 🟡 **"How to Install" Help section** - PWA install instructions
-- 🟡 **Auth hardening + OAuth** - When SendGrid ready
+### 🟡 User Actions Needed
+5. 🔴 **MongoDB Atlas → Flex** - Critical for backups
+6. ❓ **UptimeRobot setup** - External monitoring
+7. ❓ **Provide "About" content** - Blocks homepage section
+8. ❓ **Samsung A56 screenshot** - Need to see the issue
+9. ❓ **Auth decision** - OAuth only? Magic link? Both?
 
-### Completed
-1. ✅ ~~Football scoring rules UI~~ - Complete
-2. ✅ ~~CL 2025/26 logo integration~~ - Complete
-3. ✅ ~~Fixture import skip completed matches~~ - Complete
-4. ✅ ~~Auction carousel order randomization~~ - Complete
-5. ✅ ~~Dark logo watermark visibility~~ - Complete
-6. ✅ ~~Help page Stitch standardization~~ - Complete
-7. ✅ ~~CORS explicit origin configuration~~ - Complete
-8. ✅ ~~My Competitions performance optimization~~ - Complete (6s → <1s)
-9. ✅ ~~Auto-reconnection logic~~ - Complete (deployed to production)
-10. ✅ ~~Ford Overoad league fix~~ - Complete (awaiting user verification)
+### 🟠 Next Phase (After Quick Wins)
+10. ❓ **"About" section** - When content provided
+11. ❓ **GA4 integration** - User visibility
+12. ❓ **Auction room enhancements bundle** - Budgets, view all, etc.
+13. ❓ **Screen size fix** - When screenshot provided
+
+### 🔴 Larger Items (Plan Timing)
+14. ❓ **Auth implementation** - Depends on decision
+15. ❓ **Time-limited pilot access** - 4-6 hrs
+16. ❓ **OneSignal push notifications** - 1-2 days
+17. ❓ **Auto score updates** - 1-2 days
+
+### ✅ Completed
+- ✅ Football scoring rules UI
+- ✅ CL 2025/26 logo integration
+- ✅ Fixture import skip completed matches
+- ✅ Auction carousel order randomization
+- ✅ Dark logo watermark visibility
+- ✅ Help page Stitch standardization
+- ✅ CORS explicit origin configuration
+- ✅ My Competitions performance optimization (6s → <1s)
+- ✅ Auto-reconnection logic (deployed)
+- ✅ Ford Overoad league fix
 
 ---
 
@@ -474,16 +487,17 @@ All logos at 256x256px in `/app/frontend/public/assets/clubs/cricket/`
 
 ---
 
-**Document Version:** 4.4  
-**Last Updated:** February 5, 2026
+**Document Version:** 4.5  
+**Last Updated:** February 6, 2026
 
 ### Change Log
 
 | Version | Date | Changes |
 |---------|------|---------|
-| 4.4 | Feb 5, 2026 | Added pre-pilot readiness items: GA4, PWA install guide, hide dev indicators, Google OAuth; Reorganized for ~200 user charity pilot |
+| 4.5 | Feb 6, 2026 | Major update post team meeting: Added 20 pre-pilot tasks organized by effort/risk; New items include OneSignal, auto-scores, auction enhancements, time-limited access, hide cricket; Added dependencies and decision points |
+| 4.4 | Feb 5, 2026 | Added pre-pilot readiness items: GA4, PWA install guide, hide dev indicators, Google OAuth |
 | 4.3 | Feb 2, 2026 | Added auto-reconnection logic, Ford Overoad league fix, updated optimization audit |
-| 4.2 | Feb 2, 2026 | Added CORS fix, My Competitions optimization (6s→<1s), loading state, toast fix, production incident notes |
+| 4.2 | Feb 2, 2026 | Added CORS fix, My Competitions optimization (6s→<1s), loading state, toast fix |
 | 4.1 | Feb 1, 2026 | Added Session 7 fixes: fixture import filter, carousel shuffle, dark watermarks, Help page standardization |
 | 4.0 | Jan 30, 2026 | Major update: Marked Railway migration complete; Added Stitch redesign completion; Added logo integration; Updated phase to PRE-PILOT; Reorganized priorities |
 | 3.0 | Jan 16, 2026 | Complete reorganization by phase; Added mobile strategy |
