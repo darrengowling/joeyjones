@@ -1,7 +1,7 @@
 # Sport X Platform - Product Requirements Document
 
-**Last Updated:** January 30, 2026  
-**Status:** PRE-PILOT (Railway EU Deployed)
+**Last Updated:** February 6, 2026  
+**Status:** PRE-PILOT (Phase 1 Quick Wins Complete)
 
 ---
 
@@ -21,7 +21,7 @@ Build a fantasy sports auction platform for UK-based users with:
 - **Hosting:** Railway (EU-West) - migrated from Emergent (US)
 - **Database:** MongoDB Atlas (EU region)
 - **Cache:** Redis Cloud
-- **Target:** 400 UK users pilot
+- **Target:** ~200 users charity foundation pilot
 
 ### Tech Stack
 - **Frontend:** React with Stitch dark theme
@@ -41,6 +41,7 @@ Build a fantasy sports auction platform for UK-based users with:
 - [x] Fixture imports and score updates
 - [x] Profile page with username editing
 - [x] Magic link authentication (dev mode)
+- [x] Auto-reconnection database manager (self-healing)
 
 ### UI/UX (Stitch Redesign) ✅
 - [x] Dark theme (#0F172A background)
@@ -48,6 +49,10 @@ Build a fantasy sports auction platform for UK-based users with:
 - [x] Transparent logo backgrounds with conditional backdrop
 - [x] Team type filter (Clubs vs National Teams)
 - [x] Mobile-first responsive design
+- [x] "How to Install" PWA instructions in Help page
+- [x] Optimized auction button layout (2x3 grid)
+- [x] Hidden cricket for football-only pilot
+- [x] Hidden dev indicator in production
 
 ### Team Assets ✅
 - [x] 63 football club teams with logos
@@ -56,32 +61,38 @@ Build a fantasy sports auction platform for UK-based users with:
 - [x] 125 IPL players with roles
 - [x] All teams have Football-Data.org IDs (100% coverage)
 
-### Database ✅
-- [x] Standardized team names (official API format)
-- [x] Merged duplicate entries
-- [x] Preview environment connected to production DB
+### Performance & Reliability ✅
+- [x] My Competitions: 6s → <1s load time
+- [x] DB queries optimized: 30+ → 7 queries
+- [x] Auto-reconnection for DB failures
 
 ---
 
 ## Backlog (Prioritized)
 
-### P0 - Pending User Feedback
-- [ ] Device/Screen responsive audit (waiting for specific feedback)
+### P0 - Must Have for Pilot
+- [ ] Authentication: Google OAuth + Magic Link hardening
+- [ ] OneSignal push notifications
+- [ ] Auto score updates (cron job)
+- [ ] "About" section on homepage (content ready)
 
-### P1 - Needed for Pilot
-- [ ] Authentication hardening (SendGrid for emails)
-- [ ] Remaining WC2026 qualifiers (6 playoff spots)
-- [ ] IPL 2026 fixture import (when schedule released)
+### P1 - Should Have for Pilot
+- [ ] Google Analytics 4 integration
+- [ ] Auction behavior tracking
+- [ ] Auction results archive
+- [ ] Display other users' budgets in auction
+- [ ] Screen size fix (Samsung A56 issue)
+- [ ] MongoDB Atlas → Flex upgrade (backups)
 
-### P2 - Post-Pilot Enhancements
-- [ ] "Pass This Round" auction feature
-- [ ] Dynamic team colors in auction room
+### P2 - Nice to Have
+- [ ] "View All" modal enhancements
+- [ ] Bidding multiples (multi-tap)
+- [ ] Time-limited pilot access
+
+### P3 - Post-Pilot
+- [ ] "Pass This Round" implementation
 - [ ] Manual score entry UI
-- [ ] Auction history tab
 - [ ] Email notifications
-
-### P3 - Future
-- [ ] Payment integration (Stripe)
 - [ ] server.py refactoring
 - [ ] Mobile app (Capacitor wrapper)
 
@@ -95,7 +106,9 @@ Build a fantasy sports auction platform for UK-based users with:
 | `/app/SESSION_CHANGES.md` | Detailed session work log |
 | `/app/AGENT_START_HERE.md` | Quick reference for agents |
 | `/app/frontend/src/utils/teamLogoMapping.js` | Team → logo mapping |
-| `/app/scripts/populate_football_data_ids.py` | Football-Data.org ID script |
+| `/app/frontend/src/components/DebugFooter.js` | Dev indicator (hidden in prod) |
+| `/app/frontend/src/pages/AuctionRoom.js` | Auction room with optimized buttons |
+| `/app/frontend/src/pages/Help.js` | Help page with install instructions |
 
 ---
 
@@ -125,5 +138,5 @@ users            → User accounts
 
 ---
 
-**Document Version:** 2.0  
+**Document Version:** 3.0  
 **Maintained By:** Development Team
