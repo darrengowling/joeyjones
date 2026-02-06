@@ -42,6 +42,7 @@ Build a fantasy sports auction platform for UK-based users with:
 - [x] Profile page with username editing
 - [x] Magic link authentication (dev mode)
 - [x] Auto-reconnection database manager (self-healing)
+- [x] **Auction Reports system** - Auto-generated, admin-only, CSV download
 
 ### UI/UX (Stitch Redesign) ✅
 - [x] Dark theme (#0F172A background)
@@ -53,6 +54,8 @@ Build a fantasy sports auction platform for UK-based users with:
 - [x] Optimized auction button layout (2x3 grid)
 - [x] Hidden cricket for football-only pilot
 - [x] Hidden dev indicator in production
+- [x] **About page** - Separate page with header nav link
+- [x] **Screen size optimization** - Compact auction room for smaller phones
 
 ### Team Assets ✅
 - [x] 63 football club teams with logos
@@ -74,10 +77,10 @@ Build a fantasy sports auction platform for UK-based users with:
 - [ ] Authentication: Google OAuth + Magic Link hardening
 - [ ] OneSignal push notifications
 - [ ] Auto score updates (cron job)
-- [ ] "About" section on homepage (content ready)
 
 ### P1 - Should Have for Pilot
-- [ ] Google Analytics 4 integration
+- [ ] Display other users' budgets in auction room
+- [ ] "View All" modal: show owner + amount paid
 - [ ] Auction behavior tracking
 - [ ] Auction results archive
 - [ ] Display other users' budgets in auction
