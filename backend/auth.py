@@ -113,8 +113,9 @@ async def get_current_user(
     Raises:
         HTTPException: If authentication fails
     """
-    from db_manager import get_database
-    db = await get_database()
+    from db_manager import get_db_manager
+    db_manager = get_db_manager()
+    db = db_manager.db
     
     user_id = None
     email = None
