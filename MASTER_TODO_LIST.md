@@ -461,22 +461,18 @@ All logos at 256x256px in `/app/frontend/public/assets/clubs/cricket/`
 10. ✅ **View & Download** - View details in-app or download as CSV
 
 ### 🟡 User Actions Needed
-7. 🔴 **MongoDB Atlas → Flex** - Critical for backups
-8. ❓ **UptimeRobot setup** - External monitoring
-9. ✅ **Provide "About" content** - Content received & implemented
-10. ✅ **Samsung A56 screenshot** - Issue identified & fixed
-11. ✅ **Auth decision** - Both OAuth + Magic Link
+- 🔴 **MongoDB Atlas → Flex** - Critical for backups
 
-### 🟠 Next Up (Phase 3)
-12. ❓ **GA4 integration** - User visibility
-13. ❓ **Display other users' budgets** - In auction room
-14. ❓ **"View All" modal enhancements** - Show owner + amount paid
-15. ❓ **Auth implementation** - Both OAuth + Magic Link
+### 🟠 Next Up (Remaining Pre-Pilot)
+- ❓ **Display other users' budgets in auction** - 2-3 hrs
+- ❓ **"View All" modal enhancements** - Show owner + amount paid, 2-3 hrs
+- ❓ **OneSignal push notifications** - 1-2 days (must have)
+- ❓ **Auto score updates cron** - 1-2 days (must have)
+- ❓ **Auth (OAuth + Magic Link)** - 1-2 days (deferred for stress testing)
+- ❓ **Time-limited pilot access** - 4-6 hrs (timing TBD with charity)
 
-### 🔴 Larger Items (Phase 4+)
-16. ❓ **Time-limited pilot access** - 4-6 hrs
-17. ❓ **OneSignal push notifications** - 1-2 days (must have)
-18. ❓ **Auto score updates** - 1-2 days (must have)
+### 🔴 Deferred
+- ⏸️ **Google Analytics 4** - Paused, may revisit
 
 ### ✅ Completed
 - ✅ Phase 1 Quick Wins (Feb 6, 2026)
