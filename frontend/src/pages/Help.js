@@ -121,6 +121,46 @@ const Help = () => {
           </div>
         </Section>
 
+        {/* How to Install */}
+        <Section id="install-app" title="Install the App">
+          <div className="space-y-6">
+            <div>
+              <h4 className="text-lg font-semibold text-white mb-3">Add Sport X to Your Home Screen</h4>
+              <p className="text-white/80 mb-3">
+                For the best experience, add Sport X to your phone's home screen. This gives you quick access and a full-screen experience without browser bars.
+              </p>
+              
+              <div className="rounded-lg p-4 mb-4" style={{ background: 'rgba(255,255,255,0.05)' }}>
+                <h5 className="font-semibold text-white mb-2">iPhone (Safari):</h5>
+                <ol className="list-decimal list-inside space-y-2 text-white/80">
+                  <li>Open Sport X in <strong>Safari</strong> (not Chrome)</li>
+                  <li>Tap the <strong>Share</strong> button (square with arrow pointing up)</li>
+                  <li>Scroll down and tap <strong>"Add to Home Screen"</strong></li>
+                  <li>Tap <strong>"Add"</strong> in the top right corner</li>
+                  <li>Sport X will appear on your home screen as an app icon</li>
+                </ol>
+              </div>
+
+              <div className="rounded-lg p-4 mb-4" style={{ background: 'rgba(255,255,255,0.05)' }}>
+                <h5 className="font-semibold text-white mb-2">Android (Chrome):</h5>
+                <ol className="list-decimal list-inside space-y-2 text-white/80">
+                  <li>Open Sport X in <strong>Chrome</strong></li>
+                  <li>Tap the <strong>three dots menu</strong> (top right corner)</li>
+                  <li>Tap <strong>"Add to Home screen"</strong> or <strong>"Install app"</strong></li>
+                  <li>Confirm by tapping <strong>"Add"</strong></li>
+                  <li>Sport X will appear in your app drawer and home screen</li>
+                </ol>
+              </div>
+
+              <div className="rounded-lg p-4" style={{ background: 'rgba(6, 182, 212, 0.1)', border: '1px solid rgba(6, 182, 212, 0.2)' }}>
+                <p className="text-white/80 text-sm">
+                  <strong>Why install?</strong> When you open Sport X from your home screen, it launches in full-screen mode without browser navigation bars, giving you more space for bidding and a smoother experience during live auctions.
+                </p>
+              </div>
+            </div>
+          </div>
+        </Section>
+
         {/* For Commissioners */}
         <Section id="admin-create" title="For Commissioners">
           <div className="space-y-6">
