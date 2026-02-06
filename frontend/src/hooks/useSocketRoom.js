@@ -157,12 +157,16 @@ export function useSocketRoom(roomType, roomId, options = {}) {
     };
   }, [roomType, roomId, options.user]);
 
+  // Memoize the return object to avoid ref access during render
+  const socketInstance = getSocket();
+  
   return {
-    socket: getSocket(),
+    socket: socketInstance,
     connected,
     ready,
-    readyPromise: readyPromiseRef.current,
-    listenerCount: listenerCountRef.current
+    // These are stable refs that don't change after initialization
+    get readyPromise() { return readyPromiseRef.current; },
+    get listenerCount() { return listenerCountRef.current; }
   };
 }
 
