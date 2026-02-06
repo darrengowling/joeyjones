@@ -1402,6 +1402,86 @@ function AuctionRoom() {
         </div>
       )}
 
+      {/* ========== ALL BUDGETS MODAL ========== */}
+      {showBudgetsModal && (
+        <div 
+          className="fixed inset-0 z-50 flex items-end justify-center"
+          style={{ background: 'rgba(0,0,0,0.7)' }}
+          onClick={() => setShowBudgetsModal(false)}
+        >
+          <div 
+            className="w-full max-w-md max-h-[70vh] rounded-t-3xl overflow-hidden"
+            style={{ background: '#0F172A' }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="sticky top-0 px-4 py-4 flex items-center justify-between" style={{ background: '#0F172A', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+              <h3 className="text-lg font-bold text-white">
+                All Budgets
+              </h3>
+              <button 
+                onClick={() => setShowBudgetsModal(false)}
+                className="w-8 h-8 rounded-full flex items-center justify-center"
+                style={{ background: 'rgba(255,255,255,0.1)' }}
+              >
+                <span className="text-white text-xl">×</span>
+              </button>
+            </div>
+            
+            {/* Participants List */}
+            <div className="overflow-y-auto p-4 space-y-2" style={{ maxHeight: 'calc(70vh - 60px)' }}>
+              {participants
+                .sort((a, b) => (b.budgetRemaining || 0) - (a.budgetRemaining || 0))
+                .map((p) => {
+                  const isCurrentUser = user && p.userId === user.id;
+                  const teamsWon = p.clubsWon?.length || 0;
+                  
+                  return (
+                    <div 
+                      key={p.id || p.odbc}
+                      className="flex items-center gap-3 p-3 rounded-xl"
+                      style={{ 
+                        background: isCurrentUser ? 'rgba(6, 182, 212, 0.2)' : 'rgba(255,255,255,0.05)',
+                        border: isCurrentUser ? '2px solid #06B6D4' : '1px solid rgba(255,255,255,0.1)'
+                      }}
+                    >
+                      {/* Avatar */}
+                      <div 
+                        className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0"
+                        style={{ 
+                          background: isCurrentUser ? '#06B6D4' : 'rgba(255,255,255,0.1)',
+                          color: isCurrentUser ? '#0F172A' : 'white'
+                        }}
+                      >
+                        {p.userName?.substring(0, 2).toUpperCase() || '??'}
+                      </div>
+                      
+                      {/* Name & Teams Won */}
+                      <div className="flex-1 min-w-0">
+                        <p className="text-white font-semibold truncate">
+                          {p.userName || 'Unknown User'}
+                          {isCurrentUser && <span className="text-cyan-400 text-xs ml-2">(You)</span>}
+                        </p>
+                        <p className="text-xs text-white/50">
+                          {teamsWon} {teamsWon === 1 ? 'team' : 'teams'} won
+                        </p>
+                      </div>
+                      
+                      {/* Budget */}
+                      <div className="text-right flex-shrink-0">
+                        <p className="text-cyan-400 font-bold">
+                          {formatCurrency(p.budgetRemaining || 0)}
+                        </p>
+                        <p className="text-[10px] text-white/40 uppercase">remaining</p>
+                      </div>
+                    </div>
+                  );
+                })}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* ========== HERO SECTION (Flexible ~40%) ========== */}
       <div className="flex-1 flex flex-col items-center justify-center relative px-4 overflow-hidden">
         
