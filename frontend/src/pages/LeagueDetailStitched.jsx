@@ -951,6 +951,26 @@ export default function LeagueDetailStitched() {
                   </button>
                 )}
 
+                {/* Team Shortfall Warning */}
+                {selectedTeams > 0 && !hasEnoughTeams && (
+                  <div 
+                    className="p-4 rounded-xl flex items-start gap-3"
+                    style={{ 
+                      background: 'rgba(251, 191, 36, 0.1)', 
+                      border: '1px solid rgba(251, 191, 36, 0.3)' 
+                    }}
+                  >
+                    <span className="material-symbols-outlined text-amber-400 flex-shrink-0">warning</span>
+                    <div>
+                      <p className="text-amber-400 font-semibold text-sm">Not enough {uiHints.assetPlural.toLowerCase()}</p>
+                      <p className="text-amber-400/70 text-xs mt-1">
+                        {participants.length} {participants.length === 1 ? 'user' : 'users'} × {league.clubSlots} roster slots = {requiredTeams} {uiHints.assetPlural.toLowerCase()} needed.
+                        {' '}Select {teamShortfall} more to fill all rosters.
+                      </p>
+                    </div>
+                  </div>
+                )}
+
                 {/* Start Auction Button */}
                 <button
                   onClick={startAuction}
