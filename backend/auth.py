@@ -108,11 +108,18 @@ async def get_current_user(
         x_user_id: Legacy user ID from X-User-ID header
     
     Returns:
-        User data dictionary with id, email, role
+        User data dictionary with id, email, role, isAdmin
     
     Raises:
         HTTPException: If authentication fails
     """
+    from db_manager import get_database
+    db = await get_database()
+    
+    user_id = None
+    email = None
+    role = "manager"
+    
     # Try JWT authentication first
     if authorization:
         if not authorization.startswith("Bearer "):
@@ -128,26 +135,29 @@ async def get_current_user(
         if payload.get("type") != "access":
             raise HTTPException(status_code=401, detail="Invalid token type")
         
-        return {
-            "id": payload.get("sub"),
-            "email": payload.get("email"),
-            "role": payload.get("role", "manager")
-        }
+        user_id = payload.get("sub")
+        email = payload.get("email")
+        role = payload.get("role", "manager")
     
     # Fall back to legacy X-User-ID header for backward compatibility
-    if x_user_id:
-        # In pilot mode, accept X-User-ID without full validation
-        # In production, this should query the database
-        return {
-            "id": x_user_id,
-            "email": None,
-            "role": "manager"
-        }
+    elif x_user_id:
+        user_id = x_user_id
     
-    raise HTTPException(
-        status_code=401,
-        detail="Authentication required. Provide Authorization header or X-User-ID"
-    )
+    else:
+        raise HTTPException(
+            status_code=401,
+            detail="Authentication required. Provide Authorization header or X-User-ID"
+        )
+    
+    # Fetch user from database to get isAdmin flag
+    user_data = await db.users.find_one({"id": user_id}, {"_id": 0})
+    
+    return {
+        "id": user_id,
+        "email": email or (user_data.get("email") if user_data else None),
+        "role": role,
+        "isAdmin": user_data.get("isAdmin", False) if user_data else False
+    }
 
 
 async def require_commissioner(
