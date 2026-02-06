@@ -379,6 +379,100 @@ const Profile = () => {
           </div>
         </div>
 
+        {/* Auction Reports Section - Admin Only */}
+        {isAdmin && (
+          <div 
+            className="rounded-xl p-6 mb-6"
+            style={{
+              background: 'rgba(6, 182, 212, 0.05)',
+              border: '1px solid rgba(6, 182, 212, 0.2)'
+            }}
+          >
+            <div className="flex items-center gap-2 mb-4">
+              <span className="material-symbols-outlined text-cyan-400">analytics</span>
+              <h2 className="text-cyan-400 text-xs font-semibold uppercase tracking-wider">
+                Auction Reports
+              </h2>
+            </div>
+            
+            {reports.length === 0 ? (
+              <p className="text-white/40 text-sm">No auction reports yet. Reports are auto-generated when auctions complete.</p>
+            ) : (
+              <div className="space-y-3">
+                {reports.map((report) => (
+                  <div 
+                    key={report.id}
+                    className="rounded-xl p-4"
+                    style={{
+                      background: 'rgba(255, 255, 255, 0.05)',
+                      border: '1px solid rgba(255, 255, 255, 0.1)'
+                    }}
+                  >
+                    <div className="flex justify-between items-start mb-2">
+                      <div>
+                        <h3 className="text-white font-semibold">{report.leagueName}</h3>
+                        <p className="text-white/40 text-xs">{formatDate(report.generatedAt)}</p>
+                      </div>
+                      <span 
+                        className="text-xs px-2 py-1 rounded"
+                        style={{ 
+                          background: report.sportKey === 'football' ? 'rgba(34, 197, 94, 0.2)' : 'rgba(168, 85, 247, 0.2)',
+                          color: report.sportKey === 'football' ? '#22C55E' : '#A855F7'
+                        }}
+                      >
+                        {report.sportKey}
+                      </span>
+                    </div>
+                    
+                    {/* Quick Stats */}
+                    <div className="grid grid-cols-3 gap-2 mb-3 text-center">
+                      <div className="py-2 rounded-lg" style={{ background: 'rgba(255,255,255,0.05)' }}>
+                        <div className="text-white font-bold">{report.summary?.totalParticipants || 0}</div>
+                        <div className="text-white/40 text-xs">Users</div>
+                      </div>
+                      <div className="py-2 rounded-lg" style={{ background: 'rgba(255,255,255,0.05)' }}>
+                        <div className="text-white font-bold">{report.summary?.totalClubsSold || 0}</div>
+                        <div className="text-white/40 text-xs">Sold</div>
+                      </div>
+                      <div className="py-2 rounded-lg" style={{ background: 'rgba(255,255,255,0.05)' }}>
+                        <div className="text-cyan-400 font-bold">{formatCurrency(report.summary?.totalRevenue)}</div>
+                        <div className="text-white/40 text-xs">Revenue</div>
+                      </div>
+                    </div>
+                    
+                    {/* Actions */}
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => loadFullReport(report.id)}
+                        disabled={loadingReports}
+                        className="flex-1 py-2 rounded-lg text-sm font-medium flex items-center justify-center gap-1 transition-all"
+                        style={{ 
+                          background: 'rgba(255, 255, 255, 0.1)',
+                          color: 'white'
+                        }}
+                      >
+                        <span className="material-symbols-outlined text-sm">visibility</span>
+                        View
+                      </button>
+                      <button
+                        onClick={() => downloadReportCSV(report.id, report.leagueName)}
+                        className="flex-1 py-2 rounded-lg text-sm font-medium flex items-center justify-center gap-1 transition-all"
+                        style={{ 
+                          background: '#06B6D4',
+                          color: '#0F172A'
+                        }}
+                      >
+                        <span className="material-symbols-outlined text-sm">download</span>
+                        CSV
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
         {/* Logout Button */}
         <button
           onClick={handleLogout}
