@@ -460,6 +460,12 @@ All logos at 256x256px in `/app/frontend/public/assets/clubs/cricket/`
 9. ✅ **Profile page integration** - "Auction Reports" section in Profile
 10. ✅ **View & Download** - View details in-app or download as CSV
 
+### ✅ Completed: Code Cleanup (Technical Debt)
+11. ✅ **Python lint fixes** - All server.py and utility script warnings resolved
+12. ✅ **JavaScript ESLint fixes** - 97+ errors fixed across Help.js, ErrorBoundary.js, CreateLeague.js, useSocketRoom.js, Shadcn UI components
+13. ✅ **Component refactoring** - Section component moved outside Help.js to prevent re-creation
+14. ✅ **Added critical rule** - "DO NOT LEAVE WARNINGS UNATTENDED" added to AGENT_START_HERE.md
+
 ### 🟡 User Actions Needed
 - 🔴 **MongoDB Atlas → Flex** - Critical for backups
 
