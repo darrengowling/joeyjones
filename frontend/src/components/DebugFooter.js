@@ -1,6 +1,7 @@
 /**
  * Debug Footer Badge
- * Shows build info for quick sanity checks in development and production
+ * Shows build info for quick sanity checks in development ONLY
+ * Hidden in production to keep the UI clean for end users
  */
 import { useState } from 'react';
 
@@ -11,6 +12,11 @@ const DebugFooter = () => {
   const socketPath = '/api/socket.io';
   const buildHash = process.env.REACT_APP_BUILD_HASH || 'dev';
   const nodeEnv = process.env.NODE_ENV || 'development';
+
+  // Hide debug footer in production
+  if (nodeEnv === 'production') {
+    return null;
+  }
 
   return (
     <div
