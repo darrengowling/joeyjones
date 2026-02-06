@@ -10,7 +10,6 @@ const FEATURE_ASSET_SELECTION = process.env.REACT_APP_FEATURE_ASSET_SELECTION ==
 
 export default function CreateLeague() {
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
   const [sports, setSports] = useState([]);
   const [availableAssets, setAvailableAssets] = useState([]);
   const [teamMode, setTeamMode] = useState("all"); // "all" or "select"
