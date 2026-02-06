@@ -497,15 +497,16 @@ All logos at 256x256px in `/app/frontend/public/assets/clubs/cricket/`
 
 ---
 
-**Document Version:** 4.6  
+**Document Version:** 4.7  
 **Last Updated:** February 6, 2026
 
 ### Change Log
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 4.7 | Feb 6, 2026 | Phase 2 progress: Added "About Sport X" section to homepage, Screen size optimization for auction room (compact layout, 100dvh, reduced padding) |
 | 4.6 | Feb 6, 2026 | Phase 1 Quick Wins complete: Hide FE indicator, hide cricket, auction button layout, install help section |
-| 4.5 | Feb 6, 2026 | Major update post team meeting: Added 20 pre-pilot tasks organized by effort/risk; New items include OneSignal, auto-scores, auction enhancements, time-limited access, hide cricket; Added dependencies and decision points |
+| 4.5 | Feb 6, 2026 | Major update post team meeting: Added 20 pre-pilot tasks organized by effort/risk |
 | 4.4 | Feb 5, 2026 | Added pre-pilot readiness items: GA4, PWA install guide, hide dev indicators, Google OAuth |
 | 4.3 | Feb 2, 2026 | Added auto-reconnection logic, Ford Overoad league fix, updated optimization audit |
 | 4.2 | Feb 2, 2026 | Added CORS fix, My Competitions optimization (6s→<1s), loading state, toast fix |
