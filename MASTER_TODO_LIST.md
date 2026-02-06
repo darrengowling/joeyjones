@@ -506,13 +506,14 @@ All logos at 256x256px in `/app/frontend/public/assets/clubs/cricket/`
 
 ---
 
-**Document Version:** 4.8  
+**Document Version:** 4.9  
 **Last Updated:** February 6, 2026
 
 ### Change Log
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 4.9 | Feb 6, 2026 | Auction Room Enhancements: "All Budgets" modal (click avatars), "View All" modal shows owner + price paid |
 | 4.8 | Feb 6, 2026 | Added Auction Reports system: auto-generation on completion, admin-only API endpoints, Profile page UI with view/download |
 | 4.7 | Feb 6, 2026 | Phase 2: "About" page (separate page with header link), screen size optimization |
 | 4.6 | Feb 6, 2026 | Phase 1 Quick Wins: Hide FE indicator, hide cricket, auction button layout, install help |
