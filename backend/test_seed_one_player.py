@@ -54,7 +54,7 @@ async def test_seed_one_player():
         print(f"  fopifa1 createdAt type: {type(fopifa1_player['createdAt'])}")
         print(f"  TEST player createdAt type: {type(retrieved['createdAt'])}")
         
-        if type(fopifa1_player['createdAt']) == type(retrieved['createdAt']):
+        if isinstance(fopifa1_player['createdAt'], type(retrieved['createdAt'])):
             print("  ✅ Types MATCH!")
         else:
             print("  ❌ Types DO NOT MATCH!")
@@ -66,7 +66,7 @@ async def test_seed_one_player():
     client.close()
     
     # Return result
-    if type(retrieved['createdAt']) == str:
+    if isinstance(retrieved['createdAt'], str):
         print("\n✅ SUCCESS: Datetime stored as string (correct format)")
         return True
     else:
