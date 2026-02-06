@@ -114,88 +114,150 @@ All logos at 256x256px in `/app/frontend/public/assets/clubs/cricket/`
 
 *Tasks to complete before ~200 user charity foundation pilot*
 
-### 🚨 Critical - Must Have for Pilot
+---
 
-| # | Task | Effort | Status | Owner | Notes |
-|---|------|--------|--------|-------|-------|
-| 1 | **MongoDB Atlas → Flex upgrade** | 30 min | ❓ Pending | User | Critical for backups - Free tier has none |
-| 2 | **Authentication hardening** | 1 day | ⏸️ Deferred | Agent | Waiting for SendGrid setup |
-| 3 | **Google OAuth implementation** | 4-6 hrs | ❓ Pending | Agent | Alternative/complement to magic links |
-| 4 | ~~Sentry monitoring~~ | 30 min | ✅ Done | - | Jan 17 - DSN configured |
-| 5 | **Hide dev indicators** | 15 min | ❓ Pending | Agent | "FE" badge visible in production |
-| 6 | **Verify all core flows** | 2 hrs | 🔄 Ongoing | User | User testing in progress |
+### 🟢 QUICK WINS (< 2 hours, Low Risk)
 
-### 📊 Analytics & Monitoring
-
-| # | Task | Effort | Status | Notes |
-|---|------|--------|--------|-------|
-| 1 | **Google Analytics 4 integration** | 2-3 hrs | ❓ Pending | Basic user journey visibility |
-| 2 | **Custom event tracking** | 2-4 hrs | ❓ Pending | Auction completed, bids placed, etc. (optional) |
-| 3 | **UptimeRobot on /api/health** | 15 min | ❓ Pending | User action - external monitoring |
-
-### 📱 PWA & User Onboarding
-
-| # | Task | Effort | Status | Notes |
-|---|------|--------|--------|-------|
-| 1 | **"How to Install" Help section** | 30 min | ❓ Pending | Add instructions to Help page |
-| 2 | **Install guide PDF** | Manual | ❓ Pending | Charity partner can distribute to users |
-| 3 | **PWA manifest.json (optional)** | 1-2 hrs | ⏸️ Not urgent | Current "Add to Home Screen" works |
-
-### 📝 Content & Documentation
-
-| # | Task | Effort | Status | Notes |
-|---|------|--------|--------|-------|
-| 1 | **Pre-pilot content review** | TBD | ❓ Pending | To be defined after team meeting |
-| 2 | **Update Operations Playbook** | 1 hr | ❓ Pending | Update for Railway |
-
-### 🔐 Authentication Hardening (Deferred)
-
-**Current State:** Magic-link returns token in response (dev mode)  
-**Required State:** Real email delivery + production security  
-**Blocked on:** SendGrid/Resend account setup
-
-When ready, implement all at once:
-1. Email delivery (SendGrid/Resend)
-2. Remove dev token exposure from response
-3. Rate limiting on auth (3/hour/email)
-4. Single-use token enforcement
-5. Test full flow end-to-end
-6. **Google OAuth as alternative** (simpler for users, no email delivery needed)
-
-**Estimated effort:** 1-2 days (including OAuth)
+| # | Task | Effort | Risk | Owner | Notes |
+|---|------|--------|------|-------|-------|
+| 1 | **Hide "FE" dev indicator** | 15 min | Low | Agent | Visible in production screenshots |
+| 2 | **Hide cricket for pilot** | 30 min | Low | Agent | Football only - simplify pilot scope |
+| 3 | **"How to Install" Help section** | 30 min | Low | Agent | PWA install instructions |
+| 4 | **Auction button layout optimization** | 1 hr | Low | Agent | 2 rows same-size buttons (Pass/+20m/+50m same as +1/+5/+10) to free space |
+| 5 | **UptimeRobot on /api/health** | 15 min | Low | User | External uptime monitoring |
+| 6 | **Install guide PDF** | 1 hr | Low | User | Charity partner distributes to users |
 
 ---
 
-### High Priority - Should Have
+### 🟡 MEDIUM EFFORT (2-6 hours, Low-Medium Risk)
 
-| # | Task | Effort | Status | Benefit |
-|---|------|--------|--------|---------|
-| 1 | DB Call Caching | 2 hrs | ⏸️ Reverted | Attempted Jan 16 - bug found |
-| 2 | Commissioner auth checks | 1 hr | ❓ Pending | Security |
-| 3 | Frontend performance audit | 2 days | ❓ Pending | React.memo, debounce |
-
-### Device/Screen Responsive Audit ⏸️ PAUSED
-
-**Status:** Initial audit completed Jan 29. Paused pending user feedback.
-
-| Setting | Value |
-|---------|-------|
-| Primary viewport | 360-448px (mobile-first) |
-| Design approach | Mobile-first; desktop shows centered layout |
-
-**Next steps:** Gather specific user feedback (device + screenshot + issue)
+| # | Task | Effort | Risk | Owner | Notes |
+|---|------|--------|------|-------|-------|
+| 7 | **"About" section on homepage** | 2-3 hrs | Low | Agent | Sport X philosophy & gameplay - user to provide content |
+| 8 | **Google Analytics 4 integration** | 2-3 hrs | Low | Agent | Basic user journey visibility |
+| 9 | **Auction behavior tracking** | 2-4 hrs | Low | Agent | Log bid patterns, timing, amounts to DB |
+| 10 | **Auction results archive** | 3-4 hrs | Low | Agent | Which team, how much paid, winner - persistent record |
+| 11 | **Display other users' budgets in auction** | 2-3 hrs | Low | Agent | Show remaining budget for all participants |
+| 12 | **"View All" modal enhancements** | 2-3 hrs | Low | Agent | Show who owns each team + amount paid |
+| 13 | **Bidding multiples (multi-tap)** | 3-4 hrs | Med | Agent | Allow stacking +£50m taps for £100m/£150m bids |
+| 14 | **MongoDB Atlas → Flex upgrade** | 30 min | Low | User | Critical for backups - Free tier has none |
 
 ---
 
-### UI/UX Bugs
+### 🟠 HIGHER EFFORT (1-2 days, Medium Risk)
+
+| # | Task | Effort | Risk | Owner | Notes |
+|---|------|--------|------|-------|-------|
+| 15 | **Screen size optimization (Samsung A56)** | 1 day | Med | Agent | Bidding interface obscured on some devices |
+| 16 | **Google OAuth implementation** | 4-6 hrs | Med | Agent | Simpler auth for users, no email delivery needed |
+| 17 | **Magic link email hardening** | 1 day | Med | Agent | SendGrid integration, rate limiting, single-use tokens |
+| 18 | **Time-limited pilot access** | 4-6 hrs | Med | Agent | 2-week access window for controlled pilot |
+
+---
+
+### 🔴 SIGNIFICANT EFFORT (2+ days, Higher Risk/Complexity)
+
+| # | Task | Effort | Risk | Owner | Notes |
+|---|------|--------|------|-------|-------|
+| 19 | **OneSignal push notifications** | 1-2 days | Med | Agent | Score updates, upcoming fixtures - requires integration |
+| 20 | **Auto score updates (cron job)** | 1-2 days | Med | Agent | Background task to fetch/update scores automatically |
+
+---
+
+### 📋 TASK DEPENDENCIES & GROUPINGS
+
+**Authentication (choose path):**
+- Option A: Google OAuth only (simpler, 4-6 hrs)
+- Option B: Magic link hardening (needs SendGrid, 1 day)
+- Option C: Both (1.5-2 days)
+
+**Auction Room Enhancements (can bundle):**
+- Button layout optimization (#4)
+- Display other users' budgets (#11)
+- "View All" modal enhancements (#12)
+- Bidding multiples (#13)
+- *Total if bundled: ~1 day*
+
+**Analytics & Tracking (can bundle):**
+- GA4 integration (#8)
+- Auction behavior tracking (#9)
+- Auction results archive (#10)
+- *Total if bundled: ~1 day*
+
+**Pilot Controls:**
+- Hide cricket (#2)
+- Time-limited access (#18)
+- *Related: keep pilot scope tight*
+
+---
+
+### ❓ QUESTIONS / DECISIONS NEEDED
+
+| # | Question | Options | Impact |
+|---|----------|---------|--------|
+| 1 | **Auth approach?** | OAuth only / Magic link only / Both | Determines 4-6 hrs vs 1-2 days |
+| 2 | **Push notifications priority?** | Must-have / Nice-to-have / Post-pilot | OneSignal is 1-2 days effort |
+| 3 | **Auto score updates priority?** | Must-have / Nice-to-have / Post-pilot | Backend cron job, 1-2 days |
+| 4 | **Time-limited access mechanism?** | Invite codes expire / Account expiry / Manual cutoff | Complexity varies |
+| 5 | **"About" content ready?** | User to provide | Blocks task #7 |
+
+---
+
+### 🔐 Authentication Options Detail
+
+**Current State:** Magic-link returns token in response (dev mode - insecure)
+
+**Option A: Google OAuth Only**
+- Effort: 4-6 hours
+- Pros: No email delivery needed, familiar UX, secure
+- Cons: Requires Google account
+
+**Option B: Magic Link Hardening**
+- Effort: 1 day
+- Requires: SendGrid/Resend account setup
+- Includes: Real email delivery, rate limiting (3/hr), single-use tokens
+
+**Option C: Both**
+- Effort: 1.5-2 days
+- Pros: Maximum flexibility for users
+- Cons: More to maintain
+
+---
+
+### 📱 Screen Size Issue Detail
+
+**Problem:** Samsung A56 (and potentially other devices) has main bidding interface obscured when placing bids.
+
+**Potential causes:**
+- Virtual keyboard pushing content
+- Fixed positioning conflicts
+- Viewport height calculation issues
+
+**Investigation needed:**
+- Get exact screen dimensions for A56
+- Screenshot of the issue
+- Test on similar viewport sizes
+
+---
+
+### 🏷️ STATUS KEY
+
+| Symbol | Meaning |
+|--------|---------|
+| ❓ | Pending - not started |
+| 🔄 | In progress |
+| ⏸️ | Paused/blocked |
+| ✅ | Complete |
+
+---
+
+### UI/UX Bugs (Existing)
 
 | Issue ID | Page | Summary | Status | Notes |
 |----------|------|---------|--------|-------|
-| UI-001 | CompetitionDashboard | Tab height/centering on mobile | 🔴 BLOCKED | Multiple fix attempts failed. Suspected caching issue. |
-| UI-002 | TeamCrest | Shield-shaped logos overflow circular container | 🟡 PARTIAL | Soft white backdrop works for most. Fulham/Bournemouth overflow. |
-
-**UI-001:** Do not attempt further fixes until user provides specific reproduction steps.  
-**UI-002:** Paused per user request ("wasting too much time on this!")
+| UI-001 | CompetitionDashboard | Tab height/centering on mobile | 🔴 BLOCKED | Multiple fix attempts failed |
+| UI-002 | TeamCrest | Shield logos overflow circular container | 🟡 PARTIAL | Paused per user request |
+| UI-003 | AuctionRoom | Bidding interface obscured on Samsung A56 | ❓ NEW | Needs investigation |
 
 ---
 
