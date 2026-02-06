@@ -159,8 +159,17 @@ All logos at 256x256px in `/app/frontend/public/assets/clubs/cricket/`
 
 | # | Task | Effort | Risk | Owner | Notes |
 |---|------|--------|------|-------|-------|
-| 19 | **OneSignal push notifications** | 1-2 days | Med | Agent | Score updates, upcoming fixtures - requires integration |
+| 19 | **User Notifications** | 4-6 hrs (email) / 1-2 days (push) | Low-Med | Agent | ⏸️ DECISION PENDING - See options below |
 | 20 | **Auto score updates (cron job)** | 1-2 days | Med | Agent | Background task to fetch/update scores automatically |
+
+**Notification Options (Decision Pending):**
+| Option | Effort | Risk | Pros | Cons |
+|--------|--------|------|------|------|
+| **A: Email first** | 4-6 hrs | 🟢 Low | Zero auction risk, rich content (full digests), 100% reach, simpler | Not instant |
+| **B: Push (OneSignal)** | 1-2 days | 🟡 Med | Instant, slicker UX | Service worker complexity, iOS limitations, permission required |
+| **C: Both** | 2-3 days | 🟡 Med | Best of both worlds | More to maintain |
+
+*Team discussing - leaning towards email-first for pilot safety*
 
 ---
 
