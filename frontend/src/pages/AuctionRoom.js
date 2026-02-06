@@ -1222,13 +1222,14 @@ function AuctionRoom() {
   const userBudgetRemaining = currentUserParticipant?.budgetRemaining || 0;
 
   return (
-    <div className="h-screen flex flex-col overflow-hidden" style={{ background: '#0F172A' }}>
+    <div className="h-[100dvh] flex flex-col overflow-hidden" style={{ background: '#0F172A' }}>
       
-      {/* ========== STICKY HEADER (84px per Stitch spec) ========== */}
+      {/* ========== STICKY HEADER (Compact for small screens) ========== */}
       <header 
         className="flex-shrink-0 px-4 flex items-center justify-between"
         style={{ 
-          height: '84px',
+          height: '64px',
+          minHeight: '64px',
           background: 'rgba(15, 23, 42, 0.8)',
           backdropFilter: 'blur(12px)',
           WebkitBackdropFilter: 'blur(12px)',
