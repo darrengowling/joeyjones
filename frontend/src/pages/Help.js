@@ -463,7 +463,7 @@ const Help = () => {
 
               <div className="rounded-lg p-4" style={{ background: 'rgba(6, 182, 212, 0.1)', border: '1px solid rgba(6, 182, 212, 0.2)' }}>
                 <p className="text-white/80 text-sm">
-                  <strong>Access Dashboard:</strong> Click on any competition from "My Competitions" to view its live dashboard and track your performance.
+                  <strong>Access Dashboard:</strong> Click on any competition from &quot;My Competitions&quot; to view its live dashboard and track your performance.
                 </p>
               </div>
             </div>
