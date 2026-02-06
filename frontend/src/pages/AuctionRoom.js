@@ -1365,7 +1365,7 @@ function AuctionRoom() {
                       )}
                       <p className="text-xs text-white/50">
                         {isCurrent ? 'Currently on the block' : 
-                         isSold ? `Won by ${club.winner}` : 
+                         isSold ? `Won by ${club.winner} for ${formatCurrency(club.winningBid)}` : 
                          isUnsold ? 'Went unsold' :
                          inQueue ? 'In auction' : 
                          'Not in queue'}
