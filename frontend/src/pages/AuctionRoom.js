@@ -1633,11 +1633,12 @@ function AuctionRoom() {
         <div className="flex items-center justify-between mb-3">
           <button 
             type="button"
+            data-testid="avatar-list-budgets-btn"
             onClick={() => {
               console.log('🔵 Avatar list clicked - opening budgets modal');
               setShowBudgetsModal(true);
             }}
-            className="flex items-center gap-2 overflow-x-auto flex-1 mr-2"
+            className="flex items-center gap-2 overflow-x-auto flex-1 mr-2 hover:opacity-80 active:opacity-60 cursor-pointer"
             style={{ scrollbarWidth: 'none' }}
           >
             {participants.slice(0, 6).map((p) => {
