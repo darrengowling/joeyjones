@@ -95,10 +95,10 @@ const Help = () => {
               <div className="rounded-lg p-4 mb-4" style={{ background: 'rgba(255,255,255,0.05)' }}>
                 <h5 className="font-semibold text-white mb-2">Step-by-Step Sign In:</h5>
                 <ol className="list-decimal list-inside space-y-2 text-white/80">
-                  <li>Click <strong>"Sign In"</strong> on the homepage</li>
+                  <li>Click <strong>&quot;Sign In&quot;</strong> on the homepage</li>
                   <li>Enter your <strong>email address</strong> and optionally your name</li>
-                  <li>Click <strong>"Continue"</strong> to generate your magic link token</li>
-                  <li>You'll receive a <strong>6-digit token</strong> displayed on screen</li>
+                  <li>Click <strong>&quot;Continue&quot;</strong> to generate your magic link token</li>
+                  <li>You&apos;ll receive a <strong>6-digit token</strong> displayed on screen</li>
                   <li>Enter this token in the next step to complete sign in</li>
                   <li>Your session will be securely maintained for easy access</li>
                 </ol>
@@ -106,7 +106,7 @@ const Help = () => {
 
               <div className="rounded-lg p-4" style={{ background: 'rgba(6, 182, 212, 0.1)', border: '1px solid rgba(6, 182, 212, 0.2)' }}>
                 <p className="text-white/80 text-sm">
-                  <strong>Note:</strong> In production, the magic link token would be sent to your email. For the pilot, it's displayed on screen for convenience.
+                  <strong>Note:</strong> In production, the magic link token would be sent to your email. For the pilot, it&apos;s displayed on screen for convenience.
                 </p>
               </div>
             </div>
