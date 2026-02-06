@@ -447,23 +447,24 @@ All logos at 256x256px in `/app/frontend/public/assets/clubs/cricket/`
 ### 🟡 User Actions Needed
 5. 🔴 **MongoDB Atlas → Flex** - Critical for backups
 6. ❓ **UptimeRobot setup** - External monitoring
-7. ❓ **Provide "About" content** - Blocks homepage section
-8. ❓ **Samsung A56 screenshot** - Need to see the issue
-9. ❓ **Auth decision** - OAuth only? Magic link? Both?
+7. ✅ **Provide "About" content** - Content received!
+8. ✅ **Samsung A56 screenshot** - Screenshot received!
+9. ✅ **Auth decision** - Both OAuth + Magic Link
 
-### 🟠 Next Phase (After Quick Wins)
-10. ❓ **"About" section** - When content provided
+### 🟠 Next Phase (Phase 2)
+10. ❓ **"About" section on homepage** - Content ready to implement
 11. ❓ **GA4 integration** - User visibility
 12. ❓ **Auction room enhancements bundle** - Budgets, view all, etc.
-13. ❓ **Screen size fix** - When screenshot provided
+13. ❓ **Screen size fix** - Samsung A56 issue identified
 
-### 🔴 Larger Items (Plan Timing)
-14. ❓ **Auth implementation** - Depends on decision
+### 🔴 Larger Items (Phase 3+)
+14. ❓ **Auth implementation** - Both OAuth + Magic Link
 15. ❓ **Time-limited pilot access** - 4-6 hrs
-16. ❓ **OneSignal push notifications** - 1-2 days
-17. ❓ **Auto score updates** - 1-2 days
+16. ❓ **OneSignal push notifications** - 1-2 days (must have)
+17. ❓ **Auto score updates** - 1-2 days (must have)
 
 ### ✅ Completed
+- ✅ Phase 1 Quick Wins (Feb 6, 2026)
 - ✅ Football scoring rules UI
 - ✅ CL 2025/26 logo integration
 - ✅ Fixture import skip completed matches
@@ -487,13 +488,14 @@ All logos at 256x256px in `/app/frontend/public/assets/clubs/cricket/`
 
 ---
 
-**Document Version:** 4.5  
+**Document Version:** 4.6  
 **Last Updated:** February 6, 2026
 
 ### Change Log
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 4.6 | Feb 6, 2026 | Phase 1 Quick Wins complete: Hide FE indicator, hide cricket, auction button layout, install help section |
 | 4.5 | Feb 6, 2026 | Major update post team meeting: Added 20 pre-pilot tasks organized by effort/risk; New items include OneSignal, auto-scores, auction enhancements, time-limited access, hide cricket; Added dependencies and decision points |
 | 4.4 | Feb 5, 2026 | Added pre-pilot readiness items: GA4, PWA install guide, hide dev indicators, Google OAuth |
 | 4.3 | Feb 2, 2026 | Added auto-reconnection logic, Ford Overoad league fix, updated optimization audit |
