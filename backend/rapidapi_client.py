@@ -281,7 +281,7 @@ class RapidAPICricketClient:
                 series_match_list = series.get("seriesAdWrapper", {}).get("matches", [])
                 for match in series_match_list:
                     match_info = match.get("matchInfo", {})
-                    match_score = match.get("matchScore", {})
+                    # match_score available at match.get("matchScore", {}) if needed
                     
                     matches.append({
                         "matchId": match_info.get("matchId"),
