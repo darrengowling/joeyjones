@@ -447,7 +447,7 @@ const Help = () => {
             <div>
               <h4 className="text-lg font-semibold text-white mb-3">Competition Dashboard</h4>
               <p className="text-white/80 mb-3">
-                After the auction, track your teams' performance and standings in real-time.
+                After the auction, track your teams&apos; performance and standings in real-time.
               </p>
               
               <div className="rounded-lg p-4 mb-4" style={{ background: 'rgba(255,255,255,0.05)' }}>
