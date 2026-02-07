@@ -1621,14 +1621,12 @@ function AuctionRoom() {
 
       {/* ========== CONTROL PANEL (Sticky Bottom - Compact for small screens) ========== */}
       <div 
-        className="flex-shrink-0 px-3 py-3"
+        className="flex-shrink-0 px-3 py-3 pb-16"
         style={{ 
           background: 'rgba(15, 23, 42, 0.95)',
           backdropFilter: 'blur(12px)',
           WebkitBackdropFilter: 'blur(12px)',
-          borderTop: '1px solid rgba(255,255,255,0.1)',
-          position: 'relative',
-          zIndex: 9999
+          borderTop: '1px solid rgba(255,255,255,0.1)'
         }}
       >
         {/* Active Managers Row - Compact & Tappable */}
