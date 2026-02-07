@@ -1621,7 +1621,7 @@ function AuctionRoom() {
 
       {/* ========== CONTROL PANEL (Sticky Bottom - Compact for small screens) ========== */}
       <div 
-        className="flex-shrink-0 px-3 py-3 pb-16"
+        className="flex-shrink-0 px-3 py-3"
         style={{ 
           background: 'rgba(15, 23, 42, 0.95)',
           backdropFilter: 'blur(12px)',
