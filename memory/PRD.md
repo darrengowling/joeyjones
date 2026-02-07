@@ -25,14 +25,13 @@ Build a fantasy sports auction platform for UK-based users with:
 
 ### Database Configuration (CRITICAL)
 ```
-MONGO_URL: mongodb+srv://darts_admin:***@cluster0.edjfwnl.mongodb.net/
-DB_NAME: sport_x_poc
+MongoDB Cluster: Cluster0
+Database Name: sport_x_poc
 
-Preview (Emergent) → sport_x_poc (SAME as production)
-Production (Railway) → sport_x_poc (SAME as preview)
+Preview (Emergent)  → Cluster0 / sport_x_poc
+Production (Railway) → Cluster0 / sport_x_poc (SAME)
 ```
-
-**Both environments share the same database intentionally.**
+**Both environments share the same database intentionally** - changes in preview are available in production after deploy.
 
 ### Tech Stack
 - **Frontend:** React with Stitch dark theme
