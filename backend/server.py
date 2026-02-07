@@ -5862,9 +5862,18 @@ async def generate_auction_report(auction_id: str):
                     max_bid = max(b.get("amount", 0) for b in club_bids)
                     total_spent += max_bid
             
+            # Get user name with fallbacks: displayName → userName → email prefix → Unknown
+            user_display_name = (
+                user.get("displayName") or 
+                user.get("userName") or 
+                participant.get("userName") or
+                (user.get("email", "").split("@")[0] if user.get("email") else None) or
+                "Unknown"
+            )
+            
             user_summary = {
                 "userId": user_id,
-                "userName": user.get("displayName", participant.get("userName", "Unknown")),
+                "userName": user_display_name,
                 "teamsWon": len(clubs_won),
                 "teamsWonNames": [clubs_map.get(cid, {}).get("name", "Unknown") for cid in clubs_won],
                 "totalBidsPlaced": len(user_bids),
