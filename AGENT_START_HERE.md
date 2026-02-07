@@ -51,7 +51,50 @@
 
 ---
 
-## 🗄️ Database Quick Reference
+## 🗄️ DATABASE CONFIGURATION (CRITICAL - READ CAREFULLY)
+
+### ⚠️ STOP! Before running ANY database query:
+
+**Preview AND Production use the SAME database:**
+```
+MONGO_URL: mongodb+srv://darts_admin:***@cluster0.edjfwnl.mongodb.net/
+DB_NAME: sport_x_poc
+```
+
+| Environment | Database Name | Notes |
+|-------------|---------------|-------|
+| Preview (Emergent) | `sport_x_poc` | SAME as production |
+| Production (Railway) | `sport_x_poc` | SAME as preview |
+
+**This is intentional** - Changes in preview are reflected in production after deploy.
+
+### 🔴 How to Query the Database Correctly
+
+**WRONG (will fail silently or return empty):**
+```python
+import os
+client = AsyncIOMotorClient(os.environ.get('MONGO_URL'))  # ❌ env vars not loaded
+```
+
+**CORRECT (always works):**
+```python
+# Load env vars explicitly
+MONGO_URL = "mongodb+srv://darts_admin:Anniepip1315@cluster0.edjfwnl.mongodb.net/?appName=Cluster0"
+DB_NAME = "sport_x_poc"
+
+client = AsyncIOMotorClient(MONGO_URL)
+db = client[DB_NAME]
+
+# Now query
+leagues = await db.leagues.find({}).to_list(100)
+```
+
+**Or use bash to source .env first:**
+```bash
+source /app/backend/.env && python3 -c "..."
+```
+
+### 📊 Database Collections Quick Reference
 
 ```
 assets           → Teams (football) and Players (cricket)
@@ -62,9 +105,10 @@ leagues          → Competition settings
 league_participants → User budgets, rosters (clubsWon array)
 league_points    → Team/player scores (NOT in league_participants)
 auctions         → Active auction state
+auction_reports  → Auto-generated reports when auctions complete
 bids             → Bid history
 fixtures         → Match data (status must be "ft" for scoring)
-users            → User accounts
+users            → User accounts (isAdmin flag for admin users)
 magic_links      → Auth tokens
 ```
 
