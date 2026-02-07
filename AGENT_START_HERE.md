@@ -159,6 +159,7 @@ magic_links      → Auth tokens
 4. **DON'T assume broken** - If something looks wrong, verify with user first
 5. **DON'T save to GitHub** - Until user explicitly approves (triggers Railway auto-deploy)
 6. **🚨 DO NOT LEAVE WARNINGS AND ERRORS UNATTENDED** - Even if they do not relate to your code. Fix ALL lint errors, deprecation warnings, and code issues immediately. Leaving them creates technical debt, hides new bugs, and can cause build failures. This is a RULE, not a suggestion.
+7. **🚨 DATABASE QUERIES - NEVER USE os.environ.get() WITHOUT EXPLICIT ENV LOADING** - Environment variables are NOT automatically loaded in Python scripts. Either hardcode the connection string or source /app/backend/.env first. Silent failures waste hours of debugging time. See "DATABASE CONFIGURATION" section above.
 
 ---
 
