@@ -5873,6 +5873,12 @@ async def generate_auction_report(auction_id: str):
         if isinstance(completed_at, str):
             completed_at = datetime.fromisoformat(completed_at.replace('Z', '+00:00'))
         
+        # Ensure both timestamps are timezone-aware for comparison
+        if started_at and started_at.tzinfo is None:
+            started_at = started_at.replace(tzinfo=timezone.utc)
+        if completed_at and completed_at.tzinfo is None:
+            completed_at = completed_at.replace(tzinfo=timezone.utc)
+        
         duration_seconds = None
         if started_at and completed_at:
             duration_seconds = (completed_at - started_at).total_seconds()
