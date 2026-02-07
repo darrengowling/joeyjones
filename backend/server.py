@@ -5867,17 +5867,20 @@ async def generate_auction_report(auction_id: str):
         started_at = auction.get("startedAt") or auction.get("createdAt")
         completed_at = auction.get("completedAt")
         
-        # Parse timestamps if they're strings
-        if isinstance(started_at, str):
-            started_at = datetime.fromisoformat(started_at.replace('Z', '+00:00'))
-        if isinstance(completed_at, str):
-            completed_at = datetime.fromisoformat(completed_at.replace('Z', '+00:00'))
+        # Helper to parse timestamps (handles strings and datetime objects)
+        def parse_timestamp(val):
+            if val is None:
+                return None
+            if isinstance(val, str):
+                return datetime.fromisoformat(val.replace('Z', '+00:00'))
+            if isinstance(val, datetime):
+                if val.tzinfo is None:
+                    return val.replace(tzinfo=timezone.utc)
+                return val
+            return None
         
-        # Ensure both timestamps are timezone-aware for comparison
-        if started_at and started_at.tzinfo is None:
-            started_at = started_at.replace(tzinfo=timezone.utc)
-        if completed_at and completed_at.tzinfo is None:
-            completed_at = completed_at.replace(tzinfo=timezone.utc)
+        started_at = parse_timestamp(started_at)
+        completed_at = parse_timestamp(completed_at)
         
         duration_seconds = None
         if started_at and completed_at:
