@@ -5823,6 +5823,17 @@ async def generate_auction_report(auction_id: str):
             # Find winning bid (highest amount for this club)
             winning_bid = max(club_bids, key=lambda x: x.get("amount", 0)) if club_bids else None
             
+            # Get winner name with fallbacks: displayName → userName → email prefix → Unknown
+            winner_name = None
+            if winning_bid:
+                winner_user = users_map.get(winning_bid.get("userId"), {})
+                winner_name = (
+                    winner_user.get("displayName") or 
+                    winner_user.get("userName") or 
+                    (winner_user.get("email", "").split("@")[0] if winner_user.get("email") else None) or
+                    "Unknown"
+                )
+            
             lot_data = {
                 "queuePosition": idx + 1,
                 "clubId": club_id,
@@ -5830,7 +5841,7 @@ async def generate_auction_report(auction_id: str):
                 "totalBids": len(club_bids),
                 "winningBid": winning_bid.get("amount", 0) if winning_bid else 0,
                 "winnerId": winning_bid.get("userId") if winning_bid else None,
-                "winnerName": users_map.get(winning_bid.get("userId"), {}).get("displayName", "Unknown") if winning_bid else None,
+                "winnerName": winner_name,
                 "sold": winning_bid is not None and winning_bid.get("amount", 0) > 0
             }
             lots_breakdown.append(lot_data)
