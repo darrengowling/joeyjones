@@ -1626,7 +1626,9 @@ function AuctionRoom() {
           background: 'rgba(15, 23, 42, 0.95)',
           backdropFilter: 'blur(12px)',
           WebkitBackdropFilter: 'blur(12px)',
-          borderTop: '1px solid rgba(255,255,255,0.1)'
+          borderTop: '1px solid rgba(255,255,255,0.1)',
+          position: 'relative',
+          zIndex: 9999
         }}
       >
         {/* Active Managers Row - Compact & Tappable */}
