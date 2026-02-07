@@ -55,18 +55,16 @@
 
 ### ⚠️ STOP! Before running ANY database query:
 
-**Preview AND Production use the SAME database:**
+**Preview AND Production use the SAME database (intentional):**
 ```
-MONGO_URL: mongodb+srv://darts_admin:***@cluster0.edjfwnl.mongodb.net/
-DB_NAME: sport_x_poc
+MongoDB Cluster: Cluster0
+Database Name: sport_x_poc
+
+Preview (Emergent)  → Cluster0 / sport_x_poc
+Production (Railway) → Cluster0 / sport_x_poc (SAME)
 ```
 
-| Environment | Database Name | Notes |
-|-------------|---------------|-------|
-| Preview (Emergent) | `sport_x_poc` | SAME as production |
-| Production (Railway) | `sport_x_poc` | SAME as preview |
-
-**This is intentional** - Changes in preview are reflected in production after deploy.
+**Why same database?** Changes tested in preview are immediately available in production after deploy. No data sync needed.
 
 ### 🔴 How to Query the Database Correctly
 
