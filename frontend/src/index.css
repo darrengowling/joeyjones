@@ -11,6 +11,11 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Hide Emergent badge - it overlaps critical auction controls */
+#emergent-badge {
+    display: none !important;
+}
+
 html, body {
     margin: 0;
     overflow-x: hidden;
