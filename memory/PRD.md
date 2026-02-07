@@ -23,6 +23,17 @@ Build a fantasy sports auction platform for UK-based users with:
 - **Cache:** Redis Cloud
 - **Target:** ~200 users charity foundation pilot
 
+### Database Configuration (CRITICAL)
+```
+MONGO_URL: mongodb+srv://darts_admin:***@cluster0.edjfwnl.mongodb.net/
+DB_NAME: sport_x_poc
+
+Preview (Emergent) → sport_x_poc (SAME as production)
+Production (Railway) → sport_x_poc (SAME as preview)
+```
+
+**Both environments share the same database intentionally.**
+
 ### Tech Stack
 - **Frontend:** React with Stitch dark theme
 - **Backend:** FastAPI (Python)
