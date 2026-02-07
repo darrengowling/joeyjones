@@ -5006,29 +5006,35 @@ async def place_bid(auction_id: str, bid_input: BidCreate):
     # Metrics: Track bid processing time
     start_time = time.time()
     
-    # Verify auction exists and is active
-    auction = await db.auctions.find_one({"id": auction_id}, {"_id": 0})
+    # OPTIMIZATION: Parallel batch 1 - Get auction and user simultaneously
+    auction_task = db.auctions.find_one({"id": auction_id}, {"_id": 0})
+    user_task = db.users.find_one({"id": bid_input.userId}, {"_id": 0})
+    auction, user = await asyncio.gather(auction_task, user_task)
+    
+    # Validate auction
     if not auction:
         raise HTTPException(status_code=404, detail="Auction not found")
-    
     if auction["status"] != "active":
         raise HTTPException(status_code=400, detail=f"Auction is not active (status: {auction['status']})")
     
-    # Get user details
-    user = await db.users.find_one({"id": bid_input.userId}, {"_id": 0})
+    # Validate user
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     
-    # Get league
-    league = await db.leagues.find_one({"id": auction["leagueId"]}, {"_id": 0})
-    if not league:
-        raise HTTPException(status_code=404, detail="League not found")
-    
-    # Get participant to check budget
-    participant = await db.league_participants.find_one({
+    # OPTIMIZATION: Parallel batch 2 - Get league and participant simultaneously
+    # (Both need auction["leagueId"] which we now have)
+    league_task = db.leagues.find_one({"id": auction["leagueId"]}, {"_id": 0})
+    participant_task = db.league_participants.find_one({
         "leagueId": auction["leagueId"],
         "userId": bid_input.userId
     }, {"_id": 0})
+    league, participant = await asyncio.gather(league_task, participant_task)
+    
+    # Validate league
+    if not league:
+        raise HTTPException(status_code=404, detail="League not found")
+    
+    # Validate participant
     if not participant:
         raise HTTPException(status_code=403, detail="User is not a participant in this league")
     
